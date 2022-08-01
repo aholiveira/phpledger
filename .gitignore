@@ -1,0 +1,8 @@
+/nbproject/private/
+*.bz2
+*.zip
+*.bat
+*.cmd
+config.php
+test/config.php
+.vscode*

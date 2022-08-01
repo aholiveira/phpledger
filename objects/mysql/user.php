@@ -1,0 +1,329 @@
+<?php
+
+/**
+ * User class
+ * Handles user registration and authentication
+ * 
+ * @since 0.2.0
+ * @author Antonio Henrique Oliveira
+ * @copyright (c) 2017-2022, Antonio Henrique Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
+ */
+class user extends mysql_object implements iobject
+{
+    protected string $_username;
+    protected string $_password;
+    protected string $_email = '';
+    protected string $_fullname = '';
+    protected string $_token = '';
+    protected ?string $_token_expiry;
+    protected int $_active;
+    protected int $_role;
+    protected static string $tableName = "users";
+
+    public function __construct(mysqli $dblink)
+    {
+        parent::__construct($dblink);
+        $this->_token_expiry = null;
+    }
+    public function setUsername(string $value)
+    {
+        $this->_username = $value;
+    }
+    public function getUsername(): ?string
+    {
+        return isset($this->_username) ? $this->_username : null;
+    }
+    public function setPassword(string $value)
+    {
+        $this->_password = $this->hashPassword($value);
+    }
+    /**
+     * This returns the password hash. 
+     * The unhashed password is never stored on the object
+     * @return string the hashed value of the password
+     */
+    public function getPassword(): ?string
+    {
+        return isset($this->_password) ? $this->_password : null;
+    }
+    public function setEmail(string $value)
+    {
+        $this->_email = $value;
+    }
+    public function getEmail(): ?string
+    {
+        return isset($this->_email) ? $this->_email : null;
+    }
+    public function setFullName(string $value)
+    {
+        $this->_fullname = $value;
+    }
+    public function getFullName(): ?string
+    {
+        return isset($this->_fullname) ? $this->_fullname : null;
+    }
+    public function setActive(int $value)
+    {
+        $this->_active = $value;
+    }
+    public function getActive(): ?int
+    {
+        return isset($this->_active) ? $this->_active : null;
+    }
+    public function setRole(int $value)
+    {
+        $this->_role = $value;
+    }
+    public function getRole(): ?int
+    {
+        return isset($this->_role) ? $this->_role : null;
+    }
+    public function getToken(): ?string
+    {
+        return isset($this->_token) ? $this->_token : null;
+    }
+    public function setToken(string $value)
+    {
+        $this->_token = $value;
+    }
+    public function getTokenExpiry(): ?string
+    {
+        return isset($this->_token_expiry) ? $this->_token_expiry : null;
+    }
+    public function setTokenExpiry(?string $value)
+    {
+        $this->_token_expiry = $value;
+    }
+    private function hashPassword(string $password): string
+    {
+        if (function_exists('sodium_crypto_pwhash_str')) {
+            return sodium_crypto_pwhash_str($password, SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE, SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE);
+        } else {
+            return password_hash($password, PASSWORD_DEFAULT);
+        }
+    }
+    public function verifyPassword(string $password): bool
+    {
+        return sodium_crypto_pwhash_str_verify($this->_password, $password);
+    }
+    public function createToken(): string
+    {
+        $tokenLength = 32;
+        return bin2hex(random_bytes($tokenLength));
+    }
+    public function isTokenValid(string $token)
+    {
+        return (date("Y-m-d HH:ii:ss") <= $this->_token_expiry && $this->_token == $token);
+    }
+    public function save(): bool
+    {
+        $retval = false;
+        $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
+        try {
+            //static::$_dblink->begin_transaction();
+            $stmt = @static::$_dblink->prepare($sql);
+            if ($stmt == false) return $retval;
+            if (!isset($this->id)) return $retval;
+            $stmt->bind_param("i", $this->id);
+            $stmt->execute();
+            $stmt->bind_result($return_id);
+            if (!is_null($stmt->fetch()) && $return_id == $this->id) {
+                $sql = "UPDATE {$this->tableName()} SET 
+                    `username`=?, 
+                    `password`=?, 
+                    `fullname`=?, 
+                    `email`=?, 
+                    `role`=?,
+                    `token`=?,
+                    `token_expiry`=?,
+                    `active`=?
+                    WHERE `id`=?";
+            } else {
+                $sql = "INSERT INTO {$this->tableName()} (username, password, fullname, email, role, token, token_expiry, active, id) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            }
+            $stmt->close();
+            $stmt = static::$_dblink->prepare($sql);
+            if ($stmt == false) throw new mysqli_sql_exception();
+            if (!is_null($this->_token_expiry) && strlen($this->_token_expiry) == 0) {
+                $this->_token_expiry = NULL;
+            }
+            $stmt->bind_param(
+                "sssssssss",
+                $this->_username,
+                $this->_password,
+                $this->_fullname,
+                $this->_email,
+                $this->_role,
+                $this->_token,
+                $this->_token_expiry,
+                $this->_active,
+                $this->id
+            );
+            $retval = $stmt->execute();
+            if ($retval == false) {
+                throw new mysqli_sql_exception(static::$_dblink->error);
+            }
+            static::$_dblink->commit();
+        } catch (Exception $ex) {
+            $this->handleException($ex, $sql);
+            if ($stmt) $stmt->close();
+            static::$_dblink->rollback();
+        }
+        return $retval;
+    }
+    public function getAll(array $field_filter = array()): array
+    {
+        $where = parent::getWhereFromArray($field_filter);
+        $sql = "SELECT id, 
+            username AS `_username`, 
+            `password` AS `_password`, 
+            `fullname` AS `_fullname`, 
+            email AS `_email`, 
+            `role` AS `_role`, 
+            `token` AS `_token`, 
+            `token_expiry` AS `_token_expiry`, 
+            active AS `_active` 
+            FROM {$this->tableName()} "
+            . "{$where} "
+            . "ORDER BY username";
+        $retval = array();
+        try {
+            if (!is_object(static::$_dblink)) return $retval;
+            $stmt = static::$_dblink->prepare($sql);
+            if ($stmt == false) throw new mysqli_sql_exception(static::$_dblink->error);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($newobject = $result->fetch_object(__CLASS__, array(static::$_dblink))) {
+                $retval[$newobject->id] = $newobject;
+            }
+            $stmt->close();
+        } catch (Exception $ex) {
+            $this->handleException($ex, $sql);
+        }
+        return $retval;
+    }
+    public function getByUsername(string $username): user
+    {
+        $sql = "SELECT id, 
+            username AS `_username`, 
+            `password` AS `_password`, 
+            `fullname` AS `_fullname`, 
+            email AS `_email`, 
+            `role` AS `_role`, 
+            `token` AS `_token`, 
+            `token_expiry` AS `_token_expiry`, 
+            active AS `_active` 
+            FROM {$this->tableName()} "
+            . "WHERE username=?";
+        if (!is_object(static::$_dblink)) {
+            return $this;
+        }
+        try {
+            $stmt = @static::$_dblink->prepare($sql);
+            if ($stmt == false) throw new mysqli_sql_exception();
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $stmt->close();
+            if ($newobject instanceof user) {
+                $this->copyfromObject($newobject);
+            }
+        } catch (Exception $ex) {
+            $this->handleException($ex, $sql);
+        }
+        return $this;
+    }
+    public function getById(int $id): user
+    {
+        $sql = "SELECT id, 
+        `username` AS `_username`, 
+        `password` AS `_password`, 
+        `fullname` AS `_fullname`, 
+        `email` AS `_email`, 
+        `role` AS `_role`, 
+        `token` AS `_token`, 
+        `token_expiry` AS `_token_expiry`, 
+        `active` AS `_active` 
+        FROM {$this->tableName()} 
+        WHERE id=?";
+        if (!is_object(static::$_dblink)) {
+            return $this;
+        }
+        try {
+            $stmt = @static::$_dblink->prepare($sql);
+            if ($stmt == false) throw new mysqli_sql_exception();
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $stmt->close();
+            if ($newobject instanceof user) {
+                $this->copyfromObject($newobject);
+            }
+        } catch (Exception $ex) {
+            $this->handleException($ex, $sql);
+        }
+        return $this;
+    }
+    public function resetPassword(): bool
+    {
+        global $config;
+        $retval = false;
+        if (isset($this->_username) && isset($this->_email)) {
+            $this->setToken($this->createToken());
+            $this->setTokenExpiry((new DateTime(date("Y-m-d H:i:s")))->add(new DateInterval("PT24H"))->format("Y-m-d H:i:s"));
+            if ($this->save()) {
+                $retval = true;
+                $message = "Esta' a receber este email porque solicitou a reposicao da sua palavra-passe na aplicacao de gestao financeira.\r\n";
+                $message .= "Para continuar o processo deve clique no link abaixo para definir uma nova senha.\r\n";
+                $message .= "{$config->getParameter('url')}reset_password.php?token_id={$this->getToken()}.\r\n";
+                $message .= "Este token e' valido ate' 'as {$this->getTokenExpiry()}.\r\n";
+                $message .= "Findo este prazo tera' que reiniciar o processo usando o link {$config->getParameter('url')}forgot_password.php.\r\n";
+                $message .= "\r\n";
+                $message .= "Cumprimentos,\r\n";
+                $message .= "Gestao financeira\r\n";
+                Email::send_email($config->getParameter("from"), $this->getEmail(), "Reposicao de palavra-passe", $message);
+            }
+        }
+        return $retval;
+    }
+    public function getByToken(string $token): ?user
+    {
+        $sql = "SELECT id, 
+        `username` AS `_username`, 
+        `password` AS `_password`, 
+        `fullname` AS `_fullname`, 
+        `email` AS `_email`, 
+        `role` AS `_role`, 
+        `token` AS `_token`, 
+        `token_expiry` AS `_token_expiry`, 
+        `active` AS `_active` 
+        FROM {$this->tableName()} 
+        WHERE token=?";
+        if (!is_object(static::$_dblink)) {
+            return $this;
+        }
+        $retval = $this;
+        $this->clear();
+        try {
+            $stmt = @static::$_dblink->prepare($sql);
+            if ($stmt == false) throw new mysqli_sql_exception();
+            $stmt->bind_param("s", $token);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $stmt->close();
+            if ($newobject instanceof user) {
+                $this->copyfromObject($newobject);
+            } else {
+                $retval = null;
+            }
+        } catch (Exception $ex) {
+            $this->handleException($ex, $sql);
+        }
+        return $retval;
+    }
+}
