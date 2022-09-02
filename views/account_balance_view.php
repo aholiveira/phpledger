@@ -34,7 +34,7 @@ class account_balance_view extends object_viewer
             if ($object instanceof account) {
                 $balances[$object->id] = $object->getBalanceOnDate(new DateTime());
                 foreach ($type_names as $type_name) {
-                    $totals[$type_name] = +$balances[$object->id][$type_name];
+                    $totals[$type_name] += $balances[$object->id][$type_name];
                 }
             }
         }
