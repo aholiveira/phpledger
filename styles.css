@@ -95,14 +95,23 @@ input {
     padding: 1px 4px;
 }
 
-input.submit {
+input.submit, input[type=submit] {
     border: outset 2px;
-    border-radius: 6px;
-    padding: 1px 4px;
+    background-image: linear-gradient(lightblue, cornflowerblue); 
+    border: 0;
+    box-sizing: border-box;
+    color: #fff;
+    cursor: pointer;
+    padding: 4px 10px;
+    text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    font-weight: bold;
 }
 
-input.submit:hover {
-    background-color: lightblue;
+input.submit:hover, input[type=submit]:hover {
+    background-image: lightblue;
 }
 
 .RCS {
@@ -492,11 +501,11 @@ div#main td.subcategory-label {
 
 /* Printing */
 @media print {
-    div.menu {
+    aside.menu {
         display: none;
     }
 
-    div.menu ul {
+    aside.menu ul {
         display: none;
     }
 

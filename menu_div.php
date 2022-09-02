@@ -8,17 +8,17 @@
  *
  */
 -->
-<div class="menu">
+<aside class="menu">
     <nav>
         <ul>
-            <li><a href="ledger_entries.php?from=menu#last">Movimentos</a></li>
-            <li><a href="saldos.php">Saldos</a></li>
-            <li><a href="contas.php">Contas</a></li>
-            <li><a href="tipo_contas_lista.php">Tipo contas</a></li>
-            <li><a href="tipo_mov_lista.php">Categorias movim.</a></li>
-            <li><a href="report_month.php?year=<?php print date("Y"); ?>">Relat&oacute;rio mensal</a></li>
-            <li><a href="report_year.php?year=<?php print date("Y") - 1; ?>">Relat&oacute;rio anual</a></li>
-            <li><a href="index.php?do_logout=1">Sair</a>
+            <li><a id="ledger_entries" href="ledger_entries.php?from=menu#last">Movimentos</a></li>
+            <li><a id="balance" href="saldos.php">Saldos</a></li>
+            <li><a id="accounts" href="contas.php">Contas</a></li>
+            <li><a id="account_type" href="tipo_contas_lista.php">Tipo contas</a></li>
+            <li><a id="entry_type" href="tipo_mov_lista.php">Categorias movim.</a></li>
+            <li><a id="report_month" href="report_month.php?year=<?php print date("Y"); ?>">Relat&oacute;rio mensal</a></li>
+            <li><a id="report_year" href="report_year.php?year=<?php print date("Y") - 1; ?>">Relat&oacute;rio anual</a></li>
+            <li><a id="logout" href="index.php?do_logout=1">Sair</a>
         </ul>
     </nav>
-</div>
+</aside>
