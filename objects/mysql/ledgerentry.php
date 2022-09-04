@@ -26,12 +26,12 @@ class ledgerentry extends mysql_object implements iobject
     public account $account;
     public int $direction;
     public ?string $remarks;
-    public string $username;
+    public string $username = "";
     public string $last_modified;
     public int $ledger_id;
     protected static string $tableName = "movimentos";
 
-    public function __construct(mysqli $dblink)
+    public function __construct(\mysqli $dblink)
     {
         parent::__construct($dblink);
     }
@@ -52,7 +52,7 @@ class ledgerentry extends mysql_object implements iobject
                 return $retval;
             }
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->execute();
             $result = $stmt->get_result();
             while ($newobject = $result->fetch_object(__CLASS__, array(static::$_dblink))) {
@@ -60,7 +60,7 @@ class ledgerentry extends mysql_object implements iobject
                 $retval[$newobject->id] = $newobject;
             }
             $stmt->close();
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $retval;
@@ -80,7 +80,7 @@ class ledgerentry extends mysql_object implements iobject
         }
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -90,7 +90,7 @@ class ledgerentry extends mysql_object implements iobject
                 $this->copyfromObject($newobject);
                 $this->getValuesForForeignFields();
             }
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $this;
@@ -106,7 +106,7 @@ class ledgerentry extends mysql_object implements iobject
         }
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             if (is_null($account_id)) {
                 $stmt->bind_param("s", $date);
             } else {
@@ -116,7 +116,7 @@ class ledgerentry extends mysql_object implements iobject
             $stmt->bind_result($balance);
             $stmt->fetch();
             $stmt->close();
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $balance;
@@ -141,12 +141,12 @@ class ledgerentry extends mysql_object implements iobject
         }
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->execute();
             $stmt->bind_result($balance);
             $stmt->fetch();
             $stmt->close();
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             print_var($ex, "", true);
         }
         return $balance;
@@ -199,7 +199,7 @@ class ledgerentry extends mysql_object implements iobject
             }
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param(
                 "ssssssssss",
                 $this->entry_date,
@@ -216,7 +216,7 @@ class ledgerentry extends mysql_object implements iobject
             $retval = $stmt->execute();
             $stmt->close();
             static::$_dblink->commit();
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $retval;

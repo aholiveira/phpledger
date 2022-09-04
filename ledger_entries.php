@@ -77,10 +77,10 @@ function build_and_save_record()
     }
 
     function clear_filter() {
-        document.getElementById("tipo_mov_filter").value = "";
-        document.getElementById("conta_id_filter").value = "";
-        document.getElementById("sdate").value = (new Date).getFullYear().toString() + "-" + ((new Date).getMonth() + 1).toString().padStart(2, "0") + "-01";
-        document.getElementById("edate").value = (new Date).getFullYear().toString() + "-" + ((new Date).getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date).getDate().toString().padStart(2, "0");
+        document.getElementById("filter_entry_type").value = "";
+        document.getElementById("filter_conta_id").value = "";
+        document.getElementById("filter_sdate").value = (new Date).getFullYear().toString() + "-" + ((new Date).getMonth() + 1).toString().padStart(2, "0") + "-01";
+        document.getElementById("filter_edate").value = (new Date).getFullYear().toString() + "-" + ((new Date).getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date).getDate().toString().padStart(2, "0");
     }
 </script>
 
@@ -88,38 +88,38 @@ function build_and_save_record()
     <div class="maingrid">
         <?php
         include ROOT_DIR . "/menu_div.php";
-        if (array_key_exists("sdate", $_REQUEST)) {
-            $sdate = (strlen($_REQUEST["sdate"]) ? str_replace("-", "", $_REQUEST["sdate"]) : date("Ym01"));
+        if (array_key_exists("filter_sdate", $_REQUEST)) {
+            $sdate = (strlen($_REQUEST["sdate"]) ? str_replace("-", "", $_REQUEST["filter_sdate"]) : date("Ym01"));
         } else {
-            if (array_key_exists("sdateAA", $_REQUEST)) {
-                $sdate = sprintf("%04d%02d%02d", $_REQUEST["sdateAA"], $_REQUEST["sdateMM"], $_GET["sdateDD"]);
+            if (array_key_exists("filter_sdateAA", $_REQUEST)) {
+                $sdate = sprintf("%04d%02d%02d", $_REQUEST["filter_sdateAA"], $_REQUEST["filter_sdateMM"], $_GET["filter_sdateDD"]);
             } else {
                 $sdate = date("Ym01");
             }
         }
-        if (array_key_exists("edate", $_REQUEST)) {
-            $edate = strlen($_REQUEST["edate"]) ? str_replace("-", "", $_REQUEST["edate"]) : date("Ymd");
+        if (array_key_exists("filter_edate", $_REQUEST)) {
+            $edate = strlen($_REQUEST["filter_edate"]) ? str_replace("-", "", $_REQUEST["filter_edate"]) : date("Ymd");
         } else {
-            if (array_key_exists("edateAA", $_REQUEST)) {
-                $edate = sprintf("%04d%02d%02d", $_REQUEST["edateAA"], $_REQUEST["edateMM"], $_REQUEST["edateDD"]);
+            if (array_key_exists("filter_edateAA", $_REQUEST)) {
+                $edate = sprintf("%04d%02d%02d", $_REQUEST["filter_edateAA"], $_REQUEST["filter_edateMM"], $_REQUEST["filter_edateDD"]);
             } else {
                 $edate = date("Ymd");
             }
         }
         $filter = "movimentos.data_mov>='" . $sdate . "' AND movimentos.data_mov<='" . $edate . "'";
         $parent_filter = "";
-        if (array_key_exists("parent_id", $_REQUEST) && strlen($_REQUEST["parent_id"]) > 0) {
-            $parent_filter = "tipo_mov.parent_id={$_REQUEST["parent_id"]} ";
+        if (array_key_exists("filter_parent_id", $_REQUEST) && strlen($_REQUEST["filter_parent_id"]) > 0) {
+            $parent_filter = "tipo_mov.filter_parent_id={$_REQUEST["filter_parent_id"]} ";
         }
 
-        $sql = "SELECT mov_id, data_mov, tipo_mov, CONCAT(IF(tipo_mov.parent_id=0,'', CONCAT(parent.tipo_desc,'&#8594;')), tipo_mov.tipo_desc) as tipo_desc, movimentos.conta_id, conta_nome, round(valor_mov,2) as val_mov, deb_cred, moeda_mov, moeda_desc, cambio, valor_euro, obs " .
+        $sql = "SELECT mov_id, data_mov, tipo_mov, CONCAT(IF(tipo_mov.filter_parent_id=0,'', CONCAT(parent.tipo_desc,'&#8594;')), tipo_mov.tipo_desc) as tipo_desc, movimentos.conta_id, conta_nome, round(valor_mov,2) as val_mov, deb_cred, moeda_mov, moeda_desc, cambio, valor_euro, obs " .
             "FROM movimentos 
             RIGHT JOIN tipo_mov ON movimentos.tipo_mov = tipo_mov.tipo_id 
-            RIGHT JOIN tipo_mov as parent ON tipo_mov.parent_id = parent.tipo_id
+            RIGHT JOIN tipo_mov as parent ON tipo_mov.filter_parent_id = parent.tipo_id
             RIGHT JOIN moedas ON movimentos.moeda_mov = moedas.moeda_id 
             RIGHT JOIN contas ON movimentos.conta_id = contas.conta_id WHERE " .
-            (array_key_exists("conta_id_filter", $_REQUEST) && strlen($_REQUEST["conta_id_filter"]) > 0 ? " movimentos.conta_id=\"" . $_REQUEST["conta_id_filter"] . "\" AND " : "") . $filter .
-            (array_key_exists("tipo_mov_filter", $_REQUEST) && strlen($_REQUEST["tipo_mov_filter"]) > 0 ? " AND (movimentos.tipo_mov={$_REQUEST["tipo_mov_filter"]}" . (strlen($parent_filter) > 0 ? " OR {$parent_filter})" : ")") : "") .
+            (array_key_exists("filter_conta_id", $_REQUEST) && strlen($_REQUEST["filter_conta_id"]) > 0 ? " movimentos.conta_id=\"" . $_REQUEST["filter_conta_id"] . "\" AND " : "") . $filter .
+            (array_key_exists("filter_entry_type", $_REQUEST) && strlen($_REQUEST["filter_entry_type"]) > 0 ? " AND (movimentos.tipo_mov={$_REQUEST["filter_entry_type"]}" . (strlen($parent_filter) > 0 ? " OR {$parent_filter})" : ")") : "") .
             " ORDER BY data_mov, mov_id";
         if (array_key_exists("mov_id", $_GET)) {
             $aux_sql = "SELECT mov_id, tipo_mov, moeda_mov, conta_id " .
@@ -138,7 +138,7 @@ function build_and_save_record()
         // Saldo anterior
         global $object_factory;
         $ledger_entry = $object_factory->ledgerentry();
-        $saldo = $ledger_entry->getBalanceBeforeDate($sdate, array_key_exists("conta_id_filter", $_REQUEST) && strlen($_REQUEST["conta_id_filter"]) > 0 ? $_REQUEST["conta_id_filter"] : null);
+        $saldo = $ledger_entry->getBalanceBeforeDate($sdate, array_key_exists("filter_conta_id", $_REQUEST) && strlen($_REQUEST["filter_conta_id"]) > 0 ? $_REQUEST["filter_conta_id"] : null);
 
         // Movimento para editar
         if (array_key_exists("mov_id", $_GET)) {
@@ -194,31 +194,31 @@ function build_and_save_record()
         ?>
         <div class="header" id="header">
             <form name="datefilter" action="ledger_entries.php" method="GET">
-                <input type="hidden" name="parent_id" value="<?php print array_key_exists("parent_id", $_REQUEST) ? $_REQUEST["conta_id"] : ""; ?>" />
-                <input type="hidden" name="tipo_mov_filter" value="<?php print array_key_exists("tipo_mov_filter", $_REQUEST) ? $_REQUEST["tipo_mov_filter"] : ""; ?>" />
+                <input type="hidden" name="filter_parent_id" value="<?php print array_key_exists("filter_parent_id", $_REQUEST) ? $_REQUEST["conta_id"] : ""; ?>" />
+                <input type="hidden" name="filter_entry_type" value="<?php print array_key_exists("filter_entry_type", $_REQUEST) ? $_REQUEST["filter_entry_type"] : ""; ?>" />
                 <table class="filter">
                     <tr>
                         <td>Inicio</td>
                         <td>
-                            <select class="date-fallback" style="display: none" name="sdateAA" onchange="update_date('sdate');"><?php print Html::year_option(substr($sdate, 0, 4)); ?></select>
-                            <select class="date-fallback" style="display: none" name="sdateMM" onchange="update_date('sdate');"><?php print Html::mon_option(substr($sdate, 4, 2)); ?></select>
-                            <select class="date-fallback" style="display: none" name="sdateDD" onchange="update_date('sdate');"><?php print Html::day_option(substr($sdate, 6, 2)); ?></select>
-                            <input class="date-fallback" type="date" id="sdate" name="sdate" required value="<?php print (new DateTime("{$sdate}"))->format("Y-m-d"); ?>">
+                            <select class="date-fallback" style="display: none" name="filter_sdateAA" onchange="update_date('filter_sdate');"><?php print Html::year_option(substr($sdate, 0, 4)); ?></select>
+                            <select class="date-fallback" style="display: none" name="filter_sdateAA" onchange="update_date('filter_sdate');"><?php print Html::mon_option(substr($sdate, 4, 2)); ?></select>
+                            <select class="date-fallback" style="display: none" name="filter_sdateAA" onchange="update_date('filter_sdate');"><?php print Html::day_option(substr($sdate, 6, 2)); ?></select>
+                            <input class="date-fallback" type="date" id="filter_sdate" name="filter_sdate" required value="<?php print (new DateTime("{$sdate}"))->format("Y-m-d"); ?>">
                         </td>
                     </tr>
                     <tr>
                         <td>Fim</td>
                         <td>
-                            <select class="date-fallback" style="display: none" name="edateAA" onchange="update_date('edate');"><?php print Html::year_option(substr($edate, 0, 4)); ?></select>
-                            <select class="date-fallback" style="display: none" name="edateMM" onchange="update_date('edate');"><?php print Html::mon_option(substr($edate, 4, 2)); ?></select>
-                            <select class="date-fallback" style="display: none" name="edateDD" onchange="update_date('edate');"><?php print Html::day_option(substr($edate, 6, 2)); ?></select>
-                            <input class="date-fallback" type="date" id="edate" name="edate" required value="<?php print (new DateTime("{$edate}"))->format("Y-m-d"); ?>">
+                            <select class="date-fallback" style="display: none" name="filter_edateAA" onchange="update_date('filter_edate');"><?php print Html::year_option(substr($edate, 0, 4)); ?></select>
+                            <select class="date-fallback" style="display: none" name="filter_edateMM" onchange="update_date('filter_edate');"><?php print Html::mon_option(substr($edate, 4, 2)); ?></select>
+                            <select class="date-fallback" style="display: none" name="filter_edateDD" onchange="update_date('filter_edate');"><?php print Html::day_option(substr($edate, 6, 2)); ?></select>
+                            <input class="date-fallback" type="date" id="filter_edate" name="filter_edate" required value="<?php print (new DateTime("{$edate}"))->format("Y-m-d"); ?>">
                         </td>
                     </tr>
                     <tr>
                         <td>Conta</td>
                         <td>
-                            <select name="conta_id_filter" id="conta_id_filter" placeholder="Escolha uma conta">
+                            <select name="filter_conta_id" id="filter_conta_id" placeholder="Escolha uma conta">
                                 <option value=""></option>
                                 <?php print $conta_opt; ?>
                             </select>
@@ -227,7 +227,7 @@ function build_and_save_record()
                     <tr>
                         <td>Categoria</td>
                         <td>
-                            <select name="tipo_mov_filter" id="tipo_mov_filter" placeholder="Escolha uma categoria">
+                            <select name="filter_entry_type" id="filter_entry_type" placeholder="Escolha uma categoria">
                                 <option value=""></option>
                                 <?php print $tipo_mov_opt; ?>
                             </select>
@@ -243,17 +243,17 @@ function build_and_save_record()
                 </table>
             </form>
             <script>
-                document.getElementById("tipo_mov_filter").value = "<?php print array_key_exists("tipo_mov_filter", $_REQUEST) ? $_REQUEST["tipo_mov_filter"] : ""; ?>";
-                document.getElementById("conta_id_filter").value = "<?php print array_key_exists("conta_id_filter", $_REQUEST) ? $_REQUEST["conta_id_filter"] : ""; ?>";
+                document.getElementById("filter_entry_type").value = "<?php print array_key_exists("filter_entry_type", $_REQUEST) ? $_REQUEST["filter_entry_type"] : ""; ?>";
+                document.getElementById("filter_conta_id").value = "<?php print array_key_exists("filter_conta_id", $_REQUEST) ? $_REQUEST["filter_conta_id"] : ""; ?>";
             </script>
         </div>
         <div class="main" id="main">
             <form name="mov" action="ledger_entries.php" method="POST">
-                <input type="hidden" name="conta_id_filter" value="<?php print array_key_exists("conta_id_filter", $_REQUEST) ? $_REQUEST["conta_id_filter"] : ""; ?>" />
-                <input type="hidden" name="parent_id" value="<?php print array_key_exists("parent_id", $_REQUEST) ? $_REQUEST["parent_id"] : ""; ?>" />
-                <input type="hidden" name="tipo_mov_filter" value="<?php print array_key_exists("tipo_mov_filter", $_REQUEST) ? $_REQUEST["tipo_mov_filter"] : ""; ?>" />
-                <input type="hidden" name="sdate" value="<?php print $sdate; ?>" />
-                <input type="hidden" name="edate" value="<?php print $edate; ?>" />
+                <input type="hidden" name="filter_conta_id" value="<?php print array_key_exists("filter_conta_id", $_REQUEST) ? $_REQUEST["filter_conta_id"] : ""; ?>" />
+                <input type="hidden" name="filter_parent_id" value="<?php print array_key_exists("filter_parent_id", $_REQUEST) ? $_REQUEST["filter_parent_id"] : ""; ?>" />
+                <input type="hidden" name="filter_entry_type" value="<?php print array_key_exists("filter_entry_type", $_REQUEST) ? $_REQUEST["filter_entry_type"] : ""; ?>" />
+                <input type="hidden" name="filter_sdate" value="<?php print $sdate; ?>" />
+                <input type="hidden" name="filter_edate" value="<?php print $edate; ?>" />
                 <table class="lista ledger_entry_list">
                     <thead>
                         <tr>
@@ -297,15 +297,17 @@ function build_and_save_record()
                                 }
                             }
                             if (!array_key_exists("mov_id", $_GET) || $row["mov_id"] != $_GET["mov_id"]) {
-                                print "<td data-label='ID' class='id'><a name=\"{$row["mov_id"]}\" title=\"Editar entrada\" href=\"ledger_entries.php?sdate={$sdate}&amp;edate={$edate}&amp;mov_id={$row["mov_id"]}" . (array_key_exists("conta_id_filter", $_GET) ? "&amp;conta_id_filter={$_GET["conta_id_filter"]}" : "") . (array_key_exists("tipo_mov", $_GET) ? "&amp;tipo_mov_filter={$_GET["tipo_mov_filter"]}" : "") . "#\">{$row["mov_id"]}</a></td>\n";
-                                print "<td data-label='Data' class='data'>{$row["data_mov"]}</td>\n";
-                                print "<td data-label='Categoria' class='category'><a title=\"Filtrar lista para esta categoria\" href=\"ledger_entries.php?sdate={$sdate}&amp;edate={$edate}&amp;tipo_mov_filter={$row["tipo_mov"]}" . (array_key_exists("conta_id_filter", $_GET) ? "&amp;conta_id_filter={$_GET["conta_id_filter"]}" : "") . "\">{$row["tipo_desc"]}</a></td>\n";
-                                print "<td data-label='Moeda' class='currency'>{$row["moeda_desc"]}</td>\n";
-                                print "<td data-label='Conta' class='account'><a title=\"Filtrar lista para esta conta\" href=\"ledger_entries.php?sdate={$sdate}&amp;edate={$edate}&amp;conta_id_filter={$row["conta_id"]}" . (array_key_exists("tipo_mov", $_GET) ? "&amp;tipo_mov_filter={$_GET["tipo_mov_filter"]}" : "") . "\">{$row["conta_nome"]}</a></td>\n";
-                                print "<td data-label='D/C' class='direction'>" . ($row["deb_cred"] == "1" ? "Dep" : "Lev") . "</td>\n";
-                                print "<td data-label='Valor' class='amount'>" . normalize_number($row["val_mov"]) . "</td>\n";
-                                print "<td data-label='Obs' class='remarks'>{$row["obs"]}</td>\n";
-                                print "<td data-label='Saldo' class='total'>" . normalize_number($saldo) . "</td>\n";
+                        ?>
+                                <td data-label='ID' class='id'><a name="<?php print $row["mov_id"] ?>" title="Editar entrada" href="ledger_entries.php?mov_id=<?php print $row["mov_id"]; ?>#<?php print $row["mov_id"]; ?>" </a></td>
+                                <td data-label='Data' class='data'><?php print $row["data_mov"]; ?></td>
+                                <td data-label='Categoria' class='category'><a title="Filtrar lista para esta categoria" href="ledger_entries.php?filter_entry_type=<?php print $row["tipo_mov"]; ?>"><?php print $row["tipo_desc"]; ?></a></td>
+                                <td data-label='Moeda' class='currency'><?php print $row["moeda_desc"]; ?></td>
+                                <td data-label='Conta' class='account'><a title="Filtrar lista para esta conta" href="ledger_entries.php?filter_conta_id=<?php print $row["conta_id"] ?>"><?php print $row["conta_nome"]; ?></a></td>
+                                <td data-label='D/C' class='direction'><?php print($row["deb_cred"] == "1" ? "Dep" : "Lev"); ?></td>
+                                <td data-label='Valor' class='amount'><?php print normalize_number($row["val_mov"]); ?></td>
+                                <td data-label='Obs' class='remarks'><?php print $row["obs"]; ?></td>
+                                <td data-label='Saldo' class='total'><?php print normalize_number($saldo); ?></td>
+                        <?php
                             }
                             print "</tr>\n";
                         }

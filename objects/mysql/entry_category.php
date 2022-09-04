@@ -18,7 +18,7 @@ class entry_category extends mysql_object implements iobject
     public array $children;
     protected static string $tableName = "tipo_mov";
 
-    public function __construct(mysqli $dblink)
+    public function __construct(\mysqli $dblink)
     {
         parent::__construct($dblink);
     }
@@ -32,7 +32,7 @@ class entry_category extends mysql_object implements iobject
         try {
             if (!is_object(static::$_dblink)) return $retval;
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->execute();
             $stmt->bind_result($id);
             while ($stmt->fetch()) {
@@ -43,7 +43,7 @@ class entry_category extends mysql_object implements iobject
             foreach ($retval as $id => $newobject) {
                 $retval[$id] = $newobject->getById($id);
             }
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $retval;
@@ -58,13 +58,13 @@ class entry_category extends mysql_object implements iobject
         try {
             if (!is_object(static::$_dblink)) return $balance;
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("s", $this->id);
             $stmt->execute();
             $stmt->bind_result($balance);
             $stmt->fetch();
             $stmt->close();
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $balance;
@@ -77,7 +77,7 @@ class entry_category extends mysql_object implements iobject
         if (!is_object(static::$_dblink)) return $this;
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -88,7 +88,7 @@ class entry_category extends mysql_object implements iobject
                 $this->getParentDescription();
                 $this->children = $this->getChildren();
             }
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $this;
@@ -101,14 +101,14 @@ class entry_category extends mysql_object implements iobject
         if (!is_object(static::$_dblink) || !isset($this->parent_id)) return "";
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $this->parent_id);
             $stmt->execute();
             $stmt->bind_result($this->parent_description);
             $stmt->fetch();
             $stmt->close();
             return $this->parent_description;
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
             return "";
         }
@@ -123,7 +123,7 @@ class entry_category extends mysql_object implements iobject
         if (!is_object(static::$_dblink)) return $this;
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $this->id);
             $stmt->execute();
             $stmt->bind_result($child_id);
@@ -136,7 +136,7 @@ class entry_category extends mysql_object implements iobject
                     $children[$child_id] = $newobject->getById($child_id);
                 }
             }
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $children;
@@ -168,7 +168,7 @@ class entry_category extends mysql_object implements iobject
             }
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param(
                 "ssss",
                 $this->parent_id,
@@ -179,7 +179,7 @@ class entry_category extends mysql_object implements iobject
             $retval = $stmt->execute();
             $stmt->close();
             static::$_dblink->commit();
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $retval;
@@ -204,13 +204,13 @@ class entry_category extends mysql_object implements iobject
             $stmt->close();
             if (strlen($sql) == 0) return $retval;
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("s", $this->id);
             $stmt->execute();
             $stmt->close();
             static::$_dblink->commit();
             $retval = true;
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $retval;

@@ -19,15 +19,15 @@ $reports = array(
     "report_year" => "report_year_view"
 );
 print("Running tests...\r\n");
-$checkdb = new check_db($config);
-if (!$checkdb->check()) {
+$data_storage = new mysql_storage($config);
+if (!$data_storage->check()) {
     print "DB NEEDS UPDATE";
-    print $checkdb->message;
-    if ($checkdb->update()) {
-        print "DONE UPDATE";
-        print $checkdb->message;
+    print $data_storage->message();
+    if ($data_storage->update()) {
+        print "UPDATE SUCCESSFULL";
+        print $data_storage->message();
     } else {
-        print "UPATE FAILED";
+        print "UPDATE FAILED";
         exit(0);
     }
 }
@@ -56,9 +56,9 @@ function run_additional($object, $viewer = null)
     switch (get_class($object)) {
         case 'account':
             $balance = $object->getBalanceOnDate(new DateTime());
-            $retval = assert(($balance['income'] - 93764.74) <= 0) && $retval;
-            $retval = assert(($balance['expense'] - 93764.74) <= 0) && $retval;
-            $retval = assert($balance['balance'] == 0) && $retval;
+            $retval = assert(is_float($balance['income'])) && $retval;
+            $retval = assert(is_float($balance['expense'])) && $retval;
+            $retval = assert(is_float($balance['balance'])) && $retval;
             $retval = assert(strlen($viewer->printObjectList($object->getAll(array('activa' => array('operator' => '=', 'value' => '1'))))) > 0) && $retval;
             break;
     }

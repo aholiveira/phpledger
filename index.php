@@ -49,8 +49,8 @@ if (array_key_exists("userid", $_POST)) {
     $userauth = do_authentication();
     if ($userauth) {
         $_SESSION['user'] = $_POST["userid"];
-        $checkdb = $object_factory->checkdb();
-        if ($checkdb->check()) {
+        $data_storage = $object_factory->data_storage();
+        if ($data_storage->check()) {
             $defaults = $object_factory->defaults();
             $defaults->getById(1);
             $defaults->entry_date = date("Y-m-d");
@@ -159,8 +159,8 @@ function do_authentication()
      */
     $retval = do_mysql_authentication();
     $object_factory = new object_factory($config);
-    $checkdb = $object_factory->checkdb();
-    if (!$checkdb->check()) {
+    $data_storage = $object_factory->data_storage();
+    if (!$data_storage->check()) {
         if (!headers_sent()) {
             header('Location: update.php');
         } else {

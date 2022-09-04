@@ -9,6 +9,9 @@
  */
 interface iobject_factory
 {
+    function data_storage(): idata_storage;
+    function defaults(): iobject;
+    function user(): iobject;
     function account(): iobject;
     function accounttype(): iobject;
     function currency(): iobject;

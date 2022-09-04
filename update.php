@@ -23,19 +23,19 @@ $pagetitle = "Actualiza&ccedil;&atilde;o necess&aacute;ria";
     <div class="maingrid">
         <div class="main">
             <?php
-            $checkdb = $object_factory->checkdb();
+            $data_storage = $object_factory->data_storage();
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if (strcasecmp($_REQUEST["action"], "actualizar") == 0) {
-                    $result = $checkdb->check();
+                    $result = $data_storage->check();
                     if (!$result) {
-                        print "<p>{$checkdb->message}</p>";
-                        if ($checkdb->update()) {
+                        print "<p>{$data_storage->message}</p>";
+                        if ($data_storage->update()) {
                             print "<p>Database successfully updated.</p>\r\n";
                             print "<p>Redirecting to homepage in 5 seconds.</p>\r\n";
                             print "<meta http-equiv='REFRESH' content='1; URL=index.php'>\r\n";
                         } else {
                             print "<p>Update failed. Check user permissions</p>\r\n";
-                            print "<p>Message log:<br/>{$checkdb->message}</p>\r\n";
+                            print "<p>Message log:<br/>{$data_storage->message}</p>\r\n";
                         }
                     }
                 }
@@ -43,8 +43,8 @@ $pagetitle = "Actualiza&ccedil;&atilde;o necess&aacute;ria";
             ?>
             <p>A base de dados necessita actualiza&ccedil;&atilde;o</p>
             <?php
-            $checkdb->check();
-            print "<p>{$checkdb->message}</p>";
+            $data_storage->check();
+            print "<p>{$data_storage->message}</p>";
             ?>
             <form method="POST" action="update.php">
                 <input class="submit" type="submit" name="action" value="Actualizar" />
