@@ -109,13 +109,13 @@ function build_and_save_record()
         $filter = "movimentos.data_mov>='" . $sdate . "' AND movimentos.data_mov<='" . $edate . "'";
         $parent_filter = "";
         if (array_key_exists("filter_parent_id", $_REQUEST) && strlen($_REQUEST["filter_parent_id"]) > 0) {
-            $parent_filter = "tipo_mov.filter_parent_id={$_REQUEST["filter_parent_id"]} ";
+            $parent_filter = "tipo_mov.parent_id={$_REQUEST["filter_parent_id"]} ";
         }
 
-        $sql = "SELECT mov_id, data_mov, tipo_mov, CONCAT(IF(tipo_mov.filter_parent_id=0,'', CONCAT(parent.tipo_desc,'&#8594;')), tipo_mov.tipo_desc) as tipo_desc, movimentos.conta_id, conta_nome, round(valor_mov,2) as val_mov, deb_cred, moeda_mov, moeda_desc, cambio, valor_euro, obs " .
+        $sql = "SELECT mov_id, data_mov, tipo_mov, CONCAT(IF(tipo_mov.parent_id=0,'', CONCAT(parent.tipo_desc,'&#8594;')), tipo_mov.tipo_desc) as tipo_desc, movimentos.conta_id, conta_nome, round(valor_mov,2) as val_mov, deb_cred, moeda_mov, moeda_desc, cambio, valor_euro, obs " .
             "FROM movimentos 
             RIGHT JOIN tipo_mov ON movimentos.tipo_mov = tipo_mov.tipo_id 
-            RIGHT JOIN tipo_mov as parent ON tipo_mov.filter_parent_id = parent.tipo_id
+            RIGHT JOIN tipo_mov as parent ON tipo_mov.parent_id = parent.tipo_id
             RIGHT JOIN moedas ON movimentos.moeda_mov = moedas.moeda_id 
             RIGHT JOIN contas ON movimentos.conta_id = contas.conta_id WHERE " .
             (array_key_exists("filter_conta_id", $_REQUEST) && strlen($_REQUEST["filter_conta_id"]) > 0 ? " movimentos.conta_id=\"" . $_REQUEST["filter_conta_id"] . "\" AND " : "") . $filter .
@@ -275,9 +275,13 @@ function build_and_save_record()
                         </tr>
                         <?php
                         $result = $db_link->query($sql);
+                        if (!($result instanceof mysqli_result)) {
+                            print $sql;
+                            print $db_link->error;
+                        }
                         while ($row = $result->fetch_assoc()) {
                             print "<tr>";
-                            $saldo = $saldo + $row["valor_euro"];
+                            $saldo += $row["valor_euro"];
                             if (array_key_exists("mov_id", $_GET)) {
                                 if ($row["mov_id"] == $_GET["mov_id"]) {
                                     print "<td data-label=''><input type=\"hidden\" readonly size=\"4\" name=\"mov_id\" value=\"{$row["mov_id"]}\" /><input class=\"submit\" type=\"submit\" name=\"Gravar\" value=\"Gravar\" /></td>\n";
