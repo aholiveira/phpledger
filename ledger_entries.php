@@ -48,6 +48,7 @@ function build_and_save_record()
     $entry->euro_amount = $_POST["deb_cred"] * $_POST["valor_mov"];
     $entry->remarks = (strlen($_POST["obs"]) ? $_POST["obs"] : "");
     $entry->username = (strlen($_SESSION["user"]) ? $_SESSION["user"] : "");
+    
     if (!$entry->save()) {
         Html::myalert("Ocorreu um erro na gravacao");
     } else {
