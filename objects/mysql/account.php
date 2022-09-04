@@ -24,7 +24,7 @@ class account extends mysql_object implements iobject
     public string $name = "";
     public string $number = "";
     public string $iban = "";
-    public string $swift;
+    public string $swift = "";
     public int $group;
     public int $type_id;
     public string $open_date;
@@ -46,7 +46,7 @@ class account extends mysql_object implements iobject
             grupo as `group`,
             tipo_id as `type_id`,
             conta_nib as iban,
-            '' as swift,
+            swift,
             conta_abertura as open_date,
             conta_fecho as close_date,
             activa as active
@@ -73,14 +73,14 @@ class account extends mysql_object implements iobject
     public function getById($id): account
     {
         $sql = "SELECT
-            conta_id as id, 
-            conta_num as `number`, 
-            conta_nome as `name`, 
-            grupo as `group`, 
-            tipo_id as `type_id`, 
-            conta_nib as iban, 
-            '' as swift, 
-            conta_abertura as open_date, 
+            conta_id as id,
+            conta_num as `number`,
+            conta_nome as `name`,
+            grupo as `group`,
+            tipo_id as `type_id`,
+            conta_nib as iban,
+            swift,
+            conta_abertura as open_date,
             conta_fecho as close_date,
             activa as active
         FROM {$this->tableName()}
@@ -88,7 +88,7 @@ class account extends mysql_object implements iobject
         try {
             if (is_object(static::$_dblink)) {
                 $stmt = @static::$_dblink->prepare($sql);
-                if ($stmt == false) throw new \mysqli_sql_exception();
+                if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
                 $stmt->bind_param("i", $id);
                 $stmt->execute();
                 $result = $stmt->get_result();
@@ -115,8 +115,15 @@ class account extends mysql_object implements iobject
     public function getBalance(\DateTime $startDate = null, \DateTime $endDate = null): array
     {
         $where = "WHERE conta_id=? ";
-        if (!is_null($startDate)) $where .= " AND `data_mov`>=? ";
-        if (!is_null($endDate)) $where .= " AND data_mov<=? ";
+        $param_array = array($this->id);
+        if (!is_null($startDate)) {
+            $where .= " AND `data_mov`>=? ";
+            $param_array[] = $startDate->format("Y-m-d");
+        }
+        if (!is_null($endDate)) {
+            $where .= " AND data_mov<=? ";
+            $param_array[] = $endDate->format("Y-m-d");
+        }
         $sql = "SELECT 
         SUM(ROUND(IF(deb_cred='1',valor_euro,0),2)) AS income, 
         SUM(ROUND(IF(deb_cred='-1',-valor_euro,0),2)) AS expense, 
@@ -128,21 +135,8 @@ class account extends mysql_object implements iobject
         try {
             if (is_object(static::$_dblink)) {
                 $stmt = @static::$_dblink->prepare($sql);
-                if ($stmt == false) throw new \mysqli_sql_exception();
-                $startDate_s = !is_null($startDate) ? $startDate->format("Y-m-d") : "";
-                $endDate_s = !is_null($endDate) ? $endDate->format("Y-m-d") : "";
-                if (is_null($startDate) && is_null($endDate)) {
-                    $stmt->bind_param("i", $this->id);
-                }
-                if (!is_null($startDate) && is_null($endDate)) {
-                    $stmt->bind_param("is", $this->id, $startDate_s);
-                }
-                if (is_null($startDate) && !is_null($endDate)) {
-                    $stmt->bind_param("is", $this->id, $endDate_s);
-                }
-                if (!is_null($startDate) && !is_null($endDate)) {
-                    $stmt->bind_param("iss", $this->id, $startDate_s, $endDate_s);
-                }
+                if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+                $stmt->bind_param(str_repeat('s', sizeof($param_array)), ...$param_array);
                 $stmt->execute();
                 $stmt->bind_result($income, $expense, $balance);
                 $stmt->fetch();
@@ -168,28 +162,30 @@ class account extends mysql_object implements iobject
             $stmt->bind_result($return_id);
             if (!is_null($stmt->fetch()) && $return_id == $this->id) {
                 $sql = "UPDATE {$this->tableName()} SET 
-                    conta_num=?, 
-                    conta_nome=?, 
-                    tipo_id=?, 
-                    conta_nib=?, 
-                    conta_abertura=?, 
-                    conta_fecho=?, 
-                    activa=?
-                    WHERE conta_id=?";
+                    `conta_num`=?,
+                    `conta_nome`=?,
+                    `tipo_id`=?,
+                    `conta_nib`=?,
+                    `swift`=?,
+                    `conta_abertura`=?,
+                    `conta_fecho`=?,
+                    `activa`=?
+                    WHERE `conta_id`=?";
             } else {
                 $sql = "INSERT INTO " . static::$tableName
-                    . "(conta_num, conta_nome, tipo_id, conta_nib, conta_abertura, conta_fecho, activa, conta_id) "
+                    . "(`conta_num`, `conta_nome`, `tipo_id`, `conta_nib`, `swift`, `conta_abertura`, `conta_fecho`, `activa`, `conta_id`) "
                     . "VALUES "
-                    . "(?, ?, ?, ?, ?, ?, ?, ?)";
+                    . "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
             }
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
             $stmt->bind_param(
-                "ssssssss",
+                "sssssssss",
                 $this->number,
                 $this->name,
                 $this->type_id,
                 $this->iban,
+                $this->swift,
                 $this->open_date,
                 $this->close_date,
                 $this->active,
@@ -236,6 +232,6 @@ class account extends mysql_object implements iobject
     }
     public function getFreeId(string $field = "conta_id"): int
     {
-        return parent::getFreeId($field);;
+        return parent::getFreeId($field);
     }
 }

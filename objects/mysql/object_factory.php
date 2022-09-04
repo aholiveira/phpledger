@@ -10,7 +10,7 @@
 include __DIR__ . "/mysql_object.php";
 include __DIR__ . "/account.php";
 include __DIR__ . "/accounttype.php";
-include __DIR__ . "/checkdb.php";
+include __DIR__ . "/mysql_storage.php";
 include __DIR__ . "/currency.php";
 include __DIR__ . "/defaults.php";
 include __DIR__ . "/entry_category.php";
@@ -33,19 +33,22 @@ class object_factory implements iobject_factory
         $pass = $config->getParameter("password");
         $this->_config = $config;
         try {
-            $this->_dblink = @new mysqli($host, $user, $pass, $dbase);
+            $this->_dblink = @new \mysqli($host, $user, $pass, $dbase);
             if ($this->_dblink->connect_errno) {
-                throw new RuntimeException('mysqli connection error: ' . $this->_dblink->connect_error);
+                throw new \RuntimeException('mysqli connection error: ' . $this->_dblink->connect_error);
             }
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             print_var($this, "THIS", true);
-            print_var(static::$_dblink, "DBLINK", true);
+            print_var($this->_dblink, "DBLINK", true);
             print_var($ex, "EXCEPTION", true);
-            debug_print_backtrace();
-            debug_print($ex->getMessage());
-            debug_print($ex->getTraceAsString());
-            $this->_dblink = mysqli_init();
+            #debug_print_backtrace();
+            #debug_print($ex->getMessage());
+            #debug_print($ex->getTraceAsString());
         }
+    }
+    public function data_storage(): idata_storage
+    {
+        return new mysql_storage($this->_config);
     }
     public function account(): account
     {
@@ -54,10 +57,6 @@ class object_factory implements iobject_factory
     public function accounttype(): accounttype
     {
         return new accounttype($this->_dblink);
-    }
-    public function checkdb(): check_db
-    {
-        return new check_db($this->_config);
     }
     public function currency(): currency
     {

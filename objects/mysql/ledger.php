@@ -24,7 +24,7 @@ class ledger extends mysql_object implements iobject
         try {
             if (!is_object(static::$_dblink)) return $retval;
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->execute();
             $stmt->bind_result($id);
             while ($stmt->fetch()) {
@@ -47,7 +47,7 @@ class ledger extends mysql_object implements iobject
         if (!is_object(static::$_dblink)) return $this;
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -81,7 +81,7 @@ class ledger extends mysql_object implements iobject
             }
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param(
                 "ss",
                 $this->name,

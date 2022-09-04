@@ -8,12 +8,13 @@
  *
  */
 
-class check_db implements icheck_storage
+class mysql_storage implements idata_storage
 {
     private $_dblink;
-    public string $message;
+    private string $_message = "";
     private config $_config;
     private $_tableCreateSQL;
+    private $_tableNewColumnNames;
     public function __construct(config $config)
     {
         $this->_config = $config;
@@ -22,12 +23,21 @@ class check_db implements icheck_storage
         $user = $config->getParameter("user");
         $pass = $config->getParameter("password");
         $dbase = $config->getParameter("database");
-        $this->_dblink = new mysqli($host, $user, $pass, $dbase) or die(mysqli_connect_error());
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+        $this->_dblink = new \mysqli($host, $user, $pass, $dbase);
+        if ($this->_dblink->connect_errno) {
+            throw new RuntimeException('mysqli connection error: ' . $this->_dblink->connect_error);
+        }
         $this->setTableCreateSQL();
     }
-    private function addMessage(string $message)
+    public function addMessage(string $message): string
     {
-        $this->message .= "{$message}</br>\r\n";
+        $this->_message .= "{$message}</br>\r\n";
+        return $this->message();
+    }
+    public function message(): string
+    {
+        return !is_null($this->_message) ? $this->_message : "";
     }
     public function check(): bool
     {
@@ -41,6 +51,14 @@ class check_db implements icheck_storage
             if ($this->getTableEngine($table_name) != "InnoDB") {
                 $this->addMessage("Table {$table_name} engine not InnoDB");
                 $retval = false;
+            }
+            if (array_key_exists($table_name, $this->_tableNewColumnNames)) {
+                foreach ($this->_tableNewColumnNames[$table_name] as $old_column_name => $new_column_name) {
+                    if ($this->tableHasColumn($table_name, $old_column_name) && !$this->tableHasColumn($table_name, $new_column_name)) {
+                        $this->addMessage("Table {$table_name} column {$old_column_name} needs renaming to {$new_column_name}");
+                        $retval = false;
+                    }
+                }
             }
             foreach (array_keys($this->_tableCreateSQL[$table_name]['columns']) as $column) {
                 if (!$this->tableHasColumn($table_name, $column)) {
@@ -70,7 +88,7 @@ class check_db implements icheck_storage
                 $this->addMessage("Table users is empty");
                 $retval = false;
             }
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->addMessage("Table users needs update");
             $retval = false;
         }
@@ -98,9 +116,17 @@ class check_db implements icheck_storage
                     $retval = false;
                 }
             }
+            if (array_key_exists($table_name, $this->_tableNewColumnNames)) {
+                foreach ($this->_tableNewColumnNames[$table_name] as $old_column_name => $new_column_name) {
+                    if (!$this->renameColumnOnTable($old_column_name, $new_column_name, $table_name)) {
+                        $this->addMessage("Could not rename column {$old_column_name} on table {$table_name}");
+                        $retval = false;
+                    }
+                }
+            }
             foreach ($this->_tableCreateSQL[$table_name]['columns'] as $column_name => $column_definition) {
                 if (!$this->tableHasColumn($table_name, $column_name)) {
-                    $definition = $column_definition . (isset($last_column) ? " AFTER {$last_column}" : "");
+                    $definition = $column_definition . (isset($last_column) ? " AFTER `{$last_column}`" : "");
                     if (!$this->addColumnToTable($column_name, $table_name, $definition)) {
                         $this->addMessage("Could not add column {$column_name} to table {$table_name}");
                         $retval = false;
@@ -164,7 +190,7 @@ class check_db implements icheck_storage
         }
         return $retval;
     }
-    public function populateRandomData()
+    public function populateRandomData(): void
     {
         global $object_factory;
         $category = $object_factory->entry_category();
@@ -179,7 +205,7 @@ class check_db implements icheck_storage
             unset($category_list[0]);
         }
 
-        $months = date_diff(new DateTime(date("Y-m-d")), new DateTime(date("Y-m-d", mktime(0, 0, 0, 1, 1, $start_year))));
+        $months = date_diff(new \DateTime(date("Y-m-d")), new \DateTime(date("Y-m-d", mktime(0, 0, 0, 1, 1, $start_year))));
         for ($year = $start_year; $year <= $end_year; $year++) {
             for ($month = 1; $month <= ($year == date("Y") ? date("m") : 12); $month++) {
                 $days_in_month = ($year == date("Y") && $month == date("m") ? date("d") : cal_days_in_month(CAL_GREGORIAN, $month, $year));
@@ -191,13 +217,14 @@ class check_db implements icheck_storage
                     if ($ledger_entry->category_id == 0) exit(0);
                     $ledger_entry->entry_date = date("Y-m-d", mktime(0, 0, 0, $month, rand(1, $days_in_month), $year));
                     $ledger_entry->direction =  array(-1, 1)[array_rand(array(-1, 1))];
-                    $ledger_entry->currency_amount = rand(1, 100000) / 100;
+                    $ledger_entry->currency_amount = rand(1, 10000) / 100;
                     $ledger_entry->currency_id = 'EUR';
                     $ledger_entry->euro_amount = $ledger_entry->currency_amount * $ledger_entry->direction;
                     $ledger_entry->exchange_rate = 1;
+                    $ledger_entry->username = $this->_config->getParameter("user");
                     $ledger_entry->save();
                 }
-                $curr_month = date_diff(new DateTime(date("Y-m-d", mktime(0, 0, 0, $month, 1, $year))), new DateTime(date("Y-m-d", mktime(0, 0, 0, 1, 1, $start_year))));
+                $curr_month = date_diff(new \DateTime(date("Y-m-d", mktime(0, 0, 0, $month, 1, $year))), new \DateTime(date("Y-m-d", mktime(0, 0, 0, 1, 1, $start_year))));
                 print number_format(($curr_month->y * 12 + $curr_month->m) / ($months->y * 12 + $curr_month->m + 1) * 100, 1) . "%\r\n";
             }
         }
@@ -205,7 +232,7 @@ class check_db implements icheck_storage
     private function do_query_get_result($sql)
     {
         $retval = null;
-        if (!is_object($this->_dblink)) return $retval;
+        if (!($this->_dblink instanceof \mysqli)) return $retval;
         try {
             $stmt = @$this->_dblink->prepare($sql);
             if ($stmt == false) return $retval;
@@ -213,7 +240,7 @@ class check_db implements icheck_storage
             $stmt->bind_result($retval);
             $stmt->fetch();
             $stmt->close();
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             print_var($ex, "", true);
         }
         return $retval;
@@ -221,13 +248,13 @@ class check_db implements icheck_storage
     private function do_query($sql)
     {
         $retval = false;
-        if (!is_object($this->_dblink)) return $retval;
+        if (!($this->_dblink instanceof \mysqli)) return $retval;
         try {
             $stmt = $this->_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $retval = $stmt->execute();
             $stmt->close();
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             print_var($ex, "", true);
             print_var($this->_dblink, "", false);
         }
@@ -236,12 +263,12 @@ class check_db implements icheck_storage
     private function tableExists(string $table_name): bool
     {
         $retval = false;
-        if (!is_object($this->_dblink)) return $retval;
+        if (!($this->_dblink instanceof \mysqli)) return $retval;
         $sql = "SELECT count(*) as colCount FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='{$table_name}'";
         try {
             $count = $this->do_query_get_result($sql);
             $retval = ($count == 1);
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             print_var($ex, "", true);
             print_var($this->_dblink, "", false);
         }
@@ -250,13 +277,29 @@ class check_db implements icheck_storage
     private function addColumnToTable(string $column_name, string $table_name, string $typedef): bool
     {
         $retval = false;
-        if (!is_object($this->_dblink)) return $retval;
+        if (!($this->_dblink instanceof \mysqli)) return $retval;
         $sql = "SELECT count(*) as colCount FROM information_schema.columns WHERE table_name = '{$table_name}' AND column_name = '{$column_name}' and table_schema = DATABASE()";
         try {
             if ($this->tableHasColumn($table_name, $column_name)) return true;
             $sql = "ALTER TABLE `{$table_name}` ADD COLUMN `{$column_name}` $typedef";
             $retval = $this->do_query($sql);
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
+            print_var($ex, "", true);
+            print_var($this->_dblink, "", false);
+        }
+        return $retval;
+    }
+    private function renameColumnOnTable(string $old_column_name, string $new_column_name, string $table_name): bool
+    {
+        $retval = false;
+        if (!($this->_dblink instanceof \mysqli)) return $retval;
+        $sql = "SELECT count(*) as colCount FROM information_schema.columns WHERE table_name = '{$table_name}' AND column_name = '{$new_column_name}' and table_schema = DATABASE()";
+        try {
+            if ($this->tableHasColumn($table_name, $new_column_name)) return false;
+            if (!$this->tableHasColumn($table_name, $old_column_name)) return false;
+            $sql = "ALTER TABLE `{$table_name}` RENAME COLUMN `{$old_column_name}` TO `{$new_column_name}`";
+            $retval = $this->do_query($sql);
+        } catch (\Exception $ex) {
             print_var($ex, "", true);
             print_var($this->_dblink, "", false);
         }
@@ -265,12 +308,12 @@ class check_db implements icheck_storage
     private function tableHasForeignKey(string $table_name, string $key_name): bool
     {
         $retval = false;
-        if (!is_object($this->_dblink)) return $retval;
+        if (!($this->_dblink instanceof \mysqli)) return $retval;
         $sql = "SELECT count(*) as colCount FROM information_schema.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='{$table_name}' AND CONSTRAINT_NAME='{$key_name}'";
         try {
             $count = $this->do_query_get_result($sql);
             $retval = ($count == 1);
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             print_var($ex, "", true);
             print_var($this->_dblink, "", false);
         }
@@ -279,12 +322,12 @@ class check_db implements icheck_storage
     private function addForeignKeyToTable(string $key_name, string $fk_def, string $table_name): bool
     {
         $retval = false;
-        if (!is_object($this->_dblink)) return $retval;
+        if (!($this->_dblink instanceof \mysqli)) return $retval;
         $sql = "ALTER TABLE `{$table_name}` ADD FOREIGN KEY `{$key_name}` (`{$key_name}`) REFERENCES {$fk_def}";
         try {
             if ($this->tableHasForeignKey($table_name, $key_name)) return true;
             $retval = $this->do_query($sql);
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             print_var($ex, "", true);
             print_var($this->_dblink, "", false);
         }
@@ -293,27 +336,28 @@ class check_db implements icheck_storage
     private function tableHasColumn(string $table_name, string $column_name): bool
     {
         $retval = false;
-        if (!is_object($this->_dblink)) return $retval;
+        if (!($this->_dblink instanceof \mysqli)) return $retval;
         $sql = "SELECT count(*) as colCount FROM information_schema.columns WHERE table_name = '{$table_name}' AND column_name = '{$column_name}' and table_schema = DATABASE()";
         try {
             $count = $this->do_query_get_result($sql);
             $retval = ($count == 1);
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             print_var($ex, "", true);
             print_var($this->_dblink, "", false);
         }
         return $retval;
     }
-    private function getTableEngine(string $table_name): string
+    private function getTableEngine(string $table_name): ?string
     {
         $retval = "";
         if (!is_object($this->_dblink)) return $retval;
         $sql = "SELECT ENGINE FROM information_schema.TABLES WHERE table_name = '{$table_name}' AND table_schema = DATABASE()";
         try {
-            $retval = $this->do_query_get_result($sql);
-        } catch (Exception $ex) {
+            $retval = @$this->do_query_get_result($sql);
+        } catch (\Exception $ex) {
             print_var($ex, "", true);
             print_var($this->_dblink, "", false);
+            $retval = "";
         }
         return $retval;
     }
@@ -359,6 +403,17 @@ class check_db implements icheck_storage
     }
     private function setTableCreateSQL()
     {
+        $this->_tableNewColumnNames['contas'] = array(
+            'id' => 'conta_id',
+            'number' => 'conta_num',
+            'name' => 'conta_nome',
+            'group' => 'grupo',
+            'type_id' => 'tipo_id',
+            'iban' => 'conta_nib',
+            'open_date' => 'conta_abertura',
+            'close_date' => 'conta_fecho',
+            'active' => 'activa'
+        );
 
         $this->_tableCreateSQL['contas']['columns'] = array(
             "conta_id" => "int(3) NOT NULL DEFAULT 0",
@@ -367,6 +422,7 @@ class check_db implements icheck_storage
             "grupo" => "int(3) NOT NULL DEFAULT 0",
             "tipo_id" => "int(2) DEFAULT NULL",
             "conta_nib" => "char(24) DEFAULT NULL",
+            "swift" => "char(24) NOT NULL DEFAULT ''",
             "conta_abertura" => "date DEFAULT NULL",
             "conta_fecho" => "date DEFAULT NULL",
             "activa" => "int(1) NOT NULL DEFAULT 0"

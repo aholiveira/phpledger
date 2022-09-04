@@ -18,7 +18,7 @@ class report_month implements ireport
     public array $savings;
     private mysqli $db;
 
-    public function __construct(mysqli $dblink)
+    public function __construct(\mysqli $dblink)
     {
         $this->db = $dblink;
         for ($i = 1; $i <= 12; $i++) {
@@ -63,8 +63,8 @@ class report_month implements ireport
         }
         $this->savings = array();
         foreach ($month_list as $month) {
-            $startDate = new DateTime("{$this->year}-$month-1");
-            $endDate = (new DateTime("{$this->year}-$month-1"))->add(DateInterval::createFromDateString('first day of next month'))->add(DateInterval::createFromDateString("-1 day"));
+            $startDate = new \DateTime("{$this->year}-$month-1");
+            $endDate = (new \DateTime("{$this->year}-$month-1"))->add(\DateInterval::createFromDateString('first day of next month'))->add(\DateInterval::createFromDateString("-1 day"));
             foreach ($savings_accounts as $account) {
                 $balances = $account->getBalance($startDate, $endDate);
                 if (array_key_exists($month, $this->savings)) {

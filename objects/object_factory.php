@@ -11,7 +11,7 @@ if (!defined("BACKEND") || !defined("OBJECTS_DIR")) {
     die("This file should only be included!");
 }
 
-include OBJECTS_DIR . "/interfaces/icheck_storage.php";
+include OBJECTS_DIR . "/interfaces/idata_storage.php";
 include OBJECTS_DIR . "/interfaces/ireport.php";
 include OBJECTS_DIR . "/interfaces/iobject.php";
 include OBJECTS_DIR . "/interfaces/iobject_factory.php";

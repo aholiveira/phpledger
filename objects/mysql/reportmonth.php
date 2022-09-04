@@ -11,7 +11,7 @@
  */
 class report_month extends report implements ireport
 {
-    public function __construct(mysqli $dblink)
+    public function __construct(\mysqli $dblink)
     {
         parent::__construct($dblink);
         for ($i = 1; $i <= 12; $i++) {
@@ -47,8 +47,8 @@ class report_month extends report implements ireport
         }
         $this->savings = array();
         foreach (array_keys($this->columnHeaders) as $header) {
-            $startDate = new DateTime(date("Y-m-d", mktime(0, 0, 0, $header, 1, $year)));
-            $endDate = new DateTime(date("Y-m-d", mktime(0, 0, 0, $header + 1, 0, $year)));
+            $startDate = new \DateTime(date("Y-m-d", mktime(0, 0, 0, $header, 1, $year)));
+            $endDate = new \DateTime(date("Y-m-d", mktime(0, 0, 0, $header + 1, 0, $year)));
             foreach ($savings_accounts as $account) {
                 $balances = $account->getBalance($startDate, $endDate);
                 if (array_key_exists($header, $this->savings)) {

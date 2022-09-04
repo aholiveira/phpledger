@@ -21,7 +21,7 @@ class user extends mysql_object implements iobject
     protected int $_role;
     protected static string $tableName = "users";
 
-    public function __construct(mysqli $dblink)
+    public function __construct(\mysqli $dblink)
     {
         parent::__construct($dblink);
         $this->_token_expiry = null;
@@ -145,7 +145,7 @@ class user extends mysql_object implements iobject
             }
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             if (!is_null($this->_token_expiry) && strlen($this->_token_expiry) == 0) {
                 $this->_token_expiry = NULL;
             }
@@ -166,7 +166,7 @@ class user extends mysql_object implements iobject
                 throw new mysqli_sql_exception(static::$_dblink->error);
             }
             static::$_dblink->commit();
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
             if ($stmt) $stmt->close();
             static::$_dblink->rollback();
@@ -192,14 +192,14 @@ class user extends mysql_object implements iobject
         try {
             if (!is_object(static::$_dblink)) return $retval;
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception(static::$_dblink->error);
+            if ($stmt == false) throw new \mysqli_sql_exception(static::$_dblink->error);
             $stmt->execute();
             $result = $stmt->get_result();
             while ($newobject = $result->fetch_object(__CLASS__, array(static::$_dblink))) {
                 $retval[$newobject->id] = $newobject;
             }
             $stmt->close();
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $retval;
@@ -222,7 +222,7 @@ class user extends mysql_object implements iobject
         }
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("s", $username);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -231,7 +231,7 @@ class user extends mysql_object implements iobject
             if ($newobject instanceof user) {
                 $this->copyfromObject($newobject);
             }
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $this;
@@ -254,7 +254,7 @@ class user extends mysql_object implements iobject
         }
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -263,7 +263,7 @@ class user extends mysql_object implements iobject
             if ($newobject instanceof user) {
                 $this->copyfromObject($newobject);
             }
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $this;
@@ -274,7 +274,7 @@ class user extends mysql_object implements iobject
         $retval = false;
         if (isset($this->_username) && isset($this->_email)) {
             $this->setToken($this->createToken());
-            $this->setTokenExpiry((new DateTime(date("Y-m-d H:i:s")))->add(new DateInterval("PT24H"))->format("Y-m-d H:i:s"));
+            $this->setTokenExpiry((new \DateTime(date("Y-m-d H:i:s")))->add(new \DateInterval("PT24H"))->format("Y-m-d H:i:s"));
             if ($this->save()) {
                 $retval = true;
                 $message = "Esta' a receber este email porque solicitou a reposicao da sua palavra-passe na aplicacao de gestao financeira.\r\n";
@@ -310,7 +310,7 @@ class user extends mysql_object implements iobject
         $this->clear();
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("s", $token);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -321,7 +321,7 @@ class user extends mysql_object implements iobject
             } else {
                 $retval = null;
             }
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $retval;

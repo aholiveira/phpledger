@@ -13,7 +13,7 @@ class currency extends mysql_object implements iobject
     public float $exchange_rate;
     protected static string $tableName = "moedas";
 
-    public function __construct(mysqli $dblink)
+    public function __construct(\mysqli $dblink)
     {
         parent::__construct($dblink);
     }
@@ -25,14 +25,14 @@ class currency extends mysql_object implements iobject
         try {
             if (!is_object(static::$_dblink)) return $retval;
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->execute();
             $result = $stmt->get_result();
             while ($newobject = $result->fetch_object(__CLASS__, array(static::$_dblink))) {
                 $retval[$newobject->id] = $newobject;
             }
             $stmt->close();
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $retval;
@@ -44,7 +44,7 @@ class currency extends mysql_object implements iobject
         try {
             if (is_object(static::$_dblink)) {
                 $stmt = @static::$_dblink->prepare($sql);
-                if ($stmt == false) throw new mysqli_sql_exception();
+                if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
                 $stmt->bind_param("i", $id);
                 $stmt->execute();
                 $result = $stmt->get_result();
@@ -54,7 +54,7 @@ class currency extends mysql_object implements iobject
                     $this->copyfromObject($newobject);
                 }
             }
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $this;
@@ -89,7 +89,7 @@ class currency extends mysql_object implements iobject
             $stmt->close();
             static::$_dblink->commit();
             $retval = true;
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $retval;

@@ -121,7 +121,7 @@ class defaults extends mysql_object implements iobject
             }
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
-            if (!$stmt) throw new mysqli_sql_exception(static::$_dblink->error);
+            if (!$stmt) throw new \mysqli_sql_exception(static::$_dblink->error);
             $stmt->bind_param(
                 "ssssss",
                 $this->category_id,
@@ -131,12 +131,12 @@ class defaults extends mysql_object implements iobject
                 $this->direction,
                 $this->id
             );
-            if (!$stmt) throw new mysqli_sql_exception(static::$_dblink->error);
+            if (!$stmt) throw new \mysqli_sql_exception(static::$_dblink->error);
             $retval = $stmt->execute();
             $stmt->close();
-            if (!$retval) throw new mysqli_sql_exception(static::$_dblink->error);
+            if (!$retval) throw new \mysqli_sql_exception(static::$_dblink->error);
             static::$_dblink->commit();
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             static::$_dblink->rollback();
             $this->handleException($ex, $sql);
         }

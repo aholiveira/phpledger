@@ -17,7 +17,7 @@ class report implements ireport
     public array $columnHeaders;
     public array $dateFilters;
     public array $savings;
-    public function __construct(mysqli $dblink)
+    public function __construct(\mysqli $dblink)
     {
         $this->db = $dblink;
     }
@@ -28,7 +28,7 @@ class report implements ireport
         $stmt = $this->db->prepare($query);
         if ($stmt == false) {
             debug_print($this->db->error);
-            throw new mysqli_sql_exception($this->db->error);
+            throw new \mysqli_sql_exception($this->db->error);
         }
         $stmt->bind_param(str_repeat('s', sizeof($vars)), ...$vars);
         $stmt->execute();

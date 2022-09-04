@@ -17,7 +17,7 @@ class report_year extends report implements ireport
     public array $columnHeaders;
     public array $savings;
 
-    public function __construct(mysqli $dblink)
+    public function __construct(\mysqli $dblink)
     {
         parent::__construct($dblink);
         $this->first_year = 2999;
@@ -57,8 +57,8 @@ class report_year extends report implements ireport
         }
         $this->savings = array();
         foreach (array_keys($this->columnHeaders) as $header) {
-            $startDate = new DateTime(date("Y-m-d", mktime(0, 0, 0, 1, 1, $header)));
-            $endDate = new DateTime(date("Y-m-d", mktime(0, 0, 0, 12, 31, $header)));
+            $startDate = new \DateTime(date("Y-m-d", mktime(0, 0, 0, 1, 1, $header)));
+            $endDate = new \DateTime(date("Y-m-d", mktime(0, 0, 0, 12, 31, $header)));
             foreach ($savings_accounts as $account) {
                 $balances = $account->getBalance($startDate, $endDate);
                 if (array_key_exists($header, $this->savings)) {

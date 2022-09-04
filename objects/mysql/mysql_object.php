@@ -43,38 +43,45 @@ abstract class mysql_object implements iobject
      */
     public function getFreeId(string $field = "id"): int
     {
+        $db = static::$_dblink;
+        if (!is_object($db) || is_null(static::$tableName)) {
+            return -1;
+        }
         try {
-            $db = static::$_dblink;
-            $fld = $field;
-            if (!is_object($db) || is_null(static::$tableName)) {
-                return -1;
-            }
-            $sql = "SELECT {$field} FROM " . static::$tableName . " ORDER BY {$field}";
+            $sql = "SELECT `{$field}` FROM " . static::$tableName . " ORDER BY `{$field}`";
             $result = @$db->query($sql);
-            if (!$result) return -1;
-            $row = $result->fetch_assoc();
-            if ($result->num_rows == 0) {
-                $result->close();
-                return 1;
+            if ($result == FALSE) $retval = -1;
+            if ($result instanceof \mysqli_result) {
+                if ($result->num_rows == 0) {
+                    $retval = 1;
+                }
+                $row = $result->fetch_assoc();
+                if ($result->num_rows == 1) {
+                    $retval = ($row[$field] == 1 ? 2 : 1);
+                }
+                if ($result->num_rows > 1) {
+                    $last = $row[$field];
+                    $prev = 0;
+                    while ($row && ((int)$last - (int)$prev) <= 1) {
+                        $prev = $last;
+                        $last = $row[$field];
+                        $row = $result->fetch_assoc();
+                    }
+                    if ($last - $prev <= 1) {
+                        $retval = $last + 1;
+                    } else {
+                        $retval = $prev + 1;
+                    }
+                }
             }
-            if ($result->num_rows == 1) {
-                $result->close();
-                return ($row[$fld] == 1 ? 2 : 1);
-            }
-            $last = $row[$fld];
-            $prev = 0;
-            while ($row = @$result->fetch_assoc() and ((int)$last - (int)$prev) <= 1) {
-                $prev = $last;
-                $last = $row[$fld];
-            }
-            $result->close();
-            if ($last - $prev <= 1)
-                return $last + 1;
-            else
-                return $prev + 1;
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
+        } finally {
+            if (isset($result) && ($result instanceof \mysqli_result)) {
+                $result->close();
+            }
         }
+        return $retval;
     }
     public function __toString()
     {

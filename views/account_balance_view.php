@@ -56,7 +56,7 @@ class account_balance_view extends object_viewer
         $retval .= "<td class='deposits' data-label='Depositos'>" . normalize_number($totals['income']) . "</td>";
         $retval .= "<td class='withdrawls' data-label='Levantam.'>" . normalize_number($totals['expense']) . "</td>";
         $retval .= "<td class='balance' data-label='Saldo'>" . normalize_number($totals['balance']) . "</td>";
-        $retval .= "<td class='percent' data-label='Percentagem'>100</td>";
+        $retval .= "<td class='percent' data-label='Percentagem'>" . normalize_number(100) . "</td>";
         $retval .= "<td class='entries-list' data-label='Movimentos'></td>";
         $retval .= "</tr>\r\n";
         $retval .= "</tbody>\r\n";

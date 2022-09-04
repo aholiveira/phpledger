@@ -1,29 +1,29 @@
 <?php
 include "common.php";
 debug_print("Running tests...");
-$checkdb = new check_db($config);
-if (!$checkdb->check()) {
+$data_storage = $object_factory->data_storage();
+if (!$data_storage->check()) {
     print "DB NEEDS UPDATE...";
-    print $checkdb->message;
-    if ($checkdb->update()) {
-        print $checkdb->message;
-        print "DONE UPDATE<br>\n";
+    print $data_storage->message();
+    if ($data_storage->update()) {
+        print $data_storage->message();
+        print "UPDATE SUCESS<br>\n";
     } else {
-        print "UPATE FAILED<br>\n";
+        print "UPDATE FAILED<br>\n";
         exit(0);
     }
 }
 
-$checkdb->populateRandomData();
-exit(0);
-/*$object1 = $object_factory->account();
+#$data_storage->populateRandomData();
+$object = $object_factory->account();
 run_tests($object);
 $balance = $object->getBalanceOnDate(new DateTime());
-assert(($balance['income'] - 93764.74) <= 0);
-assert(($balance['expense'] - 93764.74) <= 0);
-assert($balance['balance'] == 0);
+print_var($balance);
+assert(is_float($balance['income']));
+assert(is_float($balance['expense']));
+assert(is_float($balance['balance']));
 $viewer = $view_factory->account_balance_view($object);
-debug_print($viewer->printObjectList($object->getAll(array('activa' => array('operator' => '=', 'value' => '1')))));
+/*debug_print($viewer->printObjectList($object->getAll(array('activa' => array('operator' => '=', 'value' => '1')))));
 
 $viewer = $view_factory->account_view($object);
 run_views($viewer, $object);
