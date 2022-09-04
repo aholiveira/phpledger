@@ -41,9 +41,9 @@ class object_factory implements iobject_factory
             print_var($this, "THIS", true);
             print_var($this->_dblink, "DBLINK", true);
             print_var($ex, "EXCEPTION", true);
-            #debug_print_backtrace();
-            #debug_print($ex->getMessage());
-            #debug_print($ex->getTraceAsString());
+            debug_print_backtrace();
+            debug_print($ex->getMessage());
+            debug_print($ex->getTraceAsString());
         }
     }
     public function data_storage(): idata_storage
