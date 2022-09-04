@@ -16,7 +16,6 @@ $cookie_params = array(
 );
 session_set_cookie_params($cookie_params);
 session_start();
-session_regenerate_id(true);
 if (array_key_exists("do_logout", $_GET) && $_GET["do_logout"] == 1) {
     session_destroy();
 }

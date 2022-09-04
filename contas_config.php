@@ -17,7 +17,6 @@ $cookie_params = array(
 //session_cache_limiter('nocache');
 session_set_cookie_params($cookie_params);
 session_start();
-session_regenerate_id(true);
 $config = new config();
 include __DIR__ . '/config.php';
 if (!isset($_SESSION['user'])) {

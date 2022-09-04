@@ -12,6 +12,7 @@
 abstract class mysql_object implements iobject
 {
     public $id;
+    protected string $_errormessage;
     protected static \mysqli $_dblink;
     protected static string $tableName;
     public function __construct(\mysqli $dblink)
@@ -94,8 +95,8 @@ abstract class mysql_object implements iobject
      * - - field_name is a field which you want to filter by
      * - - operator is any valid SQL operator (LIKE, BETWEEN, <, >, <=, =>)
      * - - value is the value to be filtered
-     * 
-     * @return string where condition string built from the supplied values or an empty string
+     * @param ?string $table_name table name to be used. if supplied where expression is built using "table_name.field_name" syntax
+     * @return string SQL "WHERE" condition string built from the supplied values or an empty string
      */
     protected static function getWhereFromArray(array $field_filter, ?string $table_name = null): string
     {
@@ -118,6 +119,24 @@ abstract class mysql_object implements iobject
      */
     abstract function getAll(array $field_filter = array()): array;
     abstract function save(): bool;
+    /**
+     * Validates object data.
+     * Descendant classes should implement their own code.
+     * 
+     * @return bool TRUE if object is valid. FALSE otherwise
+     */
+    public function validate(): bool
+    {
+        return TRUE;
+    }
+    public function error_message(): string
+    {
+        return $this->_errormessage;
+    }
+    protected function setErrorMessage(string $message)
+    {
+        $this->_errormessage = $message;
+    }
     protected function tableName(): string
     {
         return static::$tableName;
