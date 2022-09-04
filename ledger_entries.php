@@ -275,10 +275,6 @@ function build_and_save_record()
                         </tr>
                         <?php
                         $result = $db_link->query($sql);
-                        if (!($result instanceof mysqli_result)) {
-                            print $sql;
-                            print $db_link->error;
-                        }
                         while ($row = $result->fetch_assoc()) {
                             print "<tr>";
                             $saldo += $row["valor_euro"];
@@ -302,7 +298,7 @@ function build_and_save_record()
                             }
                             if (!array_key_exists("mov_id", $_GET) || $row["mov_id"] != $_GET["mov_id"]) {
                         ?>
-                                <td data-label='ID' class='id'><a name="<?php print $row["mov_id"] ?>" title="Editar entrada" href="ledger_entries.php?mov_id=<?php print $row["mov_id"]; ?>#<?php print $row["mov_id"]; ?>" </a></td>
+                                <td data-label='ID' class='id'><a name="<?php print $row["mov_id"] ?>" title="Editar entrada" href="ledger_entries.php?mov_id=<?php print $row["mov_id"]; ?>#<?php print $row["mov_id"]; ?>"><?php print $row["mov_id"] ?></a></td>
                                 <td data-label='Data' class='data'><?php print $row["data_mov"]; ?></td>
                                 <td data-label='Categoria' class='category'><a title="Filtrar lista para esta categoria" href="ledger_entries.php?filter_entry_type=<?php print $row["tipo_mov"]; ?>"><?php print $row["tipo_desc"]; ?></a></td>
                                 <td data-label='Moeda' class='currency'><?php print $row["moeda_desc"]; ?></td>
