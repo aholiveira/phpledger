@@ -10,14 +10,21 @@
 global $user;
 global $pass;
 $cookie_params = array(
-    'lifetime' => 3600,
+    'lifetime' => 0,
     'path' => substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/') + 1),
-    'samesite' => 'Strict; '
+    'samesite' => 'Strict',
+    'httponly' => false
 );
 session_set_cookie_params($cookie_params);
 session_start();
 if (array_key_exists("do_logout", $_GET) && $_GET["do_logout"] == 1) {
-    session_destroy();
+    $_SESSION = array();
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), session_id(), time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
+    }
+} else {
+    $_SESSION['expires'] = time() + 3600;
 }
 /**
  * User was supplied
@@ -48,6 +55,7 @@ if (array_key_exists("userid", $_POST)) {
     $userauth = do_authentication();
     if ($userauth) {
         $_SESSION['user'] = $_POST["userid"];
+        session_write_close();
         $data_storage = $object_factory->data_storage();
         if ($data_storage->check()) {
             $defaults = $object_factory->defaults();
@@ -83,7 +91,7 @@ function do_mysql_authentication()
     $config->setParameterValue("user", $username);
     $config->setParameterValue("password", $pass);
     $db_link = @mysqli_connect($config->getParameter("host"), $username, $pass, $config->getParameter("database"));
-    return ($db_link instanceof mysqli);
+    return ($db_link instanceof \mysqli);
 }
 /**
  * Create user (user migration from DB to internal auth), 
@@ -169,7 +177,7 @@ function do_authentication()
     if (auth_on_config()) {
         try {
             $retval = do_internal_authentication();
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $retval = do_mysql_authentication();
         }
     } else {
@@ -197,11 +205,11 @@ function do_authentication()
         <form method="POST" action="index.php" name="login">
             <table>
                 <tr>
-                    <td>Utilizador: </td>
+                    <td>Utilizador:</td>
                     <td><input size="10" maxlength="10" type="text" name="userid" id="userid" value="<?php (array_key_exists("userid", $_POST) ? $_POST["userid"] : "") ?>" /></td>
                 </tr>
                 <tr>
-                    <td>Password: </td>
+                    <td>Password:</td>
                     <td><input size="10" maxlength="10" type="password" name="pass" value="" /></td>
                 </tr>
                 <tr>
