@@ -90,7 +90,7 @@ function build_and_save_record()
         <?php
         include ROOT_DIR . "/menu_div.php";
         if (array_key_exists("filter_sdate", $_REQUEST)) {
-            $sdate = (strlen($_REQUEST["sdate"]) ? str_replace("-", "", $_REQUEST["filter_sdate"]) : date("Ym01"));
+            $sdate = (strlen($_REQUEST["filter_sdate"]) ? str_replace("-", "", $_REQUEST["filter_sdate"]) : date("Ym01"));
         } else {
             if (array_key_exists("filter_sdateAA", $_REQUEST)) {
                 $sdate = sprintf("%04d%02d%02d", $_REQUEST["filter_sdateAA"], $_REQUEST["filter_sdateMM"], $_GET["filter_sdateDD"]);
