@@ -93,18 +93,18 @@ function build_and_save_record()
             $sdate = (strlen($_REQUEST["filter_sdate"]) ? str_replace("-", "", $_REQUEST["filter_sdate"]) : date("Ym01"));
         } else {
             if (array_key_exists("filter_sdateAA", $_REQUEST)) {
-                $sdate = sprintf("%04d%02d%02d", $_REQUEST["filter_sdateAA"], $_REQUEST["filter_sdateMM"], $_GET["filter_sdateDD"]);
+                $sdate = sprintf("%04d-%02d-%02d", $_REQUEST["filter_sdateAA"], $_REQUEST["filter_sdateMM"], $_GET["filter_sdateDD"]);
             } else {
-                $sdate = date("Ym01");
+                $sdate = date("Y-m-01");
             }
         }
         if (array_key_exists("filter_edate", $_REQUEST)) {
             $edate = strlen($_REQUEST["filter_edate"]) ? str_replace("-", "", $_REQUEST["filter_edate"]) : date("Ymd");
         } else {
             if (array_key_exists("filter_edateAA", $_REQUEST)) {
-                $edate = sprintf("%04d%02d%02d", $_REQUEST["filter_edateAA"], $_REQUEST["filter_edateMM"], $_REQUEST["filter_edateDD"]);
+                $edate = sprintf("%04d-%02d-%02d", $_REQUEST["filter_edateAA"], $_REQUEST["filter_edateMM"], $_REQUEST["filter_edateDD"]);
             } else {
-                $edate = date("Ymd");
+                $edate = date("Y-m-d");
             }
         }
         $filter = "movimentos.data_mov>='" . $sdate . "' AND movimentos.data_mov<='" . $edate . "'";
@@ -113,7 +113,10 @@ function build_and_save_record()
             $parent_filter = "tipo_mov.parent_id={$_REQUEST["filter_parent_id"]} ";
         }
 
-        $sql = "SELECT mov_id, data_mov, tipo_mov, CONCAT(IF(tipo_mov.parent_id=0,'', CONCAT(parent.tipo_desc,'&#8594;')), tipo_mov.tipo_desc) as tipo_desc, movimentos.conta_id, conta_nome, round(valor_mov,2) as val_mov, deb_cred, moeda_mov, moeda_desc, cambio, valor_euro, obs " .
+        $sql = "SELECT mov_id, data_mov, tipo_mov, 
+        CONCAT(IF(tipo_mov.parent_id=0,'', CONCAT(parent.tipo_desc,'&#8594;')), tipo_mov.tipo_desc) as tipo_desc, 
+        movimentos.conta_id, conta_nome, 
+        round(valor_mov,2) as val_mov, deb_cred, moeda_mov, moeda_desc, cambio, valor_euro, obs " .
             "FROM movimentos 
             RIGHT JOIN tipo_mov ON movimentos.tipo_mov = tipo_mov.tipo_id 
             RIGHT JOIN tipo_mov as parent ON tipo_mov.parent_id = parent.tipo_id
@@ -202,8 +205,8 @@ function build_and_save_record()
                         <td>Inicio</td>
                         <td>
                             <select class="date-fallback" style="display: none" name="filter_sdateAA" onchange="update_date('filter_sdate');"><?php print Html::year_option(substr($sdate, 0, 4)); ?></select>
-                            <select class="date-fallback" style="display: none" name="filter_sdateAA" onchange="update_date('filter_sdate');"><?php print Html::mon_option(substr($sdate, 4, 2)); ?></select>
-                            <select class="date-fallback" style="display: none" name="filter_sdateAA" onchange="update_date('filter_sdate');"><?php print Html::day_option(substr($sdate, 6, 2)); ?></select>
+                            <select class="date-fallback" style="display: none" name="filter_sdateAA" onchange="update_date('filter_sdate');"><?php print Html::mon_option(substr($sdate, 5, 2)); ?></select>
+                            <select class="date-fallback" style="display: none" name="filter_sdateAA" onchange="update_date('filter_sdate');"><?php print Html::day_option(substr($sdate, 8, 2)); ?></select>
                             <input class="date-fallback" type="date" id="filter_sdate" name="filter_sdate" required value="<?php print (new DateTime("{$sdate}"))->format("Y-m-d"); ?>">
                         </td>
                     </tr>
@@ -211,8 +214,8 @@ function build_and_save_record()
                         <td>Fim</td>
                         <td>
                             <select class="date-fallback" style="display: none" name="filter_edateAA" onchange="update_date('filter_edate');"><?php print Html::year_option(substr($edate, 0, 4)); ?></select>
-                            <select class="date-fallback" style="display: none" name="filter_edateMM" onchange="update_date('filter_edate');"><?php print Html::mon_option(substr($edate, 4, 2)); ?></select>
-                            <select class="date-fallback" style="display: none" name="filter_edateDD" onchange="update_date('filter_edate');"><?php print Html::day_option(substr($edate, 6, 2)); ?></select>
+                            <select class="date-fallback" style="display: none" name="filter_edateMM" onchange="update_date('filter_edate');"><?php print Html::mon_option(substr($edate, 5, 2)); ?></select>
+                            <select class="date-fallback" style="display: none" name="filter_edateDD" onchange="update_date('filter_edate');"><?php print Html::day_option(substr($edate, 8, 2)); ?></select>
                             <input class="date-fallback" type="date" id="filter_edate" name="filter_edate" required value="<?php print (new DateTime("{$edate}"))->format("Y-m-d"); ?>">
                         </td>
                     </tr>
