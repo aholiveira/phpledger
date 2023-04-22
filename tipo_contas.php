@@ -7,7 +7,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-include ROOT_DIR . "/contas_config.php";
+include __DIR__ . "/contas_config.php";
 $pagetitle = "Tipo de contas";
 $message = "";
 $retval = false;
@@ -28,7 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message = "Ocorreu um erro na operacao.";
     } else {
         if (!headers_sent()) {
-            header('Location: tipo_contas_lista.php' . isset($object->id) ? "?tipo_id={$object->id}" : "");
+            header("Location: tipo_contas_lista.php" . (isset($object->id) ? "?tipo_id={$object->id}" : ""));
+            exit;
         }
     }
 }
@@ -63,10 +64,6 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         <div id="main" class="main">
             <form method="POST" action="tipo_contas.php">
                 <table class="single_item account_type_form">
-                    <?php
-                    $object = $object_factory->accounttype();
-
-                    ?>
                     <tr>
                         <td>ID</td>
                         <td data-label="ID">
