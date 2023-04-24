@@ -10,12 +10,13 @@
 
 class accounttype extends mysql_object implements iobject
 {
-    public string $description;
-    public int $savings;
+    public ?string $description = null;
+    public int $savings = 0;
     protected static string $tableName = "tipo_contas";
     public function __construct(\mysqli $dblink)
     {
         parent::__construct($dblink);
+        $this->getFreeId();
     }
 
     public function getAll(array $field_filter = array()): array
