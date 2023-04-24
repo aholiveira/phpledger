@@ -7,7 +7,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-include ROOT_DIR . "/contas_config.php";
+include __DIR__ . "/contas_config.php";
 $pagetitle = "Contas";
 
 ?>
@@ -81,8 +81,11 @@ $pagetitle = "Contas";
         $account_type = $object_factory->accounttype();
         $account_type_view = $view_factory->account_type_view($account_type);
         $tipo_opt = $account_type_view->getSelectFromList($account_type->getAll(), array_key_exists("conta_id", $_GET) ? $row["tipo_id"] : null);
+        $account = $object_factory->account();
+        $account_list = $account->getAll();
+        $account_type_cache = array();
         $sql = "SELECT conta_id, conta_num, conta_nome, contas.tipo_id, tipo_desc, conta_nib, conta_abertura, conta_fecho, activa, IF(activa,\"Sim\", \"Nao\") as activa_txt 
-        FROM contas LEFT JOIN tipo_contas ON contas.tipo_id = tipo_contas.tipo_id 
+        FROM contas LEFT OUTER JOIN tipo_contas ON contas.tipo_id = tipo_contas.tipo_id
         ORDER BY activa desc, conta_nome";
         $result = $db_link->query($sql) or die($db_link->error);
         ?>
@@ -97,6 +100,11 @@ $pagetitle = "Contas";
                 $flag = 1;
                 $row = $result->fetch_assoc();
                 print "<tbody>";
+                foreach ($account_list as $account) {
+                    if (!array_key_exists($account->type_id, $account_type_cache)) {
+                        $account_type_cache[$account->type_id] = $account_type->getById($account->type_id);
+                    }
+                }
                 while ($flag) {
                     if (!$row && !$last)
                         $last = 1;
