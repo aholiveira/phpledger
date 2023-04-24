@@ -20,7 +20,7 @@ class account_type_view extends object_viewer
         }
         $_object = $this->_object;
         if (!($_object instanceof accounttype)) return $retval;
-        $retval .= "<td data-label='ID'><a title=\"Editar\" href=\"tipo_contas.php?tipo_id={$_object->id}\">{$_object->id}</a></td>";
+        $retval .= "<td data-label='ID' id=\"{$_object->id}\"><a title=\"Editar\" href=\"tipo_contas.php?tipo_id={$_object->id}\">{$_object->id}</a></td>";
         $retval .= "<td data-label='Descri&ccedil;&atilde;o'>{$_object->description}</td>";
         $retval .= "<td data-label='Savings?' class=\"checkbox\"><input type=\"checkbox\" readonly onclick=\"return false;\" name=savings{$_object->id} " . ($_object->savings ? "checked" : "") . "></td>\n";
         return $retval;
