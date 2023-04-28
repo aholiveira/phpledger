@@ -172,7 +172,7 @@ class ledgerentry extends mysql_object implements iobject
         $sql = "SELECT mov_id FROM {$this->tableName()} WHERE mov_id=?";
         try {
             static::$_dblink->begin_transaction();
-            if (!isset($this->id)) {
+            if (empty($this->id)) {
                 $this->id = $this->getFreeId();
             }
             $stmt = @static::$_dblink->prepare($sql);
