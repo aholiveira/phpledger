@@ -141,7 +141,7 @@ abstract class mysql_object implements iobject
     {
         return static::$tableName;
     }
-    protected function handleException($ex, $sql = "")
+    protected function handleException(\Exception $ex, $sql = "")
     {
         print_var($this, "THIS", true);
         print_var(static::$_dblink, "DBLINK", true);
@@ -149,6 +149,7 @@ abstract class mysql_object implements iobject
         print_var($ex, "EXCEPTION", true);
         debug_print($ex->getMessage());
         debug_print($ex->getTraceAsString());
+        $this->setErrorMessage($ex->getTraceAsString());
     }
     public function clear(): void
     {
