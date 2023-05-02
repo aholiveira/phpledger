@@ -71,7 +71,7 @@ class account_view extends object_viewer
         $retval .= "<select class=\"date-fallback\" style=\"display: none\" name=\"fechoDD\">" . Html::day_option(isset($_object->close_date) ? substr($_object->close_date, 8, 2) : null) . "</select>\r\n";
         $retval .= "<input class=\"date-fallback\" type=\"date\" name=\"fecho\" required value=\"" . (isset($_object->close_date) ? $_object->close_date : date("Y-m-d")) . "\">\r\n";
         $retval .= "</td>\r\n";
-        $retval .= "<td data-label='Activa'><input  type=\"checkbox\" name=\"activa\" " . (isset($_object->active) && ($_object->active == 1) ? "checked" : "") . "></td>\r\n";
+        $retval .= "<td data-label='Activa'><input  type=\"checkbox\" name=\"activa\" " . ((isset($_object->active) && ($_object->active == 1)) || empty($_object->id) ? "checked" : "") . "></td>\r\n";
         $retval .= "<td><input class=\"submit\" type=\"submit\" name=\"update\" value=Gravar></td>";
         return $retval;
     }
