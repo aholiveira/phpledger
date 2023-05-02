@@ -24,13 +24,17 @@ $pagetitle = "Contas";
         include ROOT_DIR . "/menu_div.php";
         $object = $object_factory->account();
         $retval = true;
-        if (array_key_exists("update", $_POST) && strcasecmp($_POST["update"], "gravar") == 0) {
-            if (!strlen($_POST["conta_nome"])) {
+        $update = filter_input(INPUT_POST, "update", FILTER_SANITIZE_ENCODED);
+        if (strcasecmp($update, "gravar") == 0) {
+            $account_name = filter_input(INPUT_POST, "conta_nome", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+            if (!strlen($account_name)) {
                 Html::myalert("Nome de conta invalido!");
+                $retval = false;
             }
             if (strlen($_POST["abertura"]) == 0) {
                 if (!checkdate($_POST["aberturaMM"], $_POST["aberturaDD"], $_POST["aberturaAA"])) {
                     Html::myalert("Data de abertura invalida!");
+                    $retval = false;
                 } else {
                     $open_date = new DateTime(date("Y-m-d", mktime(0, 0, 0, $_POST["aberturaMM"], $_POST["aberturaDD"], $_POST["aberturaAA"])));
                 }
@@ -38,11 +42,13 @@ $pagetitle = "Contas";
                 $open_date = new DateTime($_POST["abertura"]);
                 if (!checkdate($open_date->format("m"), $open_date->format("d"), $open_date->format("Y"))) {
                     Html::myalert("Data de abertura invalida!");
+                    $retval = false;
                 }
             }
             if (strlen($_POST["fecho"]) == 0) {
                 if (!checkdate($_POST["fechoMM"], $_POST["fechoDD"], $_POST["fechoAA"])) {
                     Html::myalert("Data de fecho invalida!");
+                    $retval = false;
                 } else {
                     $close_date = new DateTime(date("Y-m-d", mktime(0, 0, 0, $_POST["fechoMM"], $_POST["fechoDD"], $_POST["fechoAA"])));
                 }
@@ -50,32 +56,35 @@ $pagetitle = "Contas";
                 $close_date = new DateTime($_POST["fecho"]);
                 if (!checkdate($close_date->format("m"), $close_date->format("d"), $close_date->format("Y"))) {
                     Html::myalert("Data de fecho invalida!");
+                    $retval = false;
                 }
             }
-            $object->id = $_POST["conta_id"];
-            $object->name = $_POST["conta_nome"];
-            $object->open_date = $open_date->format("Y-m-d");
-            $object->close_date = $close_date->format("Y-m-d");
-            $object->number = $_POST["conta_num"] == "" ? "" : $_POST["conta_num"];
-            $object->active = $_POST["activa"] == "on" ? 1 : 0;
-            $object->type_id = $_POST["tipo_id"];
-            $object->iban = $_POST["conta_nib"];
-            $retval = $object->save();
+            if ($retval) {
+                $object->id = filter_input(INPUT_POST, "conta_id", FILTER_VALIDATE_INT);
+                $object->name = $account_name;
+                $object->open_date = $open_date->format("Y-m-d");
+                $object->close_date = $close_date->format("Y-m-d");
+                $object->number = filter_input(INPUT_POST, "conta_num", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $object->active = filter_input(INPUT_POST, "activa", FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
+                $object->type_id = filter_input(INPUT_POST, "tipo_id", FILTER_VALIDATE_INT);
+                $object->iban =  filter_input(INPUT_POST, "conta_nib", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $retval = $object->save();
+            }
         }
-        if (array_key_exists("update", $_REQUEST) && strcasecmp($_REQUEST["update"], "apagar") == 0) {
-            $object->id = $_REQUEST["conta_id"];
+        if (strcasecmp($update, "apagar") == 0) {
+            $object->id = filter_input(INPUT_GET, "conta_id", FILTER_VALIDATE_INT);
             $retval = $object->delete();
         }
-        if (array_key_exists("update", $_REQUEST)) {
+        if (!empty($update)) {
             if ($retval) {
-                if (strcasecmp($_REQUEST["update"], "gravar") == 0) {
+                if (strcasecmp($update, "gravar") == 0) {
                     Html::myalert("Registo gravado");
                 }
-                if (strcasecmp($_REQUEST["update"], "apagar") == 0) {
+                if (strcasecmp($update, "apagar") == 0) {
                     Html::myalert("Registo eliminado");
                 }
             } else {
-                Html::myalert("Ocorreu um erro ao modificar o registo");
+                Html::myalert("Ocorreu um erro ao criar/modificar o registo");
             }
         }
         $edit = null;
