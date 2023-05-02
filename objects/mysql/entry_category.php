@@ -144,8 +144,8 @@ class entry_category extends mysql_object implements iobject
     public function validate(): bool
     {
         $retval = true;
-        $retval = ($this->id != $this->parent_id) && ($this->validation_message = "Categoria nao pode ser igual a si mesma") && $retval;
-        $retval = is_int($this->id) && ($this->id > 0) && $retval;
+        $retval = (null !== $this->id) && ($this->id !== $this->parent_id) && ($this->validation_message = "Categoria nao pode ser igual a si mesma") && $retval;
+        $retval = is_int($this->id) && ($this->id >= 0) && $retval;
         return $retval;
     }
     public function save(): bool
@@ -155,7 +155,7 @@ class entry_category extends mysql_object implements iobject
         $sql = "SELECT tipo_id FROM {$this->tableName()} WHERE tipo_id=?";
         try {
             static::$_dblink->begin_transaction();
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;
             if (!isset($this->id)) return $retval;
             $stmt->bind_param("s", $this->id);

@@ -9,6 +9,7 @@
  * user - Username to connect to the database - Should have all privileges on the database
  * password - Password for the user
  */
+$config->setParameterValue("title", "Gestao financeira");
 $config->setParameterValue("host", "localhost");
 $config->setParameterValue("database", "contas");
 $config->setParameterValue("user", "your-username");

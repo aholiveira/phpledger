@@ -26,43 +26,44 @@ if (array_key_exists("do_logout", $_GET) && $_GET["do_logout"] == 1) {
 } else {
     $_SESSION['expires'] = time() + 3600;
 }
-/**
- * User was supplied
- * Do user authentication
- */
-if (array_key_exists("userid", $_POST)) {
-    $config = new config();
-    include ROOT_DIR . "/config.php";
-    $host = $config->getParameter("host");
-    $dbase = $config->getParameter("database");
-    // if (!auth_on_config()) {
-    /**
-     * @todo Create a user interface to generate config.php file
-     */
-    //  print "Verifique o ficheiro config.php<br/>\r\n";
-    //print "O ficheiro deve conter credenciais para acesso 'a base de dados.<br/>\r\n";
-    //  print "Consulte o ficheiro config.php.sample para um exemplo da configuracao.<br/>\r\n";
-    //  print "A aplicacao nao pode continuar sem um ficheiro correctamente configurado.<br/>\r\n";
-    //  exit(0);
-    //}
-    /**
-     * Bypass internal auth and do mysql auth
-     * while we don't have a user interface to
-     * generate 
-     */
-    do_mysql_authentication();
-    $object_factory = new object_factory($config);
+if (!defined("ROOT_DIR")) {
+    include "prepend.php";
+}
+$config = new config();
+include __DIR__ . '/config.php';
+
+$userauth = false;
+$object_factory = new object_factory($config);
+$data_storage = $object_factory->data_storage();
+if ($_SERVER["REQUEST_METHOD"] == 'GET') {
+    #$host = $config->getParameter("host");
+    #$dbase = $config->getParameter("database");
+    if (auth_on_config()) {
+        if (!$data_storage->check()) {
+            if (!headers_sent()) {
+                header('Location: update.php');
+            } else {
+                print '<meta http-equiv="REFRESH" content="1; URL=update.php">';
+            }
+            exit(0);
+        }
+    }
+}
+if (array_key_exists("userid", $_POST) && null != $_POST["userid"]) {
+    if (!auth_on_config()) {
+        print "AUTH NOT ON CONFIG";
+        do_mysql_authentication();
+    }
     $userauth = do_authentication();
     if ($userauth) {
         $_SESSION['user'] = $_POST["userid"];
         session_write_close();
-        $data_storage = $object_factory->data_storage();
         if ($data_storage->check()) {
             $defaults = $object_factory->defaults();
             $defaults->getById(1);
             $defaults->entry_date = date("Y-m-d");
             $defaults->save();
-            header("Location: ledger_entries.php");
+            header("Location: ledger_entries.php?filter_sdate=" . date('Y-m-01'));
         } else {
             if (!headers_sent()) {
                 header('Location: update.php');
@@ -158,27 +159,25 @@ function do_internal_authentication()
 }
 function do_authentication()
 {
-    global $config;
+    global $data_storage;
     $retval = false;
     /**
      * Do we have DB credentials on config file?
      * Choose user authentication method
      */
-    $retval = do_mysql_authentication();
-    $object_factory = new object_factory($config);
-    $data_storage = $object_factory->data_storage();
-    if (!$data_storage->check()) {
-        if (!headers_sent()) {
-            header('Location: update.php');
-        } else {
-            print '<meta http-equiv="REFRESH" content="1; URL=update.php">';
-        }
-    }
     if (auth_on_config()) {
         try {
             $retval = do_internal_authentication();
         } catch (\Exception $ex) {
             $retval = do_mysql_authentication();
+        } finally {
+            if (!$data_storage->check()) {
+                if (!headers_sent()) {
+                    header('Location: update.php');
+                } else {
+                    print '<meta http-equiv="REFRESH" content="1; URL=update.php">';
+                }
+            }
         }
     } else {
         $retval = do_mysql_authentication();
@@ -195,7 +194,7 @@ function do_authentication()
 
 <body onload="javascript:document.getElementById('userid').focus();">
     <div id="login">
-        <h1>Gest&atilde;o financeira</h1>
+        <h1><?php print $config->getParameter("title"); ?></h1>
         <p>Introduza o seu nome de utilizador e password para entrar na aplica&ccedil;&atilde;o.</p>
         <?php
         if (array_key_exists("userid", $_POST) && !$userauth) {

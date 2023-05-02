@@ -168,7 +168,7 @@ class user extends mysql_object implements iobject
             static::$_dblink->commit();
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
-            if ($stmt) $stmt->close();
+            if (isset($stmt)) $stmt->close();
             static::$_dblink->rollback();
         }
         return $retval;
@@ -277,14 +277,15 @@ class user extends mysql_object implements iobject
             $this->setTokenExpiry((new \DateTime(date("Y-m-d H:i:s")))->add(new \DateInterval("PT24H"))->format("Y-m-d H:i:s"));
             if ($this->save()) {
                 $retval = true;
-                $message = "Esta' a receber este email porque solicitou a reposicao da sua palavra-passe na aplicacao de gestao financeira.\r\n";
+                $title = $config->getParameter("title");
+                $message = "Esta' a receber este email porque solicitou a reposicao da sua palavra-passe na aplicacao '$title'.\r\n";
                 $message .= "Para continuar o processo deve clique no link abaixo para definir uma nova senha.\r\n";
                 $message .= "{$config->getParameter('url')}reset_password.php?token_id={$this->getToken()}.\r\n";
                 $message .= "Este token e' valido ate' 'as {$this->getTokenExpiry()}.\r\n";
                 $message .= "Findo este prazo tera' que reiniciar o processo usando o link {$config->getParameter('url')}forgot_password.php.\r\n";
                 $message .= "\r\n";
                 $message .= "Cumprimentos,\r\n";
-                $message .= "Gestao financeira\r\n";
+                $message .= "$title\r\n";
                 Email::send_email($config->getParameter("from"), $this->getEmail(), "Reposicao de palavra-passe", $message);
             }
         }

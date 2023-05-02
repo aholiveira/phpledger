@@ -20,11 +20,11 @@ class Email
         if (strlen($from) > 0) ini_set("sendmail_from", $from);
         if (strlen($to) == 0 || strlen($subject) == 0 || strlen($body) == 0) return false;
         $from = ini_get("sendmail_from");
-        $headers["From"] = "\"Gestao financeira\" <{$from}>";
+        $headers["From"] = '"' . $config->getParameter("title") . '"' . "<{$from}>";
         $headers["User-Agent"] = "PHP";
         $headers["Return-Path"] = $from;
         $headers["Content-Type"] = "text/plain; charset=us-ascii";
-        $headers["X-Application"] = "Gestao Financeira";
+        $headers["X-Application"] = $config->getParameter("title");
         return mail($to, $subject, str_replace("\n.\n", "\n..\n", $body), $headers, "-f {$from}");
     }
 }

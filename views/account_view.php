@@ -12,15 +12,23 @@ class account_view extends object_viewer
 {
     public function printObject(): string
     {
+        global $object_factory;
         $retval = "";
         if (!isset($this->_object->id) || !($this->_object instanceof account)) return $retval;
         /**
          * @var account $_object
          */
         $_object = $this->_object;
-        $retval .= "<td data-label='ID' class=\"number\"><a title=\"Editar\" href=\"contas.php?tipo_id={$_object->id}\">{$_object->id}</a></td>";
+        $type_description = "";
+        if (!empty($_object->type_id)) {
+            $account_type = $object_factory->accounttype();
+            $account_type->getById($_object->type_id);
+            $type_description = $account_type->description;
+        }
+        $retval .= "<td data-label='ID' class=\"number\"><a title=\"Editar\" href=\"contas.php?conta_id={$_object->id}\">{$_object->id}</a></td>";
         $retval .= "<td data-label='Nome' class=\"text\">{$_object->name}</a></td>";
         $retval .= "<td data-label='Numero' class=\"number\">{$_object->number}</a></td>";
+        $retval .= "<td data-label='Tipo'>{$type_description}</a></td>";
         $retval .= "<td data-label='IBAN'>{$_object->iban}</a></td>";
         $retval .= "<td data-label='Abertura'>{$_object->open_date}</a></td>";
         $retval .= "<td data-label='Fecho'>{$_object->close_date}</td>";
@@ -34,14 +42,16 @@ class account_view extends object_viewer
         global $view_factory;
 
         $retval = "";
-        if (!($this->_object instanceof account) || !isset($this->_object->id)) return $retval;
+        if (!($this->_object instanceof account)) return $retval;
         /**
          * @var account $_object
          */
         $_object = ($this->_object);
         $id = isset($_object->id) ? $_object->id : $_object->getFreeId();
         $account_type = $object_factory->accounttype();
-        $account_type->getById($_object->type_id);
+        if (isset($_object->type_id)) {
+            $account_type->getById($_object->type_id);
+        }
         $account_type_view = $view_factory->account_type_view($account_type);
         $tipo_opt = $account_type_view->getSelectFromList($account_type->getAll(), isset($_object->type_id) ? $_object->type_id : null);
         $retval .= "<td data-label='ID'><input type=\"hidden\" name=\"conta_id\" value=\"{$id}\"/>{$id}</td>\n";
@@ -61,7 +71,7 @@ class account_view extends object_viewer
         $retval .= "<select class=\"date-fallback\" style=\"display: none\" name=\"fechoDD\">" . Html::day_option(isset($_object->close_date) ? substr($_object->close_date, 8, 2) : null) . "</select>\r\n";
         $retval .= "<input class=\"date-fallback\" type=\"date\" name=\"fecho\" required value=\"" . (isset($_object->close_date) ? $_object->close_date : date("Y-m-d")) . "\">\r\n";
         $retval .= "</td>\r\n";
-        $retval .= "<td data-label='Activa'><input  type=\"checkbox\" name=\"activa\" " . (isset($_object->active) && ($_object->active == 1) ? "checked" : "") . "></td>\r\n";
+        $retval .= "<td data-label='Activa'><input  type=\"checkbox\" name=\"activa\" " . ((isset($_object->active) && ($_object->active == 1)) || empty($_object->id) ? "checked" : "") . "></td>\r\n";
         $retval .= "<td><input class=\"submit\" type=\"submit\" name=\"update\" value=Gravar></td>";
         return $retval;
     }

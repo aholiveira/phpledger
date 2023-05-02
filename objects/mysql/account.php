@@ -52,7 +52,7 @@ class account extends mysql_object implements iobject
             activa as active
         FROM {$this->tableName()}
         {$where}
-        ORDER BY conta_nome";
+        ORDER BY activa DESC, conta_nome";
         $retval = array();
         try {
             if (!is_object(static::$_dblink)) return $retval;

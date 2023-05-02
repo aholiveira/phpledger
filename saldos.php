@@ -7,7 +7,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-include ROOT_DIR . "/contas_config.php";
+include __DIR__ . "/contas_config.php";
 $pagetitle = "Saldos";
 ?>
 <!DOCTYPE html>

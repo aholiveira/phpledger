@@ -45,7 +45,7 @@ $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";
     <?php
     ?>
     <div id="login">
-        <h1>Gest&atilde;o financeira</h1>
+        <h1><?php print $config->getParameter("title"); ?></h1>
         <p>Reposi&ccedil;&atilde;o de palavra-passe</p>
         <form method="POST" action="forgot_password.php" name="forgot_password">
             <table>

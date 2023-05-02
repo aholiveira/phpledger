@@ -10,8 +10,8 @@
 global $user;
 global $pass;
 
+include __DIR__ . "/contas_config.php";
 $config = new config();
-include ROOT_DIR . "/config.php";
 $pagetitle = "Redefini&ccedil;o de palavra-passe";
 
 ?>
@@ -76,7 +76,7 @@ $pagetitle = "Redefini&ccedil;o de palavra-passe";
     <?php
     ?>
     <div id="login">
-        <h1>Gest&atilde;o financeira</h1>
+        <h1><?php print $config->getParameter("title"); ?></h1>
         <p>Redefini&ccedil;&atilde;o de palavra-passe</p>
         <form method="POST" action="reset_password.php" name="reset_password">
             <input type="hidden" name="token_id" value="<?php print $_GET["token_id"]; ?>" />

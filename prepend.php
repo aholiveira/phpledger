@@ -30,16 +30,16 @@ if (defined("DEBUG") && DEBUG == 1) {
     syslog(LOG_INFO, __FILE__);
     closelog();
 }
-ini_set("session.use_strict_mode", true);
-ini_set("session.sid_bits_per_character", 5);
-ini_set("session.sid_length", 64);
-
+if (session_status() == PHP_SESSION_NONE) {
+    ini_set("session.use_strict_mode", true);
+    ini_set("session.sid_bits_per_character", 5);
+    ini_set("session.sid_length", 64);
+}
 include OBJECTS_DIR . '/config.class.php';
 include OBJECTS_DIR . '/object_factory.php';
 include OBJECTS_DIR . '/email.php';
 include VIEWS_DIR . '/view_factory.php';
 include ROOT_DIR . '/html.php';
-
 /**
  * Prints variable
  * @param mixed $var variable to print
@@ -56,14 +56,12 @@ function print_var($var, $comment = "", bool $debug = false)
         print "\r\n<br>END###{$comment}###END</pre><br>\r\n";
     }
 }
-
 function debug_print($text)
 {
     if (defined("DEBUG") && DEBUG == 1) {
         print(nl2br("####DEBUG#$text#DEBUG####<br>\n"));
     }
 }
-
 function normalize_number(?float $number): string
 {
     if (is_null($number)) return "";

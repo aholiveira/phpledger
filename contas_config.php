@@ -8,6 +8,9 @@
  *
  */
 
+if (!defined("ROOT_DIR")) {
+    include __DIR__ . "/prepend.php";
+}
 $cookie_params = array(
     'lifetime' => 0,
     'path' => substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/') + 1),
