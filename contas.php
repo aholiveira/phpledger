@@ -78,82 +78,67 @@ $pagetitle = "Contas";
                 Html::myalert("Ocorreu um erro ao modificar o registo");
             }
         }
+        $edit = null;
+        $conta_id = filter_input(INPUT_GET, "conta_id", FILTER_SANITIZE_NUMBER_INT);
+        if ($_SERVER["REQUEST_METHOD"] == "GET" && !empty($conta_id)) {
+            $edit = $conta_id;
+        }
         $account_type = $object_factory->accounttype();
         $account_type_view = $view_factory->account_type_view($account_type);
-        $tipo_opt = $account_type_view->getSelectFromList($account_type->getAll(), array_key_exists("conta_id", $_GET) ? $row["tipo_id"] : null);
         $account = $object_factory->account();
         $account_list = $account->getAll();
         $account_type_cache = array();
+
         $sql = "SELECT conta_id, conta_num, conta_nome, contas.tipo_id, tipo_desc, conta_nib, conta_abertura, conta_fecho, activa, IF(activa,\"Sim\", \"Nao\") as activa_txt 
         FROM contas LEFT OUTER JOIN tipo_contas ON contas.tipo_id = tipo_contas.tipo_id
-        ORDER BY activa desc, conta_nome";
+        ORDER BY contas.activa desc, conta_nome";
         $result = $db_link->query($sql) or die($db_link->error);
         ?>
         <div class="header" style="height: 0;"></div>
         <main>
             <div class="main" id="main">
-                <?php
-                print "<form method=\"POST\" action=\"contas.php\" name=\"contas\">\n";
-                print "<table class=\"lista contas\">\n";
-                print "<thead><tr><th>ID<th>Nome<th>Numero<th>Tipo<th>NIB<th>Abertura<th>Fecho<th>Activa<th>Apagar</tr></thead>";
-                $last = array_key_exists("conta_id", $_GET) ? 1 : 0;
-                $flag = 1;
-                $row = $result->fetch_assoc();
-                print "<tbody>";
-                foreach ($account_list as $account) {
-                    if (!array_key_exists($account->type_id, $account_type_cache)) {
-                        $account_type_cache[$account->type_id] = $account_type->getById($account->type_id);
-                    }
-                }
-                while ($flag) {
-                    if (!$row && !$last)
-                        $last = 1;
-                    print "<tr>";
-                    if ((array_key_exists("conta_id", $_GET) && $row["conta_id"] == $_GET["conta_id"]) || (!array_key_exists("conta_id", $_GET) && $last)) {
-                        $id = array_key_exists("conta_id", $_GET) ? $row["conta_id"] : $object->getFreeId();
-                        print "<td data-label='ID'><input type=\"hidden\" name=\"conta_id\" value=\"{$id}\"/>{$id}</td>\n";
-                        print "<td data-label='Nome'><a name=\"{$id}\"><input type=text size=16 maxlength=30 name=\"conta_nome\" value=\"" . (array_key_exists("conta_id", $_GET) ? $row["conta_nome"] : "") . "\"></a></td>";
-                        print "<td data-label='Numero'><input type=text size=15 maxlength=30 name=\"conta_num\" value=\"" . (array_key_exists("conta_id", $_GET) ? $row["conta_num"] : "") . "\"></td>";
-                        print "<td data-label='Tipo'><select name=\"tipo_id\">{$tipo_opt}</select>";
-                        print "<td data-label='NIB'><input type=text size=24 maxlength=24 name=\"conta_nib\" value=\"" . (array_key_exists("conta_id", $_GET) ? $row["conta_nib"] : "") . "\"></td>";
-                        print "<td data-label='Abertura'>\r\n";
-                        print "<select class=\"date-fallback\" style=\"display: none\" name=\"aberturaAA\">" . Html::year_option(array_key_exists("conta_id", $_GET) ? substr($row["conta_abertura"], 0, 4) : null) . "</select>\r\n";
-                        print "<select class=\"date-fallback\" style=\"display: none\" name=\"aberturaMM\">" . Html::mon_option(array_key_exists("conta_id", $_GET) ? substr($row["conta_abertura"], 5, 2) : null) . "</select>\r\n";
-                        print "<select class=\"date-fallback\" style=\"display: none\" name=\"aberturaDD\">" . Html::day_option(array_key_exists("conta_id", $_GET) ? substr($row["conta_abertura"], 8, 2) : null) . "</select>\r\n";
-                        print "<input class=\"date-fallback\" type=\"date\" name=\"abertura\" required value=\"" . (array_key_exists("conta_id", $_GET) ? $row["conta_abertura"] : date("Y-m-d")) . "\">\r\n";
-                        print "</td>\r\n";
-                        print "<td data-label='Fecho'>\r\n";
-                        print "<select class=\"date-fallback\" style=\"display: none\" name=\"fechoAA\">" . Html::year_option(array_key_exists("conta_id", $_GET) ? substr($row["conta_fecho"], 0, 4) : null) . "</select>\r\n";
-                        print "<select class=\"date-fallback\" style=\"display: none\" name=\"fechoMM\">" . Html::mon_option(array_key_exists("conta_id", $_GET) ? substr($row["conta_fecho"], 5, 2) : null) . "</select>\r\n";
-                        print "<select class=\"date-fallback\" style=\"display: none\" name=\"fechoDD\">" . Html::day_option(array_key_exists("conta_id", $_GET) ? substr($row["conta_fecho"], 8, 2) : null) . "</select>\r\n";
-                        print "<input class=\"date-fallback\" type=\"date\" name=\"fecho\" required value=\"" . (array_key_exists("conta_id", $_GET) ? $row["conta_fecho"] : date("Y-m-d")) . "\">\r\n";
-                        print "</td>\r\n";
-                        print "<td data-label='Activa'><input  type=\"checkbox\" name=\"activa\" " . (($row["activa"] == 1 || $last == 1) ? "checked" : "") . "></td>\r\n";
-                        if ((array_key_exists("conta_id", $_REQUEST) && $_REQUEST["conta_id"] == $row["conta_id"]) || $last)
-                            print "<td><input class=\"submit\" type=\"submit\" name=\"update\" value=Gravar></td>";
-                        else
-                            print "<td><a href=\"contas.php?update=Apagar&amp;conta_id={$row["conta_id"]}\" onclick=\"return confirm('Pretende apagar o registo?');\">Apagar</a></td>";
-                    } else {
-                        print "<td data-label='ID'><a href=\"contas.php?conta_id={$row["conta_id"]}#\">{$row["conta_id"]}</a></td>";
-                        print "<td data-label='Nome'>{$row["conta_nome"]}</td>";
-                        print "<td data-label='Numero'>{$row["conta_num"]}</td>";
-                        print "<td data-label='Tipo'>{$row["tipo_desc"]}</td>";
-                        print "<td data-label='NIB'>{$row["conta_nib"]}</td>";
-                        print "<td data-label='Abertura'>{$row["conta_abertura"]}</td>";
-                        print "<td data-label='Fecho'>{$row["conta_fecho"]}</td>";
-                        print "<td data-label='Activa' class=\"checkbox\"><input type=\"checkbox\" readonly onclick=\"return false;\" name=active{$row["conta_id"]} " . ($row["activa"] ? "checked" : "") . "></td>\n";
-                        print "<td class=\"lista\"><a href=\"contas.php?update=Apagar&amp;conta_id={$row["conta_id"]}\" onclick=\"return confirm('Pretende apagar o registo?');\">Apagar</a></td>";
-                    }
-                    print "</tr>\n";
-                    $row = $result->fetch_assoc();
-                    if (!$row && $last)
-                        $flag = 0;
-                }
-                print "</tbody>";
-                $result->close();
-                $db_link->close();
-                ?>
-                </table>
+                <form method="POST" action="contas.php" name="contas">
+                    <table class="lista contas">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Numero</th>
+                                <th>Tipo</th>
+                                <th>NIB</th>
+                                <th>Abertura</th>
+                                <th>Fecho</th>
+                                <th>Activa</th>
+                                <th>Apagar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach ($account_list as $account) {
+                                print "<tr>";
+                                if (!array_key_exists($account->type_id, $account_type_cache)) {
+                                    $account_type_cache[$account->type_id] = $account_type->getById($account->type_id);
+                                }
+                                $account_view = $view_factory->account_view($account);
+                                if (!empty($edit) && $account->id == $edit) {
+                                    $tipo_opt = $account_type_view->getSelectFromList($account_type->getAll(), $account->type_id);
+                                    print $account_view->printForm();
+                                }
+                                if (empty($edit) || (!empty($edit) && $account->id != $edit)) {
+                                    print $account_view->printObject();
+                                }
+                                print "</tr>";
+                            }
+                            if (empty($edit)) {
+                                print "<tr>";
+                                $account = $object_factory->account();
+                                $account_view = $view_factory->account_view($account);
+                                print $account_view->printForm();
+                                print "</tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
                 </form>
             </div>
         </main>
