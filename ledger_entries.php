@@ -359,8 +359,8 @@ function build_and_save_record()
                                 print "<td data-label='Saldo' class='total' style=\"text-align: right\">" . normalize_number($saldo) . "</td>\n";
                             }
                             if (empty($edit) || $row["mov_id"] != $edit) {
-                                $category_filter = stripos($filter_string, "filter_entry_type=") == false ? "$filter_string&filter_entry_type={$row['tipo_mov']}" : preg_replace("/filter_entry_type=(\d+)/", $row['tipo_mov'], $filter_string);
-                                $account_filter = stripos($filter_string, "filter_conta_id=") == false ? "$filter_string&filter_conta_id={$row['conta_id']}" : preg_replace("/filter_conta_id=(\d+)/", "filter_conta_id=" . $row['conta_id'], $filter_string);
+                                $category_filter = (stripos($filter_string, "filter_entry_type") === false ? "$filter_string&filter_entry_type={$row['tipo_mov']}" : preg_replace("/filter_entry_type=(\d+)/", $row['tipo_mov'], $filter_string));
+                                $account_filter = (stripos($filter_string, "filter_conta_id") === false ? "$filter_string&filter_conta_id={$row['conta_id']}" : preg_replace("/filter_conta_id=(\d+)/", "filter_conta_id=" . $row['conta_id'], $filter_string));
                         ?>
                                 <td data-label='ID' class='id'><a name="<?php print $row["mov_id"] ?>" title="Editar entrada" href="ledger_entries.php?<?php print "{$filter_string}&amp;mov_id={$row['mov_id']}"; ?>#<?php print $row["mov_id"]; ?>"><?php print $row["mov_id"] ?></a></td>
                                 <td data-label='Data' class='data'><?php print $row["data_mov"]; ?></td>
