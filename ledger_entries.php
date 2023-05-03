@@ -348,7 +348,7 @@ function build_and_save_record()
                                 print "<select class=\"date-fallback\" style=\"display: none\" name=\"data_movAA\">" . Html::year_option(substr($row["data_mov"], 0, 4)) . "</select>";
                                 print "<select class=\"date-fallback\" style=\"display: none\" name=\"data_movMM\">" . Html::mon_option(substr($row["data_mov"], 5, 2)) . "</select>";
                                 print "<select class=\"date-fallback\" style=\"display: none\" name=\"data_movDD\">" . Html::day_option(substr($row["data_mov"], 8, 2)) . "</select>";
-                                print "<input class=\"date-fallback\" type=\"date\" name=\"data_mov\" required value=\"{$row["data_mov"]}\">";
+                                print "<input class=\"date-fallback\" type=\"date\" id=\"data_mov\" name=\"data_mov\" required value=\"{$row["data_mov"]}\">";
                                 print "</a></td>\n";
                                 print "<td data-label='Categoria' class='category'><select name=\"tipo_mov\">{$tipo_mov_opt}</select></td>\n";
                                 print "<td data-label='Moeda' class='currency'><select name=\"moeda_mov\">{$moeda_opt}</select></td>\n";
@@ -385,7 +385,7 @@ function build_and_save_record()
                             print "<select class=\"date-fallback\" style=\"display: none\" name=\"data_movAA\">" . Html::year_option(substr($defaults->entry_date, 0, 4)) . "</select>\n";
                             print "<select class=\"date-fallback\" style=\"display: none\" name=\"data_movMM\">" . Html::mon_option(substr($defaults->entry_date, 5, 2)) . "</select>\n";
                             print "<select class=\"date-fallback\" style=\"display: none\" name=\"data_movDD\">" . Html::day_option(substr($defaults->entry_date, 8, 2)) . "</select>\n";
-                            print "<input class=\"date-fallback\" type=\"date\" name=\"data_mov\" required value=\"{$defaults->entry_date}\">\r\n";
+                            print "<input class=\"date-fallback\" type=\"date\" id=\"data_mov\" name=\"data_mov\" required value=\"{$defaults->entry_date}\">\r\n";
                             print "</td>";
                             print "<td data-label='Categoria' class='category'><select name=\"tipo_mov\">{$tipo_mov_opt}</select></td>\n";
                             print "<td data-label='Moeda' class='currency'><select name=\"moeda_mov\">{$moeda_opt}</select></td>\n";
@@ -407,34 +407,44 @@ function build_and_save_record()
                         include "footer.php";
                         ?>
         </div>
-        <script>
-            var test = document.createElement("input");
-            try {
-                test.type = "date";
-                row = document.getElementsByClassName("date-fallback");
-                for (i = 0; i < row.length; i++) {
-                    if (row[i].style.display == "none" && row[i].tagName == "SELECT") {
-                        row[i].value = "";
-                    }
-                }
-                document.getElementsByName("data_mov").item(0).focus();
-            } catch (e) {
-                row = document.getElementsByClassName("date-fallback");
-                for (i = 0; i < row.length; i++) {
-                    if (row[i].style.display == "none") {
-                        row[i].style.removeProperty("display");
-                    } else {
-                        if (row[i].tagName == "INPUT") {
-                            row[i].value = "";
-                            row[i].removeAttribute("required");
-                        }
-                        row[i].style.display = "none";
-                    }
-                }
-                document.getElementsByName("data_movAA").item(0).focus();
-            }
-        </script>
     </div> <!-- Main grid -->
 </body>
+<script>
+    var test = document.createElement("input");
+    try {
+        test.type = "date";
+        row = document.getElementsByClassName("date-fallback");
+        for (i = 0; i < row.length; i++) {
+            if (row[i].style.display == "none" && row[i].tagName == "SELECT") {
+                row[i].value = "";
+            }
+        }
+        elementId = "data_mov";
+    } catch (e) {
+        row = document.getElementsByClassName("date-fallback");
+        for (i = 0; i < row.length; i++) {
+            if (row[i].style.display == "none") {
+                row[i].style.removeProperty("display");
+            } else {
+                if (row[i].tagName == "INPUT") {
+                    row[i].value = "";
+                    row[i].removeAttribute("required");
+                }
+                row[i].style.display = "none";
+            }
+        }
+        elementId = "data_movAA";
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+        setTimeout(() => {
+            document.getElementById(elementId).focus();
+            document.getElementById(elementId).scrollIntoView({
+                behavior: "instant",
+                block: "end",
+                inline: "end"
+            });
+        }, 1)
+    });
+</script>
 
 </html>
