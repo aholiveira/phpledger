@@ -18,7 +18,7 @@ define("VERSION", "0.2.0");
 define("ROOT_DIR", __DIR__);
 define("OBJECTS_DIR", ROOT_DIR . "/objects");
 define("VIEWS_DIR", ROOT_DIR . "/views");
-if (file_exists(file_get_contents(realpath(ROOT_DIR . "/.git/ORIG_HEAD")))) {
+if (file_exists(realpath(ROOT_DIR . "/.git/ORIG_HEAD"))) {
     define("GITHASH", file_get_contents(realpath(ROOT_DIR . "/.git/ORIG_HEAD")));
 } else {
     define("GITHASH", "main");
