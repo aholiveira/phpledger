@@ -47,7 +47,7 @@ class account_balance_view extends object_viewer
                 $retval .= "<td class='withdrawls' data-label='Levantam.'>" . normalize_number($balance['expense']) . "</td>";
                 $retval .= "<td class='balance' data-label='Saldo'>" . normalize_number($balance['balance']) . "</td>";
                 $retval .= "<td class='percent' data-label='Percentagem'>" . normalize_number($totals['balance'] <> 0 ? round($balance['balance'] / $totals['balance'] * 100, 2) : 0) . "</td>";
-                $retval .= "<td class='entries-list' data-label='Movimentos'><a title=\"Movimentos desta conta\" href=\"ledger_entries.php?conta_id={$object->id}\">Lista</a></td>";
+                $retval .= "<td class='entries-list' data-label='Movimentos'><a title=\"Movimentos desta conta\" href=\"ledger_entries.php?filter_conta_id={$object->id}\">Lista</a></td>";
                 $retval .= "</tr>\r\n";
             }
         }
