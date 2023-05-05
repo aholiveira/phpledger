@@ -11,7 +11,7 @@
 <aside class="menu">
     <nav>
         <ul>
-            <li><a id="ledger_entries" href="ledger_entries.php?from=menu#last">Movimentos</a></li>
+            <li><a id="ledger_entries" href="ledger_entries.php#last">Movimentos</a></li>
             <li><a id="balance" href="saldos.php">Saldos</a></li>
             <li><a id="accounts" href="contas.php">Contas</a></li>
             <li><a id="account_type" href="tipo_contas_lista.php">Tipo contas</a></li>

@@ -251,7 +251,7 @@ function build_and_save_record()
         $account_viewer = $view_factory->account_view($account);
         $conta_opt = $account_viewer->getSelectFromList($account->getAll(array('activa' => array('operator' => '=', 'value' => '1'))), $account_id);
         $filter_string = "";
-        $filter_properties = array("filter_parent_id", "filter_entry_type", "filter_sdate", "filter_sdateAA", "filter_sdateMM", "filter_sdateDD", "filter_edate", "filter_edateAA", "filter_edateMM", "filter_edateDD", "filter_conta_id", "filter_entry_type");
+        $filter_properties = array("filter_parent_id", "filter_entry_type", "filter_sdate", "filter_sdateAA", "filter_sdateMM", "filter_sdateDD", "filter_edate", "filter_edateAA", "filter_edateMM", "filter_edateDD", "filter_conta_id");
         foreach ($filter_properties as $filter_prop) {
             $filter_string .= (array_key_exists($filter_prop, $filtered_input) && !empty($filtered_input[$filter_prop]) ? (strlen($filter_string) > 0 ? "&" : "") . "$filter_prop={$filtered_input[$filter_prop]}" : "");
         }
