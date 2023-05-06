@@ -327,4 +327,8 @@ class user extends mysql_object implements iobject
         }
         return $retval;
     }
+    public function delete(): bool
+    {
+        return false;
+    }
 }
