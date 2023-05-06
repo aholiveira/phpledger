@@ -16,16 +16,16 @@ if (version_compare(PHP_VERSION, '7.0.0') < 0) {
 define("BACKEND", "mysql");
 define("VERSION", "0.2.0");
 define("ROOT_DIR", __DIR__);
-define("OBJECTS_DIR", ROOT_DIR . "/objects");
-define("VIEWS_DIR", ROOT_DIR . "/views");
-if (file_exists(realpath(ROOT_DIR . "/.git/ORIG_HEAD"))) {
-    define("GITHASH", file_get_contents(realpath(ROOT_DIR . "/.git/ORIG_HEAD")));
+define("OBJECTS_DIR", constant("ROOT_DIR") . "/objects");
+define("VIEWS_DIR", constant("ROOT_DIR") . "/views");
+if (file_exists(realpath(constant("ROOT_DIR") . "/.git/ORIG_HEAD"))) {
+    define("GITHASH", file_get_contents(realpath(constant("ROOT_DIR") . "/.git/ORIG_HEAD")));
 } else {
     define("GITHASH", "main");
 }
 #exec("git show -s --format=%ci", $gitresult);
 #define("GITDATE", $gitresult[0]);
-if (defined("DEBUG") && DEBUG == 1) {
+if (constant("DEBUG") == 1) {
     openlog("contas-dev-php", LOG_PID, LOG_DAEMON);
     syslog(LOG_INFO, __FILE__);
     closelog();
@@ -35,11 +35,11 @@ if (session_status() == PHP_SESSION_NONE) {
     ini_set("session.sid_bits_per_character", 5);
     ini_set("session.sid_length", 64);
 }
-include OBJECTS_DIR . '/config.class.php';
-include OBJECTS_DIR . '/object_factory.php';
-include OBJECTS_DIR . '/email.php';
-include VIEWS_DIR . '/view_factory.php';
-include ROOT_DIR . '/html.php';
+include constant("OBJECTS_DIR") . '/config.class.php';
+include constant("OBJECTS_DIR") . '/object_factory.php';
+include constant("OBJECTS_DIR") . '/email.php';
+include constant("VIEWS_DIR") . '/view_factory.php';
+include constant("ROOT_DIR") . '/html.php';
 /**
  * Prints variable
  * @param mixed $var variable to print
@@ -50,7 +50,7 @@ include ROOT_DIR . '/html.php';
  */
 function print_var($var, $comment = "", bool $debug = false)
 {
-    if (($debug && defined("DEBUG") && DEBUG == 1) || !$debug) {
+    if (($debug && constant("DEBUG") == 1) || !$debug) {
         print "\r\n<pre>START###{$comment}###START<br>\r\n";
         print nl2br(print_r($var, true));
         print "\r\n<br>END###{$comment}###END</pre><br>\r\n";
@@ -58,7 +58,7 @@ function print_var($var, $comment = "", bool $debug = false)
 }
 function debug_print($text)
 {
-    if (defined("DEBUG") && DEBUG == 1) {
+    if (constant("DEBUG") == 1) {
         print(nl2br("####DEBUG#$text#DEBUG####<br>\n"));
     }
 }

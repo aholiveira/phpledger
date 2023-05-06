@@ -1,8 +1,7 @@
 <?php
 
 /**
- * Account class
- * Holds an account object
+ * Holds a mysql-backed `account` object
  * @property string name The name of the account
  * @property string number The account's number
  * @property string iban International Bank Account Number
@@ -12,7 +11,7 @@
  * @property string open_date The date the account was open in Y-m-d format
  * @property string close_date The date the account was closed in Y-m-d format
  * @property int active Flag to indicate if the account is still active or not
- * 
+ *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
@@ -114,7 +113,7 @@ class account extends mysql_object implements iobject
     }
     public function getBalance(\DateTime $startDate = null, \DateTime $endDate = null): array
     {
-        $where = "WHERE conta_id=? ";
+        $where = "conta_id=? ";
         $param_array = array($this->id);
         if (!is_null($startDate)) {
             $where .= " AND `data_mov`>=? ";
@@ -124,13 +123,13 @@ class account extends mysql_object implements iobject
             $where .= " AND data_mov<=? ";
             $param_array[] = $endDate->format("Y-m-d");
         }
-        $sql = "SELECT 
-        SUM(ROUND(IF(deb_cred='1',valor_euro,0),2)) AS income, 
-        SUM(ROUND(IF(deb_cred='-1',-valor_euro,0),2)) AS expense, 
-        ROUND(SUM(ROUND(IF(NOT ISNULL(valor_euro),valor_euro,0),5)),2) AS balance 
-        FROM movimentos 
-        {$where} 
-        GROUP BY conta_id ";
+        $sql = "SELECT
+                SUM(ROUND(IF(deb_cred='1',valor_euro,0),2)) AS income,
+                SUM(ROUND(IF(deb_cred='-1',-valor_euro,0),2)) AS expense,
+                ROUND(SUM(ROUND(IF(NOT ISNULL(valor_euro),valor_euro,0),5)),2) AS balance
+                FROM movimentos
+                WHERE {$where}
+                GROUP BY conta_id";
         $retval = array();
         try {
             if (is_object(static::$_dblink)) {
@@ -161,21 +160,20 @@ class account extends mysql_object implements iobject
             $stmt->execute();
             $stmt->bind_result($return_id);
             if (!is_null($stmt->fetch()) && $return_id == $this->id) {
-                $sql = "UPDATE {$this->tableName()} SET 
-                    `conta_num`=?,
-                    `conta_nome`=?,
-                    `tipo_id`=?,
-                    `conta_nib`=?,
-                    `swift`=?,
-                    `conta_abertura`=?,
-                    `conta_fecho`=?,
-                    `activa`=?
-                    WHERE `conta_id`=?";
+                $sql = "UPDATE {$this->tableName()} SET
+                        `conta_num`=?,
+                        `conta_nome`=?,
+                        `tipo_id`=?,
+                        `conta_nib`=?,
+                        `swift`=?,
+                        `conta_abertura`=?,
+                        `conta_fecho`=?,
+                        `activa`=?
+                        WHERE `conta_id`=?";
             } else {
-                $sql = "INSERT INTO " . static::$tableName
-                    . "(`conta_num`, `conta_nome`, `tipo_id`, `conta_nib`, `swift`, `conta_abertura`, `conta_fecho`, `activa`, `conta_id`) "
-                    . "VALUES "
-                    . "(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO {$this->tableName()}
+                        (`conta_num`, `conta_nome`, `tipo_id`, `conta_nib`, `swift`, `conta_abertura`, `conta_fecho`, `activa`, `conta_id`)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             }
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);

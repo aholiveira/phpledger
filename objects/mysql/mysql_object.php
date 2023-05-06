@@ -119,6 +119,7 @@ abstract class mysql_object implements iobject
      */
     abstract function getList(array $field_filter = array()): array;
     abstract function update(): bool;
+    abstract function delete(): bool;
     /**
      * Validates object data.
      * Descendant classes should implement their own code.

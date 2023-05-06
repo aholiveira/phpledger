@@ -372,13 +372,13 @@ class mysql_storage implements idata_storage
                 $entry_category->parent_id = null;
                 $entry_category->active = 1;
                 $entry_category->update();
-                $sql = "update tipo_mov set parent_id=0 where parent_id is null and tipo_id not in (select parent_id from tipo_mov where parent_id is not null group by parent_id) and tipo_id > 0";
+                $sql = "UPDATE tipo_mov SET parent_id=0 WHERE parent_id is null and tipo_id not in (select parent_id from tipo_mov where parent_id is not null group by parent_id) and tipo_id > 0";
                 if (!$this->do_query($sql)) {
                     $this->addMessage("Could not update categories");
                     $retval = false;
                 }
             }
-            if (!$this->do_query("update tipo_mov set parent_id=0 where tipo_id>0 and parent_id is null")) {
+            if (!$this->do_query("UPDATE tipo_mov set parent_id=0 where tipo_id>0 and parent_id is null")) {
                 $this->addMessage("Could not update categories with null parent");
                 $retval = false;
             }

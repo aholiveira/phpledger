@@ -1,6 +1,7 @@
 <?php
 
 /**
+ * Generic data object interface - Common interface for all data objects
  *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
@@ -9,6 +10,10 @@
  */
 interface iobject
 {
+    /**
+     * Validates if object contains valid data
+     * @return bool TRUE if object is valid, FALSE otherwise
+     */
     function validate(): bool;
     function error_message(): string;
     function update(): bool;

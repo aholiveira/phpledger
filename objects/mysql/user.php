@@ -329,6 +329,36 @@ class user extends mysql_object implements iobject
     }
     public function delete(): bool
     {
-        return false;
+        $retval = false;
+        $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
+        try {
+            static::$_dblink->begin_transaction();
+            $stmt = @static::$_dblink->prepare($sql);
+            if ($stmt == false) return $retval;
+            if (!isset($this->id)) return $retval;
+            $stmt->bind_param("i", $this->id);
+            $stmt->execute();
+            $stmt->bind_result($return_id);
+            if (!is_null($stmt->fetch()) && $return_id == $this->id) {
+                $sql = "DELETE FROM {$this->tableName()} WHERE `id`=?";
+            }
+            $stmt->close();
+            if (empty($return_id)) {
+                return true;
+            }
+            $stmt = static::$_dblink->prepare($sql);
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            $stmt->bind_param("s", $this->id);
+            $retval = $stmt->execute();
+            if ($retval == false) {
+                throw new mysqli_sql_exception(static::$_dblink->error);
+            }
+            static::$_dblink->commit();
+        } catch (\Exception $ex) {
+            $this->handleException($ex, $sql);
+            if (isset($stmt)) $stmt->close();
+            static::$_dblink->rollback();
+        }
+        return $retval;
     }
 }

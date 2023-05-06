@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Year Report 
+ * Year Report
  * Class to generate a year report with a summary of income and expense per month
- * 
+ *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
@@ -29,11 +29,11 @@ class report_month implements ireport
     public function getReport(array $params = array()): report_month
     {
         global $object_factory;
-        $sql = "select tipo_id as category_id, tipo_desc, sum(valor_euro) as sum, month(data_mov) as month "
-            . "from movimentos inner join tipo_mov on movimentos.tipo_mov=tipo_id "
-            . "where year(data_mov)=? "
-            . "group by tipo_mov, month(data_mov) "
-            . "order by month, tipo_desc";
+        $sql = "SELECT tipo_id AS category_id, tipo_desc, sum(valor_euro) AS sum, month(data_mov) AS `month`
+                FROM movimentos INNER JOIN tipo_mov ON movimentos.tipo_mov=tipo_id
+                WHERE year(data_mov)=?
+                GROUP BY tipo_mov, month(data_mov)
+                ORDER BY `month`, tipo_desc";
         $tipo_desc = "";
         $sum = 0;
         $month = 0;
