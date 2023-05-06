@@ -116,7 +116,7 @@ class user extends mysql_object implements iobject
     {
         return (date("Y-m-d HH:ii:ss") <= $this->_token_expiry && $this->_token == $token);
     }
-    public function save(): bool
+    public function update(): bool
     {
         $retval = false;
         $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
@@ -173,7 +173,7 @@ class user extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getAll(array $field_filter = array()): array
+    public function getList(array $field_filter = array()): array
     {
         $where = parent::getWhereFromArray($field_filter);
         $sql = "SELECT id, 
@@ -275,7 +275,7 @@ class user extends mysql_object implements iobject
         if (isset($this->_username) && isset($this->_email)) {
             $this->setToken($this->createToken());
             $this->setTokenExpiry((new \DateTime(date("Y-m-d H:i:s")))->add(new \DateInterval("PT24H"))->format("Y-m-d H:i:s"));
-            if ($this->save()) {
+            if ($this->update()) {
                 $retval = true;
                 $title = $config->getParameter("title");
                 $message = "Esta' a receber este email porque solicitou a reposicao da sua palavra-passe na aplicacao '$title'.\r\n";
@@ -326,5 +326,9 @@ class user extends mysql_object implements iobject
             $this->handleException($ex, $sql);
         }
         return $retval;
+    }
+    public function delete(): bool
+    {
+        return false;
     }
 }

@@ -25,7 +25,7 @@ class account_view extends object_viewer
             $account_type->getById($_object->type_id);
             $type_description = $account_type->description;
         }
-        $retval .= "<td data-label='ID' class=\"number\"><a title=\"Editar\" href=\"contas.php?conta_id={$_object->id}\">{$_object->id}</a></td>";
+        $retval .= "<td data-label='ID' class=\"number\"><a title=\"Editar\" href=\"contas.php?filter_conta_id={$_object->id}\">{$_object->id}</a></td>";
         $retval .= "<td data-label='Nome' class=\"text\">{$_object->name}</a></td>";
         $retval .= "<td data-label='Numero' class=\"number\">{$_object->number}</a></td>";
         $retval .= "<td data-label='Tipo'>{$type_description}</a></td>";
@@ -47,13 +47,13 @@ class account_view extends object_viewer
          * @var account $_object
          */
         $_object = ($this->_object);
-        $id = isset($_object->id) ? $_object->id : $_object->getFreeId();
+        $id = isset($_object->id) ? $_object->id : $_object->getNextId();
         $account_type = $object_factory->accounttype();
         if (isset($_object->type_id)) {
             $account_type->getById($_object->type_id);
         }
         $account_type_view = $view_factory->account_type_view($account_type);
-        $tipo_opt = $account_type_view->getSelectFromList($account_type->getAll(), isset($_object->type_id) ? $_object->type_id : null);
+        $tipo_opt = $account_type_view->getSelectFromList($account_type->getList(), isset($_object->type_id) ? $_object->type_id : null);
         $retval .= "<td data-label='ID'><input type=\"hidden\" name=\"conta_id\" value=\"{$id}\"/>{$id}</td>\n";
         $retval .= "<td data-label='Nome'><a name=\"{$id}\"><input type=text size=16 maxlength=30 name=\"conta_nome\" value=\"{$_object->name}\"></a></td>";
         $retval .= "<td data-label='Numero'><input type=text size=15 maxlength=30 name=\"conta_num\" value=\"{$_object->number}\"></td>";

@@ -23,7 +23,7 @@ class defaults extends mysql_object implements iobject
     {
         parent::__construct($dblink);
     }
-    public function getAll(array $field_filter = array()): array
+    public function getList(array $field_filter = array()): array
     {
         $where = parent::getWhereFromArray($field_filter);
         $sql = "SELECT
@@ -96,7 +96,7 @@ class defaults extends mysql_object implements iobject
         $this->direction = -1;
         return $this;
     }
-    public function save(): bool
+    public function update(): bool
     {
         $retval = false;
         if (!is_object(static::$_dblink)) return $retval;
@@ -141,5 +141,9 @@ class defaults extends mysql_object implements iobject
             $this->handleException($ex, $sql);
         }
         return $retval;
+    }
+    public function delete(): bool
+    {
+        return false;
     }
 }

@@ -35,7 +35,7 @@ class ledgerentry extends mysql_object implements iobject
     {
         parent::__construct($dblink);
     }
-    public function getAll(array $field_filter = array()): array
+    public function getList(array $field_filter = array()): array
     {
         $where = parent::getWhereFromArray($field_filter);
         $sql = "SELECT mov_id AS id, data_mov AS `entry_date`, tipo_mov AS category_id, 
@@ -166,14 +166,14 @@ class ledgerentry extends mysql_object implements iobject
             $this->currency->getById($this->currency_id);
         }
     }
-    public function save(): bool
+    public function update(): bool
     {
         $retval = false;
         $sql = "SELECT mov_id FROM {$this->tableName()} WHERE mov_id=?";
         try {
             static::$_dblink->begin_transaction();
             if (empty($this->id)) {
-                $this->id = $this->getFreeId();
+                $this->id = $this->getNextId();
             }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;
@@ -221,8 +221,12 @@ class ledgerentry extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getFreeId(string $field = "mov_id"): int
+    public function getNextId(string $field = "mov_id"): int
     {
-        return parent::getFreeId($field);
+        return parent::getNextId($field);
+    }
+    public function delete(): bool
+    {
+        return false;
     }
 }

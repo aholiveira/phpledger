@@ -17,12 +17,13 @@ class entry_category extends mysql_object implements iobject
     public ?string $parent_description;
     public array $children;
     protected static string $tableName = "tipo_mov";
+    public string $validation_message;
 
     public function __construct(\mysqli $dblink)
     {
         parent::__construct($dblink);
     }
-    public function getAll(array $field_filter = array()): array
+    public function getList(array $field_filter = array()): array
     {
         $where = $this->getWhereFromArray($field_filter);
         $sql = "SELECT tipo_id as id FROM {$this->tableName()} "
@@ -148,7 +149,7 @@ class entry_category extends mysql_object implements iobject
         $retval = is_int($this->id) && ($this->id >= 0) && $retval;
         return $retval;
     }
-    public function save(): bool
+    public function update(): bool
     {
         $retval = false;
         if (!$this->validate()) return $retval;
@@ -215,8 +216,8 @@ class entry_category extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getFreeId(string $field = "tipo_id"): int
+    public function getNextId(string $field = "tipo_id"): int
     {
-        return parent::getFreeId($field);
+        return parent::getNextId($field);
     }
 }

@@ -74,7 +74,7 @@ class mysql_storage implements idata_storage
                 $this->addMessage("Category '0' does not exist");
                 $retval = false;
             }
-            $entry_list = $entry_category->getAll(array('parent_id' => array('operator' => 'is', 'value' => 'null'), 'tipo_id' => array('operator' => '>', 'value' => '0')));
+            $entry_list = $entry_category->getList(array('parent_id' => array('operator' => 'is', 'value' => 'null'), 'tipo_id' => array('operator' => '>', 'value' => '0')));
             if (sizeof($entry_list) > 0) {
                 $this->addMessage("Table tipo_mov needs update");
                 $retval = false;
@@ -83,7 +83,7 @@ class mysql_storage implements idata_storage
         if ($this->tableExists("users")) {
             try {
                 $user = new user($this->_dblink);
-                if (sizeof($user->getAll()) == 0) {
+                if (sizeof($user->getList()) == 0) {
                     $this->addMessage("Table users is empty");
                     $retval = false;
                 }
@@ -94,42 +94,42 @@ class mysql_storage implements idata_storage
         }
         if ($this->tableExists("ledgers")) {
             $ledger = new ledger($this->_dblink);
-            if (sizeof($ledger->getAll()) == 0) {
+            if (sizeof($ledger->getList()) == 0) {
                 $this->addMessage("Table ledgers is empty");
                 $retval = false;
             }
         }
         if ($this->tableExists("defaults")) {
             $defaults = new defaults($this->_dblink);
-            if (sizeof($defaults->getAll()) == 0) {
+            if (sizeof($defaults->getList()) == 0) {
                 $this->addMessage("Table defaults is empty");
                 $retval = false;
             }
         }
         if ($this->tableExists("defaults")) {
             $defaults = new defaults($this->_dblink);
-            if (sizeof($defaults->getAll()) == 0) {
+            if (sizeof($defaults->getList()) == 0) {
                 $this->addMessage("Table defaults is empty");
                 $retval = false;
             }
         }
         if ($this->tableExists("moedas")) {
             $currency = new currency($this->_dblink);
-            if (sizeof($currency->getAll()) == 0) {
+            if (sizeof($currency->getList()) == 0) {
                 $this->addMessage("Table currency is empty");
                 $retval = false;
             }
         }
         if ($this->tableExists("tipo_mov")) {
             $accounttype = new accounttype($this->_dblink);
-            if (sizeof($accounttype->getAll()) == 0) {
+            if (sizeof($accounttype->getList()) == 0) {
                 $this->addMessage("Table account type is empty");
                 $retval = false;
             }
         }
         if ($this->tableExists("contas")) {
             $account = new account($this->_dblink);
-            if (sizeof($account->getAll()) == 0) {
+            if (sizeof($account->getList()) == 0) {
                 $this->addMessage("Table accounts is empty");
                 $retval = false;
             }
@@ -154,7 +154,7 @@ class mysql_storage implements idata_storage
         }
         $this->update_table_entry_type();
         $user = new user($this->_dblink);
-        if (sizeof($user->getAll()) == 0) {
+        if (sizeof($user->getList()) == 0) {
             $user->setId(1);
             $user->setUsername('admin');
             $user->setPassword('admin');
@@ -164,25 +164,25 @@ class mysql_storage implements idata_storage
             $user->setToken('');
             $user->setTokenExpiry('');
             $user->setActive(1);
-            if (!$user->save()) {
+            if (!$user->update()) {
                 $this->addMessage("Could not add user admin");
                 $retval = false;
             }
         }
         $ledger = new ledger($this->_dblink);
-        if (sizeof($ledger->getAll()) == 0) {
+        if (sizeof($ledger->getList()) == 0) {
             $ledger->setId(1);
             $ledger->name = "Default";
-            if (!$ledger->save()) {
+            if (!$ledger->update()) {
                 $this->addMessage("Could not add default ledger");
                 $retval = false;
             }
         }
         if ($this->tableExists("defaults")) {
             $defaults = new defaults($this->_dblink);
-            if (sizeof($defaults->getAll()) == 0) {
+            if (sizeof($defaults->getList()) == 0) {
                 $defaults->init();
-                if (!$defaults->save()) {
+                if (!$defaults->update()) {
                     $this->addMessage("Could not save defaults");
                     $retval = false;
                 }
@@ -190,11 +190,11 @@ class mysql_storage implements idata_storage
         }
         if ($this->tableExists("moedas")) {
             $currency = new currency($this->_dblink);
-            if (sizeof($currency->getAll()) == 0) {
+            if (sizeof($currency->getList()) == 0) {
                 $currency->description = 'Euro';
                 $currency->exchange_rate = 1;
                 $currency->id = 'EUR';
-                if (!$currency->save()) {
+                if (!$currency->update()) {
                     $this->addMessage("Could not save currency");
                     $retval = false;
                 }
@@ -202,11 +202,11 @@ class mysql_storage implements idata_storage
         }
         if ($this->tableExists("tipo_mov")) {
             $accounttype = new accounttype($this->_dblink);
-            if (sizeof($accounttype->getAll()) == 0) {
+            if (sizeof($accounttype->getList()) == 0) {
                 $accounttype->description = 'Conta caixa';
                 $accounttype->savings = 0;
                 $accounttype->id = 1;
-                if (!$accounttype->save()) {
+                if (!$accounttype->update()) {
                     $this->addMessage("Could not save account type");
                     $retval = false;
                 }
@@ -214,7 +214,7 @@ class mysql_storage implements idata_storage
         }
         if ($this->tableExists("contas")) {
             $account = new account($this->_dblink);
-            if (sizeof($account->getAll()) == 0) {
+            if (sizeof($account->getList()) == 0) {
                 $account->number = '';
                 $account->name = 'Caixa';
                 $account->type_id = 1;
@@ -225,7 +225,7 @@ class mysql_storage implements idata_storage
                 $account->close_date = date("Y-m-d", mktime(0, 0, 0, 1, 1, 1990));
                 $account->active = 1;
                 $account->id = 1;
-                if (!$account->save()) {
+                if (!$account->update()) {
                     $this->addMessage("Could not save account");
                     $retval = false;
                 }
@@ -242,8 +242,8 @@ class mysql_storage implements idata_storage
         $end_year = date("Y");
         $max_month_entries = 100;
         $account = $object_factory->account();
-        $account_list = $account->getAll(array('activa' => array('operator' => '=', 'value' => '1')));
-        $category_list = $category->getAll(array('active' => array('operator' => '=', 'value' => '1')));
+        $account_list = $account->getList(array('activa' => array('operator' => '=', 'value' => '1')));
+        $category_list = $category->getList(array('active' => array('operator' => '=', 'value' => '1')));
         if (array_key_exists(0, $category_list)) {
             unset($category_list[0]);
         }
@@ -254,7 +254,7 @@ class mysql_storage implements idata_storage
                 $days_in_month = ($year == date("Y") && $month == date("m") ? date("d") : cal_days_in_month(CAL_GREGORIAN, $month, $year));
                 $entries_to_create = random_int(round(0.7 * $max_month_entries, 0), $max_month_entries);
                 for ($entry_counter = 1; $entry_counter <= $entries_to_create; $entry_counter++) {
-                    $ledger_entry->id = $ledger_entry->getFreeId();
+                    $ledger_entry->id = $ledger_entry->getNextId();
                     $ledger_entry->account_id = $account_list[array_rand($account_list)]->id;
                     $ledger_entry->category_id = $category_list[array_rand($category_list)]->id;
                     if ($ledger_entry->category_id == 0) exit(0);
@@ -265,7 +265,7 @@ class mysql_storage implements idata_storage
                     $ledger_entry->euro_amount = $ledger_entry->currency_amount * $ledger_entry->direction;
                     $ledger_entry->exchange_rate = 1;
                     $ledger_entry->username = $this->_config->getParameter("user");
-                    $ledger_entry->save();
+                    $ledger_entry->update();
                 }
                 $curr_month = date_diff(new \DateTime(date("Y-m-d", mktime(0, 0, 0, $month, 1, $year))), new \DateTime(date("Y-m-d", mktime(0, 0, 0, 1, 1, $start_year))));
                 print number_format(($curr_month->y * 12 + $curr_month->m) / ($months->y * 12 + $curr_month->m + 1) * 100, 1) . "%\r\n";
@@ -371,7 +371,7 @@ class mysql_storage implements idata_storage
                 $entry_category->description = "Sem categoria";
                 $entry_category->parent_id = null;
                 $entry_category->active = 1;
-                $entry_category->save();
+                $entry_category->update();
                 $sql = "update tipo_mov set parent_id=0 where parent_id is null and tipo_id not in (select parent_id from tipo_mov where parent_id is not null group by parent_id) and tipo_id > 0";
                 if (!$this->do_query($sql)) {
                     $this->addMessage("Could not update categories");

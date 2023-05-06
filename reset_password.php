@@ -47,7 +47,7 @@ $pagetitle = "Redefini&ccedil;o de palavra-passe";
                     $user->setPassword($_POST["password"]);
                     $user->setToken('');
                     $user->setTokenExpiry(null);
-                    if ($user->save()) {
+                    if ($user->update()) {
                         print "<meta http-equiv='REFRESH' content='10; URL=index.php'>";
                         print "<p>Palavra-passe alterada com sucesso<br></p>";
                         print "<p>Ir&aacute; ser redireccionado para a pagina inicial.<br></p>";

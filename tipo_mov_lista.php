@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
             }
         }
         if ($object->validate()) {
-            $retval = $object->save();
+            $retval = $object->update();
         } else {
             Html::myalert("Dados inv&aacute;lidos. Por favor verifique.");
         }
@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
             <?php
             $object = $object_factory->entry_category();
             $viewer = $view_factory->entry_category_view($object);
-            print $viewer->printObjectList($object->getAll());
+            print $viewer->printObjectList($object->getList());
             ?>
         </div>
         <?php include "footer.php"; ?>

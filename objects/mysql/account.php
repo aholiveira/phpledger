@@ -36,7 +36,7 @@ class account extends mysql_object implements iobject
     {
         parent::__construct($dblink);
     }
-    public function getAll(array $field_filter = array()): array
+    public function getList(array $field_filter = array()): array
     {
         $where = parent::getWhereFromArray($field_filter);
         $sql = "SELECT
@@ -148,7 +148,7 @@ class account extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function save(): bool
+    public function update(): bool
     {
         $retval = false;
         if (!is_object(static::$_dblink)) return $retval;
@@ -230,8 +230,8 @@ class account extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getFreeId(string $field = "conta_id"): int
+    public function getNextId(string $field = "conta_id"): int
     {
-        return parent::getFreeId($field);
+        return parent::getNextId($field);
     }
 }
