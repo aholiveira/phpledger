@@ -57,7 +57,7 @@ class ledger_entry_view extends object_viewer
         if (!$_object instanceof ledgerentry) return $retval;
         $retval .= "<tr>";
         $retval .= "<td><label for=\"id\">ID</label></td>\r\n";
-        $retval .= "<td><input type=text readonly size=4 name=\"id\" value=" . (isset($_object->id)  ? $_object->id : $_object->getFreeId()) . " /></td>\r\n";
+        $retval .= "<td><input type=text readonly size=4 name=\"id\" value=" . (isset($_object->id)  ? $_object->id : $_object->getNextId()) . " /></td>\r\n";
         $retval .= "</tr>";
         $retval .= "<tr>";
         $retval .= "<td><label for=\"tipo_desc\">Nome</label></td>\n";

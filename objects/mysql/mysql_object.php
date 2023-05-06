@@ -42,7 +42,7 @@ abstract class mysql_object implements iobject
     /**
      * @return int The next free number on $field. It fills gaps if there are any.
      */
-    public function getFreeId(string $field = "id"): int
+    public function getNextId(string $field = "id"): int
     {
         $db = static::$_dblink;
         if (!is_object($db) || is_null(static::$tableName)) {
@@ -117,8 +117,8 @@ abstract class mysql_object implements iobject
      * - - operator is any valid SQL operator (LIKE, BETWEEN, <, >, <=, =>)
      * - - value is the value to be filtered
      */
-    abstract function getAll(array $field_filter = array()): array;
-    abstract function save(): bool;
+    abstract function getList(array $field_filter = array()): array;
+    abstract function update(): bool;
     /**
      * Validates object data.
      * Descendant classes should implement their own code.

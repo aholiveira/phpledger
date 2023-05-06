@@ -23,7 +23,7 @@ assert(is_float($balance['income']));
 assert(is_float($balance['expense']));
 assert(is_float($balance['balance']));
 $viewer = $view_factory->account_balance_view($object);
-/*debug_print($viewer->printObjectList($object->getAll(array('activa' => array('operator' => '=', 'value' => '1')))));
+/*debug_print($viewer->printObjectList($object->getList(array('activa' => array('operator' => '=', 'value' => '1')))));
 
 $viewer = $view_factory->account_view($object);
 run_views($viewer, $object);
@@ -41,7 +41,7 @@ run_tests($object);
 $viewer = $view_factory->ledger_entry_view($object);
 run_views($viewer, $object);
 $object = $object_factory->entry_category();
-print_var($object->getAll());
+print_var($object->getList());
 /*run_tests($object);
 debug_print("OBJECT 145");
 $object->getById(0);
@@ -77,16 +77,16 @@ function run_tests(mysql_object $object, $id = 1)
             assert($object->id === $id);
             //print_var($object);
         }
-        assert($object->save() === true, "save#{$object}#");
-        debug_print("getAll#{$object}#");
+        assert($object->update() === true, "save#{$object}#");
+        debug_print("getList#{$object}#");
         $field_filter = array();
         if ($object instanceof ledgerentry) {
             debug_print("LEDGER ENTRY FILTER");
             $field_filter = array('data_mov' => array('operator' => 'BETWEEN', 'value' => "'2022-01-01' AND '2022-01-02'"));
         }
-        $object->getAll($field_filter);
-        debug_print("getFreeId#{$object}#");
-        assert($object->getFreeId() >= 0);
+        $object->getList($field_filter);
+        debug_print("getNextId#{$object}#");
+        assert($object->getNextId() >= 0);
     } catch (Exception $ex) {
         debug_print($ex->getMessage());
     }
@@ -102,7 +102,7 @@ function run_views(object_viewer $viewer, iobject $object)
             debug_print("LEDGER ENTRY FILTER");
             $field_filter = array('data_mov' => array('operator' => 'BETWEEN', 'value' => "'2022-01-01' AND '2022-01-02'"));
         }
-        debug_print($viewer->printObjectList($object->getAll($field_filter)));
+        debug_print($viewer->printObjectList($object->getList($field_filter)));
     } catch (Exception $ex) {
         debug_print($ex->getMessage());
     }

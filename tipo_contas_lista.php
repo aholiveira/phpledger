@@ -33,7 +33,7 @@ $sql = "SELECT tipo_id, tipo_desc " .
             <?php
             $object = $object_factory->accounttype();
             $viewer = $view_factory->account_type_view($object);
-            print $viewer->printObjectList($object->getAll());
+            print $viewer->printObjectList($object->getList());
             ?>
         </div>
         <?php include "footer.php"; ?>

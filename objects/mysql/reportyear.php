@@ -48,10 +48,10 @@ class report_year extends report implements ireport
         parent::getReport($params);
         $account_type = $object_factory->accounttype();
         $account = $object_factory->account();
-        $savings_types = $account_type->getAll(array('savings' => array('operator' => '=', 'value' => '1')));
+        $savings_types = $account_type->getList(array('savings' => array('operator' => '=', 'value' => '1')));
         $savings_accounts = array();
         foreach ($savings_types as $saving_type) {
-            foreach ($account->getAll(array('tipo_id' => array('operator' => '=', 'value' => $saving_type->id))) as $acc) {
+            foreach ($account->getList(array('tipo_id' => array('operator' => '=', 'value' => $saving_type->id))) as $acc) {
                 $savings_accounts[] = $acc;
             }
         }

@@ -16,10 +16,10 @@ class accounttype extends mysql_object implements iobject
     public function __construct(\mysqli $dblink)
     {
         parent::__construct($dblink);
-        $this->getFreeId();
+        $this->getNextId();
     }
 
-    public function getAll(array $field_filter = array()): array
+    public function getList(array $field_filter = array()): array
     {
         $where = static::getWhereFromArray($field_filter);
         $sql = "SELECT tipo_id as id, tipo_desc as description, savings FROM {$this->tableName()} {$where}";
@@ -62,7 +62,7 @@ class accounttype extends mysql_object implements iobject
     }
 
 
-    public function save(): bool
+    public function update(): bool
     {
         $retval = false;
         $sql = "SELECT tipo_id FROM {$this->tableName()} WHERE tipo_id=?";
@@ -128,9 +128,9 @@ class accounttype extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getFreeId(string $field = "tipo_id"): int
+    public function getNextId(string $field = "tipo_id"): int
     {
-        $retval = parent::getFreeId($field);
+        $retval = parent::getNextId($field);
         return $retval;
     }
 }

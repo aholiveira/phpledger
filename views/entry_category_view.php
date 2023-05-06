@@ -71,7 +71,7 @@ class entry_category_view extends object_viewer
                 'active' => array('operator' => '=', 'value' => '1')
             );
         }
-        $category_list = $_object->getAll($filter);
+        $category_list = $_object->getList($filter);
         if (isset($_object->id)) {
             foreach ($category_list as $key => $category) {
                 if ($category->parent_id == $_object->id || $category->id == $_object->id) {
@@ -81,7 +81,7 @@ class entry_category_view extends object_viewer
         }
         $retval .= "<tr>";
         $retval .= "<td><label for=\"tipo_id\">ID</label></td>\r\n";
-        $retval .= "<td><input type=text readonly size=4 name=\"tipo_id\" value=" . (isset($_object->id)  ? $_object->id : $_object->getFreeId()) . " /></td>\r\n";
+        $retval .= "<td><input type=text readonly size=4 name=\"tipo_id\" value=" . (isset($_object->id)  ? $_object->id : $_object->getNextId()) . " /></td>\r\n";
         $retval .= "</tr>";
         $retval .= "<tr>";
         $retval .= "<td><label for=\"parent_id\">Categoria</label></td>\r\n";

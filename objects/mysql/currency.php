@@ -17,7 +17,7 @@ class currency extends mysql_object implements iobject
     {
         parent::__construct($dblink);
     }
-    public function getAll(array $field_filter = array()): array
+    public function getList(array $field_filter = array()): array
     {
         $where = $this->getWhereFromArray($field_filter);
         $sql = "SELECT moeda_id as id, moeda_desc as `description`, taxa as exchange_rate FROM {$this->tableName()} {$where} ORDER BY moeda_desc";
@@ -60,7 +60,7 @@ class currency extends mysql_object implements iobject
         return $this;
     }
 
-    public function save(): bool
+    public function update(): bool
     {
         $retval = false;
         $sql = "SELECT moeda_id FROM {$this->tableName()} WHERE moeda_id=?";
@@ -94,8 +94,12 @@ class currency extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getFreeId(string $field = "moeda_id"): int
+    public function getNextId(string $field = "moeda_id"): int
     {
         return 0;
+    }
+    public function delete(): bool
+    {
+        return false;
     }
 }

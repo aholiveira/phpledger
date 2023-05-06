@@ -108,7 +108,7 @@ function build_and_save_record()
     $entry->account_id = checkParameterExists("conta_id", "Conta movimento invalida!");
     $entry->remarks = checkParameterExists("obs", "Observacoes movimento invalidas!");
     $entry->username = (strlen($_SESSION["user"]) ? $_SESSION["user"] : "");
-    if (!$entry->save()) {
+    if (!$entry->update()) {
         Html::myalert("Ocorreu um erro na gravacao");
     } else {
         $defaults->getById(1);
@@ -117,7 +117,7 @@ function build_and_save_record()
         $defaults->account_id = $entry->account_id;
         $defaults->entry_date = $entry->entry_date;
         $defaults->direction = $entry->direction;
-        $defaults->save();
+        $defaults->update();
         Html::myalert("Registo gravado [ID: {$entry->id}]");
     }
 }
@@ -234,7 +234,7 @@ function build_and_save_record()
         $entry_category = $object_factory->entry_category();
         $entry_category->getById($category_id);
         $entry_viewer = $view_factory->entry_category_view($entry_category);
-        $tipo_mov_opt = $entry_viewer->getSelectFromList($entry_category->getAll(array(
+        $tipo_mov_opt = $entry_viewer->getSelectFromList($entry_category->getList(array(
             'active' => array('operator' => '=', 'value' => '1'),
             'tipo_id' => array('operator' => '>', 'value' => '0')
         )));
@@ -242,14 +242,14 @@ function build_and_save_record()
         $currency_id = $edit > 0 ? $edit_entry->currency_id :  $defaults->currency_id;
         $currency = $object_factory->currency();
         $currency_viewer = $view_factory->currency_view($currency);
-        $moeda_opt = $currency_viewer->getSelectFromList($currency->getAll(), $currency_id);
+        $moeda_opt = $currency_viewer->getSelectFromList($currency->getList(), $currency_id);
         // Contas
         $conta_opt = "";
         $account_id = $edit > 0 ? $edit_entry->account_id : $defaults->account_id;
         $account = $object_factory->account();
         $account->getById($account_id);
         $account_viewer = $view_factory->account_view($account);
-        $conta_opt = $account_viewer->getSelectFromList($account->getAll(array('activa' => array('operator' => '=', 'value' => '1'))), $account_id);
+        $conta_opt = $account_viewer->getSelectFromList($account->getList(array('activa' => array('operator' => '=', 'value' => '1'))), $account_id);
         $filter_string = "";
         $filter_properties = array("filter_parent_id", "filter_entry_type", "filter_sdate", "filter_sdateAA", "filter_sdateMM", "filter_sdateDD", "filter_edate", "filter_edateAA", "filter_edateMM", "filter_edateDD", "filter_conta_id");
         foreach ($filter_properties as $filter_prop) {

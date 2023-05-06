@@ -11,8 +11,9 @@ interface iobject
 {
     function validate(): bool;
     function error_message(): string;
-    function save(): bool;
-    function getFreeId(): int;
-    function getAll(array $field_filter = array()): array;
+    function update(): bool;
+    function getNextId(): int;
+    function getList(array $field_filter = array()): array;
     function getById(int $id): iobject;
+    function delete(): bool;
 }

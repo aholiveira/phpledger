@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $object->id = filter_input(INPUT_POST, "tipo_id", FILTER_VALIDATE_INT);
         $object->description = filter_input(INPUT_POST, "tipo_desc", FILTER_DEFAULT);
         $object->savings = filter_has_var(INPUT_POST, "saving") ? 1 : 0;
-        $retval = $object->save();
+        $retval = $object->update();
     } else {
         $object->id = filter_input(INPUT_POST, "tipo_id", FILTER_VALIDATE_INT);
         if ($object->id > 0) {
@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    $object->id = $object->getFreeID();
+    $object->id = $object->getNextId();
     if (filter_has_var(INPUT_GET, "tipo_id")) {
         $tipo_id = filter_input(INPUT_GET, "tipo_id", FILTER_VALIDATE_INT);
         if ($tipo_id > 0) {

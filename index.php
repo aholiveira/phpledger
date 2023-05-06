@@ -62,7 +62,7 @@ if (array_key_exists("userid", $_POST) && null != $_POST["userid"]) {
             $defaults = $object_factory->defaults();
             $defaults->getById(1);
             $defaults->entry_date = date("Y-m-d");
-            $defaults->save();
+            $defaults->update();
             header("Location: ledger_entries.php?filter_sdate=" . date('Y-m-01'));
         } else {
             if (!headers_sent()) {
@@ -107,14 +107,14 @@ function verify_and_migrate_user()
     $retval = false;
     if (mysqli_connect($host, $_POST["userid"], md5($_POST["pass"]), $dbase)) {
         $retval = true;
-        $user_object->setId($user_object->getFreeId());
+        $user_object->setId($user_object->getNextId());
         $user_object->setUsername($_POST["userid"]);
         $user_object->setPassword($_POST["pass"]);
         $user_object->setFullname('');
         $user_object->setRole(1);
         $user_object->setActive(1);
         $user_object->setEmail('');
-        $user_object->save();
+        $user_object->update();
     }
     return $retval;
 }

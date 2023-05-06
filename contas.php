@@ -68,7 +68,7 @@ $pagetitle = "Contas";
                 $object->active = filter_input(INPUT_POST, "activa", FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
                 $object->type_id = filter_input(INPUT_POST, "tipo_id", FILTER_VALIDATE_INT);
                 $object->iban =  filter_input(INPUT_POST, "conta_nib", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                $retval = $object->save();
+                $retval = $object->update();
             }
         }
         if (strcasecmp($update, "apagar") == 0) {
@@ -95,7 +95,7 @@ $pagetitle = "Contas";
         $account_type = $object_factory->accounttype();
         $account_type_view = $view_factory->account_type_view($account_type);
         $account = $object_factory->account();
-        $account_list = $account->getAll();
+        $account_list = $account->getList();
         $account_type_cache = array();
 
         $sql = "SELECT conta_id, conta_num, conta_nome, contas.tipo_id, tipo_desc, conta_nib, conta_abertura, conta_fecho, activa, IF(activa,\"Sim\", \"Nao\") as activa_txt 
@@ -130,7 +130,7 @@ $pagetitle = "Contas";
                                 }
                                 $account_view = $view_factory->account_view($account);
                                 if (!empty($edit) && $account->id == $edit) {
-                                    $tipo_opt = $account_type_view->getSelectFromList($account_type->getAll(), $account->type_id);
+                                    $tipo_opt = $account_type_view->getSelectFromList($account_type->getList(), $account->type_id);
                                     print $account_view->printForm();
                                 }
                                 if (empty($edit) || (!empty($edit) && $account->id != $edit)) {

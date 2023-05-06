@@ -16,7 +16,7 @@ class ledger extends mysql_object implements iobject
     {
         parent::__construct($dblink);
     }
-    public function getAll(array $field_filter = array()): array
+    public function getList(array $field_filter = array()): array
     {
         $where = $this->getWhereFromArray($field_filter);
         $sql = "SELECT id FROM {$this->tableName()} {$where} ORDER BY id";
@@ -62,7 +62,7 @@ class ledger extends mysql_object implements iobject
         return $this;
     }
 
-    public function save(): bool
+    public function update(): bool
     {
         $retval = false;
         $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
@@ -96,8 +96,12 @@ class ledger extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getFreeId(string $field = "id"): int
+    public function getNextId(string $field = "id"): int
     {
-        return parent::getFreeId($field);
+        return parent::getNextId($field);
+    }
+    public function delete(): bool
+    {
+        return false;
     }
 }

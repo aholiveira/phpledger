@@ -59,7 +59,7 @@ function run_additional($object, $viewer = null)
             $retval = assert(is_float($balance['income'])) && $retval;
             $retval = assert(is_float($balance['expense'])) && $retval;
             $retval = assert(is_float($balance['balance'])) && $retval;
-            $retval = assert(strlen($viewer->printObjectList($object->getAll(array('activa' => array('operator' => '=', 'value' => '1'))))) > 0) && $retval;
+            $retval = assert(strlen($viewer->printObjectList($object->getList(array('activa' => array('operator' => '=', 'value' => '1'))))) > 0) && $retval;
             break;
     }
     return $retval;
@@ -86,13 +86,13 @@ function test_object(mysql_object $object, $id = 1)
         if (isset($object->id)) {
             $retval = (assert($object->id === $id, "getById") && $retval);
         }
-        $retval = (assert($object->save() === true, "save#{$object}#"));
+        $retval = (assert($object->update() === true, "save#{$object}#"));
         $field_filter = array();
         if ($object instanceof ledgerentry) {
             $field_filter = array('data_mov' => array('operator' => 'BETWEEN', 'value' => "'2022-01-01' AND '2022-01-02'"));
         }
-        $retval = (@assert(sizeof($object->getAll($field_filter)) > 0, "getAll#{$object}#") && $retval);
-        $retval = (@assert($object->getFreeId() >= 0, "getFreeId#{$object}#") && $retval);
+        $retval = (@assert(sizeof($object->getList($field_filter)) > 0, "getList#{$object}#") && $retval);
+        $retval = (@assert($object->getNextId() >= 0, "getNextId#{$object}#") && $retval);
         print ($retval ?  "\033[32mPASSED\033[0m" : "\033[31mFAILED\033[0m") . "\r\n";
     } catch (Exception $ex) {
         debug_print($ex->getMessage());
@@ -111,7 +111,7 @@ function test_view(object_viewer $viewer, iobject $object)
         if ($object instanceof ledgerentry) {
             $field_filter = array('data_mov' => array('operator' => 'BETWEEN', 'value' => "'2022-01-01' AND '2022-01-02'"));
         }
-        $retval = (@assert(strlen($viewer->printObjectList($object->getAll($field_filter))) > 0, "#printObjectList#") && $retval);
+        $retval = (@assert(strlen($viewer->printObjectList($object->getList($field_filter))) > 0, "#printObjectList#") && $retval);
         $method = "printForm";
         $assert = true;
         if (method_exists($viewer, $method)) {
