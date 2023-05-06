@@ -225,4 +225,8 @@ class ledgerentry extends mysql_object implements iobject
     {
         return parent::getNextId($field);
     }
+    public function delete(): bool
+    {
+        return false;
+    }
 }
