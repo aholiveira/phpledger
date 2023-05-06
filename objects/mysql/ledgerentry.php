@@ -5,7 +5,7 @@
  * Holds an object for a ledger entry on the ledger table
  * @property int id Internal object identifier
  * @property string entry_date The entry's date. This should be in Y-m-d format
- * @property int category_id 
+ * @property int category_id
  *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
@@ -38,13 +38,13 @@ class ledgerentry extends mysql_object implements iobject
     public function getList(array $field_filter = array()): array
     {
         $where = parent::getWhereFromArray($field_filter);
-        $sql = "SELECT mov_id AS id, data_mov AS `entry_date`, tipo_mov AS category_id, 
-            conta_id AS account_id, 
-            round(valor_mov,2) as currency_amount, deb_cred AS `direction`, moeda_mov AS currency_id, 
-            cambio AS exchange_rate, valor_euro AS euro_amount, 
+        $sql = "SELECT mov_id AS id, data_mov AS `entry_date`, tipo_mov AS category_id,
+            conta_id AS account_id,
+            round(valor_mov,2) as currency_amount, deb_cred AS `direction`, moeda_mov AS currency_id,
+            cambio AS exchange_rate, valor_euro AS euro_amount,
             obs AS remarks, username, last_modified
-            FROM {$this->tableName()} 
-            {$where} 
+            FROM {$this->tableName()}
+            {$where}
             ORDER BY data_mov, mov_id";
         $retval = array();
         try {
@@ -68,12 +68,12 @@ class ledgerentry extends mysql_object implements iobject
 
     public function getById($id): ledgerentry
     {
-        $sql = "SELECT mov_id AS id, data_mov AS `entry_date`, tipo_mov AS category_id, 
-            conta_id AS account_id, 
-            round(valor_mov,2) as currency_amount, deb_cred AS `direction`, moeda_mov AS currency_id, 
-            cambio AS exchange_rate, valor_euro AS euro_amount, 
+        $sql = "SELECT mov_id AS id, data_mov AS `entry_date`, tipo_mov AS category_id,
+            conta_id AS account_id,
+            round(valor_mov,2) as currency_amount, deb_cred AS `direction`, moeda_mov AS currency_id,
+            cambio AS exchange_rate, valor_euro AS euro_amount,
             obs AS remarks, username, last_modified
-            FROM {$this->tableName()} 
+            FROM {$this->tableName()}
             WHERE mov_id=?";
         if (!is_object(static::$_dblink)) {
             return $this;
@@ -98,9 +98,9 @@ class ledgerentry extends mysql_object implements iobject
     public function getBalanceBeforeDate($date, $account_id = null): ?float
     {
         $balance = null;
-        $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(valor_euro),valor_euro,0),5)),2) AS balance FROM {$this->tableName()} " .
-            "WHERE data_mov<?" .
-            (!is_null($account_id) ? " AND conta_id=?" : "");
+        $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(valor_euro),valor_euro,0),5)),2) AS balance
+                FROM {$this->tableName()}
+                WHERE data_mov<?" . (!is_null($account_id) ? " AND conta_id=?" : "");
         if (!is_object(static::$_dblink)) {
             return $balance;
         }
@@ -123,7 +123,7 @@ class ledgerentry extends mysql_object implements iobject
     }
     /**
      * @param array $field_filter an array of the form ('field_name' => array('operator' => SQL operator, 'value' => value to filter by))
-     * - where 
+     * - where
      * - - field_name is a field which you want to filter by
      * - - operator is any valid SQL operator (LIKE, BETWEEN, <, >, <=, =>)
      * - - value is the value to be filtered
@@ -132,10 +132,11 @@ class ledgerentry extends mysql_object implements iobject
     public static function getBalanceForFilter(array $field_filter)
     {
         $where = parent::getWhereFromArray($field_filter);
+        $tableName = static::$tableName;
         $balance = null;
-        $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(valor_euro),valor_euro,0),5)),2) AS balance"
-            . " FROM " . static::$tableName . " "
-            . " WHERE {$where}";
+        $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(valor_euro),valor_euro,0),5)),2) AS balance
+                FROM {$tableName}
+                WHERE {$where}";
         if (!is_object(static::$_dblink)) {
             return $balance;
         }
@@ -181,21 +182,22 @@ class ledgerentry extends mysql_object implements iobject
             $stmt->execute();
             $stmt->bind_result($return_id);
             if (!is_null($stmt->fetch()) && $return_id == $this->id) {
-                $sql = "UPDATE {$this->tableName()} SET 
-                    data_mov =?, 
-                    tipo_mov =?, 
-                    conta_id =?, 
-                    moeda_mov =?, 
-                    deb_cred =?, 
-                    valor_mov =?, 
-                    valor_euro =?, 
+                $sql = "UPDATE {$this->tableName()} SET
+                    data_mov =?,
+                    tipo_mov =?,
+                    conta_id =?,
+                    moeda_mov =?,
+                    deb_cred =?,
+                    valor_mov =?,
+                    valor_euro =?,
                     obs =?,
-                    username=?, 
+                    username=?,
                     last_modified=NULL
                     WHERE mov_id =?";
             } else {
-                $sql = "INSERT INTO {$this->tableName()} (data_mov, tipo_mov, conta_id, moeda_mov, deb_cred, valor_mov, valor_euro, obs, username, mov_id, last_modified) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)";
+                $sql = "INSERT INTO {$this->tableName()}
+                        (data_mov, tipo_mov, conta_id, moeda_mov, deb_cred, valor_mov, valor_euro, obs, username, mov_id, last_modified)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)";
             }
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);

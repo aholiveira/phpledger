@@ -44,7 +44,7 @@ $report->getReport(array("year" => $year));
 <body>
     <div class="maingrid">
         <?php
-        include ROOT_DIR . "/menu_div.php";
+        include constant("ROOT_DIR") . "/menu_div.php";
         ?>
         <div id="header" class="header">
             <form name="filtro" action="report_month.php" method="GET">
