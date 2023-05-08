@@ -71,7 +71,7 @@ function test_report($report, $view)
     $retval = true;
     print(str_pad("Testing {$report} ...", 50));
     $object = $object_factory->$report();
-    assert(is_a($object->getReport(array("year" => 2021)), $report));
+    assert(is_a($object->getReport(array("year" => 2023)), $report));
     $viewer = $view_factory->$view($object);
     $retval = assert(strlen($viewer->printAsTable()) > 0) && $retval;
     print ($retval ?  "\033[32mPASSED\033[0m" : "\033[31mFAILED\033[0m") . "\r\n";
@@ -89,13 +89,14 @@ function test_object(mysql_object $object, $id = 1)
         $retval = (assert($object->update() === true, "save#{$object}#"));
         $field_filter = array();
         if ($object instanceof ledgerentry) {
-            $field_filter = array('data_mov' => array('operator' => 'BETWEEN', 'value' => "'2022-01-01' AND '2022-01-02'"));
+            $field_filter = array('data_mov' => array('operator' => 'BETWEEN', 'value' => "'2023-01-01' AND '2023-12-31'"));
         }
         $retval = (@assert(sizeof($object->getList($field_filter)) > 0, "getList#{$object}#") && $retval);
         $retval = (@assert($object->getNextId() >= 0, "getNextId#{$object}#") && $retval);
         print ($retval ?  "\033[32mPASSED\033[0m" : "\033[31mFAILED\033[0m") . "\r\n";
     } catch (Exception $ex) {
         debug_print($ex->getMessage());
+        debug_print($ex->getTraceAsString());
         print "EXCEPTION";
         $retval = false;
     }
