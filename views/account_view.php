@@ -25,7 +25,7 @@ class account_view extends object_viewer
             $account_type->getById($_object->type_id);
             $type_description = $account_type->description;
         }
-        $retval .= "<td data-label='ID' class=\"number\"><a title=\"Editar\" href=\"contas.php?filter_conta_id={$_object->id}\">{$_object->id}</a></td>";
+        $retval .= "<td data-label='ID' class=\"number\"><a title=\"Editar\" href=\"contas.php?conta_id={$_object->id}\">{$_object->id}</a></td>";
         $retval .= "<td data-label='Nome' class=\"text\">{$_object->name}</a></td>";
         $retval .= "<td data-label='Numero' class=\"number\">{$_object->number}</a></td>";
         $retval .= "<td data-label='Tipo'>{$type_description}</a></td>";

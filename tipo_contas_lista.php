@@ -10,9 +10,6 @@
 include __DIR__ . "/contas_config.php";
 $pagetitle = "Tipos de contas";
 
-$sql = "SELECT tipo_id, tipo_desc " .
-    "FROM tipo_contas " .
-    "ORDER BY tipo_id";
 ?>
 <!DOCTYPE html>
 <html>

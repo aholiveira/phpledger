@@ -36,6 +36,7 @@ $input_variables_filter = array(
     'obs' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
     'filter_entry_type' => FILTER_SANITIZE_NUMBER_INT,
     'filter_conta_id' => FILTER_SANITIZE_NUMBER_INT,
+    'filter_parent_id' => FILTER_SANITIZE_NUMBER_INT,
     'filter_sdateAA' => FILTER_SANITIZE_NUMBER_INT,
     'filter_sdateMM' => FILTER_SANITIZE_NUMBER_INT,
     'filter_sdateDD' => FILTER_SANITIZE_NUMBER_INT,
@@ -153,19 +154,19 @@ function build_and_save_record()
     <div class="maingrid">
         <?php
         include ROOT_DIR . "/menu_div.php";
-        if (array_key_exists("filter_sdate", $filtered_input) && !empty($filtered_input["filter_sdate"])) {
+        if (is_array($filtered_input) &&  !empty($filtered_input["filter_sdate"])) {
             $sdate = (strlen($filtered_input["filter_sdate"]) ? str_replace("-", "", $filtered_input["filter_sdate"]) : date("Ym01"));
         } else {
-            if (array_key_exists("filter_sdateAA", $filtered_input) && !empty($filtered_input["filter_sdateAA"])) {
+            if (is_array($filtered_input) && !empty($filtered_input["filter_sdateAA"])) {
                 $sdate = sprintf("%04d-%02d-%02d", $filtered_input["filter_sdateAA"], $filtered_input["filter_sdateMM"], $filtered_input["filter_sdateDD"]);
             } else {
                 $sdate = date("Y-m-01");
             }
         }
-        if (array_key_exists("filter_edate", $filtered_input) && !empty($filtered_input["filter_edate"])) {
+        if (is_array($filtered_input) && !empty($filtered_input["filter_edate"])) {
             $edate = strlen($filtered_input["filter_edate"]) ? str_replace("-", "", $filtered_input["filter_edate"]) : date("Ymd");
         } else {
-            if (array_key_exists("filter_edateAA", $filtered_input) && !empty($filtered_input["filter_edateAA"])) {
+            if (is_array($filtered_input) && !empty($filtered_input["filter_edateAA"])) {
                 $edate = sprintf("%04d-%02d-%02d", $filtered_input["filter_edateAA"], $filtered_input["filter_edateMM"], $filtered_input["filter_edateDD"]);
             } else {
                 $edate = date("Y-m-d");
@@ -175,19 +176,19 @@ function build_and_save_record()
             'data_mov' => array('>=' => $sdate),
             'data_mov' => array('<=' => $edate)
         );
-        if (array_key_exists("filter_conta_id", $filtered_input) && $filtered_input["filter_conta_id"] > 0) {
+        if (is_array($filtered_input) && $filtered_input["filter_conta_id"] > 0) {
             $ledger_filter['conta_id'] = array('=' => $filtered_input["filter_conta_id"]);
         }
-        if (array_key_exists("filter_entry_type", $filtered_input) && $filtered_input["filter_entry_type"] > 0) {
+        if (is_array($filtered_input) && $filtered_input["filter_entry_type"] > 0) {
             $ledger_filter['tipo_mov'] = array('=' => $filtered_input["filter_entry_type"]);
         }
         $filter = "movimentos.data_mov>='" . $sdate . "' AND movimentos.data_mov<='" . $edate . "'";
         $parent_filter = "";
-        if (array_key_exists("filter_parent_id", $filtered_input) && strlen($filtered_input["filter_parent_id"]) > 0) {
+        if (is_array($filtered_input) && strlen($filtered_input["filter_parent_id"]) > 0) {
             $parent_filter = "tipo_mov.parent_id={$filtered_input["filter_parent_id"]} ";
         }
         $edit = 0;
-        if ($_SERVER["REQUEST_METHOD"] == "GET" && array_key_exists("mov_id", $filtered_input) && !empty($filtered_input["mov_id"])) {
+        if ($_SERVER["REQUEST_METHOD"] == "GET" && is_array($filtered_input) && !empty($filtered_input["mov_id"])) {
             $edit = $filtered_input["mov_id"];
         }
 
@@ -200,8 +201,8 @@ function build_and_save_record()
             RIGHT JOIN tipo_mov as parent ON tipo_mov.parent_id = parent.tipo_id
             RIGHT JOIN moedas ON movimentos.moeda_mov = moedas.moeda_id
             RIGHT JOIN contas ON movimentos.conta_id = contas.conta_id WHERE " .
-            (array_key_exists("filter_conta_id", $filtered_input) && strlen($filtered_input["filter_conta_id"]) > 0 ? " movimentos.conta_id=\"" . $filtered_input["filter_conta_id"] . "\" AND " : "") . $filter .
-            (array_key_exists("filter_entry_type", $filtered_input) && strlen($filtered_input["filter_entry_type"]) > 0 ? " AND (movimentos.tipo_mov={$filtered_input["filter_entry_type"]}" . (strlen($parent_filter) > 0 ? " OR {$parent_filter})" : ")") : "") .
+            (is_array($filtered_input) && !empty($filtered_input["filter_conta_id"]) ? " movimentos.conta_id=\"" . $filtered_input["filter_conta_id"] . "\" AND " : "") . $filter .
+            (is_array($filtered_input) && !empty($filtered_input["filter_entry_type"]) ? " AND (movimentos.tipo_mov={$filtered_input["filter_entry_type"]}" . (strlen($parent_filter) > 0 ? " OR {$parent_filter})" : ")") : "") .
             " ORDER BY data_mov, mov_id";
         if ($edit > 0) {
             $edit_entry = $object_factory->ledgerentry();
@@ -213,7 +214,7 @@ function build_and_save_record()
         // Saldo anterior
         global $object_factory;
         $ledger_entry = $object_factory->ledgerentry();
-        $saldo = $ledger_entry->getBalanceBeforeDate($sdate, $filtered_input["filter_conta_id"] > 0 ? $filtered_input["filter_conta_id"] : null);
+        $saldo = $ledger_entry->getBalanceBeforeDate($sdate, is_array($filtered_input) && $filtered_input["filter_conta_id"] > 0 ? $filtered_input["filter_conta_id"] : null);
 
         // Movimento para editar
         if ($edit > 0) {
@@ -253,13 +254,13 @@ function build_and_save_record()
         $filter_string = "";
         $filter_properties = array("filter_parent_id", "filter_entry_type", "filter_sdate", "filter_sdateAA", "filter_sdateMM", "filter_sdateDD", "filter_edate", "filter_edateAA", "filter_edateMM", "filter_edateDD", "filter_conta_id");
         foreach ($filter_properties as $filter_prop) {
-            $filter_string .= (array_key_exists($filter_prop, $filtered_input) && !empty($filtered_input[$filter_prop]) ? (strlen($filter_string) > 0 ? "&" : "") . "$filter_prop={$filtered_input[$filter_prop]}" : "");
+            $filter_string .= (is_array($filtered_input) && array_key_exists($filter_prop, $filtered_input) && !empty($filtered_input[$filter_prop]) ? (strlen($filter_string) > 0 ? "&" : "") . "$filter_prop={$filtered_input[$filter_prop]}" : "");
         }
         ?>
         <div class="header" id="header">
             <form name="datefilter" action="ledger_entries.php" method="GET">
-                <input type="hidden" name="filter_parent_id" value="<?php print array_key_exists("filter_parent_id", $filtered_input) ? $filtered_input["filter_parent_id"] : ""; ?>">
-                <input type="hidden" name="filter_entry_type" value="<?php print array_key_exists("filter_entry_type", $filtered_input) ? $filtered_input["filter_entry_type"] : ""; ?>">
+                <input type="hidden" name="filter_parent_id" value="<?php print is_array($filtered_input) ? $filtered_input["filter_parent_id"] : ""; ?>">
+                <input type="hidden" name="filter_entry_type" value="<?php print is_array($filtered_input) ? $filtered_input["filter_entry_type"] : ""; ?>">
                 <table class="filter">
                     <tr>
                         <td>Inicio</td>
@@ -307,15 +308,15 @@ function build_and_save_record()
                 </table>
             </form>
             <script>
-                document.getElementById("filter_entry_type").value = "<?php print array_key_exists("filter_entry_type", $filtered_input) ? $filtered_input["filter_entry_type"] : ""; ?>";
-                document.getElementById("filter_conta_id").value = "<?php print array_key_exists("filter_conta_id", $filtered_input) ? $filtered_input["filter_conta_id"] : ""; ?>";
+                document.getElementById("filter_entry_type").value = "<?php print is_array($filtered_input) ? $filtered_input["filter_entry_type"] : ""; ?>";
+                document.getElementById("filter_conta_id").value = "<?php print is_array($filtered_input) ? $filtered_input["filter_conta_id"] : ""; ?>";
             </script>
         </div>
         <div class="main" id="main">
             <form name="mov" action="ledger_entries.php" method="POST">
-                <input type="hidden" name="filter_conta_id" value="<?php print array_key_exists("filter_conta_id", $filtered_input) ? $filtered_input["filter_conta_id"] : ""; ?>" />
-                <input type="hidden" name="filter_parent_id" value="<?php print array_key_exists("filter_parent_id", $filtered_input) ? $filtered_input["filter_parent_id"] : ""; ?>" />
-                <input type="hidden" name="filter_entry_type" value="<?php print array_key_exists("filter_entry_type", $filtered_input) ? $filtered_input["filter_entry_type"] : ""; ?>" />
+                <input type="hidden" name="filter_conta_id" value="<?php print is_array($filtered_input) ? $filtered_input["filter_conta_id"] : ""; ?>" />
+                <input type="hidden" name="filter_parent_id" value="<?php print is_array($filtered_input) ? $filtered_input["filter_parent_id"] : ""; ?>" />
+                <input type="hidden" name="filter_entry_type" value="<?php print is_array($filtered_input) ? $filtered_input["filter_entry_type"] : ""; ?>" />
                 <input type="hidden" name="filter_sdate" value="<?php print $sdate; ?>" />
                 <input type="hidden" name="filter_edate" value="<?php print $edate; ?>" />
                 <table class="lista ledger_entry_list">
