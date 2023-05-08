@@ -24,7 +24,7 @@ $pagetitle = "Tipo de movimentos";
         ?>
         <div class="header" style="height: 0;"></div>
         <div id="main" class="main">
-            <form method="POST" action="entry_types.php">
+            <form method="POST" action="entry_types_list.php">
                 <table class="entry_category">
                     <?php
                     $object = $object_factory->entry_category();
