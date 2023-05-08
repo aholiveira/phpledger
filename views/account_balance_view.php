@@ -17,7 +17,7 @@ class account_balance_view extends object_viewer
             return $retval;
         }
         $_object = $this->_object;
-        $retval .= "<td><a href=\"tipo_contas.php?tipo_id={$_object->id}\">{$_object->id}</a></td>";
+        $retval .= "<td><a href=\"account_types.php?tipo_id={$_object->id}\">{$_object->id}</a></td>";
         $retval .= "<td>{$_object->description}</td>";
         return $retval;
     }
@@ -42,7 +42,7 @@ class account_balance_view extends object_viewer
             if ($object instanceof account) {
                 $balance = $balances[$object->id];
                 $retval .= "<tr>";
-                $retval .= "<td class='account' data-label='Conta'><a title=\"Editar esta conta\" href=\"contas.php?conta_id={$object->id}\">{$object->name}</a></td>";
+                $retval .= "<td class='account' data-label='Conta'><a title=\"Editar esta conta\" href=\"accounts.php?conta_id={$object->id}\">{$object->name}</a></td>";
                 $retval .= "<td class='deposits' data-label='Depositos'>" . normalize_number($balance['income']) . "</td>";
                 $retval .= "<td class='withdrawls' data-label='Levantam.'>" . normalize_number($balance['expense']) . "</td>";
                 $retval .= "<td class='balance' data-label='Saldo'>" . normalize_number($balance['balance']) . "</td>";

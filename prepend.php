@@ -25,7 +25,7 @@ if (file_exists(realpath(constant("ROOT_DIR") . "/.git/ORIG_HEAD"))) {
 }
 #exec("git show -s --format=%ci", $gitresult);
 #define("GITDATE", $gitresult[0]);
-if (constant("DEBUG") == 1) {
+if (defined("DEBUG") && constant("DEBUG") == 1) {
     openlog("contas-dev-php", LOG_PID, LOG_DAEMON);
     syslog(LOG_INFO, __FILE__);
     closelog();
@@ -58,7 +58,7 @@ function print_var($var, $comment = "", bool $debug = false)
 }
 function debug_print($text)
 {
-    if (constant("DEBUG") == 1) {
+    if (defined("DEBUG") && constant("DEBUG") == 1) {
         print(nl2br("####DEBUG#$text#DEBUG####<br>\n"));
     }
 }

@@ -21,66 +21,88 @@ $pagetitle = "Contas";
 <body>
     <div class="maingrid">
         <?php
-        include ROOT_DIR . "/menu_div.php";
+        include constant("ROOT_DIR") . "/menu_div.php";
         $object = $object_factory->account();
         $retval = true;
-        $update = filter_input(INPUT_POST, "update", FILTER_SANITIZE_ENCODED);
-        if (strcasecmp($update, "gravar") == 0) {
-            $account_name = filter_input(INPUT_POST, "conta_nome", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-            if (!strlen($account_name)) {
+        $input_variables_filter = array(
+            'abertura' => array(
+                'filter' => FILTER_VALIDATE_REGEXP,
+                'options' => array('regexp' => '/([0-9]{1,4})(-|\/)?([0-9]{1,2})(-|\/)?([0-9-]{1,4})/')
+            ),
+            'fecho' => array(
+                'filter' => FILTER_VALIDATE_REGEXP,
+                'options' => array('regexp' => '/([0-9]{1,4})(-|\/)?([0-9]{1,2})(-|\/)?([0-9-]{1,4})/')
+            ),
+            'aberturaAA' => FILTER_SANITIZE_NUMBER_INT,
+            'aberturaMM' => FILTER_SANITIZE_NUMBER_INT,
+            'aberturaDD' => FILTER_SANITIZE_NUMBER_INT,
+            'fechoAA' => FILTER_SANITIZE_NUMBER_INT,
+            'fechoMM' => FILTER_SANITIZE_NUMBER_INT,
+            'fechoDD' => FILTER_SANITIZE_NUMBER_INT,
+            'update' => array(
+                'filter' => FILTER_SANITIZE_ENCODED,
+                'options' => FILTER_NULL_ON_FAILURE
+            ),
+            'conta_nome' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+            'conta_id' => FILTER_VALIDATE_INT,
+            'conta_num' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+            'activa' => FILTER_VALIDATE_BOOLEAN,
+            'tipo_id' => FILTER_VALIDATE_INT,
+            'conta_nib' => FILTER_SANITIZE_FULL_SPECIAL_CHARS
+        );
+        if (strcasecmp($_SERVER["REQUEST_METHOD"], "GET") == 0) {
+            $filtered_input = filter_input_array(INPUT_GET, $input_variables_filter, true);
+        }
+        if (strcasecmp($_SERVER["REQUEST_METHOD"], "POST") == 0) {
+            $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, true);
+        }
+        if (is_array($filtered_input) && strcasecmp($filtered_input["update"], "gravar") == 0) {
+            if (empty($filtered_input["conta_nome"])) {
                 Html::myalert("Nome de conta invalido!");
                 $retval = false;
             }
-            if (strlen($_POST["abertura"]) == 0) {
-                if (!checkdate($_POST["aberturaMM"], $_POST["aberturaDD"], $_POST["aberturaAA"])) {
-                    Html::myalert("Data de abertura invalida!");
-                    $retval = false;
+            try {
+                if (empty($filtered_input["abertura"])) {
+                    $open_date = new DateTime(date("Y-m-d", mktime(0, 0, 0, $filtered_input["aberturaMM"], $filtered_input["aberturaDD"], $filtered_input["aberturaAA"])));
                 } else {
-                    $open_date = new DateTime(date("Y-m-d", mktime(0, 0, 0, $_POST["aberturaMM"], $_POST["aberturaDD"], $_POST["aberturaAA"])));
+                    $open_date = new DateTime($filtered_input["abertura"]);
                 }
-            } else {
-                $open_date = new DateTime($_POST["abertura"]);
-                if (!checkdate($open_date->format("m"), $open_date->format("d"), $open_date->format("Y"))) {
-                    Html::myalert("Data de abertura invalida!");
-                    $retval = false;
-                }
+            } catch (Exception $ex) {
+                Html::myalert("Data de abertura invalida!");
+                $retval = false;
             }
-            if (strlen($_POST["fecho"]) == 0) {
-                if (!checkdate($_POST["fechoMM"], $_POST["fechoDD"], $_POST["fechoAA"])) {
-                    Html::myalert("Data de fecho invalida!");
-                    $retval = false;
+            try {
+                if (empty($filtered_input["fecho"])) {
+                    $close_date = new DateTime(date("Y-m-d", mktime(0, 0, 0, $filtered_input["fechoMM"], $filtered_input["fechoDD"], $filtered_input["fechoAA"])));
                 } else {
-                    $close_date = new DateTime(date("Y-m-d", mktime(0, 0, 0, $_POST["fechoMM"], $_POST["fechoDD"], $_POST["fechoAA"])));
+                    $close_date = new DateTime($filtered_input["fecho"]);
                 }
-            } else {
-                $close_date = new DateTime($_POST["fecho"]);
-                if (!checkdate($close_date->format("m"), $close_date->format("d"), $close_date->format("Y"))) {
-                    Html::myalert("Data de fecho invalida!");
-                    $retval = false;
-                }
+            } catch (Exception $ex) {
+                Html::myalert("Data de fecho invalida!");
+                $retval = false;
             }
             if ($retval) {
-                $object->id = filter_input(INPUT_POST, "conta_id", FILTER_VALIDATE_INT);
-                $object->name = $account_name;
+                $object->id = $filtered_input["conta_id"];
+                $object->name = $filtered_input["conta_nome"];
                 $object->open_date = $open_date->format("Y-m-d");
                 $object->close_date = $close_date->format("Y-m-d");
-                $object->number = filter_input(INPUT_POST, "conta_num", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-                $object->active = filter_input(INPUT_POST, "activa", FILTER_VALIDATE_BOOLEAN) ? 1 : 0;
-                $object->type_id = filter_input(INPUT_POST, "tipo_id", FILTER_VALIDATE_INT);
-                $object->iban =  filter_input(INPUT_POST, "conta_nib", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+                $object->number = $filtered_input["conta_num"];
+                $object->active = boolval($filtered_input["activa"]) ? 1 : 0;
+                $object->type_id = $filtered_input["tipo_id"];
+                $object->iban =  $filtered_input["conta_nib"];
                 $retval = $object->update();
             }
         }
-        if (strcasecmp($update, "apagar") == 0) {
-            $object->id = filter_input(INPUT_GET, "conta_id", FILTER_VALIDATE_INT);
+        if (is_array($filtered_input) && strcasecmp($filtered_input["update"], "apagar") == 0) {
+            $object->id = $filtered_input["conta_id"];
             $retval = $object->delete();
         }
-        if (!empty($update)) {
+        if (is_array($filtered_input) && !empty($filtered_input["update"])) {
             if ($retval) {
-                if (strcasecmp($update, "gravar") == 0) {
+                if (strcasecmp($filtered_input["update"], "gravar") == 0) {
                     Html::myalert("Registo gravado");
                 }
-                if (strcasecmp($update, "apagar") == 0) {
+                if (strcasecmp($filtered_input["update"], "apagar") == 0) {
                     Html::myalert("Registo eliminado");
                 }
             } else {
@@ -88,25 +110,17 @@ $pagetitle = "Contas";
             }
         }
         $edit = null;
-        $conta_id = filter_input(INPUT_GET, "conta_id", FILTER_SANITIZE_NUMBER_INT);
+        $conta_id = is_array($filtered_input) ? $filtered_input["conta_id"] : null;
         if ($_SERVER["REQUEST_METHOD"] == "GET" && !empty($conta_id)) {
             $edit = $conta_id;
         }
-        $account_type = $object_factory->accounttype();
-        $account_type_view = $view_factory->account_type_view($account_type);
         $account = $object_factory->account();
         $account_list = $account->getList();
-        $account_type_cache = array();
-
-        $sql = "SELECT conta_id, conta_num, conta_nome, contas.tipo_id, tipo_desc, conta_nib, conta_abertura, conta_fecho, activa, IF(activa,\"Sim\", \"Nao\") as activa_txt 
-        FROM contas LEFT OUTER JOIN tipo_contas ON contas.tipo_id = tipo_contas.tipo_id
-        ORDER BY contas.activa desc, conta_nome";
-        $result = $db_link->query($sql) or die($db_link->error);
         ?>
         <div class="header" style="height: 0;"></div>
         <main>
             <div class="main" id="main">
-                <form method="POST" action="contas.php" name="contas">
+                <form method="POST" action="accounts.php" name="contas">
                     <table class="lista contas">
                         <thead>
                             <tr>
@@ -125,12 +139,8 @@ $pagetitle = "Contas";
                             <?php
                             foreach ($account_list as $account) {
                                 print "<tr>";
-                                if (!array_key_exists($account->type_id, $account_type_cache)) {
-                                    $account_type_cache[$account->type_id] = $account_type->getById($account->type_id);
-                                }
                                 $account_view = $view_factory->account_view($account);
                                 if (!empty($edit) && $account->id == $edit) {
-                                    $tipo_opt = $account_type_view->getSelectFromList($account_type->getList(), $account->type_id);
                                     print $account_view->printForm();
                                 }
                                 if (empty($edit) || (!empty($edit) && $account->id != $edit)) {

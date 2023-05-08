@@ -10,9 +10,6 @@
 include __DIR__ . "/contas_config.php";
 $pagetitle = "Tipos de contas";
 
-$sql = "SELECT tipo_id, tipo_desc " .
-    "FROM tipo_contas " .
-    "ORDER BY tipo_id";
 ?>
 <!DOCTYPE html>
 <html>
@@ -27,7 +24,7 @@ $sql = "SELECT tipo_id, tipo_desc " .
         include ROOT_DIR . "/menu_div.php";
         ?>
         <div class="header">
-            <p style="margin: 0"><a href="tipo_contas.php">Adicionar</a></p>
+            <p style="margin: 0"><a href="account_types.php">Adicionar</a></p>
         </div>
         <div class="main" id="main">
             <?php

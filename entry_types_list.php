@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
         include ROOT_DIR . "/menu_div.php";
         ?>
         <div class="header">
-            <p style="margin: 0"><a href="tipo_mov.php">Adicionar</a></p>
+            <p style="margin: 0"><a href="entry_type.php">Adicionar</a></p>
         </div>
         <div id="main" class="main">
             <?php

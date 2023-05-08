@@ -22,7 +22,7 @@ class entry_category_view extends object_viewer
         }
         $_object = $this->_object;
         if (!($_object instanceof entry_category)) return $retval;
-        $retval .= "<td class='id' data-label='ID'><a href=\"tipo_mov.php?tipo_id={$_object->id}\" title=\"Editar a categoria\">{$_object->id}</a></td>";
+        $retval .= "<td class='id' data-label='ID'><a href=\"entry_type.php?tipo_id={$_object->id}\" title=\"Editar a categoria\">{$_object->id}</a></td>";
         $retval .= "<td class='category' data-label='Categoria'>" . (is_null($_object->parent_id) || $_object->parent_id == 0 ? "" : (isset($_object->parent_description) ? $_object->parent_description : "")) . "</td>";
         $retval .= "<td class='description' data-label='Descri&ccedil;&atilde;o'>{$_object->description}</td>";
         $retval .= "<td class='amount' data-label='Valor'>" . normalize_number(abs($_object->getBalance())) . "</td>";
