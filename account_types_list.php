@@ -24,7 +24,7 @@ $pagetitle = "Tipos de contas";
         include ROOT_DIR . "/menu_div.php";
         ?>
         <div class="header">
-            <p style="margin: 0"><a href="tipo_contas.php">Adicionar</a></p>
+            <p style="margin: 0"><a href="account_types.php">Adicionar</a></p>
         </div>
         <div class="main" id="main">
             <?php

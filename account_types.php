@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $message = "Ocorreu um erro na operacao.";
     } else {
         if (!headers_sent()) {
-            header("Location: tipo_contas_lista.php" . (isset($object->id) ? "?tipo_id={$object->id}" : ""));
+            header("Location: account_types_list.php" . (isset($object->id) ? "?tipo_id={$object->id}" : ""));
             exit;
         }
     }
@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         ?>
         <div class="header" style="height: 0;"></div>
         <div id="main" class="main">
-            <form method="POST" action="tipo_contas.php">
+            <form method="POST" action="account_types.php">
                 <table class="single_item account_type_form">
                     <tr>
                         <td>ID</td>

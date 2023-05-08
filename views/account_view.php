@@ -25,7 +25,7 @@ class account_view extends object_viewer
             $account_type->getById($_object->type_id);
             $type_description = $account_type->description;
         }
-        $retval .= "<td data-label='ID' class=\"number\"><a title=\"Editar\" href=\"contas.php?conta_id={$_object->id}\">{$_object->id}</a></td>";
+        $retval .= "<td data-label='ID' class=\"number\"><a title=\"Editar\" href=\"accounts.php?conta_id={$_object->id}\">{$_object->id}</a></td>";
         $retval .= "<td data-label='Nome' class=\"text\">{$_object->name}</a></td>";
         $retval .= "<td data-label='Numero' class=\"number\">{$_object->number}</a></td>";
         $retval .= "<td data-label='Tipo'>{$type_description}</a></td>";
@@ -33,7 +33,7 @@ class account_view extends object_viewer
         $retval .= "<td data-label='Abertura'>{$_object->open_date}</a></td>";
         $retval .= "<td data-label='Fecho'>{$_object->close_date}</td>";
         $retval .= "<td data-label='Activa'>" . ($_object->active ? "Sim" : "N&atilde;o") . "</td>";
-        $retval .= "<td><a href=\"contas.php?update=Apagar&amp;conta_id={$_object->id}\" onclick=\"return confirm('Pretende apagar o registo?');\">Apagar</a></td>";
+        $retval .= "<td><a href=\"accounts.php?update=Apagar&amp;conta_id={$_object->id}\" onclick=\"return confirm('Pretende apagar o registo?');\">Apagar</a></td>";
         return $retval;
     }
     public function printForm(): string

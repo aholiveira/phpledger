@@ -120,7 +120,7 @@ $pagetitle = "Contas";
         <div class="header" style="height: 0;"></div>
         <main>
             <div class="main" id="main">
-                <form method="POST" action="contas.php" name="contas">
+                <form method="POST" action="accounts.php" name="contas">
                     <table class="lista contas">
                         <thead>
                             <tr>
