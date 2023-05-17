@@ -322,12 +322,12 @@ function build_and_save_record()
                         <?php
                         $result = $db_link->query($sql);
                         while ($row = $result->fetch_assoc()) {
-                            print "<tr>";
+                            print "<tr id='{$row["mov_id"]}'>";
                             $saldo += $row["valor_euro"];
                             if ($row["mov_id"] == $edit) {
                         ?>
-                                <td data-label=""><input type="hidden" name="mov_id" value="<?php print $row["mov_id"]; ?>"> <input class="submit" type="submit" name="Gravar" value="Gravar"></td>
-                                <td data-label="Data" class="id"><a id="<?php print $row["mov_id"]; ?>"></a>
+                                <td data-label=""><input type="hidden" name="mov_id" value="<?php print $row["mov_id"]; ?>"><input class="submit" type="submit" name="Gravar" value="Gravar"></td>
+                                <td data-label="Data" class="id">
                                     <select class="date-fallback" style="display: none" name="data_movAA"><?php Html::year_option(substr($row["data_mov"], 0, 4)); ?></select>
                                     <select class="date-fallback" style="display: none" name="data_movMM"><?php Html::mon_option(substr($row["data_mov"], 5, 2)); ?></select>
                                     <select class="date-fallback" style="display: none" name="data_movDD"><?php Html::day_option(substr($row["data_mov"], 8, 2)); ?></select>
@@ -351,7 +351,7 @@ function build_and_save_record()
                                 $category_filter = (stripos($filter_string, "filter_entry_type") === false ? "$filter_string&filter_entry_type={$row['tipo_mov']}" : preg_replace("/filter_entry_type=(\d+)/", "filter_entry_type=" . $row['tipo_mov'], $filter_string));
                                 $account_filter = (stripos($filter_string, "filter_conta_id") === false ? "$filter_string&filter_conta_id={$row['conta_id']}" : preg_replace("/filter_conta_id=(\d+)/", "filter_conta_id=" . $row['conta_id'], $filter_string));
                             ?>
-                                <td data-label='ID' class='id'><a id="<?php print $row["mov_id"] ?>" title="Editar entrada" href="ledger_entries.php?<?php print "{$filter_string}&amp;mov_id={$row['mov_id']}"; ?>#<?php print $row["mov_id"]; ?>"><?php print $row["mov_id"] ?></a></td>
+                                <td data-label='ID' class='id'><a title="Editar entrada" href="ledger_entries.php?<?php print "{$filter_string}&amp;mov_id={$row['mov_id']}"; ?>#<?php print $row["mov_id"]; ?>"><?php print $row["mov_id"] ?></a></td>
                                 <td data-label='Data' class='data'><?php print $row["data_mov"]; ?></td>
                                 <td data-label='Categoria' class='category'><a title="Filtrar lista para esta categoria" href="ledger_entries.php?<?php print $category_filter; ?>"><?php print $row["tipo_desc"]; ?></a></td>
                                 <td data-label='Moeda' class='currency'><?php print $row["moeda_desc"]; ?></td>
@@ -372,8 +372,8 @@ function build_and_save_record()
                     if ($edit == 0) {
                     ?>
                         <tfoot>
-                            <tr>
-                                <td data-label="" class="id"><a id="last"></a><input type="hidden" name="mov_id" value="NULL"><input class="submit" type="submit" name="Gravar" value="Gravar"></td>
+                            <tr id="last">
+                                <td data-label="" class="id"><input type="hidden" name="mov_id" value="NULL"><input class="submit" type="submit" name="Gravar" value="Gravar"></td>
                                 <td data-label="Data" class="data">
                                     <select class="date-fallback" style="display: none" name="data_movAA"><?php print Html::year_option(substr($defaults->entry_date, 0, 4)); ?></select>
                                     <select class="date-fallback" style="display: none" name="data_movMM"><?php print Html::mon_option(substr($defaults->entry_date, 5, 2)); ?></select>
