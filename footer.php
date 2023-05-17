@@ -1,9 +1,7 @@
 <footer>
     <div class='footer'>
-        <hr />
-        <?php
-        printf("<span class='RCS'>\$ Id: %s$</span>", GITHASH);
-        printf("<span class='RCS'>Session expires at %s</span>", date("Y-m-d H:i:s", $_SESSION['expires']));
-        ?>
+        <hr>
+        <span class='RCS'>$ Id: <?php print constant("GITHASH"); ?> $</span>
+        <span class='RCS'>Session expires at <?php print date("Y-m-d H:i:s", $_SESSION['expires']); ?></span>
     </div>
 </footer>

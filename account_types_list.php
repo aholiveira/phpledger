@@ -12,7 +12,7 @@ $pagetitle = "Tipos de contas";
 
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pt-PT">
 
 <head>
     <?php include "header.php"; ?>

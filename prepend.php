@@ -19,7 +19,7 @@ define("ROOT_DIR", __DIR__);
 define("OBJECTS_DIR", constant("ROOT_DIR") . "/objects");
 define("VIEWS_DIR", constant("ROOT_DIR") . "/views");
 if (file_exists(realpath(constant("ROOT_DIR") . "/.git/ORIG_HEAD"))) {
-    define("GITHASH", file_get_contents(realpath(constant("ROOT_DIR") . "/.git/ORIG_HEAD")));
+    define("GITHASH", file_get_contents($filename = realpath(constant("ROOT_DIR") . "/.git/ORIG_HEAD"), false, null, 0, $length = 12));
 } else {
     define("GITHASH", "main");
 }

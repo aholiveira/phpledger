@@ -22,7 +22,7 @@ $report->year = $year;
 $report->getReport(array("year" => $year));
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pt-PT">
 
 <head>
     <?php include "header.php"; ?>
@@ -48,7 +48,7 @@ $report->getReport(array("year" => $year));
         ?>
         <div id="header" class="header">
             <form name="filtro" action="report_month.php" method="GET">
-                <p>Ano <input type="text" name="year" maxlength="4" size="6" value="<?php print $year; ?>" /></p>
+                <p>Ano <input type="text" name="year" maxlength="4" size="6" value="<?php print $year; ?>"></p>
                 <p><input type="submit" value="Obter"></p>
             </form>
         </div>

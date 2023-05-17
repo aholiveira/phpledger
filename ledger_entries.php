@@ -128,26 +128,7 @@ function build_and_save_record()
 
 <head>
     <?php include "header.php"; ?>
-    <script>
-        function update_date(id) {
-            document.getElementById(id).value =
-                document.getElementById(id + 'AA').value +
-                document.getElementById(id + 'MM').value +
-                document.getElementById(id + 'DD').value;
-        }
-
-        function clear_filter() {
-            document.getElementById("filter_entry_type").value = "";
-            document.getElementById("filter_conta_id").value = "";
-            document.getElementById("filter_sdate").value = (new Date).getFullYear().toString() + "-" + ((new Date).getMonth() + 1).toString().padStart(2, "0") + "-01";
-            document.getElementById("filter_edate").value = (new Date).getFullYear().toString() + "-" + ((new Date).getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date).getDate().toString().padStart(2, "0");
-            document.getElementsByName("datefilter")[0].submit();
-        }
-
-        function add_filter(filter_name, filter_value) {
-            document.getElementById("filter_" + filter_name).value = filter_value;
-        }
-    </script>
+    <script src="ledger_entries.js"> </script>
 </head>
 
 <body>
@@ -301,8 +282,8 @@ function build_and_save_record()
                     <tr>
                         <td></td>
                         <td>
-                            <input class="submit" type="submit" value="Filtrar" />
-                            <input class="submit" type="button" value="Limpar filtro" onclick="clear_filter(); document.getElementById('datefilter').requestSubmit();" />
+                            <input class="submit" type="submit" value="Filtrar">
+                            <input class="submit" type="button" value="Limpar filtro" onclick="clear_filter(); document.getElementById('datefilter').requestSubmit();">
                         </td>
                     </tr>
                 </table>
@@ -314,11 +295,11 @@ function build_and_save_record()
         </div>
         <div class="main" id="main">
             <form name="mov" action="ledger_entries.php" method="POST">
-                <input type="hidden" name="filter_conta_id" value="<?php print is_array($filtered_input) ? $filtered_input["filter_conta_id"] : ""; ?>" />
-                <input type="hidden" name="filter_parent_id" value="<?php print is_array($filtered_input) ? $filtered_input["filter_parent_id"] : ""; ?>" />
-                <input type="hidden" name="filter_entry_type" value="<?php print is_array($filtered_input) ? $filtered_input["filter_entry_type"] : ""; ?>" />
-                <input type="hidden" name="filter_sdate" value="<?php print $sdate; ?>" />
-                <input type="hidden" name="filter_edate" value="<?php print $edate; ?>" />
+                <input type="hidden" name="filter_conta_id" value="<?php print is_array($filtered_input) ? $filtered_input["filter_conta_id"] : ""; ?>">
+                <input type="hidden" name="filter_parent_id" value="<?php print is_array($filtered_input) ? $filtered_input["filter_parent_id"] : ""; ?>">
+                <input type="hidden" name="filter_entry_type" value="<?php print is_array($filtered_input) ? $filtered_input["filter_entry_type"] : ""; ?>">
+                <input type="hidden" name="filter_sdate" value="<?php print $sdate; ?>">
+                <input type="hidden" name="filter_edate" value="<?php print $edate; ?>">
                 <table class="lista ledger_entry_list">
                     <thead>
                         <tr>
@@ -344,7 +325,7 @@ function build_and_save_record()
                             print "<tr>";
                             $saldo += $row["valor_euro"];
                             if ($row["mov_id"] == $edit) {
-                                print "<td data-label=''><input type=\"hidden\" readonly size=\"4\" name=\"mov_id\" value=\"{$row["mov_id"]}\" /><input class=\"submit\" type=\"submit\" name=\"Gravar\" value=\"Gravar\" /></td>\n";
+                                print "<td data-label=''><input type=\"hidden\" readonly size=\"4\" name=\"mov_id\" value=\"{$row["mov_id"]}\"><input class=\"submit\" type=\"submit\" name=\"Gravar\" value=\"Gravar\"></td>\n";
                                 print "<td data-label='Data' class='id'><a name=\"{$row["mov_id"]}\">";
                                 print "<select class=\"date-fallback\" style=\"display: none\" name=\"data_movAA\">" . Html::year_option(substr($row["data_mov"], 0, 4)) . "</select>";
                                 print "<select class=\"date-fallback\" style=\"display: none\" name=\"data_movMM\">" . Html::mon_option(substr($row["data_mov"], 5, 2)) . "</select>";
@@ -355,8 +336,8 @@ function build_and_save_record()
                                 print "<td data-label='Moeda' class='currency'><select name=\"moeda_mov\">{$moeda_opt}</select></td>\n";
                                 print "<td data-label='Conta' class='account'><select name=\"conta_id\">{$conta_opt}</select></td>\n";
                                 print "<td data-label='D/C' class='direction'><select name=\"deb_cred\"><option value=\"1\"" . ($row["deb_cred"] == "1" ? " selected " : "") . ">Dep</option><option value=\"-1\"" . ($row["deb_cred"] == "-1" ? " selected " : "") . ">Lev</option></select></td>\n";
-                                print "<td data-label='Valor' class='amount'><input style=\"text-align: right\" type=text name=\" valor_mov\" maxlength=8 value=\"{$row["val_mov"]}\" />\n";
-                                print "<td data-label='Obs' class='remarks'><input type=\"text\" name=\"obs\" maxlength=\"255\" value=\"{$row["obs"]}\" /></td>\n";
+                                print "<td data-label='Valor' class='amount'><input style=\"text-align: right\" type=text name=\" valor_mov\" maxlength=8 value=\"{$row["val_mov"]}\">\n";
+                                print "<td data-label='Obs' class='remarks'><input type=\"text\" name=\"obs\" maxlength=\"255\" value=\"{$row["obs"]}\"></td>\n";
                                 print "<td data-label='Saldo' class='total' style=\"text-align: right\">" . normalize_number($saldo) . "</td>\n";
                             }
                             if (empty($edit) || $row["mov_id"] != $edit) {
@@ -381,7 +362,7 @@ function build_and_save_record()
                         if ($edit == 0) {
                             print "<tfoot>";
                             print "<tr>";
-                            print "<td data-label='' class='id'><a name=\"last\"><input type=hidden readonly size=4 name=mov_id value=\"NULL\" /><input class=\"submit\" type=\"submit\" name=\"Gravar\" value=\"Gravar\" /></a></td>\n";
+                            print "<td data-label='' class='id'><a name=\"last\"><input type=hidden readonly size=4 name=mov_id value=\"NULL\"><input class=\"submit\" type=\"submit\" name=\"Gravar\" value=\"Gravar\"></a></td>\n";
                             print "<td data-label='Data' class='data'>";
                             print "<select class=\"date-fallback\" style=\"display: none\" name=\"data_movAA\">" . Html::year_option(substr($defaults->entry_date, 0, 4)) . "</select>\n";
                             print "<select class=\"date-fallback\" style=\"display: none\" name=\"data_movMM\">" . Html::mon_option(substr($defaults->entry_date, 5, 2)) . "</select>\n";
@@ -392,8 +373,8 @@ function build_and_save_record()
                             print "<td data-label='Moeda' class='currency'><select name=\"moeda_mov\">{$moeda_opt}</select></td>\n";
                             print "<td data-label='Conta' class='account'><select name=\"conta_id\">{$conta_opt}</select></td>\n";
                             print "<td data-label='D/C' class='direction'><select name=\"deb_cred\"><option value=\"1\">Dep</option><option value=\"-1\" selected>Lev</option></select></td>\n";
-                            print "<td data-label='Valor' class='amount'><input type=\"text\" style=\"text-align: right\" name=\"valor_mov\" maxlength=\"8\" value=\"0.0\" /></td>\n";
-                            print "<td data-label='Obs' class='remarks'><input type=\"text\" name=\"obs\" maxlength=\"255\" value=\"\" /></td>\n";
+                            print "<td data-label='Valor' class='amount'><input type=\"text\" style=\"text-align: right\" name=\"valor_mov\" maxlength=\"8\" value=\"0.0\"></td>\n";
+                            print "<td data-label='Obs' class='remarks'><input type=\"text\" name=\"obs\" maxlength=\"255\" value=\"\"></td>\n";
                             print "<td data-label='Saldo' class='total'>" . normalize_number($saldo) . "</td>\n";
                             print "</tr>\n";
                             print "</tfoot>";
@@ -411,41 +392,7 @@ function build_and_save_record()
     </div> <!-- Main grid -->
 </body>
 <script>
-    var test = document.createElement("input");
-    try {
-        test.type = "date";
-        row = document.getElementsByClassName("date-fallback");
-        for (i = 0; i < row.length; i++) {
-            if (row[i].style.display == "none" && row[i].tagName == "SELECT") {
-                row[i].value = "";
-            }
-        }
-        elementId = "data_mov";
-    } catch (e) {
-        row = document.getElementsByClassName("date-fallback");
-        for (i = 0; i < row.length; i++) {
-            if (row[i].style.display == "none") {
-                row[i].style.removeProperty("display");
-            } else {
-                if (row[i].tagName == "INPUT") {
-                    row[i].value = "";
-                    row[i].removeAttribute("required");
-                }
-                row[i].style.display = "none";
-            }
-        }
-        elementId = "data_movAA";
-    }
-    document.addEventListener("DOMContentLoaded", () => {
-        setTimeout(() => {
-            document.getElementById(elementId).focus();
-            document.getElementById(elementId).scrollIntoView({
-                behavior: "instant",
-                block: "end",
-                inline: "end"
-            });
-        }, 1)
-    });
+    toggleDateElements("data_mov");
 </script>
 
 </html>

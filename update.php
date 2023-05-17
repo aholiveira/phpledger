@@ -17,7 +17,7 @@ $pagetitle = "Actualiza&ccedil;&atilde;o necess&aacute;ria";
 
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pt-PT">
 
 <head>
     <?php include "header.php"; ?>
@@ -48,8 +48,8 @@ $pagetitle = "Actualiza&ccedil;&atilde;o necess&aacute;ria";
             print "<p>" . nl2br($data_storage->message()) . "</p>";
             ?>
             <form method="POST" action="update.php">
-                <input class="submit" type="submit" name="action" value="Actualizar" />
-                <input class="submit" type="submit" name="action" value="Cancelar" />
+                <input class="submit" type="submit" name="action" value="Actualizar">
+                <input class="submit" type="submit" name="action" value="Cancelar">
             </form>
         </div>
     </div>

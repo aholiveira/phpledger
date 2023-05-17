@@ -54,7 +54,7 @@ class account_view extends object_viewer
         }
         $account_type_view = $view_factory->account_type_view($account_type);
         $tipo_opt = $account_type_view->getSelectFromList($account_type->getList(), isset($_object->type_id) ? $_object->type_id : null);
-        $retval .= "<td data-label='ID'><input type=\"hidden\" name=\"conta_id\" value=\"{$id}\"/>{$id}</td>\n";
+        $retval .= "<td data-label='ID'><input type=\"hidden\" name=\"conta_id\" value=\"{$id}\">{$id}</td>\n";
         $retval .= "<td data-label='Nome'><a name=\"{$id}\"><input type=text size=16 maxlength=30 name=\"conta_nome\" value=\"{$_object->name}\"></a></td>";
         $retval .= "<td data-label='Numero'><input type=text size=15 maxlength=30 name=\"conta_num\" value=\"{$_object->number}\"></td>";
         $retval .= "<td data-label='Tipo'><select name=\"tipo_id\">{$tipo_opt}</select>";

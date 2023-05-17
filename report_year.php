@@ -28,7 +28,7 @@ $reportHtml = $view_factory->report_year_view($report);
 $report->getReport(array("first_year" => $first_year, "last_year" => $last_year));
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pt-PT">
 
 <head>
     <?php include "header.php"; ?>
@@ -54,8 +54,8 @@ $report->getReport(array("first_year" => $first_year, "last_year" => $last_year)
         ?>
         <div id="header" class="header">
             <form name="filtro" action="report_year.php" method="GET">
-                <p>Ano inicial <input type="text" name="first_year" maxlength="4" size="6" value="<?php print $first_year; ?>" /></p>
-                <p>Ano final <input type="text" name="last_year" maxlength="4" size="6" value="<?php print $last_year; ?>" /></p>
+                <p>Ano inicial <input type="text" name="first_year" maxlength="4" size="6" value="<?php print $first_year; ?>"></p>
+                <p>Ano final <input type="text" name="last_year" maxlength="4" size="6" value="<?php print $last_year; ?>"></p>
                 <p><input type="submit" value="Obter"></p>
             </form>
         </div>

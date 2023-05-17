@@ -186,7 +186,7 @@ function do_authentication()
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pt-PT">
 
 <head>
     <?php include "header.php"; ?>
@@ -205,14 +205,14 @@ function do_authentication()
             <table>
                 <tr>
                     <td>Utilizador:</td>
-                    <td><input size="10" maxlength="10" type="text" name="userid" id="userid" value="<?php (array_key_exists("userid", $_POST) ? $_POST["userid"] : "") ?>" /></td>
+                    <td><input size="10" maxlength="10" type="text" name="userid" id="userid" value="<?php (array_key_exists("userid", $_POST) ? $_POST["userid"] : "") ?>"></td>
                 </tr>
                 <tr>
                     <td>Password:</td>
-                    <td><input size="10" maxlength="10" type="password" name="pass" value="" /></td>
+                    <td><input size="10" maxlength="10" type="password" name="pass" value=""></td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align: center"><input type="submit" value="Entrar" /></td>
+                    <td colspan="2" style="text-align: center"><input type="submit" value="Entrar"></td>
                 </tr>
             </table>
         </form>

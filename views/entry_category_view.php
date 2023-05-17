@@ -81,7 +81,7 @@ class entry_category_view extends object_viewer
         }
         $retval .= "<tr>";
         $retval .= "<td><label for=\"tipo_id\">ID</label></td>\r\n";
-        $retval .= "<td><input type=text readonly size=4 name=\"tipo_id\" value=" . (isset($_object->id)  ? $_object->id : $_object->getNextId()) . " /></td>\r\n";
+        $retval .= "<td><input type=text readonly size=4 name=\"tipo_id\" value=" . (isset($_object->id)  ? $_object->id : $_object->getNextId()) . "></td>\r\n";
         $retval .= "</tr>";
         $retval .= "<tr>";
         $retval .= "<td><label for=\"parent_id\">Categoria</label></td>\r\n";
@@ -93,7 +93,7 @@ class entry_category_view extends object_viewer
         $retval .= "</tr>";
         $retval .= "<tr>";
         $retval .= "<td><label for=\"tipo_desc\">Descri&ccedil;&atilde;o</label></td>\n";
-        $retval .= "<td><input type=text size=30 maxlength=30 name=\"tipo_desc\" value=\"" . (isset($_object->id) ? $_object->description : "") . "\" /></td>";
+        $retval .= "<td><input type=text size=30 maxlength=30 name=\"tipo_desc\" value=\"" . (isset($_object->id) ? $_object->description : "") . "\"></td>";
         $retval .= "</tr>";
         $retval .= "<tr>";
         $retval .= "<td><label for=\"active\">Activa</label></td>\n";

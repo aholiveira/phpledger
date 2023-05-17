@@ -11,7 +11,7 @@ include __DIR__ . "/contas_config.php";
 $pagetitle = "Saldos";
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pt-PT">
 
 <head>
     <?php include "header.php"; ?>

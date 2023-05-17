@@ -12,7 +12,7 @@ $pagetitle = "Contas";
 
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pt-PT">
 
 <head>
     <?php include "header.php"; ?>
