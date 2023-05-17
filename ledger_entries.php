@@ -265,7 +265,7 @@ function build_and_save_record()
                         <td>Conta</td>
                         <td>
                             <select name="filter_conta_id" id="filter_conta_id">
-                                <option value=""></option>
+                                <option value>Sem filtro</option>
                                 <?php print $conta_opt; ?>
                             </select>
                         </td>
@@ -274,7 +274,7 @@ function build_and_save_record()
                         <td>Categoria</td>
                         <td>
                             <select name="filter_entry_type" id="filter_entry_type">
-                                <option value=""></option>
+                                <option value>Sem filtro</option>
                                 <?php print $tipo_mov_opt; ?>
                             </select>
                         </td>
@@ -325,26 +325,33 @@ function build_and_save_record()
                             print "<tr>";
                             $saldo += $row["valor_euro"];
                             if ($row["mov_id"] == $edit) {
-                                print "<td data-label=''><input type=\"hidden\" readonly size=\"4\" name=\"mov_id\" value=\"{$row["mov_id"]}\"><input class=\"submit\" type=\"submit\" name=\"Gravar\" value=\"Gravar\"></td>\n";
-                                print "<td data-label='Data' class='id'><a name=\"{$row["mov_id"]}\">";
-                                print "<select class=\"date-fallback\" style=\"display: none\" name=\"data_movAA\">" . Html::year_option(substr($row["data_mov"], 0, 4)) . "</select>";
-                                print "<select class=\"date-fallback\" style=\"display: none\" name=\"data_movMM\">" . Html::mon_option(substr($row["data_mov"], 5, 2)) . "</select>";
-                                print "<select class=\"date-fallback\" style=\"display: none\" name=\"data_movDD\">" . Html::day_option(substr($row["data_mov"], 8, 2)) . "</select>";
-                                print "<input class=\"date-fallback\" type=\"date\" id=\"data_mov\" name=\"data_mov\" required value=\"{$row["data_mov"]}\">";
-                                print "</a></td>\n";
-                                print "<td data-label='Categoria' class='category'><select name=\"tipo_mov\">{$tipo_mov_opt}</select></td>\n";
-                                print "<td data-label='Moeda' class='currency'><select name=\"moeda_mov\">{$moeda_opt}</select></td>\n";
-                                print "<td data-label='Conta' class='account'><select name=\"conta_id\">{$conta_opt}</select></td>\n";
-                                print "<td data-label='D/C' class='direction'><select name=\"deb_cred\"><option value=\"1\"" . ($row["deb_cred"] == "1" ? " selected " : "") . ">Dep</option><option value=\"-1\"" . ($row["deb_cred"] == "-1" ? " selected " : "") . ">Lev</option></select></td>\n";
-                                print "<td data-label='Valor' class='amount'><input style=\"text-align: right\" type=text name=\" valor_mov\" maxlength=8 value=\"{$row["val_mov"]}\">\n";
-                                print "<td data-label='Obs' class='remarks'><input type=\"text\" name=\"obs\" maxlength=\"255\" value=\"{$row["obs"]}\"></td>\n";
-                                print "<td data-label='Saldo' class='total' style=\"text-align: right\">" . normalize_number($saldo) . "</td>\n";
+                        ?>
+                                <td data-label=""><input type="hidden" name="mov_id" value="<?php print $row["mov_id"]; ?>"> <input class="submit" type="submit" name="Gravar" value="Gravar"></td>
+                                <td data-label="Data" class="id"><a id="<?php print $row["mov_id"]; ?>"></a>
+                                    <select class="date-fallback" style="display: none" name="data_movAA"><?php Html::year_option(substr($row["data_mov"], 0, 4)); ?></select>
+                                    <select class="date-fallback" style="display: none" name="data_movMM"><?php Html::mon_option(substr($row["data_mov"], 5, 2)); ?></select>
+                                    <select class="date-fallback" style="display: none" name="data_movDD"><?php Html::day_option(substr($row["data_mov"], 8, 2)); ?></select>
+                                    <input class="date-fallback" type="date" id="data_mov" name="data_mov" required value="<?php print $row["data_mov"]; ?>">
+                                </td>
+                                <td data-label="Categoria" class="category"><select name="tipo_mov"><?php print $tipo_mov_opt; ?></select></td>
+                                <td data-label="Moeda" class="currency"><select name="moeda_mov"><?php print $moeda_opt; ?></select></td>
+                                <td data-label="Conta" class="account"><select name="conta_id"><?php print $conta_opt; ?></select></td>
+                                <td data-label="D/C" class="direction">
+                                    <select name="deb_cred">
+                                        <option value="1" <?php print($row["deb_cred"] == "1" ? " selected " : "") ?>>Dep</option>
+                                        <option value="-1" <?php print($row["deb_cred"] == "-1" ? " selected " : "") ?>>Lev</option>
+                                    </select>
+                                </td>
+                                <td data-label="Valor" class="amount"><input style="text-align: right" type="text" name="valor_mov" maxlength="8" value="<?php print $row["val_mov"]; ?>"></td>
+                                <td data-label="Obs" class="remarks"><input type="text" name="obs" maxlength="255" value="<?php print $row["obs"]; ?>"></td>
+                                <td data-label="Saldo" class="total" style="text-align: right"><?php print normalize_number($saldo); ?></td>
+                            <?php
                             }
                             if (empty($edit) || $row["mov_id"] != $edit) {
                                 $category_filter = (stripos($filter_string, "filter_entry_type") === false ? "$filter_string&filter_entry_type={$row['tipo_mov']}" : preg_replace("/filter_entry_type=(\d+)/", "filter_entry_type=" . $row['tipo_mov'], $filter_string));
                                 $account_filter = (stripos($filter_string, "filter_conta_id") === false ? "$filter_string&filter_conta_id={$row['conta_id']}" : preg_replace("/filter_conta_id=(\d+)/", "filter_conta_id=" . $row['conta_id'], $filter_string));
-                        ?>
-                                <td data-label='ID' class='id'><a name="<?php print $row["mov_id"] ?>" title="Editar entrada" href="ledger_entries.php?<?php print "{$filter_string}&amp;mov_id={$row['mov_id']}"; ?>#<?php print $row["mov_id"]; ?>"><?php print $row["mov_id"] ?></a></td>
+                            ?>
+                                <td data-label='ID' class='id'><a id="<?php print $row["mov_id"] ?>" title="Editar entrada" href="ledger_entries.php?<?php print "{$filter_string}&amp;mov_id={$row['mov_id']}"; ?>#<?php print $row["mov_id"]; ?>"><?php print $row["mov_id"] ?></a></td>
                                 <td data-label='Data' class='data'><?php print $row["data_mov"]; ?></td>
                                 <td data-label='Categoria' class='category'><a title="Filtrar lista para esta categoria" href="ledger_entries.php?<?php print $category_filter; ?>"><?php print $row["tipo_desc"]; ?></a></td>
                                 <td data-label='Moeda' class='currency'><?php print $row["moeda_desc"]; ?></td>
@@ -359,40 +366,63 @@ function build_and_save_record()
                         }
                         $num_rows = mysqli_num_rows($result);
                         $result->close();
-                        if ($edit == 0) {
-                            print "<tfoot>";
-                            print "<tr>";
-                            print "<td data-label='' class='id'><a name=\"last\"><input type=hidden readonly size=4 name=mov_id value=\"NULL\"><input class=\"submit\" type=\"submit\" name=\"Gravar\" value=\"Gravar\"></a></td>\n";
-                            print "<td data-label='Data' class='data'>";
-                            print "<select class=\"date-fallback\" style=\"display: none\" name=\"data_movAA\">" . Html::year_option(substr($defaults->entry_date, 0, 4)) . "</select>\n";
-                            print "<select class=\"date-fallback\" style=\"display: none\" name=\"data_movMM\">" . Html::mon_option(substr($defaults->entry_date, 5, 2)) . "</select>\n";
-                            print "<select class=\"date-fallback\" style=\"display: none\" name=\"data_movDD\">" . Html::day_option(substr($defaults->entry_date, 8, 2)) . "</select>\n";
-                            print "<input class=\"date-fallback\" type=\"date\" id=\"data_mov\" name=\"data_mov\" required value=\"{$defaults->entry_date}\">\r\n";
-                            print "</td>";
-                            print "<td data-label='Categoria' class='category'><select name=\"tipo_mov\">{$tipo_mov_opt}</select></td>\n";
-                            print "<td data-label='Moeda' class='currency'><select name=\"moeda_mov\">{$moeda_opt}</select></td>\n";
-                            print "<td data-label='Conta' class='account'><select name=\"conta_id\">{$conta_opt}</select></td>\n";
-                            print "<td data-label='D/C' class='direction'><select name=\"deb_cred\"><option value=\"1\">Dep</option><option value=\"-1\" selected>Lev</option></select></td>\n";
-                            print "<td data-label='Valor' class='amount'><input type=\"text\" style=\"text-align: right\" name=\"valor_mov\" maxlength=\"8\" value=\"0.0\"></td>\n";
-                            print "<td data-label='Obs' class='remarks'><input type=\"text\" name=\"obs\" maxlength=\"255\" value=\"\"></td>\n";
-                            print "<td data-label='Saldo' class='total'>" . normalize_number($saldo) . "</td>\n";
-                            print "</tr>\n";
-                            print "</tfoot>";
-                        }
-                        $db_link->close();
-                        print "</table>\n";
-                        print "</form>\n";
-                        print "</div>";
-                        print "<div class=\"main-footer\">\n";
-                        print "<p>Transac&ccedil;&otilde;es no per&iacute;odo: {$num_rows}</p>\n";
-                        print "</div>";
-                        include "footer.php";
                         ?>
+                    </tbody>
+                    <?php
+                    if ($edit == 0) {
+                    ?>
+                        <tfoot>
+                            <tr>
+                                <td data-label="" class="id"><a id="last"></a><input type="hidden" name="mov_id" value="NULL"><input class="submit" type="submit" name="Gravar" value="Gravar"></td>
+                                <td data-label="Data" class="data">
+                                    <select class="date-fallback" style="display: none" name="data_movAA"><?php print Html::year_option(substr($defaults->entry_date, 0, 4)); ?></select>
+                                    <select class="date-fallback" style="display: none" name="data_movMM"><?php print Html::mon_option(substr($defaults->entry_date, 5, 2)); ?></select>
+                                    <select class="date-fallback" style="display: none" name="data_movDD"><?php print Html::day_option(substr($defaults->entry_date, 8, 2)) ?></select>
+                                    <input class="date-fallback" type="date" id="data_mov" name="data_mov" required value="<?php print $defaults->entry_date; ?>">
+                                </td>
+                                <td data-label="Categoria" class="category">
+                                    <select name="tipo_mov">
+                                        <?php print $tipo_mov_opt; ?>
+                                    </select>
+                                </td>
+                                <td data-label="Moeda" class="currency">
+                                    <select name="moeda_mov">
+                                        <?php print $moeda_opt; ?>
+                                    </select>
+                                </td>
+                                <td data-label="Conta" class="account">
+                                    <select name="conta_id">
+                                        <?php print $conta_opt; ?>
+                                    </select>
+                                </td>
+                                <td data-label="D/C" class="direction">
+                                    <select name="deb_cred">
+                                        <option value="1">Dep</option>
+                                        <option value="-1" selected>Lev</option>
+                                    </select>
+                                </td>
+                                <td data-label="Valor" class="amount"><input type="text" style="text-align: right" name="valor_mov" maxlength="8" value="0.0"></td>
+                                <td data-label="Obs" class="remarks"><input type="text" name="obs" maxlength="255" value=""></td>
+                                <td data-label="Saldo" class="total"><?php print normalize_number($saldo); ?></td>
+                            </tr>
+                        </tfoot>
+                    <?php
+                    }
+                    $db_link->close();
+                    ?>
+                </table>
+            </form>
         </div>
+        <div class="main-footer">
+            <p>Transac&ccedil;&otilde;es no per&iacute;odo: <?php print $num_rows; ?></p>
+        </div>
+        <?php
+        include "footer.php";
+        ?>
     </div> <!-- Main grid -->
+    <script>
+        toggleDateElements("data_mov");
+    </script>
 </body>
-<script>
-    toggleDateElements("data_mov");
-</script>
 
 </html>

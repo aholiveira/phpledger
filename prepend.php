@@ -35,6 +35,9 @@ if (session_status() == PHP_SESSION_NONE) {
     ini_set("session.sid_bits_per_character", 5);
     ini_set("session.sid_length", 64);
 }
+if (!headers_sent()) {
+    header("Cache-Control: no-cache");
+}
 include constant("OBJECTS_DIR") . '/config.class.php';
 include constant("OBJECTS_DIR") . '/object_factory.php';
 include constant("OBJECTS_DIR") . '/email.php';
