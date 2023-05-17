@@ -26,7 +26,7 @@ class entry_category_view extends object_viewer
         $retval .= "<td class='category' data-label='Categoria'>" . (is_null($_object->parent_id) || $_object->parent_id == 0 ? "" : (isset($_object->parent_description) ? $_object->parent_description : "")) . "</td>";
         $retval .= "<td class='description' data-label='Descri&ccedil;&atilde;o'>{$_object->description}</td>";
         $retval .= "<td class='amount' data-label='Valor'>" . normalize_number(abs($_object->getBalance())) . "</td>";
-        $retval .= "<td class='active' data-label='Activa' class=\"checkbox\"><input type=\"checkbox\" readonly onclick=\"return false;\" name=active{$_object->id} " . ($_object->active ? "checked" : "") . "></td>\r\n";
+        $retval .= "<td class='active checkbox' data-label='Activa'><input title=\"S&oacute; pode alterar o estado em modo de edi&ccedil;&atilde;o\" type=\"checkbox\" onclick=\"return false;\" name=active{$_object->id} " . ($_object->active ? "checked" : "") . "></td>\r\n";
         return $retval;
     }
     public function printObjectList(array $object_list): string
@@ -81,7 +81,7 @@ class entry_category_view extends object_viewer
         }
         $retval .= "<tr>";
         $retval .= "<td><label for=\"tipo_id\">ID</label></td>\r\n";
-        $retval .= "<td><input type=text readonly size=4 name=\"tipo_id\" value=" . (isset($_object->id)  ? $_object->id : $_object->getNextId()) . " /></td>\r\n";
+        $retval .= "<td><input type=text readonly size=4 name=\"tipo_id\" value=" . (isset($_object->id)  ? $_object->id : $_object->getNextId()) . "></td>\r\n";
         $retval .= "</tr>";
         $retval .= "<tr>";
         $retval .= "<td><label for=\"parent_id\">Categoria</label></td>\r\n";
@@ -93,7 +93,7 @@ class entry_category_view extends object_viewer
         $retval .= "</tr>";
         $retval .= "<tr>";
         $retval .= "<td><label for=\"tipo_desc\">Descri&ccedil;&atilde;o</label></td>\n";
-        $retval .= "<td><input type=text size=30 maxlength=30 name=\"tipo_desc\" value=\"" . (isset($_object->id) ? $_object->description : "") . "\" /></td>";
+        $retval .= "<td><input type=text size=30 maxlength=30 name=\"tipo_desc\" value=\"" . (isset($_object->id) ? $_object->description : "") . "\"></td>";
         $retval .= "</tr>";
         $retval .= "<tr>";
         $retval .= "<td><label for=\"active\">Activa</label></td>\n";
@@ -109,7 +109,7 @@ class entry_category_view extends object_viewer
         foreach ($category_list as $category) {
             if (($category instanceof entry_category)) {
                 if ($category->id > 0 && sizeof($category->children) > 0) {
-                    $retval .= "<optgroup value=\"{$category->id}\" label=\"{$category->description}\">\r\n";
+                    $retval .= "<optgroup label=\"{$category->description}\">\r\n";
                     $retval .= "<option value=\"{$category->id}\"" . ($selected == $category->id ? " selected " : "") . ">{$category->description}</option>\n";
                     foreach ($category->children as $child) {
                         $retval .= "<option value=\"{$child->id}\"" . ($selected == $child->id ? " selected " : "") . ">{$child->description}</option>\n";

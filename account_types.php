@@ -44,7 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pt-PT">
 
 <head>
     <?php include "header.php"; ?>
@@ -79,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                     <tr>
                         <td>Poupan&ccedil;a</td>
                         <td data-label="Poupan&ccedil;a">
-                            <input type="checkbox" name="savings" <?php ($object->savings ? "checked" : ""); ?> />
+                            <input type="checkbox" name="savings" <?php ($object->savings ? "checked" : ""); ?>>
                         </td>
                     </tr>
                     <tr>

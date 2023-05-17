@@ -16,7 +16,7 @@ $pagetitle = "Redefini&ccedil;o de palavra-passe";
 
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pt-PT">
 
 <head>
     <?php include "header.php"; ?>
@@ -79,18 +79,18 @@ $pagetitle = "Redefini&ccedil;o de palavra-passe";
         <h1><?php print $config->getParameter("title"); ?></h1>
         <p>Redefini&ccedil;&atilde;o de palavra-passe</p>
         <form method="POST" action="reset_password.php" name="reset_password">
-            <input type="hidden" name="token_id" value="<?php print $_GET["token_id"]; ?>" />
+            <input type="hidden" name="token_id" value="<?php print $_GET["token_id"]; ?>">
             <table>
                 <tr>
                     <td>Nova palavra-passe: </td>
-                    <td><input size="10" maxlength="250" type="password" name="password" value="" required /></td>
+                    <td><input size="10" maxlength="250" type="password" name="password" value="" required></td>
                 </tr>
                 <tr>
                     <td>Confirmar palavra-passe: </td>
-                    <td><input size="10" maxlength="250" type="password" name="verify_password" value="" required /></td>
+                    <td><input size="10" maxlength="250" type="password" name="verify_password" value="" required></td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align: center"><input type="submit" value="Repor" /></td>
+                    <td colspan="2" style="text-align: center"><input type="submit" value="Repor"></td>
                 </tr>
             </table>
         </form>

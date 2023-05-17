@@ -11,7 +11,7 @@ include __DIR__ . "/contas_config.php";
 $pagetitle = "Tipo de movimentos";
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pt-PT">
 
 <head>
     <?php include "header.php"; ?>
@@ -39,11 +39,11 @@ $pagetitle = "Tipo de movimentos";
                     ?>
 
                     <tr>
-                        <td><input type="submit" name="update" value="Gravar" /></td>
+                        <td><input type="submit" name="update" value="Gravar"></td>
                         <?php
                         if ($object->id != 0) {
                         ?>
-                            <td><input type="submit" name="update" value="Apagar" /></td>
+                            <td><input type="submit" name="update" value="Apagar"></td>
                         <?php
                         }
                         ?>

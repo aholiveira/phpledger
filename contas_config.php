@@ -31,7 +31,7 @@ if (isset($_SESSION['expires']) && $_SESSION['expires'] < time()) {
 if (!isset($_SESSION['user'])) {
 ?>
     <!DOCTYPE html>
-    <html>
+    <html lang="pt-PT">
     <?php include "header.php"; ?>
     <meta http-equiv="REFRESH" content="5; URL=index.php">
 

@@ -26,11 +26,11 @@ class account_view extends object_viewer
             $type_description = $account_type->description;
         }
         $retval .= "<td data-label='ID' class=\"number\"><a title=\"Editar\" href=\"accounts.php?conta_id={$_object->id}\">{$_object->id}</a></td>";
-        $retval .= "<td data-label='Nome' class=\"text\">{$_object->name}</a></td>";
-        $retval .= "<td data-label='Numero' class=\"number\">{$_object->number}</a></td>";
-        $retval .= "<td data-label='Tipo'>{$type_description}</a></td>";
-        $retval .= "<td data-label='IBAN'>{$_object->iban}</a></td>";
-        $retval .= "<td data-label='Abertura'>{$_object->open_date}</a></td>";
+        $retval .= "<td data-label='Nome' class=\"text\">{$_object->name}</td>";
+        $retval .= "<td data-label='Numero' class=\"number\">{$_object->number}</td>";
+        $retval .= "<td data-label='Tipo'>{$type_description}</td>";
+        $retval .= "<td data-label='IBAN'>{$_object->iban}</td>";
+        $retval .= "<td data-label='Abertura'>{$_object->open_date}</td>";
         $retval .= "<td data-label='Fecho'>{$_object->close_date}</td>";
         $retval .= "<td data-label='Activa'>" . ($_object->active ? "Sim" : "N&atilde;o") . "</td>";
         $retval .= "<td><a href=\"accounts.php?update=Apagar&amp;conta_id={$_object->id}\" onclick=\"return confirm('Pretende apagar o registo?');\">Apagar</a></td>";
@@ -54,8 +54,8 @@ class account_view extends object_viewer
         }
         $account_type_view = $view_factory->account_type_view($account_type);
         $tipo_opt = $account_type_view->getSelectFromList($account_type->getList(), isset($_object->type_id) ? $_object->type_id : null);
-        $retval .= "<td data-label='ID'><input type=\"hidden\" name=\"conta_id\" value=\"{$id}\"/>{$id}</td>\n";
-        $retval .= "<td data-label='Nome'><a name=\"{$id}\"><input type=text size=16 maxlength=30 name=\"conta_nome\" value=\"{$_object->name}\"></a></td>";
+        $retval .= "<td data-label='ID'><input type=\"hidden\" name=\"conta_id\" value=\"{$id}\">{$id}</td>\n";
+        $retval .= "<td data-label='Nome'><a id=\"{$id}\"></a><input type=text size=16 maxlength=30 name=\"conta_nome\" value=\"{$_object->name}\"></td>";
         $retval .= "<td data-label='Numero'><input type=text size=15 maxlength=30 name=\"conta_num\" value=\"{$_object->number}\"></td>";
         $retval .= "<td data-label='Tipo'><select name=\"tipo_id\">{$tipo_opt}</select>";
         $retval .= "<td data-label='NIB'><input type=text size=24 maxlength=24 name=\"conta_nib\" value=\"{$_object->iban}\"></td>";

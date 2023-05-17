@@ -56,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pt-PT">
 
 <head>
     <?php include "header.php"; ?>

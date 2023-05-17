@@ -9,11 +9,13 @@
  */
 global $user;
 global $pass;
+include __DIR__ . "/prepend.php";
 $config = new config();
 include ROOT_DIR . "/config.php";
 $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";
 ?>
 <!DOCTYPE html>
+<html lang="pt-PT">
 
 <head>
     <?php include "header.php"; ?>
@@ -51,19 +53,18 @@ $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";
             <table>
                 <tr>
                     <td>Utilizador: </td>
-                    <td><input id="username" size="50" maxlength="250" type="text" name="username" value="" required /></td>
+                    <td><input id="username" size="50" maxlength="250" type="text" name="username" value="" required></td>
                 </tr>
                 <tr>
                     <td>Endere&ccedil;o de email: </td>
-                    <td><input size="50" maxlength="250" type="text" name="email" value="" required /></td>
+                    <td><input size="50" maxlength="250" type="text" name="email" value="" required></td>
                 </tr>
-                <tr></tr>
                 <tr>
                     <td colspan="2">
                         <p class='error'><?php print $message; ?></p>
                     </td>
                 <tr>
-                    <td colspan="2" style="text-align: center"><input type="submit" value="Repor" /></td>
+                    <td colspan="2" style="text-align: center"><input type="submit" value="Repor"></td>
                 </tr>
             </table>
         </form>

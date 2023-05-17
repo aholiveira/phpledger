@@ -19,7 +19,7 @@ define("ROOT_DIR", __DIR__);
 define("OBJECTS_DIR", constant("ROOT_DIR") . "/objects");
 define("VIEWS_DIR", constant("ROOT_DIR") . "/views");
 if (file_exists(realpath(constant("ROOT_DIR") . "/.git/ORIG_HEAD"))) {
-    define("GITHASH", file_get_contents(realpath(constant("ROOT_DIR") . "/.git/ORIG_HEAD")));
+    define("GITHASH", file_get_contents($filename = realpath(constant("ROOT_DIR") . "/.git/ORIG_HEAD"), false, null, 0, $length = 12));
 } else {
     define("GITHASH", "main");
 }
@@ -34,6 +34,9 @@ if (session_status() == PHP_SESSION_NONE) {
     ini_set("session.use_strict_mode", true);
     ini_set("session.sid_bits_per_character", 5);
     ini_set("session.sid_length", 64);
+}
+if (!headers_sent()) {
+    header("Cache-Control: no-cache");
 }
 include constant("OBJECTS_DIR") . '/config.class.php';
 include constant("OBJECTS_DIR") . '/object_factory.php';
