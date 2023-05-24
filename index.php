@@ -13,6 +13,7 @@ $cookie_params = array(
     'lifetime' => 0,
     'path' => substr($_SERVER['SCRIPT_NAME'], 0, strrpos($_SERVER['SCRIPT_NAME'], '/') + 1),
     'samesite' => 'Strict',
+    'secure' => true,
     'httponly' => false
 );
 session_set_cookie_params($cookie_params);

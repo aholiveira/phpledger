@@ -111,7 +111,7 @@ input.submit, input[type=submit] {
 }
 
 input.submit:hover, input[type=submit]:hover {
-    background-image: lightblue;
+    background-color: lightblue;
 }
 
 .RCS {
@@ -197,7 +197,7 @@ div#login td {
 .main-footer {
     display: grid;
     grid-area: main-footer;
-    overflow-y: none;
+    /*overflow-y: none;*/
     height: fit-content;
     align-self: end;
 }
