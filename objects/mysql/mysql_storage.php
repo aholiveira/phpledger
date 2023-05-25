@@ -12,7 +12,6 @@ class mysql_storage implements idata_storage
 {
     private $_dblink;
     private string $_message = "";
-    private config $_config;
     private $_tableCreateSQL;
     private $_tableNewColumnNames;
     private $_collation = "utf8mb4_general_ci";
@@ -20,20 +19,19 @@ class mysql_storage implements idata_storage
     private $_default_admin_username;
     private $_default_admin_password;
 
-    public function __construct(config $config)
+    public function __construct()
     {
-        $this->_config = $config;
         $this->_message = "";
         $this->setTableCreateSQL();
-        $this->_default_admin_username = $this->_config->getParameter("admin_username");
-        $this->_default_admin_password = $this->_config->getParameter("admin_password");
+        $this->_default_admin_username = config::get("admin_username");
+        $this->_default_admin_password = config::get("admin_password");
     }
     private function connect()
     {
-        $host = $this->_config->getParameter("host");
-        $user = $this->_config->getParameter("user");
-        $pass = $this->_config->getParameter("password");
-        $dbase = $this->_config->getParameter("database");
+        $host = config::get("host");
+        $user = config::get("user");
+        $pass = config::get("password");
+        $dbase = config::get("database");
         if (!($this->_dblink instanceof \mysqli) || !($this->_dblink->ping())) {
             mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
             $this->_dblink = new \mysqli($host, $user, $pass, $dbase);
@@ -58,7 +56,7 @@ class mysql_storage implements idata_storage
     public function check(): bool
     {
         $retval = true;
-        $db_name = $this->_config->getParameter("database");
+        $db_name = config::get("database");
         $tables = array_keys($this->_tableCreateSQL);
         $this->connect();
         if ($this->getDbCollation($db_name) != $this->_collation) {
@@ -147,7 +145,7 @@ class mysql_storage implements idata_storage
         $retval = true;
         $tables = array_keys($this->_tableCreateSQL);
         $this->connect();
-        $db_name = $this->_config->getParameter("database");
+        $db_name = config::get("database");
         if ($this->getDbCollation($db_name) != $this->_collation) {
             if ($this->setDbCollation($db_name, $this->_collation)) {
                 $this->addMessage("Database {$db_name} collation could not be set to {$this->_collation}");
@@ -269,7 +267,7 @@ class mysql_storage implements idata_storage
                     $ledger_entry->currency_id = 'EUR';
                     $ledger_entry->euro_amount = $ledger_entry->currency_amount * $ledger_entry->direction;
                     $ledger_entry->exchange_rate = 1;
-                    $ledger_entry->username = $this->_config->getParameter("user");
+                    $ledger_entry->username = config::get("user");
                     $ledger_entry->update();
                 }
                 $curr_month = date_diff(new \DateTime(date("Y-m-d", mktime(0, 0, 0, $month, 1, $year))), new \DateTime(date("Y-m-d", mktime(0, 0, 0, 1, 1, $start_year))));

@@ -20,8 +20,8 @@ $cookie_params = array(
 );
 session_set_cookie_params($cookie_params);
 session_start();
-$config = new config();
-include __DIR__ . '/config.php';
+config::init(__DIR__ . '/config.json');
+
 if (isset($_SESSION['expires']) && $_SESSION['expires'] < time()) {
     $_SESSION = array();
     if (ini_get("session.use_cookies")) {
@@ -45,19 +45,19 @@ if (!isset($_SESSION['user'])) {
     exit(1);
 } else {
     $_SESSION['expires'] = time() + 3600;
-    $host = $config->getParameter("host");
-    $dbase = $config->getParameter("database");
-    if (strlen($config->getParameter("user")) > 0 && strlen($config->getParameter("password")) > 0) {
-        $user = $config->getParameter("user");
-        $pass = $config->getParameter("password");
+    $host = config::get("host");
+    $dbase = config::get("database");
+    if (strlen(config::get("user")) > 0 && strlen(config::get("password")) > 0) {
+        $user = config::get("user");
+        $pass = config::get("password");
     } else {
         $user = $_SESSION['user'];
         $pass = $_SESSION['pass'];
-        $config->setParameterValue("user", $user);
-        $config->setParameterValue("password", $pass);
+        config::set("user", $user);
+        config::set("password", $pass);
     }
     session_write_close();
     $db_link = new \mysqli($host, $user, $pass, $dbase) or die(mysqli_connect_error());
-    $object_factory = new object_factory($config);
+    $object_factory = new object_factory();
     $view_factory = new view_factory();
 }

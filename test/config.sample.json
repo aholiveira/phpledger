@@ -1,0 +1,11 @@
+{
+    "title": "Gestao financeira",
+    "host": "localhost",
+    "database": "contas",
+    "user": "your-username",
+    "password": "your-password",
+    "smtp": "localhost",
+    "smtp_port": "25",
+    "from": "youremailhere@example.com",
+    "url": "http://yourhostname/contas"
+}

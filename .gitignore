@@ -3,6 +3,8 @@
 *.zip
 *.bat
 *.cmd
-config.php
-test/config.php
+config.*
+!config.sample.*
+test/config.*
+!test/config.sample.*
 .vscode*

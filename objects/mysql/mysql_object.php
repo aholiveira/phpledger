@@ -132,7 +132,7 @@ abstract class mysql_object implements iobject
     }
     public function error_message(): string
     {
-        return $this->_errormessage;
+        return isset($this->_errormessage) ? $this->_errormessage : "";
     }
     protected function setErrorMessage(string $message)
     {

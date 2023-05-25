@@ -10,21 +10,48 @@
  */
 class config
 {
-    private $parameters = array();
+    protected static $_data = array();
 
-    public function __construct()
+    private function __construct()
     {
     }
-
-    public function setParameterValue($parameter, $value)
+    /**
+     * Loads configuration from the configuration file
+     *
+     * @param string $configfile file to load configuration from
+     * @return bool TRUE on success, FALSE on failure
+     */
+    public static function init(string $configfile): bool
     {
-        $this->parameters[$parameter] = $value;
+        try {
+            self::$_data = @json_decode(file_get_contents($configfile), true);
+            return true;
+        } catch (Exception $ex) {
+            return false;
+        }
     }
 
-    public function getParameter($parameter)
+    /**
+     * Loads configuration from the configuration file
+     *
+     * @param string $configfile file to load configuration from
+     * @return bool TRUE on success, FALSE on failure
+     */
+    public static function set(string $key, $value): void
     {
-        if (array_key_exists($parameter, $this->parameters)) {
-            return $this->parameters[$parameter];
+        if (!is_array(self::$_data)) {
+            self::$_data = array();
+        }
+        self::$_data[$key] = $value;
+    }
+
+    public static function get(string $key)
+    {
+        if (!is_array(self::$_data)) {
+            self::$_data = array();
+        }
+        if (array_key_exists($key, self::$_data)) {
+            return self::$_data[$key];
         } else {
             return null;
         }

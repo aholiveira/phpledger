@@ -22,7 +22,7 @@ define("PADDING", 35);
 define("PASSED", "\033[32mPASSED\033[0m");
 define("FAILED", "\033[31mFAILED\033[0m");
 print("Running tests\r\n\r\n");
-$data_storage = new mysql_storage($config);
+$data_storage = new mysql_storage();
 print(str_pad("Testing data storage ", constant("PADDING"), ".") . " : ");
 if (!$data_storage->check()) {
     print "\033[33mUPDATE\033[0m\r\n";
