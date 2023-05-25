@@ -17,11 +17,16 @@ class mysql_storage implements idata_storage
     private $_tableNewColumnNames;
     private $_collation = "utf8mb4_general_ci";
     private $_engine = "InnoDB";
+    private $_default_admin_username;
+    private $_default_admin_password;
+
     public function __construct(config $config)
     {
         $this->_config = $config;
         $this->_message = "";
         $this->setTableCreateSQL();
+        $this->_default_admin_username = $this->_config->getParameter("admin_username");
+        $this->_default_admin_password = $this->_config->getParameter("admin_password");
     }
     private function connect()
     {
@@ -156,8 +161,8 @@ class mysql_storage implements idata_storage
         $user = new user($this->_dblink);
         if (sizeof($user->getList()) == 0) {
             $user->setId(1);
-            $user->setUsername('admin');
-            $user->setPassword('admin');
+            $user->setUsername($this->_default_admin_username);
+            $user->setPassword($this->_default_admin_password);
             $user->setFullName('Default admin');
             $user->setEmail('');
             $user->setRole(1);

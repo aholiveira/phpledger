@@ -80,7 +80,7 @@ function auth_on_config(): bool
     global $config;
     return (strlen($config->getParameter("user")) && strlen($config->getParameter("password")));
 }
-function do_mysql_authentication()
+function do_mysql_authentication(): bool
 {
     global $config;
     /**
