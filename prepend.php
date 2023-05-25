@@ -38,11 +38,11 @@ if (session_status() == PHP_SESSION_NONE) {
 if (!headers_sent()) {
     header("Cache-Control: no-cache");
     header("X-XSS-Protection: 1; mode=block");
-    header("X-Frame-Options: SAMEORIGIN");
+    header("X-Frame-Options: DENY");
     header("X-Content-Type-Options: nosniff");
     header("Strict-Transport-Security: max-age=7776000");
     header("Referrer-Policy: strict-origin-when-cross-origin");
-    header("Content-Security-Policy: default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'");
+    header("Content-Security-Policy: default-src 'self'; frame-ancestors 'none'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'");
 }
 include constant("OBJECTS_DIR") . '/config.class.php';
 include constant("OBJECTS_DIR") . '/object_factory.php';
