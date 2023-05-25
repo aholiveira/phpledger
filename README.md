@@ -12,8 +12,8 @@ Also see [History](#history).
 
 1. Create a directory in the webserver root to hold the application files
 2. Unzip the contents of phpledger.zip to the directory created above
-3. Copy or rename config.php.sample to config.php
-4. Edit config.php to suit your needs
+3. Copy or rename config.sample.json to config.json
+4. Edit config.json to suit your needs
 5. Create the database using caixa.sql file with mysql -u root -p < caixa.sql
 6. Create users in mysql to access the application. The user password should be encrypted with md5 (CREATE USER 'jeffrey'@'localhost' IDENTIFIED BY PASSWORD(md5('*90E462C37378CED12064BB3388827D2BA3A9B689')))
 

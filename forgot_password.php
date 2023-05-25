@@ -10,8 +10,7 @@
 global $user;
 global $pass;
 include __DIR__ . "/prepend.php";
-$config = new config();
-include ROOT_DIR . "/config.php";
+config::init(__DIR__ . '/config.json');
 $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";
 ?>
 <!DOCTYPE html>
@@ -20,24 +19,26 @@ $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";
 <head>
     <?php include "header.php"; ?>
     <?php
-    $object_factory = new object_factory($config);
+    $object_factory = new object_factory();
     $user = $object_factory->user();
     $message = "";
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (array_key_exists("username", $_POST) && array_key_exists("email", $_POST)) {
-            $user->getByUsername($_POST["username"]);
-            if ($user->getUsername() == $_POST["username"] && $user->getEmail() == $_POST["email"]) {
+            $username = filter_input(INPUT_POST, "username", FILTER_SANITIZE_ENCODED);
+            $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_ENCODED);
+            $user->getByUsername($username);
+            if (strcasecmp($user->getUsername(), $username) == 0 && strcasecmp(filter_var($user->getEmail(), FILTER_SANITIZE_ENCODED), $email) == 0) {
                 if ($user->resetPassword()) {
                     //print "<meta http-equiv='REFRESH' content='10; URL=index.php'>";
                     $message = "<p>Ir&aacute; receber um email com um link para efectuar a reposicao da palavra-passe.<br></p>";
                 } else {
-                    $message = "Falhou a criacao do token de reposicao. Contacte o administrador ou tente novamente.";
+                    $message = "Falhou a criacao do token de reposicao ou o envio do email. Verifique as configuracoes ou os dados fornecidos e tente novamente.";
                 }
             } else {
-                $message = "Os dados indicados estao errados.";
+                $message = "Os dados indicados est&atilde;o errados.";
             }
         } else {
-            $message = "Indique o username e o email registados na aplicacao";
+            $message = "Indique o username e o email registados na aplica&ccedil;&atilde;o";
         }
     }
     ?>
@@ -47,7 +48,7 @@ $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";
     <?php
     ?>
     <div id="login">
-        <h1><?php print $config->getParameter("title"); ?></h1>
+        <h1><?php print config::get("title"); ?></h1>
         <p>Reposi&ccedil;&atilde;o de palavra-passe</p>
         <form method="POST" action="forgot_password.php" name="forgot_password">
             <table>

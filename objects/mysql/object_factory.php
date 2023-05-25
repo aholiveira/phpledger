@@ -24,14 +24,12 @@ include __DIR__ . "/user.php";
 class object_factory implements iobject_factory
 {
     private $_dblink;
-    private $_config;
-    public function __construct(config $config)
+    public function __construct()
     {
-        $host = $config->getParameter("host");
-        $dbase = $config->getParameter("database");
-        $user = $config->getParameter("user");
-        $pass = $config->getParameter("password");
-        $this->_config = $config;
+        $host = config::get("host");
+        $dbase = config::get("database");
+        $user = config::get("user");
+        $pass = config::get("password");
         try {
             $this->_dblink = @new \mysqli($host, $user, $pass, $dbase);
             if ($this->_dblink->connect_errno) {
@@ -48,7 +46,7 @@ class object_factory implements iobject_factory
     }
     public function data_storage(): idata_storage
     {
-        return new mysql_storage($this->_config);
+        return new mysql_storage();
     }
     public function account(): account
     {

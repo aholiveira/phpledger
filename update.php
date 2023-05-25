@@ -9,9 +9,8 @@
  */
 #$_SESSION['user'] = 'update';
 #include ROOT_DIR . "/contas_config.php";
-$config = new config();
-include __DIR__ . '/config.php';
-$object_factory = new object_factory($config);
+config::init(__DIR__ . '/config.json');
+$object_factory = new object_factory();
 $view_factory = new view_factory();
 $pagetitle = "Actualiza&ccedil;&atilde;o necess&aacute;ria";
 

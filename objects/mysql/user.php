@@ -274,23 +274,23 @@ class user extends mysql_object implements iobject
     }
     public function resetPassword(): bool
     {
-        global $config;
         $retval = false;
         if (isset($this->_username) && isset($this->_email)) {
             $this->setToken($this->createToken());
             $this->setTokenExpiry((new \DateTime(date("Y-m-d H:i:s")))->add(new \DateInterval("PT24H"))->format("Y-m-d H:i:s"));
             if ($this->update()) {
                 $retval = true;
-                $title = $config->getParameter("title");
+                $title = config::get("title");
+                $url = config::get("url");
                 $message = "Esta' a receber este email porque solicitou a reposicao da sua palavra-passe na aplicacao '$title'.\r\n";
                 $message .= "Para continuar o processo deve clique no link abaixo para definir uma nova senha.\r\n";
-                $message .= "{$config->getParameter('url')}reset_password.php?token_id={$this->getToken()}.\r\n";
+                $message .= "{$url}reset_password.php?token_id={$this->getToken()}.\r\n";
                 $message .= "Este token e' valido ate' 'as {$this->getTokenExpiry()}.\r\n";
-                $message .= "Findo este prazo tera' que reiniciar o processo usando o link {$config->getParameter('url')}forgot_password.php.\r\n";
+                $message .= "Findo este prazo tera' que reiniciar o processo usando o link {$url}forgot_password.php.\r\n";
                 $message .= "\r\n";
                 $message .= "Cumprimentos,\r\n";
                 $message .= "$title\r\n";
-                Email::send_email($config->getParameter("from"), $this->getEmail(), "Reposicao de palavra-passe", $message);
+                $retval = Email::send_email(config::get("from"), $this->getEmail(), "Reposicao de palavra-passe", $message);
             }
         }
         return $retval;

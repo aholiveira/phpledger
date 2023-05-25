@@ -11,7 +11,6 @@ global $user;
 global $pass;
 
 include __DIR__ . "/contas_config.php";
-$config = new config();
 $pagetitle = "Redefini&ccedil;o de palavra-passe";
 
 ?>
@@ -21,7 +20,7 @@ $pagetitle = "Redefini&ccedil;o de palavra-passe";
 <head>
     <?php include "header.php"; ?>
     <?php
-    $object_factory = new object_factory($config);
+    $object_factory = new object_factory();
     $user = $object_factory->user();
 
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
@@ -55,17 +54,17 @@ $pagetitle = "Redefini&ccedil;o de palavra-passe";
                     if ($user->update()) {
                         print "<meta http-equiv='REFRESH' content='10; URL=index.php'>";
                         print "<p>Palavra-passe alterada com sucesso<br></p>";
-                        print "<p>Ir&aacute; ser redireccionado para a pagina inicial.<br></p>";
+                        print "<p>Ir&aacute; ser redireccionado para a p&aacute;gina inicial.<br></p>";
                         exit(1);
                     } else {
                         print "<p>Erro ao alterar utilizador<br></p>";
-                        print "<p>Ir&aacute; ser redireccionado para a pagina inicial.<br></p>";
+                        print "<p>Ir&aacute; ser redireccionado para a p&aacute;gina inicial.<br></p>";
                         exit(1);
                     }
                 }
             } else {
                 print "<meta http-equiv='REFRESH' content='10; URL=reset_password.php?token_id={$token_id}'>";
-                print "<p>Palavras-passe introduzidas nao sao iguais<br></p>";
+                print "<p>As palavras-passe introduzidas n&atilde;o s&atilde;o iguais<br></p>";
                 exit(1);
             }
         } else {
@@ -81,7 +80,7 @@ $pagetitle = "Redefini&ccedil;o de palavra-passe";
     <?php
     ?>
     <div id="login">
-        <h1><?php print $config->getParameter("title"); ?></h1>
+        <h1><?php print config::get("title"); ?></h1>
         <p>Redefini&ccedil;&atilde;o de palavra-passe</p>
         <form method="POST" action="reset_password.php" name="reset_password">
             <input type="hidden" name="token_id" value="<?php print $token_id; ?>">

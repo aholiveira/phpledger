@@ -30,15 +30,14 @@ if (array_key_exists("do_logout", $_GET) && $_GET["do_logout"] == 1) {
 if (!defined("ROOT_DIR")) {
     include "prepend.php";
 }
-$config = new config();
-include __DIR__ . '/config.php';
+config::init(__DIR__ . '/config.json');
 
 $userauth = false;
-$object_factory = new object_factory($config);
+$object_factory = new object_factory();
 $data_storage = $object_factory->data_storage();
 if ($_SERVER["REQUEST_METHOD"] == 'GET') {
-    #$host = $config->getParameter("host");
-    #$dbase = $config->getParameter("database");
+    #$host = config::get("host");
+    #$dbase = config::get("database");
     if (auth_on_config()) {
         if (!$data_storage->check()) {
             if (!headers_sent()) {
@@ -77,12 +76,10 @@ if (array_key_exists("userid", $_POST) && null != $_POST["userid"]) {
 
 function auth_on_config(): bool
 {
-    global $config;
-    return (strlen($config->getParameter("user")) && strlen($config->getParameter("password")));
+    return (strlen(config::get("user")) && strlen(config::get("password")));
 }
 function do_mysql_authentication(): bool
 {
-    global $config;
     /**
      * Do MySQL auth
      */
@@ -90,9 +87,9 @@ function do_mysql_authentication(): bool
     $pass = md5($_POST["pass"]);
     $_SESSION['user'] = $username;
     $_SESSION['pass'] = $pass;
-    $config->setParameterValue("user", $username);
-    $config->setParameterValue("password", $pass);
-    $db_link = @mysqli_connect($config->getParameter("host"), $username, $pass, $config->getParameter("database"));
+    config::set("user", $username);
+    config::set("password", $pass);
+    $db_link = @mysqli_connect(config::get("host"), $username, $pass, config::get("database"));
     return ($db_link instanceof \mysqli);
 }
 /**
@@ -121,22 +118,21 @@ function verify_and_migrate_user()
 }
 function do_internal_authentication()
 {
-    global $config;
     global $host;
     global $dbase;
     global $db_link;
     global $object_factory;
     global $user_object;
 
-    $username = $config->getParameter("user");
-    $pass = $config->getParameter("password");
+    $username = config::get("user");
+    $pass = config::get("password");
     $retval = false;
     $db_link = @mysqli_connect($host, $username, $pass, $dbase);
     if (!($db_link instanceof mysqli)) {
         /**
          * Config file credentials are invalid
          */
-        print "Verifique o ficheiro config.php";
+        print "Verifique o ficheiro config.json";
         exit(0);
     }
     /**
@@ -195,7 +191,7 @@ function do_authentication()
 
 <body onload="javascript:document.getElementById('userid').focus();">
     <div id="login">
-        <h1><?php print $config->getParameter("title"); ?></h1>
+        <h1><?php print config::get("title"); ?></h1>
         <p>Introduza o seu nome de utilizador e password para entrar na aplica&ccedil;&atilde;o.</p>
         <?php
         if (array_key_exists("userid", $_POST) && !$userauth) {

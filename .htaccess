@@ -5,3 +5,7 @@ php_value display_startup_errors on
   Order allow,deny
   Deny from all
 </Files>
+<Files "config.json">
+  Order allow,deny
+  Deny from all
+</Files>

@@ -12,19 +12,19 @@ class Email
 {
     static public function send_email($from, $to, $subject, $body): bool
     {
-        global $config;
-        if (strlen($config->getParameter("smtp")) > 0) ini_set("smtp", $config->getParameter("smtp"));
-        if (strlen($config->getParameter("smtp_port")) > 0) ini_set("smtp_port", $config->getParameter("smtp_port"));
-        if (strlen($config->getParameter("from")) > 0) ini_set("sendmail_from", $config->getParameter("from"));
-        if (strlen($config->getParameter("smtp_port")) > 0) ini_set("smtp_port", $config->getParameter("smtp_port"));
-        if (strlen($from) > 0) ini_set("sendmail_from", $from);
+        strlen(config::get("smtp")) > 0 ? ini_set("smtp", config::get("smtp")) : "";
+        strlen(config::get("smtp_port")) > 0 ? ini_set("smtp_port", config::get("smtp_port")) : "";
+        strlen(config::get("from")) > 0 ?  ini_set("sendmail_from", config::get("from")) : "";
+        strlen(config::get("smtp_port")) > 0 ?  ini_set("smtp_port", config::get("smtp_port")) : "";
+        strlen($from) > 0 ? ini_set("sendmail_from", $from) : "";
         if (strlen($to) == 0 || strlen($subject) == 0 || strlen($body) == 0) return false;
         $from = ini_get("sendmail_from");
-        $headers["From"] = '"' . $config->getParameter("title") . '"' . "<{$from}>";
+        $title = config::get("title");
+        $headers["From"] = "\"{$title}\" <{$from}>";
         $headers["User-Agent"] = "PHP";
         $headers["Return-Path"] = $from;
         $headers["Content-Type"] = "text/plain; charset=us-ascii";
-        $headers["X-Application"] = $config->getParameter("title");
-        return mail($to, $subject, str_replace("\n.\n", "\n..\n", $body), $headers, "-f {$from}");
+        $headers["X-Application"] = $title;
+        return @mail($to, $subject, str_replace("\n.\n", "\n..\n", $body), $headers, "-f {$from}");
     }
 }
