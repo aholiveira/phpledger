@@ -20,6 +20,7 @@ class user extends mysql_object implements iobject
     protected int $_active;
     protected int $_role;
     protected static string $tableName = "users";
+    protected static int $_token_length = 32;
 
     public function __construct(\mysqli $dblink)
     {
@@ -105,14 +106,17 @@ class user extends mysql_object implements iobject
     }
     public function verifyPassword(string $password): bool
     {
-        return sodium_crypto_pwhash_str_verify($this->_password, $password);
+        if (function_exists('sodium_crypto_pwhash_str_verify')) {
+            return sodium_crypto_pwhash_str_verify($this->getPassword(), $password);
+        } else {
+            return password_verify($password, $this->getPassword());
+        }
     }
     public function createToken(): string
     {
-        $tokenLength = 32;
-        return bin2hex(random_bytes($tokenLength));
+        return bin2hex(random_bytes(user::$_token_length));
     }
-    public function isTokenValid(string $token)
+    public function isTokenValid(string $token): bool
     {
         return (date("Y-m-d HH:ii:ss") <= $this->_token_expiry && $this->_token == $token);
     }

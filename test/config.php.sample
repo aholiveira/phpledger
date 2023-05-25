@@ -17,3 +17,5 @@ $config->setParameterValue("password", "your-password");
 $config->setParameterValue("smtp", "localhost");
 $config->setParameterValue("smtp_port", "25");
 $config->setParameterValue("from", "youremailhere@example.com");
+$config->setParameterValue("admin_username", "admin");
+$config->setParameterValue("admin_password", "admin");
