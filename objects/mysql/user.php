@@ -106,6 +106,7 @@ class user extends mysql_object implements iobject
     }
     public function verifyPassword(string $password): bool
     {
+        if (empty($password)) return FALSE;
         if (function_exists('sodium_crypto_pwhash_str_verify')) {
             return sodium_crypto_pwhash_str_verify($this->getPassword(), $password);
         } else {

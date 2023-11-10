@@ -33,12 +33,11 @@ if (!defined("ROOT_DIR")) {
 config::init(__DIR__ . '/config.json');
 
 $userauth = false;
+$post_user = ($_SERVER["REQUEST_METHOD"] == "POST" && array_key_exists("userid", $_POST)) ? $_POST["userid"] : "";
 $object_factory = new object_factory();
 $data_storage = $object_factory->data_storage();
 if ($_SERVER["REQUEST_METHOD"] == 'GET') {
-    #$host = config::get("host");
-    #$dbase = config::get("database");
-    if (auth_on_config()) {
+    if (authentication::isAuthOnConfig()) {
         if (!$data_storage->check()) {
             if (!headers_sent()) {
                 header('Location: update.php');
@@ -49,14 +48,14 @@ if ($_SERVER["REQUEST_METHOD"] == 'GET') {
         }
     }
 }
-if (array_key_exists("userid", $_POST) && null != $_POST["userid"]) {
-    if (!auth_on_config()) {
+if (!empty($post_user)) {
+    if (!authentication::isAuthOnConfig()) {
         print "AUTH NOT ON CONFIG";
         do_mysql_authentication();
     }
     $userauth = do_authentication();
     if ($userauth) {
-        $_SESSION['user'] = $_POST["userid"];
+        $_SESSION['user'] = $post_user;
         session_write_close();
         if ($data_storage->check()) {
             $defaults = $object_factory->defaults();
@@ -74,23 +73,10 @@ if (array_key_exists("userid", $_POST) && null != $_POST["userid"]) {
     }
 }
 
-function auth_on_config(): bool
-{
-    return (strlen(config::get("user")) && strlen(config::get("password")));
-}
 function do_mysql_authentication(): bool
 {
-    /**
-     * Do MySQL auth
-     */
-    $username = $_POST["userid"];
-    $pass = md5($_POST["pass"]);
-    $_SESSION['user'] = $username;
-    $_SESSION['pass'] = $pass;
-    config::set("user", $username);
-    config::set("password", $pass);
-    $db_link = @mysqli_connect(config::get("host"), $username, $pass, config::get("database"));
-    return ($db_link instanceof \mysqli);
+    global $post_user;
+    return authentication::authenticate($post_user, $_POST["pass"]);
 }
 /**
  * Create user (user migration from DB to internal auth), 
@@ -101,12 +87,13 @@ function verify_and_migrate_user()
     global $host;
     global $dbase;
     global $user_object;
+    global $post_user;
 
     $retval = false;
-    if (mysqli_connect($host, $_POST["userid"], md5($_POST["pass"]), $dbase)) {
+    if (mysqli_connect($host, $post_user, md5($_POST["pass"]), $dbase)) {
         $retval = true;
         $user_object->setId($user_object->getNextId());
-        $user_object->setUsername($_POST["userid"]);
+        $user_object->setUsername($post_user);
         $user_object->setPassword($_POST["pass"]);
         $user_object->setFullname('');
         $user_object->setRole(1);
@@ -123,11 +110,12 @@ function do_internal_authentication()
     global $db_link;
     global $object_factory;
     global $user_object;
+    global $post_user;
 
-    $username = config::get("user");
-    $pass = config::get("password");
+    $dbUser = config::get("user");
+    $dbPass = config::get("password");
     $retval = false;
-    $db_link = @mysqli_connect($host, $username, $pass, $dbase);
+    $db_link = @mysqli_connect($host, $dbUser, $dbPass, $dbase);
     if (!($db_link instanceof mysqli)) {
         /**
          * Config file credentials are invalid
@@ -139,8 +127,8 @@ function do_internal_authentication()
      * Config file credentials are valid.
      */
     $user_object = $object_factory->user();
-    $user_object->getByUsername($_POST["userid"]);
-    if (strcasecmp($user_object->getUsername(), $_POST["userid"]) == 0) {
+    $user_object->getByUsername($post_user);
+    if (strcasecmp($user_object->getUsername(), $post_user) == 0) {
         /**
          * User exists in internal auth DB
          * Authenticate user using data in the form
@@ -162,7 +150,7 @@ function do_authentication()
      * Do we have DB credentials on config file?
      * Choose user authentication method
      */
-    if (auth_on_config()) {
+    if (authentication::isAuthOnConfig()) {
         try {
             $retval = do_internal_authentication();
         } catch (\Exception $ex) {
@@ -202,7 +190,7 @@ function do_authentication()
             <table>
                 <tr>
                     <td>Utilizador:</td>
-                    <td><input size="10" maxlength="10" type="text" name="userid" id="userid" value="<?php (array_key_exists("userid", $_POST) ? $_POST["userid"] : "") ?>"></td>
+                    <td><input size="10" maxlength="10" type="text" name="userid" id="userid" value="<?php print $post_user; ?>"></td>
                 </tr>
                 <tr>
                     <td>Password:</td>

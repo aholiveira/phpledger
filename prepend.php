@@ -42,8 +42,9 @@ if (!headers_sent()) {
     header("X-Content-Type-Options: nosniff");
     header("Strict-Transport-Security: max-age=7776000");
     header("Referrer-Policy: strict-origin-when-cross-origin");
-    header("Content-Security-Policy: default-src 'self'; frame-ancestors 'none'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'");
+    #header("Content-Security-Policy: default-src 'self'; frame-ancestors 'none'; style-src 'self' 'unsafe-inline'; script-src * ");
 }
+include constant("OBJECTS_DIR") . '/authentication.php';
 include constant("OBJECTS_DIR") . '/config.class.php';
 include constant("OBJECTS_DIR") . '/object_factory.php';
 include constant("OBJECTS_DIR") . '/email.php';
