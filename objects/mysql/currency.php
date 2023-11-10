@@ -17,10 +17,10 @@ class currency extends mysql_object implements iobject
     {
         parent::__construct($dblink);
     }
-    public function getList(array $field_filter = array()): array
+    public static function getList(array $field_filter = array()): array
     {
-        $where = $this->getWhereFromArray($field_filter);
-        $sql = "SELECT moeda_id as id, moeda_desc as `description`, taxa as exchange_rate FROM {$this->tableName()} {$where} ORDER BY moeda_desc";
+        $where = static::getWhereFromArray($field_filter);
+        $sql = "SELECT moeda_id as id, moeda_desc as `description`, taxa as exchange_rate FROM " . static::tableName() . " {$where} ORDER BY moeda_desc";
         $retval = array();
         try {
             if (!is_object(static::$_dblink)) return $retval;
@@ -33,14 +33,14 @@ class currency extends mysql_object implements iobject
             }
             $stmt->close();
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
         return $retval;
     }
 
-    public function getById($id): currency
+    public static function getById($id): ?currency
     {
-        $sql = "SELECT moeda_id as id, moeda_desc as `description`, taxa as exchange_rate FROM {$this->tableName()} WHERE moeda_id=? ORDER BY moeda_desc";
+        $sql = "SELECT moeda_id as id, moeda_desc as `description`, taxa as exchange_rate FROM " . static::tableName() . " WHERE moeda_id=? ORDER BY moeda_desc";
         try {
             if (is_object(static::$_dblink)) {
                 $stmt = @static::$_dblink->prepare($sql);
@@ -50,14 +50,11 @@ class currency extends mysql_object implements iobject
                 $result = $stmt->get_result();
                 $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
                 $stmt->close();
-                if ($newobject instanceof currency) {
-                    $this->copyfromObject($newobject);
-                }
             }
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
-        return $this;
+        return $newobject;
     }
 
     public function update(): bool
@@ -94,7 +91,7 @@ class currency extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getNextId(string $field = "moeda_id"): int
+    public static function getNextId(string $field = "moeda_id"): int
     {
         return 0;
     }

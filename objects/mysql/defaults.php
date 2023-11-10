@@ -23,7 +23,7 @@ class defaults extends mysql_object implements iobject
     {
         parent::__construct($dblink);
     }
-    public function getList(array $field_filter = array()): array
+    public static function getList(array $field_filter = array()): array
     {
         $where = parent::getWhereFromArray($field_filter);
         $sql = "SELECT
@@ -33,7 +33,7 @@ class defaults extends mysql_object implements iobject
             moeda_mov as `currency_id`,
             `data` as `entry_date`,
             deb_cred as direction
-        FROM {$this->tableName()} 
+        FROM " . defaults::$tableName . "
         {$where}
         ORDER BY id";
         $retval = array();
@@ -48,11 +48,11 @@ class defaults extends mysql_object implements iobject
             }
             $stmt->close();
         } catch (Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
         return $retval;
     }
-    public function getById($id): defaults
+    public static function getById($id): ?defaults
     {
         $sql = "SELECT
             id,
@@ -61,7 +61,7 @@ class defaults extends mysql_object implements iobject
             moeda_mov as `currency_id`,
             `data` as `entry_date`,
             deb_cred as direction
-            FROM {$this->tableName()} 
+            FROM " . defaults::$tableName . "
             WHERE id=?";
         try {
             if (is_object(static::$_dblink)) {
@@ -73,14 +73,11 @@ class defaults extends mysql_object implements iobject
                 $result = $stmt->get_result();
                 $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
                 $stmt->close();
-                if ($newobject instanceof defaults) {
-                    $this->copyfromObject($newobject);
-                }
             }
         } catch (Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
-        return $this;
+        return $newobject;
     }
     /**
      * Set values to the initial values

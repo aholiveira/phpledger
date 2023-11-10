@@ -16,10 +16,10 @@ class ledger extends mysql_object implements iobject
     {
         parent::__construct($dblink);
     }
-    public function getList(array $field_filter = array()): array
+    public static function getList(array $field_filter = array()): array
     {
-        $where = $this->getWhereFromArray($field_filter);
-        $sql = "SELECT id FROM {$this->tableName()} {$where} ORDER BY id";
+        $where = static::getWhereFromArray($field_filter);
+        $sql = "SELECT id FROM " . static::tableName() . " {$where} ORDER BY id";
         $retval = array();
         try {
             if (!is_object(static::$_dblink)) return $retval;
@@ -28,23 +28,22 @@ class ledger extends mysql_object implements iobject
             $stmt->execute();
             $stmt->bind_result($id);
             while ($stmt->fetch()) {
-                $newobject = new ledger(static::$_dblink);
-                $retval[$id] = $newobject;
+                $retval[$id] = null;
             }
             $stmt->close();
-            foreach ($retval as $id => $newobject) {
-                $retval[$id] = $newobject->getById($id);
+            foreach (array_keys($retval) as $id) {
+                $retval[$id] = static::getById($id);
             }
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
         return $retval;
     }
 
-    public function getById($id): ledger
+    public static function getById($id): ?ledger
     {
-        $sql = "SELECT id, nome as `name` FROM {$this->tableName()} WHERE id=?";
-        if (!is_object(static::$_dblink)) return $this;
+        $sql = "SELECT id, nome as `name` FROM " . static::tableName() . " WHERE id=?";
+        if (!is_object(static::$_dblink)) return null;
         try {
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
@@ -53,13 +52,10 @@ class ledger extends mysql_object implements iobject
             $result = $stmt->get_result();
             $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
             $stmt->close();
-            if ($newobject instanceof ledger) {
-                $this->copyfromObject($newobject);
-            }
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
-        return $this;
+        return $newobject;
     }
 
     public function update(): bool
@@ -96,7 +92,7 @@ class ledger extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getNextId(string $field = "id"): int
+    public static function getNextId(string $field = "id"): int
     {
         return parent::getNextId($field);
     }

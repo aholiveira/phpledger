@@ -44,7 +44,7 @@ function prepare_accounttype(): bool
     $retval = true;
     $object = $object_factory->accounttype();
     for ($id = 1; $id <= 5; $id++) {
-        $object->getById($id);
+        $object = $object->getById($id);
         if (!isset($object->id) || $object->id === $id) {
             $object->id = $id;
             $object->description = "Account type {$id}";
@@ -60,7 +60,7 @@ function prepare_account(): bool
     $retval = true;
     $object = $object_factory->account();
     for ($id = 1; $id <= 5; $id++) {
-        $object->getById($id);
+        $object = $object->getById($id);
         if (!isset($object->id) || $object->id === $id) {
             $object->id = $id;
             $object->number = "Account number {$id}";
@@ -186,7 +186,7 @@ function test_object(mysql_object $object, $id = 1)
     $retval = true;
     try {
         print(str_pad("Testing {$object} ", constant("PADDING"), ".") . " : ");
-        $object->getById($id);
+        $object = $object->getById($id);
         if (isset($object->id)) {
             $retval = (assert($object->id === $id, "getById") && $retval);
         }

@@ -16,13 +16,13 @@ class accounttype extends mysql_object implements iobject
     public function __construct(\mysqli $dblink)
     {
         parent::__construct($dblink);
-        $this->getNextId();
+        static::getNextId();
     }
 
-    public function getList(array $field_filter = array()): array
+    public static function getList(array $field_filter = array()): array
     {
         $where = static::getWhereFromArray($field_filter);
-        $sql = "SELECT tipo_id as id, tipo_desc as description, savings FROM {$this->tableName()} {$where}";
+        $sql = "SELECT tipo_id as id, tipo_desc as description, savings FROM " . static::tableName() . " {$where}";
         $retval = array();
         try {
             if (!is_object(static::$_dblink)) return $retval;
@@ -35,16 +35,16 @@ class accounttype extends mysql_object implements iobject
             }
             $stmt->close();
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
         return $retval;
     }
 
-    public function getById(int $id): accounttype
+    public static function getById(int $id): ?accounttype
     {
-        $sql = "SELECT tipo_id as id, tipo_desc as description, savings FROM {$this->tableName()} WHERE tipo_id=?";
+        $sql = "SELECT tipo_id as id, tipo_desc as description, savings FROM " . static::tableName() . " WHERE tipo_id=?";
         try {
-            if (!is_object(static::$_dblink)) return $this;
+            if (!is_object(static::$_dblink)) return null;
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $id);
@@ -52,13 +52,10 @@ class accounttype extends mysql_object implements iobject
             $result = $stmt->get_result();
             $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
             $stmt->close();
-            if ($newobject instanceof accounttype) {
-                $this->copyfromObject($newobject);
-            }
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
-        return $this;
+        return $newobject;
     }
 
 
@@ -128,7 +125,7 @@ class accounttype extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getNextId(string $field = "tipo_id"): int
+    public static function getNextId(string $field = "tipo_id"): int
     {
         $retval = parent::getNextId($field);
         return $retval;

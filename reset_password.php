@@ -26,13 +26,14 @@ $pagetitle = "Redefini&ccedil;o de palavra-passe";
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $token_id = filter_input(INPUT_GET, "token_id", FILTER_SANITIZE_ENCODED);
         if (!empty($token_id)) {
-            if (is_null($user->getByToken($token_id))) {
+            $user = $user::getByToken($token_id);
+            if ($user instanceof user) {
                 print "<meta http-equiv='REFRESH' content='10; URL=index.php'>";
                 print "<p>Token invalido<br></p>";
                 print "<p>Ir&aacute; ser redireccionado para a pagina inicial.<br></p>";
                 exit(1);
             } else {
-                if (!$user->isTokenValid($token_id)) {
+                if (!is_null($user) && !$user->isTokenValid($token_id)) {
                     print "<meta http-equiv='REFRESH' content='10; URL=index.php'>";
                     print "<p>Token invalido ou expirado<br></p>";
                     print "<p>Ir&aacute; ser redireccionado para a pagina inicial.<br></p>";
@@ -47,7 +48,8 @@ $pagetitle = "Redefini&ccedil;o de palavra-passe";
         $verify_password = filter_input(INPUT_GET, "verify_password", FILTER_SANITIZE_ENCODED);
         if (array_key_exists("password", $_POST) && array_key_exists("verify_password", $_POST)) {
             if ($password == $verify_password) {
-                if (!is_null($user->getByToken($token_id)) && $user->isTokenValid($token_id)) {
+                $user = $user::getByToken($token_id);
+                if (($user instanceof user) && $user->isTokenValid($token_id)) {
                     $user->setPassword($password);
                     $user->setToken('');
                     $user->setTokenExpiry(null);

@@ -16,7 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (stristr($_POST["update"], "gravar")) {
         $object->id = filter_input(INPUT_POST, "tipo_id", FILTER_VALIDATE_INT);
         $object->description = filter_input(INPUT_POST, "tipo_desc", FILTER_DEFAULT);
-        $object->savings = filter_has_var(INPUT_POST, "saving") ? 1 : 0;
+        $object->savings = filter_has_var(INPUT_POST, "savings") ? 1 : 0;
         $retval = $object->update();
     } else {
         $object->id = filter_input(INPUT_POST, "tipo_id", FILTER_VALIDATE_INT);
@@ -38,7 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     if (filter_has_var(INPUT_GET, "tipo_id")) {
         $tipo_id = filter_input(INPUT_GET, "tipo_id", FILTER_VALIDATE_INT);
         if ($tipo_id > 0) {
-            $object->getById($tipo_id);
+            $object = $object->getById($tipo_id);
         }
     }
 }
@@ -79,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                     <tr>
                         <td>Poupan&ccedil;a</td>
                         <td data-label="Poupan&ccedil;a">
-                            <input type="checkbox" name="savings" <?php ($object->savings ? "checked" : ""); ?>>
+                            <input type="checkbox" name="savings" <?php print($object->savings ? "checked" : ""); ?>>
                         </td>
                     </tr>
                     <tr>

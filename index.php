@@ -59,7 +59,7 @@ if (!empty($post_user)) {
         session_write_close();
         if ($data_storage->check()) {
             $defaults = $object_factory->defaults();
-            $defaults->getById(1);
+            $defaults = $defaults->getById(1);
             $defaults->entry_date = date("Y-m-d");
             $defaults->update();
             header("Location: ledger_entries.php?filter_sdate=" . date('Y-m-01'));

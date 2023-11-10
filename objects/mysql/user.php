@@ -178,7 +178,7 @@ class user extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getList(array $field_filter = array()): array
+    public static function getList(array $field_filter = array()): array
     {
         $where = parent::getWhereFromArray($field_filter);
         $sql = "SELECT id, 
@@ -190,9 +190,9 @@ class user extends mysql_object implements iobject
             `token` AS `_token`, 
             `token_expiry` AS `_token_expiry`, 
             active AS `_active` 
-            FROM {$this->tableName()} "
-            . "{$where} "
-            . "ORDER BY username";
+            FROM " . static::tableName() . " 
+            {$where} 
+            ORDER BY username";
         $retval = array();
         try {
             if (!is_object(static::$_dblink)) return $retval;
@@ -205,7 +205,7 @@ class user extends mysql_object implements iobject
             }
             $stmt->close();
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
         return $retval;
     }
@@ -233,15 +233,12 @@ class user extends mysql_object implements iobject
             $result = $stmt->get_result();
             $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
             $stmt->close();
-            if ($newobject instanceof user) {
-                $this->copyfromObject($newobject);
-            }
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
-        return $this;
+        return $newobject;
     }
-    public function getById(int $id): user
+    public static function getById(int $id): ?user
     {
         $sql = "SELECT id, 
         `username` AS `_username`, 
@@ -252,10 +249,10 @@ class user extends mysql_object implements iobject
         `token` AS `_token`, 
         `token_expiry` AS `_token_expiry`, 
         `active` AS `_active` 
-        FROM {$this->tableName()} 
+        FROM " . static::tableName() . "
         WHERE id=?";
         if (!is_object(static::$_dblink)) {
-            return $this;
+            return null;
         }
         try {
             $stmt = @static::$_dblink->prepare($sql);
@@ -265,13 +262,10 @@ class user extends mysql_object implements iobject
             $result = $stmt->get_result();
             $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
             $stmt->close();
-            if ($newobject instanceof user) {
-                $this->copyfromObject($newobject);
-            }
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
-        return $this;
+        return $newobject;
     }
     public function resetPassword(): bool
     {
@@ -296,7 +290,7 @@ class user extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getByToken(string $token): ?user
+    public static function getByToken(string $token): ?user
     {
         $sql = "SELECT id, 
         `username` AS `_username`, 
@@ -307,28 +301,22 @@ class user extends mysql_object implements iobject
         `token` AS `_token`, 
         `token_expiry` AS `_token_expiry`, 
         `active` AS `_active` 
-        FROM {$this->tableName()} 
+        FROM " . static::tableName() . "
         WHERE token=?";
         if (!is_object(static::$_dblink)) {
-            return $this;
+            return null;
         }
-        $retval = $this;
-        $this->clear();
+        $retval = null;
         try {
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("s", $token);
             $stmt->execute();
             $result = $stmt->get_result();
-            $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
             $stmt->close();
-            if ($newobject instanceof user) {
-                $this->copyfromObject($newobject);
-            } else {
-                $retval = null;
-            }
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
         return $retval;
     }

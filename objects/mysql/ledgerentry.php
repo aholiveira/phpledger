@@ -35,7 +35,7 @@ class ledgerentry extends mysql_object implements iobject
     {
         parent::__construct($dblink);
     }
-    public function getList(array $field_filter = array()): array
+    public static function getList(array $field_filter = array()): array
     {
         $where = parent::getWhereFromArray($field_filter);
         $sql = "SELECT mov_id AS id, data_mov AS `entry_date`, tipo_mov AS category_id,
@@ -43,7 +43,7 @@ class ledgerentry extends mysql_object implements iobject
             round(valor_mov,2) as currency_amount, deb_cred AS `direction`, moeda_mov AS currency_id,
             cambio AS exchange_rate, valor_euro AS euro_amount,
             obs AS remarks, username, last_modified
-            FROM {$this->tableName()}
+            FROM " . static::tableName() . "
             {$where}
             ORDER BY data_mov, mov_id";
         $retval = array();
@@ -61,22 +61,22 @@ class ledgerentry extends mysql_object implements iobject
             }
             $stmt->close();
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
         return $retval;
     }
 
-    public function getById($id): ledgerentry
+    public static function getById($id): ?ledgerentry
     {
         $sql = "SELECT mov_id AS id, data_mov AS `entry_date`, tipo_mov AS category_id,
             conta_id AS account_id,
             round(valor_mov,2) as currency_amount, deb_cred AS `direction`, moeda_mov AS currency_id,
             cambio AS exchange_rate, valor_euro AS euro_amount,
             obs AS remarks, username, last_modified
-            FROM {$this->tableName()}
+            FROM " . static::tableName() . "
             WHERE mov_id=?";
         if (!is_object(static::$_dblink)) {
-            return $this;
+            return null;
         }
         try {
             $stmt = @static::$_dblink->prepare($sql);
@@ -87,13 +87,12 @@ class ledgerentry extends mysql_object implements iobject
             $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
             $stmt->close();
             if ($newobject instanceof ledgerentry) {
-                $this->copyfromObject($newobject);
-                $this->getValuesForForeignFields();
+                $newobject->getValuesForForeignFields();
             }
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
-        return $this;
+        return $newobject;
     }
     public function getBalanceBeforeDate($date, $account_id = null): ?float
     {
@@ -155,16 +154,13 @@ class ledgerentry extends mysql_object implements iobject
     private function getValuesForForeignFields()
     {
         if (isset($this->category_id)) {
-            $this->category = new entry_category(static::$_dblink);
-            $this->category->getById($this->category_id);
+            $this->category = entry_category::getById($this->category_id);
         }
         if (isset($this->account_id)) {
-            $this->account = new account(static::$_dblink);
-            $this->account->getById($this->account_id);
+            $this->account = account::getById($this->account_id);
         }
         if (isset($this->currency_id)) {
-            $this->currency = new currency(static::$_dblink);
-            $this->currency->getById($this->currency_id);
+            $this->currency = currency::getById($this->currency_id);
         }
     }
     public function update(): bool
@@ -223,7 +219,7 @@ class ledgerentry extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getNextId(string $field = "mov_id"): int
+    public static function getNextId(string $field = "mov_id"): int
     {
         return parent::getNextId($field);
     }

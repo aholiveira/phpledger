@@ -35,7 +35,7 @@ class account extends mysql_object implements iobject
     {
         parent::__construct($dblink);
     }
-    public function getList(array $field_filter = array()): array
+    public static function getList(array $field_filter = array()): array
     {
         $where = parent::getWhereFromArray($field_filter);
         $sql = "SELECT
@@ -49,7 +49,7 @@ class account extends mysql_object implements iobject
             conta_abertura as open_date,
             conta_fecho as close_date,
             activa as active
-        FROM {$this->tableName()}
+        FROM " . static::$tableName . "
         {$where}
         ORDER BY activa DESC, conta_nome";
         $retval = array();
@@ -64,12 +64,12 @@ class account extends mysql_object implements iobject
             }
             $stmt->close();
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
         return $retval;
     }
 
-    public function getById($id): account
+    public static function getById($id): ?account
     {
         $sql = "SELECT
             conta_id as id,
@@ -82,7 +82,7 @@ class account extends mysql_object implements iobject
             conta_abertura as open_date,
             conta_fecho as close_date,
             activa as active
-        FROM {$this->tableName()}
+        FROM " . static::tableName() . "
         WHERE conta_id=?";
         try {
             if (is_object(static::$_dblink)) {
@@ -93,14 +93,11 @@ class account extends mysql_object implements iobject
                 $result = $stmt->get_result();
                 $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
                 $stmt->close();
-                if ($newobject instanceof account) {
-                    $this->copyfromObject($newobject);
-                }
             }
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
-        return $this;
+        return $newobject;
     }
     /**
      * @return array array with keys 'income', 'expense' and 'balance'
@@ -228,7 +225,7 @@ class account extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getNextId(string $field = "conta_id"): int
+    public static function getNextId(string $field = "conta_id"): int
     {
         return parent::getNextId($field);
     }

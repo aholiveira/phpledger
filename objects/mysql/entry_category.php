@@ -23,12 +23,12 @@ class entry_category extends mysql_object implements iobject
     {
         parent::__construct($dblink);
     }
-    public function getList(array $field_filter = array()): array
+    public static function getList(array $field_filter = array()): array
     {
-        $where = $this->getWhereFromArray($field_filter);
-        $sql = "SELECT tipo_id as id FROM {$this->tableName()} "
-            . "{$where} "
-            . "ORDER BY active desc, tipo_desc";
+        $where = static::getWhereFromArray($field_filter);
+        $sql = "SELECT tipo_id as id FROM " . static::$tableName . "
+            {$where} 
+            ORDER BY active desc, tipo_desc";
         $retval = array();
         try {
             if (!is_object(static::$_dblink)) return $retval;
@@ -45,7 +45,7 @@ class entry_category extends mysql_object implements iobject
                 $retval[$id] = $newobject->getById($id);
             }
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
         return $retval;
     }
@@ -70,12 +70,12 @@ class entry_category extends mysql_object implements iobject
         }
         return $balance;
     }
-    public function getById(int $id): entry_category
+    public static function getById(int $id): ?entry_category
     {
         $sql = "SELECT tipo_id AS id, parent_id, tipo_desc AS `description`, active 
-            FROM {$this->tableName()} 
+            FROM " . static::tableName() . "
             WHERE tipo_id=? ";
-        if (!is_object(static::$_dblink)) return $this;
+        if (!is_object(static::$_dblink)) return null;
         try {
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
@@ -85,14 +85,13 @@ class entry_category extends mysql_object implements iobject
             $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
             $stmt->close();
             if ($newobject instanceof entry_category) {
-                $this->copyfromObject($newobject);
-                $this->getParentDescription();
-                $this->children = $this->getChildren();
+                $newobject->getParentDescription();
+                $newobject->children = $newobject->getChildren();
             }
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
-        return $this;
+        return $newobject;
     }
     public function getParentDescription(): string
     {
@@ -216,7 +215,7 @@ class entry_category extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getNextId(string $field = "tipo_id"): int
+    public static function getNextId(string $field = "tipo_id"): int
     {
         return parent::getNextId($field);
     }

@@ -17,8 +17,8 @@ interface iobject
     function validate(): bool;
     function error_message(): string;
     function update(): bool;
-    function getNextId(): int;
-    function getList(array $field_filter = array()): array;
-    function getById(int $id): iobject;
     function delete(): bool;
+    static function getNextId(): int;
+    static function getList(array $field_filter = array()): array;
+    static function getById(int $id): ?iobject;
 }

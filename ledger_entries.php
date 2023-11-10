@@ -112,7 +112,7 @@ function build_and_save_record()
     if (!$entry->update()) {
         Html::myalert("Ocorreu um erro na gravacao");
     } else {
-        $defaults->getById(1);
+        $defaults = $defaults->getById(1);
         $defaults->category_id = $entry->category_id;
         $defaults->currency_id = $entry->currency_id;
         $defaults->account_id = $entry->account_id;
@@ -187,7 +187,7 @@ function build_and_save_record()
             " ORDER BY data_mov, mov_id";
         if ($edit > 0) {
             $edit_entry = $object_factory->ledgerentry();
-            $edit_entry->getById($edit);
+            $edit_entry = $edit_entry->getById($edit);
             if ($edit_entry->id != $edit)
                 die("Record not found");
         }
@@ -199,7 +199,7 @@ function build_and_save_record()
 
         // Movimento para editar
         if ($edit > 0) {
-            $ledger_entry->getById($edit);
+            $ledger_entry = $ledger_entry->getById($edit);
             if ($ledger_entry->id != $edit) {
                 Html::myalert("Registo com ID {$edit} nao encontrado");
             }
@@ -207,14 +207,14 @@ function build_and_save_record()
 
         // Defaults
         $defaults = $object_factory->defaults();
-        $defaults->getById(1);
+        $defaults = $defaults->getById(1);
         if ($defaults->id != 1) {
             $defaults->init();
         }
         // Tipos movimento
         $category_id = $edit > 0 ? $edit_entry->category_id : $defaults->category_id;
         $entry_category = $object_factory->entry_category();
-        $entry_category->getById($category_id);
+        $entry_category = $entry_category->getById($category_id);
         $entry_viewer = $view_factory->entry_category_view($entry_category);
         $tipo_mov_opt = $entry_viewer->getSelectFromList($entry_category->getList(array(
             'active' => array('operator' => '=', 'value' => '1'),
@@ -229,7 +229,7 @@ function build_and_save_record()
         $conta_opt = "";
         $account_id = $edit > 0 ? $edit_entry->account_id : $defaults->account_id;
         $account = $object_factory->account();
-        $account->getById($account_id);
+        $account = $account->getById($account_id);
         $account_viewer = $view_factory->account_view($account);
         $conta_opt = $account_viewer->getSelectFromList($account->getList(array('activa' => array('operator' => '=', 'value' => '1'))), $account_id);
         $filter_string = "";
