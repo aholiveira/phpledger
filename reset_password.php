@@ -89,11 +89,11 @@ $pagetitle = "Redefini&ccedil;o de palavra-passe";
             <table>
                 <tr>
                     <td>Nova palavra-passe: </td>
-                    <td><input size="10" maxlength="250" type="password" name="password" value="" required></td>
+                    <td><input size="10" maxlength="250" type="password" name="password" autocomplete="new-password" value="" required></td>
                 </tr>
                 <tr>
                     <td>Confirmar palavra-passe: </td>
-                    <td><input size="10" maxlength="250" type="password" name="verify_password" value="" required></td>
+                    <td><input size="10" maxlength="250" type="password" name="verify_password" autocomplete="new-password" value="" required></td>
                 </tr>
                 <tr>
                     <td colspan="2" style="text-align: center"><input type="submit" value="Repor"></td>

@@ -9,6 +9,9 @@
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  */
+define("USER_ROLE_ADM", 255);
+define("USER_ROLE_RW", 192);
+define("USER_ROLE_RO", 128);
 class user extends mysql_object implements iobject
 {
     protected string $_username;
@@ -209,7 +212,7 @@ class user extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getByUsername(string $username): user
+    public static function getByUsername(string $username): ?user
     {
         $sql = "SELECT id, 
             username AS `_username`, 
@@ -220,10 +223,10 @@ class user extends mysql_object implements iobject
             `token` AS `_token`, 
             `token_expiry` AS `_token_expiry`, 
             active AS `_active` 
-            FROM {$this->tableName()} "
-            . "WHERE username=?";
+            FROM " . static::tableName() . "
+            WHERE username=?";
         if (!is_object(static::$_dblink)) {
-            return $this;
+            return null;
         }
         try {
             $stmt = @static::$_dblink->prepare($sql);

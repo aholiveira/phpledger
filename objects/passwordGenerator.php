@@ -60,7 +60,6 @@ class passwordGenerator
                 }
             }
         }
-
         return $password;
     }
 }
