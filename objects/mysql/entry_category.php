@@ -75,7 +75,7 @@ class entry_category extends mysql_object implements iobject
         $sql = "SELECT tipo_id AS id, parent_id, tipo_desc AS `description`, active 
             FROM " . static::tableName() . "
             WHERE tipo_id=? ";
-        if (!is_object(static::$_dblink)) return null;
+        if (!isset(static::$_dblink)) return null;
         try {
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
