@@ -17,7 +17,7 @@ class Html
      */
     public static function year_option(?int $selected = null, int $start = 1990, ?int $end = null): string
     {
-        return static::option_list($start, is_null($end) ? date("Y") : $end, is_null($selected) ? date("Y") : $selected);
+        return self::option_list($start, is_null($end) ? date("Y") : $end, is_null($selected) ? date("Y") : $selected);
     }
     /**
      * Option list for month selection
@@ -26,7 +26,7 @@ class Html
      */
     public static function mon_option(?string $selected = null)
     {
-        return static::option_list(1, 12, is_null($selected) ? date("n") : $selected);
+        return self::option_list(1, 12, is_null($selected) ? date("n") : $selected);
     }
     /**
      * Option list for day selection
@@ -35,15 +35,15 @@ class Html
      */
     public static function day_option(?string $selected = null)
     {
-        return static::option_list(1, 31, is_null($selected) ? date("d") : $selected);
+        return self::option_list(1, 31, is_null($selected) ? date("d") : $selected);
     }
     public static function hour_opt(?string $selected = null)
     {
-        return static::option_list(0, 23, is_null($selected) ? date("G") : $selected);
+        return self::option_list(0, 23, is_null($selected) ? date("G") : $selected);
     }
     public static function min_opt(?string $selected = null)
     {
-        return static::option_list(0, 60, is_null($selected) ? date("i") : $selected);
+        return self::option_list(0, 60, is_null($selected) ? date("i") : $selected);
     }
     public static function option_list(int $start, int $end, ?string $selected = null): string
     {
