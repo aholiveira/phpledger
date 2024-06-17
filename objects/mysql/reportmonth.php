@@ -21,7 +21,9 @@ class report_month extends report implements ireport
     public function getReport(array $params = array()): report_month
     {
         global $object_factory;
-        if (!is_object($this->db)) return $this;
+        if (!($this->db->ping())) {
+            return $this;
+        }
         $year = array_key_exists("year", $params) ? $params["year"] : date("Y");
         for ($month = 1; $month <= 12; $month++) {
             $this->columnHeaders[$month] = date("M", mktime(0, 0, 0, $month, 1));

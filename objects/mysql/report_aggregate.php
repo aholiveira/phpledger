@@ -39,7 +39,9 @@ class report_month implements ireport
         $month = 0;
         if (!array_key_exists("year", $params)) return $this;
         $this->year = $params["year"];
-        if (!is_object($this->db)) return $this;
+        if (!($this->db->ping())) {
+            return $this;
+        }
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param('i', $this->year);
         $stmt->execute();

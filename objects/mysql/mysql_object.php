@@ -45,10 +45,15 @@ abstract class mysql_object implements iobject
     public static function getNextId(string $field = "id"): int
     {
         $db = static::$_dblink;
-        if (!is_object($db) || is_null(static::$tableName)) {
-            return -1;
+        $retval = -1;
+        if (is_null(static::$tableName)) {
+            return $retval;
         }
+
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             $sql = "SELECT `{$field}` FROM " . static::$tableName . " ORDER BY `{$field}`";
             $result = @$db->query($sql);
             if ($result == FALSE) $retval = -1;

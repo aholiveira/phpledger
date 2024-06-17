@@ -60,7 +60,7 @@ include constant("ROOT_DIR") . '/html.php';
  */
 function print_var($var, $comment = "", bool $debug = false)
 {
-    if (($debug && constant("DEBUG") == 1) || !$debug) {
+    if (($debug && defined("DEBUG") && constant("DEBUG") == 1) || !$debug) {
         print "\r\n<pre>START###{$comment}###START<br>\r\n";
         print nl2br(print_r($var, true));
         print "\r\n<br>END###{$comment}###END</pre><br>\r\n";

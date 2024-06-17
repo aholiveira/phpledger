@@ -54,7 +54,9 @@ class account extends mysql_object implements iobject
         ORDER BY activa DESC, conta_nome";
         $retval = array();
         try {
-            if (!is_object(static::$_dblink)) return $retval;
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             $stmt = static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception(static::$_dblink->error);
             $stmt->execute();
@@ -84,20 +86,22 @@ class account extends mysql_object implements iobject
             activa as active
         FROM " . static::tableName() . "
         WHERE conta_id=?";
+        $retval = null;
         try {
-            if (is_object(static::$_dblink)) {
-                $stmt = @static::$_dblink->prepare($sql);
-                if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
-                $stmt->bind_param("i", $id);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
-                $stmt->close();
+            if (!(static::$_dblink->ping())) {
+                return $retval;
             }
+            $stmt = @static::$_dblink->prepare($sql);
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $stmt->close();
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
         }
-        return $newobject;
+        return $retval;
     }
     /**
      * @return array array with keys 'income', 'expense' and 'balance'
@@ -129,16 +133,17 @@ class account extends mysql_object implements iobject
                 GROUP BY conta_id";
         $retval = array();
         try {
-            if (is_object(static::$_dblink)) {
-                $stmt = @static::$_dblink->prepare($sql);
-                if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
-                $stmt->bind_param(str_repeat('s', sizeof($param_array)), ...$param_array);
-                $stmt->execute();
-                $stmt->bind_result($income, $expense, $balance);
-                $stmt->fetch();
-                $retval = array('income' => $income, 'expense' => $expense, 'balance' => $balance);
-                $stmt->close();
+            if (!(static::$_dblink->ping())) {
+                return $retval;
             }
+            $stmt = @static::$_dblink->prepare($sql);
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            $stmt->bind_param(str_repeat('s', sizeof($param_array)), ...$param_array);
+            $stmt->execute();
+            $stmt->bind_result($income, $expense, $balance);
+            $stmt->fetch();
+            $retval = array('income' => $income, 'expense' => $expense, 'balance' => $balance);
+            $stmt->close();
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
@@ -147,9 +152,12 @@ class account extends mysql_object implements iobject
     public function update(): bool
     {
         $retval = false;
-        if (!is_object(static::$_dblink)) return $retval;
+
         $sql = "SELECT conta_id FROM {$this->tableName()} WHERE conta_id=?";
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;
@@ -199,9 +207,11 @@ class account extends mysql_object implements iobject
     public function delete(): bool
     {
         $retval = false;
-        if (!is_object(static::$_dblink)) return $retval;
         $sql = "SELECT conta_id FROM {$this->tableName()} WHERE conta_id=?";
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;

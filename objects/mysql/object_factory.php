@@ -39,14 +39,23 @@ class object_factory implements iobject_factory
                 throw new \RuntimeException('mysqli connection error: ' . static::$_dblink->connect_error);
             }
         } catch (\Exception $ex) {
+            static::handle_error($ex);
+            /*
             #print_var($this, "THIS", true);
             print_var(static::$_dblink, "DBLINK", true);
             print_var($ex, "EXCEPTION", true);
             debug_print_backtrace();
             debug_print($ex->getMessage());
             debug_print($ex->getTraceAsString());
+            */
+            //exit(static::$_dblink->connect_errno);
         }
         return static::$_dblink;
+    }
+    public static function handle_error(\Exception $ex)
+    {
+        print "<p>Error [" . $ex->getMessage() .  "] while connecting to the database. Please check config file.</p>";
+        exit(0);
     }
     public static function data_storage(): idata_storage
     {

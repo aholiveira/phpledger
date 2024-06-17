@@ -48,7 +48,7 @@ class ledgerentry extends mysql_object implements iobject
             ORDER BY data_mov, mov_id";
         $retval = array();
         try {
-            if (!is_object(static::$_dblink)) {
+            if (!(static::$_dblink->ping())) {
                 return $retval;
             }
             $stmt = static::$_dblink->prepare($sql);
@@ -75,35 +75,36 @@ class ledgerentry extends mysql_object implements iobject
             obs AS remarks, username, last_modified
             FROM " . static::tableName() . "
             WHERE mov_id=?";
-        if (!is_object(static::$_dblink)) {
-            return null;
-        }
+        $retval = null;
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
-            $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
             $stmt->close();
-            if ($newobject instanceof ledgerentry) {
-                $newobject->getValuesForForeignFields();
+            if ($retval instanceof ledgerentry) {
+                $retval->getValuesForForeignFields();
             }
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
         }
-        return $newobject;
+        return $retval;
     }
     public function getBalanceBeforeDate($date, $account_id = null): ?float
     {
-        $balance = null;
+        $retval = null;
         $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(valor_euro),valor_euro,0),5)),2) AS balance
                 FROM {$this->tableName()}
                 WHERE data_mov<?" . (!is_null($account_id) ? " AND conta_id=?" : "");
-        if (!is_object(static::$_dblink)) {
-            return $balance;
-        }
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             if (is_null($account_id)) {
@@ -112,13 +113,13 @@ class ledgerentry extends mysql_object implements iobject
                 $stmt->bind_param("si", $date, $account_id);
             }
             $stmt->execute();
-            $stmt->bind_result($balance);
+            $stmt->bind_result($retval);
             $stmt->fetch();
             $stmt->close();
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
-        return $balance;
+        return $retval;
     }
     /**
      * @param array $field_filter an array of the form ('field_name' => array('operator' => SQL operator, 'value' => value to filter by))
@@ -132,24 +133,24 @@ class ledgerentry extends mysql_object implements iobject
     {
         $where = parent::getWhereFromArray($field_filter);
         $tableName = static::$tableName;
-        $balance = null;
+        $retval = null;
         $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(valor_euro),valor_euro,0),5)),2) AS balance
                 FROM {$tableName}
                 WHERE {$where}";
-        if (!is_object(static::$_dblink)) {
-            return $balance;
-        }
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->execute();
-            $stmt->bind_result($balance);
+            $stmt->bind_result($retval);
             $stmt->fetch();
             $stmt->close();
         } catch (\Exception $ex) {
             print_var($ex, "", true);
         }
-        return $balance;
+        return $retval;
     }
     private function getValuesForForeignFields()
     {
@@ -168,6 +169,9 @@ class ledgerentry extends mysql_object implements iobject
         $retval = false;
         $sql = "SELECT mov_id FROM {$this->tableName()} WHERE mov_id=?";
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             static::$_dblink->begin_transaction();
             if (empty($this->id)) {
                 $this->id = $this->getNextId();

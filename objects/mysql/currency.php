@@ -23,7 +23,9 @@ class currency extends mysql_object implements iobject
         $sql = "SELECT moeda_id as id, moeda_desc as `description`, taxa as exchange_rate FROM " . static::tableName() . " {$where} ORDER BY moeda_desc";
         $retval = array();
         try {
-            if (!is_object(static::$_dblink)) return $retval;
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->execute();
@@ -41,20 +43,22 @@ class currency extends mysql_object implements iobject
     public static function getById($id): ?currency
     {
         $sql = "SELECT moeda_id as id, moeda_desc as `description`, taxa as exchange_rate FROM " . static::tableName() . " WHERE moeda_id=? ORDER BY moeda_desc";
+        $retval = null;
         try {
-            if (is_object(static::$_dblink)) {
-                $stmt = @static::$_dblink->prepare($sql);
-                if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
-                $stmt->bind_param("i", $id);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
-                $stmt->close();
+            if (!(static::$_dblink->ping())) {
+                return $retval;
             }
+            $stmt = @static::$_dblink->prepare($sql);
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $stmt->close();
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
         }
-        return $newobject;
+        return $retval;
     }
 
     public function update(): bool
@@ -62,6 +66,9 @@ class currency extends mysql_object implements iobject
         $retval = false;
         $sql = "SELECT moeda_id FROM {$this->tableName()} WHERE moeda_id=?";
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;

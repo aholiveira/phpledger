@@ -63,21 +63,23 @@ class defaults extends mysql_object implements iobject
             deb_cred as direction
             FROM " . defaults::$tableName . "
             WHERE id=?";
+        $retval = null;
         try {
-            if (is_object(static::$_dblink)) {
-                $stmt = @static::$_dblink->prepare($sql);
-                if ($stmt == false) throw new mysqli_sql_exception();
-                $stmt->bind_param("i", $id);
-                $stmt->execute();
-                if (!$stmt) throw new mysqli_sql_exception();
-                $result = $stmt->get_result();
-                $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
-                $stmt->close();
+            if (!(static::$_dblink->ping())) {
+                return $retval;
             }
+            $stmt = @static::$_dblink->prepare($sql);
+            if ($stmt == false) throw new mysqli_sql_exception();
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            if (!$stmt) throw new mysqli_sql_exception();
+            $result = $stmt->get_result();
+            $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $stmt->close();
         } catch (Exception $ex) {
             static::handleException($ex, $sql);
         }
-        return $newobject;
+        return $retval;
     }
     /**
      * Set values to the initial values
@@ -95,10 +97,12 @@ class defaults extends mysql_object implements iobject
     }
     public function update(): bool
     {
-        $retval = false;
-        if (!is_object(static::$_dblink)) return $retval;
         $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
+        $retval = false;
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;
