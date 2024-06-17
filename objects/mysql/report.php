@@ -13,7 +13,7 @@ class report implements ireport
 {
     protected array $queryData;
     protected mysqli $db;
-    public array $reportData;
+    public array $reportData = array();
     public array $columnHeaders;
     public array $dateFilters;
     public array $savings;
