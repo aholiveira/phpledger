@@ -24,8 +24,12 @@ class config
     public static function init(string $configfile): bool
     {
         try {
-            self::$_data = @json_decode(file_get_contents($configfile), true);
-            return true;
+            if (file_exists($configfile)) {
+                self::$_data = @json_decode(file_get_contents($configfile), true);
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception $ex) {
             return false;
         }
