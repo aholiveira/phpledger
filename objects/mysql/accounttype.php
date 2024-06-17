@@ -127,7 +127,6 @@ class accounttype extends mysql_object implements iobject
     }
     public static function getNextId(string $field = "tipo_id"): int
     {
-        $retval = parent::getNextId($field);
-        return $retval;
+        return parent::getNextId($field);
     }
 }
