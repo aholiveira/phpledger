@@ -31,7 +31,7 @@ $pagetitle = "Tipo de movimentos";
                     if (filter_has_var(INPUT_GET, "tipo_id")) {
                         $tipo_id = filter_input(INPUT_GET, "tipo_id", FILTER_VALIDATE_INT);
                         if ($tipo_id > 0) {
-                            $object->getById($tipo_id);
+                            $object = $object->getById($tipo_id);
                         }
                     }
                     $viewer = $view_factory->entry_category_view($object);

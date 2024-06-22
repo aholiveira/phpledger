@@ -3,12 +3,15 @@
 /**
  * User class
  * Handles user registration and authentication
- * 
+ *
  * @since 0.2.0
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  */
+define("USER_ROLE_ADM", 255);
+define("USER_ROLE_RW", 192);
+define("USER_ROLE_RO", 128);
 class user extends mysql_object implements iobject
 {
     protected string $_username;
@@ -40,7 +43,7 @@ class user extends mysql_object implements iobject
         $this->_password = $this->hashPassword($value);
     }
     /**
-     * This returns the password hash. 
+     * This returns the password hash.
      * The unhashed password is never stored on the object
      * @return string the hashed value of the password
      */
@@ -106,6 +109,7 @@ class user extends mysql_object implements iobject
     }
     public function verifyPassword(string $password): bool
     {
+        if (empty($password)) return FALSE;
         if (function_exists('sodium_crypto_pwhash_str_verify')) {
             return sodium_crypto_pwhash_str_verify($this->getPassword(), $password);
         } else {
@@ -125,6 +129,9 @@ class user extends mysql_object implements iobject
         $retval = false;
         $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             //static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;
@@ -133,18 +140,18 @@ class user extends mysql_object implements iobject
             $stmt->execute();
             $stmt->bind_result($return_id);
             if (!is_null($stmt->fetch()) && $return_id == $this->id) {
-                $sql = "UPDATE {$this->tableName()} SET 
-                    `username`=?, 
-                    `password`=?, 
-                    `fullname`=?, 
-                    `email`=?, 
+                $sql = "UPDATE {$this->tableName()} SET
+                    `username`=?,
+                    `password`=?,
+                    `fullname`=?,
+                    `email`=?,
                     `role`=?,
                     `token`=?,
                     `token_expiry`=?,
                     `active`=?
                     WHERE `id`=?";
             } else {
-                $sql = "INSERT INTO {$this->tableName()} (username, password, fullname, email, role, token, token_expiry, active, id) 
+                $sql = "INSERT INTO {$this->tableName()} (username, password, fullname, email, role, token, token_expiry, active, id)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             }
             $stmt->close();
@@ -177,24 +184,26 @@ class user extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getList(array $field_filter = array()): array
+    public static function getList(array $field_filter = array()): array
     {
         $where = parent::getWhereFromArray($field_filter);
-        $sql = "SELECT id, 
-            username AS `_username`, 
-            `password` AS `_password`, 
-            `fullname` AS `_fullname`, 
-            email AS `_email`, 
-            `role` AS `_role`, 
-            `token` AS `_token`, 
-            `token_expiry` AS `_token_expiry`, 
-            active AS `_active` 
-            FROM {$this->tableName()} "
-            . "{$where} "
-            . "ORDER BY username";
+        $sql = "SELECT id,
+            username AS `_username`,
+            `password` AS `_password`,
+            `fullname` AS `_fullname`,
+            email AS `_email`,
+            `role` AS `_role`,
+            `token` AS `_token`,
+            `token_expiry` AS `_token_expiry`,
+            active AS `_active`
+            FROM " . static::tableName() . "
+            {$where}
+            ORDER BY username";
         $retval = array();
         try {
-            if (!is_object(static::$_dblink)) return $retval;
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             $stmt = static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception(static::$_dblink->error);
             $stmt->execute();
@@ -204,27 +213,28 @@ class user extends mysql_object implements iobject
             }
             $stmt->close();
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
         return $retval;
     }
-    public function getByUsername(string $username): user
+    public static function getByUsername(string $username): ?user
     {
-        $sql = "SELECT id, 
-            username AS `_username`, 
-            `password` AS `_password`, 
-            `fullname` AS `_fullname`, 
-            email AS `_email`, 
-            `role` AS `_role`, 
-            `token` AS `_token`, 
-            `token_expiry` AS `_token_expiry`, 
-            active AS `_active` 
-            FROM {$this->tableName()} "
-            . "WHERE username=?";
-        if (!is_object(static::$_dblink)) {
-            return $this;
-        }
+        $sql = "SELECT id,
+            username AS `_username`,
+            `password` AS `_password`,
+            `fullname` AS `_fullname`,
+            email AS `_email`,
+            `role` AS `_role`,
+            `token` AS `_token`,
+            `token_expiry` AS `_token_expiry`,
+            active AS `_active`
+            FROM " . static::tableName() . "
+            WHERE username=?";
+        $retval = null;
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("s", $username);
@@ -232,102 +242,92 @@ class user extends mysql_object implements iobject
             $result = $stmt->get_result();
             $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
             $stmt->close();
-            if ($newobject instanceof user) {
-                $this->copyfromObject($newobject);
-            }
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
-        return $this;
+        return $newobject;
     }
-    public function getById(int $id): user
+    public static function getById(int $id): ?user
     {
-        $sql = "SELECT id, 
-        `username` AS `_username`, 
-        `password` AS `_password`, 
-        `fullname` AS `_fullname`, 
-        `email` AS `_email`, 
-        `role` AS `_role`, 
-        `token` AS `_token`, 
-        `token_expiry` AS `_token_expiry`, 
-        `active` AS `_active` 
-        FROM {$this->tableName()} 
+        $sql = "SELECT id,
+        `username` AS `_username`,
+        `password` AS `_password`,
+        `fullname` AS `_fullname`,
+        `email` AS `_email`,
+        `role` AS `_role`,
+        `token` AS `_token`,
+        `token_expiry` AS `_token_expiry`,
+        `active` AS `_active`
+        FROM " . static::tableName() . "
         WHERE id=?";
-        if (!is_object(static::$_dblink)) {
-            return $this;
-        }
+        $retval = null;
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
-            $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
             $stmt->close();
-            if ($newobject instanceof user) {
-                $this->copyfromObject($newobject);
-            }
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
-        return $this;
+        return $retval;
     }
     public function resetPassword(): bool
     {
         $retval = false;
-        if (isset($this->_username) && isset($this->_email)) {
-            $this->setToken($this->createToken());
-            $this->setTokenExpiry((new \DateTime(date("Y-m-d H:i:s")))->add(new \DateInterval("PT24H"))->format("Y-m-d H:i:s"));
-            if ($this->update()) {
-                $retval = true;
-                $title = config::get("title");
-                $url = config::get("url");
-                $message = "Esta' a receber este email porque solicitou a reposicao da sua palavra-passe na aplicacao '$title'.\r\n";
-                $message .= "Para continuar o processo deve clique no link abaixo para definir uma nova senha.\r\n";
-                $message .= "{$url}reset_password.php?token_id={$this->getToken()}.\r\n";
-                $message .= "Este token e' valido ate' 'as {$this->getTokenExpiry()}.\r\n";
-                $message .= "Findo este prazo tera' que reiniciar o processo usando o link {$url}forgot_password.php.\r\n";
-                $message .= "\r\n";
-                $message .= "Cumprimentos,\r\n";
-                $message .= "$title\r\n";
-                $retval = Email::send_email(config::get("from"), $this->getEmail(), "Reposicao de palavra-passe", $message);
-            }
+        if (!isset($this->_username) || !isset($this->_email)) {
+            return $retval;
+        }
+        $this->setToken($this->createToken());
+        $this->setTokenExpiry((new \DateTime(date("Y-m-d H:i:s")))->add(new \DateInterval("PT24H"))->format("Y-m-d H:i:s"));
+        if ($this->update()) {
+            $retval = true;
+            $title = config::get("title");
+            $url = config::get("url");
+            $message = "Esta' a receber este email porque solicitou a reposicao da sua palavra-passe na aplicacao '$title'.\r\n";
+            $message .= "Para continuar o processo deve clique no link abaixo para definir uma nova senha.\r\n";
+            $message .= "{$url}reset_password.php?token_id={$this->getToken()}.\r\n";
+            $message .= "Este token e' valido ate' 'as {$this->getTokenExpiry()}.\r\n";
+            $message .= "Findo este prazo tera' que reiniciar o processo usando o link {$url}forgot_password.php.\r\n";
+            $message .= "\r\n";
+            $message .= "Cumprimentos,\r\n";
+            $message .= "$title\r\n";
+            $retval = Email::send_email(config::get("from"), $this->getEmail(), "Reposicao de palavra-passe", $message);
         }
         return $retval;
     }
-    public function getByToken(string $token): ?user
+    public static function getByToken(string $token): ?user
     {
-        $sql = "SELECT id, 
-        `username` AS `_username`, 
-        `password` AS `_password`, 
-        `fullname` AS `_fullname`, 
-        `email` AS `_email`, 
-        `role` AS `_role`, 
-        `token` AS `_token`, 
-        `token_expiry` AS `_token_expiry`, 
-        `active` AS `_active` 
-        FROM {$this->tableName()} 
+        $sql = "SELECT id,
+        `username` AS `_username`,
+        `password` AS `_password`,
+        `fullname` AS `_fullname`,
+        `email` AS `_email`,
+        `role` AS `_role`,
+        `token` AS `_token`,
+        `token_expiry` AS `_token_expiry`,
+        `active` AS `_active`
+        FROM " . static::tableName() . "
         WHERE token=?";
-        if (!is_object(static::$_dblink)) {
-            return $this;
-        }
-        $retval = $this;
-        $this->clear();
+        $retval = null;
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("s", $token);
             $stmt->execute();
             $result = $stmt->get_result();
-            $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
             $stmt->close();
-            if ($newobject instanceof user) {
-                $this->copyfromObject($newobject);
-            } else {
-                $retval = null;
-            }
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
         return $retval;
     }
@@ -336,6 +336,9 @@ class user extends mysql_object implements iobject
         $retval = false;
         $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;

@@ -22,7 +22,10 @@ class account_view extends object_viewer
         $type_description = "";
         if (!empty($_object->type_id)) {
             $account_type = $object_factory->accounttype();
-            $account_type->getById($_object->type_id);
+            $account_type = $account_type->getById($_object->type_id);
+            if (is_null($account_type) ) {
+                $account_type = $object_factory->accounttype();
+            }
             $type_description = $account_type->description;
         }
         $retval .= "<td data-label='ID' class=\"number\"><a title=\"Editar\" href=\"accounts.php?conta_id={$_object->id}\">{$_object->id}</a></td>";
@@ -50,7 +53,7 @@ class account_view extends object_viewer
         $id = isset($_object->id) ? $_object->id : $_object->getNextId();
         $account_type = $object_factory->accounttype();
         if (isset($_object->type_id)) {
-            $account_type->getById($_object->type_id);
+            $account_type = $account_type->getById($_object->type_id);
         }
         $account_type_view = $view_factory->account_type_view($account_type);
         $tipo_opt = $account_type_view->getSelectFromList($account_type->getList(), isset($_object->type_id) ? $_object->type_id : null);

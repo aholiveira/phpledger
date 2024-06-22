@@ -42,8 +42,9 @@ if (!headers_sent()) {
     header("X-Content-Type-Options: nosniff");
     header("Strict-Transport-Security: max-age=7776000");
     header("Referrer-Policy: strict-origin-when-cross-origin");
-    header("Content-Security-Policy: default-src 'self'; frame-ancestors 'none'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'");
+    #header("Content-Security-Policy: default-src 'self'; frame-ancestors 'none'; style-src 'self' 'unsafe-inline'; script-src * ");
 }
+include constant("OBJECTS_DIR") . '/authentication.php';
 include constant("OBJECTS_DIR") . '/config.class.php';
 include constant("OBJECTS_DIR") . '/object_factory.php';
 include constant("OBJECTS_DIR") . '/email.php';
@@ -59,7 +60,7 @@ include constant("ROOT_DIR") . '/html.php';
  */
 function print_var($var, $comment = "", bool $debug = false)
 {
-    if (($debug && constant("DEBUG") == 1) || !$debug) {
+    if (($debug && defined("DEBUG") && constant("DEBUG") == 1) || !$debug) {
         print "\r\n<pre>START###{$comment}###START<br>\r\n";
         print nl2br(print_r($var, true));
         print "\r\n<br>END###{$comment}###END</pre><br>\r\n";

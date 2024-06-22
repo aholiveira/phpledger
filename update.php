@@ -9,6 +9,7 @@
  */
 #$_SESSION['user'] = 'update';
 #include ROOT_DIR . "/contas_config.php";
+include "prepend.php";
 config::init(__DIR__ . '/config.json');
 $object_factory = new object_factory();
 $view_factory = new view_factory();

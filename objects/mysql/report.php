@@ -13,7 +13,7 @@ class report implements ireport
 {
     protected array $queryData;
     protected mysqli $db;
-    public array $reportData;
+    public array $reportData = array();
     public array $columnHeaders;
     public array $dateFilters;
     public array $savings;
@@ -24,7 +24,9 @@ class report implements ireport
     protected function getData(string $query, &...$vars): array
     {
         $this->queryData = array();
-        if (!is_object($this->db)) return $this;
+        if (!($this->db->ping())) {
+            return $this->queryData;
+        }
         $stmt = $this->db->prepare($query);
         if ($stmt == false) {
             debug_print($this->db->error);

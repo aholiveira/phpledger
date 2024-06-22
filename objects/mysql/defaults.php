@@ -23,7 +23,7 @@ class defaults extends mysql_object implements iobject
     {
         parent::__construct($dblink);
     }
-    public function getList(array $field_filter = array()): array
+    public static function getList(array $field_filter = array()): array
     {
         $where = parent::getWhereFromArray($field_filter);
         $sql = "SELECT
@@ -33,7 +33,7 @@ class defaults extends mysql_object implements iobject
             moeda_mov as `currency_id`,
             `data` as `entry_date`,
             deb_cred as direction
-        FROM {$this->tableName()} 
+        FROM " . defaults::$tableName . "
         {$where}
         ORDER BY id";
         $retval = array();
@@ -48,11 +48,11 @@ class defaults extends mysql_object implements iobject
             }
             $stmt->close();
         } catch (Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
         return $retval;
     }
-    public function getById($id): defaults
+    public static function getById($id): ?defaults
     {
         $sql = "SELECT
             id,
@@ -61,26 +61,25 @@ class defaults extends mysql_object implements iobject
             moeda_mov as `currency_id`,
             `data` as `entry_date`,
             deb_cred as direction
-            FROM {$this->tableName()} 
+            FROM " . defaults::$tableName . "
             WHERE id=?";
+        $retval = null;
         try {
-            if (is_object(static::$_dblink)) {
-                $stmt = @static::$_dblink->prepare($sql);
-                if ($stmt == false) throw new mysqli_sql_exception();
-                $stmt->bind_param("i", $id);
-                $stmt->execute();
-                if (!$stmt) throw new mysqli_sql_exception();
-                $result = $stmt->get_result();
-                $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
-                $stmt->close();
-                if ($newobject instanceof defaults) {
-                    $this->copyfromObject($newobject);
-                }
+            if (!(static::$_dblink->ping())) {
+                return $retval;
             }
+            $stmt = @static::$_dblink->prepare($sql);
+            if ($stmt == false) throw new mysqli_sql_exception();
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            if (!$stmt) throw new mysqli_sql_exception();
+            $result = $stmt->get_result();
+            $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $stmt->close();
         } catch (Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
-        return $this;
+        return $retval;
     }
     /**
      * Set values to the initial values
@@ -98,10 +97,12 @@ class defaults extends mysql_object implements iobject
     }
     public function update(): bool
     {
-        $retval = false;
-        if (!is_object(static::$_dblink)) return $retval;
         $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
+        $retval = false;
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;

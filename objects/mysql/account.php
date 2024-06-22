@@ -35,7 +35,7 @@ class account extends mysql_object implements iobject
     {
         parent::__construct($dblink);
     }
-    public function getList(array $field_filter = array()): array
+    public static function getList(array $field_filter = array()): array
     {
         $where = parent::getWhereFromArray($field_filter);
         $sql = "SELECT
@@ -49,12 +49,14 @@ class account extends mysql_object implements iobject
             conta_abertura as open_date,
             conta_fecho as close_date,
             activa as active
-        FROM {$this->tableName()}
+        FROM " . static::$tableName . "
         {$where}
         ORDER BY activa DESC, conta_nome";
         $retval = array();
         try {
-            if (!is_object(static::$_dblink)) return $retval;
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             $stmt = static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception(static::$_dblink->error);
             $stmt->execute();
@@ -64,12 +66,12 @@ class account extends mysql_object implements iobject
             }
             $stmt->close();
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
         return $retval;
     }
 
-    public function getById($id): account
+    public static function getById($id): ?account
     {
         $sql = "SELECT
             conta_id as id,
@@ -82,25 +84,24 @@ class account extends mysql_object implements iobject
             conta_abertura as open_date,
             conta_fecho as close_date,
             activa as active
-        FROM {$this->tableName()}
+        FROM " . static::tableName() . "
         WHERE conta_id=?";
+        $retval = null;
         try {
-            if (is_object(static::$_dblink)) {
-                $stmt = @static::$_dblink->prepare($sql);
-                if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
-                $stmt->bind_param("i", $id);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
-                $stmt->close();
-                if ($newobject instanceof account) {
-                    $this->copyfromObject($newobject);
-                }
+            if (!(static::$_dblink->ping())) {
+                return $retval;
             }
+            $stmt = @static::$_dblink->prepare($sql);
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $stmt->close();
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
-        return $this;
+        return $retval;
     }
     /**
      * @return array array with keys 'income', 'expense' and 'balance'
@@ -114,6 +115,7 @@ class account extends mysql_object implements iobject
     public function getBalance(\DateTime $startDate = null, \DateTime $endDate = null): array
     {
         $where = "conta_id=? ";
+        $retval = array('income' => 0, 'expense' => 0, 'balance' => 0);
         $param_array = array($this->id);
         if (!is_null($startDate)) {
             $where .= " AND `data_mov`>=? ";
@@ -132,16 +134,21 @@ class account extends mysql_object implements iobject
                 GROUP BY conta_id";
         $retval = array();
         try {
-            if (is_object(static::$_dblink)) {
-                $stmt = @static::$_dblink->prepare($sql);
-                if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
-                $stmt->bind_param(str_repeat('s', sizeof($param_array)), ...$param_array);
-                $stmt->execute();
-                $stmt->bind_result($income, $expense, $balance);
-                $stmt->fetch();
-                $retval = array('income' => $income, 'expense' => $expense, 'balance' => $balance);
-                $stmt->close();
+            if (!(static::$_dblink->ping())) {
+                return $retval;
             }
+            $stmt = @static::$_dblink->prepare($sql);
+            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            $stmt->bind_param(str_repeat('s', sizeof($param_array)), ...$param_array);
+            $stmt->execute();
+            $stmt->bind_result($income, $expense, $balance);
+            $stmt->fetch();
+            $retval = array(
+                'income' => is_null($income) ? 0.0 : $income,
+                'expense' => is_null($expense) ? 0.0 : $expense,
+                'balance' => is_null($balance) ? 0.0 : $balance
+            );
+            $stmt->close();
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
@@ -150,9 +157,12 @@ class account extends mysql_object implements iobject
     public function update(): bool
     {
         $retval = false;
-        if (!is_object(static::$_dblink)) return $retval;
+
         $sql = "SELECT conta_id FROM {$this->tableName()} WHERE conta_id=?";
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;
@@ -202,9 +212,11 @@ class account extends mysql_object implements iobject
     public function delete(): bool
     {
         $retval = false;
-        if (!is_object(static::$_dblink)) return $retval;
         $sql = "SELECT conta_id FROM {$this->tableName()} WHERE conta_id=?";
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;
@@ -228,7 +240,7 @@ class account extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getNextId(string $field = "conta_id"): int
+    public static function getNextId(string $field = "conta_id"): int
     {
         return parent::getNextId($field);
     }

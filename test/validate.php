@@ -44,7 +44,7 @@ function prepare_accounttype(): bool
     $retval = true;
     $object = $object_factory->accounttype();
     for ($id = 1; $id <= 5; $id++) {
-        $object->getById($id);
+        $object = $object->getById($id);
         if (!isset($object->id) || $object->id === $id) {
             $object->id = $id;
             $object->description = "Account type {$id}";
@@ -60,7 +60,7 @@ function prepare_account(): bool
     $retval = true;
     $object = $object_factory->account();
     for ($id = 1; $id <= 5; $id++) {
-        $object->getById($id);
+        $object = $object->getById($id);
         if (!isset($object->id) || $object->id === $id) {
             $object->id = $id;
             $object->number = "Account number {$id}";
@@ -143,6 +143,7 @@ foreach ($classnames as $class => $view) {
     if (array_key_exists($class, $class_id)) $id = $class_id[$class];
     $retval = (test_object($object, $id) && $retval);
     if (strlen($view) > 0) {
+        $object = $object->getById($id);
         $viewer = $view_factory->$view($object);
         $retval = test_view($viewer, $object) && $retval;
     }
@@ -186,7 +187,7 @@ function test_object(mysql_object $object, $id = 1)
     $retval = true;
     try {
         print(str_pad("Testing {$object} ", constant("PADDING"), ".") . " : ");
-        $object->getById($id);
+        $object = $object->getById($id);
         if (isset($object->id)) {
             $retval = (assert($object->id === $id, "getById") && $retval);
         }
@@ -218,7 +219,6 @@ function test_view(object_viewer $viewer, iobject $object)
         }
         $retval = (@assert(!empty($viewer->printObjectList($object->getList($field_filter))), "#printObjectList#") && $retval);
         $method = "printForm";
-        $assert = true;
         if (method_exists($viewer, $method)) {
             $retval = (@assert(!empty(@$viewer->$method()), "#{$method}#") && $retval);
         }

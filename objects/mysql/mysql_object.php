@@ -12,7 +12,7 @@
 abstract class mysql_object implements iobject
 {
     public $id;
-    protected string $_errormessage;
+    protected static string $_errormessage;
     protected static \mysqli $_dblink;
     protected static string $tableName;
     public function __construct(\mysqli $dblink)
@@ -31,24 +31,29 @@ abstract class mysql_object implements iobject
     /**
      * Copies the object vars from $object into $this
      */
-    protected function copyfromObject(mysql_object $object): void
+    protected static function copyfromObject(mysql_object $source, mysql_object $destination): void
     {
-        $vars = is_object($object) ? get_object_vars($object) : $object;
+        $vars = is_object($source) ? get_object_vars($source) : $source;
         if (!is_array($vars)) throw new \Exception('no props to import into the object!');
         foreach ($vars as $key => $value) {
-            $this->$key = $value;
+            $destination->$key = $value;
         }
     }
     /**
      * @return int The next free number on $field. It fills gaps if there are any.
      */
-    public function getNextId(string $field = "id"): int
+    public static function getNextId(string $field = "id"): int
     {
         $db = static::$_dblink;
-        if (!is_object($db) || is_null(static::$tableName)) {
-            return -1;
+        $retval = -1;
+        if (is_null(static::$tableName)) {
+            return $retval;
         }
+
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             $sql = "SELECT `{$field}` FROM " . static::$tableName . " ORDER BY `{$field}`";
             $result = @$db->query($sql);
             if ($result == FALSE) $retval = -1;
@@ -76,7 +81,7 @@ abstract class mysql_object implements iobject
                 }
             }
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         } finally {
             if (isset($result) && ($result instanceof \mysqli_result)) {
                 $result->close();
@@ -109,7 +114,7 @@ abstract class mysql_object implements iobject
         if (strlen($where) > 0) $where = "WHERE {$where}";
         return $where;
     }
-    abstract function getById(int $id): mysql_object;
+    abstract static function getById(int $id): ?mysql_object;
     /**
      * @param array $field_filter an array of the form ('field_name' => array('operator' => SQL operator, 'value' => value to filter by))
      * - where 
@@ -117,7 +122,7 @@ abstract class mysql_object implements iobject
      * - - operator is any valid SQL operator (LIKE, BETWEEN, <, >, <=, =>)
      * - - value is the value to be filtered
      */
-    abstract function getList(array $field_filter = array()): array;
+    abstract static function getList(array $field_filter = array()): array;
     abstract function update(): bool;
     abstract function delete(): bool;
     /**
@@ -132,25 +137,25 @@ abstract class mysql_object implements iobject
     }
     public function error_message(): string
     {
-        return isset($this->_errormessage) ? $this->_errormessage : "";
+        return isset(static::$_errormessage) ? static::$_errormessage : "";
     }
-    protected function setErrorMessage(string $message)
+    protected static function setErrorMessage(string $message)
     {
-        $this->_errormessage = $message;
+        static::$_errormessage = $message;
     }
-    protected function tableName(): string
+    protected static function tableName(): string
     {
         return static::$tableName;
     }
-    protected function handleException(\Exception $ex, $sql = "")
+    protected static function handleException(\Exception $ex, $sql = "")
     {
-        print_var($this, "THIS", true);
+        #print_var($this, "THIS", true);
         print_var(static::$_dblink, "DBLINK", true);
         print_var($sql, "SQL", true);
         print_var($ex, "EXCEPTION", true);
         debug_print($ex->getMessage());
         debug_print($ex->getTraceAsString());
-        $this->setErrorMessage($ex->getTraceAsString());
+        static::setErrorMessage($ex->getTraceAsString());
     }
     public function clear(): void
     {

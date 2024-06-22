@@ -71,8 +71,7 @@ class mysql_storage implements idata_storage
                 $this->addMessage("Table tipo_mov foreign key parent_id missing");
                 $retval = false;
             }
-            $entry_category = new entry_category($this->_dblink);
-            $entry_category->getById(0);
+            $entry_category = object_factory::entry_category()::getById(0);
             if ($entry_category->id !== 0) {
                 $this->addMessage("Category '0' does not exist");
                 $retval = false;
@@ -366,7 +365,8 @@ class mysql_storage implements idata_storage
              * Create new category "Uncategorized"
              * Assign all entries without category to category "Uncategorized"
              */
-            $entry_category = new entry_category($this->_dblink);
+            global $object_factory;
+            $entry_category = $object_factory->entry_category();
             $entry_category->getById(0);
             if ($entry_category->id !== 0) {
                 $this->addMessage("Adding category 0");

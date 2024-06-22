@@ -1,7 +1,7 @@
 <?php
 
 /**
- * entry_category object 
+ * entry_category object
  * @property int id The ID of the object
  *
  * @author Antonio Henrique Oliveira
@@ -23,15 +23,17 @@ class entry_category extends mysql_object implements iobject
     {
         parent::__construct($dblink);
     }
-    public function getList(array $field_filter = array()): array
+    public static function getList(array $field_filter = array()): array
     {
-        $where = $this->getWhereFromArray($field_filter);
-        $sql = "SELECT tipo_id as id FROM {$this->tableName()} "
-            . "{$where} "
-            . "ORDER BY active desc, tipo_desc";
+        $where = static::getWhereFromArray($field_filter);
+        $sql = "SELECT tipo_id as id FROM " . static::$tableName . "
+            {$where}
+            ORDER BY active desc, tipo_desc";
         $retval = array();
         try {
-            if (!is_object(static::$_dblink)) return $retval;
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->execute();
@@ -45,62 +47,69 @@ class entry_category extends mysql_object implements iobject
                 $retval[$id] = $newobject->getById($id);
             }
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
         return $retval;
     }
     public function getBalance(): float
     {
-        $balance = 0;
-        $sql = "SELECT ABS(ROUND(SUM(ROUND(valor_euro,5)),2)) as balance 
+        $retval = 0;
+        $sql = "SELECT ABS(ROUND(SUM(ROUND(valor_euro,5)),2)) as balance
             FROM movimentos
             WHERE tipo_mov=?
             GROUP BY tipo_mov";
         try {
-            if (!is_object(static::$_dblink)) return $balance;
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("s", $this->id);
             $stmt->execute();
-            $stmt->bind_result($balance);
+            $stmt->bind_result($retval);
             $stmt->fetch();
             $stmt->close();
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
-        return $balance;
+        return $retval;
     }
-    public function getById(int $id): entry_category
+    public static function getById(int $id): ?entry_category
     {
-        $sql = "SELECT tipo_id AS id, parent_id, tipo_desc AS `description`, active 
-            FROM {$this->tableName()} 
+        $sql = "SELECT tipo_id AS id, parent_id, tipo_desc AS `description`, active
+            FROM " . static::tableName() . "
             WHERE tipo_id=? ";
-        if (!is_object(static::$_dblink)) return $this;
+        $retval = null;
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
-            $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
             $stmt->close();
-            if ($newobject instanceof entry_category) {
-                $this->copyfromObject($newobject);
-                $this->getParentDescription();
-                $this->children = $this->getChildren();
+            if ($retval instanceof entry_category) {
+                $retval->getParentDescription();
+                $retval->children = $retval->getChildren();
             }
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
         }
-        return $this;
+        return $retval;
     }
     public function getParentDescription(): string
     {
         $sql = "SELECT tipo_desc AS `description`
-            FROM {$this->tableName()} 
+            FROM {$this->tableName()}
             WHERE tipo_id=?";
-        if (!is_object(static::$_dblink) || !isset($this->parent_id)) return "";
+        if (!isset($this->parent_id)) return "";
         try {
+            if (!(static::$_dblink->ping())) {
+                return "";
+            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $this->parent_id);
@@ -117,12 +126,14 @@ class entry_category extends mysql_object implements iobject
     public function getChildren(): array
     {
         $children = array();
-        $sql = "SELECT tipo_id AS id 
-            FROM {$this->tableName()} 
-            WHERE parent_id=? 
+        $sql = "SELECT tipo_id AS id
+            FROM {$this->tableName()}
+            WHERE parent_id=?
             ORDER BY active desc, tipo_desc ";
-        if (!is_object(static::$_dblink)) return $this;
         try {
+            if (!(static::$_dblink->ping())) {
+                return $this;
+            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $this->id);
@@ -155,6 +166,9 @@ class entry_category extends mysql_object implements iobject
         if (!$this->validate()) return $retval;
         $sql = "SELECT tipo_id FROM {$this->tableName()} WHERE tipo_id=?";
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             static::$_dblink->begin_transaction();
             $stmt = static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;
@@ -190,6 +204,9 @@ class entry_category extends mysql_object implements iobject
         $retval = false;
         $sql = "SELECT tipo_id FROM {$this->tableName()} WHERE tipo_id=?";
         try {
+            if (!(static::$_dblink->ping())) {
+                return $retval;
+            }
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;
@@ -216,7 +233,7 @@ class entry_category extends mysql_object implements iobject
         }
         return $retval;
     }
-    public function getNextId(string $field = "tipo_id"): int
+    public static function getNextId(string $field = "tipo_id"): int
     {
         return parent::getNextId($field);
     }

@@ -15,7 +15,10 @@ body {
     height: 95vh;
     font-family: Helvetica, sans-serif;
 }
-
+button:hover {
+    border: outset 1px;
+    border-color: black;
+}
 div a,
 div a {
     text-decoration: none;
@@ -95,7 +98,7 @@ input {
     padding: 1px 4px;
 }
 
-input.submit, input[type=submit] {
+input.submit, input[type=submit], button {
     border: outset 2px;
     background-image: linear-gradient(lightblue, cornflowerblue); 
     border: 0;

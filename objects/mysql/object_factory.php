@@ -23,69 +23,81 @@ include __DIR__ . "/user.php";
 
 class object_factory implements iobject_factory
 {
-    private $_dblink;
+    private static $_dblink;
     public function __construct()
+    {
+    }
+    private static function connect(): mysqli
     {
         $host = config::get("host");
         $dbase = config::get("database");
         $user = config::get("user");
         $pass = config::get("password");
         try {
-            $this->_dblink = @new \mysqli($host, $user, $pass, $dbase);
-            if ($this->_dblink->connect_errno) {
-                throw new \RuntimeException('mysqli connection error: ' . $this->_dblink->connect_error);
+            static::$_dblink = @new \mysqli($host, $user, $pass, $dbase);
+            if (static::$_dblink->connect_errno) {
+                throw new \RuntimeException('mysqli connection error: ' . static::$_dblink->connect_error);
             }
         } catch (\Exception $ex) {
-            print_var($this, "THIS", true);
-            print_var($this->_dblink, "DBLINK", true);
+            static::handle_error($ex);
+            /*
+            #print_var($this, "THIS", true);
+            print_var(static::$_dblink, "DBLINK", true);
             print_var($ex, "EXCEPTION", true);
             debug_print_backtrace();
             debug_print($ex->getMessage());
             debug_print($ex->getTraceAsString());
+            */
+            exit(static::$_dblink->connect_errno);
         }
+        return static::$_dblink;
     }
-    public function data_storage(): idata_storage
+    public static function handle_error(\Exception $ex)
+    {
+        print "<p>Error [" . $ex->getMessage() .  "] while connecting to the database. Please check config file.</p>";
+    }
+    public static function data_storage(): idata_storage
     {
         return new mysql_storage();
     }
-    public function account(): account
+    public static function account(): account
     {
-        return new account($this->_dblink);
+        return new account(object_factory::connect());
     }
-    public function accounttype(): accounttype
+    public static function accounttype(): accounttype
     {
-        return new accounttype($this->_dblink);
+        return new accounttype(object_factory::connect());
     }
-    public function currency(): currency
+    public static function currency(): currency
     {
-        return new currency($this->_dblink);
+        return new currency(object_factory::connect());
     }
-    public function defaults(): defaults
+    public static function defaults(): defaults
     {
-        return new defaults($this->_dblink);
+        return new defaults(object_factory::connect());
     }
-    public function entry_category(): entry_category
+    public static function entry_category(): entry_category
     {
-        return new entry_category($this->_dblink);
+        return new entry_category(object_factory::connect());
     }
-    public function ledger(): ledger
+    public static function ledger(): ledger
     {
-        return new ledger($this->_dblink);
+        return new ledger(object_factory::connect());
     }
-    public function ledgerentry(): ledgerentry
+    public static function ledgerentry(): ledgerentry
     {
-        return new ledgerentry($this->_dblink);
+        return new ledgerentry(object_factory::connect());
     }
-    public function report_month(): report_month
+    public static function report_month(): report_month
     {
-        return new report_month($this->_dblink);
+        return new report_month(object_factory::connect());
     }
-    public function report_year(): report_year
+    public static function report_year(): report_year
     {
-        return new report_year($this->_dblink);
+        return new report_year(object_factory::connect());
     }
-    public function user(): user
+    public static function user(): user
     {
-        return new user($this->_dblink);
+        return new user(object_factory::connect());
     }
 }
