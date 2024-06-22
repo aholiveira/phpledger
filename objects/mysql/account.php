@@ -115,6 +115,7 @@ class account extends mysql_object implements iobject
     public function getBalance(\DateTime $startDate = null, \DateTime $endDate = null): array
     {
         $where = "conta_id=? ";
+        $retval = array('income' => 0, 'expense' => 0, 'balance' => 0);
         $param_array = array($this->id);
         if (!is_null($startDate)) {
             $where .= " AND `data_mov`>=? ";
@@ -142,7 +143,11 @@ class account extends mysql_object implements iobject
             $stmt->execute();
             $stmt->bind_result($income, $expense, $balance);
             $stmt->fetch();
-            $retval = array('income' => $income, 'expense' => $expense, 'balance' => $balance);
+            $retval = array(
+                'income' => is_null($income) ? 0.0 : $income,
+                'expense' => is_null($expense) ? 0.0 : $expense,
+                'balance' => is_null($balance) ? 0.0 : $balance
+            );
             $stmt->close();
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
