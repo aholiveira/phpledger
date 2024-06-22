@@ -3,7 +3,7 @@
 /**
  * User class
  * Handles user registration and authentication
- * 
+ *
  * @since 0.2.0
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
@@ -43,7 +43,7 @@ class user extends mysql_object implements iobject
         $this->_password = $this->hashPassword($value);
     }
     /**
-     * This returns the password hash. 
+     * This returns the password hash.
      * The unhashed password is never stored on the object
      * @return string the hashed value of the password
      */
@@ -140,18 +140,18 @@ class user extends mysql_object implements iobject
             $stmt->execute();
             $stmt->bind_result($return_id);
             if (!is_null($stmt->fetch()) && $return_id == $this->id) {
-                $sql = "UPDATE {$this->tableName()} SET 
-                    `username`=?, 
-                    `password`=?, 
-                    `fullname`=?, 
-                    `email`=?, 
+                $sql = "UPDATE {$this->tableName()} SET
+                    `username`=?,
+                    `password`=?,
+                    `fullname`=?,
+                    `email`=?,
                     `role`=?,
                     `token`=?,
                     `token_expiry`=?,
                     `active`=?
                     WHERE `id`=?";
             } else {
-                $sql = "INSERT INTO {$this->tableName()} (username, password, fullname, email, role, token, token_expiry, active, id) 
+                $sql = "INSERT INTO {$this->tableName()} (username, password, fullname, email, role, token, token_expiry, active, id)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             }
             $stmt->close();
@@ -187,17 +187,17 @@ class user extends mysql_object implements iobject
     public static function getList(array $field_filter = array()): array
     {
         $where = parent::getWhereFromArray($field_filter);
-        $sql = "SELECT id, 
-            username AS `_username`, 
-            `password` AS `_password`, 
-            `fullname` AS `_fullname`, 
-            email AS `_email`, 
-            `role` AS `_role`, 
-            `token` AS `_token`, 
-            `token_expiry` AS `_token_expiry`, 
-            active AS `_active` 
-            FROM " . static::tableName() . " 
-            {$where} 
+        $sql = "SELECT id,
+            username AS `_username`,
+            `password` AS `_password`,
+            `fullname` AS `_fullname`,
+            email AS `_email`,
+            `role` AS `_role`,
+            `token` AS `_token`,
+            `token_expiry` AS `_token_expiry`,
+            active AS `_active`
+            FROM " . static::tableName() . "
+            {$where}
             ORDER BY username";
         $retval = array();
         try {
@@ -219,15 +219,15 @@ class user extends mysql_object implements iobject
     }
     public static function getByUsername(string $username): ?user
     {
-        $sql = "SELECT id, 
-            username AS `_username`, 
-            `password` AS `_password`, 
-            `fullname` AS `_fullname`, 
-            email AS `_email`, 
-            `role` AS `_role`, 
-            `token` AS `_token`, 
-            `token_expiry` AS `_token_expiry`, 
-            active AS `_active` 
+        $sql = "SELECT id,
+            username AS `_username`,
+            `password` AS `_password`,
+            `fullname` AS `_fullname`,
+            email AS `_email`,
+            `role` AS `_role`,
+            `token` AS `_token`,
+            `token_expiry` AS `_token_expiry`,
+            active AS `_active`
             FROM " . static::tableName() . "
             WHERE username=?";
         $retval = null;
@@ -249,15 +249,15 @@ class user extends mysql_object implements iobject
     }
     public static function getById(int $id): ?user
     {
-        $sql = "SELECT id, 
-        `username` AS `_username`, 
-        `password` AS `_password`, 
-        `fullname` AS `_fullname`, 
-        `email` AS `_email`, 
-        `role` AS `_role`, 
-        `token` AS `_token`, 
-        `token_expiry` AS `_token_expiry`, 
-        `active` AS `_active` 
+        $sql = "SELECT id,
+        `username` AS `_username`,
+        `password` AS `_password`,
+        `fullname` AS `_fullname`,
+        `email` AS `_email`,
+        `role` AS `_role`,
+        `token` AS `_token`,
+        `token_expiry` AS `_token_expiry`,
+        `active` AS `_active`
         FROM " . static::tableName() . "
         WHERE id=?";
         $retval = null;
@@ -303,15 +303,15 @@ class user extends mysql_object implements iobject
     }
     public static function getByToken(string $token): ?user
     {
-        $sql = "SELECT id, 
-        `username` AS `_username`, 
-        `password` AS `_password`, 
-        `fullname` AS `_fullname`, 
-        `email` AS `_email`, 
-        `role` AS `_role`, 
-        `token` AS `_token`, 
-        `token_expiry` AS `_token_expiry`, 
-        `active` AS `_active` 
+        $sql = "SELECT id,
+        `username` AS `_username`,
+        `password` AS `_password`,
+        `fullname` AS `_fullname`,
+        `email` AS `_email`,
+        `role` AS `_role`,
+        `token` AS `_token`,
+        `token_expiry` AS `_token_expiry`,
+        `active` AS `_active`
         FROM " . static::tableName() . "
         WHERE token=?";
         $retval = null;

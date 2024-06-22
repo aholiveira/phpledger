@@ -1,7 +1,7 @@
 <?php
 
 /**
- * entry_category object 
+ * entry_category object
  * @property int id The ID of the object
  *
  * @author Antonio Henrique Oliveira
@@ -27,7 +27,7 @@ class entry_category extends mysql_object implements iobject
     {
         $where = static::getWhereFromArray($field_filter);
         $sql = "SELECT tipo_id as id FROM " . static::$tableName . "
-            {$where} 
+            {$where}
             ORDER BY active desc, tipo_desc";
         $retval = array();
         try {
@@ -54,7 +54,7 @@ class entry_category extends mysql_object implements iobject
     public function getBalance(): float
     {
         $retval = 0;
-        $sql = "SELECT ABS(ROUND(SUM(ROUND(valor_euro,5)),2)) as balance 
+        $sql = "SELECT ABS(ROUND(SUM(ROUND(valor_euro,5)),2)) as balance
             FROM movimentos
             WHERE tipo_mov=?
             GROUP BY tipo_mov";
@@ -76,7 +76,7 @@ class entry_category extends mysql_object implements iobject
     }
     public static function getById(int $id): ?entry_category
     {
-        $sql = "SELECT tipo_id AS id, parent_id, tipo_desc AS `description`, active 
+        $sql = "SELECT tipo_id AS id, parent_id, tipo_desc AS `description`, active
             FROM " . static::tableName() . "
             WHERE tipo_id=? ";
         $retval = null;
@@ -103,7 +103,7 @@ class entry_category extends mysql_object implements iobject
     public function getParentDescription(): string
     {
         $sql = "SELECT tipo_desc AS `description`
-            FROM {$this->tableName()} 
+            FROM {$this->tableName()}
             WHERE tipo_id=?";
         if (!isset($this->parent_id)) return "";
         try {
@@ -126,9 +126,9 @@ class entry_category extends mysql_object implements iobject
     public function getChildren(): array
     {
         $children = array();
-        $sql = "SELECT tipo_id AS id 
-            FROM {$this->tableName()} 
-            WHERE parent_id=? 
+        $sql = "SELECT tipo_id AS id
+            FROM {$this->tableName()}
+            WHERE parent_id=?
             ORDER BY active desc, tipo_desc ";
         try {
             if (!(static::$_dblink->ping())) {
