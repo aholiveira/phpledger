@@ -143,6 +143,7 @@ foreach ($classnames as $class => $view) {
     if (array_key_exists($class, $class_id)) $id = $class_id[$class];
     $retval = (test_object($object, $id) && $retval);
     if (strlen($view) > 0) {
+        $object = $object->getById($id);
         $viewer = $view_factory->$view($object);
         $retval = test_view($viewer, $object) && $retval;
     }
@@ -218,7 +219,6 @@ function test_view(object_viewer $viewer, iobject $object)
         }
         $retval = (@assert(!empty($viewer->printObjectList($object->getList($field_filter))), "#printObjectList#") && $retval);
         $method = "printForm";
-        $assert = true;
         if (method_exists($viewer, $method)) {
             $retval = (@assert(!empty(@$viewer->$method()), "#{$method}#") && $retval);
         }
