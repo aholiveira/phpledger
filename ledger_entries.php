@@ -185,6 +185,8 @@ function build_and_save_record()
             (is_array($filtered_input) && !empty($filtered_input["filter_conta_id"]) ? " movimentos.conta_id=\"" . $filtered_input["filter_conta_id"] . "\" AND " : "") . $filter .
             (is_array($filtered_input) && !empty($filtered_input["filter_entry_type"]) ? " AND (movimentos.tipo_mov={$filtered_input["filter_entry_type"]}" . (strlen($parent_filter) > 0 ? " OR {$parent_filter})" : ")") : "") .
             " ORDER BY data_mov, mov_id";
+        global $object_factory;
+        $entry_filter_array = array();
         if ($edit > 0) {
             $edit_entry = $object_factory->ledgerentry();
             $edit_entry = $edit_entry->getById($edit);
@@ -193,9 +195,8 @@ function build_and_save_record()
         }
 
         // Saldo anterior
-        global $object_factory;
         $ledger_entry = $object_factory->ledgerentry();
-        $saldo = $ledger_entry->getBalanceBeforeDate($sdate, is_array($filtered_input) && $filtered_input["filter_conta_id"] > 0 ? $filtered_input["filter_conta_id"] : null);
+        $balance = $ledger_entry->getBalanceBeforeDate($sdate, is_array($filtered_input) && $filtered_input["filter_conta_id"] > 0 ? $filtered_input["filter_conta_id"] : null);
 
         // Movimento para editar
         if ($edit > 0) {
@@ -317,13 +318,13 @@ function build_and_save_record()
                     <tbody>
                         <tr>
                             <td class="balance-label" colspan="8">Saldo anterior</td>
-                            <td data-label="Saldo anterior" class="balance"><?php print normalize_number($saldo); ?></td>
+                            <td data-label="Saldo anterior" class="balance"><?php print normalize_number($balance); ?></td>
                         </tr>
                         <?php
                         $result = $db_link->query($sql);
                         while ($row = $result->fetch_assoc()) {
                             print "<tr id='{$row["mov_id"]}'>";
-                            $saldo += $row["valor_euro"];
+                            $balance += $row["valor_euro"];
                             if ($row["mov_id"] == $edit) {
                         ?>
                                 <td data-label=""><input type="hidden" name="mov_id" value="<?php print $row["mov_id"]; ?>"><input class="submit" type="submit" name="Gravar" value="Gravar"></td>
@@ -344,7 +345,7 @@ function build_and_save_record()
                                 </td>
                                 <td data-label="Valor" class="amount"><input style="text-align: right" type="text" name="valor_mov" maxlength="8" value="<?php print $row["val_mov"]; ?>"></td>
                                 <td data-label="Obs" class="remarks"><input type="text" name="obs" maxlength="255" value="<?php print $row["obs"]; ?>"></td>
-                                <td data-label="Saldo" class="total" style="text-align: right"><?php print normalize_number($saldo); ?></td>
+                                <td data-label="Saldo" class="total" style="text-align: right"><?php print normalize_number($balance); ?></td>
                             <?php
                             }
                             if (empty($edit) || $row["mov_id"] != $edit) {
@@ -359,7 +360,7 @@ function build_and_save_record()
                                 <td data-label='D/C' class='direction'><?php print($row["deb_cred"] == "1" ? "Dep" : "Lev"); ?></td>
                                 <td data-label='Valor' class='amount'><?php print normalize_number($row["val_mov"]); ?></td>
                                 <td data-label='Obs' class='remarks'><?php print $row["obs"]; ?></td>
-                                <td data-label='Saldo' class='total'><?php print normalize_number($saldo); ?></td>
+                                <td data-label='Saldo' class='total'><?php print normalize_number($balance); ?></td>
                         <?php
                             }
                             print "</tr>\n";
@@ -403,7 +404,7 @@ function build_and_save_record()
                                 </td>
                                 <td data-label="Valor" class="amount"><input type="text" style="text-align: right" name="valor_mov" maxlength="8" value="0.0"></td>
                                 <td data-label="Obs" class="remarks"><input type="text" name="obs" maxlength="255" value=""></td>
-                                <td data-label="Saldo" class="total"><?php print normalize_number($saldo); ?></td>
+                                <td data-label="Saldo" class="total"><?php print normalize_number($balance); ?></td>
                             </tr>
                         </tfoot>
                     <?php
