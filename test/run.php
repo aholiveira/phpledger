@@ -18,13 +18,12 @@ if (!$data_storage->check()) {
 $object = $object_factory->account();
 run_tests($object);
 $balance = $object->getBalanceOnDate(new DateTime());
-print_var($balance);
 assert(is_float($balance['income']));
 assert(is_float($balance['expense']));
 assert(is_float($balance['balance']));
 $viewer = $view_factory->account_balance_view($object);
 /*debug_print($viewer->printObjectList($object->getList(array('activa' => array('operator' => '=', 'value' => '1')))));
-
+*/
 $viewer = $view_factory->account_view($object);
 run_views($viewer, $object);
 $object = $object_factory->accounttype();
@@ -33,7 +32,8 @@ $viewer = $view_factory->account_type_view($object);
 run_views($viewer, $object);
 
 $object = $object_factory->currency();
-run_tests($object, "EUR");*/
+run_tests($object, "EUR");
+
 $object = $object_factory->ledger();
 run_tests($object);
 /*$object = $object_factory->ledgerentry();
@@ -72,7 +72,7 @@ function run_tests(mysql_object $object, $id = 1)
     try {
         debug_print("OBJECT: {$object}");
         debug_print("getById");
-        $object->getById($id);
+        $object = $object->getById($id);
         if (isset($object->id)) {
             assert($object->id === $id);
             //print_var($object);
