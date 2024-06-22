@@ -38,7 +38,17 @@ $report->getReport(array("year" => $year));
                 }
             }
         }
+
+        function toggle(visible) {
+            element = document.getElementById(visible);
+            if (element.style.display == "none") {
+                element.style.removeProperty("display");
+            } else {
+                element.style.display = "none";
+            }
+        }
     </script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 
 <body>
@@ -53,9 +63,108 @@ $report->getReport(array("year" => $year));
             </form>
         </div>
         <div class="main" id="main">
-            <table class="lista report_month">
-                <?php print $reportHtml->printAsTable(); ?>
-            </table>
+            <div class="viewSelector" id="viewSelector">
+                <button type="button" onclick="toggle('graph');" alt="toggle graph">Show graph</button>
+                <button type="button" onclick="toggle('table');" alt="toggle table">Show table</button>
+            </div>
+            <div class="graph" id="graph" style="display:initial; width: 99%"></div>
+            <div class="table" id="table" style="display: none;">
+                <table class="lista report_month">
+                    <?php print $reportHtml->printAsTable();
+                    ?>
+                </table>
+            </div>
+            <?php
+            $income_array[] = array();
+            $expense_array[] = array();
+            for ($month = 1; $month <= 12; $month++) {
+                $income_array[$month] = 0;
+                $expense_array[$month] = 0;
+                foreach (array_keys($report->reportData) as $key) {
+                    if (array_key_exists($month, $report->reportData[$key]["values"])) {
+                        if ($report->reportData[$key]["values"][$month] > 0) {
+                            $income_array[$month] += $report->reportData[$key]["values"][$month];
+                        } else {
+                            $expense_array[$month] += $report->reportData[$key]["values"][$month];
+                        }
+                    }
+                    if (array_key_exists("children", $report->reportData[$key])) {
+                        foreach ($report->reportData[$key]["children"] as $child)
+                            if (array_key_exists($month, $child["values"])) {
+                                if ($child["values"][$month] > 0) {
+                                    $income_array[$month] += $child["values"][$month];
+                                } else {
+                                    $expense_array[$month] += $child["values"][$month];
+                                }
+                            }
+                    }
+                }
+            }
+            $table = array();
+            $table['cols'] = array(
+                array("id" => "", 'label' => 'Month', 'type' => 'string'),
+                array("id" => "", 'label' => 'Income', 'type' => 'number'),
+                array("id" => "", 'label' => 'Expense', 'type' => 'number'),
+                array("id" => "", 'label' => 'Savings', 'type' => 'number')
+            );
+            $rows = array();
+            for ($month = 1; $month <= 12; $month++) {
+                $temp = array();
+                $temp[] = array('v' => date("M", mktime(0, 0, 0, $month, 1)));
+                $temp[] = array('v' => $income_array[$month]);
+                $temp[] = array('v' => abs($expense_array[$month]));
+                $temp[] = array('v' => array_key_exists($month, $report->savings) ? $report->savings[$month] : 0);
+                $rows[] = array('c' => $temp);
+            }
+            $table['rows'] = $rows;
+            foreach (array_keys($report->reportData) as $entry) {
+                $sum[$entry] = array_sum($report->reportData[$entry]["values"]);
+                if (array_key_exists("subtotal", $report->reportData[$entry])) {
+                    $sum[$entry] += array_sum($report->reportData[$entry]['subtotal']);
+                }
+                if (array_key_exists("children", $report->reportData[$entry])) {
+                    $sum_subentries[$entry] = array();
+                    foreach (array_keys($report->reportData[$entry]["children"]) as $subentry) {
+                        $sum_subentries[$entry][$subentry] = array_sum($report->reportData[$entry]["children"][$subentry]["values"]);
+                    }
+                }
+            }
+            $jsonTable = json_encode($table);
+            ?>
+            <script type="text/javascript">
+                google.charts.load('current', {
+                    'packages': ['corechart']
+                });
+
+                // Set a callback to run when the Google Visualization API is loaded.
+                google.charts.setOnLoadCallback(drawChart);
+
+                function drawChart() {
+                    var data = new google.visualization.DataTable(<?php print $jsonTable; ?>);
+                    var graph = new google.visualization.ColumnChart(document.getElementById('graph'));
+                    var options = {
+                        height: 500,
+                        animation: {
+                            startup: true,
+                            duration: 1000,
+                            easing: 'out',
+                        },
+                        interactivity: true,
+                        selectionMode: 'multiple',
+                        legend: {
+                            position: 'bottom'
+                        },
+                        title: 'Monthly summary',
+                        vAxis: {
+                            title: 'Euros'
+                        },
+                        hAxis: {
+                            title: 'Month'
+                        },
+                    }
+                    graph.draw(data, options);
+                };
+            </script>
         </div>
         <?php include "footer.php"; ?>
     </div>
