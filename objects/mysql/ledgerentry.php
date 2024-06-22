@@ -23,7 +23,7 @@ class ledgerentry extends mysql_object implements iobject
     public float $euro_amount;
     public float $exchange_rate;
     public int $account_id;
-    public account $account;
+    public ?account $account;
     public int $direction;
     public ?string $remarks;
     public string $username = "";
