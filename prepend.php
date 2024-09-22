@@ -3,12 +3,12 @@
 /**
  * Prepended file on each call to a PHP file
  * This does basic defines and checks if PHP version is supported
- * 
+ *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  * @since 0.2.0
- * 
+ *
  */
 if (version_compare(PHP_VERSION, '7.0.0') < 0) {
     die('PHP >= 7.0.0 required');
@@ -54,8 +54,8 @@ include constant("ROOT_DIR") . '/html.php';
  * Prints variable
  * @param mixed $var variable to print
  * @param string $comment comment to include before and after the variable printout
- * @param bool $debug 
- *  * if false, the default, prints ALWAYS. 
+ * @param bool $debug
+ *  * if false, the default, prints ALWAYS.
  *  * if true, print only if DEBUG is defined and true
  */
 function print_var($var, $comment = "", bool $debug = false)

@@ -29,10 +29,10 @@ class report_month implements ireport
     public function getReport(array $params = array()): report_month
     {
         global $object_factory;
-        $sql = "SELECT tipo_id AS category_id, tipo_desc, sum(valor_euro) AS sum, month(data_mov) AS `month`
-                FROM movimentos INNER JOIN tipo_mov ON movimentos.tipo_mov=tipo_id
-                WHERE year(data_mov)=?
-                GROUP BY tipo_mov, month(data_mov)
+        $sql = "SELECT tipo_id AS category_id, tipo_desc, sum(euro_amount) AS sum, month(entry_date) AS `month`
+                FROM movimentos INNER JOIN tipo_mov ON movimentos.category_id=tipo_id
+                WHERE year(entry_date)=?
+                GROUP BY category_id, month(entry_date)
                 ORDER BY `month`, tipo_desc";
         $tipo_desc = "";
         $sum = 0;

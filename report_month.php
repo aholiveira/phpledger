@@ -46,6 +46,9 @@ $report->getReport(array("year" => $year));
             } else {
                 element.style.display = "none";
             }
+            if (visible == "graph" && element.style.display != "none") {
+                drawChart();
+            }
         }
     </script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -67,8 +70,8 @@ $report->getReport(array("year" => $year));
                 <button type="button" onclick="toggle('graph');" alt="toggle graph">Show graph</button>
                 <button type="button" onclick="toggle('table');" alt="toggle table">Show table</button>
             </div>
-            <div class="graph" id="graph" style="display:initial; width: 99%"></div>
-            <div class="table" id="table" style="display: none;">
+            <div class="graph" id="graph" style="display: none; width: 99%"></div>
+            <div class="table" id="table" style="display: initial; width: 99%">
                 <table class="lista report_month">
                     <?php print $reportHtml->printAsTable();
                     ?>

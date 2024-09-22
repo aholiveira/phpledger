@@ -96,19 +96,19 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `movimentos`;
 CREATE TABLE `movimentos` (
-  `mov_id` int(4) NOT NULL AUTO_INCREMENT,
-  `data_mov` date DEFAULT NULL,
-  `tipo_mov` int(3) DEFAULT NULL,
-  `conta_id` int(3) DEFAULT NULL,
-  `moeda_mov` char(3) NOT NULL DEFAULT 'EUR',
-  `deb_cred` enum('1','-1') NOT NULL DEFAULT '1',
-  `valor_mov` float(10,2) DEFAULT NULL,
-  `valor_euro` float(10,2) DEFAULT NULL,
-  `cambio` float(9,4) NOT NULL DEFAULT 1.0000,
+  `id` int(4) NOT NULL AUTO_INCREMENT,
+  `entry_date` date DEFAULT NULL,
+  `category_id` int(3) DEFAULT NULL,
+  `account_id` int(3) DEFAULT NULL,
+  `currency_id` char(3) NOT NULL DEFAULT 'EUR',
+  `direction` tinyint(1) NOT NULL DEFAULT 1,
+  `currency_amount` float(10,2) DEFAULT NULL,
+  `euro_amount` float(10,2) DEFAULT NULL,
+  `exchange_rate` float(9,4) NOT NULL DEFAULT 1.0000,
   `a_pagar` tinyint(1) NOT NULL DEFAULT 0,
   `com_talao` tinyint(1) NOT NULL DEFAULT 0,
-  `obs` char(255) DEFAULT NULL,
-  PRIMARY KEY (`mov_id`)
+  `remarks` char(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --

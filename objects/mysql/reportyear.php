@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Year Report 
+ * Year Report
  * Class to generate a year report with a summary of income and expense per month
- * 
+ *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
@@ -38,11 +38,11 @@ class report_year extends report implements ireport
             $this->dateFilters[$year]['start'] = date("Ymd", mktime(0, 0, 0, 1, 1, $year));
             $this->dateFilters[$year]['end'] = date("Ymd", mktime(0, 0, 0, 12, 31, $year));
         }
-        $sql = "SELECT tipo_mov AS `row_header`, YEAR(data_mov) AS `col_header`, ROUND(SUM(ROUND(valor_euro,5)),2) AS `value`
-            FROM movimentos 
-            WHERE YEAR(data_mov) BETWEEN ? AND ?
-            GROUP BY tipo_mov, YEAR(data_mov) 
-            HAVING ROUND(SUM(ROUND(valor_euro,5)),2)<>0 
+        $sql = "SELECT category_id AS `row_header`, YEAR(entry_date) AS `col_header`, ROUND(SUM(ROUND(euro_amount,5)),2) AS `value`
+            FROM movimentos
+            WHERE YEAR(entry_date) BETWEEN ? AND ?
+            GROUP BY category_id, YEAR(entry_date)
+            HAVING ROUND(SUM(ROUND(euro_amount,5)),2)<>0
             ORDER BY `row_header`, `col_header`";
         parent::getData($sql, $this->first_year, $this->last_year);
         parent::getReport($params);

@@ -1,12 +1,12 @@
 <?php
 
 /**
- * Implements basic functionally and holds common code for mysql-backed data objects 
+ * Implements basic functionally and holds common code for mysql-backed data objects
  *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
- * 
+ *
  */
 
 abstract class mysql_object implements iobject
@@ -94,9 +94,9 @@ abstract class mysql_object implements iobject
         return get_called_class();
     }
     /**
-     * 
+     *
      * @param array $field_filter an array of the form ('field_name' => array('operator' => SQL operator, 'value' => value to filter by))
-     * - where 
+     * - where
      * - - field_name is a field which you want to filter by
      * - - operator is any valid SQL operator (LIKE, BETWEEN, <, >, <=, =>)
      * - - value is the value to be filtered
@@ -117,7 +117,7 @@ abstract class mysql_object implements iobject
     abstract static function getById(int $id): ?mysql_object;
     /**
      * @param array $field_filter an array of the form ('field_name' => array('operator' => SQL operator, 'value' => value to filter by))
-     * - where 
+     * - where
      * - - field_name is a field which you want to filter by
      * - - operator is any valid SQL operator (LIKE, BETWEEN, <, >, <=, =>)
      * - - value is the value to be filtered
@@ -128,7 +128,7 @@ abstract class mysql_object implements iobject
     /**
      * Validates object data.
      * Descendant classes should implement their own code.
-     * 
+     *
      * @return bool TRUE if object is valid. FALSE otherwise
      */
     public function validate(): bool

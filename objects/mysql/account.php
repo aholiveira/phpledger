@@ -114,24 +114,24 @@ class account extends mysql_object implements iobject
     }
     public function getBalance(\DateTime $startDate = null, \DateTime $endDate = null): array
     {
-        $where = "conta_id=? ";
+        $where = "account_id=? ";
         $retval = array('income' => 0, 'expense' => 0, 'balance' => 0);
         $param_array = array($this->id);
         if (!is_null($startDate)) {
-            $where .= " AND `data_mov`>=? ";
+            $where .= " AND `entry_date`>=? ";
             $param_array[] = $startDate->format("Y-m-d");
         }
         if (!is_null($endDate)) {
-            $where .= " AND data_mov<=? ";
+            $where .= " AND entry_date<=? ";
             $param_array[] = $endDate->format("Y-m-d");
         }
         $sql = "SELECT
-                SUM(ROUND(IF(deb_cred='1',valor_euro,0),2)) AS income,
-                SUM(ROUND(IF(deb_cred='-1',-valor_euro,0),2)) AS expense,
-                ROUND(SUM(ROUND(IF(NOT ISNULL(valor_euro),valor_euro,0),5)),2) AS balance
+                SUM(ROUND(IF(direction='1',euro_amount,0),2)) AS income,
+                SUM(ROUND(IF(direction='-1',-euro_amount,0),2)) AS expense,
+                ROUND(SUM(ROUND(IF(NOT ISNULL(euro_amount),euro_amount,0),5)),2) AS balance
                 FROM movimentos
                 WHERE {$where}
-                GROUP BY conta_id";
+                GROUP BY account_id";
         $retval = array();
         try {
             if (!(static::$_dblink->ping())) {

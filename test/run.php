@@ -82,7 +82,7 @@ function run_tests(mysql_object $object, $id = 1)
         $field_filter = array();
         if ($object instanceof ledgerentry) {
             debug_print("LEDGER ENTRY FILTER");
-            $field_filter = array('data_mov' => array('operator' => 'BETWEEN', 'value' => "'2022-01-01' AND '2022-01-02'"));
+            $field_filter = array('entry_date' => array('operator' => 'BETWEEN', 'value' => "'2022-01-01' AND '2022-01-02'"));
         }
         $object->getList($field_filter);
         debug_print("getNextId#{$object}#");
@@ -100,7 +100,7 @@ function run_views(object_viewer $viewer, iobject $object)
         $field_filter = array();
         if ($object instanceof ledgerentry) {
             debug_print("LEDGER ENTRY FILTER");
-            $field_filter = array('data_mov' => array('operator' => 'BETWEEN', 'value' => "'2022-01-01' AND '2022-01-02'"));
+            $field_filter = array('entry_date' => array('operator' => 'BETWEEN', 'value' => "'2022-01-01' AND '2022-01-02'"));
         }
         debug_print($viewer->printObjectList($object->getList($field_filter)));
     } catch (Exception $ex) {
