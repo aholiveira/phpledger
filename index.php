@@ -46,15 +46,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 $object_factory = new object_factory();
 $data_storage = $object_factory->data_storage();
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    if (!$data_storage->check()) {
-        if (!headers_sent()) {
-            header('Location: update.php');
-        } else {
-            print '<meta http-equiv="REFRESH" content="1; URL=update.php">';
-        }
-        exit(0);
+if ($data_storage->check() == false) {
+    if (!headers_sent()) {
+        header('Location: update.php');
+    } else {
+        print '<meta http-equiv="REFRESH" content="1; URL=update.php">';
     }
+    exit(0);
 }
 if (!empty($filtered_input["username"])) {
     $userauth = authentication::authenticate($filtered_input["username"], $filtered_input["password"]);

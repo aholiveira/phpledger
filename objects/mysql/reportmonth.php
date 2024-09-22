@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Month Report 
+ * Month Report
  * Class to generate a month report with a summary of income and expense per month
- * 
+ *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
@@ -30,11 +30,11 @@ class report_month extends report implements ireport
             $this->dateFilters[$month]['start'] = date("Ymd", mktime(0, 0, 0, $month, 1, $year));
             $this->dateFilters[$month]['end'] = date("Ymd", mktime(0, 0, 0, $month + 1, 0, $year));
         }
-        $sql = "SELECT tipo_mov as `row_header`, MONTH(data_mov) AS `col_header`, ROUND(SUM(ROUND(valor_euro,5)),2) AS `value` 
-            FROM movimentos 
-            WHERE YEAR(data_mov)=? 
-            GROUP BY tipo_mov, MONTH(data_mov) 
-            HAVING ROUND(SUM(ROUND(valor_euro,5)),2)<>0 
+        $sql = "SELECT category_id as `row_header`, MONTH(entry_date) AS `col_header`, ROUND(SUM(ROUND(euro_amount,5)),2) AS `value`
+            FROM movimentos
+            WHERE YEAR(entry_date)=?
+            GROUP BY category_id, MONTH(entry_date)
+            HAVING ROUND(SUM(ROUND(euro_amount,5)),2)<>0
             ORDER BY row_header, col_header";
         parent::getData($sql, $year);
         parent::getReport($params);

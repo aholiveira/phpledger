@@ -194,7 +194,7 @@ function test_object(mysql_object $object, $id = 1)
         $retval = (assert($object->update() === true, "save#{$object}#"));
         $field_filter = array();
         if ($object instanceof ledgerentry) {
-            $field_filter = array('data_mov' => array('operator' => 'BETWEEN', 'value' => "'2023-01-01' AND '2023-12-31'"));
+            $field_filter[] = array('entry_date' => array('operator' => 'BETWEEN', 'value' => "2023-01-01' AND '2023-12-31"));
         }
         $retval = (@assert(sizeof($object->getList($field_filter)) > 0, "getList#{$object}#") && $retval);
         $retval = (@assert($object->getNextId() >= 0, "getNextId#{$object}#") && $retval);
@@ -215,7 +215,7 @@ function test_view(object_viewer $viewer, iobject $object)
         $retval = (assert(!empty($viewer->printObject())) && $retval);
         $field_filter = array();
         if ($object instanceof ledgerentry) {
-            $field_filter = array('data_mov' => array('operator' => 'BETWEEN', 'value' => "'2022-01-01' AND '2022-01-02'"));
+            $field_filter[] = array('entry_date' => array('operator' => 'BETWEEN', 'value' => "2022-01-01' AND '2022-01-02"));
         }
         $retval = (@assert(!empty($viewer->printObjectList($object->getList($field_filter))), "#printObjectList#") && $retval);
         $method = "printForm";

@@ -98,9 +98,13 @@ input {
     padding: 1px 4px;
 }
 
+input[type=number] {
+    text-align: right;
+}
+
 input.submit, input[type=submit], button {
     border: outset 2px;
-    background-image: linear-gradient(lightblue, cornflowerblue); 
+    background-image: linear-gradient(lightblue, cornflowerblue);
     border: 0;
     box-sizing: border-box;
     color: #fff;
@@ -108,7 +112,7 @@ input.submit, input[type=submit], button {
     padding: 4px 10px;
     text-align: center;
     user-select: none;
-    -webkit-user-select: none;
+    /*-webkit-user-select: none;*/
     touch-action: manipulation;
     font-weight: bold;
 }
@@ -230,7 +234,7 @@ div#main table {
 div#main table thead,
 div#main table tfoot {
     position: sticky;
-    position: -webkit-sticky;
+    /*position: -webkit-sticky;*/
 }
 
 div#main table thead {
@@ -245,7 +249,7 @@ div#main table tfoot {
 
 div#main table th {
     position: sticky;
-    position: -webkit-sticky;
+    /* position: -webkit-sticky; */
     top: 0;
 }
 
@@ -270,8 +274,8 @@ div#main table.contas input,
 div#main table.contas select {
     border-collapse: collapse;
     box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
+    /*-moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;*/
 }
 
 div#main table.contas input {
@@ -281,8 +285,8 @@ div#main table.contas input {
 div#main table.lista select,
 div#main table.lista input {
     box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
+    /*-moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;*/
 }
 
 .data,

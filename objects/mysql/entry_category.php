@@ -54,10 +54,10 @@ class entry_category extends mysql_object implements iobject
     public function getBalance(): float
     {
         $retval = 0;
-        $sql = "SELECT ABS(ROUND(SUM(ROUND(valor_euro,5)),2)) as balance
+        $sql = "SELECT ABS(ROUND(SUM(ROUND(euro_amount,5)),2)) as balance
             FROM movimentos
-            WHERE tipo_mov=?
-            GROUP BY tipo_mov";
+            WHERE category_id=?
+            GROUP BY category_id";
         try {
             if (!(static::$_dblink->ping())) {
                 return $retval;

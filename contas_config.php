@@ -57,15 +57,6 @@ if (!isset($_SESSION['user'])) {
         config::set("password", $pass);
     }
     session_write_close();
-    try {
-        $db_link = @new \mysqli($host, $user, $pass, $dbase);
-        if ($db_link->connect_errno) {
-            throw new Exception($db_link->connect_error);
-        }
-    } catch (\Exception $ex) {
-        print "<p>There was an Error [" . htmlentities($ex->getMessage()) . "] while connecting to the database.</p>";
-        exit($db_link->connect_errno);
-    }
     $object_factory = new object_factory();
     $view_factory = new view_factory();
 }

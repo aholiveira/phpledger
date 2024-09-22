@@ -24,9 +24,7 @@ include __DIR__ . "/user.php";
 class object_factory implements iobject_factory
 {
     private static $_dblink;
-    public function __construct()
-    {
-    }
+    public function __construct() {}
     private static function connect(): mysqli
     {
         $host = config::get("host");
@@ -38,16 +36,11 @@ class object_factory implements iobject_factory
             if (static::$_dblink->connect_errno) {
                 throw new \RuntimeException('mysqli connection error: ' . static::$_dblink->connect_error);
             }
+            if (false === static::$_dblink->set_charset('utf8')) {
+                throw new \RuntimeException('Error while setting utf8: ' . static::$_dblink->error);
+            }
         } catch (\Exception $ex) {
             static::handle_error($ex);
-            /*
-            #print_var($this, "THIS", true);
-            print_var(static::$_dblink, "DBLINK", true);
-            print_var($ex, "EXCEPTION", true);
-            debug_print_backtrace();
-            debug_print($ex->getMessage());
-            debug_print($ex->getTraceAsString());
-            */
             exit(static::$_dblink->connect_errno);
         }
         return static::$_dblink;

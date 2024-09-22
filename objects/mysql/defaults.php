@@ -3,7 +3,7 @@
 /**
  * Defaults class
  * Holds the object for default values for forms
- * 
+ *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
@@ -19,9 +19,17 @@ class defaults extends mysql_object implements iobject
     public int $direction;
     protected static string $tableName = "defaults";
 
-    public function __construct(mysqli $dblink)
+    public function __construct(mysqli $dblink, $data = null)
     {
         parent::__construct($dblink);
+        if (is_array($data)) {
+            $this->id = $data["id"] ?? 1;
+            $this->category_id = $data["category_id"] ?? 0;
+            $this->account_id = $data["account_id"] ?? 0;
+            $this->currency_id = $data["currency_id"] ?? "EUR";
+            $this->entry_date = $data["entry_date"] ?? date("Y-m-d");
+            $this->direction = $data["direction"] ?? 1;
+        }
     }
     public static function getList(array $field_filter = array()): array
     {
@@ -85,15 +93,9 @@ class defaults extends mysql_object implements iobject
      * Set values to the initial values
      * Use if there are no persisted defaults in the database
      */
-    public function init(): defaults
+    public static function init(): defaults
     {
-        $this->id = 1;
-        $this->category_id = 1;
-        $this->account_id = 1;
-        $this->currency_id = 'EUR';
-        $this->entry_date = date("Y-m-d");
-        $this->direction = -1;
-        return $this;
+        return new defaults(static::$_dblink);
     }
     public function update(): bool
     {
@@ -110,11 +112,11 @@ class defaults extends mysql_object implements iobject
             $stmt->execute();
             $stmt->bind_result($return_id);
             if (!is_null($stmt->fetch()) && $return_id == $this->id) {
-                $sql = "UPDATE {$this->tableName()} SET 
-                    tipo_mov=?, 
-                    conta_id=?, 
-                    moeda_mov=?, 
-                    `data`=?, 
+                $sql = "UPDATE {$this->tableName()} SET
+                    tipo_mov=?,
+                    conta_id=?,
+                    moeda_mov=?,
+                    `data`=?,
                     deb_cred=?
                     WHERE id=?";
             } else {

@@ -27,7 +27,8 @@ class ledgerentry extends mysql_object implements iobject
     public int $direction;
     public ?string $remarks;
     public string $username = "";
-    public string $last_modified;
+    public string $created_at;
+    public string $updated_at;
     public int $ledger_id;
     protected static string $tableName = "movimentos";
 
@@ -35,17 +36,30 @@ class ledgerentry extends mysql_object implements iobject
     {
         parent::__construct($dblink);
     }
+    protected static function getWhereFromArray(array $field_filter, ?string $table_name = null): string
+    {
+        $where = "";
+        foreach ($field_filter as $filter_entry) {
+            foreach ($filter_entry as $field => $filter) {
+                if (strlen($where) > 0) $where .= " AND ";
+                $field_name = is_null($table_name) ? "`{$field}`" : "`{$table_name}`.`{$field}`";
+                $where .= "{$field_name} {$filter['operator']} '{$filter['value']}'";
+            }
+        }
+        if (strlen($where) > 0) $where = "WHERE {$where}";
+        return $where;
+    }
     public static function getList(array $field_filter = array()): array
     {
-        $where = parent::getWhereFromArray($field_filter);
-        $sql = "SELECT mov_id AS id, data_mov AS `entry_date`, tipo_mov AS category_id,
-            conta_id AS account_id,
-            round(valor_mov,2) as currency_amount, deb_cred AS `direction`, moeda_mov AS currency_id,
-            cambio AS exchange_rate, valor_euro AS euro_amount,
-            obs AS remarks, username, last_modified
+        $where = self::getWhereFromArray($field_filter);
+        $sql = "SELECT id, entry_date, category_id,
+            account_id,
+            round(currency_amount,2) as currency_amount, `direction`, currency_id,
+            exchange_rate, euro_amount AS euro_amount,
+            remarks, username, created_at, updated_at
             FROM " . static::tableName() . "
             {$where}
-            ORDER BY data_mov, mov_id";
+            ORDER BY entry_date, id";
         $retval = array();
         try {
             if (!(static::$_dblink->ping())) {
@@ -68,13 +82,13 @@ class ledgerentry extends mysql_object implements iobject
 
     public static function getById($id): ?ledgerentry
     {
-        $sql = "SELECT mov_id AS id, data_mov AS `entry_date`, tipo_mov AS category_id,
-            conta_id AS account_id,
-            round(valor_mov,2) as currency_amount, deb_cred AS `direction`, moeda_mov AS currency_id,
-            cambio AS exchange_rate, valor_euro AS euro_amount,
-            obs AS remarks, username, last_modified
+        $sql = "SELECT id, entry_date, category_id,
+            account_id,
+            round(currency_amount,2) as currency_amount, `direction`, currency_id,
+            exchange_rate, euro_amount,
+            remarks, username, created_at, updated_at
             FROM " . static::tableName() . "
-            WHERE mov_id=?";
+            WHERE id=?";
         $retval = null;
         try {
             if (!(static::$_dblink->ping())) {
@@ -98,9 +112,9 @@ class ledgerentry extends mysql_object implements iobject
     public function getBalanceBeforeDate($date, $account_id = null): ?float
     {
         $retval = null;
-        $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(valor_euro),valor_euro,0),5)),2) AS balance
+        $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(euro_amount),euro_amount,0),5)),2) AS balance
                 FROM {$this->tableName()}
-                WHERE data_mov<?" . (!is_null($account_id) ? " AND conta_id=?" : "");
+                WHERE entry_date<?" . (!is_null($account_id) ? " AND account_id=?" : "");
         try {
             if (!(static::$_dblink->ping())) {
                 return $retval;
@@ -134,7 +148,7 @@ class ledgerentry extends mysql_object implements iobject
         $where = parent::getWhereFromArray($field_filter);
         $tableName = static::$tableName;
         $retval = null;
-        $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(valor_euro),valor_euro,0),5)),2) AS balance
+        $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(euro_amount),euro_amount,0),5)),2) AS balance
                 FROM {$tableName}
                 WHERE {$where}";
         try {
@@ -167,7 +181,7 @@ class ledgerentry extends mysql_object implements iobject
     public function update(): bool
     {
         $retval = false;
-        $sql = "SELECT mov_id FROM {$this->tableName()} WHERE mov_id=?";
+        $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
         try {
             if (!(static::$_dblink->ping())) {
                 return $retval;
@@ -183,21 +197,21 @@ class ledgerentry extends mysql_object implements iobject
             $stmt->bind_result($return_id);
             if (!is_null($stmt->fetch()) && $return_id == $this->id) {
                 $sql = "UPDATE {$this->tableName()} SET
-                    data_mov =?,
-                    tipo_mov =?,
-                    conta_id =?,
-                    moeda_mov =?,
-                    deb_cred =?,
-                    valor_mov =?,
-                    valor_euro =?,
-                    obs =?,
+                    entry_date =?,
+                    category_id =?,
+                    account_id =?,
+                    currency_id =?,
+                    direction =?,
+                    currency_amount =?,
+                    euro_amount =?,
+                    remarks =?,
                     username=?,
-                    last_modified=NULL
-                    WHERE mov_id =?";
+                    updated_at=NULL
+                    WHERE id =?";
             } else {
                 $sql = "INSERT INTO {$this->tableName()}
-                        (data_mov, tipo_mov, conta_id, moeda_mov, deb_cred, valor_mov, valor_euro, obs, username, mov_id, last_modified)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)";
+                        (entry_date, category_id, account_id, currency_id, direction, currency_amount, euro_amount, remarks, username, id, created_at, updated_at)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL)";
             }
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
@@ -223,7 +237,7 @@ class ledgerentry extends mysql_object implements iobject
         }
         return $retval;
     }
-    public static function getNextId(string $field = "mov_id"): int
+    public static function getNextId(string $field = "id"): int
     {
         return parent::getNextId($field);
     }

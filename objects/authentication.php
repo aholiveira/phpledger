@@ -15,11 +15,10 @@ class authentication
 
     private static function do_internalAuth(string $username, string $password): bool
     {
-        global $host;
-        global $dbase;
-        global $db_link;
         global $object_factory;
 
+        $host = config::get("host");
+        $dbase = config::get("database");
         $config_user = config::get("user");
         $config_pass = config::get("password");
         $retval = false;

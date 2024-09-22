@@ -13,7 +13,7 @@ interface ireport
     /**
      * getReport
      * Calculates the report and returns the populated object
-     * @param int $year Year to calculate the report for 
+     * @param int $year Year to calculate the report for
      * @return ireport returns the populated object
      */
     function getReport(array $params = array()): ireport;
