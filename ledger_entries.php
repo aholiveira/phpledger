@@ -331,7 +331,7 @@ function build_and_save_record()
                             ?>
                                 <td data-label='ID' class='id'><a title="Editar entrada" href="ledger_entries.php?<?php print "{$filter_string}&amp;id={$row->id}"; ?>#<?php print $row->id; ?>"><?php print $row->id; ?></a></td>
                                 <td data-label='Data' class='data'><?php print $row->entry_date; ?></td>
-                                <td data-label='Categoria' class='category'><a title="Filtrar lista para esta categoria" href="ledger_entries.php?<?php print $category_filter; ?>"><?php print $row->category->parent_description . "&#8594;" . $row->category->description; ?></a></td>
+                                <td data-label='Categoria' class='category'><a title="Filtrar lista para esta categoria" href="ledger_entries.php?<?php print $category_filter; ?>"><?php print ($row->category->parent_id > 0 ? $row->category->parent_description . "&#8594;" : "") . $row->category->description; ?></a></td>
                                 <td data-label='Moeda' class='currency'><?php print $row->currency->description; ?></td>
                                 <td data-label='Conta' class='account'><a title="Filtrar lista para esta conta" href="ledger_entries.php?<?php print $account_filter ?>"><?php print $row->account->name; ?></a></td>
                                 <td data-label='D/C' class='direction'><?php print($row->direction == "1" ? "Dep" : "Lev"); ?></td>
