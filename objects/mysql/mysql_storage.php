@@ -136,6 +136,13 @@ class mysql_storage implements idata_storage
                 $retval = false;
             }
         }
+        if ($this->tableExists("movimentos")) {
+            $count = $this->do_query_get_result("SELECT COUNT(*) as rowCount FROM movimentos WHERE direction=2");
+            if ($count > 0) {
+                $this->addMessage("Table [movimentos] needs updating [direction] column");
+                $retval = false;
+            }
+        }
         return $retval;
     }
     public function update(): bool
@@ -228,6 +235,16 @@ class mysql_storage implements idata_storage
                 $account->id = 1;
                 if (!$account->update()) {
                     $this->addMessage("Could not save account");
+                    $retval = false;
+                }
+            }
+        }
+        if ($this->tableExists("movimentos")) {
+            $count = $this->do_query_get_result("SELECT COUNT(*) as rowCount FROM movimentos WHERE direction=2");
+            if ($count > 0) {
+                $result = $this->do_query("UPDATE movimentos SET direction=-1 WHERE direction=2");
+                if ($result == false) {
+                    $this->addMessage("Could not update [direction] column on table [movimentos]");
                     $retval = false;
                 }
             }
@@ -399,7 +416,11 @@ class mysql_storage implements idata_storage
         }
         return $retval;
     }
-    private function do_query_get_result($sql)
+    /**
+    * @param string $sql - The query to perform. It should produce a single column and a single row.
+    * @return mixed the result returned from the query
+    */
+    private function do_query_get_result(string $sql)
     {
         $retval = null;
         $this->connect();
@@ -416,7 +437,12 @@ class mysql_storage implements idata_storage
         }
         return $retval;
     }
-    private function do_query($sql)
+
+    /**
+    * @param string $sql - The query to perform. It should produce a single column and a single row.
+    * @return bool true if the query was successfull, false otherwise
+    */
+    private function do_query(string $sql)
     {
         $retval = false;
         $this->connect();
