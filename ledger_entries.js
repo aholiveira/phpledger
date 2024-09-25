@@ -7,7 +7,7 @@ function update_date(id) {
 
 function clear_filter() {
     document.getElementById("filter_entry_type").value = "";
-    document.getElementById("filter_conta_id").value = "";
+    document.getElementById("filter_account_id").value = "";
     document.getElementById("filter_sdate").value = (new Date).getFullYear().toString() + "-" + ((new Date).getMonth() + 1).toString().padStart(2, "0") + "-01";
     document.getElementById("filter_edate").value = (new Date).getFullYear().toString() + "-" + ((new Date).getMonth() + 1).toString().padStart(2, "0") + "-" + (new Date).getDate().toString().padStart(2, "0");
     document.getElementsByName("datefilter")[0].submit();

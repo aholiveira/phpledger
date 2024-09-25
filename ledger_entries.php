@@ -21,7 +21,7 @@ $input_variables_filter = array(
     'data_movMM' => FILTER_SANITIZE_NUMBER_INT,
     'data_movDD' => FILTER_SANITIZE_NUMBER_INT,
     'id' => FILTER_SANITIZE_NUMBER_INT,
-    'conta_id' => FILTER_SANITIZE_NUMBER_INT,
+    'account_id' => FILTER_SANITIZE_NUMBER_INT,
     'category_id' => FILTER_SANITIZE_NUMBER_INT,
     'currency_amount' => array(
         'filter' => FILTER_SANITIZE_NUMBER_FLOAT,
@@ -35,7 +35,7 @@ $input_variables_filter = array(
     ),
     'remarks' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
     'filter_entry_type' => FILTER_SANITIZE_NUMBER_INT,
-    'filter_conta_id' => FILTER_SANITIZE_NUMBER_INT,
+    'filter_account_id' => FILTER_SANITIZE_NUMBER_INT,
     'filter_parent_id' => FILTER_SANITIZE_NUMBER_INT,
     'filter_sdateAA' => FILTER_SANITIZE_NUMBER_INT,
     'filter_sdateMM' => FILTER_SANITIZE_NUMBER_INT,
@@ -105,7 +105,7 @@ function build_and_save_record()
     $entry->euro_amount = $filtered_input["direction"] * $filtered_input["currency_amount"];
     $entry->category_id = checkParameterExists("category_id", "Tipo movimento invalido!");
     $entry->currency_id = checkParameterExists("currency_id", "Moeda invalida!");
-    $entry->account_id = checkParameterExists("conta_id", "Conta movimento invalida!");
+    $entry->account_id = checkParameterExists("account_id", "Conta movimento invalida!");
     $entry->remarks = checkParameterExists("remarks", "Observacoes movimento invalidas!");
     $entry->username = (strlen($_SESSION["user"]) ? $_SESSION["user"] : "");
     if (!$entry->update()) {
@@ -154,8 +154,8 @@ function build_and_save_record()
         }
         $ledger_filter[] = array("entry_date" => array("operator" => '>=', "value" => $sdate));
         $ledger_filter[] = array("entry_date" => array("operator" => '<=', "value" => $edate));
-        if (is_array($filtered_input) && $filtered_input["filter_conta_id"] > 0) {
-            $ledger_filter[] = array('conta_id' => array("operator" => '=', "value" => $filtered_input["filter_conta_id"]));
+        if (is_array($filtered_input) && $filtered_input["filter_account_id"] > 0) {
+            $ledger_filter[] = array('account_id' => array("operator" => '=', "value" => $filtered_input["filter_account_id"]));
         }
         if (is_array($filtered_input) && $filtered_input["filter_entry_type"] > 0) {
             $ledger_filter[] = array('category_id' => array("operator" => '=', "value" => $filtered_input["filter_entry_type"]));
@@ -174,7 +174,7 @@ function build_and_save_record()
         global $object_factory;
         // Saldo anterior
         $ledger_entry = $object_factory->ledgerentry();
-        $balance = $ledger_entry->getBalanceBeforeDate($sdate, is_array($filtered_input) && $filtered_input["filter_conta_id"] > 0 ? $filtered_input["filter_conta_id"] : null);
+        $balance = $ledger_entry->getBalanceBeforeDate($sdate, is_array($filtered_input) && $filtered_input["filter_account_id"] > 0 ? $filtered_input["filter_account_id"] : null);
         $ledger_entry_cache = ledgerentry::getList($ledger_filter);
         $entry_filter_array = array();
         if ($edit > 0) {
@@ -211,7 +211,7 @@ function build_and_save_record()
         $account_viewer = $view_factory->account_view(account::getById($account_id));
         $conta_opt = $account_viewer->getSelectFromList(account::getList(array('activa' => array('operator' => '=', 'value' => '1'))), $account_id);
         $filter_string = "";
-        $filter_properties = array("filter_parent_id", "filter_entry_type", "filter_sdate", "filter_sdateAA", "filter_sdateMM", "filter_sdateDD", "filter_edate", "filter_edateAA", "filter_edateMM", "filter_edateDD", "filter_conta_id");
+        $filter_properties = array("filter_parent_id", "filter_entry_type", "filter_sdate", "filter_sdateAA", "filter_sdateMM", "filter_sdateDD", "filter_edate", "filter_edateAA", "filter_edateMM", "filter_edateDD", "filter_account_id");
         foreach ($filter_properties as $filter_prop) {
             $filter_string .= (is_array($filtered_input) && array_key_exists($filter_prop, $filtered_input) && !empty($filtered_input[$filter_prop]) ? (strlen($filter_string) > 0 ? "&" : "") . "$filter_prop={$filtered_input[$filter_prop]}" : "");
         }
@@ -240,9 +240,9 @@ function build_and_save_record()
                         </td>
                     </tr>
                     <tr>
-                        <td><label for="filter_conta_id">Conta</label> </td>
+                        <td><label for="filter_account_id">Conta</label> </td>
                         <td>
-                            <select name="filter_conta_id" id="filter_conta_id" data-placeholder="Seleccione a conta" data-max="2" data-search="false" data-select-all="true" data-list-all="true" data-width="300px" data-height="50px" data-multi-select>
+                            <select name="filter_account_id" id="filter_account_id" data-placeholder="Seleccione a conta" data-max="2" data-search="false" data-select-all="true" data-list-all="true" data-width="300px" data-height="50px" data-multi-select>
                                 <option value>Sem filtro</option>
                                 <?php print $conta_opt; ?>
                             </select>
@@ -268,12 +268,12 @@ function build_and_save_record()
             </form>
             <script>
                 document.getElementById("filter_entry_type").value = "<?php print is_array($filtered_input) ? $filtered_input["filter_entry_type"] : ""; ?>";
-                document.getElementById("filter_conta_id").value = "<?php print is_array($filtered_input) ? $filtered_input["filter_conta_id"] : ""; ?>";
+                document.getElementById("filter_account_id").value = "<?php print is_array($filtered_input) ? $filtered_input["filter_account_id"] : ""; ?>";
             </script>
         </div>
         <div class="main" id="main">
             <form name="mov" action="ledger_entries.php" method="POST">
-                <input type="hidden" name="filter_conta_id" value="<?php print is_array($filtered_input) ? $filtered_input["filter_conta_id"] : ""; ?>">
+                <input type="hidden" name="filter_account_id" value="<?php print is_array($filtered_input) ? $filtered_input["filter_account_id"] : ""; ?>">
                 <input type="hidden" name="filter_parent_id" value="<?php print is_array($filtered_input) ? $filtered_input["filter_parent_id"] : ""; ?>">
                 <input type="hidden" name="filter_entry_type" value="<?php print is_array($filtered_input) ? $filtered_input["filter_entry_type"] : ""; ?>">
                 <input type="hidden" name="filter_sdate" value="<?php print $sdate; ?>">
@@ -313,7 +313,7 @@ function build_and_save_record()
                                 </td>
                                 <td data-label="Categoria" class="category"><select name="category_id"><?php print $tipo_mov_opt; ?></select></td>
                                 <td data-label="Moeda" class="currency"><select name="currency_id"><?php print $moeda_opt; ?></select></td>
-                                <td data-label="Conta" class="account"><select name="conta_id"><?php print $conta_opt; ?></select></td>
+                                <td data-label="Conta" class="account"><select name="account_id"><?php print $conta_opt; ?></select></td>
                                 <td data-label="D/C" class="direction">
                                     <select name="direction">
                                         <option value="1" <?php print($row->direction == "1" ? " selected " : "") ?>>Dep</option>
@@ -327,7 +327,7 @@ function build_and_save_record()
                             }
                             if (empty($edit) || $row->id != $edit) {
                                 $category_filter = (stripos($filter_string, "filter_entry_type") === false ? "$filter_string&filter_entry_type={$row->category_id}" : preg_replace("/filter_entry_type=(\d+)/", "filter_entry_type=" . $row->category_id, $filter_string));
-                                $account_filter = (stripos($filter_string, "filter_conta_id") === false ? "$filter_string&filter_conta_id={$row->account_id}" : preg_replace("/filter_conta_id=(\d+)/", "filter_conta_id=" . $row->account_id, $filter_string));
+                                $account_filter = (stripos($filter_string, "filter_account_id") === false ? "$filter_string&filter_account_id={$row->account_id}" : preg_replace("/filter_account_id=(\d+)/", "filter_account_id=" . $row->account_id, $filter_string));
                             ?>
                                 <td data-label='ID' class='id'><a title="Editar entrada" href="ledger_entries.php?<?php print "{$filter_string}&amp;id={$row->id}"; ?>#<?php print $row->id; ?>"><?php print $row->id; ?></a></td>
                                 <td data-label='Data' class='data'><?php print $row->entry_date; ?></td>
@@ -368,7 +368,7 @@ function build_and_save_record()
                                     </select>
                                 </td>
                                 <td data-label="Conta" class="account">
-                                    <select name="conta_id">
+                                    <select name="account_id">
                                         <?php print $conta_opt; ?>
                                     </select>
                                 </td>
