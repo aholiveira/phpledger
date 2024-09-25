@@ -18,7 +18,7 @@ class ledger_entry_view extends object_viewer
         $retval .= "<td data-label='Data' style=\"text-align: center\">{$this->_object->entry_date}</td>\n";
         $retval .= "<td data-label='Categoria'><a title=\"Mostrar movimentos apenas desta categoria\" href=\"ledger_entries.php?filter_tipo_mov={$this->_object->category->id}\">{$this->_object->category->description}</a></td>\n";
         $retval .= "<td data-label='Moeda'>{$this->_object->category->description}</td>\n";
-        $retval .= "<td data-label='Conta'><a title=\"Mostrar movimentos apenas desta conta\" href=\"ledger_entries.php?filter_conta_id={$this->_object->account->id}\">{$this->_object->account->name}</a></td>\n";
+        $retval .= "<td data-label='Conta'><a title=\"Mostrar movimentos apenas desta conta\" href=\"ledger_entries.php?filter_account_id={$this->_object->account->id}\">{$this->_object->account->name}</a></td>\n";
         $retval .= "<td data-label='D/C'>" . ($this->_object->direction == "1" ? "Dep" : "Lev") . "</td>\n";
         $retval .= "<td data-label='Valor' class='amount'>" . normalize_number($this->_object->currency_amount) . "</td>\n";
         $retval .= "<td data-label='Obs'>{$this->_object->remarks}</td>\n";
