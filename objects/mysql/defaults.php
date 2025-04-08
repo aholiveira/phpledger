@@ -73,9 +73,6 @@ class defaults extends mysql_object implements iobject
             WHERE id=?";
         $retval = null;
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new mysqli_sql_exception();
             $stmt->bind_param("i", $id);
@@ -102,9 +99,6 @@ class defaults extends mysql_object implements iobject
         $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
         $retval = false;
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;

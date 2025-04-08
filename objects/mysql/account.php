@@ -54,9 +54,6 @@ class account extends mysql_object implements iobject
         ORDER BY activa DESC, conta_nome";
         $retval = array();
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception(static::$_dblink->error);
             $stmt->execute();
@@ -88,9 +85,6 @@ class account extends mysql_object implements iobject
         WHERE conta_id=?";
         $retval = null;
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $id);
@@ -134,9 +128,6 @@ class account extends mysql_object implements iobject
                 GROUP BY account_id";
         $retval = array();
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param(str_repeat('s', sizeof($param_array)), ...$param_array);
@@ -160,9 +151,6 @@ class account extends mysql_object implements iobject
 
         $sql = "SELECT conta_id FROM {$this->tableName()} WHERE conta_id=?";
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;
@@ -214,9 +202,6 @@ class account extends mysql_object implements iobject
         $retval = false;
         $sql = "SELECT conta_id FROM {$this->tableName()} WHERE conta_id=?";
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;

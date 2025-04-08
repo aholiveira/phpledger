@@ -51,9 +51,6 @@ abstract class mysql_object implements iobject
         }
 
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $sql = "SELECT `{$field}` FROM " . static::$tableName . " ORDER BY `{$field}`";
             $result = @$db->query($sql);
             if ($result == FALSE) $retval = -1;

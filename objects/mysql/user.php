@@ -129,9 +129,6 @@ class user extends mysql_object implements iobject
         $retval = false;
         $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             //static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;
@@ -201,9 +198,6 @@ class user extends mysql_object implements iobject
             ORDER BY username";
         $retval = array();
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception(static::$_dblink->error);
             $stmt->execute();
@@ -232,9 +226,6 @@ class user extends mysql_object implements iobject
             WHERE username=?";
         $retval = null;
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("s", $username);
@@ -262,9 +253,6 @@ class user extends mysql_object implements iobject
         WHERE id=?";
         $retval = null;
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $id);
@@ -316,9 +304,6 @@ class user extends mysql_object implements iobject
         WHERE token=?";
         $retval = null;
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("s", $token);
@@ -336,9 +321,6 @@ class user extends mysql_object implements iobject
         $retval = false;
         $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;

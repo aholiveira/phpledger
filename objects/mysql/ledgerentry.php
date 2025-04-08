@@ -62,9 +62,6 @@ class ledgerentry extends mysql_object implements iobject
             ORDER BY entry_date, id";
         $retval = array();
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->execute();
@@ -91,9 +88,6 @@ class ledgerentry extends mysql_object implements iobject
             WHERE id=?";
         $retval = null;
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $id);
@@ -116,9 +110,6 @@ class ledgerentry extends mysql_object implements iobject
                 FROM {$this->tableName()}
                 WHERE entry_date<?" . (!is_null($account_id) ? " AND account_id=?" : "");
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             if (is_null($account_id)) {
@@ -152,9 +143,6 @@ class ledgerentry extends mysql_object implements iobject
                 FROM {$tableName}
                 WHERE {$where}";
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->execute();
@@ -183,9 +171,6 @@ class ledgerentry extends mysql_object implements iobject
         $retval = false;
         $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             static::$_dblink->begin_transaction();
             if (empty($this->id)) {
                 $this->id = $this->getNextId();

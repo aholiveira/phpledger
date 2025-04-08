@@ -22,9 +22,6 @@ class ledger extends mysql_object implements iobject
         $sql = "SELECT id FROM " . static::tableName() . " {$where} ORDER BY id";
         $retval = array();
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->execute();
@@ -46,9 +43,6 @@ class ledger extends mysql_object implements iobject
     {
         $sql = "SELECT id, nome as `name` FROM " . static::tableName() . " WHERE id=?";
         try {
-            if (!(static::$_dblink->ping())) {
-                return null;
-            }
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $id);
@@ -67,9 +61,6 @@ class ledger extends mysql_object implements iobject
         $retval = false;
         $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false) return $retval;
