@@ -23,11 +23,9 @@ class currency extends mysql_object implements iobject
         $sql = "SELECT moeda_id as id, moeda_desc as `description`, taxa as exchange_rate FROM " . static::tableName() . " {$where} ORDER BY moeda_desc";
         $retval = array();
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->execute();
             $result = $stmt->get_result();
             while ($newobject = $result->fetch_object(__CLASS__, array(static::$_dblink))) {
@@ -45,11 +43,9 @@ class currency extends mysql_object implements iobject
         $sql = "SELECT moeda_id as id, moeda_desc as `description`, taxa as exchange_rate FROM " . static::tableName() . " WHERE moeda_id=? ORDER BY moeda_desc";
         $retval = null;
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -66,13 +62,12 @@ class currency extends mysql_object implements iobject
         $retval = false;
         $sql = "SELECT moeda_id FROM {$this->tableName()} WHERE moeda_id=?";
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) return $retval;
-            if (!isset($this->id)) return $retval;
+            if ($stmt == false)
+                return $retval;
+            if (!isset($this->id))
+                return $retval;
             $stmt->bind_param("s", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);

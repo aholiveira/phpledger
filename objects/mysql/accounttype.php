@@ -26,7 +26,8 @@ class accounttype extends mysql_object implements iobject
         $retval = array();
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->execute();
             $result = $stmt->get_result();
             while ($newobject = $result->fetch_object(__CLASS__, array(static::$_dblink))) {
@@ -42,15 +43,18 @@ class accounttype extends mysql_object implements iobject
     public static function getById(int $id): ?accounttype
     {
         $sql = "SELECT tipo_id as id, tipo_desc as description, savings FROM " . static::tableName() . " WHERE tipo_id=?";
-        $retval = null;
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
             $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
             $stmt->close();
+            if (is_null($retval)) {
+                $retval = new accounttype(static::$_dblink);
+            }
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
         }
@@ -65,7 +69,8 @@ class accounttype extends mysql_object implements iobject
         try {
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) return $retval;
+            if ($stmt == false)
+                return $retval;
             $stmt->bind_param("i", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);
@@ -76,7 +81,8 @@ class accounttype extends mysql_object implements iobject
             }
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param(
                 "sii",
                 $this->description,
@@ -84,7 +90,8 @@ class accounttype extends mysql_object implements iobject
                 $this->id
             );
             $retval = $stmt->execute();
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->close();
             static::$_dblink->commit();
         } catch (\Exception $ex) {
@@ -100,7 +107,8 @@ class accounttype extends mysql_object implements iobject
         try {
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) return $retval;
+            if ($stmt == false)
+                return $retval;
             $stmt->bind_param("i", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);

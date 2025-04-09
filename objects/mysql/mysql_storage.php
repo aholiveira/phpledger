@@ -32,7 +32,7 @@ class mysql_storage implements idata_storage
         $user = config::get("user");
         $pass = config::get("password");
         $dbase = config::get("database");
-        if (!($this->_dblink instanceof \mysqli) || !($this->_dblink->ping())) {
+        if (!($this->_dblink instanceof \mysqli)) {
             mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
             $this->_dblink = new \mysqli($host, $user, $pass, $dbase);
             if ($this->_dblink->connect_errno) {
@@ -75,11 +75,12 @@ class mysql_storage implements idata_storage
             if ($entry_category->id !== 0) {
                 $this->addMessage("Category '0' does not exist");
                 $retval = false;
-            }
-            $entry_list = $entry_category->getList(array('parent_id' => array('operator' => 'is', 'value' => 'null'), 'tipo_id' => array('operator' => '>', 'value' => '0')));
-            if (sizeof($entry_list) > 0) {
-                $this->addMessage("Table [tipo_mov] needs update");
-                $retval = false;
+            } else {
+                $entry_list = $entry_category->getList(array('parent_id' => array('operator' => 'is', 'value' => 'null'), 'tipo_id' => array('operator' => '>', 'value' => '0')));
+                if (sizeof($entry_list) > 0) {
+                    $this->addMessage("Table [tipo_mov] needs update");
+                    $retval = false;
+                }
             }
         }
         if ($this->tableExists("users")) {
@@ -102,15 +103,13 @@ class mysql_storage implements idata_storage
             }
         }
         if ($this->tableExists("defaults")) {
-            $defaults = new defaults($this->_dblink);
-            if (sizeof($defaults->getList()) == 0) {
+            if (sizeof(defaults::getList()) == 0) {
                 $this->addMessage("Table [defaults] is empty");
                 $retval = false;
             }
         }
         if ($this->tableExists("defaults")) {
-            $defaults = new defaults($this->_dblink);
-            if (sizeof($defaults->getList()) == 0) {
+            if (sizeof(defaults::getList()) == 0) {
                 $this->addMessage("Table [defaults] is empty");
                 $retval = false;
             }
@@ -177,9 +176,20 @@ class mysql_storage implements idata_storage
                 $retval = false;
             }
         }
+        $entry_category = object_factory::entry_category()::getById(0);
+        if ($entry_category->id !== 0) {
+            $entry_category->id = 0;
+            $entry_category->parent_id = null;
+            $entry_category->description = "Sem categoria";
+            $entry_category->active = 1;
+            if (!$entry_category->update()) {
+                $this->addMessage("Could not add category 0");
+                $retval = false;
+            }
+        }
         $ledger = new ledger($this->_dblink);
         if (sizeof($ledger->getList()) == 0) {
-            $ledger->setId(1);
+            $ledger->setId(id: 1);
             $ledger->name = "Default";
             if (!$ledger->update()) {
                 $this->addMessage("Could not add default ledger");
@@ -187,9 +197,8 @@ class mysql_storage implements idata_storage
             }
         }
         if ($this->tableExists("defaults")) {
-            $defaults = new defaults($this->_dblink);
-            if (sizeof($defaults->getList()) == 0) {
-                $defaults->init();
+            if (sizeof(defaults::getList()) == 0) {
+                $defaults = defaults::init();
                 if (!$defaults->update()) {
                     $this->addMessage("Could not save defaults");
                     $retval = false;
@@ -209,8 +218,8 @@ class mysql_storage implements idata_storage
             }
         }
         if ($this->tableExists("tipo_mov")) {
-            $accounttype = new accounttype($this->_dblink);
-            if (sizeof($accounttype->getList()) == 0) {
+            if (sizeof(accounttype::getList()) == 0) {
+                $accounttype = new accounttype($this->_dblink);
                 $accounttype->description = 'Conta caixa';
                 $accounttype->savings = 0;
                 $accounttype->id = 1;
@@ -275,9 +284,8 @@ class mysql_storage implements idata_storage
                     $ledger_entry->id = $ledger_entry->getNextId();
                     $ledger_entry->account_id = $account_list[array_rand($account_list)]->id;
                     $ledger_entry->category_id = $category_list[array_rand($category_list)]->id;
-                    if ($ledger_entry->category_id == 0) exit(0);
                     $ledger_entry->entry_date = date("Y-m-d", mktime(0, 0, 0, $month, random_int(1, $days_in_month), $year));
-                    $ledger_entry->direction =  array(-1, 1)[array_rand(array(-1, 1))];
+                    $ledger_entry->direction = array(-1, 1)[array_rand(array(-1, 1))];
                     $ledger_entry->currency_amount = random_int(1, 10000) / 100;
                     $ledger_entry->currency_id = 'EUR';
                     $ledger_entry->euro_amount = $ledger_entry->currency_amount * $ledger_entry->direction;
@@ -395,7 +403,7 @@ class mysql_storage implements idata_storage
              */
             global $object_factory;
             $entry_category = $object_factory->entry_category();
-            $entry_category = $entry_category->getById(0);
+            $entry_category = $entry_category::getById(0);
             if ($entry_category->id != 0) {
                 $this->addMessage("Adding category 0");
                 $entry_category->id = 0;
@@ -417,16 +425,17 @@ class mysql_storage implements idata_storage
         return $retval;
     }
     /**
-    * @param string $sql - The query to perform. It should produce a single column and a single row.
-    * @return mixed the result returned from the query
-    */
+     * @param string $sql - The query to perform. It should produce a single column and a single row.
+     * @return mixed the result returned from the query
+     */
     private function do_query_get_result(string $sql)
     {
         $retval = null;
         $this->connect();
         try {
             $stmt = @$this->_dblink->prepare($sql);
-            if ($stmt == false) return $retval;
+            if ($stmt == false)
+                return $retval;
             $stmt->execute();
             $stmt->bind_result($retval);
             $stmt->fetch();
@@ -439,16 +448,17 @@ class mysql_storage implements idata_storage
     }
 
     /**
-    * @param string $sql - The query to perform. It should produce a single column and a single row.
-    * @return bool true if the query was successfull, false otherwise
-    */
+     * @param string $sql - The query to perform. It should produce a single column and a single row.
+     * @return bool true if the query was successfull, false otherwise
+     */
     private function do_query(string $sql)
     {
         $retval = false;
         $this->connect();
         try {
             $stmt = $this->_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $retval = $stmt->execute();
             $stmt->close();
         } catch (\Exception $ex) {
@@ -463,7 +473,8 @@ class mysql_storage implements idata_storage
         $this->connect();
         try {
             $stmt = $this->_dblink->prepare("SHOW CREATE TABLE `{$table}`");
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->execute();
             $stmt->bind_result($table, $retval);
             $stmt->fetch();
@@ -495,7 +506,8 @@ class mysql_storage implements idata_storage
         $this->connect();
         $sql = "SELECT count(*) as colCount FROM information_schema.columns WHERE table_name = '{$table_name}' AND column_name = '{$column_name}' and table_schema = DATABASE()";
         try {
-            if ($this->tableHasColumn($table_name, $column_name)) return true;
+            if ($this->tableHasColumn($table_name, $column_name))
+                return true;
             $sql = "ALTER TABLE `{$table_name}` ADD COLUMN `{$column_name}` $typedef";
             $retval = $this->do_query($sql);
             $this->addMessage("Column [{$column_name}] added to [{$table_name}]");
@@ -528,8 +540,10 @@ class mysql_storage implements idata_storage
         $this->connect();
         $sql = "SELECT count(*) as colCount FROM information_schema.columns WHERE table_name = '{$table_name}' AND column_name = '{$new_column_name}' and table_schema = DATABASE()";
         try {
-            if ($this->tableHasColumn($table_name, $new_column_name)) return false;
-            if (!$this->tableHasColumn($table_name, $old_column_name)) return false;
+            if ($this->tableHasColumn($table_name, $new_column_name))
+                return false;
+            if (!$this->tableHasColumn($table_name, $old_column_name))
+                return false;
             $sql = "ALTER TABLE `{$table_name}` RENAME COLUMN `{$old_column_name}` TO `{$new_column_name}`";
             $retval = $this->do_query($sql);
             $this->addMessage("Renamed column [{$old_column_name}] to [{$new_column_name}] on [{$table_name}]");
@@ -562,7 +576,8 @@ class mysql_storage implements idata_storage
         $this->connect();
         $sql = "ALTER TABLE `{$table_name}` ADD FOREIGN KEY `{$key_name}` (`{$key_name}`) REFERENCES {$fk_def}";
         try {
-            if ($this->tableHasForeignKey($table_name, $key_name)) return true;
+            if ($this->tableHasForeignKey($table_name, $key_name))
+                return true;
             $retval = $this->do_query($sql);
             $this->addMessage("Added foreign key [{$key_name}] to table [{$table_name}]");
         } catch (\Exception $ex) {
@@ -771,7 +786,7 @@ class mysql_storage implements idata_storage
             "moeda_desc" => "char(30) DEFAULT NULL",
             "taxa" => "float(8,6) DEFAULT NULL"
         );
-        $this->_tableCreateSQL['moedas']['primary_key']  = "moeda_id";
+        $this->_tableCreateSQL['moedas']['primary_key'] = "moeda_id";
 
         $this->_tableCreateSQL['movimentos']['columns'] = array(
             "id" => "int(4) NOT NULL AUTO_INCREMENT",
@@ -806,7 +821,7 @@ class mysql_storage implements idata_storage
             "active" => "int(1) NOT NULL DEFAULT 0"
         );
         $this->_tableCreateSQL['tipo_mov']['primary_key'] = "tipo_id";
-        $this->_tableCreateSQL['tipo_mov']['keys'] = array("parent_id"  => "parent_id");
+        $this->_tableCreateSQL['tipo_mov']['keys'] = array("parent_id" => "parent_id");
         $this->_tableCreateSQL['tipo_mov']['constraints'] = array("parent_id" => "`tipo_mov` (`tipo_id`) ON DELETE CASCADE ON UPDATE CASCADE");
 
         $this->_tableCreateSQL['users']['columns'] = array(

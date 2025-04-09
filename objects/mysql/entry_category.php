@@ -32,7 +32,8 @@ class entry_category extends mysql_object implements iobject
         $retval = array();
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->execute();
             $stmt->bind_result($id);
             while ($stmt->fetch()) {
@@ -57,7 +58,8 @@ class entry_category extends mysql_object implements iobject
             GROUP BY category_id";
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("s", $this->id);
             $stmt->execute();
             $stmt->bind_result($retval);
@@ -68,15 +70,15 @@ class entry_category extends mysql_object implements iobject
         }
         return $retval;
     }
-    public static function getById(int $id): ?entry_category
+    public static function getById(int $id): entry_category
     {
         $sql = "SELECT tipo_id AS id, parent_id, tipo_desc AS `description`, active
             FROM " . static::tableName() . "
             WHERE tipo_id=? ";
-        $retval = null;
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -85,6 +87,8 @@ class entry_category extends mysql_object implements iobject
             if ($retval instanceof entry_category) {
                 $retval->getParentDescription();
                 $retval->children = $retval->getChildren();
+            } else {
+                $retval = new entry_category(static::$_dblink);
             }
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
@@ -96,10 +100,12 @@ class entry_category extends mysql_object implements iobject
         $sql = "SELECT tipo_desc AS `description`
             FROM {$this->tableName()}
             WHERE tipo_id=?";
-        if (!isset($this->parent_id)) return "";
+        if (!isset($this->parent_id))
+            return "";
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $this->parent_id);
             $stmt->execute();
             $stmt->bind_result($this->parent_description);
@@ -120,7 +126,8 @@ class entry_category extends mysql_object implements iobject
             ORDER BY active desc, tipo_desc ";
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $this->id);
             $stmt->execute();
             $stmt->bind_result($child_id);
@@ -141,20 +148,23 @@ class entry_category extends mysql_object implements iobject
     public function validate(): bool
     {
         $retval = true;
-        $retval = (null !== $this->id) && ($this->id !== $this->parent_id) && ($this->validation_message = "Categoria nao pode ser igual a si mesma") && $retval;
+        $retval = (!is_null($this->id)) && ($this->id !== $this->parent_id) && ($this->validation_message = "Categoria nao pode ser igual a si mesma") && $retval;
         $retval = is_int($this->id) && ($this->id >= 0) && $retval;
         return $retval;
     }
     public function update(): bool
     {
         $retval = false;
-        if (!$this->validate()) return $retval;
+        if (!$this->validate())
+            return $retval;
         $sql = "SELECT tipo_id FROM {$this->tableName()} WHERE tipo_id=?";
         try {
             static::$_dblink->begin_transaction();
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false) return $retval;
-            if (!isset($this->id)) return $retval;
+            if ($stmt == false)
+                return $retval;
+            if (!isset($this->id))
+                return $retval;
             $stmt->bind_param("s", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);
@@ -165,7 +175,8 @@ class entry_category extends mysql_object implements iobject
             }
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param(
                 "ssss",
                 $this->parent_id,
@@ -188,8 +199,10 @@ class entry_category extends mysql_object implements iobject
         try {
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) return $retval;
-            if (!isset($this->id)) return $retval;
+            if ($stmt == false)
+                return $retval;
+            if (!isset($this->id))
+                return $retval;
             $stmt->bind_param("s", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);
@@ -199,9 +212,11 @@ class entry_category extends mysql_object implements iobject
                 $sql = "";
             }
             $stmt->close();
-            if (strlen($sql) == 0) return $retval;
+            if (strlen($sql) == 0)
+                return $retval;
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("s", $this->id);
             $stmt->execute();
             $stmt->close();

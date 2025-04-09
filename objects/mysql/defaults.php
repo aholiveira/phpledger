@@ -22,14 +22,12 @@ class defaults extends mysql_object implements iobject
     public function __construct(mysqli $dblink, $data = null)
     {
         parent::__construct($dblink);
-        if (is_array($data)) {
-            $this->id = $data["id"] ?? 1;
-            $this->category_id = $data["category_id"] ?? 0;
-            $this->account_id = $data["account_id"] ?? 0;
-            $this->currency_id = $data["currency_id"] ?? "EUR";
-            $this->entry_date = $data["entry_date"] ?? date("Y-m-d");
-            $this->direction = $data["direction"] ?? 1;
-        }
+        $this->id = $data["id"] ?? 1;
+        $this->category_id = $data["category_id"] ?? 0;
+        $this->account_id = $data["account_id"] ?? 0;
+        $this->currency_id = $data["currency_id"] ?? "EUR";
+        $this->entry_date = $data["entry_date"] ?? date("Y-m-d");
+        $this->direction = $data["direction"] ?? 1;
     }
     public static function getList(array $field_filter = array()): array
     {
@@ -46,9 +44,11 @@ class defaults extends mysql_object implements iobject
         ORDER BY id";
         $retval = array();
         try {
-            if (!is_object(static::$_dblink)) return $retval;
+            if (!is_object(static::$_dblink))
+                return $retval;
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception(static::$_dblink->error);
+            if ($stmt == false)
+                throw new mysqli_sql_exception(static::$_dblink->error);
             $stmt->execute();
             $result = $stmt->get_result();
             while ($newobject = $result->fetch_object(__CLASS__, array(static::$_dblink))) {
@@ -74,10 +74,12 @@ class defaults extends mysql_object implements iobject
         $retval = null;
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new mysqli_sql_exception();
+            if ($stmt == false)
+                throw new mysqli_sql_exception();
             $stmt->bind_param("i", $id);
             $stmt->execute();
-            if (!$stmt) throw new mysqli_sql_exception();
+            if (!$stmt)
+                throw new mysqli_sql_exception();
             $result = $stmt->get_result();
             $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
             $stmt->close();
@@ -101,7 +103,8 @@ class defaults extends mysql_object implements iobject
         try {
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) return $retval;
+            if ($stmt == false)
+                return $retval;
             $stmt->bind_param("i", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);
@@ -118,7 +121,8 @@ class defaults extends mysql_object implements iobject
             }
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
-            if (!$stmt) throw new \mysqli_sql_exception(static::$_dblink->error);
+            if (!$stmt)
+                throw new \mysqli_sql_exception(static::$_dblink->error);
             $stmt->bind_param(
                 "ssssss",
                 $this->category_id,
@@ -128,10 +132,12 @@ class defaults extends mysql_object implements iobject
                 $this->direction,
                 $this->id
             );
-            if (!$stmt) throw new \mysqli_sql_exception(static::$_dblink->error);
+            if (!$stmt)
+                throw new \mysqli_sql_exception(static::$_dblink->error);
             $retval = $stmt->execute();
             $stmt->close();
-            if (!$retval) throw new \mysqli_sql_exception(static::$_dblink->error);
+            if (!$retval)
+                throw new \mysqli_sql_exception(static::$_dblink->error);
             static::$_dblink->commit();
         } catch (\Exception $ex) {
             static::$_dblink->rollback();

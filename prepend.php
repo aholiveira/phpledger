@@ -32,8 +32,6 @@ if (defined("DEBUG") && constant("DEBUG") == 1) {
 }
 if (session_status() == PHP_SESSION_NONE) {
     ini_set("session.use_strict_mode", true);
-    ini_set("session.sid_bits_per_character", 5);
-    ini_set("session.sid_length", 64);
 }
 if (!headers_sent()) {
     header("Cache-Control: no-cache");
