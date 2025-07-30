@@ -359,7 +359,7 @@ function build_and_save_record(): void
                                 $category_filter = stripos($filter_string, "filter_entry_type") === false ? "$filter_string&filter_entry_type={$row->category_id}" : preg_replace("/filter_entry_type=(\d+)/", "filter_entry_type=" . $row->category_id, $filter_string);
                                 $account_filter = stripos($filter_string, "filter_account_id") === false ? "$filter_string&filter_account_id={$row->account_id}" : preg_replace("/filter_account_id=(\d+)/", "filter_account_id=" . $row->account_id, $filter_string);
                                 ?>
-                                <td data-label='ID' class='id'><a title="Editar entrada"
+                                <td data-label='ID' class='id'><a title="Clique para editar entrada&#10;Modificado por <?= $row->username ?>&#10;em <?= $row->updated_at ?>"
                                         href="ledger_entries.php?<?= "{$filter_string}&amp;id={$row->id}" ?>#<?= $row->id ?>"><?= $row->id ?></a>
                                 </td>
                                 <td data-label='Data' class='data'><?= $row->entry_date ?></td>
