@@ -778,7 +778,8 @@ class mysql_storage implements idata_storage
             "conta_id" => "int(3) DEFAULT NULL",
             "moeda_mov" => "char(3) DEFAULT NULL",
             "data" => "date DEFAULT NULL",
-            "deb_cred" => "enum('1','-1') DEFAULT NULL"
+            "deb_cred" => "enum('1','-1') DEFAULT NULL",
+            "username" => "char(100) DEFAULT NULL"
         );
         $this->_tableCreateSQL['defaults']['primary_key'] = "id";
 

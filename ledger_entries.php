@@ -107,12 +107,16 @@ function build_and_save_record(): void
     if (!$entry->update()) {
         Html::myalert("Ocorreu um erro na gravacao");
     } else {
-        $defaults = $defaults->getById(1);
+        $defaults = $defaults->getByUsername($_SESSION["user"]);
+        if (null === $defaults) {
+            $defaults = defaults::init();
+        }
         $defaults->category_id = $entry->category_id;
         $defaults->currency_id = $entry->currency_id;
         $defaults->account_id = $entry->account_id;
         $defaults->entry_date = $entry->entry_date;
         $defaults->direction = $entry->direction;
+        $defaults->username = $_SESSION["user"];
         $defaults->update();
         Html::myalert("Registo gravado [ID: {$entry->id}]");
     }
@@ -185,9 +189,9 @@ function build_and_save_record(): void
         }
 
         // Defaults
-        $defaults = defaults::getById(1);
-        if ($defaults->id != 1) {
-            $defaults->init();
+        $defaults = defaults::getByUsername($_SESSION["user"]);
+        if (null === $defaults) {
+            $defaults = defaults::init();
         }
         // Tipos movimento
         $category_id = $edit > 0 ? $edit_entry->category_id : $defaults->category_id;
@@ -359,7 +363,8 @@ function build_and_save_record(): void
                                 $category_filter = stripos($filter_string, "filter_entry_type") === false ? "$filter_string&filter_entry_type={$row->category_id}" : preg_replace("/filter_entry_type=(\d+)/", "filter_entry_type=" . $row->category_id, $filter_string);
                                 $account_filter = stripos($filter_string, "filter_account_id") === false ? "$filter_string&filter_account_id={$row->account_id}" : preg_replace("/filter_account_id=(\d+)/", "filter_account_id=" . $row->account_id, $filter_string);
                                 ?>
-                                <td data-label='ID' class='id'><a title="Clique para editar entrada&#10;Modificado por <?= $row->username ?>&#10;em <?= $row->updated_at ?>"
+                                <td data-label='ID' class='id'><a
+                                        title="Clique para editar entrada&#10;Modificado por <?= $row->username ?>&#10;em <?= $row->updated_at ?>"
                                         href="ledger_entries.php?<?= "{$filter_string}&amp;id={$row->id}" ?>#<?= $row->id ?>"><?= $row->id ?></a>
                                 </td>
                                 <td data-label='Data' class='data'><?= $row->entry_date ?></td>
