@@ -17,17 +17,19 @@ class defaults extends mysql_object implements iobject
     public string $currency_id;
     public string $entry_date;
     public int $direction;
+    public ?string $username;
     protected static string $tableName = "defaults";
 
     public function __construct(mysqli $dblink, $data = null)
     {
         parent::__construct($dblink);
         $this->id = $data["id"] ?? 1;
-        $this->category_id = $data["category_id"] ?? 0;
+        $this->category_id = $data["category_id"] ?? 990;
         $this->account_id = $data["account_id"] ?? 0;
         $this->currency_id = $data["currency_id"] ?? "EUR";
         $this->entry_date = $data["entry_date"] ?? date("Y-m-d");
         $this->direction = $data["direction"] ?? 1;
+        $this->username = $data["username"] ?? config::get("admin_username");
     }
     public static function getList(array $field_filter = array()): array
     {
@@ -38,7 +40,8 @@ class defaults extends mysql_object implements iobject
             conta_id as `account_id`,
             moeda_mov as `currency_id`,
             `data` as `entry_date`,
-            deb_cred as direction
+            deb_cred as direction,
+            username
         FROM " . defaults::$tableName . "
         {$where}
         ORDER BY id";
@@ -68,7 +71,8 @@ class defaults extends mysql_object implements iobject
             conta_id as `account_id`,
             moeda_mov as `currency_id`,
             `data` as `entry_date`,
-            deb_cred as direction
+            deb_cred as direction,
+            username
             FROM " . defaults::$tableName . "
             WHERE id=?";
         $retval = null;
@@ -82,6 +86,37 @@ class defaults extends mysql_object implements iobject
                 throw new mysqli_sql_exception();
             $result = $stmt->get_result();
             $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $stmt->close();
+        } catch (Exception $ex) {
+            static::handleException($ex, $sql);
+        }
+        return $retval;
+    }
+    public static function getByUsername(string $username): ?defaults
+    {
+        $sql = "SELECT
+            id,
+            tipo_mov as `category_id`,
+            conta_id as `account_id`,
+            moeda_mov as `currency_id`,
+            `data` as `entry_date`,
+            deb_cred as direction,
+            username
+            FROM " . defaults::$tableName . "
+            WHERE trim(lower(username))=trim(lower(?))";
+        $retval = null;
+        try {
+            $stmt = @static::$_dblink->prepare($sql);
+            if ($stmt == false)
+                throw new mysqli_sql_exception();
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            if (!$stmt)
+                throw new mysqli_sql_exception();
+            $result = $stmt->get_result();
+            if ($row = $result->fetch_assoc()) {
+                $retval = new defaults(static::$_dblink, $row);
+            }
             $stmt->close();
         } catch (Exception $ex) {
             static::handleException($ex, $sql);
@@ -114,21 +149,23 @@ class defaults extends mysql_object implements iobject
                     conta_id=?,
                     moeda_mov=?,
                     `data`=?,
-                    deb_cred=?
+                    deb_cred=?,
+                    username=?
                     WHERE id=?"
                 :
-                $sql = "INSERT INTO {$this->tableName()} (tipo_mov, conta_id, moeda_mov, `data`, deb_cred, id) VALUES (?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO {$this->tableName()} (tipo_mov, conta_id, moeda_mov, `data`, deb_cred, username, id) VALUES (?, ?, ?, ?, ?, ?, ?)";
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
             if (!$stmt)
                 throw new \mysqli_sql_exception(static::$_dblink->error);
             $stmt->bind_param(
-                "ssssss",
+                "ssssssi",
                 $this->category_id,
                 $this->account_id,
                 $this->currency_id,
                 $this->entry_date,
                 $this->direction,
+                $this->username,
                 $this->id
             );
             if (!$stmt)
