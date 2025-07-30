@@ -29,9 +29,9 @@ class report_HtmlView
         }
         $lines .= "<th>Average</th><th>Total</th></tr></thead>\r\n";
         $lines .= "<tbody>";
-        $this->_periodIncome = array();
-        $this->_periodExpense = array();
-        $this->_periodTotal = array();
+        $this->_periodIncome = [];
+        $this->_periodExpense = [];
+        $this->_periodTotal = [];
         foreach ($this->_report->reportData as $rowHeader => $dataRecord) {
             $lines .= $this->print_row($rowHeader, $dataRecord);
             if (array_key_exists('children', $dataRecord)) {

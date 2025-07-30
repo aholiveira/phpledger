@@ -199,7 +199,7 @@ class user extends mysql_object implements iobject
             FROM " . static::tableName() . "
             {$where}
             ORDER BY username";
-        $retval = array();
+        $retval = [];
         try {
             $stmt = static::$_dblink->prepare($sql);
             if ($stmt == false)

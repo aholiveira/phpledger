@@ -45,7 +45,7 @@ class defaults extends mysql_object implements iobject
         FROM " . defaults::$tableName . "
         {$where}
         ORDER BY id";
-        $retval = array();
+        $retval = [];
         try {
             if (!is_object(static::$_dblink))
                 return $retval;
