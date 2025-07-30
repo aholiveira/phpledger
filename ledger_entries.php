@@ -8,9 +8,9 @@
  *
  */
 if (!defined("ROOT_DIR")) {
-    include __DIR__ . "/prepend.php";
+    require_once __DIR__ . "/prepend.php";
 }
-include __DIR__ . "/contas_config.php";
+require_once __DIR__ . "/contas_config.php";
 $pagetitle = "Movimentos";
 $input_variables_filter = [
     'data_mov' => [

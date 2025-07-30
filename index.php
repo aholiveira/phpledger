@@ -9,7 +9,7 @@
  */
 // Determine if connection is secure for cookie params
 if (!defined("ROOT_DIR")) {
-    include "prepend.php";
+    require_once "prepend.php";
 }
 config::init(__DIR__ . '/config.json');
 if (isset($_GET['do_logout']) && $_GET['do_logout'] === '1') {
