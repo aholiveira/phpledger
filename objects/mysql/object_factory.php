@@ -23,10 +23,15 @@ include __DIR__ . "/user.php";
 
 class object_factory implements iobject_factory
 {
-    private static $_dblink;
-    public function __construct() {}
+    private static ?\mysqli $_dblink = null;
+    public function __construct()
+    {
+    }
     private static function connect(): mysqli
     {
+        if (static::$_dblink instanceof mysqli) {
+            return static::$_dblink;
+        }
         $host = config::get("host");
         $dbase = config::get("database");
         $user = config::get("user");
@@ -47,7 +52,7 @@ class object_factory implements iobject_factory
     }
     public static function handle_error(\Exception $ex)
     {
-        print "<p>Error [" . $ex->getMessage() .  "] while connecting to the database. Please check config file.</p>";
+        print "<p>Error [" . $ex->getMessage() . "] while connecting to the database. Please check config file.</p>";
     }
     public static function data_storage(): idata_storage
     {

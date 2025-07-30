@@ -34,7 +34,8 @@ abstract class mysql_object implements iobject
     protected static function copyfromObject(mysql_object $source, mysql_object $destination): void
     {
         $vars = is_object($source) ? get_object_vars($source) : $source;
-        if (!is_array($vars)) throw new \Exception('no props to import into the object!');
+        if (!is_array($vars))
+            throw new \Exception('no props to import into the object!');
         foreach ($vars as $key => $value) {
             $destination->$key = $value;
         }
@@ -46,39 +47,31 @@ abstract class mysql_object implements iobject
     {
         $db = static::$_dblink;
         $retval = -1;
-        if (is_null(static::$tableName)) {
+        if (null === static::$tableName) {
             return $retval;
         }
-
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $sql = "SELECT `{$field}` FROM " . static::$tableName . " ORDER BY `{$field}`";
             $result = @$db->query($sql);
-            if ($result == FALSE) $retval = -1;
-            if ($result instanceof \mysqli_result) {
-                if ($result->num_rows == 0) {
-                    $retval = 1;
-                }
-                $row = $result->fetch_assoc();
-                if ($result->num_rows == 1) {
-                    $retval = ($row[$field] == 1 ? 2 : 1);
-                }
-                if ($result->num_rows > 1) {
+            if ($result == FALSE || !($result instanceof \mysqli_result)) {
+                return $retval;
+            }
+            if ($result->num_rows === 0) {
+                return 1;
+            }
+            $row = $result->fetch_assoc();
+            if ($result->num_rows == 1) {
+                return $row[$field] == 1 ? 2 : 1;
+            }
+            if ($result->num_rows > 1) {
+                $last = $row[$field];
+                $prev = 0;
+                while ($row && ((int) $last - (int) $prev) <= 1) {
+                    $prev = $last;
                     $last = $row[$field];
-                    $prev = 0;
-                    while ($row && ((int)$last - (int)$prev) <= 1) {
-                        $prev = $last;
-                        $last = $row[$field];
-                        $row = $result->fetch_assoc();
-                    }
-                    if ($last - $prev <= 1) {
-                        $retval = $last + 1;
-                    } else {
-                        $retval = $prev + 1;
-                    }
+                    $row = $result->fetch_assoc();
                 }
+                $retval = (($last - $prev <= 1) ? $last : $prev) + 1;
             }
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
@@ -107,11 +100,13 @@ abstract class mysql_object implements iobject
     {
         $where = "";
         foreach ($field_filter as $field => $filter) {
-            if (strlen($where) > 0) $where .= " AND ";
-            $field_name = is_null($table_name) ? "`{$field}`" : "`{$table_name}`.`{$field}`";
+            if (strlen($where) > 0)
+                $where .= " AND ";
+            $field_name = null === $table_name ? "`{$field}`" : "`{$table_name}`.`{$field}`";
             $where .= "{$field_name} {$filter['operator']} {$filter['value']}";
         }
-        if (strlen($where) > 0) $where = "WHERE {$where}";
+        if (strlen($where) > 0)
+            $where = "WHERE {$where}";
         return $where;
     }
     abstract static function getById(int $id): ?mysql_object;
@@ -160,7 +155,8 @@ abstract class mysql_object implements iobject
     public function clear(): void
     {
         $vars = get_object_vars($this);
-        if (!is_array($vars)) throw new \Exception('no props to import into the object!');
+        if (!is_array($vars))
+            throw new \Exception('no props to import into the object!');
         foreach (array_keys($vars) as $key) {
             unset($this->$key);
         }

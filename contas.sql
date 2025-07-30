@@ -28,7 +28,7 @@ CREATE TABLE `contas` (
   `conta_fecho` date default NULL,
   `activa` int(1) NOT NULL default '0',
   PRIMARY KEY  (`conta_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `contas`
@@ -54,7 +54,7 @@ CREATE TABLE `defaults` (
   `data` date default NULL,
   `deb_cred` enum('1','-1') default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `defaults`
@@ -73,11 +73,12 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `moedas`;
 CREATE TABLE `moedas` (
-  `moeda_id` char(3) NOT NULL default '',
-  `moeda_desc` char(30) default NULL,
-  `taxa` float(8,6) default NULL,
-  PRIMARY KEY  (`moeda_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `id` int(4) NOT NULL DEFAULT 0,
+  `code` char(3) NOT NULL default '',
+  `description` char(30) default NULL,
+  `exchange_rate` float(8,6) default NULL,
+  PRIMARY KEY  (`code`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `moedas`
@@ -86,7 +87,7 @@ CREATE TABLE `moedas` (
 
 /*!40000 ALTER TABLE `moedas` DISABLE KEYS */;
 LOCK TABLES `moedas` WRITE;
-INSERT INTO `moedas` VALUES ('EUR','Euro',1.000000);
+INSERT INTO `moedas` VALUES (0, 'EUR','Euro', 1.000000);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `moedas` ENABLE KEYS */;
 
@@ -109,17 +110,7 @@ CREATE TABLE `movimentos` (
   `com_talao` tinyint(1) NOT NULL DEFAULT 0,
   `remarks` char(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `movimentos`
---
-
-
-/*!40000 ALTER TABLE `movimentos` DISABLE KEYS */;
-LOCK TABLES `movimentos` WRITE;
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `movimentos` ENABLE KEYS */;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_general_ci;
 
 --
 -- Table structure for table `tipo_contas`
@@ -131,7 +122,7 @@ CREATE TABLE `tipo_contas` (
   `tipo_desc` char(30) DEFAULT NULL,
   `savings` int(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`tipo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tipo_contas`
@@ -157,7 +148,7 @@ CREATE TABLE `tipo_mov` (
   PRIMARY KEY (`tipo_id`),
   KEY `parent_id` (`parent_id`),
   CONSTRAINT `parent_id` FOREIGN KEY (`parent_id`) REFERENCES `tipo_mov` (`tipo_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `tipo_mov`

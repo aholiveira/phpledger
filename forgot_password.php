@@ -9,7 +9,7 @@
  */
 global $user;
 global $pass;
-include __DIR__ . "/prepend.php";
+require_once __DIR__ . "/prepend.php";
 config::init(__DIR__ . '/config.json');
 $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";
 ?>

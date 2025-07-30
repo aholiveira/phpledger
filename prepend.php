@@ -18,11 +18,9 @@ define("VERSION", "0.2.0");
 define("ROOT_DIR", __DIR__);
 define("OBJECTS_DIR", constant("ROOT_DIR") . "/objects");
 define("VIEWS_DIR", constant("ROOT_DIR") . "/views");
-if (file_exists(realpath(constant("ROOT_DIR") . "/.git/ORIG_HEAD"))) {
-    define("GITHASH", file_get_contents($filename = realpath(constant("ROOT_DIR") . "/.git/ORIG_HEAD"), false, null, 0, $length = 12));
-} else {
-    define("GITHASH", "main");
-}
+
+$gitHead = ROOT_DIR . "/.git/ORIG_HEAD";
+define("GITHASH", file_exists($gitHead) ? substr(file_get_contents($gitHead), 0, 12) : "main");
 #exec("git show -s --format=%ci", $gitresult);
 #define("GITDATE", $gitresult[0]);
 if (defined("DEBUG") && constant("DEBUG") == 1) {
@@ -30,10 +28,17 @@ if (defined("DEBUG") && constant("DEBUG") == 1) {
     syslog(LOG_INFO, __FILE__);
     closelog();
 }
+$secure = !empty($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] === 1);
+$cookie_params = [
+    'lifetime' => 0,
+    'path' => dirname($_SERVER['SCRIPT_NAME']) . '/',
+    'samesite' => 'Strict',
+    'secure' => $secure,
+    'httponly' => true
+];
 if (session_status() == PHP_SESSION_NONE) {
-    ini_set("session.use_strict_mode", true);
-    ini_set("session.sid_bits_per_character", 5);
-    ini_set("session.sid_length", 64);
+    session_set_cookie_params($cookie_params);
+    session_start();
 }
 if (!headers_sent()) {
     header("Cache-Control: no-cache");
@@ -44,12 +49,13 @@ if (!headers_sent()) {
     header("Referrer-Policy: strict-origin-when-cross-origin");
     #header("Content-Security-Policy: default-src 'self'; frame-ancestors 'none'; style-src 'self' 'unsafe-inline'; script-src * ");
 }
-include constant("OBJECTS_DIR") . '/authentication.php';
-include constant("OBJECTS_DIR") . '/config.class.php';
-include constant("OBJECTS_DIR") . '/object_factory.php';
-include constant("OBJECTS_DIR") . '/email.php';
-include constant("VIEWS_DIR") . '/view_factory.php';
-include constant("ROOT_DIR") . '/html.php';
+require_once OBJECTS_DIR . '/authentication.php';
+require_once OBJECTS_DIR . '/config.class.php';
+require_once OBJECTS_DIR . '/object_factory.php';
+require_once OBJECTS_DIR . '/email.php';
+require_once VIEWS_DIR . '/view_factory.php';
+require_once ROOT_DIR . '/html.php';
+require_once ROOT_DIR . '/csrf.php';
 /**
  * Prints variable
  * @param mixed $var variable to print
@@ -60,7 +66,7 @@ include constant("ROOT_DIR") . '/html.php';
  */
 function print_var($var, $comment = "", bool $debug = false)
 {
-    if (($debug && defined("DEBUG") && constant("DEBUG") == 1) || !$debug) {
+    if (($debug && defined("DEBUG") && DEBUG === 1) || !$debug) {
         print "\r\n<pre>START###{$comment}###START<br>\r\n";
         print nl2br(print_r($var, true));
         print "\r\n<br>END###{$comment}###END</pre><br>\r\n";
@@ -68,12 +74,11 @@ function print_var($var, $comment = "", bool $debug = false)
 }
 function debug_print($text)
 {
-    if (defined("DEBUG") && constant("DEBUG") == 1) {
-        print(nl2br("####DEBUG#$text#DEBUG####<br>\n"));
+    if (defined("DEBUG") && DEBUG === 1) {
+        print (nl2br("####DEBUG#$text#DEBUG####<br>\n"));
     }
 }
 function normalize_number(?float $number): string
 {
-    if (is_null($number)) return "";
-    return number_format($number, 2);
+    return null === $number ? "" : number_format($number, 2);
 }

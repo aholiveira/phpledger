@@ -54,11 +54,9 @@ class account extends mysql_object implements iobject
         ORDER BY activa DESC, conta_nome";
         $retval = array();
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception(static::$_dblink->error);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception(static::$_dblink->error);
             $stmt->execute();
             $result = $stmt->get_result();
             while ($newobject = $result->fetch_object(__CLASS__, array(static::$_dblink))) {
@@ -71,7 +69,7 @@ class account extends mysql_object implements iobject
         return $retval;
     }
 
-    public static function getById($id): ?account
+    public static function getById($id): account
     {
         $sql = "SELECT
             conta_id as id,
@@ -86,18 +84,18 @@ class account extends mysql_object implements iobject
             activa as active
         FROM " . static::tableName() . "
         WHERE conta_id=?";
-        $retval = null;
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
             $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
             $stmt->close();
+            if (null === $retval) {
+                $retval = new account(static::$_dblink);
+            }
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
         }
@@ -112,16 +110,16 @@ class account extends mysql_object implements iobject
     {
         return $this->getBalance(null, $date);
     }
-    public function getBalance(\DateTime $startDate = null, \DateTime $endDate = null): array
+    public function getBalance(?\DateTime $startDate = null, ?\DateTime $endDate = null): array
     {
         $where = "account_id=? ";
         $retval = array('income' => 0, 'expense' => 0, 'balance' => 0);
         $param_array = array($this->id);
-        if (!is_null($startDate)) {
+        if (null !== $startDate) {
             $where .= " AND `entry_date`>=? ";
             $param_array[] = $startDate->format("Y-m-d");
         }
-        if (!is_null($endDate)) {
+        if (null !== $endDate) {
             $where .= " AND entry_date<=? ";
             $param_array[] = $endDate->format("Y-m-d");
         }
@@ -134,19 +132,17 @@ class account extends mysql_object implements iobject
                 GROUP BY account_id";
         $retval = array();
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param(str_repeat('s', sizeof($param_array)), ...$param_array);
             $stmt->execute();
             $stmt->bind_result($income, $expense, $balance);
             $stmt->fetch();
             $retval = array(
-                'income' => is_null($income) ? 0.0 : $income,
-                'expense' => is_null($expense) ? 0.0 : $expense,
-                'balance' => is_null($balance) ? 0.0 : $balance
+                'income' => null === $income ? 0.0 : $income,
+                'expense' => null === $expense ? 0.0 : $expense,
+                'balance' => null === $balance ? 0.0 : $balance
             );
             $stmt->close();
         } catch (\Exception $ex) {
@@ -160,16 +156,14 @@ class account extends mysql_object implements iobject
 
         $sql = "SELECT conta_id FROM {$this->tableName()} WHERE conta_id=?";
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) return $retval;
+            if ($stmt == false)
+                return $retval;
             $stmt->bind_param("i", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);
-            if (!is_null($stmt->fetch()) && $return_id == $this->id) {
+            if (null !== $stmt->fetch() && $return_id == $this->id) {
                 $sql = "UPDATE {$this->tableName()} SET
                         `conta_num`=?,
                         `conta_nome`=?,
@@ -201,7 +195,8 @@ class account extends mysql_object implements iobject
             );
             $retval = $stmt->execute();
             $stmt->close();
-            if (!$retval) throw new \mysqli_sql_exception(static::$_dblink->error);
+            if (!$retval)
+                throw new \mysqli_sql_exception(static::$_dblink->error);
             static::$_dblink->commit();
         } catch (\Exception $ex) {
             static::$_dblink->rollback();
@@ -214,16 +209,14 @@ class account extends mysql_object implements iobject
         $retval = false;
         $sql = "SELECT conta_id FROM {$this->tableName()} WHERE conta_id=?";
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) return $retval;
+            if ($stmt == false)
+                return $retval;
             $stmt->bind_param("i", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);
-            if (is_null($stmt->fetch())) {
+            if (null === $stmt->fetch()) {
                 return $retval;
             }
             $stmt->close();

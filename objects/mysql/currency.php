@@ -9,25 +9,29 @@
  */
 class currency extends mysql_object implements iobject
 {
+    public string $code;
     public string $description;
     public float $exchange_rate;
+    public string $username = "";
+    public string $created_at;
+    public string $updated_at;
+
     protected static string $tableName = "moedas";
 
     public function __construct(\mysqli $dblink)
     {
         parent::__construct($dblink);
+        $this->code = "";
     }
     public static function getList(array $field_filter = array()): array
     {
         $where = static::getWhereFromArray($field_filter);
-        $sql = "SELECT moeda_id as id, moeda_desc as `description`, taxa as exchange_rate FROM " . static::tableName() . " {$where} ORDER BY moeda_desc";
+        $sql = "SELECT id, `code`, `description`, exchange_rate, username, created_at, updated_at FROM " . static::tableName() . " {$where} ORDER BY description";
         $retval = array();
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->execute();
             $result = $stmt->get_result();
             while ($newobject = $result->fetch_object(__CLASS__, array(static::$_dblink))) {
@@ -42,15 +46,32 @@ class currency extends mysql_object implements iobject
 
     public static function getById($id): ?currency
     {
-        $sql = "SELECT moeda_id as id, moeda_desc as `description`, taxa as exchange_rate FROM " . static::tableName() . " WHERE moeda_id=? ORDER BY moeda_desc";
+        $sql = "SELECT id, `code`, `description`, exchange_rate, username, created_at, updated_at FROM " . static::tableName() . " WHERE id=? ORDER BY `description`";
         $retval = null;
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $stmt->close();
+        } catch (\Exception $ex) {
+            static::handleException($ex, $sql);
+        }
+        return $retval;
+    }
+
+    public static function getByCode($code): ?currency
+    {
+        $sql = "SELECT id, `code`, `description`, exchange_rate, username, created_at, updated_at FROM " . static::tableName() . " WHERE code=? ORDER BY `description`";
+        $retval = null;
+        try {
+            $stmt = @static::$_dblink->prepare($sql);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            $stmt->bind_param("s", $code);
             $stmt->execute();
             $result = $stmt->get_result();
             $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
@@ -64,29 +85,30 @@ class currency extends mysql_object implements iobject
     public function update(): bool
     {
         $retval = false;
-        $sql = "SELECT moeda_id FROM {$this->tableName()} WHERE moeda_id=?";
+        $sql = "SELECT `id` FROM {$this->tableName()} WHERE id=?";
         try {
-            if (!(static::$_dblink->ping())) {
-                return $retval;
-            }
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) return $retval;
-            if (!isset($this->id)) return $retval;
+            if ($stmt == false)
+                return $retval;
+            if (!isset($this->id))
+                return $retval;
             $stmt->bind_param("s", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);
-            if (!is_null($stmt->fetch()) && $return_id === $this->id) {
-                $sql = "UPDATE {$this->tableName()} SET moeda_desc=?, taxa=? WHERE moeda_id=?";
-            } else {
-                $sql = "INSERT INTO {$this->tableName()} (moeda_desc, taxa, moeda_id) VALUES (?, ?, ?)";
-            }
+            null !== $stmt->fetch() && $return_id === $this->id ?
+                $sql = "UPDATE {$this->tableName()} SET `description`=?, exchange_rate=?, code=?, username=?, updated_at=NULL WHERE id=?"
+                :
+                $sql = "INSERT INTO {$this->tableName()} (`description`, exchange_rate, code, username, created_at, updated_at, id) VALUES (?, ?, ?, ?, NULL, NULL, ?)"
+            ;
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
             $stmt->bind_param(
-                "sds",
+                "sdsss",
                 $this->description,
                 $this->exchange_rate,
+                $this->code,
+                $this->username,
                 $this->id
             );
             $stmt->execute();
@@ -97,10 +119,6 @@ class currency extends mysql_object implements iobject
             $this->handleException($ex, $sql);
         }
         return $retval;
-    }
-    public static function getNextId(string $field = "moeda_id"): int
-    {
-        return 0;
     }
     public function delete(): bool
     {

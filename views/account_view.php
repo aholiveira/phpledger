@@ -14,7 +14,8 @@ class account_view extends object_viewer
     {
         global $object_factory;
         $retval = "";
-        if (!isset($this->_object->id) || !($this->_object instanceof account)) return $retval;
+        if (!isset($this->_object->id) || !($this->_object instanceof account))
+            return $retval;
         /**
          * @var account $_object
          */
@@ -23,7 +24,7 @@ class account_view extends object_viewer
         if (!empty($_object->type_id)) {
             $account_type = $object_factory->accounttype();
             $account_type = $account_type->getById($_object->type_id);
-            if (is_null($account_type) ) {
+            if (null === $account_type) {
                 $account_type = $object_factory->accounttype();
             }
             $type_description = $account_type->description;
@@ -45,7 +46,8 @@ class account_view extends object_viewer
         global $view_factory;
 
         $retval = "";
-        if (!($this->_object instanceof account)) return $retval;
+        if (!($this->_object instanceof account))
+            return $retval;
         /**
          * @var account $_object
          */
@@ -96,8 +98,13 @@ class account_view extends object_viewer
     public function getSelectFromList(array $object_list, ?int $selected = null): string
     {
         $retval = "";
+        /**
+         * @var account $_object
+         */
         $_object = $this->_object;
-        if (is_null($selected)) $selected = $_object->id;
+        if (null === $selected) {
+            $selected = $_object->id;
+        }
         foreach ($object_list as $object) {
             if (($object instanceof account)) {
                 $retval .= "<option value=\"{$object->id}\"" . ($selected == $object->id ? " selected " : "") . ">{$object->name}</option>\r\n";

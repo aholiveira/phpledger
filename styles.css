@@ -79,7 +79,9 @@ div tr:nth-child(odd) {
 p {
     margin: 0;
 }
-
+p .invalid-login {
+    color: #cc0000;
+}
 hr {
     width: 100%;
 }

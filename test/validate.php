@@ -11,23 +11,21 @@ $classnames = array(
     "ledgerentry" => "ledger_entry_view",
     "user" => ""
 );
-$class_id = array(
-    "currency" => "EUR"
-);
+$class_id = array("currency" => 1);
 $reports = array(
     "report_month" => "report_month_view",
     "report_year" => "report_year_view"
 );
-define("PADDING", 35);
-define("PASSED", "\033[32mPASSED\033[0m");
-define("FAILED", "\033[31mFAILED\033[0m");
-print("Running tests\r\n\r\n");
+const PADDING = 35;
+const PASSED = "\033[32mPASSED\033[0m";
+const FAILED = "\033[31mFAILED\033[0m";
+print "Running tests\r\n\r\n";
 $data_storage = new mysql_storage();
-print(str_pad("Testing data storage ", constant("PADDING"), ".") . " : ");
+print (str_pad("Testing data storage ", constant("PADDING"), ".") . " : ");
 if (!$data_storage->check()) {
     print "\033[33mUPDATE\033[0m\r\n";
     print $data_storage->message();
-    print(str_pad("Testing storage update ", constant("PADDING"), ".") . " : ");
+    print (str_pad("Testing storage update ", constant("PADDING"), ".") . " : ");
     if ($data_storage->update()) {
         print constant("PASSED") . "\r\n";
         print $data_storage->message();
@@ -83,7 +81,7 @@ function prepare_entry_category(): bool
     $object = $object_factory->entry_category();
     for ($id = 1; $id < 60; $id++) {
         $object->id = $id;
-        $object->parent_id = $id < 10 ? 0 : ($id / 10);
+        $object->parent_id = $id < 10 ? 0 : (int) ($id / 10);
         $object->description = "entry category $id";
         $object->active = 1;
         $retval = $object->update() && $retval;
@@ -109,10 +107,10 @@ function prepare_ledgerentry(): bool
     $object = $object_factory->ledgerentry();
     for ($id = 1; $id < 60; $id++) {
         $object->id = $id;
-        $object->entry_date = date("Y-m-d", mktime($hour = 0, null, null, date("m"), $id < 10 ? 1 : ($id / 10 + 1)));
+        $object->entry_date = date("Y-m-d", mktime($hour = 0, null, null, date("m"), $id < 10 ? 1 : (int) ($id / 10 + 1)));
         $object->category_id = $id;
-        $object->account_id = $id < 10 ? 1 : $id / 10;
-        $object->currency_id = "EUR";
+        $object->account_id = $id < 10 ? 1 : (int) ($id / 10);
+        $object->currency_id = 1;
         $object->direction = ($id % 2 == 0 ? 1 : -1);
         $object->currency_amount = $id;
         $object->euro_amount = $object->direction * $object->currency_amount;
@@ -123,7 +121,7 @@ function prepare_ledgerentry(): bool
     return $retval;
 }
 
-print(str_pad("Preparing data ", constant("PADDING"), ".") . " : ");
+print (str_pad("Preparing data ", constant("PADDING"), ".") . " : ");
 $retval = prepare_entry_category() && $retval;
 $retval = prepare_accounttype() && $retval;
 $retval = prepare_account() && $retval;
@@ -140,7 +138,8 @@ foreach ($classnames as $class => $view) {
     unset($object);
     unset($viewer);
     $object = $object_factory->$class();
-    if (array_key_exists($class, $class_id)) $id = $class_id[$class];
+    if (array_key_exists($class, $class_id))
+        $id = $class_id[$class];
     $retval = (test_object($object, $id) && $retval);
     if (strlen($view) > 0) {
         $object = $object->getById($id);
@@ -174,7 +173,7 @@ function test_report($report, $view)
     global $object_factory;
     global $view_factory;
     $retval = true;
-    print(str_pad("Testing {$report} ", constant("PADDING"), ".") . " : ");
+    print (str_pad("Testing {$report} ", constant("PADDING"), ".") . " : ");
     $object = $object_factory->$report();
     assert(is_a($object->getReport(array("year" => 2023)), $report));
     $viewer = $view_factory->$view($object);
@@ -186,15 +185,15 @@ function test_object(mysql_object $object, $id = 1)
 {
     $retval = true;
     try {
-        print(str_pad("Testing {$object} ", constant("PADDING"), ".") . " : ");
+        print (str_pad("Testing {$object} ", constant("PADDING"), ".") . " : ");
         $object = $object->getById($id);
         if (isset($object->id)) {
             $retval = (assert($object->id === $id, "getById") && $retval);
         }
-        $retval = (assert($object->update() === true, "save#{$object}#"));
+        $retval = assert($object->update() === true, "save#{$object}#");
         $field_filter = array();
         if ($object instanceof ledgerentry) {
-            $field_filter[] = array('entry_date' => array('operator' => 'BETWEEN', 'value' => "2023-01-01' AND '2023-12-31"));
+            $field_filter[] = array('entry_date' => array('operator' => 'BETWEEN', 'value' => date("Y-01-01 ") . "' AND '" . date("Y-12-31")));
         }
         $retval = (@assert(sizeof($object->getList($field_filter)) > 0, "getList#{$object}#") && $retval);
         $retval = (@assert($object->getNextId() >= 0, "getNextId#{$object}#") && $retval);
@@ -211,7 +210,7 @@ function test_view(object_viewer $viewer, iobject $object)
 {
     $retval = true;
     try {
-        print(str_pad("Testing " . get_class($viewer) . " ", constant("PADDING"), ".") . " : ");
+        print (str_pad("Testing " . get_class($viewer) . " ", constant("PADDING"), ".") . " : ");
         $retval = (assert(!empty($viewer->printObject())) && $retval);
         $field_filter = array();
         if ($object instanceof ledgerentry) {

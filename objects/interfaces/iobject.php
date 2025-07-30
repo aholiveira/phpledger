@@ -14,11 +14,11 @@ interface iobject
      * Validates if object contains valid data
      * @return bool TRUE if object is valid, FALSE otherwise
      */
-    function validate(): bool;
-    function error_message(): string;
-    function update(): bool;
-    function delete(): bool;
-    static function getNextId(): int;
-    static function getList(array $field_filter = array()): array;
-    static function getById(int $id): ?iobject;
+    public function validate(): bool;
+    public function error_message(): string;
+    public function update(): bool;
+    public function delete(): bool;
+    public static function getNextId(): int;
+    public static function getList(array $field_filter = array()): array;
+    public static function getById(int $id): ?iobject;
 }

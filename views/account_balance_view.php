@@ -16,6 +16,9 @@ class account_balance_view extends object_viewer
         if (!isset($this->_object->id)) {
             return $retval;
         }
+        /**
+         * @var accounttype $_object
+         */
         $_object = $this->_object;
         $retval .= "<td><a href=\"account_types.php?tipo_id={$_object->id}\">{$_object->id}</a></td>";
         $retval .= "<td>{$_object->description}</td>";
@@ -26,7 +29,7 @@ class account_balance_view extends object_viewer
         $retval = "<table class=\"lista saldos\">\r\n";
         $retval .= "<thead><tr><th>Conta</th><th>Depositos</th><th>Levantam.</th><th>Saldo</th><th>% do total</th><th>Movimentos</th></tr></thead>\r\n";
         $retval .= "<tbody>";
-        $type_names = array('income', 'expense', 'balance');
+        $type_names = ['income', 'expense', 'balance'];
         foreach ($type_names as $type_name) {
             $totals[$type_name] = 0;
         }
