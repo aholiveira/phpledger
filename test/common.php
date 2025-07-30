@@ -10,7 +10,7 @@
 if (!defined("DEBUG")) {
     define("DEBUG", true);
 }
-include __DIR__ . "/prepend.php";
+require_once __DIR__ . "/prepend.php";
 config::init(__DIR__ . '/config.json');
 $object_factory = new object_factory();
 $view_factory = new view_factory();
