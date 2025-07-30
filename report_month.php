@@ -144,7 +144,7 @@ $report->getReport(array("year" => $year));
 
                 function drawChart() {
                     var data = new google.visualization.DataTable(<?php print $jsonTable; ?>);
-                    var graph = new google.visualization.Treemap(document.getElementById('graph'));
+                    var graph = new google.visualization.ColumnChart(document.getElementById('graph'));
                     var options = {
                         height: 500,
                         animation: {
