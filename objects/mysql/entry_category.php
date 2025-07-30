@@ -28,7 +28,7 @@ class entry_category extends mysql_object implements iobject
         $sql = "SELECT tipo_id as id FROM " . static::$tableName . "
             {$where}
             ORDER BY active desc, tipo_desc";
-        $retval = array();
+        $retval = [];
         try {
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false)
@@ -118,7 +118,7 @@ class entry_category extends mysql_object implements iobject
     }
     public function getChildren(): array
     {
-        $children = array();
+        $children = [];
         $sql = "SELECT tipo_id AS id
             FROM {$this->tableName()}
             WHERE parent_id=?

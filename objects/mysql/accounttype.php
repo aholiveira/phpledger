@@ -23,7 +23,7 @@ class accounttype extends mysql_object implements iobject
     {
         $where = static::getWhereFromArray($field_filter);
         $sql = "SELECT tipo_id as id, tipo_desc as description, savings FROM " . static::tableName() . " {$where}";
-        $retval = array();
+        $retval = [];
         try {
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false)

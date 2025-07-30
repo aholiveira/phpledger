@@ -78,8 +78,8 @@ $report->getReport(array("year" => $year));
                 </table>
             </div>
             <?php
-            $income_array[] = array();
-            $expense_array[] = array();
+            $income_array[] = [];
+            $expense_array[] = [];
             for ($month = 1; $month <= 12; $month++) {
                 $income_array[$month] = 0;
                 $expense_array[$month] = 0;
@@ -103,16 +103,16 @@ $report->getReport(array("year" => $year));
                     }
                 }
             }
-            $table = array();
+            $table = [];
             $table['cols'] = array(
                 array("id" => "", 'label' => 'Month', 'type' => 'string'),
                 array("id" => "", 'label' => 'Income', 'type' => 'number'),
                 array("id" => "", 'label' => 'Expense', 'type' => 'number'),
                 array("id" => "", 'label' => 'Savings', 'type' => 'number')
             );
-            $rows = array();
+            $rows = [];
             for ($month = 1; $month <= 12; $month++) {
-                $temp = array();
+                $temp = [];
                 $temp[] = array('v' => date("M", mktime(0, 0, 0, $month, 1)));
                 $temp[] = array('v' => $income_array[$month]);
                 $temp[] = array('v' => abs($expense_array[$month]));
@@ -126,7 +126,7 @@ $report->getReport(array("year" => $year));
                     $sum[$entry] += array_sum($report->reportData[$entry]['subtotal']);
                 }
                 if (array_key_exists("children", $report->reportData[$entry])) {
-                    $sum_subentries[$entry] = array();
+                    $sum_subentries[$entry] = [];
                     foreach (array_keys($report->reportData[$entry]["children"]) as $subentry) {
                         $sum_subentries[$entry][$subentry] = array_sum($report->reportData[$entry]["children"][$subentry]["values"]);
                     }

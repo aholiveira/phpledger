@@ -76,7 +76,7 @@ class mysql_storage implements idata_storage
                 $this->addMessage("Category '0' does not exist");
                 $retval = false;
             } else {
-                $entry_list = $entry_category->getList(array('parent_id' => array('operator' => 'is', 'value' => 'null'), 'tipo_id' => array('operator' => '>', 'value' => '0')));
+                $entry_list = $entry_category->getList(['parent_id' => ['operator' => 'is', 'value' => 'null'], 'tipo_id' => ['operator' => '>', 'value' => '0']]);
                 if (sizeof($entry_list) > 0) {
                     $this->addMessage("Table [tipo_mov] needs update");
                     $retval = false;
@@ -270,8 +270,8 @@ class mysql_storage implements idata_storage
         $end_year = date("Y");
         $max_month_entries = 100;
         $account = $object_factory->account();
-        $account_list = $account->getList(array('activa' => array('operator' => '=', 'value' => '1')));
-        $category_list = $category->getList(array('active' => array('operator' => '=', 'value' => '1')));
+        $account_list = $account->getList(['activa' => ['operator' => '=', 'value' => '1']]);
+        $category_list = $category->getList(['active' => ['operator' => '=', 'value' => '1']]);
         if (array_key_exists(0, $category_list)) {
             unset($category_list[0]);
         }
@@ -286,7 +286,7 @@ class mysql_storage implements idata_storage
                     $ledger_entry->account_id = $account_list[array_rand($account_list)]->id;
                     $ledger_entry->category_id = $category_list[array_rand($category_list)]->id;
                     $ledger_entry->entry_date = date("Y-m-d", mktime(0, 0, 0, $month, random_int(1, $days_in_month), $year));
-                    $ledger_entry->direction = array(-1, 1)[array_rand(array(-1, 1))];
+                    $ledger_entry->direction = [-1, 1][array_rand([-1, 1])];
                     $ledger_entry->currency_amount = random_int(1, 10000) / 100;
                     $ledger_entry->currency_id = 'EUR';
                     $ledger_entry->euro_amount = $ledger_entry->currency_amount * $ledger_entry->direction;
@@ -726,7 +726,7 @@ class mysql_storage implements idata_storage
     }
     private function setTableCreateSQL()
     {
-        $this->_tableNewColumnNames['contas'] = array(
+        $this->_tableNewColumnNames['contas'] = [
             'id' => 'conta_id',
             'number' => 'conta_num',
             'name' => 'conta_nome',
@@ -736,9 +736,9 @@ class mysql_storage implements idata_storage
             'open_date' => 'conta_abertura',
             'close_date' => 'conta_fecho',
             'active' => 'activa'
-        );
+        ];
 
-        $this->_tableNewColumnNames['movimentos'] = array(
+        $this->_tableNewColumnNames['movimentos'] = [
             'mov_id' => 'id',
             'tipo_mov' => 'category_id',
             'data_mov' => 'entry_date',
@@ -750,15 +750,15 @@ class mysql_storage implements idata_storage
             'cambio' => 'exchange_rate',
             'obs' => 'remarks',
             'last_modified' => 'updated_at'
-        );
+        ];
 
-        $this->_tableNewColumnNames['moedas'] = array(
+        $this->_tableNewColumnNames['moedas'] = [
             'moeda_id' => 'code',
             'moeda_desc' => 'description',
             'taxa' => 'exchange_rate'
-        );
+        ];
 
-        $this->_tableCreateSQL['contas']['columns'] = array(
+        $this->_tableCreateSQL['contas']['columns'] = [
             "conta_id" => "int(3) NOT NULL DEFAULT 0",
             "conta_num" => "char(30) NOT NULL DEFAULT ''",
             "conta_nome" => "char(30) NOT NULL DEFAULT ''",
@@ -769,27 +769,28 @@ class mysql_storage implements idata_storage
             "conta_abertura" => "date DEFAULT NULL",
             "conta_fecho" => "date DEFAULT NULL",
             "activa" => "int(1) NOT NULL DEFAULT 0"
-        );
+        ];
         $this->_tableCreateSQL['contas']['primary_key'] = "conta_id";
 
-        $this->_tableCreateSQL['defaults']['columns'] = array(
+        $this->_tableCreateSQL['defaults']['columns'] = [
             "id" => "int(1) NOT NULL DEFAULT 0",
             "tipo_mov" => "int(3) DEFAULT NULL",
             "conta_id" => "int(3) DEFAULT NULL",
             "moeda_mov" => "char(3) DEFAULT NULL",
             "data" => "date DEFAULT NULL",
             "deb_cred" => "enum('1','-1') DEFAULT NULL",
-            "username" => "char(100) DEFAULT NULL"
-        );
+            "username" => "char(100) DEFAULT NULL",
+            "show_report_graph" => "int(1) NOT NULL DEFAULT 0",
+        ];
         $this->_tableCreateSQL['defaults']['primary_key'] = "id";
 
-        $this->_tableCreateSQL['grupo_contas']['columns'] = array(
+        $this->_tableCreateSQL['grupo_contas']['columns'] = [
             "id" => "int(4) NOT NULL DEFAULT 0",
             "nome" => "char(30) NOT NULL DEFAULT ''"
-        );
+        ];
         $this->_tableCreateSQL['grupo_contas']['primary_key'] = "id";
 
-        $this->_tableCreateSQL['moedas']['columns'] = array(
+        $this->_tableCreateSQL['moedas']['columns'] = [
             "id" => "int(4) NOT NULL DEFAULT 0",
             "code" => "char(3) NOT NULL DEFAULT ''",
             "description" => "char(30) DEFAULT NULL",
@@ -797,10 +798,10 @@ class mysql_storage implements idata_storage
             "username" => "char(255) DEFAULT ''",
             "created_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()",
             "updated_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()"
-        );
+        ];
         $this->_tableCreateSQL['moedas']['primary_key'] = "moeda_id";
 
-        $this->_tableCreateSQL['movimentos']['columns'] = array(
+        $this->_tableCreateSQL['movimentos']['columns'] = [
             "id" => "int(4) NOT NULL AUTO_INCREMENT",
             "entry_date" => "date DEFAULT NULL",
             "category_id" => "int(3) DEFAULT NULL",
@@ -816,27 +817,27 @@ class mysql_storage implements idata_storage
             "username" => "char(255) DEFAULT ''",
             "created_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()",
             "updated_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()"
-        );
+        ];
         $this->_tableCreateSQL['movimentos']['primary_key'] = "id";
 
-        $this->_tableCreateSQL['tipo_contas']['columns'] = array(
+        $this->_tableCreateSQL['tipo_contas']['columns'] = [
             "tipo_id" => "int(2) NOT NULL DEFAULT 0",
             "tipo_desc" => "char(30) DEFAULT NULL",
             "savings" => "int(1) NOT NULL DEFAULT 0"
-        );
+        ];
         $this->_tableCreateSQL['tipo_contas']['primary_key'] = "tipo_id";
 
-        $this->_tableCreateSQL['tipo_mov']['columns'] = array(
+        $this->_tableCreateSQL['tipo_mov']['columns'] = [
             "tipo_id" => "int(3) NOT NULL DEFAULT 0",
             "parent_id" => "int(3) DEFAULT NULL",
             "tipo_desc" => "char(50) DEFAULT NULL",
             "active" => "int(1) NOT NULL DEFAULT 0"
-        );
+        ];
         $this->_tableCreateSQL['tipo_mov']['primary_key'] = "tipo_id";
-        $this->_tableCreateSQL['tipo_mov']['keys'] = array("parent_id" => "parent_id");
-        $this->_tableCreateSQL['tipo_mov']['constraints'] = array("parent_id" => "`tipo_mov` (`tipo_id`) ON DELETE CASCADE ON UPDATE CASCADE");
+        $this->_tableCreateSQL['tipo_mov']['keys'] = ["parent_id" => "parent_id"];
+        $this->_tableCreateSQL['tipo_mov']['constraints'] = ["parent_id" => "`tipo_mov` (`tipo_id`) ON DELETE CASCADE ON UPDATE CASCADE"];
 
-        $this->_tableCreateSQL['users']['columns'] = array(
+        $this->_tableCreateSQL['users']['columns'] = [
             "id" => "int(3) NOT NULL DEFAULT 0",
             "username" => "char(100) NOT NULL",
             "password" => "char(255) NOT NULL",
@@ -846,7 +847,7 @@ class mysql_storage implements idata_storage
             "token" => "char(255) NOT NULL DEFAULT ''",
             "token_expiry" => "datetime",
             "active" => "int(1) NOT NULL DEFAULT 0"
-        );
+        ];
         $this->_tableCreateSQL['users']['primary_key'] = "id";
     }
 }

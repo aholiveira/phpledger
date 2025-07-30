@@ -20,7 +20,7 @@ class ledger extends mysql_object implements iobject
     {
         $where = static::getWhereFromArray($field_filter);
         $sql = "SELECT id FROM " . static::tableName() . " {$where} ORDER BY id";
-        $retval = array();
+        $retval = [];
         try {
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false)

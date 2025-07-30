@@ -79,7 +79,7 @@ function run_tests(mysql_object $object, $id = 1)
         }
         assert($object->update() === true, "save#{$object}#");
         debug_print("getList#{$object}#");
-        $field_filter = array();
+        $field_filter = [];
         if ($object instanceof ledgerentry) {
             debug_print("LEDGER ENTRY FILTER");
             $field_filter = array('entry_date' => array('operator' => 'BETWEEN', 'value' => "'2022-01-01' AND '2022-01-02'"));
@@ -97,7 +97,7 @@ function run_views(object_viewer $viewer, iobject $object)
     try {
         debug_print("OBJECT: " . get_class($viewer));
         debug_print($viewer->printObject());
-        $field_filter = array();
+        $field_filter = [];
         if ($object instanceof ledgerentry) {
             debug_print("LEDGER ENTRY FILTER");
             $field_filter = array('entry_date' => array('operator' => 'BETWEEN', 'value' => "'2022-01-01' AND '2022-01-02'"));

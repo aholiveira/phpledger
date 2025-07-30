@@ -61,7 +61,7 @@ class ledgerentry extends mysql_object implements iobject
             FROM " . static::tableName() . "
             {$where}
             ORDER BY entry_date, id";
-        $retval = array();
+        $retval = [];
         try {
             $stmt = static::$_dblink->prepare($sql);
             if ($stmt == false)

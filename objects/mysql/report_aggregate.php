@@ -55,13 +55,13 @@ class report_month implements ireport
         $account_type = $object_factory->accounttype();
         $account = $object_factory->account();
         $savings_types = $account_type->getList(array('savings' => array('operator' => '=', 'value' => '1')));
-        $savings_accounts = array();
+        $savings_accounts = [];
         foreach ($savings_types as $saving_type) {
             foreach ($account->getList(array('tipo_id' => array('operator' => '=', 'value' => $saving_type->id))) as $acc) {
                 $savings_accounts[] = $acc;
             }
         }
-        $this->savings = array();
+        $this->savings = [];
         foreach ($month_list as $month) {
             $startDate = new \DateTime("{$this->year}-$month-1");
             $endDate = (new \DateTime("{$this->year}-$month-1"))->add(\DateInterval::createFromDateString('first day of next month'))->add(\DateInterval::createFromDateString("-1 day"));

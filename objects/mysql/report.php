@@ -13,7 +13,7 @@ class report implements ireport
 {
     protected array $queryData;
     protected mysqli $db;
-    public array $reportData = array();
+    public array $reportData = [];
     public array $columnHeaders;
     public array $dateFilters;
     public array $savings;
@@ -23,7 +23,7 @@ class report implements ireport
     }
     protected function getData(string $query, &...$vars): array
     {
-        $this->queryData = array();
+        $this->queryData = [];
         $stmt = $this->db->prepare($query);
         if ($stmt == false) {
             debug_print($this->db->error);
@@ -54,16 +54,16 @@ class report implements ireport
                     $this->reportData[$category->description]['children'][$child->description]['values'] = $this->queryData[$child->id];
                     foreach ($this->queryData[$child->id] as $col_header => $value) {
                         if (!array_key_exists($category->description, $this->reportData)) {
-                            $this->reportData[$category->description] = array();
+                            $this->reportData[$category->description] = [];
                         }
                         if (!array_key_exists('id', $this->reportData[$category->description])) {
                             $this->reportData[$category->description]['id'] = $category->id;
                         }
                         if (!array_key_exists('values', $this->reportData[$category->description])) {
-                            $this->reportData[$category->description]['values'] = array();
+                            $this->reportData[$category->description]['values'] = [];
                         }
                         if (!array_key_exists('subtotal', $this->reportData[$category->description])) {
-                            $this->reportData[$category->description]['subtotal'] = array();
+                            $this->reportData[$category->description]['subtotal'] = [];
                         }
                         if (!array_key_exists($col_header, $this->reportData[$category->description]['subtotal'])) {
                             $this->reportData[$category->description]['subtotal'][$col_header] = 0;

@@ -27,7 +27,7 @@ class currency extends mysql_object implements iobject
     {
         $where = static::getWhereFromArray($field_filter);
         $sql = "SELECT id, `code`, `description`, exchange_rate, username, created_at, updated_at FROM " . static::tableName() . " {$where} ORDER BY description";
-        $retval = array();
+        $retval = [];
         try {
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false)

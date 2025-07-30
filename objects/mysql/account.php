@@ -52,7 +52,7 @@ class account extends mysql_object implements iobject
         FROM " . static::$tableName . "
         {$where}
         ORDER BY activa DESC, conta_nome";
-        $retval = array();
+        $retval = [];
         try {
             $stmt = static::$_dblink->prepare($sql);
             if ($stmt == false)
@@ -130,7 +130,7 @@ class account extends mysql_object implements iobject
                 FROM movimentos
                 WHERE {$where}
                 GROUP BY account_id";
-        $retval = array();
+        $retval = [];
         try {
             $stmt = @static::$_dblink->prepare($sql);
             if ($stmt == false)

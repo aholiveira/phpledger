@@ -191,7 +191,7 @@ function test_object(mysql_object $object, $id = 1)
             $retval = (assert($object->id === $id, "getById") && $retval);
         }
         $retval = assert($object->update() === true, "save#{$object}#");
-        $field_filter = array();
+        $field_filter = [];
         if ($object instanceof ledgerentry) {
             $field_filter[] = array('entry_date' => array('operator' => 'BETWEEN', 'value' => date("Y-01-01 ") . "' AND '" . date("Y-12-31")));
         }
@@ -212,7 +212,7 @@ function test_view(object_viewer $viewer, iobject $object)
     try {
         print (str_pad("Testing " . get_class($viewer) . " ", constant("PADDING"), ".") . " : ");
         $retval = (assert(!empty($viewer->printObject())) && $retval);
-        $field_filter = array();
+        $field_filter = [];
         if ($object instanceof ledgerentry) {
             $field_filter[] = array('entry_date' => array('operator' => 'BETWEEN', 'value' => "2022-01-01' AND '2022-01-02"));
         }
