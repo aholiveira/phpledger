@@ -23,7 +23,8 @@ class ledger extends mysql_object implements iobject
         $retval = array();
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->execute();
             $stmt->bind_result($id);
             while ($stmt->fetch()) {
@@ -44,7 +45,8 @@ class ledger extends mysql_object implements iobject
         $sql = "SELECT id, nome as `name` FROM " . static::tableName() . " WHERE id=?";
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -63,19 +65,20 @@ class ledger extends mysql_object implements iobject
         try {
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) return $retval;
-            if (!isset($this->id)) return $retval;
+            if ($stmt == false)
+                return $retval;
+            if (!isset($this->id))
+                return $retval;
             $stmt->bind_param("s", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);
-            if (!is_null($stmt->fetch()) && $return_id == $this->id) {
-                $sql = "UPDATE {$this->tableName()} SET nome=? WHERE id=?";
-            } else {
-                $sql = "INSERT INTO {$this->tableName()} (nome, id) VALUES (?, ?)";
-            }
+            $sql = (null !== $stmt->fetch() && $return_id == $this->id) ?
+                "UPDATE {$this->tableName()} SET nome=? WHERE id=?" :
+                "INSERT INTO {$this->tableName()} (nome, id) VALUES (?, ?)";
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false) throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt == false)
+                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param(
                 "ss",
                 $this->name,

@@ -51,7 +51,7 @@ class mysql_storage implements idata_storage
     }
     public function message(): string
     {
-        return !is_null($this->_message) ? $this->_message : "";
+        return null !== $this->_message ? $this->_message : "";
     }
     public function check(): bool
     {
@@ -210,7 +210,8 @@ class mysql_storage implements idata_storage
             if (sizeof($currency->getList()) == 0) {
                 $currency->description = 'Euro';
                 $currency->exchange_rate = 1;
-                $currency->id = 'EUR';
+                $currency->code = 'EUR';
+                $currency->id = 1;
                 if (!$currency->update()) {
                     $this->addMessage("Could not save currency");
                     $retval = false;
@@ -703,7 +704,7 @@ class mysql_storage implements idata_storage
                 foreach ($this->_tableCreateSQL[$table_name]['columns'] as $column_name => $column_definition) {
                     $sql .= "`{$column_name}` {$column_definition},";
                 }
-                $sql .= "PRIMARY KEY (`{$this->_tableCreateSQL[$table_name]['primary_key']}`)";
+                $sql .= "PRIMARY KEY (`" . $this->_tableCreateSQL[$table_name]['primary_key'] . "`)";
                 if (array_key_exists('keys', $this->_tableCreateSQL[$table_name])) {
                     $sql .= ",";
                     foreach ($this->_tableCreateSQL[$table_name]['keys'] as $key_name => $key_def) {
@@ -751,6 +752,12 @@ class mysql_storage implements idata_storage
             'last_modified' => 'updated_at'
         );
 
+        $this->_tableNewColumnNames['moedas'] = array(
+            'moeda_id' => 'code',
+            'moeda_desc' => 'description',
+            'taxa' => 'exchange_rate'
+        );
+
         $this->_tableCreateSQL['contas']['columns'] = array(
             "conta_id" => "int(3) NOT NULL DEFAULT 0",
             "conta_num" => "char(30) NOT NULL DEFAULT ''",
@@ -782,9 +789,13 @@ class mysql_storage implements idata_storage
         $this->_tableCreateSQL['grupo_contas']['primary_key'] = "id";
 
         $this->_tableCreateSQL['moedas']['columns'] = array(
-            "moeda_id" => "char(3) NOT NULL DEFAULT ''",
-            "moeda_desc" => "char(30) DEFAULT NULL",
-            "taxa" => "float(8,6) DEFAULT NULL"
+            "id" => "int(4) NOT NULL DEFAULT 0",
+            "code" => "char(3) NOT NULL DEFAULT ''",
+            "description" => "char(30) DEFAULT NULL",
+            "exchange_rate" => "float(8,6) DEFAULT NULL",
+            "username" => "char(255) DEFAULT ''",
+            "created_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()",
+            "updated_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()"
         );
         $this->_tableCreateSQL['moedas']['primary_key'] = "moeda_id";
 

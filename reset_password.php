@@ -33,7 +33,7 @@ $pagetitle = "Redefini&ccedil;o de palavra-passe";
                 print "<p>Ir&aacute; ser redireccionado para a pagina inicial.<br></p>";
                 exit(1);
             } else {
-                if (!is_null($user) && !$user->isTokenValid($token_id)) {
+                if (null !== $user && !$user->isTokenValid($token_id)) {
                     print "<meta http-equiv='REFRESH' content='10; URL=index.php'>";
                     print "<p>Token invalido ou expirado<br></p>";
                     print "<p>Ir&aacute; ser redireccionado para a pagina inicial.<br></p>";
@@ -43,9 +43,9 @@ $pagetitle = "Redefini&ccedil;o de palavra-passe";
         }
     }
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $token_id = filter_input(INPUT_GET, "token_id", FILTER_SANITIZE_ENCODED);
-        $password = filter_input(INPUT_GET, "password", FILTER_SANITIZE_ENCODED);
-        $verify_password = filter_input(INPUT_GET, "verify_password", FILTER_SANITIZE_ENCODED);
+        $token_id = filter_input(INPUT_POST, "token_id", FILTER_SANITIZE_ENCODED);
+        $password = filter_input(INPUT_POST, "password", FILTER_UNSAFE_RAW);
+        $verify_password = filter_input(INPUT_POST, "verify_password", FILTER_SANITIZE_ENCODED);
         if (array_key_exists("password", $_POST) && array_key_exists("verify_password", $_POST)) {
             if ($password == $verify_password) {
                 $user = $user::getByToken($token_id);
@@ -89,11 +89,13 @@ $pagetitle = "Redefini&ccedil;o de palavra-passe";
             <table>
                 <tr>
                     <td>Nova palavra-passe: </td>
-                    <td><input size="10" maxlength="250" type="password" name="password" autocomplete="new-password" value="" required></td>
+                    <td><input size="10" maxlength="250" type="password" name="password" autocomplete="new-password"
+                            value="" required></td>
                 </tr>
                 <tr>
                     <td>Confirmar palavra-passe: </td>
-                    <td><input size="10" maxlength="250" type="password" name="verify_password" autocomplete="new-password" value="" required></td>
+                    <td><input size="10" maxlength="250" type="password" name="verify_password"
+                            autocomplete="new-password" value="" required></td>
                 </tr>
                 <tr>
                     <td colspan="2" style="text-align: center"><input type="submit" value="Repor"></td>

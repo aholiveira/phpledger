@@ -93,7 +93,7 @@ class account extends mysql_object implements iobject
             $result = $stmt->get_result();
             $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
             $stmt->close();
-            if (is_null($retval)) {
+            if (null === $retval) {
                 $retval = new account(static::$_dblink);
             }
         } catch (\Exception $ex) {
@@ -115,11 +115,11 @@ class account extends mysql_object implements iobject
         $where = "account_id=? ";
         $retval = array('income' => 0, 'expense' => 0, 'balance' => 0);
         $param_array = array($this->id);
-        if (!is_null($startDate)) {
+        if (null !== $startDate) {
             $where .= " AND `entry_date`>=? ";
             $param_array[] = $startDate->format("Y-m-d");
         }
-        if (!is_null($endDate)) {
+        if (null !== $endDate) {
             $where .= " AND entry_date<=? ";
             $param_array[] = $endDate->format("Y-m-d");
         }
@@ -140,9 +140,9 @@ class account extends mysql_object implements iobject
             $stmt->bind_result($income, $expense, $balance);
             $stmt->fetch();
             $retval = array(
-                'income' => is_null($income) ? 0.0 : $income,
-                'expense' => is_null($expense) ? 0.0 : $expense,
-                'balance' => is_null($balance) ? 0.0 : $balance
+                'income' => null === $income ? 0.0 : $income,
+                'expense' => null === $expense ? 0.0 : $expense,
+                'balance' => null === $balance ? 0.0 : $balance
             );
             $stmt->close();
         } catch (\Exception $ex) {
@@ -163,7 +163,7 @@ class account extends mysql_object implements iobject
             $stmt->bind_param("i", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);
-            if (!is_null($stmt->fetch()) && $return_id == $this->id) {
+            if (null !== $stmt->fetch() && $return_id == $this->id) {
                 $sql = "UPDATE {$this->tableName()} SET
                         `conta_num`=?,
                         `conta_nome`=?,
@@ -216,7 +216,7 @@ class account extends mysql_object implements iobject
             $stmt->bind_param("i", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);
-            if (is_null($stmt->fetch())) {
+            if (null === $stmt->fetch()) {
                 return $retval;
             }
             $stmt->close();

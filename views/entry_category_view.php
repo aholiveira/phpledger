@@ -10,6 +10,7 @@
  */
 class entry_category_view extends object_viewer
 {
+    protected entry_category $object;
     public function __construct(entry_category $object)
     {
         parent::__construct($object);
@@ -21,9 +22,10 @@ class entry_category_view extends object_viewer
             return $retval;
         }
         $_object = $this->_object;
-        if (!($_object instanceof entry_category)) return $retval;
+        if (!($_object instanceof entry_category))
+            return $retval;
         $retval .= "<td class='id' data-label='ID'><a href=\"entry_type.php?tipo_id={$_object->id}\" title=\"Editar a categoria\">{$_object->id}</a></td>";
-        $retval .= "<td class='category' data-label='Categoria'>" . (is_null($_object->parent_id) || $_object->parent_id == 0 ? "" : (isset($_object->parent_description) ? $_object->parent_description : "")) . "</td>";
+        $retval .= "<td class='category' data-label='Categoria'>" . (null === $_object->parent_id || $_object->parent_id == 0 ? "" : ($_object->parent_description ?? "")) . "</td>";
         $retval .= "<td class='description' data-label='Descri&ccedil;&atilde;o'>{$_object->description}</td>";
         $retval .= "<td class='amount' data-label='Valor'>" . normalize_number(abs($_object->getBalance())) . "</td>";
         $retval .= "<td class='active checkbox' data-label='Activa'><input title=\"S&oacute; pode alterar o estado em modo de edi&ccedil;&atilde;o\" type=\"checkbox\" onclick=\"return false;\" name=active{$_object->id} " . ($_object->active ? "checked" : "") . "></td>\r\n";
@@ -60,7 +62,8 @@ class entry_category_view extends object_viewer
     {
         $retval = "";
         $_object = $this->_object;
-        if (!$_object instanceof entry_category) return $retval;
+        if (!$_object instanceof entry_category)
+            return $retval;
         if (isset($_object->id)) {
             $filter = array(
                 'active' => array('operator' => '=', 'value' => '1'),
@@ -81,7 +84,7 @@ class entry_category_view extends object_viewer
         }
         $retval .= "<tr>";
         $retval .= "<td><label for=\"tipo_id\">ID</label></td>\r\n";
-        $retval .= "<td><input type=text readonly size=4 name=\"tipo_id\" value=" . (isset($_object->id)  ? $_object->id : $_object->getNextId()) . "></td>\r\n";
+        $retval .= "<td><input type=text readonly size=4 name=\"tipo_id\" value=" . (isset($_object->id) ? $_object->id : $_object->getNextId()) . "></td>\r\n";
         $retval .= "</tr>";
         $retval .= "<tr>";
         $retval .= "<td><label for=\"parent_id\">Categoria</label></td>\r\n";
@@ -104,8 +107,13 @@ class entry_category_view extends object_viewer
     public function getSelectFromList(array $category_list, ?int $selected = null): string
     {
         $retval = "";
+        /**
+         * @var entry_category $_object
+         */
         $_object = $this->_object;
-        if (is_null($selected)) $selected = $_object->id;
+        if (null === $selected) {
+            $selected = $_object->id;
+        }
         foreach ($category_list as $category) {
             if (($category instanceof entry_category)) {
                 if ($category->id > 0 && sizeof($category->children) > 0) {

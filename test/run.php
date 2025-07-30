@@ -23,7 +23,7 @@ assert(is_float($balance['expense']));
 assert(is_float($balance['balance']));
 $viewer = $view_factory->account_balance_view($object);
 /*debug_print($viewer->printObjectList($object->getList(array('activa' => array('operator' => '=', 'value' => '1')))));
-*/
+ */
 $viewer = $view_factory->account_view($object);
 run_views($viewer, $object);
 $object = $object_factory->accounttype();
@@ -32,7 +32,7 @@ $viewer = $view_factory->account_type_view($object);
 run_views($viewer, $object);
 
 $object = $object_factory->currency();
-run_tests($object, "EUR");
+run_tests($object, 1);
 
 $object = $object_factory->ledger();
 run_tests($object);

@@ -11,6 +11,7 @@
  */
 class report_month extends report implements ireport
 {
+    public int $year;
     public function __construct(\mysqli $dblink)
     {
         parent::__construct($dblink);

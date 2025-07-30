@@ -52,7 +52,7 @@ class accounttype extends mysql_object implements iobject
             $result = $stmt->get_result();
             $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
             $stmt->close();
-            if (is_null($retval)) {
+            if (null === $retval) {
                 $retval = new accounttype(static::$_dblink);
             }
         } catch (\Exception $ex) {
@@ -74,7 +74,7 @@ class accounttype extends mysql_object implements iobject
             $stmt->bind_param("i", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);
-            if (!is_null($stmt->fetch()) && $return_id == $this->id) {
+            if (null !== $stmt->fetch() && $return_id == $this->id) {
                 $sql = "UPDATE {$this->tableName()} SET tipo_desc=?, savings=? WHERE tipo_id=?";
             } else {
                 $sql = "INSERT INTO {$this->tableName()} (tipo_desc, savings, tipo_id) VALUES (?, ?, ?)";
@@ -112,7 +112,7 @@ class accounttype extends mysql_object implements iobject
             $stmt->bind_param("i", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);
-            if (!is_null($stmt->fetch()) && $return_id == $this->id) {
+            if (null !== $stmt->fetch() && $return_id == $this->id) {
                 $sql = "DELETE FROM {$this->tableName()} WHERE tipo_id=?";
             }
             $stmt->close();

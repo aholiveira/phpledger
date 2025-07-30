@@ -108,17 +108,16 @@ class defaults extends mysql_object implements iobject
             $stmt->bind_param("i", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);
-            if (!is_null($stmt->fetch()) && $return_id == $this->id) {
+            null !== $stmt->fetch() && $return_id == $this->id ?
                 $sql = "UPDATE {$this->tableName()} SET
                     tipo_mov=?,
                     conta_id=?,
                     moeda_mov=?,
                     `data`=?,
                     deb_cred=?
-                    WHERE id=?";
-            } else {
+                    WHERE id=?"
+                :
                 $sql = "INSERT INTO {$this->tableName()} (tipo_mov, conta_id, moeda_mov, `data`, deb_cred, id) VALUES (?, ?, ?, ?, ?, ?)";
-            }
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
             if (!$stmt)

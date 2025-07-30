@@ -2,8 +2,7 @@
 
 /**
  * entry_category object
- * @property int id The ID of the object
- *
+  *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
@@ -148,7 +147,7 @@ class entry_category extends mysql_object implements iobject
     public function validate(): bool
     {
         $retval = true;
-        $retval = (!is_null($this->id)) && ($this->id !== $this->parent_id) && ($this->validation_message = "Categoria nao pode ser igual a si mesma") && $retval;
+        $retval = (null !== $this->id) && ($this->id !== $this->parent_id) && ($this->validation_message = "Categoria nao pode ser igual a si mesma") && $retval;
         $retval = is_int($this->id) && ($this->id >= 0) && $retval;
         return $retval;
     }
@@ -168,11 +167,10 @@ class entry_category extends mysql_object implements iobject
             $stmt->bind_param("s", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);
-            if (!is_null($stmt->fetch()) && $return_id == $this->id) {
-                $sql = "UPDATE {$this->tableName()} SET parent_id=?, tipo_desc=?, active=? WHERE tipo_id=?";
-            } else {
-                $sql = "INSERT INTO {$this->tableName()} (parent_id, tipo_desc, active, tipo_id) VALUES (?, ?, ?, ?)";
-            }
+            $sql = (null !== $stmt->fetch() && $return_id == $this->id) ?
+                "UPDATE {$this->tableName()} SET parent_id=?, tipo_desc=?, active=? WHERE tipo_id=?"
+                :
+                "INSERT INTO {$this->tableName()} (parent_id, tipo_desc, active, tipo_id) VALUES (?, ?, ?, ?)";
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
             if ($stmt == false)
@@ -206,11 +204,7 @@ class entry_category extends mysql_object implements iobject
             $stmt->bind_param("s", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);
-            if (!is_null($stmt->fetch()) && $return_id === $this->id) {
-                $sql = "DELETE FROM {$this->tableName()} WHERE tipo_id=?";
-            } else {
-                $sql = "";
-            }
+            $sql = (null !== $stmt->fetch() && $return_id === $this->id) ? "DELETE FROM {$this->tableName()} WHERE tipo_id=?" : "";
             $stmt->close();
             if (strlen($sql) == 0)
                 return $retval;

@@ -54,7 +54,7 @@ class report_HtmlView
         $lines = "";
         $first_date = $this->_report->dateFilters[array_key_first($this->_report->dateFilters)]['start'];
         $last_date = $this->_report->dateFilters[array_key_last($this->_report->dateFilters)]['end'];
-        if (!is_null($parent)) {
+        if (null !== $parent) {
             $lines .= "<tr style='display: none;' class=\"group{$parent['id']}\">\r\n";
             $lines .= "<td></td><td></td><td class='subcategory-label' data-label='Sub-Categoria'><a href=\"ledger_entries.php?filter_sdate={$first_date}&amp;filter_edate={$last_date}&amp;filter_entry_type={$record['id']}\" title=\"Todos os movimentos da categoria\">{$header}</a></td>";
         } else {
@@ -74,14 +74,14 @@ class report_HtmlView
             $lines .= "<span class='group{$record['id']}'>";
             if ($this->hasChildren($record)) {
                 $sum = array_key_exists($header, $record['subtotal']) ? $record['subtotal'][$header] : 0;
-                $lines .= (($value + $sum) <> 0  ? "<a href=\"ledger_entries.php?filter_sdate={$this->_report->dateFilters[$header]['start']}&amp;filter_edate={$this->_report->dateFilters[$header]['end']}&amp;filter_entry_type={$record['id']}&amp;filter_parent_id={$record['id']}\" title=\"Todos os movimentos da categoria e sub-categorias para este periodo\">" : "");
+                $lines .= (($value + $sum) <> 0 ? "<a href=\"ledger_entries.php?filter_sdate={$this->_report->dateFilters[$header]['start']}&amp;filter_edate={$this->_report->dateFilters[$header]['end']}&amp;filter_entry_type={$record['id']}&amp;filter_parent_id={$record['id']}\" title=\"Todos os movimentos da categoria e sub-categorias para este periodo\">" : "");
                 $lines .= normalize_number($value + $sum);
-                $lines .= (($value + $sum) <> 0  ? "</a>" : "") . "</span>\r\n";
+                $lines .= (($value + $sum) <> 0 ? "</a>" : "") . "</span>\r\n";
                 $lines .= "<span style='display: none;' class='group{$record['id']}'>";
             }
             $lines .= $value <> 0 ? "<a href=\"ledger_entries.php?filter_sdate={$this->_report->dateFilters[$header]['start']}&amp;filter_edate={$this->_report->dateFilters[$header]['end']}&amp;filter_entry_type={$record['id']}\" title=\"Todos os movimentos da categoria para este periodo\">" : "";
             $lines .= normalize_number($value);
-            $lines .=  ($value <> 0 ? "</a>" : "") . "</span>\r\n";
+            $lines .= ($value <> 0 ? "</a>" : "") . "</span>\r\n";
             $lines .= "</td>\r\n";
             if (array_key_exists($header, $this->_periodTotal)) {
                 $this->_periodTotal[$header] += $value;

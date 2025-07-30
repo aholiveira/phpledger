@@ -9,15 +9,15 @@
  */
 interface iobject_factory
 {
-    static function data_storage(): idata_storage;
-    static function defaults(): iobject;
-    static function user(): iobject;
-    static function account(): iobject;
-    static function accounttype(): iobject;
-    static function currency(): iobject;
-    static function ledger(): iobject;
-    static function ledgerentry(): iobject;
-    static function entry_category(): iobject;
-    static function report_month(): ireport;
-    static function report_year(): ireport;
+    public static function data_storage(): idata_storage;
+    public static function defaults(): iobject;
+    public static function user(): iobject;
+    public static function account(): iobject;
+    public static function accounttype(): iobject;
+    public static function currency(): iobject;
+    public static function ledger(): iobject;
+    public static function ledgerentry(): iobject;
+    public static function entry_category(): iobject;
+    public static function report_month(): ireport;
+    public static function report_year(): ireport;
 }
