@@ -140,6 +140,7 @@ class ledgerentry extends mysql_object implements iobject
 
     public static function getBalanceForFilter(array $field_filter)
     {
+        global $logger;
         $where = parent::getWhereFromArray($field_filter);
         $tableName = static::$tableName;
         $retval = null;
@@ -155,7 +156,7 @@ class ledgerentry extends mysql_object implements iobject
             $stmt->fetch();
             $stmt->close();
         } catch (\Exception $ex) {
-            print_var($ex, "", true);
+            $logger->dump($ex, "");
         }
         return $retval;
     }

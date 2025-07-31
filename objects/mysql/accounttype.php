@@ -102,6 +102,7 @@ class accounttype extends mysql_object implements iobject
     }
     public function delete(): bool
     {
+        global $logger;
         $retval = false;
         $sql = "SELECT tipo_id FROM {$this->tableName()} WHERE tipo_id=?";
         try {
@@ -118,8 +119,8 @@ class accounttype extends mysql_object implements iobject
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
             if ($stmt == false) {
-                print_var(static::$_dblink);
-                debug_print(static::$_dblink->errno);
+                $logger->dump(static::$_dblink);
+                $logger->error(static::$_dblink->errno);
             }
             $stmt->bind_param("i", $this->id);
             $retval = $stmt->execute();

@@ -18,6 +18,7 @@ define("VERSION", "0.2.0");
 define("ROOT_DIR", __DIR__);
 define("OBJECTS_DIR", constant("ROOT_DIR") . "/objects");
 define("VIEWS_DIR", constant("ROOT_DIR") . "/views");
+define("UTILS_DIR", constant("ROOT_DIR") . "/util");
 
 $gitHead = ROOT_DIR . "/.git/ORIG_HEAD";
 define("GITHASH", file_exists($gitHead) ? substr(file_get_contents($gitHead), 0, 12) : "main");
@@ -54,8 +55,10 @@ require_once OBJECTS_DIR . '/config.class.php';
 require_once OBJECTS_DIR . '/object_factory.php';
 require_once OBJECTS_DIR . '/email.php';
 require_once VIEWS_DIR . '/view_factory.php';
+require_once UTILS_DIR . '/csrf.php';
+require_once UTILS_DIR . '/logger.php';
 require_once ROOT_DIR . '/html.php';
-require_once ROOT_DIR . '/util/csrf.php';
+
 /**
  * Prints variable
  * @param mixed $var variable to print
@@ -64,14 +67,7 @@ require_once ROOT_DIR . '/util/csrf.php';
  *  * if false, the default, prints ALWAYS.
  *  * if true, print only if DEBUG is defined and true
  */
-function print_var($var, $comment = "", bool $debug = false)
-{
-    if (($debug && defined("DEBUG") && DEBUG === 1) || !$debug) {
-        print "\r\n<pre>START###{$comment}###START<br>\r\n";
-        print nl2br(print_r($var, true));
-        print "\r\n<br>END###{$comment}###END</pre><br>\r\n";
-    }
-}
+$logger = new Logger("ledger.log");
 function debug_print($text)
 {
     if (defined("DEBUG") && DEBUG === 1) {
