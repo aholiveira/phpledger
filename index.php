@@ -62,16 +62,22 @@ if (!empty($post_user)) {
         $defaults = $object_factory->defaults()->getById(1);
         $defaults->entry_date = date("Y-m-d");
         $defaults->update();
+        $target = "ledger_entries.php?filter_sdate=" . date('Y-m-01');
+        if (isset($_COOKIE['current_url'])) {
+            $url = rawurldecode($_COOKIE['current_url']);
+            if (!empty($url)) {
+                $target = $url;
+            }
+        }
         if (!headers_sent()) {
-            header("Location: ledger_entries.php?filter_sdate=" . date('Y-m-01'), true, 303);
+            header("Location: $target", true, 303);
         } else {
-            print '<meta http-equiv="REFRESH" content="0; URL=ledger_entries.php?filter_sdate=' . date('Y-m-01') . '">';
-            print '<noscript><a href="ledger_entries.php?filter_sdate=' . date('Y-m-01') . '">Clique aqui para continuar</a></noscript>';
+            print "<meta http-equiv='REFRESH' content='0; URL=\"{$target}\"'>";
+            print "<noscript><a href=\"{$target}\">Clique aqui para continuar</a></noscript>";
         }
         exit();
     }
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="pt-PT">
