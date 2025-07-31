@@ -19,6 +19,16 @@ if (isset($_SESSION['expires']) && $_SESSION['expires'] < time()) {
         setcookie(session_name(), session_id(), time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
     }
 }
+if (isset($_SESSION['user']) && basename($_SERVER['SCRIPT_NAME']) !== 'index.php') {
+    $secure = !empty($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] === 1);
+    setcookie('current_url', rawurlencode($_SERVER['REQUEST_URI']), [
+        'expires' => time() + 3600,
+        'path' => dirname($_SERVER['SCRIPT_NAME']) . '/',
+        'secure' => $secure,
+        'httponly' => true,
+        'samesite' => 'Strict',
+    ]);
+}
 if (!isset($_SESSION['user'])) {
     if (!headers_sent()) {
         header("Location: index.php");

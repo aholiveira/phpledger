@@ -55,7 +55,7 @@ require_once OBJECTS_DIR . '/object_factory.php';
 require_once OBJECTS_DIR . '/email.php';
 require_once VIEWS_DIR . '/view_factory.php';
 require_once ROOT_DIR . '/html.php';
-require_once ROOT_DIR . '/csrf.php';
+require_once ROOT_DIR . '/util/csrf.php';
 /**
  * Prints variable
  * @param mixed $var variable to print

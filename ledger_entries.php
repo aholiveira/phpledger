@@ -11,6 +11,9 @@ if (!defined("ROOT_DIR")) {
     require_once __DIR__ . "/prepend.php";
 }
 require_once __DIR__ . "/contas_config.php";
+require_once __DIR__ . "/util/dateparser.php";
+require_once __DIR__ . "/util/ledgerentrycontroller.php";
+
 $pagetitle = "Movimentos";
 $input_variables_filter = [
     'data_mov' => [
@@ -44,83 +47,16 @@ $input_variables_filter = [
 ];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, TRUE);
-    build_and_save_record();
+    try {
+        (new LedgerEntryController($object_factory))->handleSave($filtered_input);
+    } catch (\Exception $e) {
+        Html::myalert($e->getMessage());
+    }
 }
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $filtered_input = filter_input_array(INPUT_GET, $input_variables_filter, TRUE);
 }
 
-function checkDateParameter($parameterName, $value_array): ?DateTime
-{
-    if (!empty($value_array[$parameterName])) {
-        return date_create($value_array[$parameterName]);
-    }
-    $datetime = null;
-    $dateParts = ['AA' => 0, 'MM' => 0, 'DD' => 0];
-    foreach (['AA', 'MM', 'DD'] as $datePart) {
-        if (!empty($value_array["{$parameterName}{$datePart}"])) {
-            $dateParts[$datePart] = (int) $value_array["{$parameterName}{$datePart}"];
-        }
-    }
-    if (checkdate($dateParts['MM'], $dateParts['DD'], $dateParts['AA'])) {
-        $datetime = date_create(sprintf("%04d-%02d-%02d", $dateParts['AA'], $dateParts['MM'], $dateParts['DD']));
-    }
-    return $datetime;
-}
-
-function checkParameterExists($parameterName, $errorMessage): mixed
-{
-    global $filtered_input;
-    if (!is_array($filtered_input)) {
-        Html::myalert("No input detected");
-        return null;
-    }
-    if (array_key_exists($parameterName, $filtered_input)) {
-        if ($filtered_input[$parameterName] === NULL || $filtered_input[$parameterName] === FALSE) {
-            Html::myalert($errorMessage);
-        }
-    }
-    return $filtered_input[$parameterName];
-}
-function build_and_save_record(): void
-{
-    global $input_variables_filter;
-    global $object_factory;
-    $entry = $object_factory->ledgerentry();
-    $defaults = $object_factory->defaults();
-
-    $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, TRUE);
-    if (checkDateParameter('data_mov', $filtered_input) instanceof \DateTime) {
-        $entry->entry_date = checkDateParameter('data_mov', $filtered_input)->format("Y-m-d");
-    } else {
-        Html::myalert("Data invalida!");
-    }
-    $entry->id = checkParameterExists("id", "Dados invalidos");
-    $entry->currency_amount = checkParameterExists("currency_amount", "Valor movimento invalido!");
-    $entry->direction = checkParameterExists("direction", "Valor movimento invalido!");
-    $entry->euro_amount = $filtered_input["direction"] * $filtered_input["currency_amount"];
-    $entry->category_id = checkParameterExists("category_id", "Tipo movimento invalido!");
-    $entry->currency_id = checkParameterExists("currency_id", "Moeda invalida!");
-    $entry->account_id = checkParameterExists("account_id", "Conta movimento invalida!");
-    $entry->remarks = checkParameterExists("remarks", "Observacoes movimento invalidas!");
-    $entry->username = strlen($_SESSION["user"]) ? $_SESSION["user"] : "";
-    if (!$entry->update()) {
-        Html::myalert("Ocorreu um erro na gravacao");
-    } else {
-        $defaults = $defaults->getByUsername($_SESSION["user"]);
-        if (null === $defaults) {
-            $defaults = defaults::init();
-        }
-        $defaults->category_id = $entry->category_id;
-        $defaults->currency_id = $entry->currency_id;
-        $defaults->account_id = $entry->account_id;
-        $defaults->entry_date = $entry->entry_date;
-        $defaults->direction = $entry->direction;
-        $defaults->username = $_SESSION["user"];
-        $defaults->update();
-        Html::myalert("Registo gravado [ID: {$entry->id}]");
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="pt-PT">
@@ -200,11 +136,13 @@ function build_and_save_record(): void
             'active' => ['operator' => '=', 'value' => '1'],
             'tipo_id' => ['operator' => '>', 'value' => '0']
         ]));
+
         // Moedas
         $currency_id = $edit > 0 ? $edit_entry->currency_id : $defaults->currency_id;
         $currency = $object_factory->currency();
         $currency_viewer = $view_factory->currency_view($currency);
         $moeda_opt = $currency_viewer->getSelectFromList(currency::getList(), $currency_id);
+
         // Contas
         $conta_opt = "";
         $account_id = $edit > 0 ? $edit_entry->account_id : $defaults->account_id;
