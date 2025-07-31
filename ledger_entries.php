@@ -11,8 +11,6 @@ if (!defined("ROOT_DIR")) {
     require_once __DIR__ . "/prepend.php";
 }
 require_once __DIR__ . "/contas_config.php";
-require_once __DIR__ . "/util/dateparser.php";
-require_once __DIR__ . "/util/ledgerentrycontroller.php";
 
 $pagetitle = "Movimentos";
 $input_variables_filter = [
@@ -46,6 +44,10 @@ $input_variables_filter = [
     'filter_edateDD' => FILTER_SANITIZE_NUMBER_INT
 ];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
+        http_response_code(400);
+        Redirector::to('index.php');
+    }
     $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, TRUE);
     try {
         (new LedgerEntryController($object_factory))->handleSave($filtered_input);
@@ -225,6 +227,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         </div>
         <div class="main" id="main">
             <form name="mov" action="ledger_entries.php" method="POST">
+                <?= CSRF::inputField() ?>
                 <input type="hidden" name="filter_account_id"
                     value="<?= is_array($filtered_input) ? $filtered_input["filter_account_id"] : ""; ?>">
                 <input type="hidden" name="filter_parent_id"

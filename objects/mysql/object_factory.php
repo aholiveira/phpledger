@@ -37,22 +37,20 @@ class object_factory implements iobject_factory
         $user = config::get("user");
         $pass = config::get("password");
         try {
+            mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
             static::$_dblink = @new \mysqli($host, $user, $pass, $dbase);
-            if (static::$_dblink->connect_errno) {
-                throw new \RuntimeException('mysqli connection error: ' . static::$_dblink->connect_error);
-            }
-            if (false === static::$_dblink->set_charset('utf8')) {
-                throw new \RuntimeException('Error while setting utf8: ' . static::$_dblink->error);
-            }
+            static::$_dblink->set_charset('utf8mb4');
         } catch (\Exception $ex) {
             static::handle_error($ex);
-            exit(static::$_dblink->connect_errno);
+            exit();
         }
         return static::$_dblink;
     }
     public static function handle_error(\Exception $ex)
     {
-        print "<p>Error [" . $ex->getMessage() . "] while connecting to the database. Please check config file.</p>";
+        global $logger;
+        print "<p>Error while connecting to the database. Please check config file.</p>";
+        $logger->error("Error [{$ex->getMessage()}] while connecting to the database. Please check config file.");
     }
     public static function data_storage(): idata_storage
     {

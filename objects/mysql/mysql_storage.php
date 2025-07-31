@@ -10,7 +10,7 @@
 
 class mysql_storage implements idata_storage
 {
-    private $_dblink;
+    private \mysqli $_dblink;
     private string $_message = "";
     private $_tableCreateSQL;
     private $_tableNewColumnNames;
@@ -29,22 +29,18 @@ class mysql_storage implements idata_storage
         $this->_default_admin_password = config::get("admin_password");
         $this->logger = $logger;
     }
-    private function connect()
+    private function connect(): void
     {
         $host = config::get("host");
         $user = config::get("user");
         $pass = config::get("password");
         $dbase = config::get("database");
-        if (!($this->_dblink instanceof \mysqli)) {
-            mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+        try {
             $this->_dblink = new \mysqli($host, $user, $pass, $dbase);
-            if ($this->_dblink->connect_errno) {
-                throw new RuntimeException("Connection error: [{$this->_dblink->connect_error}]");
-            }
             $this->_dblink->set_charset('utf8mb4');
-            if ($this->_dblink->errno) {
-                throw new RuntimeException("Error while setting charset: [{$this->_dblink->connect_error}]");
-            }
+        } catch (\mysqli_sql_exception $e) {
+            throw new \RuntimeException("Database connection failed: " . $e->getMessage(), 0, $e);
         }
     }
     public function addMessage(string $message): string

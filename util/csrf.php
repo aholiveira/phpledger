@@ -1,12 +1,12 @@
 <?php
 class CSRF
 {
-    private const TOKEN_KEY = '_csrf_token';
-    private const TOKEN_EXPIRY = 3600; // seconds (1 hour)
+    private const string TOKEN_KEY = '_csrf_token';
+    private const int TOKEN_EXPIRY = 3600; // seconds (1 hour)
 
     public static function generateToken(): string
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
+        if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
             session_start();
         }
         $token = bin2hex(random_bytes(32));
@@ -19,7 +19,7 @@ class CSRF
 
     public static function getToken(): ?string
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
+        if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
             session_start();
         }
         if (!isset($_SESSION[self::TOKEN_KEY])) {
