@@ -43,7 +43,8 @@ $input_variables_filter = [
     'filter_edateMM' => FILTER_SANITIZE_NUMBER_INT,
     'filter_edateDD' => FILTER_SANITIZE_NUMBER_INT
 ];
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+$filtered_input = [];
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, TRUE);
     try {
         (new LedgerEntryController($object_factory))->handleSave($filtered_input);
@@ -51,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         Html::myalert($e->getMessage());
     }
 }
-if ($_SERVER["REQUEST_METHOD"] == "GET") {
+if ($_SERVER["REQUEST_METHOD"] === "GET") {
     $filtered_input = filter_input_array(INPUT_GET, $input_variables_filter, TRUE);
 }
 
@@ -68,16 +69,16 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     <div class="maingrid">
         <?php
         include ROOT_DIR . "/menu_div.php";
-        if (is_array($filtered_input) && !empty($filtered_input["filter_sdate"])) {
-            $sdate = (strlen($filtered_input["filter_sdate"]) ? $filtered_input["filter_sdate"] : date("Y-m-01"));
+        if (!empty($filtered_input["filter_sdate"])) {
+            $sdate = strlen($filtered_input["filter_sdate"]) ? $filtered_input["filter_sdate"] : date("Y-m-01");
         } else {
-            if (is_array($filtered_input) && !empty($filtered_input["filter_sdateAA"])) {
+            if (!empty($filtered_input["filter_sdateAA"])) {
                 $sdate = sprintf("%04d-%02d-%02d", $filtered_input["filter_sdateAA"], $filtered_input["filter_sdateMM"], $filtered_input["filter_sdateDD"]);
             } else {
                 $sdate = date("Y-m-01");
             }
         }
-        if (is_array($filtered_input) && !empty($filtered_input["filter_edate"])) {
+        if (!empty($filtered_input["filter_edate"])) {
             $edate = strlen($filtered_input["filter_edate"]) ? str_replace("-", "", $filtered_input["filter_edate"]) : date("Ymd");
         } else {
             if (is_array($filtered_input) && !empty($filtered_input["filter_edateAA"])) {
@@ -88,15 +89,15 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         }
         $ledger_filter[] = ["entry_date" => ["operator" => '>=', "value" => $sdate]];
         $ledger_filter[] = ["entry_date" => ["operator" => '<=', "value" => $edate]];
-        if (is_array($filtered_input) && $filtered_input["filter_account_id"] > 0) {
+        if (!empty($filtered_input["filter_account_id"])) {
             $ledger_filter[] = ['account_id' => ["operator" => '=', "value" => $filtered_input["filter_account_id"]]];
         }
-        if (is_array($filtered_input) && $filtered_input["filter_entry_type"] > 0) {
+        if (!empty($filtered_input["filter_entry_type"])) {
             $ledger_filter[] = ['category_id' => ["operator" => '=', "value" => $filtered_input["filter_entry_type"]]];
         }
         $filter = "movimentos.entry_date>='{$sdate}' AND movimentos.entry_date<='{$edate}'";
         $parent_filter = "";
-        if (is_array($filtered_input) && !empty($filtered_input["filter_parent_id"])) {
+        if (!empty($filtered_input["filter_parent_id"])) {
             $parent_filter = "tipo_mov.parent_id={$filtered_input['filter_parent_id']} ";
             $ledger_filter[] = ["parent_id" => ["operator" => "IN", "value" => "({$filtered_input['filter_parent_id']})"]];
         }
@@ -146,18 +147,23 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $account_id = $edit > 0 ? $edit_entry->account_id : $defaults->account_id;
         $account_viewer = $view_factory->account_view(account::getById($account_id));
         $conta_opt = $account_viewer->getSelectFromList(account::getList(['activa' => ['operator' => '=', 'value' => '1']]), $account_id);
-        $filter_string = "";
-        $filter_properties = ["filter_parent_id", "filter_entry_type", "filter_sdate", "filter_sdateAA", "filter_sdateMM", "filter_sdateDD", "filter_edate", "filter_edateAA", "filter_edateMM", "filter_edateDD", "filter_account_id"];
-        foreach ($filter_properties as $filter_prop) {
-            $filter_string .= is_array($filtered_input) && array_key_exists($filter_prop, $filtered_input) && !empty($filtered_input[$filter_prop] ? (strlen($filter_string) > 0 ? "&" : "") . "$filter_prop={$filtered_input[$filter_prop]}" : "");
+        if (!is_array($filtered_input)) {
+            $filtered_input = [];
         }
+        $filtered_input2 = [];
+        foreach ($filtered_input as $k => $v) {
+            if (stristr($k, "filter_")) {
+                $filtered_input2[$k] = $v;
+            }
+        }
+        $filter_string = http_build_query($filtered_input2);
         ?>
         <div class="header" id="header">
             <form id="datefilter" name="datefilter" action="ledger_entries.php" method="GET">
                 <input type="hidden" name="filter_parent_id"
-                    value="<?= is_array($filtered_input) ? $filtered_input["filter_parent_id"] : "" ?>">
+                    value="<?= !empty($filtered_input["filter_parent_id"]) ? $filtered_input["filter_parent_id"] : "" ?>">
                 <input type="hidden" name="filter_entry_type"
-                    value="<?= is_array($filtered_input) ? $filtered_input["filter_entry_type"] : "" ?>">
+                    value="<?= !empty($filtered_input["filter_entry_type"]) ? $filtered_input["filter_entry_type"] : "" ?>">
                 <table class="filter">
                     <tr>
                         <td>Inicio</td>
@@ -217,19 +223,18 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 </table>
             </form>
             <script>
-                document.getElementById("filter_entry_type").value = "<?= is_array($filtered_input) ? $filtered_input["filter_entry_type"] : ""; ?>";
-                document.getElementById("filter_account_id").value = "<?= is_array($filtered_input) ? $filtered_input["filter_account_id"] : ""; ?>";
+                document.getElementById("filter_entry_type").value = "<?= !empty($filtered_input["filter_entry_type"]) ? $filtered_input["filter_entry_type"] : ""; ?>";
+                document.getElementById("filter_account_id").value = "<?= !empty($filtered_input["filter_account_id"]) ? $filtered_input["filter_account_id"] : ""; ?>";
             </script>
         </div>
         <div class="main" id="main">
             <form name="mov" action="ledger_entries.php" method="POST">
-                <?= CSRF::inputField() ?>
                 <input type="hidden" name="filter_account_id"
-                    value="<?= is_array($filtered_input) ? $filtered_input["filter_account_id"] : ""; ?>">
+                    value="<?= !empty($filtered_input["filter_account_id"]) ? $filtered_input["filter_account_id"] : ""; ?>">
                 <input type="hidden" name="filter_parent_id"
-                    value="<?= is_array($filtered_input) ? $filtered_input["filter_parent_id"] : ""; ?>">
+                    value="<?= !empty($filtered_input["filter_parent_id"]) ? $filtered_input["filter_parent_id"] : ""; ?>">
                 <input type="hidden" name="filter_entry_type"
-                    value="<?= is_array($filtered_input) ? $filtered_input["filter_entry_type"] : ""; ?>">
+                    value="<?= !empty($filtered_input["filter_entry_type"]) ? $filtered_input["filter_entry_type"] : ""; ?>">
                 <input type="hidden" name="filter_sdate" value="<?= $sdate; ?>">
                 <input type="hidden" name="filter_edate" value="<?= $edate; ?>">
                 <table class="lista ledger_entry_list">
@@ -297,8 +302,12 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                                 <?php
                             }
                             if (empty($edit) || $row->id != $edit) {
-                                $category_filter = stripos($filter_string, "filter_entry_type") === false ? "$filter_string&filter_entry_type={$row->category_id}" : preg_replace("/filter_entry_type=(\d+)/", "filter_entry_type=" . $row->category_id, $filter_string);
-                                $account_filter = stripos($filter_string, "filter_account_id") === false ? "$filter_string&filter_account_id={$row->account_id}" : preg_replace("/filter_account_id=(\d+)/", "filter_account_id=" . $row->account_id, $filter_string);
+                                $filtered_input3 = $filtered_input2;
+                                $filtered_input3["filter_entry_type"] = $row->category_id;
+                                $category_filter = http_build_query($filtered_input3);
+                                $filtered_input3 = $filtered_input2;
+                                $filtered_input3["filter_account_id"] = $row->account_id;
+                                $account_filter = http_build_query($filtered_input3);
                                 ?>
                                 <td data-label='ID' class='id'><a
                                         title="Clique para editar entrada&#10;Modificado por <?= $row->username ?>&#10;em <?= $row->updated_at ?>"
