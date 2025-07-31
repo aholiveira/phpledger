@@ -57,6 +57,9 @@ require_once OBJECTS_DIR . '/email.php';
 require_once VIEWS_DIR . '/view_factory.php';
 require_once UTILS_DIR . '/csrf.php';
 require_once UTILS_DIR . '/logger.php';
+require_once UTILS_DIR . '/dateparser.php';
+require_once UTILS_DIR . '/ledgerentrycontroller.php';
+require_once UTILS_DIR . '/redirector.php';
 require_once ROOT_DIR . '/html.php';
 
 /**

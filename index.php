@@ -53,6 +53,7 @@ if (!empty($post_user)) {
                 $target = $url;
             }
         }
+        $logger->info("User [$post_user] logged in");
         Redirector::to($target);
     }
 }

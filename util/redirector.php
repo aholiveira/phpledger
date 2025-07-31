@@ -1,7 +1,7 @@
 <?php
 class Redirector
 {
-    private const array ALLOWED_REDIRECTS = [
+    private const ALLOWED_REDIRECTS = [
         'ledger_entries.php',
         'account_types_list.php',
         'account_types.php',
