@@ -1,8 +1,8 @@
 <?php
 class CSRF
 {
-    private const string TOKEN_KEY = '_csrf_token';
-    private const int TOKEN_EXPIRY = 3600; // seconds (1 hour)
+    private const TOKEN_KEY = '_csrf_token';
+    private const TOKEN_EXPIRY = 3600; // seconds (1 hour)
 
     public static function generateToken(): string
     {
