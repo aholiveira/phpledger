@@ -44,10 +44,6 @@ $input_variables_filter = [
     'filter_edateDD' => FILTER_SANITIZE_NUMBER_INT
 ];
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
-        http_response_code(400);
-        Redirector::to('index.php');
-    }
     $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, TRUE);
     try {
         (new LedgerEntryController($object_factory))->handleSave($filtered_input);
