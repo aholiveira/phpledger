@@ -1,6 +1,8 @@
 <?php
 include "common.php";
+
 debug_print("Running tests...");
+$logger = new Logger("run.log");
 $data_storage = $object_factory->data_storage();
 if (!$data_storage->check()) {
     print "DB NEEDS UPDATE...";
@@ -41,11 +43,11 @@ run_tests($object);
 $viewer = $view_factory->ledger_entry_view($object);
 run_views($viewer, $object);
 $object = $object_factory->entry_category();
-print_var($object->getList());
+$logger->dump($object->getList());
 /*run_tests($object);
 debug_print("OBJECT 145");
 $object->getById(0);
-print_var($object);
+$logger->dump($object);
 exit(0);
 /*
 $viewer = $view_factory->entry_category_view($object);
@@ -63,19 +65,19 @@ debug_print($viewer->printAsTable());
 /*
 $object = $object_factory->report_year();
 $object->getReport(array("year" => 2021));
-print_var($object);
+$logger->dump($object);
 $viewer = $view_factory->report_year_view($object);
 //debug_print($viewer->printAsTable());
 */
 function run_tests(mysql_object $object, $id = 1)
 {
+    global $logger;
     try {
         debug_print("OBJECT: {$object}");
         debug_print("getById");
         $object = $object->getById($id);
         if (isset($object->id)) {
             assert($object->id === $id);
-            //print_var($object);
         }
         assert($object->update() === true, "save#{$object}#");
         debug_print("getList#{$object}#");

@@ -19,6 +19,7 @@ $reports = array(
 const PADDING = 35;
 const PASSED = "\033[32mPASSED\033[0m";
 const FAILED = "\033[31mFAILED\033[0m";
+$logger = new Logger("validate.log");
 print "Running tests\r\n\r\n";
 $data_storage = new mysql_storage();
 print (str_pad("Testing data storage ", constant("PADDING"), ".") . " : ");
@@ -184,6 +185,7 @@ function test_report($report, $view)
 function test_object(mysql_object $object, $id = 1)
 {
     $retval = true;
+    global $logger;
     try {
         print (str_pad("Testing {$object} ", constant("PADDING"), ".") . " : ");
         $object = $object->getById($id);
@@ -201,7 +203,7 @@ function test_object(mysql_object $object, $id = 1)
     } catch (Exception $ex) {
         debug_print($ex->getMessage());
         debug_print($ex->getTraceAsString());
-        print "EXCEPTION";
+        $logger->dump($object, "OBJECT");
         $retval = false;
     }
     return $retval;
@@ -209,6 +211,7 @@ function test_object(mysql_object $object, $id = 1)
 function test_view(object_viewer $viewer, iobject $object)
 {
     $retval = true;
+    global $logger;
     try {
         print (str_pad("Testing " . get_class($viewer) . " ", constant("PADDING"), ".") . " : ");
         $retval = (assert(!empty($viewer->printObject())) && $retval);
@@ -225,7 +228,7 @@ function test_view(object_viewer $viewer, iobject $object)
     } catch (Exception $ex) {
         debug_print("EXCEPTION");
         debug_print($ex->getMessage());
-        print_var($object, "OBJECT", false);
+        $logger->dump($object, "OBJECT");
         $retval = false;
     }
     return $retval;

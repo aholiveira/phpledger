@@ -18,13 +18,16 @@ class mysql_storage implements idata_storage
     private $_engine = "InnoDB";
     private $_default_admin_username;
     private $_default_admin_password;
+    private Logger $logger;
 
     public function __construct()
     {
+        global $logger;
         $this->_message = "";
         $this->setTableCreateSQL();
         $this->_default_admin_username = config::get("admin_username");
         $this->_default_admin_password = config::get("admin_password");
+        $this->logger = $logger;
     }
     private function connect()
     {
@@ -443,7 +446,7 @@ class mysql_storage implements idata_storage
             $stmt->close();
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            print_var($ex, "", true);
+            $this->logger->dump($ex, "");
         }
         return $retval;
     }
@@ -463,8 +466,8 @@ class mysql_storage implements idata_storage
             $retval = $stmt->execute();
             $stmt->close();
         } catch (\Exception $ex) {
-            print_var($ex, "", true);
-            print_var($this->_dblink, "", false);
+            $this->logger->dump($ex, "");
+            $this->logger->dump($this->_dblink, "");
         }
         return $retval;
     }
@@ -481,8 +484,8 @@ class mysql_storage implements idata_storage
             $stmt->fetch();
             $stmt->close();
         } catch (\Exception $ex) {
-            print_var($ex, "", true);
-            print_var($this->_dblink, "", false);
+            $this->logger->dump($ex, "");
+            $this->logger->dump($this->_dblink, "");
         }
         return $retval;
     }
@@ -496,8 +499,8 @@ class mysql_storage implements idata_storage
             $retval = ($count == 1);
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            print_var($ex, "", true);
-            print_var($this->_dblink, "", false);
+            $this->logger->dump($ex, "");
+            $this->logger->dump($this->_dblink, "");
         }
         return $retval;
     }
@@ -514,8 +517,8 @@ class mysql_storage implements idata_storage
             $this->addMessage("Column [{$column_name}] added to [{$table_name}]");
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            print_var($ex, "", true);
-            print_var($this->_dblink, "", false);
+            $this->logger->dump($ex, "");
+            $this->logger->dump($this->_dblink, "");
         }
         return $retval;
     }
@@ -530,8 +533,8 @@ class mysql_storage implements idata_storage
             $this->addMessage("Table [{$table_name}] column [{$column_name}] definition changed");
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            print_var($ex, "", true);
-            print_var($this->_dblink, "", false);
+            $this->logger->dump($ex, "");
+            $this->logger->dump($this->_dblink, "");
         }
         return $retval;
     }
@@ -551,8 +554,8 @@ class mysql_storage implements idata_storage
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->addMessage($sql);
-            print_var($ex, "", true);
-            print_var($this->_dblink, "", false);
+            $this->logger->dump($ex, "");
+            $this->logger->dump($this->_dblink, "");
         }
         return $retval;
     }
@@ -566,8 +569,8 @@ class mysql_storage implements idata_storage
             $retval = ($count == 1);
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            print_var($ex, "", true);
-            print_var($this->_dblink, "", false);
+            $this->logger->dump($ex, "");
+            $this->logger->dump($this->_dblink, "");
         }
         return $retval;
     }
@@ -583,8 +586,8 @@ class mysql_storage implements idata_storage
             $this->addMessage("Added foreign key [{$key_name}] to table [{$table_name}]");
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            print_var($ex, "", true);
-            print_var($this->_dblink, "", false);
+            $this->logger->dump($ex, "");
+            $this->logger->dump($this->_dblink, "");
         }
         return $retval;
     }
@@ -598,8 +601,8 @@ class mysql_storage implements idata_storage
             $retval = ($count == 1);
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            print_var($ex, "", true);
-            print_var($this->_dblink, "", false);
+            $this->logger->dump($ex, "");
+            $this->logger->dump($this->_dblink, "");
         }
         return $retval;
     }
@@ -612,8 +615,8 @@ class mysql_storage implements idata_storage
             $retval = @$this->do_query_get_result($sql);
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            print_var($ex, "", true);
-            print_var($this->_dblink, "", false);
+            $this->logger->dump($ex, "");
+            $this->logger->dump($this->_dblink, "");
             $retval = "";
         }
         return $retval;
@@ -628,8 +631,8 @@ class mysql_storage implements idata_storage
             $this->addMessage("Changed collation on database [{$db_name}]");
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            print_var($ex, "", true);
-            print_var($this->_dblink, "", false);
+            $this->logger->dump($ex, "");
+            $this->logger->dump($this->_dblink, "");
             $retval = "";
         }
         return $retval;
@@ -643,8 +646,8 @@ class mysql_storage implements idata_storage
             $retval = @$this->do_query_get_result($sql);
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            print_var($ex, "", true);
-            print_var($this->_dblink, "", false);
+            $this->logger->dump($ex, "");
+            $this->logger->dump($this->_dblink, "");
             $retval = "";
         }
         return $retval;
@@ -659,8 +662,8 @@ class mysql_storage implements idata_storage
             $this->addMessage("Changed collation on table [{$table_name}]");
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            print_var($ex, "", true);
-            print_var($this->_dblink, "", false);
+            $this->logger->dump($ex, "");
+            $this->logger->dump($this->_dblink, "");
             $retval = "";
         }
         return $retval;
@@ -674,8 +677,8 @@ class mysql_storage implements idata_storage
             $retval = @$this->do_query_get_result($sql);
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            print_var($ex, "", true);
-            print_var($this->_dblink, "", false);
+            $this->logger->dump($ex, "");
+            $this->logger->dump($this->_dblink, "");
             $retval = "";
         }
         return $retval;
@@ -690,8 +693,8 @@ class mysql_storage implements idata_storage
             $this->addMessage("Changed engine on table [{$table_name}]");
         } catch (Exception $ex) {
             $this->addMessage($ex);
-            print_var($ex, "", false);
-            print_var($this->_dblink, "", false);
+            $this->logger->dump($ex, "");
+            $this->logger->dump($this->_dblink, "");
         }
         return $retval;
     }

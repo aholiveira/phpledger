@@ -144,12 +144,12 @@ abstract class mysql_object implements iobject
     }
     protected static function handleException(\Exception $ex, $sql = "")
     {
-        #print_var($this, "THIS", true);
-        print_var(static::$_dblink, "DBLINK", true);
-        print_var($sql, "SQL", true);
-        print_var($ex, "EXCEPTION", true);
-        debug_print($ex->getMessage());
-        debug_print($ex->getTraceAsString());
+        global $logger;
+        $logger->dump(static::$_dblink, "DBLINK");
+        $logger->dump($sql, "SQL");
+        $logger->dump($ex, "EXCEPTION");
+        $logger->dump($ex->getMessage(), "EXMSG");
+        $logger->dump($ex->getTraceAsString(), "TRACE");
         static::setErrorMessage($ex->getTraceAsString());
     }
     public function clear(): void
