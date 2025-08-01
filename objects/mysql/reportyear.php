@@ -23,7 +23,7 @@ class report_year extends report implements ireport
         $this->first_year = 2999;
         $this->last_year = 0;
     }
-    public function getReport(array $params = array()): report_year
+    public function getReport(array $params = []): report_year
     {
         global $object_factory;
         $this->first_year = array_key_exists("first_year", $params) ? $params["first_year"] : date("Y") - 1;
@@ -48,10 +48,10 @@ class report_year extends report implements ireport
         parent::getReport($params);
         $account_type = $object_factory->accounttype();
         $account = $object_factory->account();
-        $savings_types = $account_type->getList(array('savings' => array('operator' => '=', 'value' => '1')));
+        $savings_types = $account_type->getList(['savings' => ['operator' => '=', 'value' => '1']]);
         $savings_accounts = [];
         foreach ($savings_types as $saving_type) {
-            foreach ($account->getList(array('tipo_id' => array('operator' => '=', 'value' => $saving_type->id))) as $acc) {
+            foreach ($account->getList(['tipo_id' => ['operator' => '=', 'value' => $saving_type->id]]) as $acc) {
                 $savings_accounts[] = $acc;
             }
         }

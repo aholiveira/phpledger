@@ -104,20 +104,20 @@ $report->getReport(array("year" => $year));
                 }
             }
             $table = [];
-            $table['cols'] = array(
-                array("id" => "", 'label' => 'Month', 'type' => 'string'),
-                array("id" => "", 'label' => 'Income', 'type' => 'number'),
-                array("id" => "", 'label' => 'Expense', 'type' => 'number'),
-                array("id" => "", 'label' => 'Savings', 'type' => 'number')
-            );
+            $table['cols'] = [
+                ["id" => "", 'label' => 'Month', 'type' => 'string'],
+                ["id" => "", 'label' => 'Income', 'type' => 'number'],
+                ["id" => "", 'label' => 'Expense', 'type' => 'number'],
+                ["id" => "", 'label' => 'Savings', 'type' => 'number']
+            ];
             $rows = [];
             for ($month = 1; $month <= 12; $month++) {
                 $temp = [];
-                $temp[] = array('v' => date("M", mktime(0, 0, 0, $month, 1)));
-                $temp[] = array('v' => $income_array[$month]);
-                $temp[] = array('v' => abs($expense_array[$month]));
-                $temp[] = array('v' => array_key_exists($month, $report->savings) ? $report->savings[$month] : 0);
-                $rows[] = array('c' => $temp);
+                $temp[] = ['v' => date("M", mktime(0, 0, 0, $month, 1))];
+                $temp[] = ['v' => $income_array[$month]];
+                $temp[] = ['v' => abs($expense_array[$month])];
+                $temp[] = ['v' => array_key_exists($month, $report->savings) ? $report->savings[$month] : 0];
+                $rows[] = ['c' => $temp];
             }
             $table['rows'] = $rows;
             foreach (array_keys($report->reportData) as $entry) {

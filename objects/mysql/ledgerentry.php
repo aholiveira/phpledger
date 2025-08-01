@@ -50,7 +50,7 @@ class ledgerentry extends mysql_object implements iobject
             $where = "WHERE {$where}";
         return $where;
     }
-    public static function getList(array $field_filter = array()): array
+    public static function getList(array $field_filter =[]): array
     {
         $where = self::getWhereFromArray($field_filter);
         $sql = "SELECT id, entry_date, category_id,
@@ -68,7 +68,7 @@ class ledgerentry extends mysql_object implements iobject
                 throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->execute();
             $result = $stmt->get_result();
-            while ($newobject = $result->fetch_object(__CLASS__, array(static::$_dblink))) {
+            while ($newobject = $result->fetch_object(__CLASS__, [static::$_dblink])) {
                 $newobject->getValuesForForeignFields();
                 $retval[$newobject->id] = $newobject;
             }
@@ -96,7 +96,7 @@ class ledgerentry extends mysql_object implements iobject
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $retval = $result->fetch_object(__CLASS__, [static::$_dblink]);
             $stmt->close();
             if ($retval instanceof ledgerentry) {
                 $retval->getValuesForForeignFields();

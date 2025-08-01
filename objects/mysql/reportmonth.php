@@ -19,7 +19,7 @@ class report_month extends report implements ireport
             $this->columnHeaders[$i] = date("M", mktime(0, 0, 0, $i, 1));
         }
     }
-    public function getReport(array $params = array()): report_month
+    public function getReport(array $params = []): report_month
     {
         global $object_factory;
         $year = array_key_exists("year", $params) ? $params["year"] : date("Y");
@@ -38,10 +38,10 @@ class report_month extends report implements ireport
         parent::getReport($params);
         $account_type = $object_factory->accounttype();
         $account = $object_factory->account();
-        $savings_types = $account_type->getList(array('savings' => array('operator' => '=', 'value' => '1')));
+        $savings_types = $account_type->getList(['savings' => ['operator' => '=', 'value' => '1']]);
         $savings_accounts = [];
         foreach ($savings_types as $saving_type) {
-            foreach ($account->getList(array('tipo_id' => array('operator' => '=', 'value' => $saving_type->id))) as $acc) {
+            foreach ($account->getList(['tipo_id' => ['operator' => '=', 'value' => $saving_type->id]]) as $acc) {
                 $savings_accounts[] = $acc;
             }
         }

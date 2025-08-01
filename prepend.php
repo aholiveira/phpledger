@@ -10,34 +10,33 @@
  * @since 0.2.0
  *
  */
-if (version_compare(PHP_VERSION, '7.0.0') < 0) {
+
+if (PHP_VERSION_ID < 70000) {
     die('PHP >= 7.0.0 required');
 }
-define("BACKEND", "mysql");
-define("VERSION", "0.2.0");
-define("ROOT_DIR", __DIR__);
-define("OBJECTS_DIR", constant("ROOT_DIR") . "/objects");
-define("VIEWS_DIR", constant("ROOT_DIR") . "/views");
-define("UTILS_DIR", constant("ROOT_DIR") . "/util");
+
+const BACKEND = "mysql";
+const VERSION = "0.2.0";
+const ROOT_DIR = __DIR__;
+const OBJECTS_DIR = ROOT_DIR . "/objects";
+const VIEWS_DIR = ROOT_DIR . "/views";
+const UTILS_DIR = ROOT_DIR . "/util";
 
 $gitHead = ROOT_DIR . "/.git/ORIG_HEAD";
 define("GITHASH", file_exists($gitHead) ? substr(file_get_contents($gitHead), 0, 12) : "main");
-#exec("git show -s --format=%ci", $gitresult);
-#define("GITDATE", $gitresult[0]);
-if (defined("DEBUG") && constant("DEBUG") == 1) {
+if (defined("DEBUG") && DEBUG === 1) {
     openlog("contas-dev-php", LOG_PID, LOG_DAEMON);
     syslog(LOG_INFO, __FILE__);
     closelog();
 }
-if (!headers_sent()) {
-    header("Cache-Control: no-cache");
-    header("X-XSS-Protection: 1; mode=block");
-    header("X-Frame-Options: DENY");
-    header("X-Content-Type-Options: nosniff");
-    header("Strict-Transport-Security: max-age=7776000");
-    header("Referrer-Policy: strict-origin-when-cross-origin");
-    #header("Content-Security-Policy: default-src 'self'; frame-ancestors 'none'; style-src 'self' 'unsafe-inline'; script-src * ");
-}
+@header('Cache-Control: no-cache');
+@header('X-XSS-Protection: 1; mode=block');
+@header('X-Frame-Options: DENY');
+@header('X-Content-Type-Options: nosniff');
+@header('Strict-Transport-Security: max-age=7776000');
+@header('Referrer-Policy: strict-origin-when-cross-origin');
+#@header("Content-Security-Policy: default-src 'self'; frame-ancestors 'none'; style-src 'self' 'unsafe-inline'; script-src * ");
+
 require_once OBJECTS_DIR . '/authentication.php';
 require_once OBJECTS_DIR . '/config.class.php';
 require_once OBJECTS_DIR . '/object_factory.php';
@@ -61,7 +60,7 @@ SessionManager::start();
  *  * if false, the default, prints ALWAYS.
  *  * if true, print only if DEBUG is defined and true
  */
-$logger = new Logger("ledger.log");
+$logger = new Logger(ROOT_DIR . "/logs/ledger.log");
 function debug_print($text)
 {
     if (defined("DEBUG") && DEBUG === 1) {

@@ -117,7 +117,7 @@ abstract class mysql_object implements iobject
      * - - operator is any valid SQL operator (LIKE, BETWEEN, <, >, <=, =>)
      * - - value is the value to be filtered
      */
-    abstract static function getList(array $field_filter = array()): array;
+    abstract static function getList(array $field_filter = []): array;
     abstract function update(): bool;
     abstract function delete(): bool;
     /**

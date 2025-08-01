@@ -27,7 +27,7 @@ $pagetitle = "Saldos";
             <?php
             $object = $object_factory->account();
             $viewer = $view_factory->account_balance_view($object);
-            print $viewer->printObjectList($object->getList(array('activa' => array('operator' => '=', 'value' => '1'))));
+            print $viewer->printObjectList($object->getList(['activa' => ['operator' => '=', 'value' => '1']]));
             ?>
         </div>
         <?php include "footer.php"; ?>

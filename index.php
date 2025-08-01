@@ -9,6 +9,7 @@
  */
 require_once __DIR__ . "/util/redirector.php";
 require_once __DIR__ . "/util/sessionmanager.php";
+
 const SESSION_TIMEOUT = 3600;
 if (isset($_GET['do_logout']) && $_GET['do_logout'] === '1') {
     SessionManager::logout();
@@ -69,7 +70,7 @@ if (!empty($post_user)) {
     <div id="login">
         <h1><?= htmlspecialchars(config::get("title")) ?></h1>
         <p>Introduza o seu nome de utilizador e password para entrar na aplica&ccedil;&atilde;o.</p>
-        <?php if (isset($_POST['username']) && !$userauth): ?>
+        <?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$userauth): ?>
             <p class="invalid-login">Utilizador e/ou password inv&aacute;lidos</p>
         <?php endif; ?>
         <form method="POST" action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" name="login" autocomplete="off">

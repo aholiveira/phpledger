@@ -65,14 +65,12 @@ class entry_category_view extends object_viewer
         if (!$_object instanceof entry_category)
             return $retval;
         if (isset($_object->id)) {
-            $filter = array(
-                'active' => array('operator' => '=', 'value' => '1'),
-                'tipo_id' => array('operator' => '<>', 'value' => "{$_object->id}")
-            );
+            $filter = [
+                'active' => ['operator' => '=', 'value' => '1'],
+                'tipo_id' => ['operator' => '<>', 'value' => "{$_object->id}"]
+            ];
         } else {
-            $filter = array(
-                'active' => array('operator' => '=', 'value' => '1')
-            );
+            $filter = ['active' => ['operator' => '=', 'value' => '1']];
         }
         $category_list = $_object->getList($filter);
         if (isset($_object->id)) {
