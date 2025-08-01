@@ -25,7 +25,7 @@ class LedgerEntryController
         }
 
         // 2) grab and validate the other fields
-        foreach (['id', 'currency_amount', 'direction', 'category_id', 'currency_id', 'account_id', 'remarks'] as $fld) {
+        foreach (['currency_amount', 'direction', 'category_id', 'currency_id', 'account_id'] as $fld) {
             if (!isset($input[$fld]) || $input[$fld] === '' || $input[$fld] === false) {
                 throw new DomainException("Parâmetro {$fld} inválido");
             }
@@ -34,7 +34,7 @@ class LedgerEntryController
         // 3) hydrate and save
         $entry = $this->factory->ledgerentry();
         $entry->entry_date = $dt->format('Y-m-d');
-        $entry->id = (int) $input['id'];
+        $entry->id = (int) $input['id'] ?? $entry::getNextId();
         $entry->currency_amount = (float) $input['currency_amount'];
         $entry->direction = (int) $input['direction'];
         $entry->euro_amount = $entry->direction * $entry->currency_amount;

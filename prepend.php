@@ -29,18 +29,6 @@ if (defined("DEBUG") && constant("DEBUG") == 1) {
     syslog(LOG_INFO, __FILE__);
     closelog();
 }
-$secure = !empty($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] === 1);
-$cookie_params = [
-    'lifetime' => 0,
-    'path' => dirname($_SERVER['SCRIPT_NAME']) . '/',
-    'samesite' => 'Strict',
-    'secure' => $secure,
-    'httponly' => true
-];
-if (session_status() == PHP_SESSION_NONE) {
-    session_set_cookie_params($cookie_params);
-    session_start();
-}
 if (!headers_sent()) {
     header("Cache-Control: no-cache");
     header("X-XSS-Protection: 1; mode=block");
@@ -60,7 +48,10 @@ require_once UTILS_DIR . '/logger.php';
 require_once UTILS_DIR . '/dateparser.php';
 require_once UTILS_DIR . '/ledgerentrycontroller.php';
 require_once UTILS_DIR . '/redirector.php';
+require_once UTILS_DIR . '/sessionmanager.php';
 require_once ROOT_DIR . '/html.php';
+
+SessionManager::start();
 
 /**
  * Prints variable

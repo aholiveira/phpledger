@@ -12,7 +12,11 @@ $pagetitle = "Tipo de contas";
 $message = "";
 $retval = false;
 $object = $object_factory->accounttype();
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
+        http_response_code(400);
+        Redirector::to('ledger_entries.php');
+    }
     if (stristr($_POST["update"], "gravar")) {
         $object->id = filter_input(INPUT_POST, "tipo_id", FILTER_VALIDATE_INT);
         $object->description = filter_input(INPUT_POST, "tipo_desc", FILTER_DEFAULT);
@@ -63,28 +67,31 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         <div class="header" style="height: 0;"></div>
         <div id="main" class="main">
             <form method="POST" action="account_types.php">
+                <?= CSRF::inputField() ?>
                 <table class="single_item account_type_form">
                     <tr>
                         <td>ID</td>
                         <td data-label="ID">
-                            <input type="text" readonly size="4" name="tipo_id" value="<?php print $object->id; ?>">
+                            <input type="text" readonly size="4" name="tipo_id" value="<?= $object->id ?>">
                         </td>
                     </tr>
                     <tr>
                         <td>Descri&ccedil;&atilde;o</td>
                         <td data-label="Descri&ccedil;&atilde;o">
-                            <input type="text" size="30" maxlength="30" name="tipo_desc" value="<?php print $object->description; ?>">
+                            <input type="text" size="30" maxlength="30" name="tipo_desc"
+                                value="<?= $object->description ?>">
                         </td>
                     </tr>
                     <tr>
                         <td>Poupan&ccedil;a</td>
                         <td data-label="Poupan&ccedil;a">
-                            <input type="checkbox" name="savings" <?php print($object->savings ? "checked" : ""); ?>>
+                            <input type="checkbox" name="savings" <?= $object->savings ? "checked" : "" ?>>
                         </td>
                     </tr>
                     <tr>
                         <td><input type="submit" name="update" value="Gravar"></td>
-                        <td><input type="submit" name="update" value="Apagar" onclick="return confirm('Pretende apagar o registo?');"></td>
+                        <td><input type="submit" name="update" value="Apagar"
+                                onclick="return confirm('Pretende apagar o registo?');"></td>
                     </tr>
                 </table>
             </form>
