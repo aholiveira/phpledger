@@ -16,7 +16,7 @@ class ledger extends mysql_object implements iobject
     {
         parent::__construct($dblink);
     }
-    public static function getList(array $field_filter = array()): array
+    public static function getList(array $field_filter =[]): array
     {
         $where = static::getWhereFromArray($field_filter);
         $sql = "SELECT id FROM " . static::tableName() . " {$where} ORDER BY id";
@@ -50,7 +50,7 @@ class ledger extends mysql_object implements iobject
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
-            $newobject = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $newobject = $result->fetch_object(__CLASS__, [static::$_dblink]);
             $stmt->close();
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);

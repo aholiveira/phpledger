@@ -184,7 +184,7 @@ class user extends mysql_object implements iobject
         }
         return $retval;
     }
-    public static function getList(array $field_filter = array()): array
+    public static function getList(array $field_filter = []): array
     {
         $where = parent::getWhereFromArray($field_filter);
         $sql = "SELECT id,
@@ -206,7 +206,7 @@ class user extends mysql_object implements iobject
                 throw new \mysqli_sql_exception(static::$_dblink->error);
             $stmt->execute();
             $result = $stmt->get_result();
-            while ($newobject = $result->fetch_object(__CLASS__, array(static::$_dblink))) {
+            while ($newobject = $result->fetch_object(__CLASS__, [static::$_dblink])) {
                 $retval[$newobject->id] = $newobject;
             }
             $stmt->close();
@@ -235,7 +235,7 @@ class user extends mysql_object implements iobject
             $stmt->bind_param("s", $username);
             $stmt->execute();
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $retval = $result->fetch_object(__CLASS__, [static::$_dblink]);
             $stmt->close();
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
@@ -263,7 +263,7 @@ class user extends mysql_object implements iobject
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $retval = $result->fetch_object(__CLASS__, [static::$_dblink]);
             $stmt->close();
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
@@ -315,7 +315,7 @@ class user extends mysql_object implements iobject
             $stmt->bind_param("s", $token);
             $stmt->execute();
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $retval = $result->fetch_object(__CLASS__, [static::$_dblink]);
             $stmt->close();
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);

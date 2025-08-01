@@ -45,6 +45,10 @@ $input_variables_filter = [
 ];
 $filtered_input = [];
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
+        http_response_code(400);
+        Redirector::to('ledger_entries.php');
+    }
     $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, TRUE);
     try {
         (new LedgerEntryController($object_factory))->handleSave($filtered_input);
@@ -229,6 +233,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         </div>
         <div class="main" id="main">
             <form name="mov" action="ledger_entries.php" method="POST">
+                <?= CSRF::inputField() ?>
                 <input type="hidden" name="filter_account_id"
                     value="<?= !empty($filtered_input["filter_account_id"]) ? $filtered_input["filter_account_id"] : ""; ?>">
                 <input type="hidden" name="filter_parent_id"

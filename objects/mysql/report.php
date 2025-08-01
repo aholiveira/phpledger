@@ -26,7 +26,6 @@ class report implements ireport
         $this->queryData = [];
         $stmt = $this->db->prepare($query);
         if ($stmt == false) {
-            debug_print($this->db->error);
             throw new \mysqli_sql_exception($this->db->error);
         }
         $stmt->bind_param(str_repeat('s', sizeof($vars)), ...$vars);
@@ -38,11 +37,11 @@ class report implements ireport
         $stmt->close();
         return $this->queryData;
     }
-    public function getReport(array $params = array()): report
+    public function getReport(array $params = []): report
     {
         global $object_factory;
         $category = $object_factory->entry_category();
-        $category_list = $category->getList(array('parent_id' => array('operator' => '=', 'value' => '0')));
+        $category_list = $category->getList(['parent_id' => ['operator' => '=', 'value' => '0']]);
         foreach ($category_list as $category) {
             if (array_key_exists($category->id, $this->queryData) && sizeof($this->queryData[$category->id]) > 0) {
                 $this->reportData[$category->description]['id'] = $category->id;

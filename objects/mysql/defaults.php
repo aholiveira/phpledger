@@ -31,7 +31,7 @@ class defaults extends mysql_object implements iobject
         $this->direction = $data["direction"] ?? 1;
         $this->username = $data["username"] ?? config::get("admin_username");
     }
-    public static function getList(array $field_filter = array()): array
+    public static function getList(array $field_filter =[]): array
     {
         $where = parent::getWhereFromArray($field_filter);
         $sql = "SELECT
@@ -54,7 +54,7 @@ class defaults extends mysql_object implements iobject
                 throw new mysqli_sql_exception(static::$_dblink->error);
             $stmt->execute();
             $result = $stmt->get_result();
-            while ($newobject = $result->fetch_object(__CLASS__, array(static::$_dblink))) {
+            while ($newobject = $result->fetch_object(__CLASS__, [static::$_dblink])) {
                 $retval[$newobject->id] = $newobject;
             }
             $stmt->close();
@@ -85,7 +85,7 @@ class defaults extends mysql_object implements iobject
             if (!$stmt)
                 throw new mysqli_sql_exception();
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $retval = $result->fetch_object(__CLASS__, [static::$_dblink]);
             $stmt->close();
         } catch (Exception $ex) {
             static::handleException($ex, $sql);

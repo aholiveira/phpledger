@@ -26,7 +26,7 @@ class report_month implements ireport
         }
     }
 
-    public function getReport(array $params = array()): report_month
+    public function getReport(array $params = []): report_month
     {
         global $object_factory;
         $sql = "SELECT tipo_id AS category_id, tipo_desc, sum(euro_amount) AS sum, month(entry_date) AS `month`
@@ -54,10 +54,10 @@ class report_month implements ireport
         $stmt->close();
         $account_type = $object_factory->accounttype();
         $account = $object_factory->account();
-        $savings_types = $account_type->getList(array('savings' => array('operator' => '=', 'value' => '1')));
+        $savings_types = $account_type->getList(['savings' => ['operator' => '=', 'value' => '1']]);
         $savings_accounts = [];
         foreach ($savings_types as $saving_type) {
-            foreach ($account->getList(array('tipo_id' => array('operator' => '=', 'value' => $saving_type->id))) as $acc) {
+            foreach ($account->getList(['tipo_id' => ['operator' => '=', 'value' => $saving_type->id]]) as $acc) {
                 $savings_accounts[] = $acc;
             }
         }

@@ -22,7 +22,7 @@ class entry_category extends mysql_object implements iobject
     {
         parent::__construct($dblink);
     }
-    public static function getList(array $field_filter = array()): array
+    public static function getList(array $field_filter =[]): array
     {
         $where = static::getWhereFromArray($field_filter);
         $sql = "SELECT tipo_id as id FROM " . static::$tableName . "
@@ -81,7 +81,7 @@ class entry_category extends mysql_object implements iobject
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__, array(static::$_dblink));
+            $retval = $result->fetch_object(__CLASS__, [static::$_dblink]);
             $stmt->close();
             if ($retval instanceof entry_category) {
                 $retval->getParentDescription();

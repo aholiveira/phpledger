@@ -24,36 +24,40 @@ $pagetitle = "Contas";
         include constant("ROOT_DIR") . "/menu_div.php";
         $object = $object_factory->account();
         $retval = true;
-        $input_variables_filter = array(
-            'abertura' => array(
+        $input_variables_filter = [
+            'abertura' => [
                 'filter' => FILTER_VALIDATE_REGEXP,
-                'options' => array('regexp' => '/([0-9]{1,4})(-|\/)?([0-9]{1,2})(-|\/)?([0-9-]{1,4})/')
-            ),
-            'fecho' => array(
+                'options' => ['regexp' => '/([0-9]{1,4})(-|\/)?([0-9]{1,2})(-|\/)?([0-9-]{1,4})/']
+            ],
+            'fecho' => [
                 'filter' => FILTER_VALIDATE_REGEXP,
-                'options' => array('regexp' => '/([0-9]{1,4})(-|\/)?([0-9]{1,2})(-|\/)?([0-9-]{1,4})/')
-            ),
+                'options' => ['regexp' => '/([0-9]{1,4})(-|\/)?([0-9]{1,2})(-|\/)?([0-9-]{1,4})/']
+            ],
             'aberturaAA' => FILTER_SANITIZE_NUMBER_INT,
             'aberturaMM' => FILTER_SANITIZE_NUMBER_INT,
             'aberturaDD' => FILTER_SANITIZE_NUMBER_INT,
             'fechoAA' => FILTER_SANITIZE_NUMBER_INT,
             'fechoMM' => FILTER_SANITIZE_NUMBER_INT,
             'fechoDD' => FILTER_SANITIZE_NUMBER_INT,
-            'update' => array(
+            'update' => [
                 'filter' => FILTER_SANITIZE_ENCODED,
                 'options' => FILTER_NULL_ON_FAILURE
-            ),
+            ],
             'conta_nome' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
             'conta_id' => FILTER_VALIDATE_INT,
             'conta_num' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
             'activa' => FILTER_VALIDATE_BOOLEAN,
             'tipo_id' => FILTER_VALIDATE_INT,
             'conta_nib' => FILTER_SANITIZE_FULL_SPECIAL_CHARS
-        );
-        if (strcasecmp($_SERVER["REQUEST_METHOD"], "GET") == 0) {
+        ];
+        if ($_SERVER["REQUEST_METHOD"] === "GET") {
             $filtered_input = filter_input_array(INPUT_GET, $input_variables_filter, true);
         }
-        if (strcasecmp($_SERVER["REQUEST_METHOD"], "POST") == 0) {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
+                http_response_code(400);
+                Redirector::to('ledger_entries.php');
+            }
             $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, true);
         }
         if (is_array($filtered_input) && strcasecmp($filtered_input["update"], "gravar") == 0) {
@@ -89,7 +93,7 @@ $pagetitle = "Contas";
                 $object->number = $filtered_input["conta_num"];
                 $object->active = boolval($filtered_input["activa"]) ? 1 : 0;
                 $object->type_id = $filtered_input["tipo_id"];
-                $object->iban =  $filtered_input["conta_nib"];
+                $object->iban = $filtered_input["conta_nib"];
                 $retval = $object->update();
             }
         }
@@ -121,6 +125,7 @@ $pagetitle = "Contas";
         <main>
             <div class="main" id="main">
                 <form method="POST" action="accounts.php" name="contas">
+                    <?= CSRF::inputField() ?>
                     <table class="lista contas">
                         <thead>
                             <tr>

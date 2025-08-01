@@ -1,7 +1,7 @@
 <?php
 include "common.php";
 $retval = true;
-$classnames = array(
+$classnames = [
     "account" => "account_view",
     "accounttype" => "account_type_view",
     "currency" => "",
@@ -10,12 +10,9 @@ $classnames = array(
     "ledger" => "",
     "ledgerentry" => "ledger_entry_view",
     "user" => ""
-);
-$class_id = array("currency" => 1);
-$reports = array(
-    "report_month" => "report_month_view",
-    "report_year" => "report_year_view"
-);
+];
+$class_id = ["currency" => 1];
+$reports = ["report_month" => "report_month_view", "report_year" => "report_year_view"];
 const PADDING = 35;
 const PASSED = "\033[32mPASSED\033[0m";
 const FAILED = "\033[31mFAILED\033[0m";
@@ -141,13 +138,13 @@ foreach ($classnames as $class => $view) {
     $object = $object_factory->$class();
     if (array_key_exists($class, $class_id))
         $id = $class_id[$class];
-    $retval = (test_object($object, $id) && $retval);
+    $retval = test_object($object, $id) && $retval;
     if (strlen($view) > 0) {
         $object = $object->getById($id);
         $viewer = $view_factory->$view($object);
         $retval = test_view($viewer, $object) && $retval;
     }
-    $retval = (run_additional($object, isset($viewer) ? $viewer : null) && $retval);
+    $retval = run_additional($object, isset($viewer) ? $viewer : null) && $retval;
 }
 foreach ($reports as $report => $view) {
     $retval = test_report($report, $view) && $retval;
@@ -164,7 +161,7 @@ function run_additional($object, $viewer = null)
             $retval = assert(is_float($balance['income'])) && $retval;
             $retval = assert(is_float($balance['expense'])) && $retval;
             $retval = assert(is_float($balance['balance'])) && $retval;
-            $retval = assert(strlen($viewer->printObjectList($object->getList(array('activa' => array('operator' => '=', 'value' => '1'))))) > 0) && $retval;
+            $retval = assert(strlen($viewer->printObjectList($object->getList(['activa' => ['operator' => '=', 'value' => '1']]))) > 0) && $retval;
             break;
     }
     return $retval;
@@ -176,7 +173,7 @@ function test_report($report, $view)
     $retval = true;
     print (str_pad("Testing {$report} ", constant("PADDING"), ".") . " : ");
     $object = $object_factory->$report();
-    assert(is_a($object->getReport(array("year" => 2023)), $report));
+    assert(is_a($object->getReport(["year" => 2023]), $report));
     $viewer = $view_factory->$view($object);
     $retval = assert(!empty($viewer->printAsTable())) && $retval;
     print ($retval ? constant("PASSED") : constant("FAILED")) . "\r\n";
@@ -195,14 +192,14 @@ function test_object(mysql_object $object, $id = 1)
         $retval = assert($object->update() === true, "save#{$object}#");
         $field_filter = [];
         if ($object instanceof ledgerentry) {
-            $field_filter[] = array('entry_date' => array('operator' => 'BETWEEN', 'value' => date("Y-01-01 ") . "' AND '" . date("Y-12-31")));
+            $field_filter[] = ['entry_date' => ['operator' => 'BETWEEN', 'value' => date("Y-01-01 ") . "' AND '" . date("Y-12-31")]];
         }
         $retval = (@assert(sizeof($object->getList($field_filter)) > 0, "getList#{$object}#") && $retval);
         $retval = (@assert($object->getNextId() >= 0, "getNextId#{$object}#") && $retval);
         print ($retval ? constant("PASSED") : constant("FAILED")) . "\r\n";
     } catch (Exception $ex) {
-        debug_print($ex->getMessage());
-        debug_print($ex->getTraceAsString());
+        $logger->dump($ex->getMessage());
+        $logger->dump($ex->getTraceAsString());
         $logger->dump($object, "OBJECT");
         $retval = false;
     }
@@ -217,7 +214,7 @@ function test_view(object_viewer $viewer, iobject $object)
         $retval = (assert(!empty($viewer->printObject())) && $retval);
         $field_filter = [];
         if ($object instanceof ledgerentry) {
-            $field_filter[] = array('entry_date' => array('operator' => 'BETWEEN', 'value' => "2022-01-01' AND '2022-01-02"));
+            $field_filter[] = ['entry_date' => ['operator' => 'BETWEEN', 'value' => "2022-01-01' AND '2022-01-02"]];
         }
         $retval = (@assert(!empty($viewer->printObjectList($object->getList($field_filter))), "#printObjectList#") && $retval);
         $method = "printForm";
@@ -226,8 +223,8 @@ function test_view(object_viewer $viewer, iobject $object)
         }
         print ($retval ? constant("PASSED") : constant("FAILED")) . "\r\n";
     } catch (Exception $ex) {
-        debug_print("EXCEPTION");
-        debug_print($ex->getMessage());
+        $logger->dump("EXCEPTION");
+        $logger->dump($ex->getMessage());
         $logger->dump($object, "OBJECT");
         $retval = false;
     }

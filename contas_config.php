@@ -13,11 +13,7 @@ if (!defined("ROOT_DIR")) {
 }
 config::init(__DIR__ . '/config.json');
 if (isset($_SESSION['expires']) && $_SESSION['expires'] < time()) {
-    $_SESSION = [];
-    if (ini_get("session.use_cookies")) {
-        $params = session_get_cookie_params();
-        setcookie(session_name(), session_id(), time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
-    }
+    SessionManager::logout();
 }
 if (isset($_SESSION['user']) && basename($_SERVER['SCRIPT_NAME']) !== 'index.php') {
     $secure = !empty($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] === 1);
@@ -32,7 +28,7 @@ if (isset($_SESSION['user']) && basename($_SERVER['SCRIPT_NAME']) !== 'index.php
 if (!isset($_SESSION['user'])) {
     if (!headers_sent()) {
         header("Location: index.php");
-        exit;
+        exit();
     } else {
         ?>
         <!DOCTYPE html>
@@ -52,7 +48,7 @@ if (!isset($_SESSION['user'])) {
 
         </html>
     <?php }
-    exit(1);
+    exit();
 } else {
     $_SESSION['expires'] = time() + 3600;
     if (!isset($_SESSION['timezone']) && isset($_COOKIE['timezone']) && in_array($_COOKIE['timezone'], timezone_identifiers_list())) {
@@ -60,7 +56,6 @@ if (!isset($_SESSION['user'])) {
     }
     $tz = $_SESSION['timezone'] ?? config::get("timezone");
     date_default_timezone_set(in_array($tz, timezone_identifiers_list(), true) ? $tz : 'UTC');
-    session_write_close();
     $object_factory = new object_factory();
     $view_factory = new view_factory();
 }
