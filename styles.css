@@ -106,6 +106,9 @@ input {
     padding: 3px 4px;
     border: 1px solid #ccc;
     font-size: 0.95em;
+}
+
+select {
     margin: 0px 0px;
     width: 100%;
 }
@@ -163,7 +166,7 @@ div#login table {
     margin: auto;
     background-color: #fff;
     border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 div#login td {
@@ -181,7 +184,7 @@ div#login td {
     padding: 1em;
     background-color: #fff;
     border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     position: sticky;
     top: 0;
     z-index: 3;
@@ -201,6 +204,7 @@ div#login td {
 .header {
     max-height: fit-content;
 }
+
 .header,
 .main,
 .main-footer,
@@ -209,7 +213,7 @@ div#login td {
     padding: 1em;
     background-color: #fff;
     border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .main {
@@ -220,6 +224,7 @@ div#login td {
 .footer {
     align-self: end;
 }
+
 .main-footer {
     display: grid;
     grid-area: main-footer;
@@ -264,6 +269,7 @@ div#main table tfoot {
     bottom: 0;
     z-index: 1;
 }
+
 .id,
 .balance,
 .total,
@@ -311,13 +317,14 @@ div#main table tr td.totals {
     font-weight: bold;
     padding-left: 1em;
 }
+
 tr.income {
-    background-color: #d4edda !important; /* light green */
+    background-color: #d4edda !important;
     color: #155724;
 }
 
 tr.expense {
-    background-color: #f8d7da !important; /* light red */
+    background-color: #f8d7da !important;
     color: #721c24;
 }
 
@@ -453,7 +460,7 @@ tr.expense {
 /* Printing */
 @media print {
     * {
-      scrollbar-width: none; /* Firefox */
+        scrollbar-width: none;
     }
 
     /* For WebKit browsers */
@@ -466,6 +473,7 @@ tr.expense {
             'main';
         height: auto;
     }
+
     nav,
     .header,
     .footer,
