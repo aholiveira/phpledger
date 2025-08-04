@@ -11,6 +11,10 @@ if (!defined("ROOT_DIR")) {
     require_once __DIR__ . "/prepend.php";
 }
 require_once __DIR__ . "/contas_config.php";
+ini_set('zlib.output_compression', 'Off');
+ini_set('output_buffering', 'Off');
+ini_set('implicit_flush', '1');
+ob_implicit_flush(true);
 
 $pagetitle = "Movimentos";
 $input_variables_filter = [
@@ -106,7 +110,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         $parent_filter = "";
         if (!empty($filtered_input["filter_parent_id"])) {
             $parent_filter = "tipo_mov.parent_id={$filtered_input['filter_parent_id']} ";
-            $ledger_filter[] = ["parent_id" => ["operator" => "IN", "value" => "({$filtered_input['filter_parent_id']})"]];
+            //$ledger_filter[] = ["parent_id" => ["operator" => "IN", "value" => "({$filtered_input['filter_parent_id']})"]];
         }
         $edit = 0;
         if ($_SERVER["REQUEST_METHOD"] == "GET" && is_array($filtered_input) && !empty($filtered_input["id"])) {
