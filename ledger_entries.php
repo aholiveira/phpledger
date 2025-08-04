@@ -71,6 +71,9 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
 <body>
     <div class="maingrid">
+        <div id="preloader">
+            <div class="spinner"></div>
+        </div>
         <?php
         include ROOT_DIR . "/menu_div.php";
         if (!empty($filtered_input["filter_sdate"])) {
@@ -316,7 +319,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                 ?>
                                 <td data-label='ID' class='id'><a
                                         title="Clique para editar entrada&#10;Modificado por <?= $row->username ?>&#10;em <?= $row->updated_at ?>"
-                                        href="ledger_entries.php?<?= "{$filter_string}&amp;id={$row->id}" ?>#<?= $row->id ?>"><?= $row->id ?></a>
+                                        href="ledger_entries.php?<?= "{$filter_string}&amp;id={$row->id}" ?>"><?= $row->id ?></a>
                                 </td>
                                 <td data-label='Data' class='data'><?= $row->entry_date ?></td>
                                 <td data-label='Categoria' class='category'><a title="Filtrar lista para esta categoria"
@@ -399,6 +402,9 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
     </div> <!-- Main grid -->
     <script>
         toggleDateElements("data_mov");
+        setTimeout(() => {
+            document.getElementById("preloader").style.display = "none"; // Hide
+        }, 0);
     </script>
 </body>
 
