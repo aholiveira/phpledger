@@ -106,8 +106,11 @@ input {
     padding: 3px 4px;
     border: 1px solid #ccc;
     font-size: 0.95em;
+    margin: 0px 0px;
+    width: 100%;
 }
 
+input[type=text],
 select {
     margin: 0px 0px;
     width: 100%;
