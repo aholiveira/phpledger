@@ -49,7 +49,7 @@ function toggleDateElements(elementId) {
             const el = document.getElementById(elementId);
             if (el) {
                 el.focus();
-                el.scrollIntoView({ behavior: "instant", block: "end", inline: "end" });
+                el.closest("tr").scrollIntoView({ behavior: "auto", block: "nearest" });
             }
         }, 1);
     });
