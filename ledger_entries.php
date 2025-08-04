@@ -249,6 +249,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                     value="<?= !empty($filtered_input["filter_entry_type"]) ? $filtered_input["filter_entry_type"] : ""; ?>">
                 <input type="hidden" name="filter_sdate" value="<?= $sdate; ?>">
                 <input type="hidden" name="filter_edate" value="<?= $edate; ?>">
+                <div class="table-wrapper">
                 <table class="lista ledger_entry_list">
                     <thead>
                         <tr>
@@ -395,6 +396,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                     }
                     ?>
                 </table>
+                </div>
             </form>
         </div>
         <div class="main-footer">

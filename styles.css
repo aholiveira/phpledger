@@ -1,60 +1,66 @@
-/**
- * CSS styles for the website
- *
- * @author Antonio Henrique Oliveira
- * @copyright (c) 2017-2022, Antonio Henrique Oliveira
- * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
- */
+/* Refactored CSS Stylesheet */
 
-/* Common */
+:root {
+    --bg-primary: #f5f7fa;
+    --bg-secondary: #ffffff;
+    --text-primary: #222;
+    --text-secondary: #555;
+    --highlight: #d6e9ff;
+    --accent: #4a90e2;
+    --hover-accent: #377cd4;
+    --error: #d9534f;
+    --success: #5cb85c;
+    --warning: #f0ad4e;
+    --shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    --border-radius: 6px;
+}
+
 body {
     height: 95vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
-    background-color: #f4f6f8;
-    color: #333;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
 }
 
 button:hover {
-    border: 1px solid #333;
+    border: 1px solid var(--text-primary);
 }
 
-div a {
+form {
+    width: max-content;
+    max-width: 100%;
+}
+
+a {
     text-decoration: none;
     padding: 4px 6px;
-    transition: all 0.2s;
-    border-radius: 6px;
+    transition: background 0.2s, text-decoration 0.2s;
+    border-radius: var(--border-radius);
+    color: var(--accent);
 }
 
-div a:hover {
+a:hover {
     text-decoration: underline;
-    background-color: #e0f0ff;
+    background-color: var(--highlight);
 }
 
-div a:visited {
-    color: #0066cc;
+a:visited {
+    color: var(--hover-accent);
 }
 
 div {
     margin-left: 0.2rem;
 }
 
-div table {
-    border-spacing: 0;
-    border-collapse: collapse;
-    width: max-content;
-    max-width: 100%;
-    height: auto;
-}
-
-div th,
-div td {
+th,
+td {
     padding: 0.2em 0.3em;
-    border-radius: 6px;
+    border-radius: var(--border-radius);
 }
 
-div th {
-    background-color: #3f80ea;
+th {
+    background-color: var(--accent);
     color: white;
     position: sticky;
     top: 0;
@@ -62,29 +68,26 @@ div th {
     text-align: center;
 }
 
-div tr {
-    background-color: #e9ecef;
-    color: #000;
+tr {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
 }
 
-div tr:nth-child(even) {
-    background-color: #d0e7ff;
+tr:nth-child(even) {
+    background-color: var(--highlight);
 }
 
-div tr:nth-child(even) a:hover {
-    background-color: #fff;
-}
-
-div tr:nth-child(odd) {
-    background-color: #fff;
+tr:nth-child(even) a:hover {
+    background-color: var(--bg-secondary);
 }
 
 p {
     margin: 0;
 }
 
-p .invalid-login {
-    color: #cc0000;
+.invalid-login,
+.error {
+    color: var(--error);
 }
 
 hr {
@@ -95,14 +98,10 @@ hr {
     margin: 1em 0;
 }
 
-.error {
-    color: red;
-}
-
 select,
 input {
-    background-color: #fff;
-    border-radius: 6px;
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
     padding: 3px 4px;
     border: 1px solid #ccc;
     font-size: 0.95em;
@@ -110,7 +109,6 @@ input {
 
 input[type=text],
 select {
-    margin: 0px 0px;
     width: 100%;
 }
 
@@ -121,20 +119,20 @@ input[type=number] {
 input.submit,
 input[type=submit],
 button {
-    background: linear-gradient(to bottom right, #5fa9ff, #3f80ea);
+    background: linear-gradient(to bottom right, var(--accent), var(--hover-accent));
     color: #fff;
     font-weight: bold;
     border: none;
     padding: 3px 6px;
     cursor: pointer;
-    border-radius: 6px;
+    border-radius: var(--border-radius);
     transition: background 0.2s;
 }
 
 input.submit:hover,
 input[type=submit]:hover,
 button:hover {
-    background-color: #5fa9ff;
+    background-color: var(--accent);
 }
 
 .RCS {
@@ -150,46 +148,30 @@ button:hover {
         'menu main-footer'
         'menu footer';
     grid-template-columns: max-content 1fr;
-    grid-template-rows: min-content;
-    grid-gap: 1em;
+    grid-template-rows: min-content 1fr auto auto;
+    gap: 0.5em;
     height: 100%;
-    padding: 1em 0em 0em 0em;
+    padding-top: 1em;
 }
 
-/* Login */
-div#login {
-    width: 100%;
-    text-align: center;
+.menu,
+.header,
+.main,
+.main-footer,
+.footer {
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
     padding: 1em;
 }
 
-div#login table {
-    margin: auto;
-    background-color: #fff;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-div#login td {
-    border: none;
-    background-color: white;
-    text-align: left;
-    padding: 0.5em;
-}
-
-/* Menu */
 .menu {
     grid-area: menu;
     display: flex;
     flex-direction: column;
-    padding: 1em;
-    background-color: #fff;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
     position: sticky;
     top: 0;
     z-index: 3;
-    width: inherit;
 }
 
 .menu ul {
@@ -198,75 +180,50 @@ div#login td {
     margin: 0;
 }
 
-.menu ul li {
+.menu li {
     margin: 0.3em 0;
 }
 
-.header {
-    max-height: fit-content;
-}
-
-.header,
-.main,
-.main-footer,
-.footer {
-    display: block;
-    padding: 1em;
-    background-color: #fff;
-    border-radius: 6px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-.main {
-    overflow-y: auto;
-}
-
-.main-footer,
-.footer {
-    align-self: end;
-}
+.header { max-height: fit-content; }
+.main { overflow-y: auto; }
+.main-footer, .footer { align-self: end; }
 
 .main-footer {
     display: grid;
     grid-area: main-footer;
-    /*overflow-y: none;*/
     height: fit-content;
-    align-self: end;
 }
 
 .footer {
     display: grid;
     grid-area: footer;
-    inset-block-end: 0;
-    max-height: min-content;
     height: min-content;
-    align-self: end;
 }
 
-div#main {
+#main {
     grid-area: main;
-    display: block;
     overflow: auto;
-    max-height: 60vh;
+    max-height: 90vh;
 }
 
-/* Tables */
-div#main table {
-    width: 100%;
+.table-wrapper {
+    max-height:  calc(95vh - 24.5em);
     overflow: auto;
-    display: block;
-    max-height: 35vh;
 }
 
-div#main table thead {
-    display: table-header-group;
+#main table {
+    width: auto;
+    overflow: auto;
+    display: inline-table;
+}
+
+#main table thead,
+#main table tfoot {
     position: sticky;
-    top: 0;
     z-index: 2;
 }
 
-div#main table tfoot {
-    position: sticky;
+#main table tfoot {
     bottom: 0;
     z-index: 1;
 }
@@ -274,10 +231,10 @@ div#main table tfoot {
 .id,
 .balance,
 .total,
-div#main table td.amount,
-div#main table td.balance,
-div#main table td.total,
-div#main table td.balance-label {
+#main td.amount,
+#main td.balance,
+#main td.total,
+#main td.balance-label {
     text-align: right;
 }
 
@@ -286,33 +243,31 @@ div#main table td.balance-label {
     font-weight: bold;
 }
 
-div#main table.saldos td {
+#main .saldos td {
     text-align: right;
 }
 
-div#main table.saldos td.account {
+#main .saldos td.account {
     text-align: left;
 }
 
-div#main table.lista select,
-div#main table.lista input {
+#main .lista select,
+#main .lista input {
     box-sizing: border-box;
-    /*-moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;*/
 }
 
-div#main table td.saldos {
+#main td.saldos {
     text-align: right;
     min-width: 3em;
 }
 
-div#main table tr.totals {
-    background-color: lightblue;
-    color: black;
+#main tr.totals,
+#main td.totals {
+    background-color: var(--highlight);
+    color: var(--text-primary);
     font-weight: bold;
 }
-
-div#main table tr td.totals {
+#main td.totals {
     text-align: right;
     background-color: lightblue;
     font-weight: bold;
@@ -320,19 +275,17 @@ div#main table tr td.totals {
 }
 
 tr.income {
-    background-color: #d4edda !important;
-    color: #155724;
+    background-color: #e6f9eb !important;
+    color: #2e6d4d;
 }
 
 tr.expense {
-    background-color: #f8d7da !important;
-    color: #721c24;
+    background-color: #ffe6e6 !important;
+    color: #990000;
 }
 
 @media only screen and (max-width: 1024px) {
-    div {
-        margin-left: 0;
-    }
+    div { margin-left: 0; }
 
     .maingrid {
         grid-template-areas:
@@ -346,161 +299,97 @@ tr.expense {
 
     .menu {
         width: 100vw;
-        height: min-content;
         position: sticky;
         align-self: start;
-        top: 0;
-        margin-bottom: 0.1em;
-        z-index: 1;
-        background-clip: border-box;
-        background-color: white;
     }
 
-    .menu li {
-        font-size: small;
-        float: left;
-    }
-
-    .header {
-        font-size: small;
-    }
-
-    .main {
-        font-size: small;
-        z-index: 0;
-        width: 95vw;
-    }
-
+    .menu li,
+    .header,
+    .main,
     .main-footer {
-        font-size: x-small;
+        font-size: small;
     }
 
     .footer,
-    div#main table thead,
-    .balance-label {
-        display: none;
-    }
+    #main table thead,
+    .balance-label { display: none; }
 
-    div#main table {
+    #main table {
         width: 95vw;
     }
 
-    .lista table,
-    .lista tbody,
-    .lista th,
-    .lista td,
-    .lista tr {
+    .lista * {
         display: block;
     }
 
     .lista tr {
-        border-top: 0.1em lightgray solid;
-        border-bottom: 0.1em lightgray solid;
+        border-top: 1px solid lightgray;
+        border-bottom: 1px solid lightgray;
         padding: 0.3em 0.4em;
         margin: 15px 5px;
         box-shadow: 5px 5px lightgray;
-        border-radius: 6px;
-    }
-
-    .total {
-        font-weight: bold;
-    }
-
-    .open,
-    .close {
-        font-size: 10px;
-        cursor: pointer;
-        border: 1px black solid;
-    }
-
-    .data,
-    .lista td,
-    .data td,
-    div#main .data td,
-    div#main table td,
-    div#main .data {
-        /* Behave like a "row" */
-        border: none;
-        border-bottom: 1px solid #eee;
-        text-align: right;
-        min-height: 1em;
-        border-radius: unset;
+        border-radius: var(--border-radius);
     }
 
     .lista tr td:before {
-        /* Now like a table header */
         content: attr(data-label);
         font-weight: bold;
         float: left;
         white-space: nowrap;
     }
 
-    div#main table tr td.totals {
-        background-color: inherit;
-        padding-left: inherit;
+    .data td,
+    #main td {
+        border: none;
+        border-bottom: 1px solid #eee;
+        text-align: right;
     }
 
-    td.totals {
-        background-color: white;
-    }
-
-    div#main table.contas input {
+    #main .contas input {
         width: unset;
     }
 
-    div#main table.contas td {
+    #main .contas td {
         font-size: 0.8em;
         text-align: right;
     }
 
-    div#main .lista tr td.checkbox {
+    #main .lista tr td.checkbox {
         text-align: right;
     }
 }
 
+/* Preloader */
 #preloader {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: white;
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: white;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .spinner {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #007acc;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--accent);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
 }
 
 @keyframes spin {
-  0%   { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+    to { transform: rotate(360deg); }
 }
 
-/* Printing */
 @media print {
-    * {
-        scrollbar-width: none;
-    }
+    * { scrollbar-width: none; }
 
-    /* For WebKit browsers */
-    ::-webkit-scrollbar {
-        display: none;
-    }
+    ::-webkit-scrollbar { display: none; }
 
-    .maingrid {
-        grid-template-areas:
-            'main';
-        height: auto;
-    }
+    .maingrid { grid-template-areas: 'main'; height: auto; }
 
     nav,
     .header,
@@ -508,57 +397,28 @@ tr.expense {
     input,
     select,
     .main-footer,
-    aside.menu {
-        display: none;
-    }
-
+    aside.menu,
     aside.menu ul {
         display: none;
     }
 
-    div#main {
-        position: relative;
-        border: 0;
-        left: 0;
-        margin: 0 0;
-        max-height: 100%;
+    #main {
         max-width: 90%;
+        max-height: 100%;
     }
 
-    div#main table {
-        border-collapse: collapse;
-        max-height: 100%;
+    #main table {
+        max-width: 90%;
         overflow: hidden !important;
-        max-width: 90%;
     }
 
-    div#main table.filter {
-        width: 100%;
+    #main input.submit,
+    #main table.lista tr.last,
+    #main hr.footer,
+    #main span.RCS,
+    #main a.link {
+        display: none;
     }
 
-    div#main input.submit {
-        display: none
-    }
-
-    div#main table.lista {
-        page-break-inside: auto;
-        height: 100%;
-    }
-
-    div#main table.lista tr.last {
-        display: none
-    }
-
-    div#main hr.footer,
-    div#main span.RCS {
-        display: none
-    }
-
-    div#main a {
-        color: black
-    }
-
-    div#main a.link {
-        display: none
-    }
+    #main a { color: black; }
 }
