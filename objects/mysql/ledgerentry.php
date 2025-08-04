@@ -43,14 +43,19 @@ class ledgerentry extends mysql_object implements iobject
                 if (strlen($where) > 0)
                     $where .= " AND ";
                 $field_name = null === $table_name ? "`{$field}`" : "`{$table_name}`.`{$field}`";
-                $where .= "{$field_name} {$filter['operator']} '{$filter['value']}'";
+                if (strtolower($filter['operator']) === "in") {
+                    $where .= "{$field_name} {$filter['operator']} {$filter['value']}";
+                }
+                else {
+                    $where .= "{$field_name} {$filter['operator']} '{$filter['value']}'";
+                }
             }
         }
         if (strlen($where) > 0)
             $where = "WHERE {$where}";
         return $where;
     }
-    public static function getList(array $field_filter =[]): array
+    public static function getList(array $field_filter = []): array
     {
         $where = self::getWhereFromArray($field_filter);
         $sql = "SELECT id, entry_date, category_id,
