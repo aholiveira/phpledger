@@ -106,6 +106,8 @@ input {
     padding: 3px 4px;
     border: 1px solid #ccc;
     font-size: 0.95em;
+    margin: 0px 0px;
+    width: 100%;
 }
 
 input[type=number] {
@@ -283,7 +285,14 @@ div#main table.saldos td {
 
 div#main table.saldos td.account {
     text-align: left;
-  }
+}
+
+div#main table.lista select,
+div#main table.lista input {
+    box-sizing: border-box;
+    /*-moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;*/
+}
 
 div#main table td.saldos {
     text-align: right;
