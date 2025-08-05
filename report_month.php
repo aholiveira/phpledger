@@ -37,6 +37,7 @@ $report->getReport(array("year" => $year));
                     row[i].style.display = "none";
                 }
             }
+            updateRowColors("report");
         }
 
         function toggle(visible) {
@@ -51,6 +52,7 @@ $report->getReport(array("year" => $year));
             }
         }
     </script>
+    <script type="text/javascript" src="common.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 
@@ -72,7 +74,7 @@ $report->getReport(array("year" => $year));
             </div>
             <div class="graph" id="graph" style="display: none; width: 99%"></div>
             <div class="table report_month" id="table" style="display: inherit; width: 99%">
-                <table class="lista report_month">
+                <table class="lista report_month" id="report">
                     <?php print $reportHtml->printAsTable();
                     ?>
                 </table>
@@ -135,6 +137,7 @@ $report->getReport(array("year" => $year));
             $jsonTable = json_encode($table);
             ?>
             <script type="text/javascript">
+                updateRowColors("report");
                 google.charts.load('current', {
                     'packages': ['corechart']
                 });

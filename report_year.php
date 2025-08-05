@@ -43,8 +43,10 @@ $report->getReport(array("first_year" => $first_year, "last_year" => $last_year)
                     row[i].style.display = "none";
                 }
             }
+            updateRowColors("report");
         }
     </script>
+    <script type="text/javascript" src="common.js"></script>
 </head>
 
 <body>
@@ -63,11 +65,14 @@ $report->getReport(array("first_year" => $first_year, "last_year" => $last_year)
         </div>
         <div class="main" id="main">
             <div class="report_year">
-                <table class="lista report_year">
+                <table class="lista report_year" id="report">
                     <?php print $reportHtml->printAsTable(); ?>
                 </table>
             </div>
         </div>
+        <script type="text/javascript">
+            updateRowColors("report");
+        </script>
         <?php include "footer.php"; ?>
     </div>
 </body>
