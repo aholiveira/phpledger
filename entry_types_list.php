@@ -71,11 +71,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
             <p style="margin: 0"><a href="entry_type.php">Adicionar</a></p>
         </div>
         <div id="main" class="main">
-            <?php
-            $object = $object_factory->entry_category();
-            $viewer = $view_factory->entry_category_view($object);
-            print $viewer->printObjectList($object->getList());
-            ?>
+            <div class="entry_category_list">
+                <?php
+                $object = $object_factory->entry_category();
+                $viewer = $view_factory->entry_category_view($object);
+                print $viewer->printObjectList($object->getList());
+                ?>
+            </div>
         </div>
         <?php include "footer.php"; ?>
     </div>
