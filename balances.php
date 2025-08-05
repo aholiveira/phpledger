@@ -37,6 +37,9 @@ $pagetitle = "Saldos";
         </div>
         <?php include "footer.php"; ?>
     </div>
+    <script>
+        setTimeout(() => { document.getElementById("preloader").style.display = "none"; }, 0);
+    </script>
 </body>
 
 </html>
