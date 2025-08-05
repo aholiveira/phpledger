@@ -65,12 +65,12 @@ th {
 
 tr,
 tr.odd,
-tr:not(.report):nth-child(odd) {
+table.lista tr:nth-child(odd) {
     background-color: var(--bg-secondary);
     color: var(--text-primary);
 }
 
-tr:not(.report):nth-child(even),
+table.lista tr:nth-child(even),
 tr.even {
     background-color: var(--highlight);
 }
