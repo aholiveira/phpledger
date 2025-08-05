@@ -78,6 +78,9 @@ $report->getReport(array("first_year" => $first_year, "last_year" => $last_year)
         </script>
         <?php include "footer.php"; ?>
     </div>
+    <script>
+        setTimeout(() => { document.getElementById("preloader").style.display = "none"; }, 0);
+    </script>
 </body>
 
 </html>
