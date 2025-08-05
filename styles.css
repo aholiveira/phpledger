@@ -63,16 +63,19 @@ th {
     text-align: center;
 }
 
-tr {
+tr,
+tr.odd,
+tr:not(.report):nth-child(odd) {
     background-color: var(--bg-secondary);
     color: var(--text-primary);
 }
 
-tr:nth-child(even) {
+tr:not(.report):nth-child(even),
+tr.even {
     background-color: var(--highlight);
 }
 
-tr:nth-child(even) a:hover {
+a:hover {
     background-color: var(--bg-secondary);
 }
 
