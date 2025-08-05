@@ -27,11 +27,6 @@ button:hover {
     border: 1px solid var(--text-primary);
 }
 
-form {
-    width: max-content;
-    max-width: 100%;
-}
-
 a {
     text-decoration: none;
     padding: 4px 6px;
@@ -107,7 +102,7 @@ input {
     font-size: 0.95em;
 }
 
-input[type=text],
+input[name=remarks],
 select {
     width: 100%;
 }
@@ -154,6 +149,28 @@ button:hover {
     padding-top: 1em;
 }
 
+/* Login */
+div#login {
+    width: 100%;
+    text-align: center;
+    padding: 1em;
+    align-items: center;
+}
+
+div#login table {
+    margin: auto;
+    align-self: center;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+div#login td {
+    border: none;
+    background-color: white;
+    text-align: left;
+    padding: 0.5em;
+}
 .menu,
 .header,
 .main,
