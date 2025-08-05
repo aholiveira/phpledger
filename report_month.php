@@ -71,7 +71,7 @@ $report->getReport(array("year" => $year));
                 <button type="button" onclick="toggle('table');" alt="toggle table">Show table</button>
             </div>
             <div class="graph" id="graph" style="display: none; width: 99%"></div>
-            <div class="table report_month" id="table" style="display: initial; width: 99%">
+            <div class="table report_month" id="table" style="display: inherit; width: 99%">
                 <table class="lista report_month">
                     <?php print $reportHtml->printAsTable();
                     ?>

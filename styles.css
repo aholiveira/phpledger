@@ -171,6 +171,7 @@ div#login td {
     text-align: left;
     padding: 0.5em;
 }
+
 .menu,
 .header,
 .main,
@@ -201,9 +202,18 @@ div#login td {
     margin: 0.3em 0;
 }
 
-.header { max-height: fit-content; }
-.main { overflow-y: auto; }
-.main-footer, .footer { align-self: end; }
+.header {
+    max-height: fit-content;
+}
+
+.main {
+    overflow-y: auto;
+}
+
+.main-footer,
+.footer {
+    align-self: end;
+}
 
 .main-footer {
     display: grid;
@@ -224,13 +234,21 @@ div#login td {
 }
 
 .table-wrapper {
-    max-height:  calc(95vh - 24.5em);
+    max-height: calc(95vh - 24.5em);
     overflow: auto;
 }
 
 div.saldos,
-div.accounts {
+div.accounts,
+div.contas,
+div.entry_category_list {
     max-height: calc(95vh - 10em);
+    overflow: auto;
+}
+
+div.report_month,
+div.report_year {
+    max-height: calc(95vh - 14em);
     overflow: auto;
 }
 
@@ -290,6 +308,7 @@ div.accounts {
     color: var(--text-primary);
     font-weight: bold;
 }
+
 #main td.totals {
     text-align: right;
     background-color: lightblue;
@@ -308,7 +327,9 @@ tr.expense {
 }
 
 @media only screen and (max-width: 1024px) {
-    div { margin-left: 0; }
+    div {
+        margin-left: 0;
+    }
 
     .maingrid {
         grid-template-areas:
@@ -335,7 +356,9 @@ tr.expense {
 
     .footer,
     #main table thead,
-    .balance-label { display: none; }
+    .balance-label {
+        display: none;
+    }
 
     #main table {
         width: 95vw;
@@ -385,8 +408,10 @@ tr.expense {
 /* Preloader */
 #preloader {
     position: fixed;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background-color: white;
     z-index: 9999;
     display: flex;
@@ -404,15 +429,24 @@ tr.expense {
 }
 
 @keyframes spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @media print {
-    * { scrollbar-width: none; }
+    * {
+        scrollbar-width: none;
+    }
 
-    ::-webkit-scrollbar { display: none; }
+    ::-webkit-scrollbar {
+        display: none;
+    }
 
-    .maingrid { grid-template-areas: 'main'; height: auto; }
+    .maingrid {
+        grid-template-areas: 'main';
+        height: auto;
+    }
 
     nav,
     .header,
@@ -443,5 +477,7 @@ tr.expense {
         display: none;
     }
 
-    #main a { color: black; }
+    #main a {
+        color: black;
+    }
 }
