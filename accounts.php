@@ -20,6 +20,9 @@ $pagetitle = "Contas";
 
 <body>
     <div class="maingrid">
+        <div id="preloader">
+            <div class="spinner"></div>
+        </div>
         <?php
         include constant("ROOT_DIR") . "/menu_div.php";
         $object = $object_factory->account();
