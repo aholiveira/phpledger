@@ -64,6 +64,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
 
 <body>
     <div id="maingrid" class="maingrid">
+        <div id="preloader">
+            <div class="spinner"></div>
+        </div>
         <?php
         include ROOT_DIR . "/menu_div.php";
         ?>

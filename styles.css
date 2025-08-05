@@ -431,6 +431,17 @@ tr.expense {
     animation: spin 1s linear infinite;
 }
 
+.spinner::after {
+  content: "Loading...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 10px;
+  color: #333;
+  white-space: nowrap;
+}
+
 @keyframes spin {
     to {
         transform: rotate(360deg);

@@ -51,6 +51,9 @@ $report->getReport(array("first_year" => $first_year, "last_year" => $last_year)
 
 <body>
     <div class="maingrid">
+        <div id="preloader">
+            <div class="spinner"></div>
+        </div>
         <?php
         include ROOT_DIR . "/menu_div.php";
         ?>
