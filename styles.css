@@ -228,6 +228,12 @@ div#login td {
     overflow: auto;
 }
 
+div.saldos,
+div.accounts {
+    max-height: calc(95vh - 10em);
+    overflow: auto;
+}
+
 #main table {
     width: auto;
     overflow: auto;

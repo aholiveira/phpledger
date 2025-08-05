@@ -124,46 +124,48 @@ $pagetitle = "Contas";
         <div class="header" style="height: 0;"></div>
         <main>
             <div class="main" id="main">
-                <form method="POST" action="accounts.php" name="contas">
-                    <?= CSRF::inputField() ?>
-                    <table class="lista contas">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nome</th>
-                                <th>Numero</th>
-                                <th>Tipo</th>
-                                <th>NIB</th>
-                                <th>Abertura</th>
-                                <th>Fecho</th>
-                                <th>Activa</th>
-                                <th>Apagar</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            foreach ($account_list as $account) {
-                                print "<tr>";
-                                $account_view = $view_factory->account_view($account);
-                                if (!empty($edit) && $account->id == $edit) {
+                <div class="contas">
+                    <form method="POST" action="accounts.php" name="contas">
+                        <?= CSRF::inputField() ?>
+                        <table class="lista contas">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nome</th>
+                                    <th>Numero</th>
+                                    <th>Tipo</th>
+                                    <th>NIB</th>
+                                    <th>Abertura</th>
+                                    <th>Fecho</th>
+                                    <th>Activa</th>
+                                    <th>Apagar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                foreach ($account_list as $account) {
+                                    print "<tr>";
+                                    $account_view = $view_factory->account_view($account);
+                                    if (!empty($edit) && $account->id == $edit) {
+                                        print $account_view->printForm();
+                                    }
+                                    if (empty($edit) || (!empty($edit) && $account->id != $edit)) {
+                                        print $account_view->printObject();
+                                    }
+                                    print "</tr>";
+                                }
+                                if (empty($edit)) {
+                                    print "<tr>";
+                                    $account = $object_factory->account();
+                                    $account_view = $view_factory->account_view($account);
                                     print $account_view->printForm();
+                                    print "</tr>";
                                 }
-                                if (empty($edit) || (!empty($edit) && $account->id != $edit)) {
-                                    print $account_view->printObject();
-                                }
-                                print "</tr>";
-                            }
-                            if (empty($edit)) {
-                                print "<tr>";
-                                $account = $object_factory->account();
-                                $account_view = $view_factory->account_view($account);
-                                print $account_view->printForm();
-                                print "</tr>";
-                            }
-                            ?>
-                        </tbody>
-                    </table>
-                </form>
+                                ?>
+                            </tbody>
+                        </table>
+                    </form>
+                </div>
             </div>
         </main>
         <script>

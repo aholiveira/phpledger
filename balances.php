@@ -24,11 +24,13 @@ $pagetitle = "Saldos";
         ?>
         <div class="header" style="height: 0;"></div>
         <div class="main" id="main">
-            <?php
-            $object = $object_factory->account();
-            $viewer = $view_factory->account_balance_view($object);
-            print $viewer->printObjectList($object->getList(['activa' => ['operator' => '=', 'value' => '1']]));
-            ?>
+            <div class="saldos">
+                <?php
+                $object = $object_factory->account();
+                $viewer = $view_factory->account_balance_view($object);
+                print $viewer->printObjectList($object->getList(['activa' => ['operator' => '=', 'value' => '1']]));
+                ?>
+            </div>
         </div>
         <?php include "footer.php"; ?>
     </div>
