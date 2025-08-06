@@ -27,6 +27,11 @@ button:hover {
     border: 1px solid var(--text-primary);
 }
 
+.version-tag {
+    font-size: x-small;
+    text-align: center;
+}
+
 a {
     text-decoration: none;
     padding: 4px 6px;
@@ -87,7 +92,9 @@ p {
 .error {
     color: var(--error);
 }
-
+.invalid-login {
+    text-align: center;
+}
 hr {
     width: 100%;
     border: none;
@@ -156,8 +163,8 @@ button:hover {
 div#login {
     width: 100%;
     text-align: center;
-    padding: 1em;
     align-items: center;
+    padding: 1em;
 }
 
 div#login table {
@@ -171,8 +178,7 @@ div#login table {
 div#login td {
     border: none;
     background-color: white;
-    text-align: left;
-    padding: 0.5em;
+    padding: 0.6em;
 }
 
 .menu,
@@ -432,14 +438,14 @@ tr.expense {
 }
 
 .spinner::after {
-  content: "Loading...";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 10px;
-  color: #333;
-  white-space: nowrap;
+    content: "Loading...";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10px;
+    color: #333;
+    white-space: nowrap;
 }
 
 @keyframes spin {

@@ -69,25 +69,28 @@ if (!empty($post_user)) {
 <body onload="document.getElementById('username').focus();">
     <div id="login">
         <h1><?= htmlspecialchars(config::get("title")) ?></h1>
-        <p>Introduza o seu nome de utilizador e password para entrar na aplica&ccedil;&atilde;o.</p>
-        <?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$userauth): ?>
-            <p class="invalid-login">Utilizador e/ou password inv&aacute;lidos</p>
-        <?php endif; ?>
         <form method="POST" action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" name="login" autocomplete="off">
             <?= CSRF::inputField() ?>
             <table>
                 <tr>
-                    <td>Utilizador:</td>
-                    <td><input size="10" maxlength="50" type="text" name="username" id="username"
-                            autocomplete="username" value="<?= htmlspecialchars($post_user) ?>"></td>
+                    <td><input size="25" maxlength="50" type="text" name="username" id="username"
+                            placeholder="Utilizador" autocomplete="username"
+                            value="<?= htmlspecialchars($post_user) ?>"></td>
                 </tr>
                 <tr>
-                    <td>Password:</td>
-                    <td><input size="10" maxlength="255" type="password" name="password" autocomplete="current-password"
-                            value=""></td>
+                    <td><input size="25" maxlength="255" type="password" name="password" placeholder="Password"
+                            autocomplete="current-password" value=""></td>
+                </tr>
+                <?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$userauth): ?>
+                    <tr>
+                        <td class="invalid-login" style="width: 100%">Credenciais inv&aacute;lidas</td>
+                    </tr>
+                <?php endif; ?>
+                <tr>
+                    <td style="text-align: center"><input type="submit" value="Entrar"></td>
                 </tr>
                 <tr>
-                    <td colspan="2" style="text-align: center"><input type="submit" value="Entrar"></td>
+                    <td class="version-tag">Version <?= VERSION ?></td>
                 </tr>
             </table>
         </form>
