@@ -62,7 +62,7 @@ elseif ($requested_lang === 'pt-pt')
 else
     $lang = str_starts_with($browser_lang, 'en') ? 'en-US' : 'pt-PT';
 
-$l10n = require ROOT_DIR . "/lang/{$lang}.php";
+$l10n = require ROOT_DIR . "/lang/" . strtolower($lang) . ".php";
 
 /**
  * Prints variable
