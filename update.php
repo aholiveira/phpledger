@@ -23,7 +23,7 @@ $needs_update = !$data_storage->check();
 $message = nl2br(htmlspecialchars($data_storage->message(), ENT_QUOTES, 'UTF-8'));
 
 $strings = [
-    'pt' => [
+    'pt-PT' => [
         'title' => "Actualização necessária",
         'db_needs_update' => "A base de dados necessita de ser actualizada.",
         'cannot_use_app' => "Não poderá utilizar a aplicação sem concluir esta actualização.",
@@ -36,7 +36,7 @@ $strings = [
         'update_fail' => "Falha na actualização. Verifique as permissões do utilizador.",
         'error_msg' => "Mensagem de erro:"
     ],
-    'en' => [
+    'en-US' => [
         'title' => "Update Required",
         'db_needs_update' => "The database requires an update.",
         'cannot_use_app' => "You cannot use the application until this update is completed.",
