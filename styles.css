@@ -15,6 +15,11 @@
     --border-radius: 6px;
 }
 
+* {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
 body {
     height: 95vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -92,9 +97,11 @@ p {
 .error {
     color: var(--error);
 }
+
 .invalid-login {
     text-align: center;
 }
+
 hr {
     width: 100%;
     border: none;
@@ -159,7 +166,12 @@ button:hover {
     padding-top: 1em;
 }
 
-/* Login */
+.update-screen {
+    align-items: center;
+    text-align: center;
+    grid-area: main;
+}
+
 div#login {
     width: 100%;
     text-align: center;

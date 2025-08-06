@@ -90,7 +90,8 @@ if (!empty($post_user)) {
                     <td style="text-align: center"><input type="submit" value="Entrar"></td>
                 </tr>
                 <tr>
-                    <td class="version-tag">Version <?= VERSION ?></td>
+                    <td class="version-tag"><a style="padding: 0;"
+                            href="https://github.com/aholiveira/phpledger">Version <?= VERSION ?></a></td>
                 </tr>
             </table>
         </form>
