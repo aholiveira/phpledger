@@ -16,7 +16,7 @@ if (PHP_VERSION_ID < 70000) {
 }
 
 const BACKEND = "mysql";
-const VERSION = "0.4.17";
+const VERSION = "0.4.18";
 const ROOT_DIR = __DIR__;
 const OBJECTS_DIR = ROOT_DIR . "/objects";
 const VIEWS_DIR = ROOT_DIR . "/views";
@@ -55,12 +55,14 @@ SessionManager::start();
 $requested_lang = strtolower($_GET['lang'] ?? '');
 $browser_lang = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? '');
 
-if ($requested_lang === 'en')
+if ($requested_lang === 'en-us')
     $lang = 'en-US';
-elseif ($requested_lang === 'pt')
+elseif ($requested_lang === 'pt-pt')
     $lang = 'pt-PT';
 else
     $lang = str_starts_with($browser_lang, 'en') ? 'en-US' : 'pt-PT';
+
+$l10n = require ROOT_DIR . "/lang/{$lang}.php";
 
 /**
  * Prints variable
