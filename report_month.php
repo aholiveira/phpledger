@@ -8,7 +8,7 @@
  *
  */
 include __DIR__ . "/contas_config.php";
-$pagetitle = "Relat&oacute;rio mensal";
+$pagetitle = "Relatório mensal";
 $year = date("Y");
 if (array_key_exists("year", $_GET)) {
     $year = filter_input(INPUT_GET, "year", FILTER_VALIDATE_INT);
@@ -19,7 +19,7 @@ if (array_key_exists("year", $_GET)) {
 $report = $object_factory->report_month();
 $reportHtml = $view_factory->report_month_view($report);
 $report->year = $year;
-$report->getReport(array("year" => $year));
+$report->getReport(["year" => $year]);
 ?>
 <!DOCTYPE html>
 <html lang="pt-PT">

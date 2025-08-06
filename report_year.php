@@ -8,7 +8,7 @@
  *
  */
 include __DIR__ . "/contas_config.php";
-$pagetitle = "Relat&oacute;rio anual";
+$pagetitle = "Relatório anual";
 $first_year = date("Y") - 1;
 $last_year = date("Y");
 if (array_key_exists("first_year", $_GET)) {
@@ -25,7 +25,7 @@ if (array_key_exists("last_year", $_GET)) {
 }
 $report = $object_factory->report_year();
 $reportHtml = $view_factory->report_year_view($report);
-$report->getReport(array("first_year" => $first_year, "last_year" => $last_year));
+$report->getReport(["first_year" => $first_year, "last_year" => $last_year]);
 ?>
 <!DOCTYPE html>
 <html lang="pt-PT">
