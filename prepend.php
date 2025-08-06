@@ -16,7 +16,7 @@ if (PHP_VERSION_ID < 70000) {
 }
 
 const BACKEND = "mysql";
-const VERSION = "0.4.18";
+const VERSION = "0.4.19";
 const ROOT_DIR = __DIR__;
 const OBJECTS_DIR = ROOT_DIR . "/objects";
 const VIEWS_DIR = ROOT_DIR . "/views";
@@ -62,7 +62,7 @@ elseif ($requested_lang === 'pt-pt')
 else
     $lang = str_starts_with($browser_lang, 'en') ? 'en-US' : 'pt-PT';
 
-$l10n = require ROOT_DIR . "/lang/{$lang}.php";
+$l10n = require ROOT_DIR . "/lang/" . strtolower($lang) . ".php";
 
 /**
  * Prints variable
