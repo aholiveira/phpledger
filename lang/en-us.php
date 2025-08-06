@@ -9,7 +9,7 @@ return
         'db_updated' => "The database was successfully updated.",
         'redirecting' => "You will be redirected to the login screen in 5 seconds.",
         'db_ok' => "The database is up to date.",
-        'go_login' => "You can access the application from the <a style='padding: 0' href='index.php'>login screen</a>.",
+        'go_login' => "You can access the application from the <a href='index.php'>login screen</a>.",
         'update_fail' => "Update failed. Please check user permissions.",
         'error_msg' => "Error message:"
     ];

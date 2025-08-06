@@ -9,7 +9,7 @@ return
         'db_updated' => "A base de dados foi actualizada com sucesso.",
         'redirecting' => "Será redireccionado para o ecrã de login em 5 segundos.",
         'db_ok' => "A base de dados está actualizada.",
-        'go_login' => "Pode aceder à aplicação a partir do <a style='padding: 0' href='index.php'>ecrã de login</a>.",
+        'go_login' => "Pode aceder à aplicação a partir do <a href='index.php'>ecrã de login</a>.",
         'update_fail' => "Falha na actualização. Verifique as permissões do utilizador.",
         'error_msg' => "Mensagem de erro:"
     ];
