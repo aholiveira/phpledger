@@ -52,6 +52,16 @@ require_once ROOT_DIR . '/html.php';
 
 SessionManager::start();
 
+$requested_lang = strtolower($_GET['lang'] ?? '');
+$browser_lang = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? '');
+
+if ($requested_lang === 'en')
+    $lang = 'en-US';
+elseif ($requested_lang === 'pt')
+    $lang = 'pt-PT';
+else
+    $lang = str_starts_with($browser_lang, 'en') ? 'en-US' : 'pt-PT';
+
 /**
  * Prints variable
  * @param mixed $var variable to print
