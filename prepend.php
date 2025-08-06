@@ -16,7 +16,7 @@ if (PHP_VERSION_ID < 70000) {
 }
 
 const BACKEND = "mysql";
-const VERSION = "0.4.8";
+const VERSION = "Enter version tag (e.g. v0.4.9): ";
 const ROOT_DIR = __DIR__;
 const OBJECTS_DIR = ROOT_DIR . "/objects";
 const VIEWS_DIR = ROOT_DIR . "/views";
