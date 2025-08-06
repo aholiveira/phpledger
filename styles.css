@@ -39,7 +39,6 @@ button:hover {
 
 a {
     text-decoration: none;
-    padding: 4px 6px;
     transition: background 0.2s, text-decoration 0.2s;
     border-radius: var(--border-radius);
     color: var(--accent);
