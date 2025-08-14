@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
 ?>
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="<?= l10n::$lang === 'en-us' ? 'en-US' : 'pt-PT' ?>">
 
 <head>
     <?php include "header.php"; ?>
@@ -181,7 +181,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         $filter_string = http_build_query($filtered_input2);
         ?>
         <div class="header" id="header">
-            <form id="datefilter" name="datefilter" action="ledger_entries.php" method="GET">
+            <form id="datefilter" name="datefilter" action="?lang=<?= l10n::$lang ?>" method="GET">
+                <input name="lang" value="<?= l10n::$lang ?>" type="hidden" />
                 <input type="hidden" name="filter_parent_id"
                     value="<?= !empty($filtered_input["filter_parent_id"]) ? $filtered_input["filter_parent_id"] : "" ?>">
                 <input type="hidden" name="filter_entry_type"
@@ -250,7 +251,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             </script>
         </div>
         <div class="main" id="main">
-            <form name="mov" action="ledger_entries.php" method="POST">
+            <form name="mov" action="?lang=<?= l10n::$lang ?>" method="POST">
+                <input name="lang" value="<?= l10n::$lang ?>" type="hidden" />
                 <?= CSRF::inputField() ?>
                 <input type="hidden" name="filter_account_id"
                     value="<?= !empty($filtered_input["filter_account_id"]) ? $filtered_input["filter_account_id"] : ""; ?>">
