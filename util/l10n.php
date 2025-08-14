@@ -30,14 +30,14 @@ class l10n
     private static function load_lang(?string $forced_lang = null): array
     {
         $lang = $forced_lang ?? self::detect_user_lang();
-        $path = ROOT_DIR . "/lang/$lang.php";
+        $path = strtolower(ROOT_DIR . "/lang/$lang.php");
 
         if (!file_exists($path)) {
             $lang = 'pt-PT';
-            $path = ROOT_DIR . "/lang/$lang.php";
+            $path = strtolower(ROOT_DIR . "/lang/$lang.php");
         }
 
-        return file_exists($path) ? include strtolower($path) : [];
+        return file_exists($path) ? include $path : [];
     }
 
 }
