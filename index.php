@@ -15,6 +15,7 @@ if (isset($_GET['do_logout']) && $_GET['do_logout'] === '1') {
     SessionManager::logout();
     Redirector::to('index.php');
 }
+
 if (!defined("ROOT_DIR")) {
     require_once "prepend.php";
 }
@@ -60,7 +61,7 @@ if (!empty($post_user)) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="<?= l10n::$lang === 'en-us' ? 'en-US' : 'pt-PT' ?>">
 
 <head>
     <?php include "header.php"; ?>
@@ -69,28 +70,30 @@ if (!empty($post_user)) {
 <body onload="document.getElementById('username').focus();">
     <div id="login">
         <h1><?= htmlspecialchars(config::get("title")) ?></h1>
-        <form method="POST" action="<?= htmlspecialchars($_SERVER['PHP_SELF']) ?>" name="login" autocomplete="off">
+        <form method="POST" action="?lang=<?= l10n::$lang ?>" name="login" autocomplete="off">
+            <input name="lang" value="<?= l10n::$lang ?>" type="hidden" />
             <?= CSRF::inputField() ?>
             <table>
                 <tr>
-                    <td><input size="25" maxlength="50" type="text" name="username" id="username"
-                            placeholder="Utilizador" autocomplete="username"
+                    <td><input required size="25" maxlength="50" type="text" name="username" id="username"
+                            placeholder="<?= l10n::l('username') ?>" autocomplete="username"
                             value="<?= htmlspecialchars($post_user) ?>"></td>
                 </tr>
                 <tr>
-                    <td><input size="25" maxlength="255" type="password" name="password" placeholder="Password"
-                            autocomplete="current-password" value=""></td>
+                    <td><input required size="25" maxlength="255" type="password" name="password"
+                            placeholder="<?= l10n::l('password') ?>" autocomplete="current-password" value=""></td>
                 </tr>
                 <?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$userauth): ?>
                     <tr>
-                        <td class="invalid-login" style="width: 100%">Credenciais inv&aacute;lidas</td>
+                        <td class="invalid-login" style="width: 100%"><?= l10n::l('invalid_credentials') ?></td>
                     </tr>
                 <?php endif; ?>
                 <tr>
-                    <td style="text-align: center"><input type="submit" value="Entrar"></td>
+                    <td style="text-align: center"><input type="submit" value="<?= l10n::l('login') ?>"></td>
                 </tr>
                 <tr>
-                    <td class="version-tag"><a href="https://github.com/aholiveira/phpledger">Version <?= VERSION ?></a>
+                    <td class="version-tag">
+                        <a href="https://github.com/aholiveira/phpledger"><?= l10n::l('version') ?> <?= VERSION ?></a>
                     </td>
                 </tr>
             </table>
