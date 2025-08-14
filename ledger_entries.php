@@ -48,6 +48,7 @@ $input_variables_filter = [
     'filter_edateDD' => FILTER_SANITIZE_NUMBER_INT
 ];
 $filtered_input = [];
+$saved_id = null;
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
         http_response_code(400);
@@ -55,7 +56,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
     $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, TRUE);
     try {
-        (new LedgerEntryController($object_factory))->handleSave($filtered_input);
+        $saved_id = (new LedgerEntryController($object_factory))->handleSave($filtered_input);
     } catch (\Exception $e) {
         Html::myalert($e->getMessage());
     }
@@ -74,6 +75,16 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 </head>
 
 <body>
+    <?php if (!empty($saved_id)): ?>
+        <div id="flashmessage"><?= str_replace("%1", $saved_id, l10n::l("save_success")) ?></div>
+        <script>
+            const el = document.getElementById('flashmessage');
+            setTimeout(() => {
+                el.classList.add('hide');
+                el.addEventListener('transitionend', () => el.remove(), { once: true });
+            }, 2500);
+        </script>
+    <?php endif ?>
     <div class="maingrid">
         <div id="preloader">
             <div class="spinner"></div>
@@ -250,152 +261,154 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                 <input type="hidden" name="filter_sdate" value="<?= $sdate; ?>">
                 <input type="hidden" name="filter_edate" value="<?= $edate; ?>">
                 <div class="table-wrapper">
-                <table class="lista ledger_entry_list">
-                    <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Data</th>
-                            <th scope="col">Categoria</th>
-                            <th scope="col">Moeda</th>
-                            <th scope="col">Conta</th>
-                            <th scope="col">D/C</th>
-                            <th scope="col">Valor</th>
-                            <th scope="col">Obs</th>
-                            <th scope="col">Saldo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="balance-label" colspan="8">Saldo anterior</td>
-                            <td data-label="Saldo anterior" class="balance"><?= normalize_number($balance); ?></td>
-                        </tr>
-                        <?php
-
-                        foreach ($ledger_entry_cache as $row):
-                            print "<tr id='{$row->id}'>";
-                            $balance += $row->euro_amount;
-                            if ($row->id == $edit) {
-                                ?>
-                                <td data-label=""><input type="hidden" name="id" value="<?= $row->id; ?>">
-                                    <input class="submit" type="submit" name="Gravar" value="Gravar">
-                                </td>
-                                <td data-label="Data" class="id">
-                                    <select class="date-fallback" style="display: none" name="data_movAA">
-                                        <?= Html::year_option(substr($row->entry_date, 0, 4)) ?>
-                                    </select>
-                                    <select class="date-fallback" style="display: none" name="data_movMM">
-                                        <?= Html::mon_option(substr($row->entry_date, 5, 2)) ?>
-                                    </select>
-                                    <select class="date-fallback" style="display: none" name="data_movDD">
-                                        <?= Html::day_option(substr($row->entry_date, 8, 2)) ?>
-                                    </select>
-                                    <input class="date-fallback" type="date" id="data_mov" name="data_mov" required
-                                        value="<?= $row->entry_date ?>">
-                                </td>
-                                <td data-label="Categoria" class="category"><select
-                                        name="category_id"><?= $tipo_mov_opt ?></select></td>
-                                <td data-label="Moeda" class="currency"><select name="currency_id"><?= $moeda_opt ?></select>
-                                </td>
-                                <td data-label="Conta" class="account"><select name="account_id"><?= $conta_opt ?></select>
-                                </td>
-                                <td data-label="D/C" class="direction">
-                                    <select name="direction">
-                                        <option value="1" <?= $row->direction == "1" ? " selected " : "" ?>>Dep</option>
-                                        <option value="-1" <?= $row->direction == "-1" ? " selected " : "" ?>>Lev
-                                        </option>
-                                    </select>
-                                </td>
-                                <td data-label="Valor" class="amount"><input type="number" step="0.01" name="currency_amount"
-                                        placeholder="0.00" value="<?= $row->currency_amount ?>"></td>
-                                <td data-label="Obs" class="remarks"><input type="text" name="remarks" maxlength="255"
-                                        value="<?= $row->remarks ?>"></td>
-                                <td data-label="Saldo" class="total" style="text-align: right">
-                                    <?= normalize_number($balance) ?>
-                                </td>
-                                <?php
-                            }
-                            if (empty($edit) || $row->id != $edit) {
-                                $filtered_input3 = $filtered_input2;
-                                $filtered_input3["filter_entry_type"] = $row->category_id;
-                                $category_filter = http_build_query($filtered_input3);
-                                $filtered_input3 = $filtered_input2;
-                                $filtered_input3["filter_account_id"] = $row->account_id;
-                                $account_filter = http_build_query($filtered_input3);
-                                ?>
-                                <td data-label='ID' class='id'><a
-                                        title="Clique para editar entrada&#10;Modificado por <?= $row->username ?>&#10;em <?= $row->updated_at ?>"
-                                        href="ledger_entries.php?<?= "{$filter_string}&amp;id={$row->id}" ?>"><?= $row->id ?></a>
-                                </td>
-                                <td data-label='Data' class='data'><?= $row->entry_date ?></td>
-                                <td data-label='Categoria' class='category'><a title="Filtrar lista para esta categoria"
-                                        href="ledger_entries.php?<?= $category_filter ?>"><?= ($row->category->parent_id > 0 ? $row->category->parent_description . "&#8594;" : "") . $row->category->description ?></a>
-                                </td>
-                                <td data-label='Moeda' class='currency'><?= $row->currency->description ?></td>
-                                <td data-label='Conta' class='account'><a title="Filtrar lista para esta conta"
-                                        href="ledger_entries.php?<?= $account_filter ?>"><?= $row->account->name ?></a>
-                                </td>
-                                <td data-label='D/C' class='direction'><?= $row->direction == "1" ? "Dep" : "Lev" ?>
-                                </td>
-                                <td data-label='Valor' class='amount'><?= normalize_number($row->currency_amount) ?>
-                                </td>
-                                <td data-label='Obs' class='remarks'><?= $row->remarks; ?></td>
-                                <td data-label='Saldo' class='total'><?= normalize_number($balance) ?></td>
-                                <?php
-                            }
-
-                            print "</tr>\n";
-                        endforeach;
-                        ?>
-                    </tbody>
-                    <?php
-                    if ($edit == 0) {
-                        ?>
-                        <tfoot>
-                            <tr id="last">
-                                <td data-label="" class="id"><input type="hidden" name="id" value="NULL">
-                                    <input class="submit" type="submit" name="Gravar" value="Gravar">
-                                </td>
-                                <td data-label="Data" class="data">
-                                    <select class="date-fallback" style="display: none" name="data_movAA">
-                                        <?= Html::year_option(substr($defaults->entry_date, 0, 4)) ?>
-                                    </select>
-                                    <select class="date-fallback" style="display: none" name="data_movMM">
-                                        <?= Html::mon_option(substr($defaults->entry_date, 5, 2)) ?>
-                                    </select>
-                                    <select class="date-fallback" style="display: none" name="data_movDD">
-                                        <?= Html::day_option(substr($defaults->entry_date, 8, 2)) ?>
-                                    </select>
-                                    <input class="date-fallback" type="date" id="data_mov" name="data_mov" required
-                                        value="<?= $defaults->entry_date ?>">
-                                </td>
-                                <td data-label="Categoria" class="category">
-                                    <select name="category_id"> <?= $tipo_mov_opt ?> </select>
-                                </td>
-                                <td data-label="Moeda" class="currency">
-                                    <select name="currency_id"> <?= $moeda_opt ?> </select>
-                                </td>
-                                <td data-label="Conta" class="account">
-                                    <select name="account_id"> <?= $conta_opt; ?> </select>
-                                </td>
-                                <td data-label="D/C" class="direction">
-                                    <select name="direction">
-                                        <option value="1">Dep</option>
-                                        <option value="-1" selected>Lev</option>
-                                    </select>
-                                </td>
-                                <td data-label="Valor" class="amount">
-                                    <input type="number" step="0.01" name="currency_amount" placeholder="0.00" value="0.00">
-                                </td>
-                                <td data-label="Obs" class="remarks">
-                                    <input type="text" name="remarks" maxlength="255" value="">
-                                </td>
-                                <td data-label="Saldo" class="total"><?= normalize_number($balance) ?></td>
+                    <table class="lista ledger_entry_list">
+                        <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Data</th>
+                                <th scope="col">Categoria</th>
+                                <th scope="col">Moeda</th>
+                                <th scope="col">Conta</th>
+                                <th scope="col">D/C</th>
+                                <th scope="col">Valor</th>
+                                <th scope="col">Obs</th>
+                                <th scope="col">Saldo</th>
                             </tr>
-                        </tfoot>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="balance-label" colspan="8">Saldo anterior</td>
+                                <td data-label="Saldo anterior" class="balance"><?= normalize_number($balance); ?></td>
+                            </tr>
+                            <?php
+
+                            foreach ($ledger_entry_cache as $row):
+                                print "<tr id='{$row->id}'>";
+                                $balance += $row->euro_amount;
+                                if ($row->id == $edit) {
+                                    ?>
+                                    <td data-label=""><input type="hidden" name="id" value="<?= $row->id; ?>">
+                                        <input class="submit" type="submit" name="Gravar" value="Gravar">
+                                    </td>
+                                    <td data-label="Data" class="id">
+                                        <select class="date-fallback" style="display: none" name="data_movAA">
+                                            <?= Html::year_option(substr($row->entry_date, 0, 4)) ?>
+                                        </select>
+                                        <select class="date-fallback" style="display: none" name="data_movMM">
+                                            <?= Html::mon_option(substr($row->entry_date, 5, 2)) ?>
+                                        </select>
+                                        <select class="date-fallback" style="display: none" name="data_movDD">
+                                            <?= Html::day_option(substr($row->entry_date, 8, 2)) ?>
+                                        </select>
+                                        <input class="date-fallback" type="date" id="data_mov" name="data_mov" required
+                                            value="<?= $row->entry_date ?>">
+                                    </td>
+                                    <td data-label="Categoria" class="category"><select
+                                            name="category_id"><?= $tipo_mov_opt ?></select></td>
+                                    <td data-label="Moeda" class="currency"><select
+                                            name="currency_id"><?= $moeda_opt ?></select>
+                                    </td>
+                                    <td data-label="Conta" class="account"><select name="account_id"><?= $conta_opt ?></select>
+                                    </td>
+                                    <td data-label="D/C" class="direction">
+                                        <select name="direction">
+                                            <option value="1" <?= $row->direction == "1" ? " selected " : "" ?>>Dep</option>
+                                            <option value="-1" <?= $row->direction == "-1" ? " selected " : "" ?>>Lev
+                                            </option>
+                                        </select>
+                                    </td>
+                                    <td data-label="Valor" class="amount"><input type="number" step="0.01"
+                                            name="currency_amount" placeholder="0.00" value="<?= $row->currency_amount ?>"></td>
+                                    <td data-label="Obs" class="remarks"><input type="text" name="remarks" maxlength="255"
+                                            value="<?= $row->remarks ?>"></td>
+                                    <td data-label="Saldo" class="total" style="text-align: right">
+                                        <?= normalize_number($balance) ?>
+                                    </td>
+                                    <?php
+                                }
+                                if (empty($edit) || $row->id != $edit) {
+                                    $filtered_input3 = $filtered_input2;
+                                    $filtered_input3["filter_entry_type"] = $row->category_id;
+                                    $category_filter = http_build_query($filtered_input3);
+                                    $filtered_input3 = $filtered_input2;
+                                    $filtered_input3["filter_account_id"] = $row->account_id;
+                                    $account_filter = http_build_query($filtered_input3);
+                                    ?>
+                                    <td data-label='ID' class='id'><a
+                                            title="Clique para editar entrada&#10;Modificado por <?= $row->username ?>&#10;em <?= $row->updated_at ?>"
+                                            href="ledger_entries.php?<?= "{$filter_string}&amp;id={$row->id}" ?>"><?= $row->id ?></a>
+                                    </td>
+                                    <td data-label='Data' class='data'><?= $row->entry_date ?></td>
+                                    <td data-label='Categoria' class='category'><a title="Filtrar lista para esta categoria"
+                                            href="ledger_entries.php?<?= $category_filter ?>"><?= ($row->category->parent_id > 0 ? $row->category->parent_description . "&#8594;" : "") . $row->category->description ?></a>
+                                    </td>
+                                    <td data-label='Moeda' class='currency'><?= $row->currency->description ?></td>
+                                    <td data-label='Conta' class='account'><a title="Filtrar lista para esta conta"
+                                            href="ledger_entries.php?<?= $account_filter ?>"><?= $row->account->name ?></a>
+                                    </td>
+                                    <td data-label='D/C' class='direction'><?= $row->direction == "1" ? "Dep" : "Lev" ?>
+                                    </td>
+                                    <td data-label='Valor' class='amount'><?= normalize_number($row->currency_amount) ?>
+                                    </td>
+                                    <td data-label='Obs' class='remarks'><?= $row->remarks; ?></td>
+                                    <td data-label='Saldo' class='total'><?= normalize_number($balance) ?></td>
+                                    <?php
+                                }
+
+                                print "</tr>\n";
+                            endforeach;
+                            ?>
+                        </tbody>
                         <?php
-                    }
-                    ?>
-                </table>
+                        if ($edit == 0) {
+                            ?>
+                            <tfoot>
+                                <tr id="last">
+                                    <td data-label="" class="id"><input type="hidden" name="id" value="NULL">
+                                        <input class="submit" type="submit" name="Gravar" value="Gravar">
+                                    </td>
+                                    <td data-label="Data" class="data">
+                                        <select class="date-fallback" style="display: none" name="data_movAA">
+                                            <?= Html::year_option(substr($defaults->entry_date, 0, 4)) ?>
+                                        </select>
+                                        <select class="date-fallback" style="display: none" name="data_movMM">
+                                            <?= Html::mon_option(substr($defaults->entry_date, 5, 2)) ?>
+                                        </select>
+                                        <select class="date-fallback" style="display: none" name="data_movDD">
+                                            <?= Html::day_option(substr($defaults->entry_date, 8, 2)) ?>
+                                        </select>
+                                        <input class="date-fallback" type="date" id="data_mov" name="data_mov" required
+                                            value="<?= $defaults->entry_date ?>">
+                                    </td>
+                                    <td data-label="Categoria" class="category">
+                                        <select name="category_id"> <?= $tipo_mov_opt ?> </select>
+                                    </td>
+                                    <td data-label="Moeda" class="currency">
+                                        <select name="currency_id"> <?= $moeda_opt ?> </select>
+                                    </td>
+                                    <td data-label="Conta" class="account">
+                                        <select name="account_id"> <?= $conta_opt; ?> </select>
+                                    </td>
+                                    <td data-label="D/C" class="direction">
+                                        <select name="direction">
+                                            <option value="1">Dep</option>
+                                            <option value="-1" selected>Lev</option>
+                                        </select>
+                                    </td>
+                                    <td data-label="Valor" class="amount">
+                                        <input type="number" step="0.01" name="currency_amount" placeholder="0.00"
+                                            value="0.00">
+                                    </td>
+                                    <td data-label="Obs" class="remarks">
+                                        <input type="text" name="remarks" maxlength="255" value="">
+                                    </td>
+                                    <td data-label="Saldo" class="total"><?= normalize_number($balance) ?></td>
+                                </tr>
+                            </tfoot>
+                            <?php
+                        }
+                        ?>
+                    </table>
                 </div>
             </form>
         </div>

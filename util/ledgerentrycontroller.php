@@ -12,7 +12,7 @@ class LedgerEntryController
      * Validate, build and persist one ledger‐entry from $input.
      * Throws on any validation error.
      */
-    public function handleSave(array $input): void
+    public function handleSave(array $input): int
     {
         // 1) parse date
         try {
@@ -62,7 +62,6 @@ class LedgerEntryController
         if (!$defaults->update()) {
             throw new \RuntimeException("Erro ao gravar defaults");
         }
-
-        Html::myalert("Registo gravado [ID: {$entry->id}]");
+        return $entry->id;
     }
 }

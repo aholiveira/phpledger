@@ -20,6 +20,28 @@
     text-rendering: optimizeLegibility;
 }
 
+#flashmessage {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #28a745;
+    /* green */
+    color: white;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    opacity: 1;
+    transition: opacity .5s;
+    z-index: 9999;
+}
+
+#flashmessage.hide {
+    opacity: 0;
+    pointer-events: none;
+}
+
 body {
     height: 95vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -30,6 +52,12 @@ body {
 
 button:hover {
     border: 1px solid var(--text-primary);
+}
+
+.lang-selector {
+    text-align: right;
+    margin-bottom: 1em;
+    font-size: small;
 }
 
 .version-tag {
