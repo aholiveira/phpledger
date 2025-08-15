@@ -16,7 +16,7 @@ ini_set('output_buffering', 'Off');
 ini_set('implicit_flush', '1');
 ob_implicit_flush(true);
 
-$pagetitle = "Movimentos";
+$pagetitle = l10n::l("ledger_entries");
 $input_variables_filter = [
     'data_mov' => [
         'filter' => FILTER_VALIDATE_REGEXP,
@@ -45,7 +45,8 @@ $input_variables_filter = [
     'filter_edate' => FILTER_SANITIZE_ENCODED,
     'filter_edateAA' => FILTER_SANITIZE_NUMBER_INT,
     'filter_edateMM' => FILTER_SANITIZE_NUMBER_INT,
-    'filter_edateDD' => FILTER_SANITIZE_NUMBER_INT
+    'filter_edateDD' => FILTER_SANITIZE_NUMBER_INT,
+    'lang' => FILTER_SANITIZE_ENCODED
 ];
 $filtered_input = [];
 $saved_id = null;
@@ -67,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
 ?>
 <!DOCTYPE html>
-<html lang="<?= l10n::$lang === 'en-us' ? 'en-US' : 'pt-PT' ?>">
+<html lang="<?= l10n::html() ?>">
 
 <head>
     <?php include "header.php"; ?>
@@ -76,7 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
 <body>
     <?php if (!empty($saved_id)): ?>
-        <div id="flashmessage"><?= str_replace("%1", $saved_id, l10n::l("save_success")) ?></div>
+        <div id="flashmessage"><?= l10n::l("save_success", $saved_id) ?></div>
         <script>
             const el = document.getElementById('flashmessage');
             setTimeout(() => {
@@ -137,11 +138,11 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         if ($edit > 0) {
             $edit_entry = ledgerentry::getById($edit);
             if ($edit_entry->id != $edit) {
-                die("Record not found");
+                die(l10n::l('not_found', $edit));
             }
             $ledger_entry = ledgerentry::getById($edit);
             if ($ledger_entry->id != $edit) {
-                Html::myalert("Registo com ID {$edit} nao encontrado");
+                Html::myalert(l10n::l('not_found', $edit));
             }
         }
 
@@ -178,6 +179,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                 $filtered_input2[$k] = $v;
             }
         }
+        $filtered_input2['lang'] = l10n::$lang;
         $filter_string = http_build_query($filtered_input2);
         ?>
         <div class="header" id="header">
@@ -189,7 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                     value="<?= !empty($filtered_input["filter_entry_type"]) ? $filtered_input["filter_entry_type"] : "" ?>">
                 <table class="filter">
                     <tr>
-                        <td>Inicio</td>
+                        <td><?= l10n::l('start') ?></td>
                         <td>
                             <select class="date-fallback" style="display: none" name="filter_sdateAA"
                                 onchange="update_date('filter_sdate');"><?= Html::year_option(substr($sdate, 0, 4)) ?></select>
@@ -202,7 +204,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                         </td>
                     </tr>
                     <tr>
-                        <td>Fim</td>
+                        <td><?= l10n::l('end') ?></td>
                         <td>
                             <select class="date-fallback" style="display: none" name="filter_edateAA"
                                 onchange="update_date('filter_edate');"><?= Html::year_option(substr($edate, 0, 4)) ?></select>
@@ -215,22 +217,22 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                         </td>
                     </tr>
                     <tr>
-                        <td><label for="filter_account_id">Conta</label> </td>
+                        <td><label for="filter_account_id"><?= l10n::l('account') ?></label> </td>
                         <td>
                             <select name="filter_account_id" id="filter_account_id"
                                 data-placeholder="Seleccione a conta" data-max="2" data-search="false"
                                 data-select-all="true" data-list-all="true" data-width="300px" data-height="50px"
                                 data-multi-select>
-                                <option value>Sem filtro</option>
+                                <option value><?= l10n::l('no_filter') ?></option>
                                 <?= $conta_opt ?>
                             </select>
                         </td>
                     </tr>
                     <tr>
-                        <td><label for="filter_entry_type">Categoria</label></td>
+                        <td><label for="filter_entry_type"><?= l10n::l('category') ?></label></td>
                         <td>
                             <select name="filter_entry_type" id="filter_entry_type">
-                                <option value>Sem filtro</option>
+                                <option value><?= l10n::l('no_filter') ?></option>
                                 <?= $tipo_mov_opt ?>
                             </select>
                         </td>
@@ -238,8 +240,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                     <tr>
                         <td></td>
                         <td>
-                            <input class="submit" type="submit" value="Filtrar">
-                            <input class="submit" type="button" value="Limpar filtro"
+                            <input class="submit" type="submit" value="<?= l10n::l('filter') ?>">
+                            <input class="submit" type="button" value="<?= l10n::l('clear_filter') ?>"
                                 onclick="clear_filter(); document.getElementById('datefilter').requestSubmit();">
                         </td>
                     </tr>
@@ -266,21 +268,23 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                     <table class="lista ledger_entry_list">
                         <thead>
                             <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Data</th>
-                                <th scope="col">Categoria</th>
-                                <th scope="col">Moeda</th>
-                                <th scope="col">Conta</th>
-                                <th scope="col">D/C</th>
-                                <th scope="col">Valor</th>
-                                <th scope="col">Obs</th>
-                                <th scope="col">Saldo</th>
+                                <th scope="col"><?= l10n::l('id') ?></th>
+                                <th scope="col"><?= l10n::l('date') ?></th>
+                                <th scope="col"><?= l10n::l('category') ?></th>
+                                <th scope="col"><?= l10n::l('currency') ?></th>
+                                <th scope="col"><?= l10n::l('account') ?></th>
+                                <th scope="col"><?= l10n::l('dc') ?></th>
+                                <th scope="col"><?= l10n::l('amount') ?></th>
+                                <th scope="col"><?= l10n::l('remarks') ?></th>
+                                <th scope="col"><?= l10n::l('balance') ?></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="balance-label" colspan="8">Saldo anterior</td>
-                                <td data-label="Saldo anterior" class="balance"><?= normalize_number($balance); ?></td>
+                                <td class="balance-label" colspan="8"><?= l10n::l('previous_balance') ?></td>
+                                <td data-label="<?= l10n::l('previous_balance') ?>" class="balance">
+                                    <?= normalize_number($balance); ?>
+                                </td>
                             </tr>
                             <?php
 
@@ -290,9 +294,9 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                 if ($row->id == $edit) {
                                     ?>
                                     <td data-label=""><input type="hidden" name="id" value="<?= $row->id; ?>">
-                                        <input class="submit" type="submit" name="Gravar" value="Gravar">
+                                        <input class="submit" type="submit" name="save" value="<?= l10n::l('save') ?>">
                                     </td>
-                                    <td data-label="Data" class="id">
+                                    <td data-label="<?= l10n::l('date') ?>" class="id">
                                         <select class="date-fallback" style="display: none" name="data_movAA">
                                             <?= Html::year_option(substr($row->entry_date, 0, 4)) ?>
                                         </select>
@@ -305,25 +309,29 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                         <input class="date-fallback" type="date" id="data_mov" name="data_mov" required
                                             value="<?= $row->entry_date ?>">
                                     </td>
-                                    <td data-label="Categoria" class="category"><select
+                                    <td data-label="<?= l10n::l('category') ?>" class="category"><select
                                             name="category_id"><?= $tipo_mov_opt ?></select></td>
-                                    <td data-label="Moeda" class="currency"><select
+                                    <td data-label="<?= l10n::l('currency') ?>" class="currency"><select
                                             name="currency_id"><?= $moeda_opt ?></select>
                                     </td>
-                                    <td data-label="Conta" class="account"><select name="account_id"><?= $conta_opt ?></select>
+                                    <td data-label="<?= l10n::l('account') ?>" class="account"><select
+                                            name="account_id"><?= $conta_opt ?></select>
                                     </td>
-                                    <td data-label="D/C" class="direction">
+                                    <td data-label="<?= l10n::l('dc') ?>" class="direction">
                                         <select name="direction">
-                                            <option value="1" <?= $row->direction == "1" ? " selected " : "" ?>>Dep</option>
-                                            <option value="-1" <?= $row->direction == "-1" ? " selected " : "" ?>>Lev
+                                            <option value="1" <?= $row->direction == "1" ? " selected " : "" ?>>
+                                                <?= l10n::l('deposit') ?>
+                                            </option>
+                                            <option value="-1" <?= $row->direction == "-1" ? " selected " : "" ?>>
+                                                <?= l10n::l('withdraw') ?>
                                             </option>
                                         </select>
                                     </td>
-                                    <td data-label="Valor" class="amount"><input type="number" step="0.01"
+                                    <td data-label="<?= l10n::l('amount') ?>" class="amount"><input type="number" step="0.01"
                                             name="currency_amount" placeholder="0.00" value="<?= $row->currency_amount ?>"></td>
-                                    <td data-label="Obs" class="remarks"><input type="text" name="remarks" maxlength="255"
-                                            value="<?= $row->remarks ?>"></td>
-                                    <td data-label="Saldo" class="total" style="text-align: right">
+                                    <td data-label="<?= l10n::l('remarks') ?>" class="remarks"><input type="text" name="remarks"
+                                            maxlength="255" value="<?= $row->remarks ?>"></td>
+                                    <td data-label="<?= l10n::l('balance') ?>" class="total" style="text-align: right">
                                         <?= normalize_number($balance) ?>
                                     </td>
                                     <?php
@@ -336,24 +344,31 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                     $filtered_input3["filter_account_id"] = $row->account_id;
                                     $account_filter = http_build_query($filtered_input3);
                                     ?>
-                                    <td data-label='ID' class='id'><a
-                                            title="Clique para editar entrada&#10;Modificado por <?= $row->username ?>&#10;em <?= $row->updated_at ?>"
+                                    <td data-label='<?= l10n::l('id') ?>' class='id'><a
+                                            title="<?= l10n::l('click_to_edit') ?>&#10;<?= l10n::l('modified_by_at', $row->username, $row->updated_at) ?>"
                                             href="ledger_entries.php?<?= "{$filter_string}&amp;id={$row->id}" ?>"><?= $row->id ?></a>
                                     </td>
-                                    <td data-label='Data' class='data'><?= $row->entry_date ?></td>
-                                    <td data-label='Categoria' class='category'><a title="Filtrar lista para esta categoria"
+                                    <td data-label='<?= l10n::l('date') ?>' class='data'><?= $row->entry_date ?></td>
+                                    <td data-label='<?= l10n::l('category') ?>' class='category'><a
+                                            title="Filtrar lista para esta categoria"
                                             href="ledger_entries.php?<?= $category_filter ?>"><?= ($row->category->parent_id > 0 ? $row->category->parent_description . "&#8594;" : "") . $row->category->description ?></a>
                                     </td>
-                                    <td data-label='Moeda' class='currency'><?= $row->currency->description ?></td>
-                                    <td data-label='Conta' class='account'><a title="Filtrar lista para esta conta"
+                                    <td data-label='<?= l10n::l('currency') ?>' class='currency'>
+                                        <?= $row->currency->description ?>
+                                    </td>
+                                    <td data-label='<?= l10n::l('account') ?>' class='account'><a
+                                            title="Filtrar lista para esta conta"
                                             href="ledger_entries.php?<?= $account_filter ?>"><?= $row->account->name ?></a>
                                     </td>
-                                    <td data-label='D/C' class='direction'><?= $row->direction == "1" ? "Dep" : "Lev" ?>
+                                    <td data-label='<?= l10n::l('dc') ?>' class='direction'>
+                                        <?= $row->direction == "1" ? "Dep" : "Lev" ?>
                                     </td>
-                                    <td data-label='Valor' class='amount'><?= normalize_number($row->currency_amount) ?>
+                                    <td data-label='<?= l10n::l('amount') ?>' class='amount'>
+                                        <?= normalize_number($row->currency_amount) ?>
                                     </td>
-                                    <td data-label='Obs' class='remarks'><?= $row->remarks; ?></td>
-                                    <td data-label='Saldo' class='total'><?= normalize_number($balance) ?></td>
+                                    <td data-label='<?= l10n::l('remarks') ?>' class='remarks'><?= $row->remarks; ?></td>
+                                    <td data-label='<?= l10n::l('balance') ?>' class='total'><?= normalize_number($balance) ?>
+                                    </td>
                                     <?php
                                 }
 
@@ -367,9 +382,9 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                             <tfoot>
                                 <tr id="last">
                                     <td data-label="" class="id"><input type="hidden" name="id" value="NULL">
-                                        <input class="submit" type="submit" name="Gravar" value="Gravar">
+                                        <input class="submit" type="submit" name="save" value="<?= l10n::l('save') ?>">
                                     </td>
-                                    <td data-label="Data" class="data">
+                                    <td data-label="<?= l10n::l('date') ?>" class="data">
                                         <select class="date-fallback" style="display: none" name="data_movAA">
                                             <?= Html::year_option(substr($defaults->entry_date, 0, 4)) ?>
                                         </select>
@@ -382,29 +397,31 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                         <input class="date-fallback" type="date" id="data_mov" name="data_mov" required
                                             value="<?= $defaults->entry_date ?>">
                                     </td>
-                                    <td data-label="Categoria" class="category">
+                                    <td data-label="<?= l10n::l('category') ?>" class="category">
                                         <select name="category_id"> <?= $tipo_mov_opt ?> </select>
                                     </td>
-                                    <td data-label="Moeda" class="currency">
+                                    <td data-label="<?= l10n::l('currency') ?>" class="currency">
                                         <select name="currency_id"> <?= $moeda_opt ?> </select>
                                     </td>
-                                    <td data-label="Conta" class="account">
+                                    <td data-label="<?= l10n::l('account') ?>" class="account">
                                         <select name="account_id"> <?= $conta_opt; ?> </select>
                                     </td>
-                                    <td data-label="D/C" class="direction">
+                                    <td data-label="<?= l10n::l('dc') ?>" class="direction">
                                         <select name="direction">
-                                            <option value="1">Dep</option>
-                                            <option value="-1" selected>Lev</option>
+                                            <option value="1"><?= l10n::l('deposit') ?></option>
+                                            <option value="-1" selected><?= l10n::l('withdraw') ?></option>
                                         </select>
                                     </td>
-                                    <td data-label="Valor" class="amount">
+                                    <td data-label="<?= l10n::l('amount') ?>" class="amount">
                                         <input type="number" step="0.01" name="currency_amount" placeholder="0.00"
                                             value="0.00">
                                     </td>
-                                    <td data-label="Obs" class="remarks">
+                                    <td data-label="<?= l10n::l('remarks') ?>" class="remarks">
                                         <input type="text" name="remarks" maxlength="255" value="">
                                     </td>
-                                    <td data-label="Saldo" class="total"><?= normalize_number($balance) ?></td>
+                                    <td data-label="<?= l10n::l('balance') ?>" class="total">
+                                        <?= normalize_number($balance) ?>
+                                    </td>
                                 </tr>
                             </tfoot>
                             <?php
@@ -415,7 +432,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             </form>
         </div>
         <div class="main-footer">
-            <p>Transac&ccedil;&otilde;es no per&iacute;odo: <?= sizeof($ledger_entry_cache) ?></p>
+            <p><?= l10n::l('transactions_in_period', count($ledger_entry_cache)) ?></p>
         </div>
         <?php
         include "footer.php";

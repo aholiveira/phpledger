@@ -12,27 +12,32 @@ class account_balance_view extends object_viewer
 {
     public function printObject(): string
     {
-        $retval = "";
         if (!isset($this->_object->id)) {
-            return $retval;
+            return "";
         }
-        /**
-         * @var accounttype $_object
-         */
+
         $_object = $this->_object;
-        $retval .= "<td><a href=\"account_types.php?tipo_id={$_object->id}\">{$_object->id}</a></td>";
-        $retval .= "<td>{$_object->description}</td>";
-        return $retval;
+        return "<td><a href=\"account_types.php?tipo_id={$_object->id}\">{$_object->id}</a></td>"
+            . "<td>{$_object->description}</td>";
     }
+
     public function printObjectList(array $object_list): string
     {
         $retval = "<table class=\"lista saldos\">\r\n";
-        $retval .= "<thead><tr><th>Conta</th><th>Depositos</th><th>Levantam.</th><th>Saldo</th><th>% do total</th><th>Movimentos</th></tr></thead>\r\n";
+        $retval .= "<thead><tr>"
+            . "<th>" . l10n::l('account') . "</th>"
+            . "<th>" . l10n::l('deposits') . "</th>"
+            . "<th>" . l10n::l('withdrawals') . "</th>"
+            . "<th>" . l10n::l('balance') . "</th>"
+            . "<th>" . l10n::l('percent') . "</th>"
+            . "<th>" . l10n::l('entries') . "</th>"
+            . "</tr></thead>\r\n";
         $retval .= "<tbody>";
+
         $type_names = ['income', 'expense', 'balance'];
-        foreach ($type_names as $type_name) {
-            $totals[$type_name] = 0;
-        }
+        $totals = array_fill_keys($type_names, 0);
+        $balances = [];
+
         foreach ($object_list as $object) {
             if ($object instanceof account) {
                 $balances[$object->id] = $object->getBalanceOnDate(new DateTime());
@@ -41,29 +46,41 @@ class account_balance_view extends object_viewer
                 }
             }
         }
+
         foreach ($object_list as $object) {
             if ($object instanceof account) {
                 $balance = $balances[$object->id];
                 $retval .= "<tr>";
-                $retval .= "<td class='account' data-label='Conta'><a title=\"Editar esta conta\" href=\"accounts.php?conta_id={$object->id}\">{$object->name}</a></td>";
-                $retval .= "<td class='deposits' data-label='Depositos'>" . normalize_number($balance['income']) . "</td>";
-                $retval .= "<td class='withdrawls' data-label='Levantam.'>" . normalize_number($balance['expense']) . "</td>";
-                $retval .= "<td class='balance' data-label='Saldo'>" . normalize_number($balance['balance']) . "</td>";
-                $retval .= "<td class='percent' data-label='Percentagem'>" . normalize_number($totals['balance'] <> 0 ? round($balance['balance'] / $totals['balance'] * 100, 2) : 0) . "</td>";
-                $retval .= "<td class='entries-list' data-label='Movimentos'><a title=\"Movimentos desta conta\" href=\"ledger_entries.php?filter_account_id={$object->id}\">Lista</a></td>";
+                $retval .= "<td class='account' data-label='" . l10n::l('account') . "'>"
+                    . "<a title='" . l10n::l('edit_account') . "' href='accounts.php?conta_id={$object->id}'>"
+                    . "{$object->name}</a></td>";
+                $retval .= "<td class='deposits' data-label='" . l10n::l('deposits') . "'>"
+                    . normalize_number($balance['income']) . "</td>";
+                $retval .= "<td class='withdrawls' data-label='" . l10n::l('withdrawals') . "'>"
+                    . normalize_number($balance['expense']) . "</td>";
+                $retval .= "<td class='balance' data-label='" . l10n::l('balance') . "'>"
+                    . normalize_number($balance['balance']) . "</td>";
+                $retval .= "<td class='percent' data-label='" . l10n::l('percent') . "'>"
+                    . normalize_number($totals['balance'] <> 0 ? round($balance['balance'] / $totals['balance'] * 100, 2) : 0)
+                    . "</td>";
+                $retval .= "<td class='entries-list' data-label='" . l10n::l('entries') . "'>"
+                    . "<a title='" . l10n::l('account_entries') . "' href='ledger_entries.php?filter_account_id={$object->id}'>"
+                    . l10n::l('list') . "</a></td>";
                 $retval .= "</tr>\r\n";
             }
         }
+
+        // Networth row
         $retval .= "<tr>";
-        $retval .= "<td class='account' data-label='Conta'>Networth</td>";
-        $retval .= "<td class='deposits' data-label='Depositos'>" . normalize_number($totals['income']) . "</td>";
-        $retval .= "<td class='withdrawls' data-label='Levantam.'>" . normalize_number($totals['expense']) . "</td>";
-        $retval .= "<td class='balance' data-label='Saldo'>" . normalize_number($totals['balance']) . "</td>";
-        $retval .= "<td class='percent' data-label='Percentagem'>" . normalize_number(100) . "</td>";
-        $retval .= "<td class='entries-list' data-label='Movimentos'></td>";
+        $retval .= "<td class='account' data-label='" . l10n::l('account') . "'>" . l10n::l('networth') . "</td>";
+        $retval .= "<td class='deposits' data-label='" . l10n::l('deposits') . "'>" . normalize_number($totals['income']) . "</td>";
+        $retval .= "<td class='withdrawls' data-label='" . l10n::l('withdrawals') . "'>" . normalize_number($totals['expense']) . "</td>";
+        $retval .= "<td class='balance' data-label='" . l10n::l('balance') . "'>" . normalize_number($totals['balance']) . "</td>";
+        $retval .= "<td class='percent' data-label='" . l10n::l('percent') . "'>" . normalize_number(100) . "</td>";
+        $retval .= "<td class='entries-list' data-label='" . l10n::l('entries') . "'></td>";
         $retval .= "</tr>\r\n";
-        $retval .= "</tbody>\r\n";
-        $retval .= "</table>\r\n";
+
+        $retval .= "</tbody>\r\n</table>\r\n";
         return $retval;
     }
 }
