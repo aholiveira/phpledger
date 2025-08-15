@@ -17,6 +17,7 @@ class defaults extends mysql_object implements iobject
     public string $currency_id;
     public string $entry_date;
     public int $direction;
+    public ?string $language;
     public ?string $username;
     protected static string $tableName = "defaults";
 
@@ -29,6 +30,7 @@ class defaults extends mysql_object implements iobject
         $this->currency_id = $data["currency_id"] ?? "EUR";
         $this->entry_date = $data["entry_date"] ?? date("Y-m-d");
         $this->direction = $data["direction"] ?? 1;
+        $this->language = $data["language"] ?? 'pt-PT';
         $this->username = $data["username"] ?? config::get("admin_username");
     }
     public static function getList(array $field_filter =[]): array
@@ -41,6 +43,7 @@ class defaults extends mysql_object implements iobject
             moeda_mov as `currency_id`,
             `data` as `entry_date`,
             deb_cred as direction,
+            `language`,
             username
         FROM " . defaults::$tableName . "
         {$where}
@@ -72,6 +75,7 @@ class defaults extends mysql_object implements iobject
             moeda_mov as `currency_id`,
             `data` as `entry_date`,
             deb_cred as direction,
+            `language`,
             username
             FROM " . defaults::$tableName . "
             WHERE id=?";
@@ -101,6 +105,7 @@ class defaults extends mysql_object implements iobject
             moeda_mov as `currency_id`,
             `data` as `entry_date`,
             deb_cred as direction,
+            `language`,
             username
             FROM " . defaults::$tableName . "
             WHERE trim(lower(username))=trim(lower(?))";
@@ -150,21 +155,23 @@ class defaults extends mysql_object implements iobject
                     moeda_mov=?,
                     `data`=?,
                     deb_cred=?,
+                    `language`=?,
                     username=?
                     WHERE id=?"
                 :
-                $sql = "INSERT INTO {$this->tableName()} (tipo_mov, conta_id, moeda_mov, `data`, deb_cred, username, id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                $sql = "INSERT INTO {$this->tableName()} (tipo_mov, conta_id, moeda_mov, `data`, deb_cred, `language`, username, id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
             if (!$stmt)
                 throw new \mysqli_sql_exception(static::$_dblink->error);
             $stmt->bind_param(
-                "ssssssi",
+                "sssssssi",
                 $this->category_id,
                 $this->account_id,
                 $this->currency_id,
                 $this->entry_date,
                 $this->direction,
+                $this->language,
                 $this->username,
                 $this->id
             );

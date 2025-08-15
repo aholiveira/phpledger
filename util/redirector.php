@@ -9,6 +9,7 @@ class Redirector
         'entry_type.php',
         'report_month.php',
         'report_year.php',
+        'update.php'
     ];
     public static function to($url, $delay = 0): never
     {

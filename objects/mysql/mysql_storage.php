@@ -778,6 +778,7 @@ class mysql_storage implements idata_storage
             "moeda_mov" => "char(3) DEFAULT NULL",
             "data" => "date DEFAULT NULL",
             "deb_cred" => "enum('1','-1') DEFAULT NULL",
+            "language" => "char(10) DEFAULT NULL",
             "username" => "char(100) DEFAULT NULL",
             "show_report_graph" => "int(1) NOT NULL DEFAULT 0",
         ];

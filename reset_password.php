@@ -15,7 +15,7 @@ $pagetitle = "Redefini&ccedil;o de palavra-passe";
 
 ?>
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="<?= l10n::html() ?>">
 
 <head>
     <?php include "header.php"; ?>

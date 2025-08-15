@@ -22,7 +22,7 @@ $report->year = $year;
 $report->getReport(["year" => $year]);
 ?>
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="<?= l10n::html() ?>">
 
 <head>
     <?php include "header.php"; ?>

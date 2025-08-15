@@ -11,7 +11,7 @@ include __DIR__ . "/contas_config.php";
 $pagetitle = "Tipo de movimentos";
 ?>
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="<?= l10n::html() ?>">
 
 <head>
     <?php include "header.php"; ?>

@@ -28,7 +28,7 @@ $reportHtml = $view_factory->report_year_view($report);
 $report->getReport(["first_year" => $first_year, "last_year" => $last_year]);
 ?>
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="<?= l10n::html() ?>">
 
 <head>
     <?php include "header.php"; ?>

@@ -12,7 +12,7 @@ $pagetitle = "Contas";
 
 ?>
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="<?= l10n::html() ?>">
 
 <head>
     <?php include "header.php"; ?>
@@ -63,7 +63,7 @@ $pagetitle = "Contas";
             }
             $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, true);
         }
-        if (is_array($filtered_input) && strcasecmp($filtered_input["update"], "gravar") == 0) {
+        if (($filtered_input["update"] ?? null) === "gravar") {
             if (empty($filtered_input["conta_nome"])) {
                 Html::myalert("Nome de conta invalido!");
                 $retval = false;
@@ -100,7 +100,7 @@ $pagetitle = "Contas";
                 $retval = $object->update();
             }
         }
-        if (is_array($filtered_input) && strcasecmp($filtered_input["update"], "apagar") == 0) {
+        if (($filtered_input["update"] ?? null) === "apagar") {
             $object->id = $filtered_input["conta_id"];
             $retval = $object->delete();
         }

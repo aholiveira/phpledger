@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 $object_factory = new object_factory();
 $data_storage = $object_factory::data_storage();
 if ($data_storage->check() === false) {
-    Redirector::to('update.php', 1);
+    Redirector::to("update.php?lang=" . l10n::$lang, 1);
 }
 if (!empty($post_user)) {
     $userauth = authentication::authenticate($post_user, $post_pass);
@@ -47,27 +47,30 @@ if (!empty($post_user)) {
         $_SESSION['expires'] = time() + SESSION_TIMEOUT;
         $defaults = $object_factory->defaults()->getById(1);
         $defaults->entry_date = date("Y-m-d");
+        $defaults->language = l10n::$lang;
         $defaults->update();
-        $target = "ledger_entries.php?filter_sdate=" . date('Y-m-01');
+        $target = sprintf("ledger_entries.php?lang=%s&filter_sdate=%s", l10n::$lang, date('Y-m-01'));
+        /*
         if (isset($_COOKIE['current_url'])) {
             $url = rawurldecode($_COOKIE['current_url']);
             if (!empty($url)) {
                 $target = $url;
             }
-        }
+        }*/
         $logger->info("User [$post_user] logged in");
         Redirector::to($target);
     }
 }
 ?>
 <!DOCTYPE html>
-<html lang="<?= l10n::$lang === 'en-us' ? 'en-US' : 'pt-PT' ?>">
+<html lang="<?= l10n::html() ?>">
 
 <head>
     <?php include "header.php"; ?>
 </head>
 
 <body onload="document.getElementById('username').focus();">
+
     <div id="login">
         <h1><?= htmlspecialchars(config::get("title")) ?></h1>
         <form method="POST" action="?lang=<?= l10n::$lang ?>" name="login" autocomplete="off">
@@ -93,7 +96,12 @@ if (!empty($post_user)) {
                 </tr>
                 <tr>
                     <td class="version-tag">
-                        <a href="https://github.com/aholiveira/phpledger"><?= l10n::l('version') ?> <?= VERSION ?></a>
+                        <a href="https://github.com/aholiveira/phpledger"><?= l10n::l('version', VERSION) ?></a>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="version-tag">
+                        <?php include ROOT_DIR . "/lang_selector.php"; ?>
                     </td>
                 </tr>
             </table>
