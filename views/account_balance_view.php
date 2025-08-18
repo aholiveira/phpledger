@@ -15,10 +15,12 @@ class account_balance_view extends object_viewer
         if (!isset($this->_object->id)) {
             return "";
         }
-
+        /**
+         * @var account
+         */
         $_object = $this->_object;
         return "<td><a href=\"account_types.php?tipo_id={$_object->id}\">{$_object->id}</a></td>"
-            . "<td>{$_object->description}</td>";
+            . "<td>{$_object->name}</td>";
     }
 
     public function printObjectList(array $object_list): string

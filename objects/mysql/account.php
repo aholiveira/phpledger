@@ -135,11 +135,11 @@ class account extends mysql_object implements iobject
      * representing the corresponding amounts (euro-based) for that account and
      * on or before the reference date
      */
-    public function getBalanceOnDate(\DateTime $date): array
+    public function getBalanceOnDate(\DateTimeInterface $date): array
     {
         return $this->getBalance(null, $date);
     }
-    public function getBalance(?\DateTime $startDate = null, ?\DateTime $endDate = null): array
+    public function getBalance(?\DateTimeInterface $startDate = null, ?\DateTimeInterface $endDate = null): array
     {
         $where = "account_id=? ";
         $retval = ['income' => 0, 'expense' => 0, 'balance' => 0];
