@@ -45,8 +45,7 @@ class ledgerentry extends mysql_object implements iobject
                 $field_name = null === $table_name ? "`{$field}`" : "`{$table_name}`.`{$field}`";
                 if (strtolower($filter['operator']) === "in") {
                     $where .= "{$field_name} {$filter['operator']} {$filter['value']}";
-                }
-                else {
+                } else {
                     $where .= "{$field_name} {$filter['operator']} '{$filter['value']}'";
                 }
             }
@@ -54,6 +53,42 @@ class ledgerentry extends mysql_object implements iobject
         if (strlen($where) > 0)
             $where = "WHERE {$where}";
         return $where;
+    }
+    public static function getDefinition(): array
+    {
+        $retval = [];
+        $retval['new'] = [
+            'mov_id' => 'id',
+            'tipo_mov' => 'category_id',
+            'data_mov' => 'entry_date',
+            'conta_id' => 'account_id',
+            'deb_cred' => 'direction',
+            'moeda_mov' => 'currency_id',
+            'valor_mov' => 'currency_amount',
+            'valor_euro' => 'euro_amount',
+            'cambio' => 'exchange_rate',
+            'obs' => 'remarks',
+            'last_modified' => 'updated_at'
+        ];
+        $retval['columns'] = [
+            "id" => "int(4) NOT NULL AUTO_INCREMENT",
+            "entry_date" => "date DEFAULT NULL",
+            "category_id" => "int(3) DEFAULT NULL",
+            "account_id" => "int(3) DEFAULT NULL",
+            "currency_id" => "char(3) NOT NULL DEFAULT 'EUR'",
+            "direction" => "tinyint(1) NOT NULL DEFAULT 1",
+            "currency_amount" => "float(10,2) DEFAULT NULL",
+            "euro_amount" => "float(10,2) DEFAULT NULL",
+            "exchange_rate" => "float(9,4) NOT NULL DEFAULT 1.0000",
+            "a_pagar" => "tinyint(1) NOT NULL DEFAULT 0",
+            "com_talao" => "tinyint(1) NOT NULL DEFAULT 0",
+            "remarks" => "char(255) DEFAULT NULL",
+            "username" => "char(255) DEFAULT ''",
+            "created_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()",
+            "updated_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()"
+        ];
+        $retval['primary_key'] = "id";
+        return $retval;
     }
     public static function getList(array $field_filter = []): array
     {
@@ -180,41 +215,29 @@ class ledgerentry extends mysql_object implements iobject
     public function update(): bool
     {
         $retval = false;
-        $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
+        if (!$this->validate())
+            return $retval;
         try {
-            static::$_dblink->begin_transaction();
-            if (empty($this->id)) {
-                $this->id = $this->getNextId();
-            }
-            $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                return $retval;
-            $stmt->bind_param("s", $this->id);
-            $stmt->execute();
-            $stmt->bind_result($return_id);
-            $sql = (null !== $stmt->fetch() && $return_id == $this->id) ?
-                "UPDATE {$this->tableName()} SET
-                    entry_date =?,
-                    category_id =?,
-                    account_id =?,
-                    currency_id =?,
-                    direction =?,
-                    currency_amount =?,
-                    euro_amount =?,
-                    remarks =?,
-                    username=?,
-                    updated_at=NULL
-                    WHERE id =?"
-                :
-                "INSERT INTO {$this->tableName()}
-                        (entry_date, category_id, account_id, currency_id, direction, currency_amount, euro_amount, remarks, username, id, created_at, updated_at)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL)";
-            $stmt->close();
+            $sql = "INSERT INTO {$this->tableName()}
+            (id, entry_date, category_id, account_id, currency_id, direction, currency_amount, euro_amount, remarks, username, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL)
+            ON DUPLICATE KEY UPDATE
+                entry_date=VALUES(entry_date),
+                category_id=VALUES(category_id),
+                account_id=VALUES(account_id),
+                currency_id=VALUES(currency_id),
+                direction=VALUES(direction),
+                currency_amount=VALUES(currency_amount),
+                euro_amount=VALUES(euro_amount),
+                remarks=VALUES(remarks),
+                username=VALUES(username),
+                updated_at=NULL";
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false)
+            if ($stmt === false)
                 throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param(
-                "ssssssssss",
+                "isiisiddss",
+                $this->id,
                 $this->entry_date,
                 $this->category_id,
                 $this->account_id,
@@ -223,12 +246,10 @@ class ledgerentry extends mysql_object implements iobject
                 $this->currency_amount,
                 $this->euro_amount,
                 $this->remarks,
-                $this->username,
-                $this->id
+                $this->username
             );
             $retval = $stmt->execute();
             $stmt->close();
-            static::$_dblink->commit();
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }

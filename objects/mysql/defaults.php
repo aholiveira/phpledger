@@ -19,6 +19,7 @@ class defaults extends mysql_object implements iobject
     public int $direction;
     public ?string $language;
     public ?string $username;
+    public ?string $last_visited;
     protected static string $tableName = "defaults";
 
     public function __construct(mysqli $dblink, $data = null)
@@ -31,9 +32,29 @@ class defaults extends mysql_object implements iobject
         $this->entry_date = $data["entry_date"] ?? date("Y-m-d");
         $this->direction = $data["direction"] ?? 1;
         $this->language = $data["language"] ?? 'pt-PT';
+        $this->last_visited = $data["last_visited"] ?? "";
         $this->username = $data["username"] ?? config::get("admin_username");
     }
-    public static function getList(array $field_filter =[]): array
+    public static function getDefinition(): array
+    {
+        $retval = [];
+        $retval['new'] = [];
+        $retval['columns'] = [
+            "id" => "int(1) NOT NULL DEFAULT 0",
+            "tipo_mov" => "int(3) DEFAULT NULL",
+            "conta_id" => "int(3) DEFAULT NULL",
+            "moeda_mov" => "char(3) DEFAULT NULL",
+            "data" => "date DEFAULT NULL",
+            "deb_cred" => "enum('1','-1') DEFAULT NULL",
+            "language" => "char(10) DEFAULT NULL",
+            "last_visited" => "char(255) DEFAULT NULL",
+            "username" => "char(100) DEFAULT NULL",
+            "show_report_graph" => "int(1) NOT NULL DEFAULT 0",
+        ];
+        $retval['primary_key'] = "id";
+        return $retval;
+    }
+    public static function getList(array $field_filter = []): array
     {
         $where = parent::getWhereFromArray($field_filter);
         $sql = "SELECT
@@ -44,6 +65,7 @@ class defaults extends mysql_object implements iobject
             `data` as `entry_date`,
             deb_cred as direction,
             `language`,
+            last_visited,
             username
         FROM " . defaults::$tableName . "
         {$where}
@@ -76,6 +98,7 @@ class defaults extends mysql_object implements iobject
             `data` as `entry_date`,
             deb_cred as direction,
             `language`,
+            last_visited,
             username
             FROM " . defaults::$tableName . "
             WHERE id=?";
@@ -106,6 +129,7 @@ class defaults extends mysql_object implements iobject
             `data` as `entry_date`,
             deb_cred as direction,
             `language`,
+            last_visited,
             username
             FROM " . defaults::$tableName . "
             WHERE trim(lower(username))=trim(lower(?))";
@@ -138,52 +162,40 @@ class defaults extends mysql_object implements iobject
     }
     public function update(): bool
     {
-        $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
         $retval = false;
         try {
-            static::$_dblink->begin_transaction();
-            $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                return $retval;
-            $stmt->bind_param("i", $this->id);
-            $stmt->execute();
-            $stmt->bind_result($return_id);
-            null !== $stmt->fetch() && $return_id == $this->id ?
-                $sql = "UPDATE {$this->tableName()} SET
-                    tipo_mov=?,
-                    conta_id=?,
-                    moeda_mov=?,
-                    `data`=?,
-                    deb_cred=?,
-                    `language`=?,
-                    username=?
-                    WHERE id=?"
-                :
-                $sql = "INSERT INTO {$this->tableName()} (tipo_mov, conta_id, moeda_mov, `data`, deb_cred, `language`, username, id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmt->close();
+            $sql = "INSERT INTO {$this->tableName()} 
+                    (tipo_mov, conta_id, moeda_mov, `data`, deb_cred, `language`, last_visited, username, id) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                ON DUPLICATE KEY UPDATE
+                    tipo_mov=VALUES(tipo_mov),
+                    conta_id=VALUES(conta_id),
+                    moeda_mov=VALUES(moeda_mov),
+                    `data`=VALUES(`data`),
+                    deb_cred=VALUES(deb_cred),
+                    `language`=VALUES(`language`),
+                    last_visited=VALUES(last_visited),
+                    username=VALUES(username)";
             $stmt = static::$_dblink->prepare($sql);
-            if (!$stmt)
+            if ($stmt === false)
                 throw new \mysqli_sql_exception(static::$_dblink->error);
             $stmt->bind_param(
-                "sssssssi",
+                "ssssssssi",
                 $this->category_id,
                 $this->account_id,
                 $this->currency_id,
                 $this->entry_date,
                 $this->direction,
                 $this->language,
+                $this->last_visited,
                 $this->username,
                 $this->id
             );
-            if (!$stmt)
-                throw new \mysqli_sql_exception(static::$_dblink->error);
             $retval = $stmt->execute();
             $stmt->close();
             if (!$retval)
                 throw new \mysqli_sql_exception(static::$_dblink->error);
-            static::$_dblink->commit();
         } catch (\Exception $ex) {
-            static::$_dblink->rollback();
             $this->handleException($ex, $sql);
         }
         return $retval;

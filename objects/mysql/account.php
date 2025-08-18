@@ -2,15 +2,15 @@
 
 /**
  * Holds a mysql-backed `account` object
- * @property string name The name of the account
- * @property string number The account's number
- * @property string iban International Bank Account Number
- * @property string swift The account's switft identifier
- * @property int group Links the account to the group table. Used to group different accounts under
- * @property int type_id Account type - linked to the account_type table
- * @property string open_date The date the account was open in Y-m-d format
- * @property string close_date The date the account was closed in Y-m-d format
- * @property int active Flag to indicate if the account is still active or not
+ * @property string $name The name of the account
+ * @property string $number The account's number
+ * @property string $iban International Bank Account Number
+ * @property string $swift The account's switft identifier
+ * @property int $group Links the account to the group table. Used to group different accounts under
+ * @property int $type_id Account type - linked to the account_type table
+ * @property string $open_date The date the account was open in Y-m-d format
+ * @property string $close_date The date the account was closed in Y-m-d format
+ * @property int $active Flag to indicate if the account is still active or not
  *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
@@ -34,6 +34,35 @@ class account extends mysql_object implements iobject
     public function __construct(\mysqli $dblink)
     {
         parent::__construct($dblink);
+    }
+    public static function getDefinition(): array
+    {
+        $retval = [];
+        $retval['columns'] = [
+            "conta_id" => "int(3) NOT NULL DEFAULT 0",
+            "conta_num" => "char(30) NOT NULL DEFAULT ''",
+            "conta_nome" => "char(30) NOT NULL DEFAULT ''",
+            "grupo" => "int(3) NOT NULL DEFAULT 0",
+            "tipo_id" => "int(2) DEFAULT NULL",
+            "conta_nib" => "char(24) DEFAULT NULL",
+            "swift" => "char(24) NOT NULL DEFAULT ''",
+            "conta_abertura" => "date DEFAULT NULL",
+            "conta_fecho" => "date DEFAULT NULL",
+            "activa" => "int(1) NOT NULL DEFAULT 0"
+        ];
+        $retval['primary_key'] = "conta_id";
+        $retval['new'] = [
+            'id' => 'conta_id',
+            'number' => 'conta_num',
+            'name' => 'conta_nome',
+            'group' => 'grupo',
+            'type_id' => 'tipo_id',
+            'iban' => 'conta_nib',
+            'open_date' => 'conta_abertura',
+            'close_date' => 'conta_fecho',
+            'active' => 'activa'
+        ];
+        return $retval;
     }
     public static function getList(array $field_filter = []): array
     {
@@ -153,36 +182,24 @@ class account extends mysql_object implements iobject
     public function update(): bool
     {
         $retval = false;
-
-        $sql = "SELECT conta_id FROM {$this->tableName()} WHERE conta_id=?";
         try {
-            static::$_dblink->begin_transaction();
-            $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                return $retval;
-            $stmt->bind_param("i", $this->id);
-            $stmt->execute();
-            $stmt->bind_result($return_id);
-            if (null !== $stmt->fetch() && $return_id == $this->id) {
-                $sql = "UPDATE {$this->tableName()} SET
-                        `conta_num`=?,
-                        `conta_nome`=?,
-                        `tipo_id`=?,
-                        `conta_nib`=?,
-                        `swift`=?,
-                        `conta_abertura`=?,
-                        `conta_fecho`=?,
-                        `activa`=?
-                        WHERE `conta_id`=?";
-            } else {
-                $sql = "INSERT INTO {$this->tableName()}
+            $sql = "INSERT INTO {$this->tableName()}
                         (`conta_num`, `conta_nome`, `tipo_id`, `conta_nib`, `swift`, `conta_abertura`, `conta_fecho`, `activa`, `conta_id`)
-                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            }
-            $stmt->close();
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        ON DUPLICATE KEY UPDATE
+                            `conta_num`=VALUES(`conta_num`),
+                            `conta_nome`=VALUES(`conta_nome`),
+                            `tipo_id`=VALUES(`tipo_id`),
+                            `conta_nib`=VALUES(`conta_nib`),
+                            `swift`=VALUES(`swift`),
+                            `conta_abertura`=VALUES(`conta_abertura`),
+                            `conta_fecho`=VALUES(`conta_fecho`),
+                            `activa`=VALUES(`activa`)";
             $stmt = static::$_dblink->prepare($sql);
+            if ($stmt === false)
+                throw new \mysqli_sql_exception("Prepare failed");
             $stmt->bind_param(
-                "sssssssss",
+                "ssissssii",
                 $this->number,
                 $this->name,
                 $this->type_id,
@@ -197,9 +214,7 @@ class account extends mysql_object implements iobject
             $stmt->close();
             if (!$retval)
                 throw new \mysqli_sql_exception(static::$_dblink->error);
-            static::$_dblink->commit();
         } catch (\Exception $ex) {
-            static::$_dblink->rollback();
             $this->handleException($ex, $sql);
         }
         return $retval;
@@ -207,28 +222,13 @@ class account extends mysql_object implements iobject
     public function delete(): bool
     {
         $retval = false;
-        $sql = "SELECT conta_id FROM {$this->tableName()} WHERE conta_id=?";
         try {
-            static::$_dblink->begin_transaction();
-            $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                return $retval;
-            $stmt->bind_param("i", $this->id);
-            $stmt->execute();
-            $stmt->bind_result($return_id);
-            if (null === $stmt->fetch()) {
-                return $retval;
-            }
-            $stmt->close();
             $sql = "DELETE FROM {$this->tableName()} WHERE conta_id=?";
             $stmt = static::$_dblink->prepare($sql);
             $stmt->bind_param("s", $this->id);
             $retval = $stmt->execute();
             $stmt->close();
-            static::$_dblink->commit();
-            $this->clear();
         } catch (\Exception $ex) {
-            static::$_dblink->rollback();
             $this->handleException($ex, $sql);
         }
         return $retval;

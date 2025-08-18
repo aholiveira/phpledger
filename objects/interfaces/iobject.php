@@ -11,6 +11,9 @@
 interface iobject
 {
     /**
+     * @property int id
+     */
+    /**
      * Validates if object contains valid data
      * @return bool TRUE if object is valid, FALSE otherwise
      */

@@ -30,6 +30,23 @@ class user extends mysql_object implements iobject
         parent::__construct($dblink);
         $this->_token_expiry = null;
     }
+    public static function getDefinition(): array
+    {
+        $retval = [];
+        $retval['columns'] = [
+            "id" => "int(3) NOT NULL DEFAULT 0",
+            "username" => "char(100) NOT NULL",
+            "password" => "char(255) NOT NULL",
+            "fullname" => "char(255) NOT NULL DEFAULT ''",
+            "email" => "char(255) NOT NULL DEFAULT ''",
+            "role" => "int(3) NOT NULL DEFAULT 0",
+            "token" => "char(255) NOT NULL DEFAULT ''",
+            "token_expiry" => "datetime",
+            "active" => "int(1) NOT NULL DEFAULT 0"
+        ];
+        $retval['primary_key'] = "id";
+        return $retval;
+    }
     public function setUsername(string $value)
     {
         $this->_username = $value;
@@ -325,38 +342,16 @@ class user extends mysql_object implements iobject
     public function delete(): bool
     {
         $retval = false;
-        $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
         try {
-            static::$_dblink->begin_transaction();
-            $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                return $retval;
-            if (!isset($this->id))
-                return $retval;
-            $stmt->bind_param("i", $this->id);
-            $stmt->execute();
-            $stmt->bind_result($return_id);
-            if (null !== $stmt->fetch() && $return_id == $this->id) {
-                $sql = "DELETE FROM {$this->tableName()} WHERE `id`=?";
-            }
-            $stmt->close();
-            if (empty($return_id)) {
-                return true;
-            }
+            $sql = "DELETE FROM {$this->tableName()} WHERE `id`=?";
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
             $stmt->bind_param("i", $this->id);
             $retval = $stmt->execute();
-            if ($retval == false) {
-                throw new mysqli_sql_exception(static::$_dblink->error);
-            }
-            static::$_dblink->commit();
+            $stmt->close();
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
             if (isset($stmt))
                 $stmt->close();
-            static::$_dblink->rollback();
         }
         return $retval;
     }

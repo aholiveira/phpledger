@@ -24,12 +24,15 @@ include __DIR__ . "/user.php";
 class object_factory implements iobject_factory
 {
     private static ?\mysqli $_dblink = null;
-    public function __construct()
+    private Logger $logger;
+
+    public function __construct(?Logger $logger = null)
     {
+        $this->logger = $logger ?? new Logger("ledger.log");
     }
-    private static function connect(): mysqli
+    private static function connect(): \mysqli
     {
-        if (static::$_dblink instanceof mysqli) {
+        if (static::$_dblink instanceof \mysqli) {
             return static::$_dblink;
         }
         $host = config::get("host");
@@ -38,7 +41,7 @@ class object_factory implements iobject_factory
         $pass = config::get("password");
         try {
             mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
-            static::$_dblink = @new \mysqli($host, $user, $pass, $dbase);
+            static::$_dblink = new \mysqli($host, $user, $pass, $dbase);
             static::$_dblink->set_charset('utf8mb4');
         } catch (\Exception $ex) {
             static::handle_error($ex);
@@ -62,6 +65,7 @@ class object_factory implements iobject_factory
     }
     public static function accounttype(): accounttype
     {
+        account::class;
         return new accounttype(object_factory::connect());
     }
     public static function currency(): currency

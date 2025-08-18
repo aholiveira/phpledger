@@ -10,6 +10,8 @@
  */
 class ledger_entry_view extends object_viewer
 {
+    /** @var ledgerentry $_object */
+    protected iobject $_object;
     public function printObject(): string
     {
         $retval = "";

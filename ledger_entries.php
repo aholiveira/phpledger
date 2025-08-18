@@ -58,8 +58,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, TRUE);
     try {
         $saved_id = (new LedgerEntryController($object_factory))->handleSave($filtered_input);
+        $success = true;
     } catch (\Exception $e) {
-        Html::myalert($e->getMessage());
+        $error_essage = $e->getMessage();
+        $success = false;
     }
 }
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
@@ -77,9 +79,11 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
 <body>
     <?php if (!empty($saved_id)): ?>
-        <div id="flashmessage"><?= l10n::l("save_success", $saved_id) ?></div>
+        <div id="notification" class="notification <?= $success ? "success" : "fail" ?>">
+            <?= $success ? l10n::l("save_success", $saved_id) : $error_essage ?>
+        </div>
         <script>
-            const el = document.getElementById('flashmessage');
+            const el = document.getElementById('notification');
             setTimeout(() => {
                 el.classList.add('hide');
                 el.addEventListener('transitionend', () => el.remove(), { once: true });

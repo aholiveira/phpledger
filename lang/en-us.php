@@ -18,7 +18,7 @@ return
         'invalid_credentials' => "Invalid credentials",
         'login_screen' => "login screen",
         'version' => "Version %s",
-        'save_success' => "Entry saved [ID: %s]",
+        'save_success' => "Saved successfully – ID: %s",
         'ledger_entries' => "Ledger entries",
         'balances' => "Balances",
         'accounts' => "Accounts",

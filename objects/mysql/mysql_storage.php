@@ -10,10 +10,9 @@
 
 class mysql_storage implements idata_storage
 {
-    private \mysqli $_dblink;
+    private ?\mysqli $_dblink = null;
     private string $_message = "";
     private $_tableCreateSQL;
-    private $_tableNewColumnNames;
     private $_collation = "utf8mb4_general_ci";
     private $_engine = "InnoDB";
     private $_default_admin_username;
@@ -37,6 +36,18 @@ class mysql_storage implements idata_storage
         $dbase = config::get("database");
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
         try {
+            if ($this->_dblink instanceof \mysqli) {
+                if ($this->_dblink->connect_errno) {
+                    try {
+                        $this->_dblink->close();
+                    } catch (\Exception $e) {
+                        // Ignore errors on closing a broken connection
+                    }
+                    $this->_dblink = null;
+                } else {
+                    return;
+                }
+            }
             $this->_dblink = new \mysqli($host, $user, $pass, $dbase);
             $this->_dblink->set_charset('utf8mb4');
         } catch (\mysqli_sql_exception $e) {
@@ -45,12 +56,13 @@ class mysql_storage implements idata_storage
     }
     public function addMessage(string $message): string
     {
-        $this->_message .= "{$message}\r\n";
+        $this->_message = ($this->_message ?? "") . "{$message}\r\n";
         return $this->message();
     }
+
     public function message(): string
     {
-        return null !== $this->_message ? $this->_message : "";
+        return $this->_message ?? "";
     }
     public function check(): bool
     {
@@ -63,7 +75,7 @@ class mysql_storage implements idata_storage
             $retval = false;
         }
         foreach ($tables as $table_name) {
-            $retval = ($retval && $this->check_table($table_name));
+            $retval = $retval && $this->check_table($table_name);
         }
         if ($this->tableExists("tipo_mov")) {
             if (!$this->tableHasForeignKey("tipo_mov", "parent_id")) {
@@ -98,12 +110,6 @@ class mysql_storage implements idata_storage
             $ledger = new ledger($this->_dblink);
             if (sizeof($ledger->getList()) == 0) {
                 $this->addMessage("Table [ledgers] is empty");
-                $retval = false;
-            }
-        }
-        if ($this->tableExists("defaults")) {
-            if (sizeof(defaults::getList()) == 0) {
-                $this->addMessage("Table [defaults] is empty");
                 $retval = false;
             }
         }
@@ -300,64 +306,63 @@ class mysql_storage implements idata_storage
     }
     private function check_table($table_name): bool
     {
-        $retval = true;
         $table_exists = $this->tableExists($table_name);
         if (!$table_exists) {
             $this->addMessage("Table [{$table_name}] does not exist");
-            $retval = false;
+            return false;
         }
-        if ($table_exists && $this->getTableEngine($table_name) != $this->_engine) {
+        $retval = true;
+        if ($this->getTableEngine($table_name) !== $this->_engine) {
             $this->addMessage("Table [{$table_name}] engine not [{$this->_engine}]");
             $retval = false;
         }
-        if ($table_exists && $this->getTableCollation($table_name) != $this->_collation) {
+        if ($this->getTableCollation($table_name) !== $this->_collation) {
             $this->addMessage("Table [{$table_name}] collation not [{$this->_collation}]");
             $retval = false;
         }
-        if ($table_exists && array_key_exists($table_name, $this->_tableNewColumnNames)) {
-            foreach ($this->_tableNewColumnNames[$table_name] as $old_column_name => $new_column_name) {
+        if (!empty($this->_tableCreateSQL[$table_name]['new'] ?? [])) {
+            foreach ($this->_tableCreateSQL[$table_name]['new'] as $old_column_name => $new_column_name) {
                 if ($this->tableHasColumn($table_name, $old_column_name) && !$this->tableHasColumn($table_name, $new_column_name)) {
                     $this->addMessage("Table [{$table_name}] column [{$old_column_name}] needs renaming to [{$new_column_name}]");
                     $retval = false;
                 }
             }
         }
-        if ($table_exists) {
-            $result = $this->getSQLTableCreate($table_name);
-            foreach (array_keys($this->_tableCreateSQL[$table_name]['columns']) as $column) {
-                if (!$this->tableHasColumn($table_name, $column)) {
-                    $this->addMessage("Table [{$table_name}] missing column [{$column}]");
-                    $retval = false;
-                }
-                if (stripos($result, "`{$column}` {$this->_tableCreateSQL[$table_name]['columns'][$column]}") === false) {
-                    $this->addMessage("Table [{$table_name}] column definition [{$column}] is wrong");
-                    $retval = false;
-                }
+        $columns = $this->_tableCreateSQL[$table_name]['columns'];
+        $createSQL = $this->getSQLTableCreate($table_name);
+        foreach ($columns as $column => $definition) {
+            if (!$this->tableHasColumn($table_name, $column)) {
+                $this->addMessage("Table [{$table_name}] missing column [{$column}]");
+                $retval = false;
+            } elseif (stripos($createSQL, "`{$column}` {$definition}") === false) {
+                $this->addMessage("Table [{$table_name}] column definition [{$column}] is wrong");
+                $retval = false;
             }
         }
         return $retval;
     }
     private function update_table($table_name): bool
     {
-        $retval = true;
-        if (!($table_exists = $this->createTable($table_name))) {
+
+        if (!($this->createTable($table_name))) {
             $this->addMessage("Failed to create [{$table_name}]");
-            $retval = false;
+            return false;
         }
-        if ($table_exists && $this->getTableEngine($table_name) != "InnoDB") {
-            if (!$this->setTableEngine($table_name, "InnoDB")) {
+        $retval = true;
+        if ($this->getTableEngine($table_name) != $this->_engine) {
+            if (!$this->setTableEngine($table_name, $this->_engine)) {
                 $this->addMessage("Could not change engine on table [{$table_name}]");
                 $retval = false;
             }
         }
-        if ($table_exists && $this->getTableCollation($table_name) != "utf8mb4_general_ci") {
-            if (!$this->setTableCollation($table_name, "utf8mb4_general_ci")) {
+        if ($this->getTableCollation($table_name) !== $this->_collation) {
+            if (!$this->setTableCollation($table_name, $this->_collation)) {
                 $this->addMessage("Could not change engine on table [{$table_name}]");
                 $retval = false;
             }
         }
-        if ($table_exists && array_key_exists($table_name, $this->_tableNewColumnNames)) {
-            foreach ($this->_tableNewColumnNames[$table_name] as $old_column_name => $new_column_name) {
+        if (!empty($this->_tableCreateSQL[$table_name]['new'] ?? [])) {
+            foreach ($this->_tableCreateSQL[$table_name]['new'] as $old_column_name => $new_column_name) {
                 if ($this->tableHasColumn($table_name, $old_column_name)) {
                     if (!$this->renameColumnOnTable($old_column_name, $new_column_name, $table_name)) {
                         $this->addMessage("Could not rename column [{$old_column_name}] on table [{$table_name}]");
@@ -366,24 +371,23 @@ class mysql_storage implements idata_storage
                 }
             }
         }
-        if ($table_exists) {
-            foreach ($this->_tableCreateSQL[$table_name]['columns'] as $column_name => $column_definition) {
-                if (!$this->tableHasColumn($table_name, $column_name)) {
-                    $definition = $column_definition . (isset($last_column) ? " AFTER `{$last_column}`" : "");
-                    if (!$this->addColumnToTable($column_name, $table_name, $definition)) {
-                        $this->addMessage("Could not add column [{$column_name}] to table [{$table_name}]");
-                        $retval = false;
-                    }
+        $last_column = null;
+        foreach ($this->_tableCreateSQL[$table_name]['columns'] as $column_name => $column_definition) {
+            if (!$this->tableHasColumn($table_name, $column_name)) {
+                $definition = $column_definition . ($last_column ? " AFTER `{$last_column}`" : "");
+                if (!$this->addColumnToTable($column_name, $table_name, $definition)) {
+                    $this->addMessage("Could not add column [{$column_name}] to table [{$table_name}]");
+                    $retval = false;
                 }
-                $result = $this->getSQLTableCreate($table_name);
-                if (stripos($result, "`{$column_name}` {$column_definition}") === false) {
-                    if ($this->changeColumnOnTable($column_name, $table_name, $column_definition) === false) {
-                        $this->addMessage("Could not change table [{$table_name}] column [{$column_name}] definition");
-                        $retval = false;
-                    }
-                }
-                $last_column = $column_name;
             }
+            $result = $this->getSQLTableCreate($table_name);
+            if (stripos($result, "`{$column_name}` {$column_definition}") === false) {
+                if ($this->changeColumnOnTable($column_name, $table_name, $column_definition) === false) {
+                    $this->addMessage("Could not change table [{$table_name}] column [{$column_name}] definition");
+                    $retval = false;
+                }
+            }
+            $last_column = $column_name;
         }
         return $retval;
     }
@@ -494,7 +498,7 @@ class mysql_storage implements idata_storage
             $count = $this->do_query_get_result($sql);
             $retval = ($count == 1);
         } catch (\Exception $ex) {
-            $this->addMessage($ex);
+            $this->addMessage($ex->getMessage());
             $this->logger->dump($ex, "");
             $this->logger->dump($this->_dblink, "");
         }
@@ -502,27 +506,28 @@ class mysql_storage implements idata_storage
     }
     private function addColumnToTable(string $column_name, string $table_name, string $typedef): bool
     {
-        $retval = false;
+        if ($this->tableHasColumn($table_name, $column_name)) {
+            return true;
+        }
         $this->connect();
-        $sql = "SELECT count(*) as colCount FROM information_schema.columns WHERE table_name = '{$table_name}' AND column_name = '{$column_name}' and table_schema = DATABASE()";
         try {
-            if ($this->tableHasColumn($table_name, $column_name))
-                return true;
             $sql = "ALTER TABLE `{$table_name}` ADD COLUMN `{$column_name}` $typedef";
             $retval = $this->do_query($sql);
-            $this->addMessage("Column [{$column_name}] added to [{$table_name}]");
+            if ($retval) {
+                $this->addMessage("Column [{$column_name}] added to [{$table_name}]");
+            }
+            return (bool) $retval;
         } catch (\Exception $ex) {
-            $this->addMessage($ex);
+            $this->addMessage("Failed to add column [{$column_name}] to [{$table_name}]: " . $ex->getMessage());
+            $this->logger->dump($sql ?? '', "SQL failed");
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->_dblink, "");
+            return false;
         }
-        return $retval;
     }
     private function changeColumnOnTable(string $column_name, string $table_name, string $typedef): bool
     {
         $retval = false;
         $this->connect();
-        $sql = "SELECT count(*) as colCount FROM information_schema.columns WHERE table_name = '{$table_name}' AND column_name = '{$column_name}' and table_schema = DATABASE()";
         try {
             $sql = "ALTER TABLE `{$table_name}` CHANGE COLUMN `{$column_name}` `{$column_name}` $typedef";
             $retval = $this->do_query($sql);
@@ -538,7 +543,6 @@ class mysql_storage implements idata_storage
     {
         $retval = false;
         $this->connect();
-        $sql = "SELECT count(*) as colCount FROM information_schema.columns WHERE table_name = '{$table_name}' AND column_name = '{$new_column_name}' and table_schema = DATABASE()";
         try {
             if ($this->tableHasColumn($table_name, $new_column_name))
                 return false;
@@ -589,33 +593,33 @@ class mysql_storage implements idata_storage
     }
     private function tableHasColumn(string $table_name, string $column_name): bool
     {
-        $retval = false;
         $this->connect();
-        $sql = "SELECT count(*) as colCount FROM information_schema.columns WHERE table_name = '{$table_name}' AND column_name = '{$column_name}' and table_schema = DATABASE()";
+        $sql = "SELECT count(*) as colCount
+        FROM information_schema.columns
+        WHERE table_name = '{$table_name}' AND column_name = '{$column_name}' and table_schema = DATABASE()";
         try {
-            $count = $this->do_query_get_result($sql);
-            $retval = ($count == 1);
+            $count = (int) $this->do_query_get_result($sql);
+            return $count === 1;
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
             $this->logger->dump($this->_dblink, "");
+            return false;
         }
-        return $retval;
     }
     private function getDbCollation(string $db_name): ?string
     {
-        $retval = "";
         $this->connect();
         $sql = "SELECT DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME='{$db_name}'";
         try {
-            $retval = @$this->do_query_get_result($sql);
+            $retval = $this->do_query_get_result($sql);
+            return $retval ?: null;
         } catch (\Exception $ex) {
-            $this->addMessage($ex);
+            $this->addMessage("Failed to get collation for database [{$db_name}]: " . $ex->getMessage());
             $this->logger->dump($ex, "");
             $this->logger->dump($this->_dblink, "");
-            $retval = "";
+            return "";
         }
-        return $retval;
     }
     private function setDbCollation(string $db_name, string $collation): ?string
     {
@@ -623,15 +627,18 @@ class mysql_storage implements idata_storage
         $this->connect();
         $sql = "ALTER DATABASE `{$db_name}` COLLATE='{$collation}'";
         try {
-            $retval = @$this->do_query($sql);
-            $this->addMessage("Changed collation on database [{$db_name}]");
+            $retval = $this->do_query($sql);
+            if ($retval) {
+                $this->addMessage("Changed collation on database [{$db_name}] to [{$collation}]");
+            }
+            return (bool) $retval;
         } catch (\Exception $ex) {
+            $this->addMessage("Failed to change collation on database [{$db_name}]: " . $ex->getMessage());
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
             $this->logger->dump($this->_dblink, "");
-            $retval = "";
+            return "";
         }
-        return $retval;
     }
     private function getTableCollation(string $table_name): ?string
     {
@@ -696,158 +703,60 @@ class mysql_storage implements idata_storage
     }
     private function createTable(string $table_name)
     {
-        $retval = true;
-        if (!$this->tableExists($table_name)) {
-            if (array_key_exists($table_name, $this->_tableCreateSQL)) {
-                $sql = "CREATE TABLE `{$table_name}` (";
-                foreach ($this->_tableCreateSQL[$table_name]['columns'] as $column_name => $column_definition) {
-                    $sql .= "`{$column_name}` {$column_definition},";
-                }
-                $sql .= "PRIMARY KEY (`" . $this->_tableCreateSQL[$table_name]['primary_key'] . "`)";
-                if (array_key_exists('keys', $this->_tableCreateSQL[$table_name])) {
-                    $sql .= ",";
-                    foreach ($this->_tableCreateSQL[$table_name]['keys'] as $key_name => $key_def) {
-                        $sql .= "KEY `{$key_name}` ({$key_def}),";
-                    }
-                }
-                if (array_key_exists('constraints', $this->_tableCreateSQL[$table_name])) {
-                    foreach ($this->_tableCreateSQL[$table_name]['constraints'] as $key_name => $key_def) {
-                        $sql .= " CONSTRAINT `{$key_name}` FOREIGN KEY (`{$key_name}`) REFERENCES {$key_def}";
-                    }
-                }
-                $sql .= ") ENGINE={$this->_engine} DEFAULT COLLATE='{$this->_collation}'";
-                $retval = $this->do_query($sql);
-                $this->addMessage("Created table [{$sql}]");
-                $this->addMessage("Created table [{$table_name}]");
+        if ($this->tableExists($table_name)) {
+            return true;
+        }
+        if (!isset($this->_tableCreateSQL[$table_name])) {
+            $this->addMessage("No create definition for table [{$table_name}]");
+            return false;
+        }
+        $columns = [];
+        $createSQL = $this->_tableCreateSQL[$table_name];
+        foreach ($createSQL['columns'] as $column_name => $column_definition) {
+            $columns[] = "`{$column_name}` {$column_definition}";
+        }
+        $columns[] = sprintf("PRIMARY KEY (`%s`)", $createSQL['primary_key']);
+
+
+        if (!empty($createSQL['keys'])) {
+            foreach ($createSQL['keys'] as $key_name => $key_def) {
+                $columns[] = "KEY `{$key_name}` ({$key_def})";
             }
         }
-        return $retval;
+        if (!empty($createSQL['constraints'])) {
+            foreach ($createSQL['constraints'] as $key_name => $key_def) {
+                $columns[] = " CONSTRAINT `{$key_name}` FOREIGN KEY (`{$key_name}`) REFERENCES {$key_def}";
+            }
+        }
+        $sql = "CREATE TABLE `{$table_name}` (" . implode(",", $columns) . ")
+         ENGINE={$this->_engine} DEFAULT COLLATE='{$this->_collation}'";
+        try {
+            $retval = $this->do_query($sql);
+            if ($retval) {
+                $this->addMessage("Created table [{$table_name}]");
+                $this->addMessage("Created table [{$sql}]");
+
+            }
+            return (bool) $retval;
+        } catch (\Exception $ex) {
+            $this->addMessage("Failed to create table [{$table_name}]: " . $ex->getMessage());
+            $this->logger->dump($ex);
+            return false;
+        }
     }
     private function setTableCreateSQL()
     {
-        $this->_tableNewColumnNames['contas'] = [
-            'id' => 'conta_id',
-            'number' => 'conta_num',
-            'name' => 'conta_nome',
-            'group' => 'grupo',
-            'type_id' => 'tipo_id',
-            'iban' => 'conta_nib',
-            'open_date' => 'conta_abertura',
-            'close_date' => 'conta_fecho',
-            'active' => 'activa'
+        $tables = [
+            'contas' => account::getDefinition(),
+            'movimentos' => ledgerentry::getDefinition(),
+            'moedas' => currency::getDefinition(),
+            'defaults' => defaults::getDefinition(),
+            'tipo_contas' => accounttype::getDefinition(),
+            'users' => user::getDefinition(),
+            'grupo_contas' => ledger::getDefinition()
         ];
-
-        $this->_tableNewColumnNames['movimentos'] = [
-            'mov_id' => 'id',
-            'tipo_mov' => 'category_id',
-            'data_mov' => 'entry_date',
-            'conta_id' => 'account_id',
-            'deb_cred' => 'direction',
-            'moeda_mov' => 'currency_id',
-            'valor_mov' => 'currency_amount',
-            'valor_euro' => 'euro_amount',
-            'cambio' => 'exchange_rate',
-            'obs' => 'remarks',
-            'last_modified' => 'updated_at'
-        ];
-
-        $this->_tableNewColumnNames['moedas'] = [
-            'moeda_id' => 'code',
-            'moeda_desc' => 'description',
-            'taxa' => 'exchange_rate'
-        ];
-
-        $this->_tableCreateSQL['contas']['columns'] = [
-            "conta_id" => "int(3) NOT NULL DEFAULT 0",
-            "conta_num" => "char(30) NOT NULL DEFAULT ''",
-            "conta_nome" => "char(30) NOT NULL DEFAULT ''",
-            "grupo" => "int(3) NOT NULL DEFAULT 0",
-            "tipo_id" => "int(2) DEFAULT NULL",
-            "conta_nib" => "char(24) DEFAULT NULL",
-            "swift" => "char(24) NOT NULL DEFAULT ''",
-            "conta_abertura" => "date DEFAULT NULL",
-            "conta_fecho" => "date DEFAULT NULL",
-            "activa" => "int(1) NOT NULL DEFAULT 0"
-        ];
-        $this->_tableCreateSQL['contas']['primary_key'] = "conta_id";
-
-        $this->_tableCreateSQL['defaults']['columns'] = [
-            "id" => "int(1) NOT NULL DEFAULT 0",
-            "tipo_mov" => "int(3) DEFAULT NULL",
-            "conta_id" => "int(3) DEFAULT NULL",
-            "moeda_mov" => "char(3) DEFAULT NULL",
-            "data" => "date DEFAULT NULL",
-            "deb_cred" => "enum('1','-1') DEFAULT NULL",
-            "language" => "char(10) DEFAULT NULL",
-            "username" => "char(100) DEFAULT NULL",
-            "show_report_graph" => "int(1) NOT NULL DEFAULT 0",
-        ];
-        $this->_tableCreateSQL['defaults']['primary_key'] = "id";
-
-        $this->_tableCreateSQL['grupo_contas']['columns'] = [
-            "id" => "int(4) NOT NULL DEFAULT 0",
-            "nome" => "char(30) NOT NULL DEFAULT ''"
-        ];
-        $this->_tableCreateSQL['grupo_contas']['primary_key'] = "id";
-
-        $this->_tableCreateSQL['moedas']['columns'] = [
-            "id" => "int(4) NOT NULL DEFAULT 0",
-            "code" => "char(3) NOT NULL DEFAULT ''",
-            "description" => "char(30) DEFAULT NULL",
-            "exchange_rate" => "float(8,6) DEFAULT NULL",
-            "username" => "char(255) DEFAULT ''",
-            "created_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()",
-            "updated_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()"
-        ];
-        $this->_tableCreateSQL['moedas']['primary_key'] = "moeda_id";
-
-        $this->_tableCreateSQL['movimentos']['columns'] = [
-            "id" => "int(4) NOT NULL AUTO_INCREMENT",
-            "entry_date" => "date DEFAULT NULL",
-            "category_id" => "int(3) DEFAULT NULL",
-            "account_id" => "int(3) DEFAULT NULL",
-            "currency_id" => "char(3) NOT NULL DEFAULT 'EUR'",
-            "direction" => "tinyint(1) NOT NULL DEFAULT 1",
-            "currency_amount" => "float(10,2) DEFAULT NULL",
-            "euro_amount" => "float(10,2) DEFAULT NULL",
-            "exchange_rate" => "float(9,4) NOT NULL DEFAULT 1.0000",
-            "a_pagar" => "tinyint(1) NOT NULL DEFAULT 0",
-            "com_talao" => "tinyint(1) NOT NULL DEFAULT 0",
-            "remarks" => "char(255) DEFAULT NULL",
-            "username" => "char(255) DEFAULT ''",
-            "created_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()",
-            "updated_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()"
-        ];
-        $this->_tableCreateSQL['movimentos']['primary_key'] = "id";
-
-        $this->_tableCreateSQL['tipo_contas']['columns'] = [
-            "tipo_id" => "int(2) NOT NULL DEFAULT 0",
-            "tipo_desc" => "char(30) DEFAULT NULL",
-            "savings" => "int(1) NOT NULL DEFAULT 0"
-        ];
-        $this->_tableCreateSQL['tipo_contas']['primary_key'] = "tipo_id";
-
-        $this->_tableCreateSQL['tipo_mov']['columns'] = [
-            "tipo_id" => "int(3) NOT NULL DEFAULT 0",
-            "parent_id" => "int(3) DEFAULT NULL",
-            "tipo_desc" => "char(50) DEFAULT NULL",
-            "active" => "int(1) NOT NULL DEFAULT 0"
-        ];
-        $this->_tableCreateSQL['tipo_mov']['primary_key'] = "tipo_id";
-        $this->_tableCreateSQL['tipo_mov']['keys'] = ["parent_id" => "parent_id"];
-        $this->_tableCreateSQL['tipo_mov']['constraints'] = ["parent_id" => "`tipo_mov` (`tipo_id`) ON DELETE CASCADE ON UPDATE CASCADE"];
-
-        $this->_tableCreateSQL['users']['columns'] = [
-            "id" => "int(3) NOT NULL DEFAULT 0",
-            "username" => "char(100) NOT NULL",
-            "password" => "char(255) NOT NULL",
-            "fullname" => "char(255) NOT NULL DEFAULT ''",
-            "email" => "char(255) NOT NULL DEFAULT ''",
-            "role" => "int(3) NOT NULL DEFAULT 0",
-            "token" => "char(255) NOT NULL DEFAULT ''",
-            "token_expiry" => "datetime",
-            "active" => "int(1) NOT NULL DEFAULT 0"
-        ];
-        $this->_tableCreateSQL['users']['primary_key'] = "id";
+        foreach ($tables as $name => $data) {
+            $this->_tableCreateSQL[$name] = $data ?? [];
+        }
     }
 }

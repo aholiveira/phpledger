@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         Redirector::to('index.php');
     }
     $action = $_POST['action'] ?? null;
-    if ($action === l10n::l('do_update')) {
+    if ($action === 'update_db') {
         $update_result = $data_storage->update();
     }
 }
@@ -55,7 +55,10 @@ $pagetitle = l10n::l('update_needed');
                         <form method="POST" role="form" aria-describedby="update-messages"
                             action="update.php?lang=<?= l10n::$lang ?>">
                             <?= CSRF::inputField() ?>
-                            <input class="submit" type="submit" name="action" value="<?= l10n::l('do_update') ?>">
+                            <button class="submit" type="submit" name="action" value="update_db"
+                                aria-label="<?= l10n::l('do_update') ?>">
+                                <?= l10n::l('do_update') ?>
+                            </button>
                         </form>
                     <?php else: ?>
                         <p><?= l10n::l('db_ok') ?></p>

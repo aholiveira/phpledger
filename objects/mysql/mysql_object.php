@@ -118,6 +118,7 @@ abstract class mysql_object implements iobject
      * - - value is the value to be filtered
      */
     abstract static function getList(array $field_filter = []): array;
+    abstract static function getDefinition(): array;
     abstract function update(): bool;
     abstract function delete(): bool;
     /**
