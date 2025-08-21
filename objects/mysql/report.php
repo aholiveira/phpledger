@@ -37,41 +37,43 @@ class report implements ireport
         $stmt->close();
         return $this->queryData;
     }
-    public function getReport(array $params = []): report
+
+    public function getReport(array $params = []): self
     {
         global $object_factory;
         $category = $object_factory->entry_category();
         $category_list = $category->getList(['parent_id' => ['operator' => '=', 'value' => '0']]);
         foreach ($category_list as $category) {
-            if (array_key_exists($category->id, $this->queryData) && sizeof($this->queryData[$category->id]) > 0) {
-                $this->reportData[$category->description]['id'] = $category->id;
-                $this->reportData[$category->description]['values'] = $this->queryData[$category->id];
-            }
-            foreach ($category->children as $child) {
-                if (array_key_exists($child->id, $this->queryData) && sizeof($this->queryData[$child->id]) > 0) {
-                    $this->reportData[$category->description]['children'][$child->description]['id'] = $child->id;
-                    $this->reportData[$category->description]['children'][$child->description]['values'] = $this->queryData[$child->id];
-                    foreach ($this->queryData[$child->id] as $col_header => $value) {
-                        if (!array_key_exists($category->description, $this->reportData)) {
-                            $this->reportData[$category->description] = [];
-                        }
-                        if (!array_key_exists('id', $this->reportData[$category->description])) {
-                            $this->reportData[$category->description]['id'] = $category->id;
-                        }
-                        if (!array_key_exists('values', $this->reportData[$category->description])) {
-                            $this->reportData[$category->description]['values'] = [];
-                        }
-                        if (!array_key_exists('subtotal', $this->reportData[$category->description])) {
-                            $this->reportData[$category->description]['subtotal'] = [];
-                        }
-                        if (!array_key_exists($col_header, $this->reportData[$category->description]['subtotal'])) {
-                            $this->reportData[$category->description]['subtotal'][$col_header] = 0;
-                        }
-                        $this->reportData[$category->description]['subtotal'][$col_header] += $value;
-                    }
-                }
-            }
+            $this->processCategory($category);
         }
         return $this;
+    }
+    protected function processCategory($category): void
+    {
+        if (!empty($this->queryData[$category->id])) {
+            $this->reportData[$category->description] = [
+                'id' => $category->id,
+                'values' => $this->queryData[$category->id]
+            ];
+        }
+
+        foreach ($category->children as $child) {
+            if (!empty($this->queryData[$child->id])) {
+                $this->reportData[$category->description]['children'][$child->description] = [
+                    'id' => $child->id,
+                    'values' => $this->queryData[$child->id]
+                ];
+                $this->updateSubtotal($category, $this->queryData[$child->id]);
+            }
+        }
+    }
+    protected function updateSubtotal($category, array $childValues): void
+    {
+        foreach ($childValues as $col_header => $value) {
+            $this->reportData[$category->description]['id'] ??= $category->id;
+            $this->reportData[$category->description]['values'] ??= [];
+            $this->reportData[$category->description]['subtotal'][$col_header] ??= 0;
+            $this->reportData[$category->description]['subtotal'][$col_header] += $value;
+        }
     }
 }

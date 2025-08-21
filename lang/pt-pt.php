@@ -18,7 +18,7 @@ return
         'invalid_credentials' => "Credenciais inválidas",
         'login_screen' => "ecrã de login",
         'version' => "Versão %s",
-        'save_success' => "Registo gravado [ID: %s]",
+        'save_success' => "Guardado com sucesso – ID: %s",
         'ledger_entries' => "Movimentos",
         'balances' => "Saldos",
         'accounts' => "Contas",

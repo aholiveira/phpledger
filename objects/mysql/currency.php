@@ -23,7 +23,27 @@ class currency extends mysql_object implements iobject
         parent::__construct($dblink);
         $this->code = "";
     }
-    public static function getList(array $field_filter =[]): array
+    public static function getDefinition(): array
+    {
+        $retval = [];
+        $retval['new'] = [
+            'moeda_id' => 'code',
+            'moeda_desc' => 'description',
+            'taxa' => 'exchange_rate'
+        ];
+        $retval['columns'] = [
+            "id" => "int(4) NOT NULL DEFAULT 0",
+            "code" => "char(3) NOT NULL DEFAULT ''",
+            "description" => "char(30) DEFAULT NULL",
+            "exchange_rate" => "float(8,6) DEFAULT NULL",
+            "username" => "char(255) DEFAULT ''",
+            "created_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()",
+            "updated_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()"
+        ];
+        $retval['primary_key'] = "moeda_id";
+        return $retval;
+    }
+    public static function getList(array $field_filter = []): array
     {
         $where = static::getWhereFromArray($field_filter);
         $sql = "SELECT id, `code`, `description`, exchange_rate, username, created_at, updated_at FROM " . static::tableName() . " {$where} ORDER BY description";
@@ -85,36 +105,32 @@ class currency extends mysql_object implements iobject
     public function update(): bool
     {
         $retval = false;
-        $sql = "SELECT `id` FROM {$this->tableName()} WHERE id=?";
         try {
-            static::$_dblink->begin_transaction();
-            $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                return $retval;
-            if (!isset($this->id))
-                return $retval;
-            $stmt->bind_param("s", $this->id);
-            $stmt->execute();
-            $stmt->bind_result($return_id);
-            null !== $stmt->fetch() && $return_id === $this->id ?
-                $sql = "UPDATE {$this->tableName()} SET `description`=?, exchange_rate=?, code=?, username=?, updated_at=NULL WHERE id=?"
-                :
-                $sql = "INSERT INTO {$this->tableName()} (`description`, exchange_rate, code, username, created_at, updated_at, id) VALUES (?, ?, ?, ?, NULL, NULL, ?)"
-            ;
-            $stmt->close();
+            $sql = "INSERT INTO {$this->tableName()} 
+                    (`description`, `exchange_rate`, `code`, `username`, `created_at`, `updated_at`, `id`)
+                VALUES (?, ?, ?, ?, NULL, NULL, ?)
+                ON DUPLICATE KEY UPDATE
+                    `description`=VALUES(`description`),
+                    `exchange_rate`=VALUES(`exchange_rate`),
+                    `code`=VALUES(`code`),
+                    `username`=VALUES(`username`),
+                    `created_at`=NULL,
+                    `updated_at`=NULL";
             $stmt = static::$_dblink->prepare($sql);
+            if ($stmt === false)
+                throw new \mysqli_sql_exception("Prepare failed");
             $stmt->bind_param(
-                "sdsss",
+                "sdssi",
                 $this->description,
                 $this->exchange_rate,
                 $this->code,
                 $this->username,
                 $this->id
             );
-            $stmt->execute();
+            $retval = $stmt->execute();
             $stmt->close();
-            static::$_dblink->commit();
-            $retval = true;
+            if (!$retval)
+                throw new \mysqli_sql_exception(static::$_dblink->error);
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }

@@ -16,7 +16,17 @@ class ledger extends mysql_object implements iobject
     {
         parent::__construct($dblink);
     }
-    public static function getList(array $field_filter =[]): array
+    public static function getDefinition(): array
+    {
+        $retval = [];
+        $retval['columns'] = [
+            "id" => "int(4) NOT NULL DEFAULT 0",
+            "nome" => "char(30) NOT NULL DEFAULT ''"
+        ];
+        $retval['primary_key'] = "id";
+        return $retval;
+    }
+    public static function getList(array $field_filter = []): array
     {
         $where = static::getWhereFromArray($field_filter);
         $sql = "SELECT id FROM " . static::tableName() . " {$where} ORDER BY id";
@@ -39,7 +49,6 @@ class ledger extends mysql_object implements iobject
         }
         return $retval;
     }
-
     public static function getById($id): ?ledger
     {
         $sql = "SELECT id, nome as `name` FROM " . static::tableName() . " WHERE id=?";
