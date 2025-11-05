@@ -25,8 +25,8 @@ class report implements ireport
     {
         $this->queryData = [];
         $stmt = $this->db->prepare($query);
-        if ($stmt == false) {
-            throw new \mysqli_sql_exception($this->db->error);
+        if ($stmt === false) {
+            throw new \mysqli_sql_exception();
         }
         $stmt->bind_param(str_repeat('s', sizeof($vars)), ...$vars);
         $stmt->execute();

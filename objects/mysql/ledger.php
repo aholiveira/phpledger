@@ -33,8 +33,9 @@ class ledger extends mysql_object implements iobject
         $retval = [];
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->execute();
             $stmt->bind_result($id);
             while ($stmt->fetch()) {
@@ -54,8 +55,9 @@ class ledger extends mysql_object implements iobject
         $sql = "SELECT id, nome as `name` FROM " . static::tableName() . " WHERE id=?";
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -74,10 +76,12 @@ class ledger extends mysql_object implements iobject
         try {
             static::$_dblink->begin_transaction();
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
+            if ($stmt === false) {
                 return $retval;
-            if (!isset($this->id))
+            }
+            if (!isset($this->id)) {
                 return $retval;
+            }
             $stmt->bind_param("s", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);
@@ -86,8 +90,9 @@ class ledger extends mysql_object implements iobject
                 "INSERT INTO {$this->tableName()} (nome, id) VALUES (?, ?)";
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param(
                 "ss",
                 $this->name,

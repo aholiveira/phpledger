@@ -15,7 +15,7 @@ interface iobject
      */
     /**
      * Validates if object contains valid data
-     * @return bool TRUE if object is valid, FALSE otherwise
+     * @return bool true if object is valid, FALSE otherwise
      */
     public function validate(): bool;
     public function error_message(): string;

@@ -38,8 +38,9 @@ class accounttype extends mysql_object implements iobject
         $retval = [];
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->execute();
             $result = $stmt->get_result();
             while ($newobject = $result->fetch_object(__CLASS__, [static::$_dblink])) {
@@ -57,8 +58,9 @@ class accounttype extends mysql_object implements iobject
         $sql = "SELECT tipo_id as id, tipo_desc as description, savings FROM " . static::tableName() . " WHERE tipo_id=?";
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -85,8 +87,9 @@ class accounttype extends mysql_object implements iobject
                     `tipo_desc` = VALUES(`tipo_desc`),
                     `savings` = VALUES(`savings`)";
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt === false)
-                throw new \mysqli_sql_exception("Prepare failed");
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param(
                 "sii",
                 $this->description,
@@ -95,8 +98,9 @@ class accounttype extends mysql_object implements iobject
             );
             $retval = $stmt->execute();
             $stmt->close();
-            if (!$retval)
-                throw new \mysqli_sql_exception(static::$_dblink->error);
+            if (!$retval) {
+                throw new \mysqli_sql_exception();
+            }
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }

@@ -18,8 +18,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         Redirector::to('ledger_entries.php');
     }
     if (stristr($_POST["update"], "gravar")) {
-        $object->id = filter_input(INPUT_POST, "tipo_id", FILTER_VALIDATE_INT);
-        $object->description = filter_input(INPUT_POST, "tipo_desc", FILTER_DEFAULT);
+        $object->id = htmlspecialchars(filter_input(INPUT_POST, "tipo_id", FILTER_VALIDATE_INT));
+        $object->description = htmlspecialchars(filter_input(INPUT_POST, "tipo_desc", FILTER_DEFAULT));
         $object->savings = filter_has_var(INPUT_POST, "savings") ? 1 : 0;
         $retval = $object->update();
     } else {

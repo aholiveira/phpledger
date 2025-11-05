@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         http_response_code(400);
         Redirector::to('ledger_entries.php');
     }
-    $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, TRUE);
+    $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, true);
     try {
         $saved_id = (new LedgerEntryController($object_factory))->handleSave($filtered_input);
         $success = true;
@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
-    $filtered_input = filter_input_array(INPUT_GET, $input_variables_filter, TRUE);
+    $filtered_input = filter_input_array(INPUT_GET, $input_variables_filter, true);
 }
 
 ?>

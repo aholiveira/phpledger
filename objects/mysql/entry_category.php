@@ -55,8 +55,9 @@ class entry_category extends mysql_object implements iobject
 
         try {
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt === false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->execute();
             $result = $stmt->get_result();
 
@@ -94,8 +95,9 @@ class entry_category extends mysql_object implements iobject
             GROUP BY category_id";
         try {
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param("i", $this->id);
             $stmt->execute();
             $stmt->bind_result($retval);
@@ -116,8 +118,9 @@ class entry_category extends mysql_object implements iobject
         $retval = new self(static::$_dblink);
         try {
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt === false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param("ii", $id, $id);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -150,8 +153,9 @@ class entry_category extends mysql_object implements iobject
     public function update(): bool
     {
         $retval = false;
-        if (!$this->validate())
+        if (!$this->validate()) {
             return $retval;
+        }
         try {
             $sql = "INSERT INTO {$this->tableName()} (parent_id, tipo_desc, active, tipo_id)
                 VALUES (?, ?, ?, ?)
@@ -160,8 +164,9 @@ class entry_category extends mysql_object implements iobject
                     tipo_desc=VALUES(tipo_desc),
                     active=VALUES(active)";
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt === false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param("isii", $this->parent_id, $this->description, $this->active, $this->id);
             $retval = $stmt->execute();
             $stmt->close();
@@ -176,8 +181,9 @@ class entry_category extends mysql_object implements iobject
         try {
             $sql = "DELETE FROM {$this->tableName()} WHERE tipo_id=?";
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt === false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param("i", $this->id);
             $retval = $stmt->execute();
             $stmt->close();
