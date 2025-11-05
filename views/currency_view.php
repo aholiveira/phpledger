@@ -49,8 +49,9 @@ class currency_view extends object_viewer
     {
         $retval = "";
         $_object = $this->_object;
-        if (!$_object instanceof currency)
+        if (!$_object instanceof currency) {
             return $retval;
+        }
         $retval .= "<tr>";
         $retval .= "<td><label for=\"id\">ID</label></td>\r\n";
         $retval .= "<td><input type=text readonly size=4 name=\"id\" value=" . (isset($_object->id) ? $_object->id : $_object->getNextId()) . "></td>\r\n";
@@ -76,8 +77,9 @@ class currency_view extends object_viewer
          * @var currency $_object
          */
         $_object = $this->_object;
-        if (null === $selected)
+        if (null === $selected) {
             $selected = $_object->id;
+        }
         foreach ($object_list as $object) {
             if (($object instanceof currency)) {
                 $retval .= "<option value=\"{$object->id}\"" . ($selected == $object->id ? " selected " : "") . ">{$object->code} - {$object->description}</option>\r\n";

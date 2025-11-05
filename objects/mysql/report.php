@@ -9,7 +9,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-class report implements ireport
+class report implements iReport
 {
     protected array $queryData;
     protected mysqli $db;
@@ -25,8 +25,8 @@ class report implements ireport
     {
         $this->queryData = [];
         $stmt = $this->db->prepare($query);
-        if ($stmt == false) {
-            throw new \mysqli_sql_exception($this->db->error);
+        if ($stmt === false) {
+            throw new \mysqli_sql_exception();
         }
         $stmt->bind_param(str_repeat('s', sizeof($vars)), ...$vars);
         $stmt->execute();
@@ -40,8 +40,8 @@ class report implements ireport
 
     public function getReport(array $params = []): self
     {
-        global $object_factory;
-        $category = $object_factory->entry_category();
+        global $objectFactory;
+        $category = $objectFactory->entry_category();
         $category_list = $category->getList(['parent_id' => ['operator' => '=', 'value' => '0']]);
         foreach ($category_list as $category) {
             $this->processCategory($category);

@@ -8,7 +8,7 @@
  *
  */
 
-class mysql_storage implements idata_storage
+class mysql_storage implements iDataStorage
 {
     private ?\mysqli $_dblink = null;
     private string $_message = "";
@@ -268,13 +268,13 @@ class mysql_storage implements idata_storage
     }
     public function populateRandomData(): void
     {
-        global $object_factory;
-        $category = $object_factory->entry_category();
-        $ledger_entry = $object_factory->ledgerentry();
+        global $objectFactory;
+        $category = $objectFactory->entry_category();
+        $ledger_entry = $objectFactory->ledgerentry();
         $start_year = date("Y") - 3;
         $end_year = date("Y");
         $max_month_entries = 100;
-        $account = $object_factory->account();
+        $account = $objectFactory->account();
         $account_list = $account->getList(['activa' => ['operator' => '=', 'value' => '1']]);
         $category_list = $category->getList(['active' => ['operator' => '=', 'value' => '1']]);
         if (array_key_exists(0, $category_list)) {
@@ -405,8 +405,8 @@ class mysql_storage implements idata_storage
              * Create new category "Uncategorized"
              * Assign all entries without category to category "Uncategorized"
              */
-            global $object_factory;
-            $entry_category = $object_factory->entry_category();
+            global $objectFactory;
+            $entry_category = $objectFactory->entry_category();
             $entry_category = $entry_category::getById(0);
             if ($entry_category->id != 0) {
                 $this->addMessage("Adding category 0");
@@ -438,8 +438,9 @@ class mysql_storage implements idata_storage
         $this->connect();
         try {
             $stmt = @$this->_dblink->prepare($sql);
-            if ($stmt == false)
+            if ($stmt == false) {
                 return $retval;
+            }
             $stmt->execute();
             $stmt->bind_result($retval);
             $stmt->fetch();
@@ -461,8 +462,9 @@ class mysql_storage implements idata_storage
         $this->connect();
         try {
             $stmt = $this->_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $retval = $stmt->execute();
             $stmt->close();
         } catch (\Exception $ex) {
@@ -477,8 +479,9 @@ class mysql_storage implements idata_storage
         $this->connect();
         try {
             $stmt = $this->_dblink->prepare("SHOW CREATE TABLE `{$table}`");
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->execute();
             $stmt->bind_result($table, $retval);
             $stmt->fetch();
@@ -544,10 +547,12 @@ class mysql_storage implements idata_storage
         $retval = false;
         $this->connect();
         try {
-            if ($this->tableHasColumn($table_name, $new_column_name))
+            if ($this->tableHasColumn($table_name, $new_column_name)) {
                 return false;
-            if (!$this->tableHasColumn($table_name, $old_column_name))
+            }
+            if (!$this->tableHasColumn($table_name, $old_column_name)) {
                 return false;
+            }
             $sql = "ALTER TABLE `{$table_name}` RENAME COLUMN `{$old_column_name}` TO `{$new_column_name}`";
             $retval = $this->do_query($sql);
             $this->addMessage("Renamed column [{$old_column_name}] to [{$new_column_name}] on [{$table_name}]");
@@ -580,8 +585,9 @@ class mysql_storage implements idata_storage
         $this->connect();
         $sql = "ALTER TABLE `{$table_name}` ADD FOREIGN KEY `{$key_name}` (`{$key_name}`) REFERENCES {$fk_def}";
         try {
-            if ($this->tableHasForeignKey($table_name, $key_name))
+            if ($this->tableHasForeignKey($table_name, $key_name)) {
                 return true;
+            }
             $retval = $this->do_query($sql);
             $this->addMessage("Added foreign key [{$key_name}] to table [{$table_name}]");
         } catch (\Exception $ex) {
@@ -735,7 +741,6 @@ class mysql_storage implements idata_storage
             if ($retval) {
                 $this->addMessage("Created table [{$table_name}]");
                 $this->addMessage("Created table [{$sql}]");
-
             }
             return (bool) $retval;
         } catch (\Exception $ex) {

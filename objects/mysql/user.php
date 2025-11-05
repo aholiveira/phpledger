@@ -12,7 +12,7 @@
 define("USER_ROLE_ADM", 255);
 define("USER_ROLE_RW", 192);
 define("USER_ROLE_RO", 128);
-class user extends mysql_object implements iobject
+class user extends mysql_object implements iObject
 {
     protected string $_username;
     protected string $_password;
@@ -127,7 +127,7 @@ class user extends mysql_object implements iobject
     public function verifyPassword(string $password): bool
     {
         if (empty($password)) {
-            return FALSE;
+            return false;
         }
         if (function_exists('sodium_crypto_pwhash_str_verify')) {
             return sodium_crypto_pwhash_str_verify($this->getPassword(), $password);
@@ -149,10 +149,12 @@ class user extends mysql_object implements iobject
         $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
+            if ($stmt == false) {
                 return $retval;
-            if (!isset($this->id))
+            }
+            if (!isset($this->id)) {
                 return $retval;
+            }
             $stmt->bind_param("i", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);
@@ -172,10 +174,11 @@ class user extends mysql_object implements iobject
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt->close();
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             if (empty($this->_token_expiry)) {
-                $this->_token_expiry = NULL;
+                $this->_token_expiry = null;
             }
             $stmt->bind_param(
                 "sssssisii",
@@ -190,14 +193,15 @@ class user extends mysql_object implements iobject
                 $this->id
             );
             $retval = $stmt->execute();
-            if ($retval == false) {
-                throw new mysqli_sql_exception(static::$_dblink->error);
+            if ($retval === false) {
+                throw new mysqli_sql_exception();
             }
             static::$_dblink->commit();
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
-            if (isset($stmt))
+            if (isset($stmt)) {
                 $stmt->close();
+            }
         }
         return $retval;
     }
@@ -219,8 +223,9 @@ class user extends mysql_object implements iobject
         $retval = [];
         try {
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception(static::$_dblink->error);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->execute();
             $result = $stmt->get_result();
             while ($newobject = $result->fetch_object(__CLASS__, [static::$_dblink])) {
@@ -247,8 +252,9 @@ class user extends mysql_object implements iobject
             WHERE username=?";
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param("s", $username);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -275,8 +281,9 @@ class user extends mysql_object implements iobject
         $retval = null;
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -307,7 +314,7 @@ class user extends mysql_object implements iobject
             $message .= "\r\n";
             $message .= "Cumprimentos,\r\n";
             $message .= "$title\r\n";
-            $retval = Email::send_email(config::get("from"), $this->getEmail(), "Reposicao de palavra-passe", $message);
+            $retval = Email::sendEmail(config::get("from"), $this->getEmail(), "Reposicao de palavra-passe", $message);
         }
         return $retval;
     }
@@ -327,8 +334,9 @@ class user extends mysql_object implements iobject
         $retval = null;
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param("s", $token);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -350,8 +358,9 @@ class user extends mysql_object implements iobject
             $stmt->close();
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
-            if (isset($stmt))
+            if (isset($stmt)) {
                 $stmt->close();
+            }
         }
         return $retval;
     }

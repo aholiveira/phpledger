@@ -18,7 +18,7 @@
  *
  */
 
-class account extends mysql_object implements iobject
+class account extends mysql_object implements iObject
 {
     public string $name = "";
     public string $number = "";
@@ -31,10 +31,6 @@ class account extends mysql_object implements iobject
     public int $active;
     protected static string $tableName = "contas";
 
-    public function __construct(\mysqli $dblink)
-    {
-        parent::__construct($dblink);
-    }
     public static function getDefinition(): array
     {
         $retval = [];
@@ -84,8 +80,9 @@ class account extends mysql_object implements iobject
         $retval = [];
         try {
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception(static::$_dblink->error);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->execute();
             $result = $stmt->get_result();
             while ($newobject = $result->fetch_object(__CLASS__, [static::$_dblink])) {
@@ -115,8 +112,9 @@ class account extends mysql_object implements iobject
         WHERE conta_id=?";
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -162,8 +160,9 @@ class account extends mysql_object implements iobject
         $retval = [];
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param(str_repeat('s', sizeof($param_array)), ...$param_array);
             $stmt->execute();
             $stmt->bind_result($income, $expense, $balance);
@@ -196,8 +195,9 @@ class account extends mysql_object implements iobject
                             `conta_fecho`=VALUES(`conta_fecho`),
                             `activa`=VALUES(`activa`)";
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt === false)
-                throw new \mysqli_sql_exception("Prepare failed");
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param(
                 "ssissssii",
                 $this->number,
@@ -212,8 +212,9 @@ class account extends mysql_object implements iobject
             );
             $retval = $stmt->execute();
             $stmt->close();
-            if (!$retval)
-                throw new \mysqli_sql_exception(static::$_dblink->error);
+            if (!$retval) {
+                throw new \mysqli_sql_exception();
+            }
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }

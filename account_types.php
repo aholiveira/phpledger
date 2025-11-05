@@ -7,19 +7,19 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-include __DIR__ . "/contas_config.php";
+include_once __DIR__ . "/contas_config.php";
 $pagetitle = "Tipo de contas";
 $message = "";
 $retval = false;
-$object = $object_factory->accounttype();
+$object = $objectFactory->accounttype();
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
         http_response_code(400);
         Redirector::to('ledger_entries.php');
     }
     if (stristr($_POST["update"], "gravar")) {
-        $object->id = filter_input(INPUT_POST, "tipo_id", FILTER_VALIDATE_INT);
-        $object->description = filter_input(INPUT_POST, "tipo_desc", FILTER_DEFAULT);
+        $object->id = htmlspecialchars(filter_input(INPUT_POST, "tipo_id", FILTER_VALIDATE_INT));
+        $object->description = htmlspecialchars(filter_input(INPUT_POST, "tipo_desc", FILTER_DEFAULT));
         $object->savings = filter_has_var(INPUT_POST, "savings") ? 1 : 0;
         $retval = $object->update();
     } else {
@@ -51,7 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include "header.php"; ?>
+    <?php include_once "header.php"; ?>
 </head>
 
 <body>
@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     ?>
     <div class="maingrid" id="maingrid">
         <?php
-        include ROOT_DIR . "/menu_div.php";
+        include_once ROOT_DIR . "/menu_div.php";
         ?>
         <div class="header" style="height: 0;"></div>
         <div id="main" class="main">
@@ -96,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 </table>
             </form>
         </div>
-        <?php include "footer.php"; ?>
+        <?php include_once "footer.php"; ?>
     </div>
 </body>
 

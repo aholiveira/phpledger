@@ -20,26 +20,25 @@ function add_filter(filter_name, filter_value) {
 
 function toggleDateElements(elementId) {
     const test = document.createElement("input");
-    let row;
     try {
         test.type = "date";
-        row = document.getElementsByClassName("date-fallback");
-        for (let i = 0; i < row.length; i++) {
-            if (row[i].style.display === "none" && row[i].tagName === "SELECT") {
-                row[i].value = "";
+        let rows = document.getElementsByClassName("date-fallback");
+        for (let row of rows) {
+            if (row.style.display === "none" && row.tagName === "SELECT") {
+                row.value = "";
             }
         }
     } catch (e) {
-        row = document.getElementsByClassName("date-fallback");
-        for (let i = 0; i < row.length; i++) {
-            if (row[i].style.display === "none") {
-                row[i].style.removeProperty("display");
+        let rows = document.getElementsByClassName("date-fallback");
+        for (let row of rows) {
+            if (row.style.display === "none") {
+                row.style.removeProperty("display");
             } else {
-                if (row[i].tagName === "INPUT") {
-                    row[i].value = "";
-                    row[i].removeAttribute("required");
+                if (row.tagName === "INPUT") {
+                    row.value = "";
+                    row.removeAttribute("required");
                 }
-                row[i].style.display = "none";
+                row.style.display = "none";
             }
         }
         elementId += "AA";

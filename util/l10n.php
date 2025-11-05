@@ -48,7 +48,7 @@ class l10n
             $path = strtolower(ROOT_DIR . "/lang/$lang.php");
         }
 
-        return file_exists($path) ? include $path : [];
+        return file_exists($path) ? include_once $path : [];
     }
 
 }

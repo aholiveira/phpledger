@@ -10,9 +10,9 @@
 require_once "prepend.php";
 config::init(__DIR__ . '/config.json');
 
-$object_factory = new object_factory();
-$view_factory = new view_factory();
-$data_storage = $object_factory->data_storage();
+$objectFactory = new object_factory();
+$viewFactory = new view_factory();
+$data_storage = $objectFactory->data_storage();
 $update_result = null;
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -34,7 +34,7 @@ $pagetitle = l10n::l('update_needed');
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include "header.php"; ?>
+    <?php include_once "header.php"; ?>
     <title><?= $pagetitle ?></title>
     <?php if ($update_result): ?>
         <meta http-equiv="refresh" content="5;url=index.php">
@@ -44,7 +44,7 @@ $pagetitle = l10n::l('update_needed');
 <body>
     <main class="maingrid">
         <div class="main update-screen">
-            <?php include ROOT_DIR . "/lang_selector.php"; ?>
+            <?php include_once ROOT_DIR . "/lang_selector.php"; ?>
             <section id="update-messages" aria-live="polite">
                 <?php if ($update_result === null): ?>
                     <?php if ($needs_update): ?>

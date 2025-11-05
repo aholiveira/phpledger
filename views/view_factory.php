@@ -4,16 +4,16 @@ if (!defined("BACKEND") || !defined("OBJECTS_DIR")) {
     die("This file should only be included!");
 }
 
-include VIEWS_DIR . "/object_viewer.php";
-include VIEWS_DIR . "/account_balance_view.php";
-include VIEWS_DIR . "/account_type_view.php";
-include VIEWS_DIR . "/account_view.php";
-include VIEWS_DIR . "/currency_view.php";
-include VIEWS_DIR . "/entry_category_view.php";
-include VIEWS_DIR . "/ledger_entry_view.php";
-include VIEWS_DIR . "/report_view.php";
-include VIEWS_DIR . "/report_month_view.php";
-include VIEWS_DIR . "/report_year_view.php";
+include_once VIEWS_DIR . "/object_viewer.php";
+include_once VIEWS_DIR . "/account_balance_view.php";
+include_once VIEWS_DIR . "/account_type_view.php";
+include_once VIEWS_DIR . "/account_view.php";
+include_once VIEWS_DIR . "/currency_view.php";
+include_once VIEWS_DIR . "/entry_category_view.php";
+include_once VIEWS_DIR . "/ledger_entry_view.php";
+include_once VIEWS_DIR . "/report_view.php";
+include_once VIEWS_DIR . "/report_month_view.php";
+include_once VIEWS_DIR . "/report_year_view.php";
 
 /**
  * Factory for viewer objects

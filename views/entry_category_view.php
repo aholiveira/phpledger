@@ -22,8 +22,9 @@ class entry_category_view extends object_viewer
             return $retval;
         }
         $_object = $this->_object;
-        if (!($_object instanceof entry_category))
+        if (!($_object instanceof entry_category)) {
             return $retval;
+        }
         $retval .= "<td class='id' data-label='ID'><a href=\"entry_type.php?tipo_id={$_object->id}\" title=\"Editar a categoria\">{$_object->id}</a></td>";
         $retval .= "<td class='category' data-label='Categoria'>" . (null === $_object->parent_id || $_object->parent_id == 0 ? "" : ($_object->parent_description ?? "")) . "</td>";
         $retval .= "<td class='description' data-label='Descri&ccedil;&atilde;o'>{$_object->description}</td>";
@@ -33,11 +34,11 @@ class entry_category_view extends object_viewer
     }
     public function printObjectList(array $object_list): string
     {
-        global $object_factory;
+        global $objectFactory;
         $retval = "<table class=\"lista entry_category\">\r\n";
         $retval .= "<thead><tr><th>ID</th><th>Categoria</th><th>Descri&ccedil;&atilde;o</th><th>Valor</th><th>Activa</th></tr></thead>\r\n";
         $retval .= "<tbody>\r\n";
-        $view = new entry_category_view($object_factory->entry_category());
+        $view = new entry_category_view($objectFactory->entry_category());
         foreach ($object_list as $object) {
             if ($object instanceof entry_category) {
                 if ($object->parent_id === 0) {
@@ -62,8 +63,9 @@ class entry_category_view extends object_viewer
     {
         $retval = "";
         $_object = $this->_object;
-        if (!$_object instanceof entry_category)
+        if (!$_object instanceof entry_category) {
             return $retval;
+        }
         if (isset($_object->id)) {
             $filter = [
                 'active' => ['operator' => '=', 'value' => '1'],

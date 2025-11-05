@@ -7,7 +7,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-include __DIR__ . "/contas_config.php";
+include_once __DIR__ . "/contas_config.php";
 $pagetitle = "Contas";
 
 ?>
@@ -15,7 +15,7 @@ $pagetitle = "Contas";
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include "header.php"; ?>
+    <?php include_once "header.php"; ?>
 </head>
 
 <body>
@@ -24,8 +24,8 @@ $pagetitle = "Contas";
             <div class="spinner"></div>
         </div>
         <?php
-        include constant("ROOT_DIR") . "/menu_div.php";
-        $object = $object_factory->account();
+        include_once constant("ROOT_DIR") . "/menu_div.php";
+        $object = $objectFactory->account();
         $retval = true;
         $input_variables_filter = [
             'abertura' => [
@@ -121,7 +121,7 @@ $pagetitle = "Contas";
         if ($_SERVER["REQUEST_METHOD"] == "GET" && !empty($conta_id)) {
             $edit = $conta_id;
         }
-        $account = $object_factory->account();
+        $account = $objectFactory->account();
         $account_list = $account->getList();
         ?>
         <div class="header" style="height: 0;"></div>
@@ -148,7 +148,7 @@ $pagetitle = "Contas";
                                 <?php
                                 foreach ($account_list as $account) {
                                     print "<tr>";
-                                    $account_view = $view_factory->account_view($account);
+                                    $account_view = $viewFactory->account_view($account);
                                     if (!empty($edit) && $account->id == $edit) {
                                         print $account_view->printForm();
                                     }
@@ -159,8 +159,8 @@ $pagetitle = "Contas";
                                 }
                                 if (empty($edit)) {
                                     print "<tr>";
-                                    $account = $object_factory->account();
-                                    $account_view = $view_factory->account_view($account);
+                                    $account = $objectFactory->account();
+                                    $account_view = $viewFactory->account_view($account);
                                     print $account_view->printForm();
                                     print "</tr>";
                                 }
@@ -190,7 +190,7 @@ $pagetitle = "Contas";
                 }
             }
         </script>
-        <?php include "footer.php"; ?>
+        <?php include_once "footer.php"; ?>
     </div>
     <script>
         setTimeout(() => { document.getElementById("preloader").style.display = "none"; }, 0);

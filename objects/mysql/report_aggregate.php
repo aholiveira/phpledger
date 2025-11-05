@@ -9,7 +9,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-class report_month implements ireport
+class report_month implements iReport
 {
     public int $year;
     public array $monthNames;
@@ -28,7 +28,7 @@ class report_month implements ireport
 
     public function getReport(array $params = []): report_month
     {
-        global $object_factory;
+        global $objectFactory;
         $sql = "SELECT tipo_id AS category_id, tipo_desc, sum(euro_amount) AS sum, month(entry_date) AS `month`
                 FROM movimentos INNER JOIN tipo_mov ON movimentos.category_id=tipo_id
                 WHERE year(entry_date)=?
@@ -37,8 +37,9 @@ class report_month implements ireport
         $tipo_desc = "";
         $sum = 0;
         $month = 0;
-        if (!array_key_exists("year", $params))
+        if (!array_key_exists("year", $params)) {
             return $this;
+        }
         $this->year = $params["year"];
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param('i', $this->year);
@@ -52,8 +53,8 @@ class report_month implements ireport
             $month_list[$month] = $month;
         }
         $stmt->close();
-        $account_type = $object_factory->accounttype();
-        $account = $object_factory->account();
+        $account_type = $objectFactory->accounttype();
+        $account = $objectFactory->account();
         $savings_types = $account_type->getList(['savings' => ['operator' => '=', 'value' => '1']]);
         $savings_accounts = [];
         foreach ($savings_types as $saving_type) {

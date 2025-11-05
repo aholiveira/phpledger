@@ -1,20 +1,20 @@
 <?php
-class authentication
+class Authentication
 {
-    public static bool $_authenticated = false;
+    private static bool $authenticated = false;
     public static function isAuthenticated(): bool
     {
-        return static::$_authenticated;
+        return static::$authenticated;
     }
 
     public static function authenticate(string $username, string $password): bool
     {
-        global $object_factory;
+        global $objectFactory;
 
-        $user_object = $object_factory::user()->getByUsername($username);
+        $user_object = $objectFactory::user()->getByUsername($username);
         if ($user_object instanceof user) {
-            static::$_authenticated = $user_object->verifyPassword($password);
+            static::$authenticated = $user_object->verifyPassword($password);
         }
-        return static::$_authenticated;
+        return static::$authenticated;
     }
 }

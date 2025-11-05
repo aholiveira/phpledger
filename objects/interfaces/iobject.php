@@ -8,20 +8,20 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-interface iobject
+interface iObject
 {
     /**
      * @property int id
      */
     /**
      * Validates if object contains valid data
-     * @return bool TRUE if object is valid, FALSE otherwise
+     * @return bool true if object is valid, false otherwise
      */
     public function validate(): bool;
-    public function error_message(): string;
+    public function errorMessage(): string;
     public function update(): bool;
     public function delete(): bool;
     public static function getNextId(): int;
     public static function getList(array $field_filter = []): array;
-    public static function getById(int $id): ?iobject;
+    public static function getById(int $id): ?iObject;
 }

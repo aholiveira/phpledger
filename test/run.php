@@ -1,9 +1,9 @@
 <?php
-include "common.php";
+include_once "common.php";
 
 debug_print("Running tests...");
 $logger = new Logger("run.log");
-$data_storage = $object_factory->data_storage();
+$data_storage = $objectFactory->data_storage();
 if (!$data_storage->check()) {
     print "DB NEEDS UPDATE...";
     print $data_storage->message();
@@ -17,32 +17,32 @@ if (!$data_storage->check()) {
 }
 
 #$data_storage->populateRandomData();
-$object = $object_factory->account();
+$object = $objectFactory->account();
 run_tests($object);
 $balance = $object->getBalanceOnDate(new DateTime());
 assert(is_float($balance['income']));
 assert(is_float($balance['expense']));
 assert(is_float($balance['balance']));
-$viewer = $view_factory->account_balance_view($object);
+$viewer = $viewFactory->account_balance_view($object);
 /*debug_print($viewer->printObjectList($object->getList(array('activa' => array('operator' => '=', 'value' => '1')))));
  */
-$viewer = $view_factory->account_view($object);
+$viewer = $viewFactory->account_view($object);
 run_views($viewer, $object);
-$object = $object_factory->accounttype();
+$object = $objectFactory->accounttype();
 run_tests($object);
-$viewer = $view_factory->account_type_view($object);
+$viewer = $viewFactory->account_type_view($object);
 run_views($viewer, $object);
 
-$object = $object_factory->currency();
+$object = $objectFactory->currency();
 run_tests($object, 1);
 
-$object = $object_factory->ledger();
+$object = $objectFactory->ledger();
 run_tests($object);
-/*$object = $object_factory->ledgerentry();
+/*$object = $objectFactory->ledgerentry();
 run_tests($object);
-$viewer = $view_factory->ledger_entry_view($object);
+$viewer = $viewFactory->ledger_entry_view($object);
 run_views($viewer, $object);
-$object = $object_factory->entry_category();
+$object = $objectFactory->entry_category();
 $logger->dump($object->getList());
 /*run_tests($object);
 debug_print("OBJECT 145");
@@ -50,23 +50,23 @@ $object->getById(0);
 $logger->dump($object);
 exit(0);
 /*
-$viewer = $view_factory->entry_category_view($object);
+$viewer = $viewFactory->entry_category_view($object);
 print $viewer->printForm();
 $object->getById(7);
-$viewer = $view_factory->entry_category_view($object);
+$viewer = $viewFactory->entry_category_view($object);
 run_views($viewer, $object);
 print $viewer->printForm();
 
 debug_print("YEAR REPORT:");
-$object = $object_factory->report_month();
+$object = $objectFactory->report_month();
 $object->getReport(array("year" => 2021));
-$viewer = $view_factory->report_month_view($object);
+$viewer = $viewFactory->report_month_view($object);
 debug_print($viewer->printAsTable());
 /*
-$object = $object_factory->report_year();
+$object = $objectFactory->report_year();
 $object->getReport(array("year" => 2021));
 $logger->dump($object);
-$viewer = $view_factory->report_year_view($object);
+$viewer = $viewFactory->report_year_view($object);
 //debug_print($viewer->printAsTable());
 */
 function run_tests(mysql_object $object, $id = 1)
@@ -94,7 +94,7 @@ function run_tests(mysql_object $object, $id = 1)
     }
 }
 
-function run_views(object_viewer $viewer, iobject $object)
+function run_views(object_viewer $viewer, iObject $object)
 {
     try {
         debug_print("OBJECT: " . get_class($viewer));

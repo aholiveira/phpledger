@@ -9,7 +9,7 @@
  *
  */
 
-abstract class mysql_object implements iobject
+abstract class mysql_object implements iObject
 {
     public $id;
     protected static string $_errormessage;
@@ -26,7 +26,7 @@ abstract class mysql_object implements iobject
     }
     public function getId()
     {
-        return isset($this->id) ? $this->id : null;
+        return $this->id ?? $this->id;
     }
     /**
      * Copies the object vars from $object into $this
@@ -34,8 +34,9 @@ abstract class mysql_object implements iobject
     protected static function copyfromObject(mysql_object $source, mysql_object $destination): void
     {
         $vars = is_object($source) ? get_object_vars($source) : $source;
-        if (!is_array($vars))
+        if (!is_array($vars)) {
             throw new \Exception('no props to import into the object!');
+        }
         foreach ($vars as $key => $value) {
             $destination->$key = $value;
         }
@@ -53,7 +54,7 @@ abstract class mysql_object implements iobject
         try {
             $sql = "SELECT `{$field}` FROM " . static::$tableName . " ORDER BY `{$field}`";
             $result = @$db->query($sql);
-            if ($result == FALSE || !($result instanceof \mysqli_result)) {
+            if ($result == false || !($result instanceof \mysqli_result)) {
                 return $retval;
             }
             if ($result->num_rows === 0) {
@@ -100,13 +101,15 @@ abstract class mysql_object implements iobject
     {
         $where = "";
         foreach ($field_filter as $field => $filter) {
-            if (strlen($where) > 0)
+            if (strlen($where) > 0) {
                 $where .= " AND ";
+            }
             $field_name = null === $table_name ? "`{$field}`" : "`{$table_name}`.`{$field}`";
             $where .= "{$field_name} {$filter['operator']} {$filter['value']}";
         }
-        if (strlen($where) > 0)
+        if (strlen($where) > 0) {
             $where = "WHERE {$where}";
+        }
         return $where;
     }
     abstract static function getById(int $id): ?mysql_object;
@@ -125,13 +128,13 @@ abstract class mysql_object implements iobject
      * Validates object data.
      * Descendant classes should implement their own code.
      *
-     * @return bool TRUE if object is valid. FALSE otherwise
+     * @return bool true if object is valid. false otherwise
      */
     public function validate(): bool
     {
-        return TRUE;
+        return true;
     }
-    public function error_message(): string
+    public function errorMessage(): string
     {
         return isset(static::$_errormessage) ? static::$_errormessage : "";
     }
@@ -156,8 +159,9 @@ abstract class mysql_object implements iobject
     public function clear(): void
     {
         $vars = get_object_vars($this);
-        if (!is_array($vars))
+        if (!is_array($vars)) {
             throw new \Exception('no props to import into the object!');
+        }
         foreach (array_keys($vars) as $key) {
             unset($this->$key);
         }

@@ -7,7 +7,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-include __DIR__ . "/contas_config.php";
+include_once __DIR__ . "/contas_config.php";
 $pagetitle = "Relatório mensal";
 $year = date("Y");
 if (array_key_exists("year", $_GET)) {
@@ -16,8 +16,8 @@ if (array_key_exists("year", $_GET)) {
         $year = date("Y");
     }
 }
-$report = $object_factory->report_month();
-$reportHtml = $view_factory->report_month_view($report);
+$report = $objectFactory->report_month();
+$reportHtml = $viewFactory->report_month_view($report);
 $report->year = $year;
 $report->getReport(["year" => $year]);
 ?>
@@ -25,7 +25,7 @@ $report->getReport(["year" => $year]);
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include "header.php"; ?>
+    <?php include_once "header.php"; ?>
     <script>
         function toogleGroup(groupName) {
             var i, j, row, multiplier;
@@ -62,7 +62,7 @@ $report->getReport(["year" => $year]);
             <div class="spinner"></div>
         </div>
         <?php
-        include constant("ROOT_DIR") . "/menu_div.php";
+        include_once constant("ROOT_DIR") . "/menu_div.php";
         ?>
         <div id="header" class="header">
             <form name="filtro" action="report_month.php" method="GET">
@@ -97,7 +97,7 @@ $report->getReport(["year" => $year]);
                         }
                     }
                     if (array_key_exists("children", $report->reportData[$key])) {
-                        foreach ($report->reportData[$key]["children"] as $child)
+                        foreach ($report->reportData[$key]["children"] as $child) {
                             if (array_key_exists($month, $child["values"])) {
                                 if ($child["values"][$month] > 0) {
                                     $income_array[$month] += $child["values"][$month];
@@ -105,6 +105,7 @@ $report->getReport(["year" => $year]);
                                     $expense_array[$month] += $child["values"][$month];
                                 }
                             }
+                        }
                     }
                 }
             }
@@ -175,7 +176,7 @@ $report->getReport(["year" => $year]);
                 };
             </script>
         </div>
-        <?php include "footer.php"; ?>
+        <?php include_once "footer.php"; ?>
     </div>
     <script>
         setTimeout(() => { document.getElementById("preloader").style.display = "none"; }, 0);

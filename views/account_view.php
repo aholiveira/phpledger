@@ -12,20 +12,21 @@ class account_view extends object_viewer
 {
     public function printObject(): string
     {
-        global $object_factory;
+        global $objectFactory;
         $retval = "";
-        if (!isset($this->_object->id) || !($this->_object instanceof account))
+        if (!isset($this->_object->id) || !($this->_object instanceof account)) {
             return $retval;
+        }
         /**
          * @var account $_object
          */
         $_object = $this->_object;
         $type_description = "";
         if (!empty($_object->type_id)) {
-            $account_type = $object_factory->accounttype();
+            $account_type = $objectFactory->accounttype();
             $account_type = $account_type->getById($_object->type_id);
             if (null === $account_type) {
-                $account_type = $object_factory->accounttype();
+                $account_type = $objectFactory->accounttype();
             }
             $type_description = $account_type->description;
         }
@@ -42,22 +43,23 @@ class account_view extends object_viewer
     }
     public function printForm(): string
     {
-        global $object_factory;
-        global $view_factory;
+        global $objectFactory;
+        global $viewFactory;
 
         $retval = "";
-        if (!($this->_object instanceof account))
+        if (!($this->_object instanceof account)) {
             return $retval;
+        }
         /**
          * @var account $_object
          */
         $_object = ($this->_object);
         $id = isset($_object->id) ? $_object->id : $_object->getNextId();
-        $account_type = $object_factory->accounttype();
+        $account_type = $objectFactory->accounttype();
         if (isset($_object->type_id)) {
             $account_type = $account_type->getById($_object->type_id);
         }
-        $account_type_view = $view_factory->account_type_view($account_type);
+        $account_type_view = $viewFactory->account_type_view($account_type);
         $tipo_opt = $account_type_view->getSelectFromList($account_type->getList(), isset($_object->type_id) ? $_object->type_id : null);
         $retval .= "<td data-label='ID'><input type=\"hidden\" name=\"conta_id\" value=\"{$id}\">{$id}</td>\n";
         $retval .= "<td data-label='Nome'><a id=\"{$id}\"></a><input type=text size=16 maxlength=30 name=\"conta_nome\" value=\"{$_object->name}\"></td>";

@@ -10,7 +10,7 @@
  *
  */
 
-class defaults extends mysql_object implements iobject
+class defaults extends mysql_object implements iObject
 {
     public int $category_id;
     public int $account_id;
@@ -72,11 +72,13 @@ class defaults extends mysql_object implements iobject
         ORDER BY id";
         $retval = [];
         try {
-            if (!is_object(static::$_dblink))
+            if (!is_object(static::$_dblink)) {
                 return $retval;
+            }
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new mysqli_sql_exception(static::$_dblink->error);
+            if ($stmt === false) {
+                throw new mysqli_sql_exception();
+            }
             $stmt->execute();
             $result = $stmt->get_result();
             while ($newobject = $result->fetch_object(__CLASS__, [static::$_dblink])) {
@@ -105,12 +107,14 @@ class defaults extends mysql_object implements iobject
         $retval = null;
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
+            if ($stmt === false) {
                 throw new mysqli_sql_exception();
+            }
             $stmt->bind_param("i", $id);
             $stmt->execute();
-            if (!$stmt)
+            if (!$stmt) {
                 throw new mysqli_sql_exception();
+            }
             $result = $stmt->get_result();
             $retval = $result->fetch_object(__CLASS__, [static::$_dblink]);
             $stmt->close();
@@ -136,12 +140,14 @@ class defaults extends mysql_object implements iobject
         $retval = null;
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
+            if ($stmt === false) {
                 throw new mysqli_sql_exception();
+            }
             $stmt->bind_param("s", $username);
             $stmt->execute();
-            if (!$stmt)
+            if (!$stmt) {
                 throw new mysqli_sql_exception();
+            }
             $result = $stmt->get_result();
             if ($row = $result->fetch_assoc()) {
                 $retval = new defaults(static::$_dblink, $row);
@@ -164,8 +170,8 @@ class defaults extends mysql_object implements iobject
     {
         $retval = false;
         try {
-            $sql = "INSERT INTO {$this->tableName()} 
-                    (tipo_mov, conta_id, moeda_mov, `data`, deb_cred, `language`, last_visited, username, id) 
+            $sql = "INSERT INTO {$this->tableName()}
+                    (tipo_mov, conta_id, moeda_mov, `data`, deb_cred, `language`, last_visited, username, id)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON DUPLICATE KEY UPDATE
                     tipo_mov=VALUES(tipo_mov),
@@ -177,8 +183,9 @@ class defaults extends mysql_object implements iobject
                     last_visited=VALUES(last_visited),
                     username=VALUES(username)";
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt === false)
-                throw new \mysqli_sql_exception(static::$_dblink->error);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param(
                 "ssssssssi",
                 $this->category_id,
@@ -193,8 +200,9 @@ class defaults extends mysql_object implements iobject
             );
             $retval = $stmt->execute();
             $stmt->close();
-            if (!$retval)
-                throw new \mysqli_sql_exception(static::$_dblink->error);
+            if (!$retval) {
+                throw new \mysqli_sql_exception();
+            }
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }

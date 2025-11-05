@@ -55,9 +55,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         http_response_code(400);
         Redirector::to('ledger_entries.php');
     }
-    $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, TRUE);
+    $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, true);
     try {
-        $saved_id = (new LedgerEntryController($object_factory))->handleSave($filtered_input);
+        $saved_id = (new LedgerEntryController($objectFactory))->handleSave($filtered_input);
         $success = true;
     } catch (\Exception $e) {
         $error_essage = $e->getMessage();
@@ -65,7 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 if ($_SERVER["REQUEST_METHOD"] === "GET") {
-    $filtered_input = filter_input_array(INPUT_GET, $input_variables_filter, TRUE);
+    $filtered_input = filter_input_array(INPUT_GET, $input_variables_filter, true);
 }
 
 ?>
@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include "header.php"; ?>
+    <?php include_once "header.php"; ?>
     <script src="ledger_entries.js"> </script>
 </head>
 
@@ -95,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             <div class="spinner"></div>
         </div>
         <?php
-        include ROOT_DIR . "/menu_div.php";
+        include_once ROOT_DIR . "/menu_div.php";
         if (!empty($filtered_input["filter_sdate"])) {
             $sdate = strlen($filtered_input["filter_sdate"]) ? $filtered_input["filter_sdate"] : date("Y-m-01");
         } else {
@@ -133,9 +133,9 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             $edit = $filtered_input["id"];
         }
 
-        global $object_factory;
+        global $objectFactory;
         // Saldo anterior
-        $ledger_entry = $object_factory->ledgerentry();
+        $ledger_entry = $objectFactory->ledgerentry();
         $balance = $ledger_entry->getBalanceBeforeDate($sdate, is_array($filtered_input) && $filtered_input["filter_account_id"] > 0 ? $filtered_input["filter_account_id"] : null);
         $ledger_entry_cache = ledgerentry::getList($ledger_filter);
         $entry_filter_array = [];
@@ -157,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         }
         // Tipos movimento
         $category_id = $edit > 0 ? $edit_entry->category_id : $defaults->category_id;
-        $entry_viewer = $view_factory->entry_category_view(entry_category::getById($category_id));
+        $entry_viewer = $viewFactory->entry_category_view(entry_category::getById($category_id));
         $tipo_mov_opt = $entry_viewer->getSelectFromList(entry_category::getList([
             'active' => ['operator' => '=', 'value' => '1'],
             'tipo_id' => ['operator' => '>', 'value' => '0']
@@ -165,14 +165,14 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
         // Moedas
         $currency_id = $edit > 0 ? $edit_entry->currency_id : $defaults->currency_id;
-        $currency = $object_factory->currency();
-        $currency_viewer = $view_factory->currency_view($currency);
+        $currency = $objectFactory->currency();
+        $currency_viewer = $viewFactory->currency_view($currency);
         $moeda_opt = $currency_viewer->getSelectFromList(currency::getList(), $currency_id);
 
         // Contas
         $conta_opt = "";
         $account_id = $edit > 0 ? $edit_entry->account_id : $defaults->account_id;
-        $account_viewer = $view_factory->account_view(account::getById($account_id));
+        $account_viewer = $viewFactory->account_view(account::getById($account_id));
         $conta_opt = $account_viewer->getSelectFromList(account::getList(['activa' => ['operator' => '=', 'value' => '1']]), $account_id);
         if (!is_array($filtered_input)) {
             $filtered_input = [];
@@ -439,7 +439,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             <p><?= l10n::l('transactions_in_period', count($ledger_entry_cache)) ?></p>
         </div>
         <?php
-        include "footer.php";
+        include_once "footer.php";
         ?>
     </div> <!-- Main grid -->
     <script>
