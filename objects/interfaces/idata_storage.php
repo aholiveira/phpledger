@@ -3,12 +3,12 @@ interface idata_storage
 {
     /**
      * Check if data storage needs to be updated
-     * @return bool TRUE if data storage is up-to-date, FALSE if data storage needs updating
+     * @return bool true if data storage is up-to-date, FALSE if data storage needs updating
      */
     public function check(): bool;
     /**
      * Updates data storage according to current schema
-     * @return bool TRUE if update was successfull, FALSE otherwise
+     * @return bool true if update was successfull, FALSE otherwise
      */
     public function update(): bool;
     /**

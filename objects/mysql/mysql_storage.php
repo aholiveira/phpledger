@@ -461,8 +461,9 @@ class mysql_storage implements idata_storage
         $this->connect();
         try {
             $stmt = $this->_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $retval = $stmt->execute();
             $stmt->close();
         } catch (\Exception $ex) {
@@ -477,8 +478,9 @@ class mysql_storage implements idata_storage
         $this->connect();
         try {
             $stmt = $this->_dblink->prepare("SHOW CREATE TABLE `{$table}`");
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->execute();
             $stmt->bind_result($table, $retval);
             $stmt->fetch();

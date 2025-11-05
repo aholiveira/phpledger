@@ -50,8 +50,9 @@ class currency extends mysql_object implements iobject
         $retval = [];
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->execute();
             $result = $stmt->get_result();
             while ($newobject = $result->fetch_object(__CLASS__, [static::$_dblink])) {
@@ -70,8 +71,9 @@ class currency extends mysql_object implements iobject
         $retval = null;
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -89,8 +91,9 @@ class currency extends mysql_object implements iobject
         $retval = null;
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param("s", $code);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -117,8 +120,9 @@ class currency extends mysql_object implements iobject
                     `created_at`=NULL,
                     `updated_at`=NULL";
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt === false)
-                throw new \mysqli_sql_exception("Prepare failed");
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param(
                 "sdssi",
                 $this->description,
@@ -129,8 +133,9 @@ class currency extends mysql_object implements iobject
             );
             $retval = $stmt->execute();
             $stmt->close();
-            if (!$retval)
-                throw new \mysqli_sql_exception(static::$_dblink->error);
+            if (!$retval) {
+                throw new \mysqli_sql_exception();
+            }
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }

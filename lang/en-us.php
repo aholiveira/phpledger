@@ -1,7 +1,7 @@
 <?php
 return
     [
-        'update_needed' => "Update Required",
+        'update_needed' => "Update required",
         'db_needs_update' => "The database requires an update.",
         'cannot_use_app' => "You cannot use the application until this update is completed.",
         'start_update' => "Click the button below to begin the update process.",
@@ -18,7 +18,7 @@ return
         'invalid_credentials' => "Invalid credentials",
         'login_screen' => "login screen",
         'version' => "Version %s",
-        'save_success' => "Saved successfully – ID: %s",
+        'save_success' => "Saved successfully - ID: %s",
         'ledger_entries' => "Ledger entries",
         'balances' => "Balances",
         'accounts' => "Accounts",

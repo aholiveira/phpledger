@@ -30,7 +30,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         http_response_code(400);
         Redirector::to('index.php');
     }
-    $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, TRUE);
+    $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, true);
     $post_user = trim($filtered_input["username"] ?? "");
     $post_pass = $filtered_input["password"] ?? "";
 }

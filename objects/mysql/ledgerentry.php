@@ -40,8 +40,9 @@ class ledgerentry extends mysql_object implements iobject
         $where = "";
         foreach ($field_filter as $filter_entry) {
             foreach ($filter_entry as $field => $filter) {
-                if (strlen($where) > 0)
+                if (strlen($where) > 0) {
                     $where .= " AND ";
+                }
                 $field_name = null === $table_name ? "`{$field}`" : "`{$table_name}`.`{$field}`";
                 if (strtolower($filter['operator']) === "in") {
                     $where .= "{$field_name} {$filter['operator']} {$filter['value']}";
@@ -50,8 +51,9 @@ class ledgerentry extends mysql_object implements iobject
                 }
             }
         }
-        if (strlen($where) > 0)
+        if (strlen($where) > 0) {
             $where = "WHERE {$where}";
+        }
         return $where;
     }
     public static function getDefinition(): array
@@ -104,8 +106,9 @@ class ledgerentry extends mysql_object implements iobject
         $retval = [];
         try {
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->execute();
             $result = $stmt->get_result();
             while ($newobject = $result->fetch_object(__CLASS__, [static::$_dblink])) {
@@ -131,8 +134,9 @@ class ledgerentry extends mysql_object implements iobject
         $retval = null;
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
@@ -154,8 +158,9 @@ class ledgerentry extends mysql_object implements iobject
                 WHERE entry_date<?" . (null !== $account_id ? " AND account_id=?" : "");
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             if (null === $account_id) {
                 $stmt->bind_param("s", $date);
             } else {
@@ -189,8 +194,9 @@ class ledgerentry extends mysql_object implements iobject
                 WHERE {$where}";
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->execute();
             $stmt->bind_result($retval);
             $stmt->fetch();
@@ -233,8 +239,9 @@ class ledgerentry extends mysql_object implements iobject
                 username=VALUES(username),
                 updated_at=NULL";
             $stmt = static::$_dblink->prepare($sql);
-            if ($stmt === false)
-                throw new \mysqli_sql_exception("Error on function " . __FUNCTION__ . " class " . __CLASS__);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
             $stmt->bind_param(
                 "isiisiddss",
                 $this->id,

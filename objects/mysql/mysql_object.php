@@ -125,11 +125,11 @@ abstract class mysql_object implements iobject
      * Validates object data.
      * Descendant classes should implement their own code.
      *
-     * @return bool TRUE if object is valid. FALSE otherwise
+     * @return bool true if object is valid. FALSE otherwise
      */
     public function validate(): bool
     {
-        return TRUE;
+        return true;
     }
     public function error_message(): string
     {
