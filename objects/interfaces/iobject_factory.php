@@ -7,17 +7,17 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-interface iobject_factory
+interface iObjectFactory
 {
-    public static function data_storage(): idata_storage;
-    public static function defaults(): iobject;
-    public static function user(): iobject;
-    public static function account(): iobject;
-    public static function accounttype(): iobject;
-    public static function currency(): iobject;
-    public static function ledger(): iobject;
-    public static function ledgerentry(): iobject;
-    public static function entry_category(): iobject;
-    public static function report_month(): ireport;
-    public static function report_year(): ireport;
+    public static function data_storage(): iDataStorage;
+    public static function defaults(): iObject;
+    public static function user(): iObject;
+    public static function account(): iObject;
+    public static function accounttype(): iObject;
+    public static function currency(): iObject;
+    public static function ledger(): iObject;
+    public static function ledgerentry(): iObject;
+    public static function entry_category(): iObject;
+    public static function report_month(): iReport;
+    public static function report_year(): iReport;
 }

@@ -18,7 +18,7 @@
  *
  */
 
-class account extends mysql_object implements iobject
+class account extends mysql_object implements iObject
 {
     public string $name = "";
     public string $number = "";
@@ -31,10 +31,6 @@ class account extends mysql_object implements iobject
     public int $active;
     protected static string $tableName = "contas";
 
-    public function __construct(\mysqli $dblink)
-    {
-        parent::__construct($dblink);
-    }
     public static function getDefinition(): array
     {
         $retval = [];

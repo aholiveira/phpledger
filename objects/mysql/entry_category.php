@@ -8,7 +8,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-class entry_category extends mysql_object implements iobject
+class entry_category extends mysql_object implements iObject
 {
     public ?string $description;
     public int $active;

@@ -7,7 +7,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-include __DIR__ . "/contas_config.php";
+include_once __DIR__ . "/contas_config.php";
 $pagetitle = "Tipos de movimentos";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")) {
@@ -59,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include "header.php"; ?>
+    <?php include_once "header.php"; ?>
 </head>
 
 <body>
@@ -68,7 +68,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
             <div class="spinner"></div>
         </div>
         <?php
-        include ROOT_DIR . "/menu_div.php";
+        include_once ROOT_DIR . "/menu_div.php";
         ?>
         <div class="header">
             <p style="margin: 0"><a href="entry_type.php">Adicionar</a></p>
@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
                 ?>
             </div>
         </div>
-        <?php include "footer.php"; ?>
+        <?php include_once "footer.php"; ?>
     </div>
     <script>
         setTimeout(() => { document.getElementById("preloader").style.display = "none"; }, 0);

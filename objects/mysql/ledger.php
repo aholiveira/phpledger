@@ -8,14 +8,10 @@
  *
  */
 
-class ledger extends mysql_object implements iobject
+class ledger extends mysql_object implements iObject
 {
     public string $name;
     protected static string $tableName = "`grupo_contas`";
-    public function __construct(\mysqli $dblink)
-    {
-        parent::__construct($dblink);
-    }
     public static function getDefinition(): array
     {
         $retval = [];

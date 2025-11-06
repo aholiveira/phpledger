@@ -12,7 +12,7 @@
 define("USER_ROLE_ADM", 255);
 define("USER_ROLE_RW", 192);
 define("USER_ROLE_RO", 128);
-class user extends mysql_object implements iobject
+class user extends mysql_object implements iObject
 {
     protected string $_username;
     protected string $_password;
@@ -311,7 +311,7 @@ class user extends mysql_object implements iobject
             $message .= "\r\n";
             $message .= "Cumprimentos,\r\n";
             $message .= "$title\r\n";
-            $retval = Email::send_email(config::get("from"), $this->getEmail(), "Reposicao de palavra-passe", $message);
+            $retval = Email::sendEmail(config::get("from"), $this->getEmail(), "Reposicao de palavra-passe", $message);
         }
         return $retval;
     }

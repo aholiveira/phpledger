@@ -11,7 +11,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-class ledgerentry extends mysql_object implements iobject
+class ledgerentry extends mysql_object implements iObject
 {
     public string $entry_date;
     public int $category_id;
@@ -31,10 +31,6 @@ class ledgerentry extends mysql_object implements iobject
     public int $ledger_id;
     protected static string $tableName = "movimentos";
 
-    public function __construct(\mysqli $dblink)
-    {
-        parent::__construct($dblink);
-    }
     protected static function getWhereFromArray(array $field_filter, ?string $table_name = null): string
     {
         $where = "";

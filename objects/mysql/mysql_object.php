@@ -9,7 +9,7 @@
  *
  */
 
-abstract class mysql_object implements iobject
+abstract class mysql_object implements iObject
 {
     public $id;
     protected static string $_errormessage;
@@ -131,7 +131,7 @@ abstract class mysql_object implements iobject
     {
         return true;
     }
-    public function error_message(): string
+    public function errorMessage(): string
     {
         return isset(static::$_errormessage) ? static::$_errormessage : "";
     }

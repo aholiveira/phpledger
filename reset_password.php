@@ -10,7 +10,7 @@
 global $user;
 global $pass;
 
-include __DIR__ . "/contas_config.php";
+include_once __DIR__ . "/contas_config.php";
 $pagetitle = "Redefini&ccedil;o de palavra-passe";
 
 ?>
@@ -18,7 +18,7 @@ $pagetitle = "Redefini&ccedil;o de palavra-passe";
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include "header.php"; ?>
+    <?php include_once "header.php"; ?>
     <?php
     $object_factory = new object_factory();
     $user = $object_factory->user();

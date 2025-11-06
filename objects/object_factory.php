@@ -11,11 +11,11 @@ if (!defined("BACKEND") || !defined("OBJECTS_DIR")) {
     die("This file should only be included!");
 }
 
-include OBJECTS_DIR . "/interfaces/idata_storage.php";
-include OBJECTS_DIR . "/interfaces/ireport.php";
-include OBJECTS_DIR . "/interfaces/iobject.php";
-include OBJECTS_DIR . "/interfaces/iobject_factory.php";
+include_once OBJECTS_DIR . "/interfaces/idata_storage.php";
+include_once OBJECTS_DIR . "/interfaces/ireport.php";
+include_once OBJECTS_DIR . "/interfaces/iobject.php";
+include_once OBJECTS_DIR . "/interfaces/iobject_factory.php";
 
 if (defined("BACKEND") && file_exists(OBJECTS_DIR . "/" . BACKEND . "/" . basename(__FILE__))) {
-    include OBJECTS_DIR . "/" . BACKEND . "/" . basename(__FILE__);
+    include_once OBJECTS_DIR . "/" . BACKEND . "/" . basename(__FILE__);
 }

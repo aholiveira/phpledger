@@ -1,5 +1,5 @@
 <?php
-interface idata_storage
+interface iDataStorage
 {
     /**
      * Check if data storage needs to be updated

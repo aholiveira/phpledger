@@ -9,7 +9,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-class report_month implements ireport
+class report_month implements iReport
 {
     public int $year;
     public array $monthNames;

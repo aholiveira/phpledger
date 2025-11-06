@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include "header.php"; ?>
+    <?php include_once "header.php"; ?>
     <script src="ledger_entries.js"> </script>
 </head>
 
@@ -95,7 +95,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             <div class="spinner"></div>
         </div>
         <?php
-        include ROOT_DIR . "/menu_div.php";
+        include_once ROOT_DIR . "/menu_div.php";
         if (!empty($filtered_input["filter_sdate"])) {
             $sdate = strlen($filtered_input["filter_sdate"]) ? $filtered_input["filter_sdate"] : date("Y-m-01");
         } else {
@@ -439,7 +439,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             <p><?= l10n::l('transactions_in_period', count($ledger_entry_cache)) ?></p>
         </div>
         <?php
-        include "footer.php";
+        include_once "footer.php";
         ?>
     </div> <!-- Main grid -->
     <script>

@@ -9,7 +9,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-class report_year extends report implements ireport
+class report_year extends report implements iReport
 {
     protected int $first_year;
     protected int $last_year;

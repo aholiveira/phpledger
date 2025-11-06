@@ -8,7 +8,7 @@
  *
  */
 
-class mysql_storage implements idata_storage
+class mysql_storage implements iDataStorage
 {
     private ?\mysqli $_dblink = null;
     private string $_message = "";

@@ -11,5 +11,5 @@ if (!defined("BACKEND") || !defined("OBJECTS_DIR")) {
     die("This file should only be included!");
 }
 if (defined("BACKEND") && file_exists(OBJECTS_DIR . BACKEND . "/" . basename(__FILE__))) {
-    include OBJECTS_DIR . BACKEND . "/" . basename(__FILE__);
+    include_once OBJECTS_DIR . BACKEND . "/" . basename(__FILE__);
 }
