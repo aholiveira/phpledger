@@ -1,5 +1,5 @@
 <?php
-include "common.php";
+include_once "common.php";
 
 debug_print("Running tests...");
 $logger = new Logger("run.log");
@@ -94,7 +94,7 @@ function run_tests(mysql_object $object, $id = 1)
     }
 }
 
-function run_views(object_viewer $viewer, iobject $object)
+function run_views(object_viewer $viewer, iObject $object)
 {
     try {
         debug_print("OBJECT: " . get_class($viewer));

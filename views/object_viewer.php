@@ -9,8 +9,8 @@
  */
 abstract class object_viewer
 {
-    protected iobject $_object;
-    public function __construct(iobject $object)
+    protected iObject $_object;
+    public function __construct(iObject $object)
     {
         $this->_object = $object;
     }
@@ -18,7 +18,7 @@ abstract class object_viewer
     {
         return get_called_class();
     }
-    public function setObject(iobject $object)
+    public function setObject(iObject $object)
     {
         $this->_object = $object;
     }

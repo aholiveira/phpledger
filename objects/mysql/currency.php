@@ -7,7 +7,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-class currency extends mysql_object implements iobject
+class currency extends mysql_object implements iObject
 {
     public string $code;
     public string $description;

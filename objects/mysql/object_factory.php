@@ -7,21 +7,21 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-include __DIR__ . "/mysql_object.php";
-include __DIR__ . "/account.php";
-include __DIR__ . "/accounttype.php";
-include __DIR__ . "/mysql_storage.php";
-include __DIR__ . "/currency.php";
-include __DIR__ . "/defaults.php";
-include __DIR__ . "/entry_category.php";
-include __DIR__ . "/ledger.php";
-include __DIR__ . "/ledgerentry.php";
-include __DIR__ . "/report.php";
-include __DIR__ . "/reportmonth.php";
-include __DIR__ . "/reportyear.php";
-include __DIR__ . "/user.php";
+include_once __DIR__ . "/mysql_object.php";
+include_once __DIR__ . "/account.php";
+include_once __DIR__ . "/accounttype.php";
+include_once __DIR__ . "/mysql_storage.php";
+include_once __DIR__ . "/currency.php";
+include_once __DIR__ . "/defaults.php";
+include_once __DIR__ . "/entry_category.php";
+include_once __DIR__ . "/ledger.php";
+include_once __DIR__ . "/ledgerentry.php";
+include_once __DIR__ . "/report.php";
+include_once __DIR__ . "/reportmonth.php";
+include_once __DIR__ . "/reportyear.php";
+include_once __DIR__ . "/user.php";
 
-class object_factory implements iobject_factory
+class object_factory implements iObjectFactory
 {
     private static ?\mysqli $_dblink = null;
     private Logger $logger;
@@ -55,7 +55,7 @@ class object_factory implements iobject_factory
         print "<p>Error while connecting to the database. Please check config file.</p>";
         $logger->error("Error [{$ex->getMessage()}] while connecting to the database. Please check config file.");
     }
-    public static function data_storage(): idata_storage
+    public static function data_storage(): iDataStorage
     {
         return new mysql_storage();
     }

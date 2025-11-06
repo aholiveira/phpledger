@@ -1,5 +1,5 @@
 <?php
-include "common.php";
+include_once "common.php";
 $retval = true;
 $classnames = [
     "account" => "account_view",
@@ -205,7 +205,7 @@ function test_object(mysql_object $object, $id = 1)
     }
     return $retval;
 }
-function test_view(object_viewer $viewer, iobject $object)
+function test_view(object_viewer $viewer, iObject $object)
 {
     $retval = true;
     global $logger;

@@ -9,7 +9,7 @@
  */
 
 if (!defined("ROOT_DIR")) {
-    include __DIR__ . "/prepend.php";
+    include_once __DIR__ . "/prepend.php";
 }
 config::init(__DIR__ . '/config.json');
 if (isset($_SESSION['expires']) && $_SESSION['expires'] < time()) {
@@ -33,7 +33,7 @@ if (!isset($_SESSION['user'])) {
         ?>
         <!DOCTYPE html>
         <html lang="pt-PT">
-        <?php include "header.php"; ?>
+        <?php include_once "header.php"; ?>
         <meta http-equiv="refresh" content="5;url=index.php">
         <script>
             window.addEventListener("DOMContentLoaded", () => {

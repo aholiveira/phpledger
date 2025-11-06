@@ -66,7 +66,7 @@ if (!empty($post_user)) {
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include "header.php"; ?>
+    <?php include_once "header.php"; ?>
 </head>
 
 <body onload="document.getElementById('username').focus();">
@@ -101,7 +101,7 @@ if (!empty($post_user)) {
                 </tr>
                 <tr>
                     <td class="version-tag">
-                        <?php include ROOT_DIR . "/lang_selector.php"; ?>
+                        <?php include_once ROOT_DIR . "/lang_selector.php"; ?>
                     </td>
                 </tr>
             </table>

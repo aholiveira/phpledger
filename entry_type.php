@@ -7,20 +7,20 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-include __DIR__ . "/contas_config.php";
+include_once __DIR__ . "/contas_config.php";
 $pagetitle = "Tipo de movimentos";
 ?>
 <!DOCTYPE html>
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include "header.php"; ?>
+    <?php include_once "header.php"; ?>
 </head>
 
 <body>
     <div class="maingrid">
         <?php
-        include ROOT_DIR . "/menu_div.php";
+        include_once ROOT_DIR . "/menu_div.php";
         ?>
         <div class="header" style="height: 0;"></div>
         <div id="main" class="main">
@@ -51,7 +51,7 @@ $pagetitle = "Tipo de movimentos";
                 </table>
             </form>
         </div>
-        <?php include "footer.php"; ?>
+        <?php include_once "footer.php"; ?>
     </div>
 </body>
 

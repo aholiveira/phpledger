@@ -8,7 +8,7 @@
  *
  */
 
-class accounttype extends mysql_object implements iobject
+class accounttype extends mysql_object implements iObject
 {
     public ?string $description = null;
     public int $savings = 0;
