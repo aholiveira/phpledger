@@ -19,37 +19,40 @@ function add_filter(filter_name, filter_value) {
 }
 
 function toggleDateElements(elementId) {
-    const test = document.createElement("input");
-    try {
-        test.type = "date";
-        let rows = document.getElementsByClassName("date-fallback");
-        for (let row of rows) {
-            if (row.style.display === "none" && row.tagName === "SELECT") {
+    const input = document.createElement("input");
+    input.type = "date";
+    const supportsDate = input.type === "date";
+    const rows = document.getElementsByClassName("date-fallback");
+
+    for (const row of rows) {
+        if (supportsDate) {
+            if (row.tagName === "SELECT" && row.style.display === "none") {
                 row.value = "";
             }
         }
-    } catch (e) {
-        let rows = document.getElementsByClassName("date-fallback");
-        for (let row of rows) {
-            if (row.style.display === "none") {
-                row.style.removeProperty("display");
-            } else {
-                if (row.tagName === "INPUT") {
-                    row.value = "";
-                    row.removeAttribute("required");
-                }
-                row.style.display = "none";
+        else {
+            const isHidden = row.style.display === "none";
+            row.style.display = isHidden ? "" : "none";
+            if (!isHidden && row.tagName === "INPUT") {
+                row.value = "";
+                row.removeAttribute("required");
             }
         }
-        elementId += "AA";
     }
-    document.addEventListener("DOMContentLoaded", () => {
+
+    const focusTarget = () => {
+        const el = document.getElementById(elementId + (supportsDate ? "" : "AA"));
+        if (!el) { return; }
         setTimeout(() => {
-            const el = document.getElementById(elementId);
-            if (el) {
-                el.focus();
-                el.closest("tr").scrollIntoView({ behavior: "auto", block: "nearest" });
-            }
+            el.focus();
+            el.closest("tr")?.scrollIntoView({ behavior: "auto", block: "nearest" });
         }, 1);
-    });
+    };
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", focusTarget, { once: true });
+    }
+    else {
+        focusTarget();
+    }
 }
