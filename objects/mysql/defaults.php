@@ -169,8 +169,8 @@ class defaults extends mysql_object implements iObject
     {
         $retval = false;
         try {
-            $sql = "INSERT INTO {$this->tableName()} 
-                    (tipo_mov, conta_id, moeda_mov, `data`, deb_cred, `language`, last_visited, username, id) 
+            $sql = "INSERT INTO {$this->tableName()}
+                    (tipo_mov, conta_id, moeda_mov, `data`, deb_cred, `language`, last_visited, username, id)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON DUPLICATE KEY UPDATE
                     tipo_mov=VALUES(tipo_mov),

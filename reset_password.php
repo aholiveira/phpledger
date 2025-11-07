@@ -20,8 +20,8 @@ $pagetitle = "Redefini&ccedil;o de palavra-passe";
 <head>
     <?php include_once "header.php"; ?>
     <?php
-    $object_factory = new object_factory();
-    $user = $object_factory->user();
+    $objectFactory = new object_factory();
+    $user = $objectFactory->user();
 
     if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $token_id = filter_input(INPUT_GET, "token_id", FILTER_SANITIZE_ENCODED);

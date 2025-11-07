@@ -33,11 +33,11 @@ class entry_category_view extends object_viewer
     }
     public function printObjectList(array $object_list): string
     {
-        global $object_factory;
+        global $objectFactory;
         $retval = "<table class=\"lista entry_category\">\r\n";
         $retval .= "<thead><tr><th>ID</th><th>Categoria</th><th>Descri&ccedil;&atilde;o</th><th>Valor</th><th>Activa</th></tr></thead>\r\n";
         $retval .= "<tbody>\r\n";
-        $view = new entry_category_view($object_factory->entry_category());
+        $view = new entry_category_view($objectFactory->entry_category());
         foreach ($object_list as $object) {
             if ($object instanceof entry_category) {
                 if ($object->parent_id === 0) {

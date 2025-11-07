@@ -27,14 +27,14 @@ $pagetitle = "Tipo de movimentos";
             <form method="POST" action="entry_types_list.php">
                 <table class="entry_category">
                     <?php
-                    $object = $object_factory->entry_category();
+                    $object = $objectFactory->entry_category();
                     if (filter_has_var(INPUT_GET, "tipo_id")) {
                         $tipo_id = filter_input(INPUT_GET, "tipo_id", FILTER_VALIDATE_INT);
                         if ($tipo_id > 0) {
                             $object = $object->getById($tipo_id);
                         }
                     }
-                    $viewer = $view_factory->entry_category_view($object);
+                    $viewer = $viewFactory->entry_category_view($object);
                     print $viewer->printForm();
                     ?>
 

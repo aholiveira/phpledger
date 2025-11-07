@@ -11,7 +11,7 @@ include_once __DIR__ . "/contas_config.php";
 $pagetitle = "Tipos de movimentos";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")) {
-    $object = $object_factory->entry_category();
+    $object = $objectFactory->entry_category();
     $retval = false;
     $update = filter_input(INPUT_POST, "update", FILTER_DEFAULT);
     if (strcasecmp($update, "gravar") == 0) {
@@ -76,8 +76,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
         <div id="main" class="main">
             <div class="entry_category_list">
                 <?php
-                $object = $object_factory->entry_category();
-                $viewer = $view_factory->entry_category_view($object);
+                $object = $objectFactory->entry_category();
+                $viewer = $viewFactory->entry_category_view($object);
                 print $viewer->printObjectList($object->getList());
                 ?>
             </div>

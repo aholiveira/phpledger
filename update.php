@@ -10,9 +10,9 @@
 require_once "prepend.php";
 config::init(__DIR__ . '/config.json');
 
-$object_factory = new object_factory();
-$view_factory = new view_factory();
-$data_storage = $object_factory->data_storage();
+$objectFactory = new object_factory();
+$viewFactory = new view_factory();
+$data_storage = $objectFactory->data_storage();
 $update_result = null;
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {

@@ -11,7 +11,7 @@ include_once __DIR__ . "/contas_config.php";
 $pagetitle = "Tipo de contas";
 $message = "";
 $retval = false;
-$object = $object_factory->accounttype();
+$object = $objectFactory->accounttype();
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
         http_response_code(400);

@@ -23,8 +23,8 @@ if (array_key_exists("last_year", $_GET)) {
         $last_year = date("Y");
     }
 }
-$report = $object_factory->report_year();
-$reportHtml = $view_factory->report_year_view($report);
+$report = $objectFactory->report_year();
+$reportHtml = $viewFactory->report_year_view($report);
 $report->getReport(["first_year" => $first_year, "last_year" => $last_year]);
 ?>
 <!DOCTYPE html>

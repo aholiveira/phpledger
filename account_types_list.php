@@ -31,8 +31,8 @@ $pagetitle = "Tipos de contas";
         </div>
         <div class="main" id="main">
             <?php
-            $object = $object_factory->accounttype();
-            $viewer = $view_factory->account_type_view($object);
+            $object = $objectFactory->accounttype();
+            $viewer = $viewFactory->account_type_view($object);
             print $viewer->printObjectList($object->getList());
             ?>
         </div>

@@ -109,7 +109,7 @@ class currency extends mysql_object implements iObject
     {
         $retval = false;
         try {
-            $sql = "INSERT INTO {$this->tableName()} 
+            $sql = "INSERT INTO {$this->tableName()}
                     (`description`, `exchange_rate`, `code`, `username`, `created_at`, `updated_at`, `id`)
                 VALUES (?, ?, ?, ?, NULL, NULL, ?)
                 ON DUPLICATE KEY UPDATE

@@ -32,7 +32,7 @@ class report_month extends report implements iReport
 
     public function getReport(array $params = []): report_month
     {
-        global $object_factory;
+        global $objectFactory;
         $this->year = array_key_exists("year", $params) ? $params["year"] : date("Y");
         $this->initColumnHeaders($this->year);
         $sql = "SELECT category_id as `row_header`, MONTH(entry_date) AS `col_header`, ROUND(SUM(ROUND(euro_amount,5)),2) AS `value`
@@ -43,8 +43,8 @@ class report_month extends report implements iReport
             ORDER BY row_header, col_header";
         parent::getData($sql, $this->year);
         parent::getReport($params);
-        $account_type = $object_factory->accounttype();
-        $account = $object_factory->account();
+        $account_type = $objectFactory->accounttype();
+        $account = $objectFactory->account();
         $savings_types = $account_type->getList(['savings' => ['operator' => '=', 'value' => '1']]);
         $savings_accounts = [];
         foreach ($savings_types as $saving_type) {
