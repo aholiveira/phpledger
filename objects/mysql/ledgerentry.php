@@ -217,8 +217,9 @@ class ledgerentry extends mysql_object implements iObject
     public function update(): bool
     {
         $retval = false;
-        if (!$this->validate())
+        if (!$this->validate()) {
             return $retval;
+        }
         try {
             $sql = "INSERT INTO {$this->tableName()}
             (id, entry_date, category_id, account_id, currency_id, direction, currency_amount, euro_amount, remarks, username, created_at, updated_at)

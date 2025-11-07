@@ -149,10 +149,12 @@ class user extends mysql_object implements iObject
         $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false)
+            if ($stmt == false) {
                 return $retval;
-            if (!isset($this->id))
+            }
+            if (!isset($this->id)) {
                 return $retval;
+            }
             $stmt->bind_param("i", $this->id);
             $stmt->execute();
             $stmt->bind_result($return_id);
@@ -197,8 +199,9 @@ class user extends mysql_object implements iObject
             static::$_dblink->commit();
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
-            if (isset($stmt))
+            if (isset($stmt)) {
                 $stmt->close();
+            }
         }
         return $retval;
     }
@@ -355,8 +358,9 @@ class user extends mysql_object implements iObject
             $stmt->close();
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
-            if (isset($stmt))
+            if (isset($stmt)) {
                 $stmt->close();
+            }
         }
         return $retval;
     }

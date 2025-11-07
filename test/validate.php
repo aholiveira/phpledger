@@ -19,11 +19,11 @@ const FAILED = "\033[31mFAILED\033[0m";
 $logger = new Logger("validate.log");
 print "Running tests\r\n\r\n";
 $data_storage = new mysql_storage();
-print (str_pad("Testing data storage ", constant("PADDING"), ".") . " : ");
+print str_pad("Testing data storage ", constant("PADDING"), ".") . " : ";
 if (!$data_storage->check()) {
     print "\033[33mUPDATE\033[0m\r\n";
     print $data_storage->message();
-    print (str_pad("Testing storage update ", constant("PADDING"), ".") . " : ");
+    print str_pad("Testing storage update ", constant("PADDING"), ".") . " : ";
     if ($data_storage->update()) {
         print constant("PASSED") . "\r\n";
         print $data_storage->message();
@@ -119,7 +119,7 @@ function prepare_ledgerentry(): bool
     return $retval;
 }
 
-print (str_pad("Preparing data ", constant("PADDING"), ".") . " : ");
+print str_pad("Preparing data ", constant("PADDING"), ".") . " : ";
 $retval = prepare_entry_category() && $retval;
 $retval = prepare_accounttype() && $retval;
 $retval = prepare_account() && $retval;
@@ -136,8 +136,9 @@ foreach ($classnames as $class => $view) {
     unset($object);
     unset($viewer);
     $object = $objectFactory->$class();
-    if (array_key_exists($class, $class_id))
+    if (array_key_exists($class, $class_id)) {
         $id = $class_id[$class];
+    }
     $retval = test_object($object, $id) && $retval;
     if (strlen($view) > 0) {
         $object = $object->getById($id);
@@ -163,6 +164,9 @@ function run_additional($object, $viewer = null)
             $retval = assert(is_float($balance['balance'])) && $retval;
             $retval = assert(strlen($viewer->printObjectList($object->getList(['activa' => ['operator' => '=', 'value' => '1']]))) > 0) && $retval;
             break;
+        default:
+            $retval = true;
+            break;
     }
     return $retval;
 }
@@ -171,7 +175,7 @@ function test_report($report, $view)
     global $objectFactory;
     global $viewFactory;
     $retval = true;
-    print (str_pad("Testing {$report} ", constant("PADDING"), ".") . " : ");
+    print str_pad("Testing {$report} ", constant("PADDING"), ".") . " : ";
     $object = $objectFactory->$report();
     assert(is_a($object->getReport(["year" => 2023]), $report));
     $viewer = $viewFactory->$view($object);
@@ -184,18 +188,18 @@ function test_object(mysql_object $object, $id = 1)
     $retval = true;
     global $logger;
     try {
-        print (str_pad("Testing {$object} ", constant("PADDING"), ".") . " : ");
+        print str_pad("Testing {$object} ", constant("PADDING"), ".") . " : ";
         $object = $object->getById($id);
         if (isset($object->id)) {
-            $retval = (assert($object->id === $id, "getById") && $retval);
+            $retval = assert($object->id === $id, "getById") && $retval;
         }
         $retval = assert($object->update() === true, "save#{$object}#");
         $field_filter = [];
         if ($object instanceof ledgerentry) {
             $field_filter[] = ['entry_date' => ['operator' => 'BETWEEN', 'value' => date("Y-01-01 ") . "' AND '" . date("Y-12-31")]];
         }
-        $retval = (@assert(sizeof($object->getList($field_filter)) > 0, "getList#{$object}#") && $retval);
-        $retval = (@assert($object->getNextId() >= 0, "getNextId#{$object}#") && $retval);
+        $retval = @assert(sizeof($object->getList($field_filter)) > 0, "getList#{$object}#") && $retval;
+        $retval = @assert($object->getNextId() >= 0, "getNextId#{$object}#") && $retval;
         print ($retval ? constant("PASSED") : constant("FAILED")) . "\r\n";
     } catch (Exception $ex) {
         $logger->dump($ex->getMessage());
@@ -210,16 +214,16 @@ function test_view(object_viewer $viewer, iObject $object)
     $retval = true;
     global $logger;
     try {
-        print (str_pad("Testing " . get_class($viewer) . " ", constant("PADDING"), ".") . " : ");
-        $retval = (assert(!empty($viewer->printObject())) && $retval);
+        print str_pad("Testing " . get_class($viewer) . " ", constant("PADDING"), ".") . " : ";
+        $retval = assert(!empty($viewer->printObject())) && $retval;
         $field_filter = [];
         if ($object instanceof ledgerentry) {
             $field_filter[] = ['entry_date' => ['operator' => 'BETWEEN', 'value' => "2022-01-01' AND '2022-01-02"]];
         }
-        $retval = (@assert(!empty($viewer->printObjectList($object->getList($field_filter))), "#printObjectList#") && $retval);
+        $retval = @assert(!empty($viewer->printObjectList($object->getList($field_filter))), "#printObjectList#") && $retval;
         $method = "printForm";
         if (method_exists($viewer, $method)) {
-            $retval = (@assert(!empty(@$viewer->$method()), "#{$method}#") && $retval);
+            $retval = @assert(!empty(@$viewer->$method()), "#{$method}#") && $retval;
         }
         print ($retval ? constant("PASSED") : constant("FAILED")) . "\r\n";
     } catch (Exception $ex) {

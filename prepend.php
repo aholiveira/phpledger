@@ -66,7 +66,7 @@ $logger = new Logger(ROOT_DIR . "/logs/ledger.log");
 function debug_print($text)
 {
     if (defined("DEBUG") && DEBUG === 1) {
-        print (nl2br("####DEBUG#$text#DEBUG####<br>\n"));
+        print nl2br("####DEBUG#$text#DEBUG####<br>\n");
     }
 }
 function normalize_number(?float $number): string

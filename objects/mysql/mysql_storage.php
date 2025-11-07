@@ -438,8 +438,9 @@ class mysql_storage implements iDataStorage
         $this->connect();
         try {
             $stmt = @$this->_dblink->prepare($sql);
-            if ($stmt == false)
+            if ($stmt == false) {
                 return $retval;
+            }
             $stmt->execute();
             $stmt->bind_result($retval);
             $stmt->fetch();
@@ -546,10 +547,12 @@ class mysql_storage implements iDataStorage
         $retval = false;
         $this->connect();
         try {
-            if ($this->tableHasColumn($table_name, $new_column_name))
+            if ($this->tableHasColumn($table_name, $new_column_name)) {
                 return false;
-            if (!$this->tableHasColumn($table_name, $old_column_name))
+            }
+            if (!$this->tableHasColumn($table_name, $old_column_name)) {
                 return false;
+            }
             $sql = "ALTER TABLE `{$table_name}` RENAME COLUMN `{$old_column_name}` TO `{$new_column_name}`";
             $retval = $this->do_query($sql);
             $this->addMessage("Renamed column [{$old_column_name}] to [{$new_column_name}] on [{$table_name}]");
@@ -582,8 +585,9 @@ class mysql_storage implements iDataStorage
         $this->connect();
         $sql = "ALTER TABLE `{$table_name}` ADD FOREIGN KEY `{$key_name}` (`{$key_name}`) REFERENCES {$fk_def}";
         try {
-            if ($this->tableHasForeignKey($table_name, $key_name))
+            if ($this->tableHasForeignKey($table_name, $key_name)) {
                 return true;
+            }
             $retval = $this->do_query($sql);
             $this->addMessage("Added foreign key [{$key_name}] to table [{$table_name}]");
         } catch (\Exception $ex) {
@@ -737,7 +741,6 @@ class mysql_storage implements iDataStorage
             if ($retval) {
                 $this->addMessage("Created table [{$table_name}]");
                 $this->addMessage("Created table [{$sql}]");
-
             }
             return (bool) $retval;
         } catch (\Exception $ex) {

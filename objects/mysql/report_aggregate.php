@@ -37,8 +37,9 @@ class report_month implements iReport
         $tipo_desc = "";
         $sum = 0;
         $month = 0;
-        if (!array_key_exists("year", $params))
+        if (!array_key_exists("year", $params)) {
             return $this;
+        }
         $this->year = $params["year"];
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param('i', $this->year);

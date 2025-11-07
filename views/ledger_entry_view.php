@@ -15,8 +15,9 @@ class ledger_entry_view extends object_viewer
     public function printObject(): string
     {
         $retval = "";
-        if (empty($this->_object->id))
+        if (empty($this->_object->id)) {
             return $retval;
+        }
         $retval .= "<td data-label='ID'><a id=\"{$this->_object->id}\" title=\"Editar\" href=\"ledger_entries.php?id={$this->_object->id}#{$this->_object->id}\">{$this->_object->id}</a></td>\n";
         $retval .= "<td data-label='Data' style=\"text-align: center\">{$this->_object->entry_date}</td>\n";
         $retval .= "<td data-label='Categoria'><a title=\"Mostrar movimentos apenas desta categoria\" href=\"ledger_entries.php?filter_tipo_mov={$this->_object->category->id}\">{$this->_object->category->description}</a></td>\n";

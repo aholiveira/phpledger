@@ -97,7 +97,7 @@ $report->getReport(["year" => $year]);
                         }
                     }
                     if (array_key_exists("children", $report->reportData[$key])) {
-                        foreach ($report->reportData[$key]["children"] as $child)
+                        foreach ($report->reportData[$key]["children"] as $child) {
                             if (array_key_exists($month, $child["values"])) {
                                 if ($child["values"][$month] > 0) {
                                     $income_array[$month] += $child["values"][$month];
@@ -105,6 +105,7 @@ $report->getReport(["year" => $year]);
                                     $expense_array[$month] += $child["values"][$month];
                                 }
                             }
+                        }
                     }
                 }
             }
