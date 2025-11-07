@@ -9,6 +9,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+use PHPLedger\Util\L10n;
 class account_type_view extends ObjectViewer
 {
 

@@ -11,6 +11,8 @@
 if (!defined("ROOT_DIR")) {
     include_once __DIR__ . "/prepend.php";
 }
+use PHPLedger\Util\SessionManager;
+
 config::init(__DIR__ . '/config.json');
 if (isset($_SESSION['expires']) && $_SESSION['expires'] < time()) {
     SessionManager::logout();

@@ -1,4 +1,7 @@
-<div >
+<?php
+use PHPLedger\Util\L10n;
+?>
+<div>
     <?php if (l10n::$lang === 'pt-pt'): ?>
         <a href="?lang=en-us">EN</a> | <span>PT</span>
     <?php else: ?>

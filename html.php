@@ -15,37 +15,37 @@ class Html
      * If no end value is provided current year is used
      * If no selected value is provided, current year is selected
      */
-    public static function year_option(?int $selected = null, int $start = 1990, ?int $end = null): string
+    public static function yearOptions(?int $selected = null, int $start = 1990, ?int $end = null): string
     {
-        return self::option_list($start, null === $end ? date("Y") : $end, null === $selected ? date("Y") : $selected);
+        return self::buildOptions($start, null === $end ? date("Y") : $end, null === $selected ? date("Y") : $selected);
     }
     /**
      * Option list for month selection
      * If no end value is provided current month is used
      * If no selected value is provided, current month is selected
      */
-    public static function mon_option(?string $selected = null): string
+    public static function monthOptions(?string $selected = null): string
     {
-        return self::option_list(1, 12, null === $selected ? date("n") : $selected);
+        return self::buildOptions(1, 12, null === $selected ? date("n") : $selected);
     }
     /**
      * Option list for day selection
      * If no end value is provided current day is used
      * If no selected value is provided, current day is selected
      */
-    public static function day_option(?string $selected = null): string
+    public static function dayOptions(?string $selected = null): string
     {
-        return self::option_list(1, 31, null === $selected ? date("d") : $selected);
+        return self::buildOptions(1, 31, null === $selected ? date("d") : $selected);
     }
-    public static function hour_opt(?string $selected = null): string
+    public static function hourOptions(?string $selected = null): string
     {
-        return self::option_list(0, 23, null === $selected ? date("G") : $selected);
+        return self::buildOptions(0, 23, null === $selected ? date("G") : $selected);
     }
-    public static function min_opt(?string $selected = null): string
+    public static function minuteOptions(?string $selected = null): string
     {
-        return self::option_list(0, 59, null === $selected ? date("i") : $selected);
+        return self::buildOptions(0, 59, null === $selected ? date("i") : $selected);
     }
-    public static function option_list(int $start, int $end, ?string $selected = null): string
+    public static function buildOptions(int $start, int $end, ?string $selected = null): string
     {
         $retval = "";
         $length = strlen($end);

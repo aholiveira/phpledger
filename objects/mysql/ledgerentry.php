@@ -11,7 +11,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-class LedgerEntry extends MySqlObject implements iObject
+use PHPLedger\Contracts\DataObjectInterface;
+class LedgerEntry extends MySqlObject implements DataObjectInterface
 {
     public string $entry_date;
     public int $category_id;

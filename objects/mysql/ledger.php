@@ -7,8 +7,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-
-class Ledger extends MySqlObject implements iObject
+use PHPLedger\Contracts\DataObjectInterface;
+class Ledger extends MySqlObject implements DataObjectInterface
 {
     public string $name;
     protected static string $tableName = "`grupo_contas`";

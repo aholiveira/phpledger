@@ -21,7 +21,10 @@ include_once __DIR__ . "/reportmonth.php";
 include_once __DIR__ . "/reportyear.php";
 include_once __DIR__ . "/user.php";
 
-class ObjectFactory implements iObjectFactory
+use PHPLedger\Contracts\DataStorageInterface;
+use PHPLedger\Contracts\DataObjectFactoryInterface;
+use PHPLedger\Util\Logger;
+class ObjectFactory implements DataObjectFactoryInterface
 {
     private static ?\mysqli $_dblink = null;
     private Logger $logger;
@@ -55,7 +58,7 @@ class ObjectFactory implements iObjectFactory
         print "<p>Error while connecting to the database. Please check config file.</p>";
         $logger->error("Error [{$ex->getMessage()}] while connecting to the database. Please check config file.");
     }
-    public static function dataStorage(): iDataStorage
+    public static function dataStorage(): DataStorageInterface
     {
         return new MySqlStorage();
     }

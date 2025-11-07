@@ -1,5 +1,5 @@
 <?php
-
+namespace PHPLedger\Util;
 class Logger
 {
     private string $logFile;

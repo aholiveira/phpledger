@@ -1,5 +1,6 @@
 <?php
-class l10n
+namespace PHPLedger\Util;
+class L10n
 {
     public static ?string $forcedLang = null;
     public static string $lang;
@@ -42,13 +43,10 @@ class l10n
     {
         $lang = $forcedLang ?? self::detectUserLang();
         $path = strtolower(ROOT_DIR . "/lang/$lang.php");
-
         if (!file_exists($path)) {
             $lang = 'pt-pt';
             $path = strtolower(ROOT_DIR . "/lang/$lang.php");
         }
-
         return file_exists($path) ? include_once $path : [];
     }
-
 }

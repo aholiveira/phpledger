@@ -9,8 +9,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-
-class Defaults extends MySqlObject implements iObject
+use PHPLedger\Contracts\DataObjectInterface;
+class Defaults extends MySqlObject implements DataObjectInterface
 {
     public int $category_id;
     public int $account_id;

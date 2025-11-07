@@ -8,8 +8,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-
-abstract class MySqlObject implements iObject
+use PHPLedger\Contracts\DataObjectInterface;
+abstract class MySqlObject implements DataObjectInterface
 {
     public $id;
     protected static string $_errormessage;

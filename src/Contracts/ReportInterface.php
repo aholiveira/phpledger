@@ -8,13 +8,14 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-interface iReport
+namespace PHPLedger\Contracts;
+interface ReportInterface
 {
     /**
      * getReport
      * Calculates the report and returns the populated object
      * @param int $year Year to calculate the report for
-     * @return iReport returns the populated object
+     * @return ReportInterface returns the populated object
      */
-    public function getReport(array $params = []): iReport;
+    public function getReport(array $params = []): ReportInterface;
 }

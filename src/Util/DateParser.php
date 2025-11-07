@@ -1,5 +1,8 @@
 <?php
-
+namespace PHPLedger\Util;
+use DateTimeImmutable;
+use Exception;
+use InvalidArgumentException;
 class DateParser
 {
     /**
@@ -15,7 +18,7 @@ class DateParser
         if (!empty($input[$key])) {
             try {
                 return new DateTimeImmutable($input[$key]);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 throw new InvalidArgumentException("Invalid date format for {$key}");
             }
         }

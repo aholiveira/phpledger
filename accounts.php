@@ -8,7 +8,8 @@
  *
  */
 use PHPLedger\Util\CSRF;
-
+use PHPLedger\Util\L10n;
+use PHPLedger\Util\Redirector;
 include_once __DIR__ . "/contas_config.php";
 $pagetitle = "Contas";
 

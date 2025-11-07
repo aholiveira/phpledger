@@ -8,11 +8,11 @@
  *
  */
 require __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . "/util/redirector.php";
-require_once __DIR__ . "/util/sessionmanager.php";
 
 use PHPLedger\Util\CSRF;
-
+use PHPLedger\Util\L10n;
+use PHPLedger\Util\Redirector;
+use PHPLedger\Util\SessionManager;
 const SESSION_TIMEOUT = 3600;
 if (isset($_GET['do_logout']) && $_GET['do_logout'] === '1') {
     SessionManager::logout();
@@ -53,13 +53,6 @@ if (!empty($post_user)) {
         $defaults->language = l10n::$lang;
         $defaults->update();
         $target = sprintf("ledger_entries.php?lang=%s&filter_sdate=%s", l10n::$lang, date('Y-m-01'));
-        /*
-        if (isset($_COOKIE['current_url'])) {
-            $url = rawurldecode($_COOKIE['current_url']);
-            if (!empty($url)) {
-                $target = $url;
-            }
-        }*/
         $logger->info("User [$post_user] logged in");
         Redirector::to($target);
     }

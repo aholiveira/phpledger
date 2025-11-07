@@ -7,10 +7,11 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+use PHPLedger\Contracts\DataObjectInterface;
 abstract class ObjectViewer
 {
-    protected iObject $_object;
-    public function __construct(iObject $object)
+    protected DataObjectInterface $_object;
+    public function __construct(DataObjectInterface $object)
     {
         $this->_object = $object;
     }
@@ -18,7 +19,7 @@ abstract class ObjectViewer
     {
         return get_called_class();
     }
-    public function setObject(iObject $object)
+    public function setObject(DataObjectInterface $object)
     {
         $this->_object = $object;
     }

@@ -1,4 +1,5 @@
 <?php
+namespace PHPLedger\Util;
 class SessionManager
 {
     public static function start(): void

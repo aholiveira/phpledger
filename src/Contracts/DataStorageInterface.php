@@ -1,5 +1,6 @@
 <?php
-interface iDataStorage
+namespace PHPLedger\Contracts;
+interface DataStorageInterface
 {
     /**
      * Check if data storage needs to be updated

@@ -8,7 +8,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-interface iObject
+namespace PHPLedger\Contracts;
+interface DataObjectInterface
 {
     /**
      * @property int id
@@ -23,5 +24,5 @@ interface iObject
     public function delete(): bool;
     public static function getNextId(): int;
     public static function getList(array $field_filter = []): array;
-    public static function getById(int $id): ?iObject;
+    public static function getById(int $id): ?DataObjectInterface;
 }

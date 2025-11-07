@@ -9,7 +9,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-class report implements iReport
+use PHPLedger\Contracts\ReportInterface;
+class report implements ReportInterface
 {
     protected array $queryData;
     protected mysqli $db;

@@ -9,10 +9,12 @@
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  */
-define("USER_ROLE_ADM", 255);
-define("USER_ROLE_RW", 192);
-define("USER_ROLE_RO", 128);
-class User extends MySqlObject implements iObject
+use PHPLedger\Contracts\DataObjectInterface;
+
+const USER_ROLE_ADM = 255;
+const USER_ROLE_RW = 192;
+const USER_ROLE_RO = 128;
+class User extends MySqlObject implements DataObjectInterface
 {
     protected string $_username;
     protected string $_password;

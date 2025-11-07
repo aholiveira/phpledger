@@ -17,8 +17,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-
-class Account extends MySqlObject implements iObject
+use PHPLedger\Contracts\DataObjectInterface;
+class Account extends MySqlObject implements DataObjectInterface
 {
     public string $name = "";
     public string $number = "";

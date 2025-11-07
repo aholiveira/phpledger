@@ -1,5 +1,7 @@
 <?php
 include_once "common.php";
+use PHPLedger\Contracts\DataObjectInterface;
+use PHPLedger\Util\Logger;
 $retval = true;
 $classnames = [
     "account" => "account_view",
@@ -209,7 +211,7 @@ function test_object(MySqlObject $object, $id = 1)
     }
     return $retval;
 }
-function test_view(ObjectViewer $viewer, iObject $object)
+function test_view(ObjectViewer $viewer, DataObjectInterface $object)
 {
     $retval = true;
     global $logger;

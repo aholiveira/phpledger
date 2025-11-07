@@ -1,5 +1,7 @@
 <?php
 
+use PHPLedger\Contracts\DataObjectInterface;
+
 /**
  * View for Currency object
  *

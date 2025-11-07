@@ -9,7 +9,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-class ReportYear extends report implements iReport
+use PHPLedger\Contracts\ReportInterface;
+class ReportYear extends report implements ReportInterface
 {
     protected int $first_year;
     protected int $last_year;

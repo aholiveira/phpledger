@@ -7,8 +7,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-
-class AccountType extends MySqlObject implements iObject
+use PHPLedger\Contracts\DataObjectInterface;
+class AccountType extends MySqlObject implements DataObjectInterface
 {
     public ?string $description = null;
     public int $savings = 0;

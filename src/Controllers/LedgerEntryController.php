@@ -1,9 +1,15 @@
 <?php
+namespace PHPLedger\Controllers;
+use DomainException;
+use Exception;
+use PHPLedger\Util\DateParser;
+use PHPLedger\Util\L10n;
+use RuntimeException;
 class LedgerEntryController
 {
-    private ObjectFactory $factory;
+    private \ObjectFactory $factory;
 
-    public function __construct(ObjectFactory $factory)
+    public function __construct(\ObjectFactory $factory)
     {
         $this->factory = $factory;
     }
@@ -17,7 +23,7 @@ class LedgerEntryController
         // 1) parse date
         try {
             $dt = DateParser::parseNamed('data_mov', $input);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw new DomainException(l10n::l("invalid_date", $e->getMessage()));
         }
         if (!$dt) {
@@ -46,7 +52,7 @@ class LedgerEntryController
         $entry->username = $_SESSION['user'] ?? 'empty';
 
         if (!$entry->update()) {
-            throw new \RuntimeException(l10n::l("ledger_save_error"));
+            throw new RuntimeException(l10n::l("ledger_save_error"));
         }
 
         // 4) update that user’s “defaults” record
@@ -62,7 +68,7 @@ class LedgerEntryController
         $defaults->username = $_SESSION['user'] ?? 'empty';
 
         if (!$defaults->update()) {
-            throw new \RuntimeException(l10n::l("defaults_save_error"));
+            throw new RuntimeException(l10n::l("defaults_save_error"));
         }
         return $entry->id;
     }

@@ -8,10 +8,11 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+use PHPLedger\Contracts\DataObjectInterface;
 class ledger_entry_view extends ObjectViewer
 {
     /** @var ledgerentry $_object */
-    protected iObject $_object;
+    protected DataObjectInterface $_object;
     public function printObject(): string
     {
         $retval = "";

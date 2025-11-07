@@ -1,6 +1,7 @@
 <?php
 include_once "common.php";
-
+use PHPLedger\Contracts\DataObjectInterface;
+use PHPLedger\Util\Logger;
 debug_print("Running tests...");
 $logger = new Logger("run.log");
 $data_storage = $objectFactory->dataStorage();
@@ -94,7 +95,7 @@ function run_tests(MySqlObject $object, $id = 1)
     }
 }
 
-function run_views(ObjectViewer $viewer, iObject $object)
+function run_views(ObjectViewer $viewer, DataObjectInterface $object)
 {
     try {
         debug_print("OBJECT: " . get_class($viewer));

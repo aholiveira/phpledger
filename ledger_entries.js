@@ -29,19 +29,19 @@ function toggleDateElements(elementId) {
             if (row.tagName === "SELECT" && row.style.display === "none") {
                 row.value = "";
             }
+            continue;
         }
-        else {
-            const isHidden = row.style.display === "none";
-            row.style.display = isHidden ? "" : "none";
-            if (!isHidden && row.tagName === "INPUT") {
-                row.value = "";
-                row.removeAttribute("required");
-            }
+        const isHidden = row.style.display === "none";
+        row.style.display = isHidden ? "" : "none";
+        if (!isHidden && row.tagName === "INPUT") {
+            row.value = "";
+            row.removeAttribute("required");
         }
     }
 
     const focusTarget = () => {
-        const el = document.getElementById(elementId + (supportsDate ? "" : "AA"));
+        const suffix = supportsDate ? "" : "AA";
+        const el = document.getElementById(elementId + suffix);
         if (!el) { return; }
         setTimeout(() => {
             el.focus();

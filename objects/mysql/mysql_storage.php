@@ -7,8 +7,9 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-
-class MySqlStorage implements iDataStorage
+use PHPLedger\Contracts\DataStorageInterface;
+use PHPLedger\Util\Logger;
+class MySqlStorage implements DataStorageInterface
 {
     private ?\mysqli $_dblink = null;
     private string $_message = "";

@@ -1,4 +1,5 @@
 <?php
+namespace PHPLedger\Util;
 class Redirector
 {
     private const array ALLOWED_REDIRECTS = [
