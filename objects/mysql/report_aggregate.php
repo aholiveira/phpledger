@@ -9,7 +9,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-class report_month implements iReport
+class ReportMonth implements iReport
 {
     public int $year;
     public array $monthNames;
@@ -26,7 +26,7 @@ class report_month implements iReport
         }
     }
 
-    public function getReport(array $params = []): report_month
+    public function getReport(array $params = []): ReportMonth
     {
         global $objectFactory;
         $sql = "SELECT tipo_id AS category_id, tipo_desc, sum(euro_amount) AS sum, month(entry_date) AS `month`

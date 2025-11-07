@@ -6,19 +6,19 @@ $classnames = [
     "accounttype" => "account_type_view",
     "currency" => "",
     "defaults" => "",
-    "entry_category" => "entry_category_view",
+    "EntryCategory" => "entry_category_view",
     "ledger" => "",
     "ledgerentry" => "ledger_entry_view",
     "user" => ""
 ];
 $class_id = ["currency" => 1];
-$reports = ["report_month" => "report_month_view", "report_year" => "report_year_view"];
+$reports = ["ReportMonth" => "report_month_view", "ReportYear" => "report_year_view"];
 const PADDING = 35;
 const PASSED = "\033[32mPASSED\033[0m";
 const FAILED = "\033[31mFAILED\033[0m";
 $logger = new Logger("validate.log");
 print "Running tests\r\n\r\n";
-$data_storage = new mysql_storage();
+$data_storage = new MySqlStorage();
 print str_pad("Testing data storage ", constant("PADDING"), ".") . " : ";
 if (!$data_storage->check()) {
     print "\033[33mUPDATE\033[0m\r\n";
@@ -76,7 +76,7 @@ function prepare_entry_category(): bool
 {
     global $objectFactory;
     $retval = true;
-    $object = $objectFactory->entry_category();
+    $object = $objectFactory->entryCategory();
     for ($id = 1; $id < 60; $id++) {
         $object->id = $id;
         $object->parent_id = $id < 10 ? 0 : (int) ($id / 10);
@@ -183,7 +183,7 @@ function test_report($report, $view)
     print ($retval ? constant("PASSED") : constant("FAILED")) . "\r\n";
     return $retval;
 }
-function test_object(mysql_object $object, $id = 1)
+function test_object(MySqlObject $object, $id = 1)
 {
     $retval = true;
     global $logger;
@@ -209,7 +209,7 @@ function test_object(mysql_object $object, $id = 1)
     }
     return $retval;
 }
-function test_view(object_viewer $viewer, iObject $object)
+function test_view(ObjectViewer $viewer, iObject $object)
 {
     $retval = true;
     global $logger;

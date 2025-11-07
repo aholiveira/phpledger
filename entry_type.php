@@ -27,7 +27,7 @@ $pagetitle = "Tipo de movimentos";
             <form method="POST" action="entry_types_list.php">
                 <table class="entry_category">
                     <?php
-                    $object = $objectFactory->entry_category();
+                    $object = $objectFactory->EntryCategory();
                     if (filter_has_var(INPUT_GET, "tipo_id")) {
                         $tipo_id = filter_input(INPUT_GET, "tipo_id", FILTER_VALIDATE_INT);
                         if ($tipo_id > 0) {

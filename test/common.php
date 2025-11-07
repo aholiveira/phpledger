@@ -11,6 +11,6 @@ if (!defined("DEBUG")) {
     define("DEBUG", true);
 }
 require_once __DIR__ . "/prepend.php";
-config::init(__DIR__ . '/config.json');
-$objectFactory = new object_factory();
+Config::init(__DIR__ . '/config.json');
+$objectFactory = new ObjectFactory();
 $viewFactory = new view_factory();

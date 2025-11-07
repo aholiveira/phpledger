@@ -41,7 +41,7 @@ class report implements iReport
     public function getReport(array $params = []): self
     {
         global $objectFactory;
-        $category = $objectFactory->entry_category();
+        $category = $objectFactory->entryCategory();
         $category_list = $category->getList(['parent_id' => ['operator' => '=', 'value' => '0']]);
         foreach ($category_list as $category) {
             $this->processCategory($category);

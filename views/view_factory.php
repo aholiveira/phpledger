@@ -41,7 +41,7 @@ class view_factory
     {
         return new currency_view($object);
     }
-    public function entry_category_view(entry_category $object): entry_category_view
+    public function entry_category_view(EntryCategory $object): entry_category_view
     {
         return new entry_category_view($object);
     }
@@ -49,11 +49,11 @@ class view_factory
     {
         return new ledger_entry_view($object);
     }
-    public function report_month_view(report_month $object): report_month_HtmlView
+    public function report_month_view(ReportMonth $object): report_month_HtmlView
     {
         return new report_month_HtmlView($object);
     }
-    public function report_year_view(report_year $object): report_year_HtmlView
+    public function report_year_view(ReportYear $object): report_year_HtmlView
     {
         return new report_year_HtmlView($object);
     }

@@ -3,7 +3,7 @@ include_once "common.php";
 
 debug_print("Running tests...");
 $logger = new Logger("run.log");
-$data_storage = $objectFactory->data_storage();
+$data_storage = $objectFactory->dataStorage();
 if (!$data_storage->check()) {
     print "DB NEEDS UPDATE...";
     print $data_storage->message();
@@ -42,7 +42,7 @@ run_tests($object);
 run_tests($object);
 $viewer = $viewFactory->ledger_entry_view($object);
 run_views($viewer, $object);
-$object = $objectFactory->entry_category();
+$object = $objectFactory->entryCategory();
 $logger->dump($object->getList());
 /*run_tests($object);
 debug_print("OBJECT 145");
@@ -58,18 +58,18 @@ run_views($viewer, $object);
 print $viewer->printForm();
 
 debug_print("YEAR REPORT:");
-$object = $objectFactory->report_month();
+$object = $objectFactory->reportMonth();
 $object->getReport(array("year" => 2021));
 $viewer = $viewFactory->report_month_view($object);
 debug_print($viewer->printAsTable());
 /*
-$object = $objectFactory->report_year();
+$object = $objectFactory->reportYear();
 $object->getReport(array("year" => 2021));
 $logger->dump($object);
 $viewer = $viewFactory->report_year_view($object);
 //debug_print($viewer->printAsTable());
 */
-function run_tests(mysql_object $object, $id = 1)
+function run_tests(MySqlObject $object, $id = 1)
 {
     global $logger;
     try {
@@ -94,7 +94,7 @@ function run_tests(mysql_object $object, $id = 1)
     }
 }
 
-function run_views(object_viewer $viewer, iObject $object)
+function run_views(ObjectViewer $viewer, iObject $object)
 {
     try {
         debug_print("OBJECT: " . get_class($viewer));

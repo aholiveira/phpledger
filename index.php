@@ -7,8 +7,11 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+require __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . "/util/redirector.php";
 require_once __DIR__ . "/util/sessionmanager.php";
+
+use PHPLedger\Util\CSRF;
 
 const SESSION_TIMEOUT = 3600;
 if (isset($_GET['do_logout']) && $_GET['do_logout'] === '1') {
@@ -34,8 +37,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $post_user = trim($filtered_input["username"] ?? "");
     $post_pass = $filtered_input["password"] ?? "";
 }
-$objectFactory = new object_factory();
-$data_storage = $objectFactory::data_storage();
+$objectFactory = new ObjectFactory();
+$data_storage = $objectFactory::dataStorage();
 if ($data_storage->check() === false) {
     Redirector::to("update.php?lang=" . l10n::$lang, 1);
 }

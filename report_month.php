@@ -16,7 +16,7 @@ if (array_key_exists("year", $_GET)) {
         $year = date("Y");
     }
 }
-$report = $objectFactory->report_month();
+$report = $objectFactory->reportMonth();
 $reportHtml = $viewFactory->report_month_view($report);
 $report->year = $year;
 $report->getReport(["year" => $year]);

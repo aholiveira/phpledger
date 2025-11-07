@@ -9,7 +9,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-class report_month extends report implements iReport
+class ReportMonth extends report implements iReport
 {
     public int $year;
     //public array $savings = [];
@@ -30,7 +30,7 @@ class report_month extends report implements iReport
         }
     }
 
-    public function getReport(array $params = []): report_month
+    public function getReport(array $params = []): ReportMonth
     {
         global $objectFactory;
         $this->year = array_key_exists("year", $params) ? $params["year"] : date("Y");

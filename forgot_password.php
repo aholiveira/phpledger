@@ -19,7 +19,7 @@ $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";
 <head>
     <?php include_once "header.php"; ?>
     <?php
-    $objectFactory = new object_factory();
+    $objectFactory = new ObjectFactory();
     $user = $objectFactory->user();
     $message = "";
     if ($_SERVER["REQUEST_METHOD"] == "POST") {

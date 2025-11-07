@@ -14,9 +14,10 @@
 if (PHP_VERSION_ID < 70000) {
     die('PHP >= 7.0.0 required');
 }
+require __DIR__ . '/vendor/autoload.php';
 
 const BACKEND = "mysql";
-const VERSION = "0.4.31";
+const VERSION = "0.4.100";
 const ROOT_DIR = __DIR__;
 const OBJECTS_DIR = ROOT_DIR . "/objects";
 const VIEWS_DIR = ROOT_DIR . "/views";
@@ -42,7 +43,6 @@ require_once OBJECTS_DIR . '/config.class.php';
 require_once OBJECTS_DIR . '/object_factory.php';
 require_once OBJECTS_DIR . '/email.php';
 require_once VIEWS_DIR . '/view_factory.php';
-require_once UTILS_DIR . '/csrf.php';
 require_once UTILS_DIR . '/logger.php';
 require_once UTILS_DIR . '/dateparser.php';
 require_once UTILS_DIR . '/ledgerentrycontroller.php';

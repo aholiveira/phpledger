@@ -8,9 +8,9 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  * 
  */
-class config
+class Config
 {
-    protected static $_data = array();
+    protected static $_data = [];
 
     private function __construct()
     {
@@ -45,7 +45,7 @@ class config
     public static function set(string $key, $value): void
     {
         if (!is_array(self::$_data)) {
-            self::$_data = array();
+            self::$_data = [];
         }
         self::$_data[$key] = $value;
     }
@@ -59,7 +59,7 @@ class config
     public static function get(string $key)
     {
         if (!is_array(self::$_data)) {
-            self::$_data = array();
+            self::$_data = [];
         }
         if (array_key_exists($key, self::$_data)) {
             return self::$_data[$key];

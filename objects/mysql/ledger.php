@@ -8,7 +8,7 @@
  *
  */
 
-class ledger extends mysql_object implements iObject
+class Ledger extends MySqlObject implements iObject
 {
     public string $name;
     protected static string $tableName = "`grupo_contas`";

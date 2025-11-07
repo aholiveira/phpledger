@@ -12,7 +12,7 @@
 define("USER_ROLE_ADM", 255);
 define("USER_ROLE_RW", 192);
 define("USER_ROLE_RO", 128);
-class user extends mysql_object implements iObject
+class User extends MySqlObject implements iObject
 {
     protected string $_username;
     protected string $_password;

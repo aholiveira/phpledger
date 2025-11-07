@@ -21,7 +21,7 @@ include_once __DIR__ . "/reportmonth.php";
 include_once __DIR__ . "/reportyear.php";
 include_once __DIR__ . "/user.php";
 
-class object_factory implements iObjectFactory
+class ObjectFactory implements iObjectFactory
 {
     private static ?\mysqli $_dblink = null;
     private Logger $logger;
@@ -44,60 +44,60 @@ class object_factory implements iObjectFactory
             static::$_dblink = new \mysqli($host, $user, $pass, $dbase);
             static::$_dblink->set_charset('utf8mb4');
         } catch (\Exception $ex) {
-            static::handle_error($ex);
+            static::handleError($ex);
             exit();
         }
         return static::$_dblink;
     }
-    public static function handle_error(\Exception $ex)
+    public static function handleError(\Exception $ex)
     {
         global $logger;
         print "<p>Error while connecting to the database. Please check config file.</p>";
         $logger->error("Error [{$ex->getMessage()}] while connecting to the database. Please check config file.");
     }
-    public static function data_storage(): iDataStorage
+    public static function dataStorage(): iDataStorage
     {
-        return new mysql_storage();
+        return new MySqlStorage();
     }
     public static function account(): account
     {
-        return new account(object_factory::connect());
+        return new account(ObjectFactory::connect());
     }
-    public static function accounttype(): accounttype
+    public static function accountType(): accounttype
     {
         account::class;
-        return new accounttype(object_factory::connect());
+        return new accounttype(ObjectFactory::connect());
     }
     public static function currency(): currency
     {
-        return new currency(object_factory::connect());
+        return new currency(ObjectFactory::connect());
     }
     public static function defaults(): defaults
     {
-        return new defaults(object_factory::connect());
+        return new defaults(ObjectFactory::connect());
     }
-    public static function entry_category(): entry_category
+    public static function entryCategory(): EntryCategory
     {
-        return new entry_category(object_factory::connect());
+        return new EntryCategory(ObjectFactory::connect());
     }
     public static function ledger(): ledger
     {
-        return new ledger(object_factory::connect());
+        return new ledger(ObjectFactory::connect());
     }
-    public static function ledgerentry(): ledgerentry
+    public static function ledgerEntry(): ledgerentry
     {
-        return new ledgerentry(object_factory::connect());
+        return new ledgerentry(ObjectFactory::connect());
     }
-    public static function report_month(): report_month
+    public static function reportMonth(): ReportMonth
     {
-        return new report_month(object_factory::connect());
+        return new ReportMonth(ObjectFactory::connect());
     }
-    public static function report_year(): report_year
+    public static function reportYear(): ReportYear
     {
-        return new report_year(object_factory::connect());
+        return new ReportYear(ObjectFactory::connect());
     }
     public static function user(): user
     {
-        return new user(object_factory::connect());
+        return new user(ObjectFactory::connect());
     }
 }

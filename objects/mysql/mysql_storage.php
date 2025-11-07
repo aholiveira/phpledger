@@ -8,7 +8,7 @@
  *
  */
 
-class mysql_storage implements iDataStorage
+class MySqlStorage implements iDataStorage
 {
     private ?\mysqli $_dblink = null;
     private string $_message = "";
@@ -75,14 +75,14 @@ class mysql_storage implements iDataStorage
             $retval = false;
         }
         foreach ($tables as $table_name) {
-            $retval = $retval && $this->check_table($table_name);
+            $retval = $retval && $this->checkTable($table_name);
         }
         if ($this->tableExists("tipo_mov")) {
             if (!$this->tableHasForeignKey("tipo_mov", "parent_id")) {
                 $this->addMessage("Table [tipo_mov] foreign key [parent_id] missing");
                 $retval = false;
             }
-            $entry_category = object_factory::entry_category()::getById(0);
+            $entry_category = ObjectFactory::entryCategory()::getById(0);
             if ($entry_category->id !== 0) {
                 $this->addMessage("Category '0' does not exist");
                 $retval = false;
@@ -139,7 +139,7 @@ class mysql_storage implements iDataStorage
             }
         }
         if ($this->tableExists("movimentos")) {
-            $count = $this->do_query_get_result("SELECT COUNT(*) as rowCount FROM movimentos WHERE direction=2");
+            $count = $this->fetchSingleValue("SELECT COUNT(*) as rowCount FROM movimentos WHERE direction=2");
             if ($count > 0) {
                 $this->addMessage("Table [movimentos] needs updating [direction] column");
                 $retval = false;
@@ -161,9 +161,9 @@ class mysql_storage implements iDataStorage
             $retval = false;
         }
         foreach ($tables as $table_name) {
-            $this->update_table($table_name);
+            $this->updateTable($table_name);
         }
-        $this->update_table_entry_type();
+        $this->updateTableEntryType();
         $user = new user($this->_dblink);
         if (sizeof($user->getList()) == 0) {
             $user->setId(1);
@@ -180,7 +180,7 @@ class mysql_storage implements iDataStorage
                 $retval = false;
             }
         }
-        $entry_category = object_factory::entry_category()::getById(0);
+        $entry_category = ObjectFactory::entryCategory()::getById(0);
         if ($entry_category->id !== 0) {
             $entry_category->id = 0;
             $entry_category->parent_id = null;
@@ -250,9 +250,9 @@ class mysql_storage implements iDataStorage
             }
         }
         if ($this->tableExists("movimentos")) {
-            $count = $this->do_query_get_result("SELECT COUNT(*) as rowCount FROM movimentos WHERE direction=2");
+            $count = $this->fetchSingleValue("SELECT COUNT(*) as rowCount FROM movimentos WHERE direction=2");
             if ($count > 0) {
-                $result = $this->do_query("UPDATE movimentos SET direction=-1 WHERE direction=2");
+                $result = $this->executeQuery("UPDATE movimentos SET direction=-1 WHERE direction=2");
                 if (!$result) {
                     $this->addMessage("Could not update [direction] column on table [movimentos]");
                     $retval = false;
@@ -264,7 +264,7 @@ class mysql_storage implements iDataStorage
     public function populateRandomData(): void
     {
         global $objectFactory;
-        $category = $objectFactory->entry_category();
+        $category = $objectFactory->entryCategory();
         $ledger_entry = $objectFactory->ledgerentry();
         $start_year = date("Y") - 3;
         $end_year = date("Y");
@@ -299,7 +299,7 @@ class mysql_storage implements iDataStorage
             }
         }
     }
-    private function check_table($table_name): bool
+    private function checkTable($table_name): bool
     {
         $table_exists = $this->tableExists($table_name);
         if (!$table_exists) {
@@ -336,7 +336,7 @@ class mysql_storage implements iDataStorage
         }
         return $retval;
     }
-    private function update_table($table_name): bool
+    private function updateTable($table_name): bool
     {
 
         if (!($this->createTable($table_name))) {
@@ -386,7 +386,7 @@ class mysql_storage implements iDataStorage
         }
         return $retval;
     }
-    private function update_table_entry_type(): bool
+    private function updateTableEntryType(): bool
     {
         $retval = true;
         if ($this->tableExists("tipo_mov")) {
@@ -401,7 +401,7 @@ class mysql_storage implements iDataStorage
              * Assign all entries without category to category "Uncategorized"
              */
             global $objectFactory;
-            $entry_category = $objectFactory->entry_category();
+            $entry_category = $objectFactory->entryCategory();
             $entry_category = $entry_category::getById(0);
             if ($entry_category->id != 0) {
                 $this->addMessage("Adding category 0");
@@ -411,12 +411,12 @@ class mysql_storage implements iDataStorage
                 $entry_category->active = 1;
                 $entry_category->update();
                 $sql = "UPDATE tipo_mov SET parent_id=0 WHERE parent_id is null and tipo_id not in (select parent_id from tipo_mov where parent_id is not null group by parent_id) and tipo_id > 0";
-                if (!$this->do_query($sql)) {
+                if (!$this->executeQuery($sql)) {
                     $this->addMessage("Could not update categories");
                     $retval = false;
                 }
             }
-            if (!$this->do_query("UPDATE tipo_mov set parent_id=0 where tipo_id>0 and parent_id is null")) {
+            if (!$this->executeQuery("UPDATE tipo_mov set parent_id=0 where tipo_id>0 and parent_id is null")) {
                 $this->addMessage("Could not update categories with null parent");
                 $retval = false;
             }
@@ -427,7 +427,7 @@ class mysql_storage implements iDataStorage
      * @param string $sql - The query to perform. It should produce a single column and a single row.
      * @return mixed the result returned from the query
      */
-    private function do_query_get_result(string $sql)
+    private function fetchSingleValue(string $sql)
     {
         $retval = null;
         $this->connect();
@@ -451,7 +451,7 @@ class mysql_storage implements iDataStorage
      * @param string $sql - The query to perform. It should produce a single column and a single row.
      * @return bool true if the query was successfull, false otherwise
      */
-    private function do_query(string $sql)
+    private function executeQuery(string $sql)
     {
         $retval = false;
         $this->connect();
@@ -493,7 +493,7 @@ class mysql_storage implements iDataStorage
         $this->connect();
         $sql = "SELECT count(*) as colCount FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='{$table_name}'";
         try {
-            $count = $this->do_query_get_result($sql);
+            $count = $this->fetchSingleValue($sql);
             $retval = ($count == 1);
         } catch (\Exception $ex) {
             $this->addMessage($ex->getMessage());
@@ -510,7 +510,7 @@ class mysql_storage implements iDataStorage
         $this->connect();
         try {
             $sql = "ALTER TABLE `{$table_name}` ADD COLUMN `{$column_name}` $typedef";
-            $retval = $this->do_query($sql);
+            $retval = $this->executeQuery($sql);
             if ($retval) {
                 $this->addMessage("Column [{$column_name}] added to [{$table_name}]");
             }
@@ -528,7 +528,7 @@ class mysql_storage implements iDataStorage
         $this->connect();
         try {
             $sql = "ALTER TABLE `{$table_name}` CHANGE COLUMN `{$column_name}` `{$column_name}` $typedef";
-            $retval = $this->do_query($sql);
+            $retval = $this->executeQuery($sql);
             $this->addMessage("Table [{$table_name}] column [{$column_name}] definition changed");
         } catch (\Exception $ex) {
             $this->addMessage($ex);
@@ -549,7 +549,7 @@ class mysql_storage implements iDataStorage
                 return false;
             }
             $sql = "ALTER TABLE `{$table_name}` RENAME COLUMN `{$old_column_name}` TO `{$new_column_name}`";
-            $retval = $this->do_query($sql);
+            $retval = $this->executeQuery($sql);
             $this->addMessage("Renamed column [{$old_column_name}] to [{$new_column_name}] on [{$table_name}]");
         } catch (\Exception $ex) {
             $this->addMessage($ex);
@@ -565,7 +565,7 @@ class mysql_storage implements iDataStorage
         $this->connect();
         $sql = "SELECT count(*) as colCount FROM information_schema.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='{$table_name}' AND CONSTRAINT_NAME='{$key_name}'";
         try {
-            $count = $this->do_query_get_result($sql);
+            $count = $this->fetchSingleValue($sql);
             $retval = ($count == 1);
         } catch (\Exception $ex) {
             $this->addMessage($ex);
@@ -583,7 +583,7 @@ class mysql_storage implements iDataStorage
             if ($this->tableHasForeignKey($table_name, $key_name)) {
                 return true;
             }
-            $retval = $this->do_query($sql);
+            $retval = $this->executeQuery($sql);
             $this->addMessage("Added foreign key [{$key_name}] to table [{$table_name}]");
         } catch (\Exception $ex) {
             $this->addMessage($ex);
@@ -599,7 +599,7 @@ class mysql_storage implements iDataStorage
         FROM information_schema.columns
         WHERE table_name = '{$table_name}' AND column_name = '{$column_name}' and table_schema = DATABASE()";
         try {
-            $count = (int) $this->do_query_get_result($sql);
+            $count = (int) $this->fetchSingleValue($sql);
             return $count === 1;
         } catch (\Exception $ex) {
             $this->addMessage($ex);
@@ -613,7 +613,7 @@ class mysql_storage implements iDataStorage
         $this->connect();
         $sql = "SELECT DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME='{$db_name}'";
         try {
-            $retval = $this->do_query_get_result($sql);
+            $retval = $this->fetchSingleValue($sql);
             return $retval ?: null;
         } catch (\Exception $ex) {
             $this->addMessage("Failed to get collation for database [{$db_name}]: " . $ex->getMessage());
@@ -628,7 +628,7 @@ class mysql_storage implements iDataStorage
         $this->connect();
         $sql = "ALTER DATABASE `{$db_name}` COLLATE='{$collation}'";
         try {
-            $retval = $this->do_query($sql);
+            $retval = $this->executeQuery($sql);
             if ($retval) {
                 $this->addMessage("Changed collation on database [{$db_name}] to [{$collation}]");
             }
@@ -647,7 +647,7 @@ class mysql_storage implements iDataStorage
         $this->connect();
         $sql = "SELECT table_collation FROM information_schema.TABLES WHERE table_name = '{$table_name}' AND table_schema = DATABASE()";
         try {
-            $retval = @$this->do_query_get_result($sql);
+            $retval = @$this->fetchSingleValue($sql);
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
@@ -662,7 +662,7 @@ class mysql_storage implements iDataStorage
         $this->connect();
         $sql = "ALTER TABLE `{$table_name}` COLLATE='{$collation}'";
         try {
-            $retval = @$this->do_query($sql);
+            $retval = @$this->executeQuery($sql);
             $this->addMessage("Changed collation on table [{$table_name}]");
         } catch (\Exception $ex) {
             $this->addMessage($ex);
@@ -678,7 +678,7 @@ class mysql_storage implements iDataStorage
         $this->connect();
         $sql = "SELECT ENGINE FROM information_schema.TABLES WHERE table_name = '{$table_name}' AND table_schema = DATABASE()";
         try {
-            $retval = @$this->do_query_get_result($sql);
+            $retval = @$this->fetchSingleValue($sql);
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
@@ -693,7 +693,7 @@ class mysql_storage implements iDataStorage
         $this->connect();
         $sql = "ALTER TABLE `{$table_name}` ENGINE={$engine}";
         try {
-            $retval = $this->do_query($sql);
+            $retval = $this->executeQuery($sql);
             $this->addMessage("Changed engine on table [{$table_name}]");
         } catch (Exception $ex) {
             $this->addMessage($ex);
@@ -732,7 +732,7 @@ class mysql_storage implements iDataStorage
         $sql = "CREATE TABLE `{$table_name}` (" . implode(",", $columns) . ")
          ENGINE={$this->_engine} DEFAULT COLLATE='{$this->_collation}'";
         try {
-            $retval = $this->do_query($sql);
+            $retval = $this->executeQuery($sql);
             if ($retval) {
                 $this->addMessage("Created table [{$table_name}]");
                 $this->addMessage("Created table [{$sql}]");
