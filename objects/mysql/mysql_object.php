@@ -54,7 +54,7 @@ abstract class mysql_object implements iObject
         try {
             $sql = "SELECT `{$field}` FROM " . static::$tableName . " ORDER BY `{$field}`";
             $result = @$db->query($sql);
-            if ($result == FALSE || !($result instanceof \mysqli_result)) {
+            if ($result == false || !($result instanceof \mysqli_result)) {
                 return $retval;
             }
             if ($result->num_rows === 0) {
@@ -128,7 +128,7 @@ abstract class mysql_object implements iObject
      * Validates object data.
      * Descendant classes should implement their own code.
      *
-     * @return bool true if object is valid. FALSE otherwise
+     * @return bool true if object is valid. false otherwise
      */
     public function validate(): bool
     {
