@@ -42,9 +42,9 @@ $pagetitle = "Tipo de movimentos";
                         <td><input type="submit" name="update" value="Gravar"></td>
                         <?php
                         if ($object->id != 0) {
-                        ?>
+                            ?>
                             <td><input type="submit" name="update" value="Apagar"></td>
-                        <?php
+                            <?php
                         }
                         ?>
                     </tr>
