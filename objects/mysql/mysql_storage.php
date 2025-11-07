@@ -113,11 +113,9 @@ class mysql_storage implements iDataStorage
                 $retval = false;
             }
         }
-        if ($this->tableExists("defaults")) {
-            if (sizeof(defaults::getList()) == 0) {
-                $this->addMessage("Table [defaults] is empty");
-                $retval = false;
-            }
+        if ($this->tableExists("defaults") && sizeof(defaults::getList()) == 0) {
+            $this->addMessage("Table [defaults] is empty");
+            $retval = false;
         }
         if ($this->tableExists("moedas")) {
             $currency = new currency($this->_dblink);
@@ -155,11 +153,12 @@ class mysql_storage implements iDataStorage
         $tables = array_keys($this->_tableCreateSQL);
         $this->connect();
         $db_name = config::get("database");
-        if ($this->getDbCollation($db_name) != $this->_collation) {
-            if ($this->setDbCollation($db_name, $this->_collation)) {
-                $this->addMessage("Database [{$db_name}] collation could not be set to [{$this->_collation}]");
-                $retval = false;
-            }
+        if (
+            $this->getDbCollation($db_name) != $this->_collation &&
+            $this->setDbCollation($db_name, $this->_collation)
+        ) {
+            $this->addMessage("Database [{$db_name}] collation could not be set to [{$this->_collation}]");
+            $retval = false;
         }
         foreach ($tables as $table_name) {
             $this->update_table($table_name);
@@ -201,13 +200,11 @@ class mysql_storage implements iDataStorage
                 $retval = false;
             }
         }
-        if ($this->tableExists("defaults")) {
-            if (sizeof(defaults::getList()) == 0) {
-                $defaults = defaults::init();
-                if (!$defaults->update()) {
-                    $this->addMessage("Could not save defaults");
-                    $retval = false;
-                }
+        if ($this->tableExists("defaults") && sizeof(defaults::getList()) == 0) {
+            $defaults = defaults::init();
+            if (!$defaults->update()) {
+                $this->addMessage("Could not save defaults");
+                $retval = false;
             }
         }
         if ($this->tableExists("moedas")) {
@@ -223,16 +220,14 @@ class mysql_storage implements iDataStorage
                 }
             }
         }
-        if ($this->tableExists("tipo_mov")) {
-            if (sizeof(accounttype::getList()) == 0) {
-                $accounttype = new accounttype($this->_dblink);
-                $accounttype->description = 'Conta caixa';
-                $accounttype->savings = 0;
-                $accounttype->id = 1;
-                if (!$accounttype->update()) {
-                    $this->addMessage("Could not save account type");
-                    $retval = false;
-                }
+        if ($this->tableExists("tipo_mov") && sizeof(accounttype::getList()) == 0) {
+            $accounttype = new accounttype($this->_dblink);
+            $accounttype->description = 'Conta caixa';
+            $accounttype->savings = 0;
+            $accounttype->id = 1;
+            if (!$accounttype->update()) {
+                $this->addMessage("Could not save account type");
+                $retval = false;
             }
         }
         if ($this->tableExists("contas")) {
@@ -258,7 +253,7 @@ class mysql_storage implements iDataStorage
             $count = $this->do_query_get_result("SELECT COUNT(*) as rowCount FROM movimentos WHERE direction=2");
             if ($count > 0) {
                 $result = $this->do_query("UPDATE movimentos SET direction=-1 WHERE direction=2");
-                if ($result == false) {
+                if (!$result) {
                     $this->addMessage("Could not update [direction] column on table [movimentos]");
                     $retval = false;
                 }
@@ -438,7 +433,7 @@ class mysql_storage implements iDataStorage
         $this->connect();
         try {
             $stmt = @$this->_dblink->prepare($sql);
-            if ($stmt == false) {
+            if (!$stmt) {
                 return $retval;
             }
             $stmt->execute();

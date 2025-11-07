@@ -54,7 +54,7 @@ abstract class mysql_object implements iObject
         try {
             $sql = "SELECT `{$field}` FROM " . static::$tableName . " ORDER BY `{$field}`";
             $result = @$db->query($sql);
-            if ($result == false || !($result instanceof \mysqli_result)) {
+            if (!$result || !($result instanceof \mysqli_result)) {
                 return $retval;
             }
             if ($result->num_rows === 0) {

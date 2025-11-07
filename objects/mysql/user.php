@@ -149,7 +149,7 @@ class user extends mysql_object implements iObject
         $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
         try {
             $stmt = @static::$_dblink->prepare($sql);
-            if ($stmt == false) {
+            if (!$stmt) {
                 return $retval;
             }
             if (!isset($this->id)) {
