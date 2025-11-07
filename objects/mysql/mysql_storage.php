@@ -268,13 +268,13 @@ class mysql_storage implements iDataStorage
     }
     public function populateRandomData(): void
     {
-        global $object_factory;
-        $category = $object_factory->entry_category();
-        $ledger_entry = $object_factory->ledgerentry();
+        global $objectFactory;
+        $category = $objectFactory->entry_category();
+        $ledger_entry = $objectFactory->ledgerentry();
         $start_year = date("Y") - 3;
         $end_year = date("Y");
         $max_month_entries = 100;
-        $account = $object_factory->account();
+        $account = $objectFactory->account();
         $account_list = $account->getList(['activa' => ['operator' => '=', 'value' => '1']]);
         $category_list = $category->getList(['active' => ['operator' => '=', 'value' => '1']]);
         if (array_key_exists(0, $category_list)) {
@@ -405,8 +405,8 @@ class mysql_storage implements iDataStorage
              * Create new category "Uncategorized"
              * Assign all entries without category to category "Uncategorized"
              */
-            global $object_factory;
-            $entry_category = $object_factory->entry_category();
+            global $objectFactory;
+            $entry_category = $objectFactory->entry_category();
             $entry_category = $entry_category::getById(0);
             if ($entry_category->id != 0) {
                 $this->addMessage("Adding category 0");

@@ -29,8 +29,8 @@ $pagetitle = "Saldos";
         <div class="main" id="main">
             <div class="saldos">
                 <?php
-                $object = $object_factory->account();
-                $viewer = $view_factory->account_balance_view($object);
+                $object = $objectFactory->account();
+                $viewer = $viewFactory->account_balance_view($object);
                 print $viewer->printObjectList($object->getList(['activa' => ['operator' => '=', 'value' => '1']]));
                 ?>
             </div>

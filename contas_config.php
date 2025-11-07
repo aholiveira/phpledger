@@ -56,6 +56,6 @@ if (!isset($_SESSION['user'])) {
     }
     $tz = $_SESSION['timezone'] ?? config::get("timezone");
     date_default_timezone_set(in_array($tz, timezone_identifiers_list(), true) ? $tz : 'UTC');
-    $object_factory = new object_factory();
-    $view_factory = new view_factory();
+    $objectFactory = new object_factory();
+    $viewFactory = new view_factory();
 }

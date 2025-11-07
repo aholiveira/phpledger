@@ -34,18 +34,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $post_user = trim($filtered_input["username"] ?? "");
     $post_pass = $filtered_input["password"] ?? "";
 }
-$object_factory = new object_factory();
-$data_storage = $object_factory::data_storage();
+$objectFactory = new object_factory();
+$data_storage = $objectFactory::data_storage();
 if ($data_storage->check() === false) {
     Redirector::to("update.php?lang=" . l10n::$lang, 1);
 }
 if (!empty($post_user)) {
-    $userauth = authentication::authenticate($post_user, $post_pass);
+    $userauth = Authentication::authenticate($post_user, $post_pass);
     if ($userauth) {
         session_regenerate_id(true);
         $_SESSION['user'] = $post_user;
         $_SESSION['expires'] = time() + SESSION_TIMEOUT;
-        $defaults = $object_factory->defaults()->getById(1);
+        $defaults = $objectFactory->defaults()->getById(1);
         $defaults->entry_date = date("Y-m-d");
         $defaults->language = l10n::$lang;
         $defaults->update();

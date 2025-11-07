@@ -36,9 +36,9 @@ if (!$data_storage->check()) {
 }
 function prepare_accounttype(): bool
 {
-    global $object_factory;
+    global $objectFactory;
     $retval = true;
-    $object = $object_factory->accounttype();
+    $object = $objectFactory->accounttype();
     for ($id = 1; $id <= 5; $id++) {
         $object = $object->getById($id);
         if (!isset($object->id) || $object->id === $id) {
@@ -52,9 +52,9 @@ function prepare_accounttype(): bool
 }
 function prepare_account(): bool
 {
-    global $object_factory;
+    global $objectFactory;
     $retval = true;
-    $object = $object_factory->account();
+    $object = $objectFactory->account();
     for ($id = 1; $id <= 5; $id++) {
         $object = $object->getById($id);
         if (!isset($object->id) || $object->id === $id) {
@@ -74,9 +74,9 @@ function prepare_account(): bool
 }
 function prepare_entry_category(): bool
 {
-    global $object_factory;
+    global $objectFactory;
     $retval = true;
-    $object = $object_factory->entry_category();
+    $object = $objectFactory->entry_category();
     for ($id = 1; $id < 60; $id++) {
         $object->id = $id;
         $object->parent_id = $id < 10 ? 0 : (int) ($id / 10);
@@ -88,9 +88,9 @@ function prepare_entry_category(): bool
 }
 function prepare_ledger(): bool
 {
-    global $object_factory;
+    global $objectFactory;
     $retval = true;
-    $object = $object_factory->ledger();
+    $object = $objectFactory->ledger();
     for ($id = 1; $id <= 5; $id++) {
         $object->id = $id;
         $object->name = "ledger $id";
@@ -100,9 +100,9 @@ function prepare_ledger(): bool
 }
 function prepare_ledgerentry(): bool
 {
-    global $object_factory;
+    global $objectFactory;
     $retval = true;
-    $object = $object_factory->ledgerentry();
+    $object = $objectFactory->ledgerentry();
     for ($id = 1; $id < 60; $id++) {
         $object->id = $id;
         $object->entry_date = date("Y-m-d", mktime($hour = 0, null, null, date("m"), $id < 10 ? 1 : (int) ($id / 10 + 1)));
@@ -135,13 +135,13 @@ foreach ($classnames as $class => $view) {
     $id = 1;
     unset($object);
     unset($viewer);
-    $object = $object_factory->$class();
+    $object = $objectFactory->$class();
     if (array_key_exists($class, $class_id))
         $id = $class_id[$class];
     $retval = test_object($object, $id) && $retval;
     if (strlen($view) > 0) {
         $object = $object->getById($id);
-        $viewer = $view_factory->$view($object);
+        $viewer = $viewFactory->$view($object);
         $retval = test_view($viewer, $object) && $retval;
     }
     $retval = run_additional($object, isset($viewer) ? $viewer : null) && $retval;
@@ -168,13 +168,13 @@ function run_additional($object, $viewer = null)
 }
 function test_report($report, $view)
 {
-    global $object_factory;
-    global $view_factory;
+    global $objectFactory;
+    global $viewFactory;
     $retval = true;
     print (str_pad("Testing {$report} ", constant("PADDING"), ".") . " : ");
-    $object = $object_factory->$report();
+    $object = $objectFactory->$report();
     assert(is_a($object->getReport(["year" => 2023]), $report));
-    $viewer = $view_factory->$view($object);
+    $viewer = $viewFactory->$view($object);
     $retval = assert(!empty($viewer->printAsTable())) && $retval;
     print ($retval ? constant("PASSED") : constant("FAILED")) . "\r\n";
     return $retval;

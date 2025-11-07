@@ -25,7 +25,7 @@ class report_year extends report implements iReport
     }
     public function getReport(array $params = []): report_year
     {
-        global $object_factory;
+        global $objectFactory;
         $this->first_year = array_key_exists("first_year", $params) ? $params["first_year"] : date("Y") - 1;
         $this->last_year = array_key_exists("last_year", $params) ? $params["last_year"] : date("Y");
         if ($this->first_year > $this->last_year) {
@@ -46,8 +46,8 @@ class report_year extends report implements iReport
             ORDER BY `row_header`, `col_header`";
         parent::getData($sql, $this->first_year, $this->last_year);
         parent::getReport($params);
-        $account_type = $object_factory->accounttype();
-        $account = $object_factory->account();
+        $account_type = $objectFactory->accounttype();
+        $account = $objectFactory->account();
         $savings_types = $account_type->getList(['savings' => ['operator' => '=', 'value' => '1']]);
         $savings_accounts = [];
         foreach ($savings_types as $saving_type) {
