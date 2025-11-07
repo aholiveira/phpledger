@@ -14,8 +14,9 @@ class account_view extends object_viewer
     {
         global $objectFactory;
         $retval = "";
-        if (!isset($this->_object->id) || !($this->_object instanceof account))
+        if (!isset($this->_object->id) || !($this->_object instanceof account)) {
             return $retval;
+        }
         /**
          * @var account $_object
          */
@@ -46,8 +47,9 @@ class account_view extends object_viewer
         global $viewFactory;
 
         $retval = "";
-        if (!($this->_object instanceof account))
+        if (!($this->_object instanceof account)) {
             return $retval;
+        }
         /**
          * @var account $_object
          */

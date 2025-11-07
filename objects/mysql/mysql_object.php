@@ -26,7 +26,7 @@ abstract class mysql_object implements iObject
     }
     public function getId()
     {
-        return isset($this->id) ? $this->id : null;
+        return $this->id ?? $this->id;
     }
     /**
      * Copies the object vars from $object into $this
@@ -34,8 +34,9 @@ abstract class mysql_object implements iObject
     protected static function copyfromObject(mysql_object $source, mysql_object $destination): void
     {
         $vars = is_object($source) ? get_object_vars($source) : $source;
-        if (!is_array($vars))
+        if (!is_array($vars)) {
             throw new \Exception('no props to import into the object!');
+        }
         foreach ($vars as $key => $value) {
             $destination->$key = $value;
         }
@@ -100,13 +101,15 @@ abstract class mysql_object implements iObject
     {
         $where = "";
         foreach ($field_filter as $field => $filter) {
-            if (strlen($where) > 0)
+            if (strlen($where) > 0) {
                 $where .= " AND ";
+            }
             $field_name = null === $table_name ? "`{$field}`" : "`{$table_name}`.`{$field}`";
             $where .= "{$field_name} {$filter['operator']} {$filter['value']}";
         }
-        if (strlen($where) > 0)
+        if (strlen($where) > 0) {
             $where = "WHERE {$where}";
+        }
         return $where;
     }
     abstract static function getById(int $id): ?mysql_object;
@@ -156,8 +159,9 @@ abstract class mysql_object implements iObject
     public function clear(): void
     {
         $vars = get_object_vars($this);
-        if (!is_array($vars))
+        if (!is_array($vars)) {
             throw new \Exception('no props to import into the object!');
+        }
         foreach (array_keys($vars) as $key) {
             unset($this->$key);
         }

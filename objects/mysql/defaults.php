@@ -72,8 +72,9 @@ class defaults extends mysql_object implements iObject
         ORDER BY id";
         $retval = [];
         try {
-            if (!is_object(static::$_dblink))
+            if (!is_object(static::$_dblink)) {
                 return $retval;
+            }
             $stmt = static::$_dblink->prepare($sql);
             if ($stmt === false) {
                 throw new mysqli_sql_exception();

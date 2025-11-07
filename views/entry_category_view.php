@@ -22,8 +22,9 @@ class entry_category_view extends object_viewer
             return $retval;
         }
         $_object = $this->_object;
-        if (!($_object instanceof entry_category))
+        if (!($_object instanceof entry_category)) {
             return $retval;
+        }
         $retval .= "<td class='id' data-label='ID'><a href=\"entry_type.php?tipo_id={$_object->id}\" title=\"Editar a categoria\">{$_object->id}</a></td>";
         $retval .= "<td class='category' data-label='Categoria'>" . (null === $_object->parent_id || $_object->parent_id == 0 ? "" : ($_object->parent_description ?? "")) . "</td>";
         $retval .= "<td class='description' data-label='Descri&ccedil;&atilde;o'>{$_object->description}</td>";
@@ -62,8 +63,9 @@ class entry_category_view extends object_viewer
     {
         $retval = "";
         $_object = $this->_object;
-        if (!$_object instanceof entry_category)
+        if (!$_object instanceof entry_category) {
             return $retval;
+        }
         if (isset($_object->id)) {
             $filter = [
                 'active' => ['operator' => '=', 'value' => '1'],
