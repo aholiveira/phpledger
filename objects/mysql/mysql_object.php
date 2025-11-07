@@ -9,7 +9,7 @@
  *
  */
 
-abstract class mysql_object implements iObject
+abstract class MySqlObject implements iObject
 {
     public $id;
     protected static string $_errormessage;
@@ -31,7 +31,7 @@ abstract class mysql_object implements iObject
     /**
      * Copies the object vars from $object into $this
      */
-    protected static function copyfromObject(mysql_object $source, mysql_object $destination): void
+    protected static function copyfromObject(MySqlObject $source, MySqlObject $destination): void
     {
         $vars = is_object($source) ? get_object_vars($source) : $source;
         if (!is_array($vars)) {
@@ -112,7 +112,7 @@ abstract class mysql_object implements iObject
         }
         return $where;
     }
-    abstract static function getById(int $id): ?mysql_object;
+    abstract static function getById(int $id): ?MySqlObject;
     /**
      * @param array $field_filter an array of the form ('field_name' => array('operator' => SQL operator, 'value' => value to filter by))
      * - where

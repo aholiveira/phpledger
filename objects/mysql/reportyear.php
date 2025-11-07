@@ -9,7 +9,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-class report_year extends report implements iReport
+class ReportYear extends report implements iReport
 {
     protected int $first_year;
     protected int $last_year;
@@ -23,7 +23,7 @@ class report_year extends report implements iReport
         $this->first_year = 2999;
         $this->last_year = 0;
     }
-    public function getReport(array $params = []): report_year
+    public function getReport(array $params = []): ReportYear
     {
         global $objectFactory;
         $this->first_year = array_key_exists("first_year", $params) ? $params["first_year"] : date("Y") - 1;

@@ -1,14 +1,14 @@
 <?php
 
 /**
- * entry_category object
+ * EntryCategory object
  *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-class entry_category extends mysql_object implements iObject
+class EntryCategory extends MySqlObject implements iObject
 {
     public ?string $description;
     public int $active;

@@ -20,7 +20,7 @@ $pagetitle = "Redefini&ccedil;o de palavra-passe";
 <head>
     <?php include_once "header.php"; ?>
     <?php
-    $objectFactory = new object_factory();
+    $objectFactory = new ObjectFactory();
     $user = $objectFactory->user();
 
     if ($_SERVER["REQUEST_METHOD"] == "GET") {

@@ -1,9 +1,9 @@
 <?php
 class LedgerEntryController
 {
-    private object_factory $factory;
+    private ObjectFactory $factory;
 
-    public function __construct(object_factory $factory)
+    public function __construct(ObjectFactory $factory)
     {
         $this->factory = $factory;
     }

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * View for report_month class
+ * View for ReportMonth class
  *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
@@ -10,7 +10,7 @@
  */
 class report_month_HtmlView extends report_HtmlView
 {
-    public function __construct(report_month $report)
+    public function __construct(ReportMonth $report)
     {
         parent::__construct($report);
     }

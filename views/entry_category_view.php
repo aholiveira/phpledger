@@ -1,17 +1,17 @@
 <?php
 
 /**
- * View for entry_category object
+ * View for EntryCategory object
  *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-class entry_category_view extends object_viewer
+class entry_category_view extends ObjectViewer
 {
-    protected entry_category $object;
-    public function __construct(entry_category $object)
+    protected EntryCategory $object;
+    public function __construct(EntryCategory $object)
     {
         parent::__construct($object);
     }
@@ -22,7 +22,7 @@ class entry_category_view extends object_viewer
             return $retval;
         }
         $_object = $this->_object;
-        if (!($_object instanceof entry_category)) {
+        if (!($_object instanceof EntryCategory)) {
             return $retval;
         }
         $retval .= "<td class='id' data-label='ID'><a href=\"entry_type.php?tipo_id={$_object->id}\" title=\"Editar a categoria\">{$_object->id}</a></td>";
@@ -38,9 +38,9 @@ class entry_category_view extends object_viewer
         $retval = "<table class=\"lista entry_category\">\r\n";
         $retval .= "<thead><tr><th>ID</th><th>Categoria</th><th>Descri&ccedil;&atilde;o</th><th>Valor</th><th>Activa</th></tr></thead>\r\n";
         $retval .= "<tbody>\r\n";
-        $view = new entry_category_view($objectFactory->entry_category());
+        $view = new entry_category_view($objectFactory->entryCategory());
         foreach ($object_list as $object) {
-            if ($object instanceof entry_category) {
+            if ($object instanceof EntryCategory) {
                 if ($object->parent_id === 0) {
                     $view->setObject($object);
                     $retval .= "<tr>" . $view->printObject() . "</tr>\r\n";
@@ -63,7 +63,7 @@ class entry_category_view extends object_viewer
     {
         $retval = "";
         $_object = $this->_object;
-        if (!$_object instanceof entry_category) {
+        if (!$_object instanceof EntryCategory) {
             return $retval;
         }
         if (isset($_object->id)) {
@@ -108,14 +108,14 @@ class entry_category_view extends object_viewer
     {
         $retval = "";
         /**
-         * @var entry_category $_object
+         * @var EntryCategory $_object
          */
         $_object = $this->_object;
         if (null === $selected) {
             $selected = $_object->id;
         }
         foreach ($category_list as $category) {
-            if (($category instanceof entry_category)) {
+            if (($category instanceof EntryCategory)) {
                 if ($category->id > 0 && sizeof($category->children) > 0) {
                     $retval .= "<optgroup label=\"{$category->description}\">\r\n";
                     $retval .= "<option value=\"{$category->id}\"" . ($selected == $category->id ? " selected " : "") . ">{$category->description}</option>\n";

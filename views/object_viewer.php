@@ -7,7 +7,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-abstract class object_viewer
+abstract class ObjectViewer
 {
     protected iObject $_object;
     public function __construct(iObject $object)

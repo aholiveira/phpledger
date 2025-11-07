@@ -10,7 +10,7 @@
  *
  */
 
-class defaults extends mysql_object implements iObject
+class Defaults extends MySqlObject implements iObject
 {
     public int $category_id;
     public int $account_id;

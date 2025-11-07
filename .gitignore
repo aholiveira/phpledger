@@ -9,3 +9,4 @@ test/config.*
 !test/config.sample.*
 .vscode*
 *.log
+/vendor/

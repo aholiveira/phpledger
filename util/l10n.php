@@ -1,14 +1,14 @@
 <?php
 class l10n
 {
-    public static ?string $forced_lang = null;
+    public static ?string $forcedLang = null;
     public static string $lang;
     private static array $l10n;
 
     public static function init(): void
     {
-        self::$lang = self::$forced_lang ?? self::detect_user_lang();
-        self::$l10n = self::load_lang(self::$forced_lang);
+        self::$lang = self::$forcedLang ?? self::detectUserLang();
+        self::$l10n = self::loadLang(self::$forcedLang);
     }
     public static function l(string $translation_id, mixed ...$replacements): string
     {
@@ -25,7 +25,7 @@ class l10n
             default => 'pt-PT'
         };
     }
-    private static function detect_user_lang(): string
+    private static function detectUserLang(): string
     {
         $requested = strtolower($_REQUEST['lang'] ?? '');
         $browser = strtolower($_SERVER['HTTP_ACCEPT_LANGUAGE'] ?? '');
@@ -38,9 +38,9 @@ class l10n
         });
     }
 
-    private static function load_lang(?string $forced_lang = null): array
+    private static function loadLang(?string $forcedLang = null): array
     {
-        $lang = $forced_lang ?? self::detect_user_lang();
+        $lang = $forcedLang ?? self::detectUserLang();
         $path = strtolower(ROOT_DIR . "/lang/$lang.php");
 
         if (!file_exists($path)) {

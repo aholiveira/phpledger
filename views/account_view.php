@@ -8,7 +8,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-class account_view extends object_viewer
+class account_view extends ObjectViewer
 {
     public function printObject(): string
     {

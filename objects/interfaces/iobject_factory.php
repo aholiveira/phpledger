@@ -9,15 +9,15 @@
  */
 interface iObjectFactory
 {
-    public static function data_storage(): iDataStorage;
+    public static function dataStorage(): iDataStorage;
     public static function defaults(): iObject;
     public static function user(): iObject;
     public static function account(): iObject;
-    public static function accounttype(): iObject;
+    public static function accountType(): iObject;
     public static function currency(): iObject;
     public static function ledger(): iObject;
-    public static function ledgerentry(): iObject;
-    public static function entry_category(): iObject;
-    public static function report_month(): iReport;
-    public static function report_year(): iReport;
+    public static function ledgerEntry(): iObject;
+    public static function entryCategory(): iObject;
+    public static function reportMonth(): iReport;
+    public static function reportYear(): iReport;
 }

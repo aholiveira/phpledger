@@ -18,7 +18,7 @@
  *
  */
 
-class account extends mysql_object implements iObject
+class Account extends MySqlObject implements iObject
 {
     public string $name = "";
     public string $number = "";

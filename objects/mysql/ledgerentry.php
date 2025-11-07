@@ -11,11 +11,11 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-class ledgerentry extends mysql_object implements iObject
+class LedgerEntry extends MySqlObject implements iObject
 {
     public string $entry_date;
     public int $category_id;
-    public entry_category $category;
+    public EntryCategory $category;
     public float $currency_amount;
     public string $currency_id;
     public currency $currency;
@@ -205,7 +205,7 @@ class ledgerentry extends mysql_object implements iObject
     private function getValuesForForeignFields()
     {
         if (isset($this->category_id)) {
-            $this->category = entry_category::getById($this->category_id);
+            $this->category = EntryCategory::getById($this->category_id);
         }
         if (isset($this->account_id)) {
             $this->account = account::getById($this->account_id);

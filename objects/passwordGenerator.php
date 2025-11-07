@@ -1,18 +1,18 @@
 <?php
 // Adapted from https://alexwebdevelop.com/php-generate-random-secure-password/
-class passwordGenerator
+class PasswordGenerator
 {
     // Alphabetic letters, lowercase
-    private const LETTERS = 'abcdefghijklmnopqrstuvwxyz';
+    private const string LETTERS = 'abcdefghijklmnopqrstuvwxyz';
 
     // Digits
-    private const DIGITS = '0123456789';
+    private const string DIGITS = '0123456789';
 
     // Special characters
-    private const SPECIAL_CHARS = '!@#$%^&*()_+-={}[]|:;"<>,.?/';
+    private const string SPECIAL_CHARS = '!@#$%^&*()_+-={}[]|:;"<>,.?/';
 
     // The maximum similarity percentage
-    private const MAX_SIMILARITY_PERC = 20;
+    private const int MAX_SIMILARITY_PERC = 20;
 
     public static function generate(int $minLength = 4, int $maxLength = 32, array $diffStrings = [], int $maxSimilarityPerc = self::MAX_SIMILARITY_PERC): string
     {

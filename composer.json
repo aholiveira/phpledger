@@ -1,0 +1,21 @@
+{
+    "name": "aholiveira/phpledger",
+    "description": "Personal finances manager",
+    "type": "project",
+    "license": "GPL-3.0-or-later",
+    "autoload": {
+        "psr-4": {
+            "PHPLedger\\": "src/"
+        }
+    },
+    "classmap": [
+        "./"
+    ],
+    "authors": [
+        {
+            "name": "aholiveira",
+            "email": "98539014+aholiveira@users.noreply.github.com"
+        }
+    ],
+    "require": {}
+}

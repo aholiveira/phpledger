@@ -4,7 +4,7 @@ class SessionManager
     public static function start(): void
     {
         $secure = !empty($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] === 1);
-        $cookie_params = [
+        $cookieParams = [
             'lifetime' => 0,
             'path' => dirname($_SERVER['SCRIPT_NAME']) . '/',
             'samesite' => 'Strict',
@@ -12,7 +12,7 @@ class SessionManager
             'httponly' => true
         ];
         if (session_status() === PHP_SESSION_NONE) {
-            session_set_cookie_params($cookie_params);
+            session_set_cookie_params($cookieParams);
             session_start();
         }
     }
