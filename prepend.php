@@ -17,7 +17,7 @@ if (PHP_VERSION_ID < 70000) {
 require __DIR__ . '/vendor/autoload.php';
 
 const BACKEND = "mysql";
-const VERSION = "0.4.31";
+const VERSION = "0.4.100";
 const ROOT_DIR = __DIR__;
 const OBJECTS_DIR = ROOT_DIR . "/objects";
 const VIEWS_DIR = ROOT_DIR . "/views";
