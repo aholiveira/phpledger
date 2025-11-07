@@ -127,7 +127,7 @@ class user extends mysql_object implements iObject
     public function verifyPassword(string $password): bool
     {
         if (empty($password)) {
-            return FALSE;
+            return false;
         }
         if (function_exists('sodium_crypto_pwhash_str_verify')) {
             return sodium_crypto_pwhash_str_verify($this->getPassword(), $password);
@@ -178,7 +178,7 @@ class user extends mysql_object implements iObject
                 throw new \mysqli_sql_exception();
             }
             if (empty($this->_token_expiry)) {
-                $this->_token_expiry = NULL;
+                $this->_token_expiry = null;
             }
             $stmt->bind_param(
                 "sssssisii",
