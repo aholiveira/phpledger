@@ -13,9 +13,9 @@ class AccountType extends MySqlObject implements DataObjectInterface
     public ?string $description = null;
     public int $savings = 0;
     protected static string $tableName = "tipo_contas";
-    public function __construct(\mysqli $dblink)
+    public function __construct()
     {
-        parent::__construct($dblink);
+        parent::__construct();
         static::getNextId();
     }
 
@@ -37,13 +37,13 @@ class AccountType extends MySqlObject implements DataObjectInterface
         $sql = "SELECT tipo_id as id, tipo_desc as description, savings FROM " . static::tableName() . " {$where}";
         $retval = [];
         try {
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = @static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->execute();
             $result = $stmt->get_result();
-            while ($newobject = $result->fetch_object(__CLASS__, [static::$_dblink])) {
+            while ($newobject = $result->fetch_object(__CLASS__, [static::$dbConnection])) {
                 $retval[$newobject->id] = $newobject;
             }
             $stmt->close();
@@ -57,17 +57,17 @@ class AccountType extends MySqlObject implements DataObjectInterface
     {
         $sql = "SELECT tipo_id as id, tipo_desc as description, savings FROM " . static::tableName() . " WHERE tipo_id=?";
         try {
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = @static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__, [static::$_dblink]);
+            $retval = $result->fetch_object(__CLASS__, [static::$dbConnection]);
             $stmt->close();
             if (null === $retval) {
-                $retval = new accounttype(static::$_dblink);
+                $retval = new accounttype();
             }
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
@@ -86,7 +86,7 @@ class AccountType extends MySqlObject implements DataObjectInterface
                 ON DUPLICATE KEY UPDATE
                     `tipo_desc` = VALUES(`tipo_desc`),
                     `savings` = VALUES(`savings`)";
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -112,7 +112,7 @@ class AccountType extends MySqlObject implements DataObjectInterface
         $retval = false;
         try {
             $sql = "DELETE FROM {$this->tableName()} WHERE tipo_id=?";
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             $stmt->bind_param("i", $this->id);
             $retval = $stmt->execute();
             $stmt->close();

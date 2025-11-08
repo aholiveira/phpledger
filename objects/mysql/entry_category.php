@@ -19,9 +19,9 @@ class EntryCategory extends MySqlObject implements DataObjectInterface
     protected static string $tableName = "tipo_mov";
     public string $validation_message;
 
-    public function __construct(\mysqli $dblink)
+    public function __construct()
     {
-        parent::__construct($dblink);
+        parent::__construct();
         $this->children = [];
     }
     public static function getDefinition(): array
@@ -55,14 +55,14 @@ class EntryCategory extends MySqlObject implements DataObjectInterface
         $children_map = [];
 
         try {
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->execute();
             $result = $stmt->get_result();
 
-            while ($row = $result->fetch_object(__CLASS__, [static::$_dblink])) {
+            while ($row = $result->fetch_object(__CLASS__, [static::$dbConnection])) {
                 if ($row->parent_id === 0 || $row->parent_id === null) {
                     $retval[$row->id] = $row;
                 } else {
@@ -95,7 +95,7 @@ class EntryCategory extends MySqlObject implements DataObjectInterface
             WHERE category_id=?
             GROUP BY category_id";
         try {
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -116,16 +116,16 @@ class EntryCategory extends MySqlObject implements DataObjectInterface
             LEFT JOIN " . static::tableName() . " p ON c.parent_id = p.tipo_id
             WHERE c.tipo_id=? OR c.parent_id=?";
         $children = [];
-        $retval = new self(static::$_dblink);
+        $retval = new self();
         try {
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->bind_param("ii", $id, $id);
             $stmt->execute();
             $result = $stmt->get_result();
-            while ($row = $result->fetch_object(__CLASS__, [static::$_dblink])) {
+            while ($row = $result->fetch_object(__CLASS__, [static::$dbConnection])) {
                 if ($row->id === $id) {
                     $retval = $row;
                 } else {
@@ -164,7 +164,7 @@ class EntryCategory extends MySqlObject implements DataObjectInterface
                     parent_id=VALUES(parent_id),
                     tipo_desc=VALUES(tipo_desc),
                     active=VALUES(active)";
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -181,7 +181,7 @@ class EntryCategory extends MySqlObject implements DataObjectInterface
         $retval = false;
         try {
             $sql = "DELETE FROM {$this->tableName()} WHERE tipo_id=?";
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }

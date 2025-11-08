@@ -28,7 +28,7 @@ class Ledger extends MySqlObject implements DataObjectInterface
         $sql = "SELECT id FROM " . static::tableName() . " {$where} ORDER BY id";
         $retval = [];
         try {
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = @static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -50,14 +50,14 @@ class Ledger extends MySqlObject implements DataObjectInterface
     {
         $sql = "SELECT id, nome as `name` FROM " . static::tableName() . " WHERE id=?";
         try {
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = @static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
-            $newobject = $result->fetch_object(__CLASS__, [static::$_dblink]);
+            $newobject = $result->fetch_object(__CLASS__, [static::$dbConnection]);
             $stmt->close();
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
@@ -70,8 +70,8 @@ class Ledger extends MySqlObject implements DataObjectInterface
         $retval = false;
         $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
         try {
-            static::$_dblink->begin_transaction();
-            $stmt = @static::$_dblink->prepare($sql);
+            static::$dbConnection->begin_transaction();
+            $stmt = @static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 return $retval;
             }
@@ -85,7 +85,7 @@ class Ledger extends MySqlObject implements DataObjectInterface
                 "UPDATE {$this->tableName()} SET nome=? WHERE id=?" :
                 "INSERT INTO {$this->tableName()} (nome, id) VALUES (?, ?)";
             $stmt->close();
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -96,7 +96,7 @@ class Ledger extends MySqlObject implements DataObjectInterface
             );
             $retval = $stmt->execute();
             $stmt->close();
-            static::$_dblink->commit();
+            static::$dbConnection->commit();
         } catch (\Exception $ex) {
             print "ERROR";
             $this->handleException($ex, $sql);

@@ -9,17 +9,17 @@
  *
  */
 use PHPLedger\Contracts\DataObjectInterface;
+use PHPLedger\Contracts\DataStorageInterface;
 abstract class MySqlObject implements DataObjectInterface
 {
     public $id;
     protected static string $_errormessage;
-    protected static \mysqli $_dblink;
+    protected static \mysqli $dbConnection;
     protected static string $tableName;
-    public function __construct(\mysqli $dblink)
+    public function __construct()
     {
-        static::$_dblink = $dblink;
+        static::$dbConnection = MySqlStorage::getConnection();
     }
-
     public function setId($id)
     {
         $this->id = $id;
@@ -46,7 +46,7 @@ abstract class MySqlObject implements DataObjectInterface
      */
     public static function getNextId(string $field = "id"): int
     {
-        $db = static::$_dblink;
+        $db = static::$dbConnection;
         $retval = -1;
         if (null === static::$tableName) {
             return $retval;
@@ -149,7 +149,7 @@ abstract class MySqlObject implements DataObjectInterface
     protected static function handleException(\Exception $ex, $sql = "")
     {
         global $logger;
-        $logger->dump(static::$_dblink, "DBLINK");
+        $logger->dump(static::$dbConnection, "DBLINK");
         $logger->dump($sql, "SQL");
         $logger->dump($ex, "EXCEPTION");
         $logger->dump($ex->getMessage(), "EXMSG");

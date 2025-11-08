@@ -27,9 +27,9 @@ class User extends MySqlObject implements DataObjectInterface
     protected static string $tableName = "users";
     protected static int $_token_length = 32;
 
-    public function __construct(\mysqli $dblink)
+    public function __construct()
     {
-        parent::__construct($dblink);
+        parent::__construct();
         $this->_token_expiry = null;
     }
     public static function getDefinition(): array
@@ -150,7 +150,7 @@ class User extends MySqlObject implements DataObjectInterface
         $retval = false;
         $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
         try {
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = @static::$dbConnection->prepare($sql);
             if (!$stmt) {
                 return $retval;
             }
@@ -175,7 +175,7 @@ class User extends MySqlObject implements DataObjectInterface
                 "INSERT INTO {$this->tableName()} (username, password, fullname, email, role, token, token_expiry, active, id)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt->close();
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -198,7 +198,7 @@ class User extends MySqlObject implements DataObjectInterface
             if ($retval === false) {
                 throw new mysqli_sql_exception();
             }
-            static::$_dblink->commit();
+            static::$dbConnection->commit();
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
             if (isset($stmt)) {
@@ -224,13 +224,13 @@ class User extends MySqlObject implements DataObjectInterface
             ORDER BY username";
         $retval = [];
         try {
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->execute();
             $result = $stmt->get_result();
-            while ($newobject = $result->fetch_object(__CLASS__, [static::$_dblink])) {
+            while ($newobject = $result->fetch_object(__CLASS__, [static::$dbConnection])) {
                 $retval[$newobject->id] = $newobject;
             }
             $stmt->close();
@@ -253,14 +253,14 @@ class User extends MySqlObject implements DataObjectInterface
             FROM " . static::tableName() . "
             WHERE username=?";
         try {
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = @static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->bind_param("s", $username);
             $stmt->execute();
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__, [static::$_dblink]);
+            $retval = $result->fetch_object(__CLASS__, [static::$dbConnection]);
             $stmt->close();
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
@@ -282,14 +282,14 @@ class User extends MySqlObject implements DataObjectInterface
         WHERE id=?";
         $retval = null;
         try {
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = @static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__, [static::$_dblink]);
+            $retval = $result->fetch_object(__CLASS__, [static::$dbConnection]);
             $stmt->close();
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
@@ -335,14 +335,14 @@ class User extends MySqlObject implements DataObjectInterface
         WHERE token=?";
         $retval = null;
         try {
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = @static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->bind_param("s", $token);
             $stmt->execute();
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__, [static::$_dblink]);
+            $retval = $result->fetch_object(__CLASS__, [static::$dbConnection]);
             $stmt->close();
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
@@ -354,7 +354,7 @@ class User extends MySqlObject implements DataObjectInterface
         $retval = false;
         try {
             $sql = "DELETE FROM {$this->tableName()} WHERE `id`=?";
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             $stmt->bind_param("i", $this->id);
             $retval = $stmt->execute();
             $stmt->close();

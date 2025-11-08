@@ -79,13 +79,13 @@ class Account extends MySqlObject implements DataObjectInterface
         ORDER BY activa DESC, conta_nome";
         $retval = [];
         try {
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->execute();
             $result = $stmt->get_result();
-            while ($newobject = $result->fetch_object(__CLASS__, [static::$_dblink])) {
+            while ($newobject = $result->fetch_object(__CLASS__, [static::$dbConnection])) {
                 $retval[$newobject->id] = $newobject;
             }
             $stmt->close();
@@ -111,17 +111,17 @@ class Account extends MySqlObject implements DataObjectInterface
         FROM " . static::tableName() . "
         WHERE conta_id=?";
         try {
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = @static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__, [static::$_dblink]);
+            $retval = $result->fetch_object(__CLASS__, [static::$dbConnection]);
             $stmt->close();
             if (null === $retval) {
-                $retval = new account(static::$_dblink);
+                $retval = new account();
             }
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
@@ -159,7 +159,7 @@ class Account extends MySqlObject implements DataObjectInterface
                 GROUP BY account_id";
         $retval = [];
         try {
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = @static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -194,7 +194,7 @@ class Account extends MySqlObject implements DataObjectInterface
                             `conta_abertura`=VALUES(`conta_abertura`),
                             `conta_fecho`=VALUES(`conta_fecho`),
                             `activa`=VALUES(`activa`)";
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -225,7 +225,7 @@ class Account extends MySqlObject implements DataObjectInterface
         $retval = false;
         try {
             $sql = "DELETE FROM {$this->tableName()} WHERE conta_id=?";
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             $stmt->bind_param("s", $this->id);
             $retval = $stmt->execute();
             $stmt->close();

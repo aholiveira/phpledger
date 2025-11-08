@@ -22,9 +22,9 @@ class Defaults extends MySqlObject implements DataObjectInterface
     public ?string $last_visited;
     protected static string $tableName = "defaults";
 
-    public function __construct(mysqli $dblink, $data = null)
+    public function __construct($data = null)
     {
-        parent::__construct($dblink);
+        parent::__construct();
         $this->id = $data["id"] ?? 1;
         $this->category_id = $data["category_id"] ?? 990;
         $this->account_id = $data["account_id"] ?? 0;
@@ -72,16 +72,16 @@ class Defaults extends MySqlObject implements DataObjectInterface
         ORDER BY id";
         $retval = [];
         try {
-            if (!is_object(static::$_dblink)) {
+            if (!is_object(static::$dbConnection)) {
                 return $retval;
             }
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new mysqli_sql_exception();
             }
             $stmt->execute();
             $result = $stmt->get_result();
-            while ($newobject = $result->fetch_object(__CLASS__, [static::$_dblink])) {
+            while ($newobject = $result->fetch_object(__CLASS__, [static::$dbConnection])) {
                 $retval[$newobject->id] = $newobject;
             }
             $stmt->close();
@@ -106,7 +106,7 @@ class Defaults extends MySqlObject implements DataObjectInterface
             WHERE id=?";
         $retval = null;
         try {
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = @static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new mysqli_sql_exception();
             }
@@ -116,7 +116,7 @@ class Defaults extends MySqlObject implements DataObjectInterface
                 throw new mysqli_sql_exception();
             }
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__, [static::$_dblink]);
+            $retval = $result->fetch_object(__CLASS__, [static::$dbConnection]);
             $stmt->close();
         } catch (Exception $ex) {
             static::handleException($ex, $sql);
@@ -139,7 +139,7 @@ class Defaults extends MySqlObject implements DataObjectInterface
             WHERE trim(lower(username))=trim(lower(?))";
         $retval = null;
         try {
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = @static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new mysqli_sql_exception();
             }
@@ -150,7 +150,7 @@ class Defaults extends MySqlObject implements DataObjectInterface
             }
             $result = $stmt->get_result();
             if ($row = $result->fetch_assoc()) {
-                $retval = new defaults(static::$_dblink, $row);
+                $retval = new defaults($row);
             }
             $stmt->close();
         } catch (Exception $ex) {
@@ -164,7 +164,7 @@ class Defaults extends MySqlObject implements DataObjectInterface
      */
     public static function init(): defaults
     {
-        return new defaults(static::$_dblink);
+        return new defaults(static::$dbConnection);
     }
     public function update(): bool
     {
@@ -182,7 +182,7 @@ class Defaults extends MySqlObject implements DataObjectInterface
                     `language`=VALUES(`language`),
                     last_visited=VALUES(last_visited),
                     username=VALUES(username)";
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }

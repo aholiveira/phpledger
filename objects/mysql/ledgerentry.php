@@ -102,13 +102,13 @@ class LedgerEntry extends MySqlObject implements DataObjectInterface
             ORDER BY entry_date, id";
         $retval = [];
         try {
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->execute();
             $result = $stmt->get_result();
-            while ($newobject = $result->fetch_object(__CLASS__, [static::$_dblink])) {
+            while ($newobject = $result->fetch_object(__CLASS__, [static::$dbConnection])) {
                 $newobject->getValuesForForeignFields();
                 $retval[$newobject->id] = $newobject;
             }
@@ -130,14 +130,14 @@ class LedgerEntry extends MySqlObject implements DataObjectInterface
             WHERE id=?";
         $retval = null;
         try {
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = @static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__, [static::$_dblink]);
+            $retval = $result->fetch_object(__CLASS__, [static::$dbConnection]);
             $stmt->close();
             if ($retval instanceof ledgerentry) {
                 $retval->getValuesForForeignFields();
@@ -154,7 +154,7 @@ class LedgerEntry extends MySqlObject implements DataObjectInterface
                 FROM {$this->tableName()}
                 WHERE entry_date<?" . (null !== $account_id ? " AND account_id=?" : "");
         try {
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = @static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -190,7 +190,7 @@ class LedgerEntry extends MySqlObject implements DataObjectInterface
                 FROM {$tableName}
                 WHERE {$where}";
         try {
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = @static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -236,7 +236,7 @@ class LedgerEntry extends MySqlObject implements DataObjectInterface
                 remarks=VALUES(remarks),
                 username=VALUES(username),
                 updated_at=NULL";
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }

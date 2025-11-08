@@ -19,9 +19,9 @@ class Currency extends MySqlObject implements DataObjectInterface
 
     protected static string $tableName = "moedas";
 
-    public function __construct(\mysqli $dblink)
+    public function __construct()
     {
-        parent::__construct($dblink);
+        parent::__construct();
         $this->code = "";
     }
     public static function getDefinition(): array
@@ -50,13 +50,13 @@ class Currency extends MySqlObject implements DataObjectInterface
         $sql = "SELECT id, `code`, `description`, exchange_rate, username, created_at, updated_at FROM " . static::tableName() . " {$where} ORDER BY description";
         $retval = [];
         try {
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = @static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->execute();
             $result = $stmt->get_result();
-            while ($newobject = $result->fetch_object(__CLASS__, [static::$_dblink])) {
+            while ($newobject = $result->fetch_object(__CLASS__, [static::$dbConnection])) {
                 $retval[$newobject->id] = $newobject;
             }
             $stmt->close();
@@ -71,14 +71,14 @@ class Currency extends MySqlObject implements DataObjectInterface
         $sql = "SELECT id, `code`, `description`, exchange_rate, username, created_at, updated_at FROM " . static::tableName() . " WHERE id=? ORDER BY `description`";
         $retval = null;
         try {
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = @static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__, [static::$_dblink]);
+            $retval = $result->fetch_object(__CLASS__, [static::$dbConnection]);
             $stmt->close();
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
@@ -91,14 +91,14 @@ class Currency extends MySqlObject implements DataObjectInterface
         $sql = "SELECT id, `code`, `description`, exchange_rate, username, created_at, updated_at FROM " . static::tableName() . " WHERE code=? ORDER BY `description`";
         $retval = null;
         try {
-            $stmt = @static::$_dblink->prepare($sql);
+            $stmt = @static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->bind_param("s", $code);
             $stmt->execute();
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__, [static::$_dblink]);
+            $retval = $result->fetch_object(__CLASS__, [static::$dbConnection]);
             $stmt->close();
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
@@ -120,7 +120,7 @@ class Currency extends MySqlObject implements DataObjectInterface
                     `username`=VALUES(`username`),
                     `created_at`=NULL,
                     `updated_at`=NULL";
-            $stmt = static::$_dblink->prepare($sql);
+            $stmt = static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }

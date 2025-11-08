@@ -11,7 +11,7 @@ use PHPLedger\Contracts\DataStorageInterface;
 use PHPLedger\Util\Logger;
 class MySqlStorage implements DataStorageInterface
 {
-    private ?\mysqli $_dblink = null;
+    private ?\mysqli $dbConnection = null;
     private string $_message = "";
     private $_tableCreateSQL;
     private $_collation = "utf8mb4_general_ci";
@@ -19,7 +19,7 @@ class MySqlStorage implements DataStorageInterface
     private $_default_admin_username;
     private $_default_admin_password;
     private Logger $logger;
-
+    private static ?self $instance = null;
     public function __construct()
     {
         global $logger;
@@ -29,28 +29,37 @@ class MySqlStorage implements DataStorageInterface
         $this->_default_admin_password = config::get("admin_password");
         $this->logger = $logger;
     }
+    public static function instance(): self
+    {
+        return self::$instance ??= new self();
+    }
+    public static function getConnection(): mysqli
+    {
+        self::instance()->connect();
+        return self::instance()->dbConnection;
+    }
     private function connect(): void
     {
         $host = config::get("host");
         $user = config::get("user");
         $pass = config::get("password");
         $dbase = config::get("database");
-        mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
         try {
-            if ($this->_dblink instanceof \mysqli) {
-                if ($this->_dblink->connect_errno) {
+            mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+            if ($this->dbConnection instanceof \mysqli) {
+                if ($this->dbConnection->connect_errno) {
                     try {
-                        $this->_dblink->close();
+                        $this->dbConnection->close();
                     } catch (\Exception $e) {
                         // Ignore errors on closing a broken connection
                     }
-                    $this->_dblink = null;
+                    $this->dbConnection = null;
                 } else {
                     return;
                 }
             }
-            $this->_dblink = new \mysqli($host, $user, $pass, $dbase);
-            $this->_dblink->set_charset('utf8mb4');
+            $this->dbConnection = new \mysqli($host, $user, $pass, $dbase);
+            $this->dbConnection->set_charset('utf8mb4');
         } catch (\mysqli_sql_exception $e) {
             throw new \RuntimeException("Database connection failed: " . $e->getMessage(), 0, $e);
         }
@@ -97,7 +106,7 @@ class MySqlStorage implements DataStorageInterface
         }
         if ($this->tableExists("users")) {
             try {
-                $user = new user($this->_dblink);
+                $user = new user();
                 if (sizeof($user->getList()) == 0) {
                     $this->addMessage("Table [users] is empty");
                     $retval = false;
@@ -108,7 +117,7 @@ class MySqlStorage implements DataStorageInterface
             }
         }
         if ($this->tableExists("ledgers")) {
-            $ledger = new ledger($this->_dblink);
+            $ledger = new ledger();
             if (sizeof($ledger->getList()) == 0) {
                 $this->addMessage("Table [ledgers] is empty");
                 $retval = false;
@@ -119,21 +128,21 @@ class MySqlStorage implements DataStorageInterface
             $retval = false;
         }
         if ($this->tableExists("moedas")) {
-            $currency = new currency($this->_dblink);
+            $currency = new currency();
             if (sizeof($currency->getList()) == 0) {
                 $this->addMessage("Table [currency] is empty");
                 $retval = false;
             }
         }
         if ($this->tableExists("tipo_mov")) {
-            $accounttype = new accounttype($this->_dblink);
+            $accounttype = new accounttype();
             if (sizeof($accounttype->getList()) == 0) {
                 $this->addMessage("Table [account type] is empty");
                 $retval = false;
             }
         }
         if ($this->tableExists("contas")) {
-            $account = new account($this->_dblink);
+            $account = new account();
             if (sizeof($account->getList()) == 0) {
                 $this->addMessage("Table [accounts] is empty");
                 $retval = false;
@@ -165,7 +174,7 @@ class MySqlStorage implements DataStorageInterface
             $this->updateTable($table_name);
         }
         $this->updateTableEntryType();
-        $user = new user($this->_dblink);
+        $user = new user();
         if (sizeof($user->getList()) == 0) {
             $user->setId(1);
             $user->setUsername($this->_default_admin_username);
@@ -192,7 +201,7 @@ class MySqlStorage implements DataStorageInterface
                 $retval = false;
             }
         }
-        $ledger = new ledger($this->_dblink);
+        $ledger = new ledger();
         if (sizeof($ledger->getList()) == 0) {
             $ledger->setId(id: 1);
             $ledger->name = "Default";
@@ -209,7 +218,7 @@ class MySqlStorage implements DataStorageInterface
             }
         }
         if ($this->tableExists("moedas")) {
-            $currency = new currency($this->_dblink);
+            $currency = new currency();
             if (sizeof($currency->getList()) == 0) {
                 $currency->description = 'Euro';
                 $currency->exchange_rate = 1;
@@ -222,7 +231,7 @@ class MySqlStorage implements DataStorageInterface
             }
         }
         if ($this->tableExists("tipo_mov") && sizeof(accounttype::getList()) == 0) {
-            $accounttype = new accounttype($this->_dblink);
+            $accounttype = new accounttype();
             $accounttype->description = 'Conta caixa';
             $accounttype->savings = 0;
             $accounttype->id = 1;
@@ -232,7 +241,7 @@ class MySqlStorage implements DataStorageInterface
             }
         }
         if ($this->tableExists("contas")) {
-            $account = new account($this->_dblink);
+            $account = new account();
             if (sizeof($account->getList()) == 0) {
                 $account->number = '';
                 $account->name = 'Caixa';
@@ -433,7 +442,7 @@ class MySqlStorage implements DataStorageInterface
         $retval = null;
         $this->connect();
         try {
-            $stmt = @$this->_dblink->prepare($sql);
+            $stmt = @$this->dbConnection->prepare($sql);
             if (!$stmt) {
                 return $retval;
             }
@@ -457,7 +466,7 @@ class MySqlStorage implements DataStorageInterface
         $retval = false;
         $this->connect();
         try {
-            $stmt = $this->_dblink->prepare($sql);
+            $stmt = $this->dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -465,7 +474,7 @@ class MySqlStorage implements DataStorageInterface
             $stmt->close();
         } catch (\Exception $ex) {
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->_dblink, "");
+            $this->logger->dump($this->dbConnection, "");
         }
         return $retval;
     }
@@ -474,7 +483,7 @@ class MySqlStorage implements DataStorageInterface
         $retval = false;
         $this->connect();
         try {
-            $stmt = $this->_dblink->prepare("SHOW CREATE TABLE `{$table}`");
+            $stmt = $this->dbConnection->prepare("SHOW CREATE TABLE `{$table}`");
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -484,7 +493,7 @@ class MySqlStorage implements DataStorageInterface
             $stmt->close();
         } catch (\Exception $ex) {
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->_dblink, "");
+            $this->logger->dump($this->dbConnection, "");
         }
         return $retval;
     }
@@ -499,7 +508,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage($ex->getMessage());
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->_dblink, "");
+            $this->logger->dump($this->dbConnection, "");
         }
         return $retval;
     }
@@ -534,7 +543,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->_dblink, "");
+            $this->logger->dump($this->dbConnection, "");
         }
         return $retval;
     }
@@ -556,7 +565,7 @@ class MySqlStorage implements DataStorageInterface
             $this->addMessage($ex);
             $this->addMessage($sql);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->_dblink, "");
+            $this->logger->dump($this->dbConnection, "");
         }
         return $retval;
     }
@@ -571,7 +580,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->_dblink, "");
+            $this->logger->dump($this->dbConnection, "");
         }
         return $retval;
     }
@@ -589,7 +598,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->_dblink, "");
+            $this->logger->dump($this->dbConnection, "");
         }
         return $retval;
     }
@@ -605,7 +614,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->_dblink, "");
+            $this->logger->dump($this->dbConnection, "");
             return false;
         }
     }
@@ -619,7 +628,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage("Failed to get collation for database [{$db_name}]: " . $ex->getMessage());
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->_dblink, "");
+            $this->logger->dump($this->dbConnection, "");
             return "";
         }
     }
@@ -638,7 +647,7 @@ class MySqlStorage implements DataStorageInterface
             $this->addMessage("Failed to change collation on database [{$db_name}]: " . $ex->getMessage());
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->_dblink, "");
+            $this->logger->dump($this->dbConnection, "");
             return "";
         }
     }
@@ -652,7 +661,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->_dblink, "");
+            $this->logger->dump($this->dbConnection, "");
             $retval = "";
         }
         return $retval;
@@ -668,7 +677,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->_dblink, "");
+            $this->logger->dump($this->dbConnection, "");
             $retval = "";
         }
         return $retval;
@@ -683,7 +692,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->_dblink, "");
+            $this->logger->dump($this->dbConnection, "");
             $retval = "";
         }
         return $retval;
@@ -699,7 +708,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->_dblink, "");
+            $this->logger->dump($this->dbConnection, "");
         }
         return $retval;
     }
