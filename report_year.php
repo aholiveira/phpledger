@@ -76,7 +76,7 @@ $report->getReport(["first_year" => $first_year, "last_year" => $last_year]);
         <script type="text/javascript">
             updateRowColors("report");
         </script>
-        <?php include_once "footer.php"; ?>
+        <?php Html::footer(); ?>
     </div>
     <script>
         setTimeout(() => { document.getElementById("preloader").style.display = "none"; }, 0);

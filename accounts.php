@@ -194,7 +194,7 @@ $pagetitle = "Contas";
                 }
             }
         </script>
-        <?php include_once "footer.php"; ?>
+        <?php Html::footer(); ?>
     </div>
     <script>
         setTimeout(() => { document.getElementById("preloader").style.display = "none"; }, 0);

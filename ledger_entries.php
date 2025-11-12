@@ -443,9 +443,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         <div class="main-footer">
             <p><?= l10n::l('transactions_in_period', count($ledger_entry_cache)) ?></p>
         </div>
-        <?php
-        include_once "footer.php";
-        ?>
+        <?php Html::footer(); ?>
     </div> <!-- Main grid -->
     <script>
         toggleDateElements("data_mov");

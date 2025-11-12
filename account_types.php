@@ -99,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 </table>
             </form>
         </div>
-        <?php include_once "footer.php"; ?>
+        <?php Html::footer(); ?>
     </div>
 </body>
 

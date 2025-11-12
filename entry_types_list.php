@@ -82,7 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
                 ?>
             </div>
         </div>
-        <?php include_once "footer.php"; ?>
+        <?php Html::footer(); ?>
     </div>
     <script>
         setTimeout(() => { document.getElementById("preloader").style.display = "none"; }, 0);

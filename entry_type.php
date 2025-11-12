@@ -8,6 +8,7 @@
  *
  */
 include_once __DIR__ . "/contas_config.php";
+use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 $pagetitle = "Tipo de movimentos";
 ?>
@@ -50,7 +51,7 @@ $pagetitle = "Tipo de movimentos";
                 </table>
             </form>
         </div>
-        <?php include_once "footer.php"; ?>
+        <?php Html::footer(); ?>
     </div>
 </body>
 

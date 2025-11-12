@@ -101,7 +101,7 @@ if (!empty($post_user)) {
                 </tr>
                 <tr>
                     <td class="version-tag">
-                        <?php include_once ROOT_DIR . "/lang_selector.php"; ?>
+                        <?php Html::lang_selector(); ?>
                     </td>
                 </tr>
             </table>
