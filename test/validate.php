@@ -2,6 +2,7 @@
 include_once "common.php";
 use PHPLedger\Contracts\DataObjectInterface;
 use PHPLedger\Util\Logger;
+
 $retval = true;
 $classnames = [
     "account" => "account_view",

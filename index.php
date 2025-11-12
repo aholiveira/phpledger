@@ -9,11 +9,14 @@
  */
 require __DIR__ . '/vendor/autoload.php';
 
+use PHPLedger\Util\Authentication;
+use PHPLedger\Util\Html;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\CSRF;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Redirector;
 use PHPLedger\Util\SessionManager;
+
 const SESSION_TIMEOUT = 3600;
 if (isset($_GET['do_logout']) && $_GET['do_logout'] === '1') {
     SessionManager::logout();

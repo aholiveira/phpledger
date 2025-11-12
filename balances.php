@@ -8,7 +8,9 @@
  *
  */
 include_once __DIR__ . "/contas_config.php";
+use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
+
 $pagetitle = "Saldos";
 ?>
 <!DOCTYPE html>

@@ -9,6 +9,7 @@
  */
 use PHPLedger\Controllers\LedgerEntryController;
 use PHPLedger\Util\CSRF;
+use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Redirector;
 
@@ -150,14 +151,14 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             }
             $ledger_entry = \ledgerentry::getById($edit);
             if ($ledger_entry->id != $edit) {
-                \Html::myalert(l10n::l('not_found', $edit));
+                Html::myalert(l10n::l('not_found', $edit));
             }
         }
 
         // Defaults
-        $defaults = \defaults::getByUsername($_SESSION["user"]);
+        $defaults = defaults::getByUsername($_SESSION["user"]);
         if (null === $defaults) {
-            $defaults = \defaults::init();
+            $defaults = defaults::init();
         }
         // Tipos movimento
         $category_id = $edit > 0 ? $edit_entry->category_id : $defaults->category_id;
@@ -202,11 +203,11 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                         <td><?= l10n::l('start') ?></td>
                         <td>
                             <select class="date-fallback" style="display: none" name="filter_sdateAA"
-                                onchange="update_date('filter_sdate');"><?= \Html::yearOptions(substr($sdate, 0, 4)) ?></select>
+                                onchange="update_date('filter_sdate');"><?= Html::yearOptions(substr($sdate, 0, 4)) ?></select>
                             <select class="date-fallback" style="display: none" name="filter_sdateMM"
-                                onchange="update_date('filter_sdate');"><?= \Html::monthOptions(substr($sdate, 5, 2)) ?></select>
+                                onchange="update_date('filter_sdate');"><?= Html::monthOptions(substr($sdate, 5, 2)) ?></select>
                             <select class="date-fallback" style="display: none" name="filter_sdateDD"
-                                onchange="update_date('filter_sdate');"><?= \Html::dayOptions(substr($sdate, 8, 2)) ?></select>
+                                onchange="update_date('filter_sdate');"><?= Html::dayOptions(substr($sdate, 8, 2)) ?></select>
                             <input class="date-fallback" type="date" id="filter_sdate" name="filter_sdate" required
                                 value="<?= (new \DateTime("{$sdate}"))->format("Y-m-d") ?>">
                         </td>
@@ -215,11 +216,11 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                         <td><?= l10n::l('end') ?></td>
                         <td>
                             <select class="date-fallback" style="display: none" name="filter_edateAA"
-                                onchange="update_date('filter_edate');"><?= \Html::yearOptions(substr($edate, 0, 4)) ?></select>
+                                onchange="update_date('filter_edate');"><?= Html::yearOptions(substr($edate, 0, 4)) ?></select>
                             <select class="date-fallback" style="display: none" name="filter_edateMM"
-                                onchange="update_date('filter_edate');"><?= \Html::monthOptions(substr($edate, 5, 2)) ?></select>
+                                onchange="update_date('filter_edate');"><?= Html::monthOptions(substr($edate, 5, 2)) ?></select>
                             <select class="date-fallback" style="display: none" name="filter_edateDD"
-                                onchange="update_date('filter_edate');"><?= \Html::dayOptions(substr($edate, 8, 2)) ?></select>
+                                onchange="update_date('filter_edate');"><?= Html::dayOptions(substr($edate, 8, 2)) ?></select>
                             <input class="date-fallback" type="date" id="filter_edate" name="filter_edate" required
                                 value="<?= (new \DateTime("{$edate}"))->format("Y-m-d") ?>">
                         </td>
@@ -306,13 +307,13 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                     </td>
                                     <td data-label="<?= l10n::l('date') ?>" class="id">
                                         <select class="date-fallback" style="display: none" name="data_movAA">
-                                            <?= \Html::yearOptions(substr($row->entry_date, 0, 4)) ?>
+                                            <?= Html::yearOptions(substr($row->entry_date, 0, 4)) ?>
                                         </select>
                                         <select class="date-fallback" style="display: none" name="data_movMM">
-                                            <?= \Html::monthOptions(substr($row->entry_date, 5, 2)) ?>
+                                            <?= Html::monthOptions(substr($row->entry_date, 5, 2)) ?>
                                         </select>
                                         <select class="date-fallback" style="display: none" name="data_movDD">
-                                            <?= \Html::dayOptions(substr($row->entry_date, 8, 2)) ?>
+                                            <?= Html::dayOptions(substr($row->entry_date, 8, 2)) ?>
                                         </select>
                                         <input class="date-fallback" type="date" id="data_mov" name="data_mov" required
                                             value="<?= $row->entry_date ?>">
@@ -394,13 +395,13 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                     </td>
                                     <td data-label="<?= l10n::l('date') ?>" class="data">
                                         <select class="date-fallback" style="display: none" name="data_movAA">
-                                            <?= \Html::yearOptions(substr($defaults->entry_date, 0, 4)) ?>
+                                            <?= Html::yearOptions(substr($defaults->entry_date, 0, 4)) ?>
                                         </select>
                                         <select class="date-fallback" style="display: none" name="data_movMM">
-                                            <?= \Html::monthOptions(substr($defaults->entry_date, 5, 2)) ?>
+                                            <?= Html::monthOptions(substr($defaults->entry_date, 5, 2)) ?>
                                         </select>
                                         <select class="date-fallback" style="display: none" name="data_movDD">
-                                            <?= \Html::dayOptions(substr($defaults->entry_date, 8, 2)) ?>
+                                            <?= Html::dayOptions(substr($defaults->entry_date, 8, 2)) ?>
                                         </select>
                                         <input class="date-fallback" type="date" id="data_mov" name="data_mov" required
                                             value="<?= $defaults->entry_date ?>">

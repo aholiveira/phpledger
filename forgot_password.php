@@ -9,8 +9,10 @@
  */
 global $user;
 global $pass;
-use PHPLedger\Util\L10n;
 use PHPLedger\Util\Config;
+use PHPLedger\Util\Html;
+use PHPLedger\Util\L10n;
+
 require_once __DIR__ . "/prepend.php";
 config::init(__DIR__ . '/config.json');
 $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";

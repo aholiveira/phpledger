@@ -10,6 +10,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  */
 use PHPLedger\Contracts\DataObjectInterface;
+use PHPLedger\Util\Config;
+use PHPLedger\Util\Email;
 
 const USER_ROLE_ADM = 255;
 const USER_ROLE_RW = 192;

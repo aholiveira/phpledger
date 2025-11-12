@@ -8,6 +8,7 @@
  *
  */
 use PHPLedger\Util\CSRF;
+use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Redirector;
 

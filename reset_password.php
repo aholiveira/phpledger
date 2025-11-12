@@ -12,6 +12,7 @@ global $pass;
 
 include_once __DIR__ . "/contas_config.php";
 use PHPLedger\Util\Config;
+use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 $pagetitle = "Redefini&ccedil;o de palavra-passe";
 
