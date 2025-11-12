@@ -10,6 +10,7 @@
 global $user;
 global $pass;
 use PHPLedger\Util\L10n;
+use PHPLedger\Util\Config;
 require_once __DIR__ . "/prepend.php";
 config::init(__DIR__ . '/config.json');
 $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";
@@ -18,7 +19,7 @@ $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include_once "header.php"; ?>
+    <?php Html::header(); ?>
     <?php
     $objectFactory = new ObjectFactory();
     $user = $objectFactory->user();

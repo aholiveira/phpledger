@@ -9,6 +9,7 @@
  */
 require __DIR__ . '/vendor/autoload.php';
 
+use PHPLedger\Util\Config;
 use PHPLedger\Util\CSRF;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Redirector;
@@ -62,7 +63,7 @@ if (!empty($post_user)) {
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include_once "header.php"; ?>
+    <?php Html::header(); ?>
 </head>
 
 <body onload="document.getElementById('username').focus();">

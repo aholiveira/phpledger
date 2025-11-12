@@ -8,6 +8,7 @@
  *
  */
 use PHPLedger\Contracts\DataStorageInterface;
+use PHPLedger\Util\Config;
 use PHPLedger\Util\Logger;
 class MySqlStorage implements DataStorageInterface
 {
@@ -28,6 +29,7 @@ class MySqlStorage implements DataStorageInterface
         $this->_default_admin_username = config::get("admin_username");
         $this->_default_admin_password = config::get("admin_password");
         $this->logger = $logger;
+
     }
     public static function instance(): self
     {
@@ -45,6 +47,7 @@ class MySqlStorage implements DataStorageInterface
         $pass = config::get("password");
         $dbase = config::get("database");
         try {
+
             mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
             if ($this->dbConnection instanceof \mysqli) {
                 if ($this->dbConnection->connect_errno) {

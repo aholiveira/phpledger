@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include_once "header.php"; ?>
+    <?php Html::header(); ?>
 </head>
 
 <body>
@@ -65,9 +65,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     }
     ?>
     <div class="maingrid" id="maingrid">
-        <?php
-        include_once ROOT_DIR . "/menu_div.php";
-        ?>
+        <?php Html::menu(); ?>
         <div class="header" style="height: 0;"></div>
         <div id="main" class="main">
             <form method="POST" action="account_types.php">

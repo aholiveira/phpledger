@@ -7,7 +7,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-
+use PHPLedger\Util\L10n;
+use PHPLedger\Util\Config;
 class Html
 {
     /**
@@ -56,16 +57,78 @@ class Html
     }
     public static function errortext(string $message): never
     {
-        print "<p>{$message}</p>\n";
-        print "</div>\n";
-        print "</body>\n";
-        print "</html>\n";
+        ?>
+        <p><?= $message ?></p>
+        </div>
+        </body>
+
+        </html>
+        <?php
         die();
     }
     public static function myalert(string $message): void
     {
-        print "<script type=\"text/javascript\" defer>\n";
-        print "alert(" . json_encode($message) . ");\n";
-        print "</script>";
+        ?>
+        <script type="text/javascript" defer>
+            alert(<?= json_encode($message) ?>);
+        </script>
+        <?php
+    }
+    public static function header(): void
+    {
+        ?>
+        <title>
+            <?= htmlspecialchars((!empty($pagetitle) ? "$pagetitle - " : "") . config::get("title")) ?>
+        </title>
+        <script>
+            document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone + "; path=/";
+        </script>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="styles.css">
+        <?php
+    }
+    public static function menu(): void
+    {
+        ?>
+        <aside class="menu">
+            <nav>
+                <ul>
+                    <li><a id="ledger_entries"
+                            href="ledger_entries.php?lang=<?= l10n::$lang ?>"><?= l10n::l("ledger_entries") ?></a>
+                    </li>
+                    <li><a id="balance" href="balances.php?lang=<?= l10n::$lang ?>"><?= l10n::l("balances") ?></a>
+                    </li>
+                    <li><a id="accounts" href="accounts.php?lang=<?= l10n::$lang ?>"><?= l10n::l("accounts") ?></a>
+                    </li>
+                    <li><a id="account_type"
+                            href="account_types_list.php?lang=<?= l10n::$lang ?>"><?= l10n::l("account_types") ?></a>
+                    </li>
+                    <li><a id="entry_type" href="entry_types_list.php?lang=<?= l10n::$lang ?>"><?= l10n::l("entry_types") ?></a>
+                    </li>
+                    <li><a id="report_month"
+                            href="report_month.php?lang=<?= l10n::$lang ?>&year=<?= date("Y") ?>"><?= l10n::l("report_month") ?></a>
+                    </li>
+                    <li><a id="report_year"
+                            href="report_year.php?lang=<?= l10n::$lang ?>&year=<?= date("Y") - 1 ?>"><?= l10n::l("report_year") ?></a>
+                    </li>
+                    <li><a id="logout" href="index.php?lang=<?= l10n::$lang ?>&do_logout=1"><?= l10n::l("logout") ?></a>
+                </ul>
+            </nav>
+        </aside>
+        <?php
+    }
+    public static function lang_selector(): void
+    {
+        ?>
+        <div>
+            <?php if (l10n::$lang === 'pt-pt'): ?>
+                <a href="?lang=en-us">EN</a> | <span>PT</span>
+            <?php else: ?>
+                <span>EN</span> | <a href="?lang=pt-pt">PT</a>
+            <?php endif; ?>
+        </div>
+        <?php
     }
 }

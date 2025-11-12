@@ -8,11 +8,12 @@
  *
  */
 
+use PHPLedger\Util\Config;
 use PHPLedger\Util\CSRF;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Redirector;
 require_once "prepend.php";
-\config::init(__DIR__ . '/config.json');
+config::init(__DIR__ . '/config.json');
 
 $objectFactory = new \ObjectFactory();
 $viewFactory = new \view_factory();
@@ -38,7 +39,7 @@ $pagetitle = L10n::l('update_needed');
 <html lang="<?= L10n::html() ?>">
 
 <head>
-    <?php include_once "header.php"; ?>
+    <?php Html::header(); ?>
     <title><?= $pagetitle ?></title>
     <?php if ($update_result): ?>
         <meta http-equiv="refresh" content="5;url=index.php">

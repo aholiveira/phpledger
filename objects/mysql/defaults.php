@@ -9,7 +9,9 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 use PHPLedger\Contracts\DataObjectInterface;
+use PHPLedger\Util\Config;
 class Defaults extends MySqlObject implements DataObjectInterface
 {
     public int $category_id;
@@ -81,7 +83,7 @@ class Defaults extends MySqlObject implements DataObjectInterface
             }
             $stmt->execute();
             $result = $stmt->get_result();
-            while ($newobject = $result->fetch_object(__CLASS__, [static::$dbConnection])) {
+            while ($newobject = $result->fetch_object(__CLASS__)) {
                 $retval[$newobject->id] = $newobject;
             }
             $stmt->close();
@@ -116,7 +118,7 @@ class Defaults extends MySqlObject implements DataObjectInterface
                 throw new mysqli_sql_exception();
             }
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__, [static::$dbConnection]);
+            $retval = $result->fetch_object(__CLASS__);
             $stmt->close();
         } catch (Exception $ex) {
             static::handleException($ex, $sql);

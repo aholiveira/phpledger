@@ -42,9 +42,7 @@ if (defined("DEBUG") && DEBUG === 1) {
 #@header("Content-Security-Policy: default-src 'self'; frame-ancestors 'none'; style-src 'self' 'unsafe-inline'; script-src * ");
 
 require_once OBJECTS_DIR . '/authentication.php';
-require_once OBJECTS_DIR . '/config.class.php';
 require_once OBJECTS_DIR . '/object_factory.php';
-require_once OBJECTS_DIR . '/email.php';
 require_once VIEWS_DIR . '/view_factory.php';
 require_once ROOT_DIR . '/html.php';
 

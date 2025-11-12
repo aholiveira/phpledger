@@ -18,7 +18,7 @@ $pagetitle = "Contas";
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include_once "header.php"; ?>
+    <?php Html::header(); ?>
 </head>
 
 <body>
@@ -27,7 +27,7 @@ $pagetitle = "Contas";
             <div class="spinner"></div>
         </div>
         <?php
-        include_once constant("ROOT_DIR") . "/menu_div.php";
+        Html::menu();
         $object = $objectFactory->account();
         $retval = true;
         $input_variables_filter = [

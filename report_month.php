@@ -26,7 +26,7 @@ $report->getReport(["year" => $year]);
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include_once "header.php"; ?>
+    <?php Html::header(); ?>
     <script>
         function toogleGroup(groupName) {
             var i, j, row, multiplier;
@@ -62,9 +62,7 @@ $report->getReport(["year" => $year]);
         <div id="preloader">
             <div class="spinner"></div>
         </div>
-        <?php
-        include_once constant("ROOT_DIR") . "/menu_div.php";
-        ?>
+        <?php Html::menu(); ?>
         <div id="header" class="header">
             <form name="filtro" action="report_month.php" method="GET">
                 <p>Ano <input type="text" name="year" maxlength="4" size="6" value="<?php print $year; ?>"></p>

@@ -7,7 +7,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-
+namespace PHPLedger\Util;
+use PHPLedger\Util\Config;
 class Email
 {
     public static function sendEmail($from, $to, $subject, $body): bool

@@ -15,7 +15,7 @@ $pagetitle = "Saldos";
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include_once "header.php"; ?>
+    <?php Html::header(); ?>
 </head>
 
 <body>
@@ -23,9 +23,7 @@ $pagetitle = "Saldos";
         <div id="preloader">
             <div class="spinner"></div>
         </div>
-        <?php
-        include_once ROOT_DIR . "/menu_div.php";
-        ?>
+        <?php Html::menu(); ?>
         <div class="header" style="height: 0;"></div>
         <div class="main" id="main">
             <div class="saldos">

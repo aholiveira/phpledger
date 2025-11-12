@@ -78,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include_once "header.php"; ?>
+    <?php Html::header(); ?>
     <script src="ledger_entries.js"> </script>
 </head>
 
@@ -99,8 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         <div id="preloader">
             <div class="spinner"></div>
         </div>
-        <?php
-        include_once ROOT_DIR . "/menu_div.php";
+        <?php Html::menu();
         if (!empty($filtered_input["filter_sdate"])) {
             $sdate = strlen($filtered_input["filter_sdate"]) ? $filtered_input["filter_sdate"] : date("Y-m-01");
         } else {
@@ -338,8 +337,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                     </td>
                                     <td data-label="<?= l10n::l('amount') ?>" class="amount"><input type="number" step="0.01"
                                             name="currency_amount" placeholder="0.00" value="<?= $row->currency_amount ?>"></td>
-                                    <td data-label="<?= l10n::l('remarks') ?>" class="remarks"><input type="text"
-                                            name="remarks" maxlength="255" value="<?= $row->remarks ?>"></td>
+                                    <td data-label="<?= l10n::l('remarks') ?>" class="remarks"><input type="text" name="remarks"
+                                            maxlength="255" value="<?= $row->remarks ?>"></td>
                                     <td data-label="<?= l10n::l('balance') ?>" class="total" style="text-align: right">
                                         <?= normalize_number($balance) ?>
                                     </td>
