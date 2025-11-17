@@ -14,7 +14,7 @@
 if (PHP_VERSION_ID < 70000) {
     die('PHP >= 7.0.0 required');
 }
-require __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Logger;

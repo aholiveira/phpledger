@@ -1,6 +1,7 @@
 <?php
 namespace PHPLedger\Storage\Abstract;
 
+use Exception;
 use PHPLedger\Contracts\DataObjectFactoryInterface;
 use PHPLedger\Contracts\DataStorageInterface;
 use PHPLedger\Domain\Account;
@@ -27,8 +28,7 @@ abstract class AbstractObjectFactory implements DataObjectFactoryInterface
                     static::$backendFactory = new \PHPLedger\Storage\MySql\MySqlObjectFactory($backend, $logger);
                     break;
                 default:
-                    static::$backendFactory = new \PHPLedger\Storage\MySql\MySqlObjectFactory($backend, $logger);
-                    break;
+                    throw new Exception("Storage not implemented");
             }
         }
         static::$logger = $logger ?? new Logger("ledger.log");

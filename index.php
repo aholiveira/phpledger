@@ -7,7 +7,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-require __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
