@@ -14,14 +14,14 @@
 if (PHP_VERSION_ID < 70000) {
     die('PHP >= 7.0.0 required');
 }
-require __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\SessionManager;
 
 const BACKEND = "mysql";
-const VERSION = "0.4.202";
+const VERSION = "0.4.203";
 const ROOT_DIR = __DIR__;
 const OBJECTS_DIR = ROOT_DIR . "/objects";
 const VIEWS_DIR = ROOT_DIR . "/views";

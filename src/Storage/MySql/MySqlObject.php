@@ -25,7 +25,7 @@ trait MySqlObject
     }
     public function getId()
     {
-        return $this->id ?? $this->id;
+        return $this->id;
     }
     /**
      * Copies the object vars from $object into $this
