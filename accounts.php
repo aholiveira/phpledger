@@ -7,9 +7,12 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-use PHPLedger\Util\CSRF;
-
 include_once __DIR__ . "/contas_config.php";
+use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Util\CSRF;
+use PHPLedger\Util\Html;
+use PHPLedger\Util\L10n;
+use PHPLedger\Util\Redirector;
 $pagetitle = "Contas";
 
 ?>
@@ -17,7 +20,7 @@ $pagetitle = "Contas";
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include_once "header.php"; ?>
+    <?php Html::header(); ?>
 </head>
 
 <body>
@@ -26,8 +29,8 @@ $pagetitle = "Contas";
             <div class="spinner"></div>
         </div>
         <?php
-        include_once constant("ROOT_DIR") . "/menu_div.php";
-        $object = $objectFactory->account();
+        Html::menu();
+        $object = ObjectFactory::account();
         $retval = true;
         $input_variables_filter = [
             'abertura' => [
@@ -56,62 +59,62 @@ $pagetitle = "Contas";
             'conta_nib' => FILTER_SANITIZE_FULL_SPECIAL_CHARS
         ];
         if ($_SERVER["REQUEST_METHOD"] === "GET") {
-            $filtered_input = filter_input_array(INPUT_GET, $input_variables_filter, true);
+            $filteredInput = filter_input_array(INPUT_GET, $input_variables_filter, true);
         }
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
                 http_response_code(400);
                 Redirector::to('ledger_entries.php');
             }
-            $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, true);
+            $filteredInput = filter_input_array(INPUT_POST, $input_variables_filter, true);
         }
-        if (($filtered_input["update"] ?? null) === "gravar") {
-            if (empty($filtered_input["conta_nome"])) {
+        if (($filteredInput["update"] ?? null) === "Gravar") {
+            if (empty($filteredInput["conta_nome"])) {
                 Html::myalert("Nome de conta invalido!");
                 $retval = false;
             }
             try {
-                if (empty($filtered_input["abertura"])) {
-                    $open_date = new DateTime(date("Y-m-d", mktime(0, 0, 0, $filtered_input["aberturaMM"], $filtered_input["aberturaDD"], $filtered_input["aberturaAA"])));
+                if (empty($filteredInput["abertura"])) {
+                    $open_date = new DateTime(date("Y-m-d", mktime(0, 0, 0, $filteredInput["aberturaMM"], $filteredInput["aberturaDD"], $filteredInput["aberturaAA"])));
                 } else {
-                    $open_date = new DateTime($filtered_input["abertura"]);
+                    $open_date = new DateTime($filteredInput["abertura"]);
                 }
             } catch (Exception $ex) {
                 Html::myalert("Data de abertura invalida!");
                 $retval = false;
             }
             try {
-                if (empty($filtered_input["fecho"])) {
-                    $close_date = new DateTime(date("Y-m-d", mktime(0, 0, 0, $filtered_input["fechoMM"], $filtered_input["fechoDD"], $filtered_input["fechoAA"])));
+                if (empty($filteredInput["fecho"])) {
+                    $close_date = new DateTime(date("Y-m-d", mktime(0, 0, 0, $filteredInput["fechoMM"], $filteredInput["fechoDD"], $filteredInput["fechoAA"])));
                 } else {
-                    $close_date = new DateTime($filtered_input["fecho"]);
+                    $close_date = new DateTime($filteredInput["fecho"]);
                 }
             } catch (Exception $ex) {
                 Html::myalert("Data de fecho invalida!");
                 $retval = false;
             }
             if ($retval) {
-                $object->id = $filtered_input["conta_id"];
-                $object->name = $filtered_input["conta_nome"];
+                $object->id = $filteredInput["conta_id"];
+                $object->name = $filteredInput["conta_nome"];
                 $object->open_date = $open_date->format("Y-m-d");
                 $object->close_date = $close_date->format("Y-m-d");
-                $object->number = $filtered_input["conta_num"];
-                $object->active = boolval($filtered_input["activa"]) ? 1 : 0;
-                $object->type_id = $filtered_input["tipo_id"];
-                $object->iban = $filtered_input["conta_nib"];
+                $object->number = $filteredInput["conta_num"];
+                $object->active = boolval($filteredInput["activa"]) ? 1 : 0;
+                $object->type_id = $filteredInput["tipo_id"];
+                $object->iban = $filteredInput["conta_nib"];
                 $retval = $object->update();
             }
         }
-        if (($filtered_input["update"] ?? null) === "apagar") {
-            $object->id = $filtered_input["conta_id"];
+        if (($filteredInput["update"] ?? null) === "Apagar") {
+            $object->id = $filteredInput["conta_id"];
             $retval = $object->delete();
         }
-        if (is_array($filtered_input) && !empty($filtered_input["update"])) {
+        if (is_array($filteredInput) && !empty($filteredInput["update"])) {
             if ($retval) {
-                if (strcasecmp($filtered_input["update"], "gravar") == 0) {
+                if (strcasecmp($filteredInput["update"], "gravar") == 0) {
                     Html::myalert("Registo gravado");
                 }
-                if (strcasecmp($filtered_input["update"], "apagar") == 0) {
+                if (strcasecmp($filteredInput["update"], "apagar") == 0) {
                     Html::myalert("Registo eliminado");
                 }
             } else {
@@ -119,12 +122,11 @@ $pagetitle = "Contas";
             }
         }
         $edit = null;
-        $conta_id = is_array($filtered_input) ? $filtered_input["conta_id"] : null;
+        $conta_id = is_array($filteredInput) ? $filteredInput["conta_id"] : null;
         if ($_SERVER["REQUEST_METHOD"] == "GET" && !empty($conta_id)) {
             $edit = $conta_id;
         }
-        $account = $objectFactory->account();
-        $account_list = $account->getList();
+        $account_list = ObjectFactory::account()::getList();
         ?>
         <div class="header" style="height: 0;"></div>
         <main>
@@ -149,22 +151,26 @@ $pagetitle = "Contas";
                             <tbody>
                                 <?php
                                 foreach ($account_list as $account) {
-                                    print "<tr>";
-                                    $account_view = $viewFactory->account_view($account);
-                                    if (!empty($edit) && $account->id == $edit) {
-                                        print $account_view->printForm();
-                                    }
-                                    if (empty($edit) || (!empty($edit) && $account->id != $edit)) {
-                                        print $account_view->printObject();
-                                    }
-                                    print "</tr>";
+                                    ?>
+                                    <tr>
+                                        <?php
+                                        $account_view = $viewFactory->account_view($account);
+                                        if (!empty($edit) && $account->id == $edit) {
+                                            print $account_view->printForm();
+                                        }
+                                        if (empty($edit) || (!empty($edit) && $account->id != $edit)) {
+                                            print $account_view->printObject();
+                                        }
+                                        ?>
+                                    </tr>
+                                    <?php
                                 }
                                 if (empty($edit)) {
-                                    print "<tr>";
-                                    $account = $objectFactory->account();
-                                    $account_view = $viewFactory->account_view($account);
-                                    print $account_view->printForm();
-                                    print "</tr>";
+                                    ?>
+                                    <tr>
+                                        <?= $viewFactory->account_view(ObjectFactory::account())->printForm(); ?>
+                                    </tr>
+                                    <?php
                                 }
                                 ?>
                             </tbody>
@@ -192,7 +198,7 @@ $pagetitle = "Contas";
                 }
             }
         </script>
-        <?php include_once "footer.php"; ?>
+        <?php Html::footer(); ?>
     </div>
     <script>
         setTimeout(() => { document.getElementById("preloader").style.display = "none"; }, 0);

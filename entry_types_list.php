@@ -8,10 +8,14 @@
  *
  */
 include_once __DIR__ . "/contas_config.php";
+use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Util\Html;
+use PHPLedger\Util\L10n;
+
 $pagetitle = "Tipos de movimentos";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")) {
-    $object = $objectFactory->entryCategory();
+    $object = ObjectFactory::entryCategory();
     $retval = false;
     $update = filter_input(INPUT_POST, "update", FILTER_DEFAULT);
     if (strcasecmp($update, "gravar") == 0) {
@@ -59,7 +63,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include_once "header.php"; ?>
+    <?php Html::header(); ?>
 </head>
 
 <body>
@@ -67,22 +71,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
         <div id="preloader">
             <div class="spinner"></div>
         </div>
-        <?php
-        include_once ROOT_DIR . "/menu_div.php";
-        ?>
+        <?php Html::menu(); ?>
         <div class="header">
             <p style="margin: 0"><a href="entry_type.php">Adicionar</a></p>
         </div>
         <div id="main" class="main">
             <div class="entry_category_list">
                 <?php
-                $object = $objectFactory->entryCategory();
+                $object = ObjectFactory::entryCategory();
                 $viewer = $viewFactory->entry_category_view($object);
                 print $viewer->printObjectList($object->getList());
                 ?>
             </div>
         </div>
-        <?php include_once "footer.php"; ?>
+        <?php Html::footer(); ?>
     </div>
     <script>
         setTimeout(() => { document.getElementById("preloader").style.display = "none"; }, 0);

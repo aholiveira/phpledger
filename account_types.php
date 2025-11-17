@@ -7,12 +7,17 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-use PHPLedger\Util\CSRF;
 include_once __DIR__ . "/contas_config.php";
+use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Util\CSRF;
+use PHPLedger\Util\Html;
+use PHPLedger\Util\L10n;
+use PHPLedger\Util\Redirector;
+
 $pagetitle = "Tipo de contas";
 $message = "";
 $retval = false;
-$object = $objectFactory->accounttype();
+$object = ObjectFactory::accounttype();
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
         http_response_code(400);
@@ -52,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include_once "header.php"; ?>
+    <?php Html::header(); ?>
 </head>
 
 <body>
@@ -62,9 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     }
     ?>
     <div class="maingrid" id="maingrid">
-        <?php
-        include_once ROOT_DIR . "/menu_div.php";
-        ?>
+        <?php Html::menu(); ?>
         <div class="header" style="height: 0;"></div>
         <div id="main" class="main">
             <form method="POST" action="account_types.php">
@@ -97,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                 </table>
             </form>
         </div>
-        <?php include_once "footer.php"; ?>
+        <?php Html::footer(); ?>
     </div>
 </body>
 

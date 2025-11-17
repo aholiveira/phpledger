@@ -11,6 +11,10 @@
 if (!defined("ROOT_DIR")) {
     include_once __DIR__ . "/prepend.php";
 }
+use PHPLedger\Util\Config;
+use PHPLedger\Util\Html;
+use PHPLedger\Util\SessionManager;
+
 config::init(__DIR__ . '/config.json');
 if (isset($_SESSION['expires']) && $_SESSION['expires'] < time()) {
     SessionManager::logout();
@@ -33,7 +37,7 @@ if (!isset($_SESSION['user'])) {
         ?>
         <!DOCTYPE html>
         <html lang="pt-PT">
-        <?php include_once "header.php"; ?>
+        <?php Html::header(); ?>
         <meta http-equiv="refresh" content="5;url=index.php">
         <script>
             window.addEventListener("DOMContentLoaded", () => {
@@ -56,6 +60,5 @@ if (!isset($_SESSION['user'])) {
     }
     $tz = $_SESSION['timezone'] ?? config::get("timezone");
     date_default_timezone_set(in_array($tz, timezone_identifiers_list(), true) ? $tz : 'UTC');
-    $objectFactory = new ObjectFactory();
     $viewFactory = new view_factory();
 }

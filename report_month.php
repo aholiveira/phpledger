@@ -8,6 +8,9 @@
  *
  */
 include_once __DIR__ . "/contas_config.php";
+use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Util\Html;
+use PHPLedger\Util\L10n;
 $pagetitle = "Relatório mensal";
 $year = date("Y");
 if (array_key_exists("year", $_GET)) {
@@ -16,7 +19,7 @@ if (array_key_exists("year", $_GET)) {
         $year = date("Y");
     }
 }
-$report = $objectFactory->reportMonth();
+$report = ObjectFactory::reportMonth();
 $reportHtml = $viewFactory->report_month_view($report);
 $report->year = $year;
 $report->getReport(["year" => $year]);
@@ -25,7 +28,7 @@ $report->getReport(["year" => $year]);
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include_once "header.php"; ?>
+    <?php Html::header(); ?>
     <script>
         function toogleGroup(groupName) {
             var i, j, row, multiplier;
@@ -61,9 +64,7 @@ $report->getReport(["year" => $year]);
         <div id="preloader">
             <div class="spinner"></div>
         </div>
-        <?php
-        include_once constant("ROOT_DIR") . "/menu_div.php";
-        ?>
+        <?php Html::menu(); ?>
         <div id="header" class="header">
             <form name="filtro" action="report_month.php" method="GET">
                 <p>Ano <input type="text" name="year" maxlength="4" size="6" value="<?php print $year; ?>"></p>
@@ -176,7 +177,7 @@ $report->getReport(["year" => $year]);
                 };
             </script>
         </div>
-        <?php include_once "footer.php"; ?>
+        <?php Html::footer(); ?>
     </div>
     <script>
         setTimeout(() => { document.getElementById("preloader").style.display = "none"; }, 0);

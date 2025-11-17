@@ -1,3 +1,6 @@
+<?php
+use PHPLedger\Util\L10n;
+?>
 <footer>
     <div class='footer'>
         <span class='RCS'><a

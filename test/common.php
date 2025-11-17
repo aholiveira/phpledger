@@ -10,7 +10,8 @@
 if (!defined("DEBUG")) {
     define("DEBUG", true);
 }
+use PHPLedger\Util\Config;
+
 require_once __DIR__ . "/prepend.php";
 Config::init(__DIR__ . '/config.json');
-$objectFactory = new ObjectFactory();
 $viewFactory = new view_factory();

@@ -8,10 +8,15 @@
  *
  */
 require __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . "/util/redirector.php";
-require_once __DIR__ . "/util/sessionmanager.php";
 
+use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Util\Config;
 use PHPLedger\Util\CSRF;
+use PHPLedger\Util\Html;
+use PHPLedger\Util\L10n;
+use PHPLedger\Util\Logger;
+use PHPLedger\Util\Redirector;
+use PHPLedger\Util\SessionManager;
 
 const SESSION_TIMEOUT = 3600;
 if (isset($_GET['do_logout']) && $_GET['do_logout'] === '1') {
@@ -26,7 +31,7 @@ config::init(__DIR__ . '/config.json');
 $userauth = false;
 $input_variables_filter = ['username' => FILTER_SANITIZE_FULL_SPECIAL_CHARS, 'password' => FILTER_UNSAFE_RAW];
 
-$post_user = "";
+$postUser = "";
 $filtered_input = [];
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
@@ -34,33 +39,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         Redirector::to('index.php');
     }
     $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, true);
-    $post_user = trim($filtered_input["username"] ?? "");
-    $post_pass = $filtered_input["password"] ?? "";
+    $postUser = trim($filtered_input["username"] ?? "");
+    $postPass = $filtered_input["password"] ?? "";
 }
-$objectFactory = new ObjectFactory();
-$data_storage = $objectFactory::dataStorage();
-if ($data_storage->check() === false) {
+$dataStorage = ObjectFactory::dataStorage();
+if ($dataStorage->check() === false) {
     Redirector::to("update.php?lang=" . l10n::$lang, 1);
 }
-if (!empty($post_user)) {
-    $userauth = Authentication::authenticate($post_user, $post_pass);
-    if ($userauth) {
+if (!empty($postUser)) {
+    $userAuth = ObjectFactory::user()::getByUsername($postUser)->verifyPassword($postPass);
+    if ($userAuth) {
         session_regenerate_id(true);
-        $_SESSION['user'] = $post_user;
+        $_SESSION['user'] = $postUser;
         $_SESSION['expires'] = time() + SESSION_TIMEOUT;
-        $defaults = $objectFactory->defaults()->getById(1);
+        $defaults = ObjectFactory::defaults()->getById(1);
         $defaults->entry_date = date("Y-m-d");
         $defaults->language = l10n::$lang;
         $defaults->update();
         $target = sprintf("ledger_entries.php?lang=%s&filter_sdate=%s", l10n::$lang, date('Y-m-01'));
-        /*
-        if (isset($_COOKIE['current_url'])) {
-            $url = rawurldecode($_COOKIE['current_url']);
-            if (!empty($url)) {
-                $target = $url;
-            }
-        }*/
-        $logger->info("User [$post_user] logged in");
+        Logger::instance()->info("User [$postUser] logged in");
         Redirector::to($target);
     }
 }
@@ -69,7 +66,7 @@ if (!empty($post_user)) {
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include_once "header.php"; ?>
+    <?php Html::header(); ?>
 </head>
 
 <body onload="document.getElementById('username').focus();">
@@ -83,7 +80,7 @@ if (!empty($post_user)) {
                 <tr>
                     <td><input required size="25" maxlength="50" type="text" name="username" id="username"
                             placeholder="<?= l10n::l('username') ?>" autocomplete="username"
-                            value="<?= htmlspecialchars($post_user) ?>"></td>
+                            value="<?= htmlspecialchars($postUser) ?>"></td>
                 </tr>
                 <tr>
                     <td><input required size="25" maxlength="255" type="password" name="password"
@@ -104,7 +101,7 @@ if (!empty($post_user)) {
                 </tr>
                 <tr>
                     <td class="version-tag">
-                        <?php include_once ROOT_DIR . "/lang_selector.php"; ?>
+                        <?php Html::lang_selector(); ?>
                     </td>
                 </tr>
             </table>

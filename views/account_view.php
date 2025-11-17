@@ -8,11 +8,13 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+use PHPLedger\Domain\Account;
+use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Util\Html;
 class account_view extends ObjectViewer
 {
     public function printObject(): string
     {
-        global $objectFactory;
         $retval = "";
         if (!isset($this->_object->id) || !($this->_object instanceof account)) {
             return $retval;
@@ -23,10 +25,10 @@ class account_view extends ObjectViewer
         $_object = $this->_object;
         $type_description = "";
         if (!empty($_object->type_id)) {
-            $account_type = $objectFactory->accounttype();
+            $account_type = ObjectFactory::accounttype();
             $account_type = $account_type->getById($_object->type_id);
             if (null === $account_type) {
-                $account_type = $objectFactory->accounttype();
+                $account_type = ObjectFactory::accounttype();
             }
             $type_description = $account_type->description;
         }
@@ -43,7 +45,6 @@ class account_view extends ObjectViewer
     }
     public function printForm(): string
     {
-        global $objectFactory;
         global $viewFactory;
 
         $retval = "";
@@ -55,7 +56,7 @@ class account_view extends ObjectViewer
          */
         $_object = ($this->_object);
         $id = isset($_object->id) ? $_object->id : $_object->getNextId();
-        $account_type = $objectFactory->accounttype();
+        $account_type = ObjectFactory::accounttype();
         if (isset($_object->type_id)) {
             $account_type = $account_type->getById($_object->type_id);
         }
@@ -67,15 +68,15 @@ class account_view extends ObjectViewer
         $retval .= "<td data-label='Tipo'><select name=\"tipo_id\">{$tipo_opt}</select>";
         $retval .= "<td data-label='NIB'><input type=text size=24 maxlength=24 name=\"conta_nib\" value=\"{$_object->iban}\"></td>";
         $retval .= "<td data-label='Abertura'>\r\n";
-        $retval .= "<select class=\"date-fallback\" style=\"display: none\" name=\"aberturaAA\">" . Html::year_option(isset($_object->open_date) ? substr($_object->open_date, 0, 4) : null) . "</select>\r\n";
-        $retval .= "<select class=\"date-fallback\" style=\"display: none\" name=\"aberturaMM\">" . Html::mon_option(isset($_object->open_date) ? substr($_object->open_date, 5, 2) : null) . "</select>\r\n";
-        $retval .= "<select class=\"date-fallback\" style=\"display: none\" name=\"aberturaDD\">" . Html::day_option(isset($_object->open_date) ? substr($_object->open_date, 8, 2) : null) . "</select>\r\n";
+        $retval .= "<select class=\"date-fallback\" style=\"display: none\" name=\"aberturaAA\">" . Html::yearOptions(isset($_object->open_date) ? substr($_object->open_date, 0, 4) : null) . "</select>\r\n";
+        $retval .= "<select class=\"date-fallback\" style=\"display: none\" name=\"aberturaMM\">" . Html::monthOptions(isset($_object->open_date) ? substr($_object->open_date, 5, 2) : null) . "</select>\r\n";
+        $retval .= "<select class=\"date-fallback\" style=\"display: none\" name=\"aberturaDD\">" . Html::dayOptions(isset($_object->open_date) ? substr($_object->open_date, 8, 2) : null) . "</select>\r\n";
         $retval .= "<input class=\"date-fallback\" type=\"date\" name=\"abertura\" required value=\"" . (isset($_object->close_date) ? $_object->open_date : date("Y-m-d")) . "\">\r\n";
         $retval .= "</td>\r\n";
         $retval .= "<td data-label='Fecho'>\r\n";
-        $retval .= "<select class=\"date-fallback\" style=\"display: none\" name=\"fechoAA\">" . Html::year_option(isset($_object->close_date) ? substr($_object->close_date, 0, 4) : null) . "</select>\r\n";
-        $retval .= "<select class=\"date-fallback\" style=\"display: none\" name=\"fechoMM\">" . Html::mon_option(isset($_object->close_date) ? substr($_object->close_date, 5, 2) : null) . "</select>\r\n";
-        $retval .= "<select class=\"date-fallback\" style=\"display: none\" name=\"fechoDD\">" . Html::day_option(isset($_object->close_date) ? substr($_object->close_date, 8, 2) : null) . "</select>\r\n";
+        $retval .= "<select class=\"date-fallback\" style=\"display: none\" name=\"fechoAA\">" . Html::yearOptions(isset($_object->close_date) ? substr($_object->close_date, 0, 4) : null) . "</select>\r\n";
+        $retval .= "<select class=\"date-fallback\" style=\"display: none\" name=\"fechoMM\">" . Html::monthOptions(isset($_object->close_date) ? substr($_object->close_date, 5, 2) : null) . "</select>\r\n";
+        $retval .= "<select class=\"date-fallback\" style=\"display: none\" name=\"fechoDD\">" . Html::dayOptions(isset($_object->close_date) ? substr($_object->close_date, 8, 2) : null) . "</select>\r\n";
         $retval .= "<input class=\"date-fallback\" type=\"date\" name=\"fecho\" required value=\"" . (isset($_object->close_date) ? $_object->close_date : date("Y-m-d")) . "\">\r\n";
         $retval .= "</td>\r\n";
         $retval .= "<td data-label='Activa'><input  type=\"checkbox\" name=\"activa\" " . ((isset($_object->active) && ($_object->active == 1)) || empty($_object->id) ? "checked" : "") . "></td>\r\n";

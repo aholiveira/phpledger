@@ -8,13 +8,17 @@
  *
  */
 include_once __DIR__ . "/contas_config.php";
+use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Util\Html;
+use PHPLedger\Util\L10n;
+
 $pagetitle = "Saldos";
 ?>
 <!DOCTYPE html>
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include_once "header.php"; ?>
+    <?php Html::header(); ?>
 </head>
 
 <body>
@@ -22,20 +26,18 @@ $pagetitle = "Saldos";
         <div id="preloader">
             <div class="spinner"></div>
         </div>
-        <?php
-        include_once ROOT_DIR . "/menu_div.php";
-        ?>
+        <?php Html::menu(); ?>
         <div class="header" style="height: 0;"></div>
         <div class="main" id="main">
             <div class="saldos">
                 <?php
-                $object = $objectFactory->account();
+                $object = ObjectFactory::account();
                 $viewer = $viewFactory->account_balance_view($object);
                 print $viewer->printObjectList($object->getList(['activa' => ['operator' => '=', 'value' => '1']]));
                 ?>
             </div>
         </div>
-        <?php include_once "footer.php"; ?>
+        <?php Html::footer(); ?>
     </div>
     <script>
         setTimeout(() => { document.getElementById("preloader").style.display = "none"; }, 0);

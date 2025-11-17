@@ -8,6 +8,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+use PHPLedger\Domain\EntryCategory;
+use PHPLedger\Storage\ObjectFactory;
 class entry_category_view extends ObjectViewer
 {
     protected EntryCategory $object;
@@ -34,11 +36,10 @@ class entry_category_view extends ObjectViewer
     }
     public function printObjectList(array $object_list): string
     {
-        global $objectFactory;
         $retval = "<table class=\"lista entry_category\">\r\n";
         $retval .= "<thead><tr><th>ID</th><th>Categoria</th><th>Descri&ccedil;&atilde;o</th><th>Valor</th><th>Activa</th></tr></thead>\r\n";
         $retval .= "<tbody>\r\n";
-        $view = new entry_category_view($objectFactory->entryCategory());
+        $view = new entry_category_view(ObjectFactory::entryCategory());
         foreach ($object_list as $object) {
             if ($object instanceof EntryCategory) {
                 if ($object->parent_id === 0) {

@@ -8,6 +8,10 @@
  *
  */
 include_once __DIR__ . "/contas_config.php";
+use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Util\Html;
+use PHPLedger\Util\L10n;
+
 $pagetitle = "Tipos de contas";
 
 ?>
@@ -15,7 +19,7 @@ $pagetitle = "Tipos de contas";
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php include_once "header.php"; ?>
+    <?php Html::header(); ?>
 </head>
 
 <body>
@@ -23,20 +27,18 @@ $pagetitle = "Tipos de contas";
         <div id="preloader">
             <div class="spinner"></div>
         </div>
-        <?php
-        include_once ROOT_DIR . "/menu_div.php";
-        ?>
+        <?php Html::menu(); ?>
         <div class="header">
             <p style="margin: 0"><a href="account_types.php">Adicionar</a></p>
         </div>
         <div class="main" id="main">
             <?php
-            $object = $objectFactory->accounttype();
+            $object = ObjectFactory::accounttype();
             $viewer = $viewFactory->account_type_view($object);
             print $viewer->printObjectList($object->getList());
             ?>
         </div>
-        <?php include_once "footer.php"; ?>
+        <?php Html::footer(); ?>
     </div>
     <script>
         setTimeout(() => { document.getElementById("preloader").style.display = "none"; }, 0);

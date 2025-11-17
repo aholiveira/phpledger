@@ -3,7 +3,7 @@
 *.zip
 *.bat
 *.cmd
-config.*
+config.json
 !config.sample.*
 test/config.*
 !test/config.sample.*

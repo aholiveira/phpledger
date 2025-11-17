@@ -1,9 +1,13 @@
 <?php
 include_once "common.php";
+use PHPLedger\Contracts\DataObjectInterface;
+use PHPLedger\Storage\MySql\MySqlObject;
+use PHPLedger\Storage\MySql\ObjectFactory;
+use PHPLedger\Util\Logger;
 
 debug_print("Running tests...");
 $logger = new Logger("run.log");
-$data_storage = $objectFactory->dataStorage();
+$data_storage = ObjectFactory::dataStorage();
 if (!$data_storage->check()) {
     print "DB NEEDS UPDATE...";
     print $data_storage->message();
@@ -17,7 +21,7 @@ if (!$data_storage->check()) {
 }
 
 #$data_storage->populateRandomData();
-$object = $objectFactory->account();
+$object = ObjectFactory::account();
 run_tests($object);
 $balance = $object->getBalanceOnDate(new DateTime());
 assert(is_float($balance['income']));
@@ -28,21 +32,21 @@ $viewer = $viewFactory->account_balance_view($object);
  */
 $viewer = $viewFactory->account_view($object);
 run_views($viewer, $object);
-$object = $objectFactory->accounttype();
+$object = ObjectFactory::accounttype();
 run_tests($object);
 $viewer = $viewFactory->account_type_view($object);
 run_views($viewer, $object);
 
-$object = $objectFactory->currency();
+$object = ObjectFactory::currency();
 run_tests($object, 1);
 
-$object = $objectFactory->ledger();
+$object = ObjectFactory::ledger();
 run_tests($object);
-/*$object = $objectFactory->ledgerentry();
+/*$object = ObjectFactory::ledgerentry();
 run_tests($object);
 $viewer = $viewFactory->ledger_entry_view($object);
 run_views($viewer, $object);
-$object = $objectFactory->entryCategory();
+$object = ObjectFactory::entryCategory();
 $logger->dump($object->getList());
 /*run_tests($object);
 debug_print("OBJECT 145");
@@ -58,12 +62,12 @@ run_views($viewer, $object);
 print $viewer->printForm();
 
 debug_print("YEAR REPORT:");
-$object = $objectFactory->reportMonth();
+$object = ObjectFactory::reportMonth();
 $object->getReport(array("year" => 2021));
 $viewer = $viewFactory->report_month_view($object);
 debug_print($viewer->printAsTable());
 /*
-$object = $objectFactory->reportYear();
+$object = ObjectFactory::reportYear();
 $object->getReport(array("year" => 2021));
 $logger->dump($object);
 $viewer = $viewFactory->report_year_view($object);
@@ -94,7 +98,7 @@ function run_tests(MySqlObject $object, $id = 1)
     }
 }
 
-function run_views(ObjectViewer $viewer, iObject $object)
+function run_views(ObjectViewer $viewer, DataObjectInterface $object)
 {
     try {
         debug_print("OBJECT: " . get_class($viewer));
