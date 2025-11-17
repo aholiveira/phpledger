@@ -29,9 +29,9 @@ class MySqlObjectFactory implements DataObjectFactoryInterface
     {
         return new MySqlAccount();
     }
-    public static function accountType(): MysqlAccountType
+    public static function accountType(): MySqlAccountType
     {
-        return new MysqlAccountType();
+        return new MySqlAccountType();
     }
     public static function currency(): MySqlCurrency
     {
