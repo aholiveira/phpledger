@@ -52,7 +52,7 @@ class LedgerEntryController
 
         // 4) update that user's "defaults" record
         $defaults = ObjectFactory::defaults()::getByUsername($_SESSION['user'])
-            ?? Defaults::init();
+            ?? ObjectFactory::defaults()::init();
 
         $defaults->category_id = $entry->category_id;
         $defaults->currency_id = $entry->currency_id;

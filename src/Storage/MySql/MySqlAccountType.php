@@ -40,7 +40,7 @@ class MysqlAccountType extends AccountType
         $sql = "SELECT tipo_id as id, tipo_desc as description, savings FROM " . static::tableName() . " {$where}";
         $retval = [];
         try {
-            $stmt = @static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -60,7 +60,7 @@ class MysqlAccountType extends AccountType
     {
         $sql = "SELECT tipo_id as id, tipo_desc as description, savings FROM " . static::tableName() . " WHERE tipo_id=?";
         try {
-            $stmt = @static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -89,7 +89,7 @@ class MysqlAccountType extends AccountType
                 ON DUPLICATE KEY UPDATE
                     `tipo_desc` = VALUES(`tipo_desc`),
                     `savings` = VALUES(`savings`)";
-            $stmt = static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -114,7 +114,7 @@ class MysqlAccountType extends AccountType
         $retval = false;
         try {
             $sql = "DELETE FROM {$this->tableName()} WHERE tipo_id=?";
-            $stmt = static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             $stmt->bind_param("i", $this->id);
             $retval = $stmt->execute();
             $stmt->close();

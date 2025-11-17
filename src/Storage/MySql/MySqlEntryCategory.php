@@ -53,7 +53,7 @@ class MySqlEntryCategory extends EntryCategory
         $children_map = [];
 
         try {
-            $stmt = static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -93,7 +93,7 @@ class MySqlEntryCategory extends EntryCategory
             WHERE category_id=?
             GROUP BY category_id";
         try {
-            $stmt = static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -116,7 +116,7 @@ class MySqlEntryCategory extends EntryCategory
         $children = [];
         $retval = new self();
         try {
-            $stmt = static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -162,7 +162,7 @@ class MySqlEntryCategory extends EntryCategory
                     parent_id=VALUES(parent_id),
                     tipo_desc=VALUES(tipo_desc),
                     active=VALUES(active)";
-            $stmt = static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -179,7 +179,7 @@ class MySqlEntryCategory extends EntryCategory
         $retval = false;
         try {
             $sql = "DELETE FROM {$this->tableName()} WHERE tipo_id=?";
-            $stmt = static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
