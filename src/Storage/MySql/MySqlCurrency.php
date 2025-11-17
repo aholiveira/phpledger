@@ -8,8 +8,8 @@
  *
  */
 namespace PHPLedger\Storage\MySql;
-use PHPLedger\Domain\Currency;
-use PHPLedger\Storage\MySql\MySqlObject;
+use \PHPLedger\Domain\Currency;
+use \PHPLedger\Storage\MySql\MySqlObject;
 class MySqlCurrency extends Currency
 {
     use MySqlObject {

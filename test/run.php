@@ -1,9 +1,9 @@
 <?php
 include_once "common.php";
-use PHPLedger\Contracts\DataObjectInterface;
-use PHPLedger\Storage\MySql\MySqlObject;
-use PHPLedger\Storage\MySql\ObjectFactory;
-use PHPLedger\Util\Logger;
+use \PHPLedger\Contracts\DataObjectInterface;
+use \PHPLedger\Storage\MySql\MySqlObject;
+use \PHPLedger\Storage\MySql\ObjectFactory;
+use \PHPLedger\Util\Logger;
 
 debug_print("Running tests...");
 $logger = new Logger("run.log");

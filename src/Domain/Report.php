@@ -9,8 +9,8 @@
  *
  */
 namespace PHPLedger\Domain;
-use PHPLedger\Contracts\ReportInterface;
-use PHPLedger\Storage\ObjectFactory;
+use \PHPLedger\Contracts\ReportInterface;
+use \PHPLedger\Storage\ObjectFactory;
 abstract class Report implements ReportInterface
 {
     public array $reportData = [];

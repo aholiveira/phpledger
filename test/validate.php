@@ -1,10 +1,10 @@
 <?php
 include_once "common.php";
-use PHPLedger\Contracts\DataObjectInterface;
-use PHPLedger\Storage\Abstract\AbstractDataObject;
-use PHPLedger\Storage\MySql\MySqlStorage;
-use PHPLedger\Storage\ObjectFactory;
-use PHPLedger\Util\Logger;
+use \PHPLedger\Contracts\DataObjectInterface;
+use \PHPLedger\Storage\Abstract\AbstractDataObject;
+use \PHPLedger\Storage\MySql\MySqlStorage;
+use \PHPLedger\Storage\ObjectFactory;
+use \PHPLedger\Util\Logger;
 $retval = true;
 $classnames = [
     "account" => "account_view",

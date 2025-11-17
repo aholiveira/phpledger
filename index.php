@@ -9,14 +9,14 @@
  */
 require_once __DIR__ . '/vendor/autoload.php';
 
-use PHPLedger\Storage\ObjectFactory;
-use PHPLedger\Util\Config;
-use PHPLedger\Util\CSRF;
-use PHPLedger\Util\Html;
-use PHPLedger\Util\L10n;
-use PHPLedger\Util\Logger;
-use PHPLedger\Util\Redirector;
-use PHPLedger\Util\SessionManager;
+use \PHPLedger\Storage\ObjectFactory;
+use \PHPLedger\Util\Config;
+use \PHPLedger\Util\CSRF;
+use \PHPLedger\Util\Html;
+use \PHPLedger\Util\L10n;
+use \PHPLedger\Util\Logger;
+use \PHPLedger\Util\Redirector;
+use \PHPLedger\Util\SessionManager;
 
 const SESSION_TIMEOUT = 3600;
 if (isset($_GET['do_logout']) && $_GET['do_logout'] === '1') {

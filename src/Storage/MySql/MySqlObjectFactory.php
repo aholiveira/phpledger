@@ -8,9 +8,9 @@
  *
  */
 namespace PHPLedger\Storage\MySql;
-use PHPLedger\Contracts\DataObjectFactoryInterface;
-use PHPLedger\Contracts\DataStorageInterface;
-use PHPLedger\Util\Logger;
+use \PHPLedger\Contracts\DataObjectFactoryInterface;
+use \PHPLedger\Contracts\DataStorageInterface;
+use \PHPLedger\Util\Logger;
 class MySqlObjectFactory implements DataObjectFactoryInterface
 {
     private static ?\mysqli $dbConnection = null;

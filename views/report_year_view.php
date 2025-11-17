@@ -8,7 +8,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-use PHPLedger\Domain\ReportYear;
+use \PHPLedger\Domain\ReportYear;
 class report_year_HtmlView extends report_HtmlView
 {
     public function __construct(ReportYear $report)

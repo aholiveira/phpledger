@@ -8,7 +8,7 @@
  *
  */
 namespace PHPLedger\Util;
-use PHPLedger\Util\Config;
+use \PHPLedger\Util\Config;
 class Email
 {
     public static function sendEmail($from, $to, $subject, $body): bool

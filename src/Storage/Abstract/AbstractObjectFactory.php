@@ -2,19 +2,19 @@
 namespace PHPLedger\Storage\Abstract;
 
 use Exception;
-use PHPLedger\Contracts\DataObjectFactoryInterface;
-use PHPLedger\Contracts\DataStorageInterface;
-use PHPLedger\Domain\Account;
-use PHPLedger\Domain\AccountType;
-use PHPLedger\Domain\Currency;
-use PHPLedger\Domain\Defaults;
-use PHPLedger\Domain\EntryCategory;
-use PHPLedger\Domain\Ledger;
-use PHPLedger\Domain\LedgerEntry;
-use PHPLedger\Domain\ReportMonth;
-use PHPLedger\Domain\ReportYear;
-use PHPLedger\Domain\User;
-use PHPLedger\Util\Logger;
+use \PHPLedger\Contracts\DataObjectFactoryInterface;
+use \PHPLedger\Contracts\DataStorageInterface;
+use \PHPLedger\Domain\Account;
+use \PHPLedger\Domain\AccountType;
+use \PHPLedger\Domain\Currency;
+use \PHPLedger\Domain\Defaults;
+use \PHPLedger\Domain\EntryCategory;
+use \PHPLedger\Domain\Ledger;
+use \PHPLedger\Domain\LedgerEntry;
+use \PHPLedger\Domain\ReportMonth;
+use \PHPLedger\Domain\ReportYear;
+use \PHPLedger\Domain\User;
+use \PHPLedger\Util\Logger;
 
 abstract class AbstractObjectFactory implements DataObjectFactoryInterface
 {

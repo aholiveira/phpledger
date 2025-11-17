@@ -2,10 +2,10 @@
 namespace PHPLedger\Controllers;
 use DomainException;
 use Exception;
-use PHPLedger\Domain\Defaults;
-use PHPLedger\Storage\ObjectFactory;
-use PHPLedger\Util\DateParser;
-use PHPLedger\Util\L10n;
+use \PHPLedger\Domain\Defaults;
+use \PHPLedger\Storage\ObjectFactory;
+use \PHPLedger\Util\DateParser;
+use \PHPLedger\Util\L10n;
 use RuntimeException;
 class LedgerEntryController
 {

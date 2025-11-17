@@ -8,8 +8,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-use PHPLedger\Contracts\DataObjectInterface;
-use PHPLedger\Storage\MySql\LedgerEntry;
+use \PHPLedger\Contracts\DataObjectInterface;
+use \PHPLedger\Storage\MySql\LedgerEntry;
 class ledger_entry_view extends ObjectViewer
 {
     /** @var ledgerentry $_object */

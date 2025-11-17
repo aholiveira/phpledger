@@ -1,5 +1,5 @@
 <?php
-use PHPLedger\Util\L10n;
+use \PHPLedger\Util\L10n;
 ?>
 <footer>
     <div class='footer'>
