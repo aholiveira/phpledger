@@ -163,7 +163,6 @@ class MySqlStorage implements DataStorageInterface
     {
         $retval = true;
         $tables = array_keys($this->_tableCreateSQL);
-        $this->connect();
         $db_name = config::get("database");
         if (
             $this->getDbCollation($db_name) != $this->_collation &&
@@ -232,7 +231,7 @@ class MySqlStorage implements DataStorageInterface
                 }
             }
         }
-        if ($this->tableExists("tipo_mov") && sizeof(MysqlAccountType::getList()) == 0) {
+        if ($this->tableExists("tipo_mov") && \sizeof(MysqlAccountType::getList()) == 0) {
             $accounttype = new MysqlAccountType();
             $accounttype->description = 'Conta caixa';
             $accounttype->savings = 0;
@@ -440,9 +439,8 @@ class MySqlStorage implements DataStorageInterface
     private function fetchSingleValue(string $sql)
     {
         $retval = null;
-        $this->connect();
         try {
-            $stmt = @$this->dbConnection->prepare($sql);
+            $stmt = self::getConnection()->prepare($sql);
             if (!$stmt) {
                 return $retval;
             }
@@ -464,9 +462,8 @@ class MySqlStorage implements DataStorageInterface
     private function executeQuery(string $sql)
     {
         $retval = false;
-        $this->connect();
         try {
-            $stmt = $this->dbConnection->prepare($sql);
+            $stmt = self::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -474,16 +471,15 @@ class MySqlStorage implements DataStorageInterface
             $stmt->close();
         } catch (\Exception $ex) {
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->dbConnection, "");
+            $this->logger->dump(self::getConnection(), "");
         }
         return $retval;
     }
     private function getSQLTableCreate($table)
     {
         $retval = false;
-        $this->connect();
         try {
-            $stmt = $this->dbConnection->prepare("SHOW CREATE TABLE `{$table}`");
+            $stmt = self::getConnection()->prepare("SHOW CREATE TABLE `{$table}`");
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -493,7 +489,7 @@ class MySqlStorage implements DataStorageInterface
             $stmt->close();
         } catch (\Exception $ex) {
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->dbConnection, "");
+            $this->logger->dump(self::getConnection(), "");
         }
         return $retval;
     }
@@ -508,7 +504,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage($ex->getMessage());
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->dbConnection, "");
+            $this->logger->dump(self::getConnection(), "");
         }
         return $retval;
     }
@@ -535,7 +531,6 @@ class MySqlStorage implements DataStorageInterface
     private function changeColumnOnTable(string $column_name, string $table_name, string $typedef): bool
     {
         $retval = false;
-        $this->connect();
         try {
             $sql = "ALTER TABLE `{$table_name}` CHANGE COLUMN `{$column_name}` `{$column_name}` $typedef";
             $retval = $this->executeQuery($sql);
@@ -543,14 +538,13 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->dbConnection, "");
+            $this->logger->dump(self::getConnection(), "");
         }
         return $retval;
     }
     private function renameColumnOnTable(string $old_column_name, string $new_column_name, string $table_name): bool
     {
         $retval = false;
-        $this->connect();
         try {
             if ($this->tableHasColumn($table_name, $new_column_name)) {
                 return false;
@@ -565,14 +559,13 @@ class MySqlStorage implements DataStorageInterface
             $this->addMessage($ex);
             $this->addMessage($sql);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->dbConnection, "");
+            $this->logger->dump(self::getConnection(), "");
         }
         return $retval;
     }
     private function tableHasForeignKey(string $table_name, string $key_name): bool
     {
         $retval = false;
-        $this->connect();
         $sql = "SELECT count(*) as colCount FROM information_schema.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='{$table_name}' AND CONSTRAINT_NAME='{$key_name}'";
         try {
             $count = $this->fetchSingleValue($sql);
@@ -580,14 +573,13 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->dbConnection, "");
+            $this->logger->dump(self::getConnection(), "");
         }
         return $retval;
     }
     private function addForeignKeyToTable(string $key_name, string $fk_def, string $table_name): bool
     {
         $retval = false;
-        $this->connect();
         $sql = "ALTER TABLE `{$table_name}` ADD FOREIGN KEY `{$key_name}` (`{$key_name}`) REFERENCES {$fk_def}";
         try {
             if ($this->tableHasForeignKey($table_name, $key_name)) {
@@ -598,13 +590,12 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->dbConnection, "");
+            $this->logger->dump(self::getConnection(), "");
         }
         return $retval;
     }
     private function tableHasColumn(string $table_name, string $column_name): bool
     {
-        $this->connect();
         $sql = "SELECT count(*) as colCount
         FROM information_schema.columns
         WHERE table_name = '{$table_name}' AND column_name = '{$column_name}' and table_schema = DATABASE()";
@@ -614,7 +605,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->dbConnection, "");
+            $this->logger->dump(self::getConnection(), "");
             return false;
         }
     }
@@ -628,7 +619,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage("Failed to get collation for database [{$db_name}]: " . $ex->getMessage());
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->dbConnection, "");
+            $this->logger->dump(self::getConnection(), "");
             return "";
         }
     }
@@ -647,7 +638,7 @@ class MySqlStorage implements DataStorageInterface
             $this->addMessage("Failed to change collation on database [{$db_name}]: " . $ex->getMessage());
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->dbConnection, "");
+            $this->logger->dump(self::getConnection(), "");
             return "";
         }
     }
@@ -661,7 +652,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->dbConnection, "");
+            $this->logger->dump(self::getConnection(), "");
             $retval = "";
         }
         return $retval;
@@ -677,7 +668,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->dbConnection, "");
+            $this->logger->dump(self::getConnection(), "");
             $retval = "";
         }
         return $retval;
@@ -692,7 +683,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->dbConnection, "");
+            $this->logger->dump(self::getConnection(), "");
             $retval = "";
         }
         return $retval;
@@ -708,7 +699,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->logger->dump($ex, "");
-            $this->logger->dump($this->dbConnection, "");
+            $this->logger->dump(self::getConnection(), "");
         }
         return $retval;
     }

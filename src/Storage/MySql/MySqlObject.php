@@ -46,41 +46,17 @@ trait MySqlObject
     public static function getNextId(string $field = "id"): int
     {
         $db = MySqlStorage::getConnection();
-        $retval = -1;
-        if (null === static::$tableName) {
-            return $retval;
+        $table = static::$tableName;
+        $sql = "SELECT MIN(t1.$field + 1) AS next_id
+            FROM $table t1
+            LEFT JOIN $table t2 ON t2.$field = t1.$field + 1
+            WHERE t2.$field IS NULL";
+        $res = $db->query($sql);
+        if (!$res) {
+            return 1;
         }
-        try {
-            $sql = "SELECT `{$field}` FROM " . static::$tableName . " ORDER BY `{$field}`";
-            $result = @$db->query($sql);
-            if (!$result || !($result instanceof \mysqli_result)) {
-                return $retval;
-            }
-            if ($result->num_rows === 0) {
-                return 1;
-            }
-            $row = $result->fetch_assoc();
-            if ($result->num_rows == 1) {
-                return $row[$field] == 1 ? 2 : 1;
-            }
-            if ($result->num_rows > 1) {
-                $last = $row[$field];
-                $prev = 0;
-                while ($row && ((int) $last - (int) $prev) <= 1) {
-                    $prev = $last;
-                    $last = $row[$field];
-                    $row = $result->fetch_assoc();
-                }
-                $retval = (($last - $prev <= 1) ? $last : $prev) + 1;
-            }
-        } catch (\Exception $ex) {
-            static::handleException($ex, $sql);
-        } finally {
-            if (isset($result) && ($result instanceof \mysqli_result)) {
-                $result->close();
-            }
-        }
-        return $retval;
+        $row = $res->fetch_assoc();
+        return $row['next_id'] ?? 1;
     }
     public function __toString()
     {
@@ -98,26 +74,32 @@ trait MySqlObject
      */
     protected static function getWhereFromArray(array $field_filter, ?string $table_name = null): string
     {
-        $where = "";
+        if (!$field_filter)
+            return "";
+
+        $db = MySqlStorage::getConnection();
+        $allowedOps = ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'BETWEEN', 'IS'];
+
+        $parts = [];
         foreach ($field_filter as $field => $filter) {
-            if (strlen($where) > 0) {
-                $where .= " AND ";
+            $op = strtoupper($filter['operator']);
+            if (!\in_array($op, $allowedOps))
+                continue;
+
+            $name = $table_name ? "`$table_name`.`$field`" : "`$field`";
+
+            if ($op === 'BETWEEN' && \is_array($filter['value'])) {
+                $v1 = "'" . $db->real_escape_string($filter['value'][0]) . "'";
+                $v2 = "'" . $db->real_escape_string($filter['value'][1]) . "'";
+                $parts[] = "$name BETWEEN $v1 AND $v2";
+            } else {
+                $val = "'" . $db->real_escape_string($filter['value']) . "'";
+                $parts[] = "$name $op $val";
             }
-            $field_name = null === $table_name ? "`{$field}`" : "`{$table_name}`.`{$field}`";
-            $where .= "{$field_name} {$filter['operator']} {$filter['value']}";
         }
-        if (strlen($where) > 0) {
-            $where = "WHERE {$where}";
-        }
-        return $where;
+
+        return $parts ? "WHERE " . implode(" AND ", $parts) : "";
     }
-    /**
-     * @param array $field_filter an array of the form ('field_name' => array('operator' => SQL operator, 'value' => value to filter by))
-     * - where
-     * - - field_name is a field which you want to filter by
-     * - - operator is any valid SQL operator (LIKE, BETWEEN, <, >, <=, =>)
-     * - - value is the value to be filtered
-     */
     abstract public static function getList(array $field_filter = []): array;
     abstract public static function getDefinition(): array;
     abstract public function update(): bool;
