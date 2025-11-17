@@ -8,10 +8,10 @@
  *
  */
 require_once __DIR__ . "/prepend.php";
-use PHPLedger\Storage\ObjectFactory;
-use PHPLedger\Util\Config;
-use PHPLedger\Util\Html;
-use PHPLedger\Util\L10n;
+use \PHPLedger\Storage\ObjectFactory;
+use \PHPLedger\Util\Config;
+use \PHPLedger\Util\Html;
+use \PHPLedger\Util\L10n;
 
 Config::init(__DIR__ . '/config.json');
 $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";

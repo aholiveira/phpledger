@@ -8,9 +8,9 @@
  *
  */
 include_once __DIR__ . "/contas_config.php";
-use PHPLedger\Storage\ObjectFactory;
-use PHPLedger\Util\Html;
-use PHPLedger\Util\L10n;
+use \PHPLedger\Storage\ObjectFactory;
+use \PHPLedger\Util\Html;
+use \PHPLedger\Util\L10n;
 $pagetitle = "Relatório anual";
 $first_year = date("Y") - 1;
 $last_year = date("Y");

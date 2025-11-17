@@ -12,8 +12,8 @@
  *
  */
 namespace PHPLedger\Storage\MySql;
-use PHPLedger\Domain\LedgerEntry;
-use PHPLedger\Util\Logger;
+use \PHPLedger\Domain\LedgerEntry;
+use \PHPLedger\Util\Logger;
 class MySqlLedgerEntry extends LedgerEntry
 {
     use MySqlObject;

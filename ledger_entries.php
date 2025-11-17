@@ -7,12 +7,12 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-use PHPLedger\Controllers\LedgerEntryController;
-use PHPLedger\Storage\ObjectFactory;
-use PHPLedger\Util\CSRF;
-use PHPLedger\Util\Html;
-use PHPLedger\Util\L10n;
-use PHPLedger\Util\Redirector;
+use \PHPLedger\Controllers\LedgerEntryController;
+use \PHPLedger\Storage\ObjectFactory;
+use \PHPLedger\Util\CSRF;
+use \PHPLedger\Util\Html;
+use \PHPLedger\Util\L10n;
+use \PHPLedger\Util\Redirector;
 
 if (!defined("ROOT_DIR")) {
     require_once __DIR__ . "/prepend.php";

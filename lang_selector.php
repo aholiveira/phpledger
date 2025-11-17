@@ -1,5 +1,5 @@
 <?php
-use PHPLedger\Util\L10n;
+use \PHPLedger\Util\L10n;
 ?>
 <div>
     <?php if (l10n::$lang === 'pt-pt'): ?>

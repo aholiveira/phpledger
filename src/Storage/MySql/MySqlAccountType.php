@@ -8,7 +8,7 @@
  *
  */
 namespace PHPLedger\Storage\MySql;
-use PHPLedger\Domain\AccountType;
+use \PHPLedger\Domain\AccountType;
 class MysqlAccountType extends AccountType
 {
     protected static string $tableName = "tipo_contas";

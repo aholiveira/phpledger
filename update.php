@@ -8,12 +8,12 @@
  *
  */
 
-use PHPLedger\Storage\ObjectFactory;
-use PHPLedger\Util\Config;
-use PHPLedger\Util\CSRF;
-use PHPLedger\Util\Html;
-use PHPLedger\Util\L10n;
-use PHPLedger\Util\Redirector;
+use \PHPLedger\Storage\ObjectFactory;
+use \PHPLedger\Util\Config;
+use \PHPLedger\Util\CSRF;
+use \PHPLedger\Util\Html;
+use \PHPLedger\Util\L10n;
+use \PHPLedger\Util\Redirector;
 
 require_once "prepend.php";
 config::init(__DIR__ . '/config.json');

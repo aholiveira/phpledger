@@ -15,10 +15,10 @@ if (PHP_VERSION_ID < 70000) {
     die('PHP >= 7.0.0 required');
 }
 require_once __DIR__ . '/vendor/autoload.php';
-use PHPLedger\Storage\ObjectFactory;
-use PHPLedger\Util\L10n;
-use PHPLedger\Util\Logger;
-use PHPLedger\Util\SessionManager;
+use \PHPLedger\Storage\ObjectFactory;
+use \PHPLedger\Util\L10n;
+use \PHPLedger\Util\Logger;
+use \PHPLedger\Util\SessionManager;
 
 const BACKEND = "mysql";
 const VERSION = "0.4.203";

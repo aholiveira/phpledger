@@ -8,9 +8,9 @@
  *
  */
 namespace PHPLedger\Storage\MySql;
-use PHPLedger\Contracts\DataStorageInterface;
-use PHPLedger\Util\Config;
-use PHPLedger\Util\Logger;
+use \PHPLedger\Contracts\DataStorageInterface;
+use \PHPLedger\Util\Config;
+use \PHPLedger\Util\Logger;
 class MySqlStorage implements DataStorageInterface
 {
     private ?\mysqli $dbConnection = null;
