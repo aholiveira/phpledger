@@ -222,7 +222,7 @@ class MySqlStorage implements DataStorageInterface
             $currency = new MySqlCurrency();
             if (sizeof($currency->getList()) == 0) {
                 $currency->description = 'Euro';
-                $currency->exchange_rate = 1;
+                $currency->exchangeRate = 1;
                 $currency->code = 'EUR';
                 $currency->id = 1;
                 if (!$currency->update()) {
@@ -246,12 +246,12 @@ class MySqlStorage implements DataStorageInterface
             if (sizeof($account->getList()) == 0) {
                 $account->number = '';
                 $account->name = 'Caixa';
-                $account->type_id = 1;
+                $account->typeId = 1;
                 $account->group = 1;
                 $account->iban = '';
                 $account->swift = '';
-                $account->open_date = date("Y-m-d");
-                $account->close_date = date("Y-m-d", mktime(0, 0, 0, 1, 1, 1990));
+                $account->openDate = date("Y-m-d");
+                $account->closeDate = date("Y-m-d", mktime(0, 0, 0, 1, 1, 1990));
                 $account->active = 1;
                 $account->id = 1;
                 if (!$account->update()) {
@@ -299,8 +299,8 @@ class MySqlStorage implements DataStorageInterface
                     $ledger_entry->direction = [-1, 1][array_rand([-1, 1])];
                     $ledger_entry->currency_amount = random_int(1, 10000) / 100;
                     $ledger_entry->currency_id = 'EUR';
-                    $ledger_entry->euro_amount = $ledger_entry->currency_amount * $ledger_entry->direction;
-                    $ledger_entry->exchange_rate = 1;
+                    $ledger_entry->euroAmount = $ledger_entry->currency_amount * $ledger_entry->direction;
+                    $ledger_entry->exchangeRate = 1;
                     $ledger_entry->username = config::get("user");
                     $ledger_entry->update();
                 }

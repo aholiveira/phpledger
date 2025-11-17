@@ -10,7 +10,7 @@
  */
 use \PHPLedger\Domain\Account;
 use \PHPLedger\Util\L10n;
-class account_balance_view extends ObjectViewer
+class accountBalanceView extends ObjectViewer
 {
     public function printObject(): string
     {

@@ -9,7 +9,7 @@
  *
  */
 use \PHPLedger\Domain\report;
-class report_HtmlView
+class reportHtmlView
 {
     private $_periodIncome;
     private $_periodExpense;

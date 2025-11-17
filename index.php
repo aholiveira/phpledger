@@ -101,7 +101,7 @@ if (!empty($postUser)) {
                 </tr>
                 <tr>
                     <td class="version-tag">
-                        <?php Html::lang_selector(); ?>
+                        <?php Html::languageSelector(); ?>
                     </td>
                 </tr>
             </table>

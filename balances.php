@@ -33,7 +33,7 @@ $pagetitle = "Saldos";
             <div class="saldos">
                 <?php
                 $object = ObjectFactory::account();
-                $viewer = ViewFactory::instance()->account_balance_view($object);
+                $viewer = ViewFactory::instance()->accountBalanceView($object);
                 print $viewer->printObjectList($object->getList(['activa' => ['operator' => '=', 'value' => '1']]));
                 ?>
             </div>

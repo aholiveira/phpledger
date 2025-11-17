@@ -7,8 +7,8 @@ abstract class Currency extends AbstractDataObject implements DataObjectInterfac
 {
     public string $code;
     public string $description;
-    public float $exchange_rate;
+    public float $exchangeRate;
     public string $username = "";
-    public string $created_at;
-    public string $updated_at;
+    public string $createdAt;
+    public string $updatedAt;
 }

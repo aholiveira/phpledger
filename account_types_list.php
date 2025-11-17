@@ -35,7 +35,7 @@ $pagetitle = "Tipos de contas";
         <div class="main" id="main">
             <?php
             $object = ObjectFactory::accounttype();
-            $viewer = ViewFactory::instance()->account_type_view($object);
+            $viewer = ViewFactory::instance()->accountTypeView($object);
             print $viewer->printObjectList($object->getList());
             ?>
         </div>

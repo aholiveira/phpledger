@@ -28,14 +28,14 @@ $balance = $object->getBalanceOnDate(new DateTime());
 assert(is_float($balance['income']));
 assert(is_float($balance['expense']));
 assert(is_float($balance['balance']));
-$viewer = ViewFactory::instance()->account_balance_view($object);
+$viewer = ViewFactory::instance()->accountBalanceView($object);
 /*debug_print($viewer->printObjectList($object->getList(array('activa' => array('operator' => '=', 'value' => '1')))));
  */
-$viewer = ViewFactory::instance()->account_view($object);
+$viewer = ViewFactory::instance()->accountView($object);
 run_views($viewer, $object);
 $object = ObjectFactory::accounttype();
 run_tests($object);
-$viewer = ViewFactory::instance()->account_type_view($object);
+$viewer = ViewFactory::instance()->accountTypeView($object);
 run_views($viewer, $object);
 
 $object = ObjectFactory::currency();
@@ -45,7 +45,7 @@ $object = ObjectFactory::ledger();
 run_tests($object);
 /*$object = ObjectFactory::ledgerentry();
 run_tests($object);
-$viewer = ViewFactory::instance()->ledger_entry_view($object);
+$viewer = ViewFactory::instance()->ledgerEntryView($object);
 run_views($viewer, $object);
 $object = ObjectFactory::entryCategory();
 $logger->dump($object->getList());
@@ -55,23 +55,23 @@ $object->getById(0);
 $logger->dump($object);
 exit(0);
 /*
-$viewer = ViewFactory::instance()->entry_category_view($object);
+$viewer = ViewFactory::instance()->entryCategoryView($object);
 print $viewer->printForm();
 $object->getById(7);
-$viewer = ViewFactory::instance()->entry_category_view($object);
+$viewer = ViewFactory::instance()->entryCategoryView($object);
 run_views($viewer, $object);
 print $viewer->printForm();
 
 debug_print("YEAR REPORT:");
 $object = ObjectFactory::reportMonth();
 $object->getReport(array("year" => 2021));
-$viewer = ViewFactory::instance()->report_month_view($object);
+$viewer = ViewFactory::instance()->reportMonthHtmlView($object);
 debug_print($viewer->printAsTable());
 /*
 $object = ObjectFactory::reportYear();
 $object->getReport(array("year" => 2021));
 $logger->dump($object);
-$viewer = ViewFactory::instance()->report_year_view($object);
+$viewer = ViewFactory::instance()->reportYearHtmlView($object);
 //debug_print($viewer->printAsTable());
 */
 function run_tests(MySqlObject $object, $id = 1)

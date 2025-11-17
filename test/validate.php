@@ -8,17 +8,17 @@ use \PHPLedger\Util\Logger;
 use \PHPLedger\Views\ViewFactory;
 $retval = true;
 $classnames = [
-    "account" => "account_view",
-    "accounttype" => "account_type_view",
+    "account" => "accountView",
+    "accounttype" => "accountTypeView",
     "currency" => "",
     "defaults" => "",
-    "EntryCategory" => "entry_category_view",
+    "EntryCategory" => "entryCategoryView",
     "Ledger" => "",
-    "LedgerEntry" => "ledger_entry_view",
+    "LedgerEntry" => "ledgerEntryView",
     "user" => ""
 ];
 $class_id = ["currency" => 1];
-$reports = ["ReportMonth" => "report_month_view", "ReportYear" => "report_year_view"];
+$reports = ["ReportMonth" => "reportMonthHtmlView", "ReportYear" => "reportYearHtmlView"];
 const PADDING = 35;
 const PASSED = "\033[32mPASSED\033[0m";
 const FAILED = "\033[31mFAILED\033[0m";
@@ -65,11 +65,11 @@ function prepare_account(): bool
             $object->id = $id;
             $object->number = "Account number {$id}";
             $object->name = "Account name {$id}";
-            $object->type_id = $id;
+            $object->typeId = $id;
             $object->iban = str_pad($id, 20, $id);
             $object->swift = "SWIFT" . str_pad($id, 2, $id);
-            $object->open_date = date("Y-m-d", mktime($hour = 0, $minute = 0, $second = 0, $month = 1, $day = $id, $year = date("Y")));
-            $object->close_date = date("Y-m-d", mktime($hour = 0, $minute = 0, $second = 0, $month = 1, $day = $id, $year = date("Y") + 1));
+            $object->openDate = date("Y-m-d", mktime($hour = 0, $minute = 0, $second = 0, $month = 1, $day = $id, $year = date("Y")));
+            $object->closeDate = date("Y-m-d", mktime($hour = 0, $minute = 0, $second = 0, $month = 1, $day = $id, $year = date("Y") + 1));
             $object->active = 1;
             $retval = $object->update() && $retval;
         }
@@ -112,7 +112,7 @@ function prepare_ledgerentry(): bool
         $object->currency_id = 1;
         $object->direction = ($id % 2 == 0 ? 1 : -1);
         $object->currency_amount = $id;
-        $object->euro_amount = $object->direction * $object->currency_amount;
+        $object->euroAmount = $object->direction * $object->currency_amount;
         $object->remarks = "Entry $id";
         $object->username = "admin";
         $retval = $object->update() && $retval;
@@ -140,7 +140,7 @@ foreach ($classnames as $class => $view) {
     if (array_key_exists($class, $class_id)) {
         $id = $class_id[$class];
     }
-    $retval = test_object($object, $id) && $retval;
+    $retval = testObject($object, $id) && $retval;
     if (strlen($view) > 0) {
         $object = $object->getById($id);
         $viewer = ViewFactory::instance()->$view($object);
@@ -182,7 +182,7 @@ function test_report($report, $view)
     print ($retval ? constant("PASSED") : constant("FAILED")) . "\r\n";
     return $retval;
 }
-function test_object(AbstractDataObject $object, $id = 1)
+function testObject(AbstractDataObject $object, $id = 1)
 {
     $retval = true;
     global $logger;

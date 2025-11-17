@@ -36,7 +36,7 @@ $pagetitle = "Tipo de movimentos";
                             $object = $object->getById($tipo_id);
                         }
                     }
-                    $viewer = ViewFactory::instance()->entry_category_view($object);
+                    $viewer = ViewFactory::instance()->entryCategoryView($object);
                     print $viewer->printForm();
                     ?>
 

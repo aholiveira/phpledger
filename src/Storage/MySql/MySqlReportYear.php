@@ -43,11 +43,11 @@ class MySqlReportYear extends ReportYear
             $this->dateFilters[$year]['start'] = date("Ymd", mktime(0, 0, 0, 1, 1, $year));
             $this->dateFilters[$year]['end'] = date("Ymd", mktime(0, 0, 0, 12, 31, $year));
         }
-        $sql = "SELECT category_id AS `row_header`, YEAR(entry_date) AS `col_header`, ROUND(SUM(ROUND(euro_amount,5)),2) AS `value`
+        $sql = "SELECT category_id AS `row_header`, YEAR(entry_date) AS `col_header`, ROUND(SUM(ROUND(euroAmount,5)),2) AS `value`
             FROM movimentos
             WHERE YEAR(entry_date) BETWEEN ? AND ?
             GROUP BY category_id, YEAR(entry_date)
-            HAVING ROUND(SUM(ROUND(euro_amount,5)),2)<>0
+            HAVING ROUND(SUM(ROUND(euroAmount,5)),2)<>0
             ORDER BY `row_header`, `col_header`";
         self::getData($sql, $this->first_year, $this->last_year);
         $this->traitGetReport($params);

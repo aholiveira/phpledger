@@ -76,9 +76,9 @@ $pagetitle = "Contas";
             }
             try {
                 if (empty($filteredInput["abertura"])) {
-                    $open_date = new DateTime(date("Y-m-d", mktime(0, 0, 0, $filteredInput["aberturaMM"], $filteredInput["aberturaDD"], $filteredInput["aberturaAA"])));
+                    $openDate = new DateTime(date("Y-m-d", mktime(0, 0, 0, $filteredInput["aberturaMM"], $filteredInput["aberturaDD"], $filteredInput["aberturaAA"])));
                 } else {
-                    $open_date = new DateTime($filteredInput["abertura"]);
+                    $openDate = new DateTime($filteredInput["abertura"]);
                 }
             } catch (Exception $ex) {
                 Html::myalert("Data de abertura invalida!");
@@ -86,9 +86,9 @@ $pagetitle = "Contas";
             }
             try {
                 if (empty($filteredInput["fecho"])) {
-                    $close_date = new DateTime(date("Y-m-d", mktime(0, 0, 0, $filteredInput["fechoMM"], $filteredInput["fechoDD"], $filteredInput["fechoAA"])));
+                    $closeDate = new DateTime(date("Y-m-d", mktime(0, 0, 0, $filteredInput["fechoMM"], $filteredInput["fechoDD"], $filteredInput["fechoAA"])));
                 } else {
-                    $close_date = new DateTime($filteredInput["fecho"]);
+                    $closeDate = new DateTime($filteredInput["fecho"]);
                 }
             } catch (Exception $ex) {
                 Html::myalert("Data de fecho invalida!");
@@ -97,11 +97,11 @@ $pagetitle = "Contas";
             if ($retval) {
                 $object->id = $filteredInput["conta_id"];
                 $object->name = $filteredInput["conta_nome"];
-                $object->open_date = $open_date->format("Y-m-d");
-                $object->close_date = $close_date->format("Y-m-d");
+                $object->openDate = $openDate->format("Y-m-d");
+                $object->closeDate = $closeDate->format("Y-m-d");
                 $object->number = $filteredInput["conta_num"];
                 $object->active = boolval($filteredInput["activa"]) ? 1 : 0;
-                $object->type_id = $filteredInput["tipo_id"];
+                $object->typeId = $filteredInput["tipo_id"];
                 $object->iban = $filteredInput["conta_nib"];
                 $retval = $object->update();
             }
@@ -155,12 +155,12 @@ $pagetitle = "Contas";
                                     ?>
                                     <tr>
                                         <?php
-                                        $account_view = ViewFactory::instance()->account_view($account);
+                                        $accountView = ViewFactory::instance()->accountView($account);
                                         if (!empty($edit) && $account->id == $edit) {
-                                            print $account_view->printForm();
+                                            print $accountView->printForm();
                                         }
                                         if (empty($edit) || (!empty($edit) && $account->id != $edit)) {
-                                            print $account_view->printObject();
+                                            print $accountView->printObject();
                                         }
                                         ?>
                                     </tr>
@@ -169,7 +169,7 @@ $pagetitle = "Contas";
                                 if (empty($edit)) {
                                     ?>
                                     <tr>
-                                        <?= ViewFactory::instance()->account_view(ObjectFactory::account())->printForm(); ?>
+                                        <?= ViewFactory::instance()->accountView(ObjectFactory::account())->printForm(); ?>
                                     </tr>
                                     <?php
                                 }

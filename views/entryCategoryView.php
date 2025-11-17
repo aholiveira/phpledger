@@ -10,7 +10,7 @@
  */
 use \PHPLedger\Domain\EntryCategory;
 use \PHPLedger\Storage\ObjectFactory;
-class entry_category_view extends ObjectViewer
+class entryCategoryView extends ObjectViewer
 {
     public function __construct(EntryCategory $object)
     {
@@ -38,7 +38,7 @@ class entry_category_view extends ObjectViewer
         $retval = "<table class=\"lista entry_category\">\r\n";
         $retval .= "<thead><tr><th>ID</th><th>Categoria</th><th>Descri&ccedil;&atilde;o</th><th>Valor</th><th>Activa</th></tr></thead>\r\n";
         $retval .= "<tbody>\r\n";
-        $view = new entry_category_view(ObjectFactory::entryCategory());
+        $view = new entryCategoryView(ObjectFactory::entryCategory());
         foreach ($object_list as $object) {
             if ($object instanceof EntryCategory) {
                 if ($object->parent_id === 0) {

@@ -10,7 +10,7 @@
  *
  */
 use \PHPLedger\Domain\AccountType;
-class account_type_view extends ObjectViewer
+class accountTypeView extends ObjectViewer
 {
 
     public function printObject(): string
@@ -35,7 +35,7 @@ class account_type_view extends ObjectViewer
         $retval .= "<tbody>\r\n";
         foreach ($object_list as $object) {
             if ($object instanceof accounttype) {
-                $view = new account_type_view($object);
+                $view = new accountTypeView($object);
                 $retval .= "<tr>" . $view->printObject() . "</tr>\r\n";
             }
         }

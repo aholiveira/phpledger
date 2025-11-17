@@ -10,7 +10,7 @@
  */
 use \PHPLedger\Contracts\DataObjectInterface;
 use \PHPLedger\Domain\LedgerEntry;
-class ledger_entry_view extends ObjectViewer
+class ledgerEntryView extends ObjectViewer
 {
     /** @var ledgerentry $object */
     protected DataObjectInterface $object;
@@ -41,11 +41,11 @@ class ledger_entry_view extends ObjectViewer
         $retval .= "<tbody>\r\n";
         foreach ($object_list as $object) {
             if ($object instanceof ledgerentry) {
-                $saldo += $object->euro_amount;
+                $saldo += $object->euroAmount;
                 if ($object->id == $this->object->id) {
                     //$this->printForm();
                 } else {
-                    $view = new ledger_entry_view($object);
+                    $view = new ledgerEntryView($object);
                     $retval .= "<tr>" . $view->printObject();
                 }
                 $retval .= "<td data-label='Saldo' class='total'>" . normalize_number($saldo) . "</td>\r\n";

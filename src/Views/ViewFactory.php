@@ -4,16 +4,16 @@ if (!\defined("BACKEND")) {
     die("This file should only be included!");
 }
 
-include_once VIEWS_DIR . "/object_viewer.php";
-include_once VIEWS_DIR . "/account_balance_view.php";
-include_once VIEWS_DIR . "/account_type_view.php";
-include_once VIEWS_DIR . "/account_view.php";
-include_once VIEWS_DIR . "/currency_view.php";
-include_once VIEWS_DIR . "/entry_category_view.php";
-include_once VIEWS_DIR . "/ledger_entry_view.php";
-include_once VIEWS_DIR . "/report_view.php";
-include_once VIEWS_DIR . "/report_month_view.php";
-include_once VIEWS_DIR . "/report_year_view.php";
+include_once VIEWS_DIR . "/ObjectViewer.php";
+include_once VIEWS_DIR . "/accountBalanceView.php";
+include_once VIEWS_DIR . "/accountTypeView.php";
+include_once VIEWS_DIR . "/accountView.php";
+include_once VIEWS_DIR . "/currencyView.php";
+include_once VIEWS_DIR . "/entryCategoryView.php";
+include_once VIEWS_DIR . "/ledgerEntryView.php";
+include_once VIEWS_DIR . "/reportHtmlView.php";
+include_once VIEWS_DIR . "/reportMonthHtmlView.php";
+include_once VIEWS_DIR . "/reportYearHtmlView.php";
 
 /**
  * Factory for viewer objects
@@ -40,36 +40,36 @@ class ViewFactory
         }
         return static::$viewFactory;
     }
-    public function account_balance_view(account $object): \account_balance_view
+    public function accountBalanceView(account $object): \accountBalanceView
     {
-        return new \account_balance_view($object);
+        return new \accountBalanceView($object);
     }
-    public function account_type_view(accounttype $object): \account_type_view
+    public function accountTypeView(accounttype $object): \accountTypeView
     {
-        return new \account_type_view($object);
+        return new \accountTypeView($object);
     }
-    public function account_view(account $object): \account_view
+    public function accountView(account $object): \accountView
     {
-        return new \account_view($object);
+        return new \accountView($object);
     }
-    public function currency_view(currency $object): \currency_view
+    public function currencyView(currency $object): \currencyView
     {
-        return new \currency_view($object);
+        return new \currencyView($object);
     }
-    public function entry_category_view(EntryCategory $object): \entry_category_view
+    public function entryCategoryView(EntryCategory $object): \entryCategoryView
     {
-        return new \entry_category_view($object);
+        return new \entryCategoryView($object);
     }
-    public function ledger_entry_view(ledgerentry $object): \ledger_entry_view
+    public function ledgerEntryView(ledgerentry $object): \ledgerEntryView
     {
-        return new \ledger_entry_view($object);
+        return new \ledgerEntryView($object);
     }
-    public function report_month_view(ReportMonth $object): \report_month_HtmlView
+    public function reportMonthHtmlView(ReportMonth $object): \reportMonthHtmlView
     {
-        return new \report_month_HtmlView($object);
+        return new \reportMonthHtmlView($object);
     }
-    public function report_year_view(ReportYear $object): \report_year_HtmlView
+    public function reportYearHtmlView(ReportYear $object): \reportYearHtmlView
     {
-        return new \report_year_HtmlView($object);
+        return new \reportYearHtmlView($object);
     }
 }

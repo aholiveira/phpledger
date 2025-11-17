@@ -11,7 +11,7 @@ use \PHPLedger\Contracts\DataObjectInterface;
  *
  */
 use \PHPLedger\Domain\Currency;
-class currency_view extends ObjectViewer
+class currencyView extends ObjectViewer
 {
     public function __construct(currency $object)
     {
@@ -29,7 +29,7 @@ class currency_view extends ObjectViewer
         $retval .= "<td><a title=\"Editar\" href=\"currency.php?tipo_id={$object->id}\">{$object->id}</a></td>";
         $retval .= "<td>{$object->code}</td>";
         $retval .= "<td>{$object->description}</td>";
-        $retval .= "<td style=\"text-align: right\">" . normalize_number($object->exchange_rate) . "</td>";
+        $retval .= "<td style=\"text-align: right\">" . normalize_number($object->exchangeRate) . "</td>";
         return $retval;
     }
     public function printObjectList(array $object_list): string
@@ -39,7 +39,7 @@ class currency_view extends ObjectViewer
         $retval .= "<tbody>\r\n";
         foreach ($object_list as $object) {
             if ($object instanceof currency) {
-                $view = new currency_view($object);
+                $view = new currencyView($object);
                 $retval .= "<tr>" . $view->printObject() . "</tr>\r\n";
             }
         }
@@ -67,8 +67,8 @@ class currency_view extends ObjectViewer
         $retval .= "<td><input type=text size=30 maxlength=30 name=\"description\" value=\"" . (isset($object->id) ? $object->description : "") . "\"></td>";
         $retval .= "</tr>";
         $retval .= "<tr>";
-        $retval .= "<td><label for=\"exchange_rate\">C&acirc;mbio</label></td>\n";
-        $retval .= "<td><input type=number name=\"exchange_rate\" value=\"" . (isset($object->id) ? $object->exchange_rate : "") . "\"></td>";
+        $retval .= "<td><label for=\"exchangeRate\">C&acirc;mbio</label></td>\n";
+        $retval .= "<td><input type=number name=\"exchangeRate\" value=\"" . (isset($object->id) ? $object->exchangeRate : "") . "\"></td>";
         $retval .= "</tr>\r\n";
         return $retval;
     }

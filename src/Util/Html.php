@@ -142,7 +142,7 @@ class Html
         </aside>
         <?php
     }
-    public static function lang_selector(): void
+    public static function languageSelector(): void
     {
         ?>
         <div>

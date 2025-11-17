@@ -50,7 +50,7 @@ $pagetitle = L10n::l('update_needed');
 <body>
     <main class="maingrid">
         <div class="main update-screen">
-            <?php Html::lang_selector(); ?>
+            <?php Html::languageSelector(); ?>
             <section id="update-messages" aria-live="polite">
                 <?php if ($update_result === null): ?>
                     <?php if ($needs_update): ?>

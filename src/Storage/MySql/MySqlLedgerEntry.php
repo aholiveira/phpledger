@@ -51,10 +51,13 @@ class MySqlLedgerEntry extends LedgerEntry
             'deb_cred' => 'direction',
             'moeda_mov' => 'currency_id',
             'valor_mov' => 'currency_amount',
-            'valor_euro' => 'euro_amount',
-            'cambio' => 'exchange_rate',
+            'valor_euro' => 'euroAmount',
+            'cambio' => 'exchangeRate',
             'obs' => 'remarks',
-            'last_modified' => 'updated_at'
+            'last_modified' => 'updatedAt',
+            'updated_at' => 'updatedAt',
+            'exchange_rate' => 'exchangeRate',
+            'euro_amount' => 'euroAmount'
         ];
         $retval['columns'] = [
             "id" => "int(4) NOT NULL AUTO_INCREMENT",
@@ -64,14 +67,14 @@ class MySqlLedgerEntry extends LedgerEntry
             "currency_id" => "char(3) NOT NULL DEFAULT 'EUR'",
             "direction" => "tinyint(1) NOT NULL DEFAULT 1",
             "currency_amount" => "float(10,2) DEFAULT NULL",
-            "euro_amount" => "float(10,2) DEFAULT NULL",
-            "exchange_rate" => "float(9,4) NOT NULL DEFAULT 1.0000",
+            "euroAmount" => "float(10,2) DEFAULT NULL",
+            "exchangeRate" => "float(9,4) NOT NULL DEFAULT 1.0000",
             "a_pagar" => "tinyint(1) NOT NULL DEFAULT 0",
             "com_talao" => "tinyint(1) NOT NULL DEFAULT 0",
             "remarks" => "char(255) DEFAULT NULL",
             "username" => "char(255) DEFAULT ''",
-            "created_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()",
-            "updated_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()"
+            "createdAt" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()",
+            "updatedAt" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()"
         ];
         $retval['primary_key'] = "id";
         return $retval;
@@ -82,8 +85,8 @@ class MySqlLedgerEntry extends LedgerEntry
         $sql = "SELECT id, entry_date, category_id,
             account_id,
             round(currency_amount,2) as currency_amount, `direction`, currency_id,
-            exchange_rate, euro_amount AS euro_amount,
-            remarks, username, created_at, updated_at
+            exchangeRate, euroAmount,
+            remarks, username, createdAt, updatedAt
             FROM " . static::tableName() . "
             {$where}
             ORDER BY entry_date, id";
@@ -111,8 +114,8 @@ class MySqlLedgerEntry extends LedgerEntry
         $sql = "SELECT id, entry_date, category_id,
             account_id,
             round(currency_amount,2) as currency_amount, `direction`, currency_id,
-            exchange_rate, euro_amount,
-            remarks, username, created_at, updated_at
+            exchangeRate, euroAmount,
+            remarks, username, createdAt, updatedAt
             FROM " . static::tableName() . "
             WHERE id=?";
         $retval = null;
@@ -137,7 +140,7 @@ class MySqlLedgerEntry extends LedgerEntry
     public function getBalanceBeforeDate($date, $account_id = null): ?float
     {
         $retval = null;
-        $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(euro_amount),euro_amount,0),5)),2) AS balance
+        $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(euroAmount),euroAmount,0),5)),2) AS balance
                 FROM {$this->tableName()}
                 WHERE entry_date<?" . (null !== $account_id ? " AND account_id=?" : "");
         try {
@@ -172,7 +175,7 @@ class MySqlLedgerEntry extends LedgerEntry
         $where = self::getWhereFromArray($field_filter);
         $tableName = static::$tableName;
         $retval = null;
-        $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(euro_amount),euro_amount,0),5)),2) AS balance
+        $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(euroAmount),euroAmount,0),5)),2) AS balance
                 FROM {$tableName}
                 WHERE {$where}";
         try {
@@ -209,7 +212,7 @@ class MySqlLedgerEntry extends LedgerEntry
         }
         try {
             $sql = "INSERT INTO {$this->tableName()}
-            (id, entry_date, category_id, account_id, currency_id, direction, currency_amount, euro_amount, remarks, username, created_at, updated_at)
+            (id, entry_date, category_id, account_id, currency_id, direction, currency_amount, euroAmount, remarks, username, createdAt, updatedAt)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL)
             ON DUPLICATE KEY UPDATE
                 entry_date=VALUES(entry_date),
@@ -218,10 +221,10 @@ class MySqlLedgerEntry extends LedgerEntry
                 currency_id=VALUES(currency_id),
                 direction=VALUES(direction),
                 currency_amount=VALUES(currency_amount),
-                euro_amount=VALUES(euro_amount),
+                euroAmount=VALUES(euroAmount),
                 remarks=VALUES(remarks),
                 username=VALUES(username),
-                updated_at=NULL";
+                updatedAt=NULL";
             $stmt = static::$dbConnection->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
@@ -235,7 +238,7 @@ class MySqlLedgerEntry extends LedgerEntry
                 $this->currency_id,
                 $this->direction,
                 $this->currency_amount,
-                $this->euro_amount,
+                $this->euroAmount,
                 $this->remarks,
                 $this->username
             );

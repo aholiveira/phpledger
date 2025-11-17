@@ -9,7 +9,7 @@
  *
  */
 use \PHPLedger\Domain\ReportMonth;
-class report_month_HtmlView extends report_HtmlView
+class reportMonthHtmlView extends reportHtmlView
 {
     public function __construct(ReportMonth $report)
     {

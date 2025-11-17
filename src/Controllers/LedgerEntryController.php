@@ -38,7 +38,7 @@ class LedgerEntryController
         $entry->id = (int) $input['id'] ?? $entry::getNextId();
         $entry->currency_amount = (float) $input['currency_amount'];
         $entry->direction = (int) $input['direction'];
-        $entry->euro_amount = $entry->direction * $entry->currency_amount;
+        $entry->euroAmount = $entry->direction * $entry->currency_amount;
         $entry->category_id = (int) $input['category_id'];
         $entry->currency_id = $input['currency_id'];
         $entry->account_id = (int) $input['account_id'];

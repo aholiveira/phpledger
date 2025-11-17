@@ -21,7 +21,7 @@ if (array_key_exists("year", $_GET)) {
     }
 }
 $report = ObjectFactory::reportMonth();
-$reportHtml = ViewFactory::instance()->report_month_view($report);
+$reportHtml = ViewFactory::instance()->reportMonthHtmlView($report);
 $report->year = $year;
 $report->getReport(["year" => $year]);
 ?>

@@ -163,7 +163,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         }
         // Tipos movimento
         $category_id = $edit > 0 ? $edit_entry->category_id : $defaults->category_id;
-        $entry_viewer = ViewFactory::instance()->entry_category_view(ObjectFactory::entryCategory()::getById($category_id));
+        $entry_viewer = ViewFactory::instance()->entryCategoryView(ObjectFactory::entryCategory()::getById($category_id));
         $tipo_mov_opt = $entry_viewer->getSelectFromList(ObjectFactory::entryCategory()::getList([
             'active' => ['operator' => '=', 'value' => '1'],
             'tipo_id' => ['operator' => '>', 'value' => '0']
@@ -172,14 +172,14 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         // Moedas
         $currency_id = $edit > 0 ? $edit_entry->currency_id : $defaults->currency_id;
         $currency = ObjectFactory::currency();
-        $currency_viewer = ViewFactory::instance()->currency_view($currency);
-        $moeda_opt = $currency_viewer->getSelectFromList(ObjectFactory::currency()::getList(), $currency_id);
+        $currencyViewer = ViewFactory::instance()->currencyView($currency);
+        $moeda_opt = $currencyViewer->getSelectFromList(ObjectFactory::currency()::getList(), $currency_id);
 
         // Contas
         $conta_opt = "";
         $account_id = $edit > 0 ? $edit_entry->account_id : $defaults->account_id;
-        $account_viewer = ViewFactory::instance()->account_view(ObjectFactory::account()::getById($account_id));
-        $conta_opt = $account_viewer->getSelectFromList(ObjectFactory::account()::getList(['activa' => ['operator' => '=', 'value' => '1']]), $account_id);
+        $accountViewer = ViewFactory::instance()->accountView(ObjectFactory::account()::getById($account_id));
+        $conta_opt = $accountViewer->getSelectFromList(ObjectFactory::account()::getList(['activa' => ['operator' => '=', 'value' => '1']]), $account_id);
         if (!is_array($filteredInput)) {
             $filteredInput = [];
         }
@@ -300,7 +300,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
                             foreach ($ledger_entry_cache as $row):
                                 print "<tr id='{$row->id}'>";
-                                $balance += $row->euro_amount;
+                                $balance += $row->euroAmount;
                                 if ($row->id == $edit) {
                                     ?>
                                     <td data-label=""><input type="hidden" name="id" value="<?= $row->id; ?>">
@@ -355,7 +355,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                     $account_filter = http_build_query($filteredInput3);
                                     ?>
                                     <td data-label='<?= l10n::l('id') ?>' class='id'><a
-                                            title="<?= l10n::l('click_to_edit') ?>&#10;<?= l10n::l('modified_by_at', $row->username, $row->updated_at) ?>"
+                                            title="<?= l10n::l('click_to_edit') ?>&#10;<?= l10n::l('modified_by_at', $row->username, $row->updatedAt) ?>"
                                             href="ledger_entries.php?<?= "{$filter_string}&amp;id={$row->id}" ?>"><?= $row->id ?></a>
                                     </td>
                                     <td data-label='<?= l10n::l('date') ?>' class='data'><?= $row->entry_date ?></td>

@@ -88,7 +88,7 @@ class MySqlEntryCategory extends EntryCategory
     public function getBalance(): float
     {
         $retval = 0;
-        $sql = "SELECT ABS(ROUND(SUM(ROUND(euro_amount,5)),2)) as balance
+        $sql = "SELECT ABS(ROUND(SUM(ROUND(euroAmount,5)),2)) as balance
             FROM movimentos
             WHERE category_id=?
             GROUP BY category_id";
