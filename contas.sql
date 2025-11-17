@@ -103,7 +103,7 @@ CREATE TABLE `movimentos` (
   `account_id` int(3) DEFAULT NULL,
   `currency_id` char(3) NOT NULL DEFAULT 'EUR',
   `direction` tinyint(1) NOT NULL DEFAULT 1,
-  `currency_amount` float(10,2) DEFAULT NULL,
+  `currencyAmount` float(10,2) DEFAULT NULL,
   `euroAmount` float(10,2) DEFAULT NULL,
   `exchange_rate` float(9,4) NOT NULL DEFAULT 1.0000,
   `a_pagar` tinyint(1) NOT NULL DEFAULT 0,

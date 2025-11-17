@@ -36,7 +36,7 @@ $input_variables_filter = [
     'id' => FILTER_SANITIZE_NUMBER_INT,
     'account_id' => FILTER_SANITIZE_NUMBER_INT,
     'category_id' => FILTER_SANITIZE_NUMBER_INT,
-    'currency_amount' => [
+    'currencyAmount' => [
         'filter' => FILTER_SANITIZE_NUMBER_FLOAT,
         'flags' => FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_THOUSAND
     ],
@@ -338,7 +338,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                         </select>
                                     </td>
                                     <td data-label="<?= l10n::l('amount') ?>" class="amount"><input type="number" step="0.01"
-                                            name="currency_amount" placeholder="0.00" value="<?= $row->currency_amount ?>"></td>
+                                            name="currencyAmount" placeholder="0.00" value="<?= $row->currencyAmount ?>"></td>
                                     <td data-label="<?= l10n::l('remarks') ?>" class="remarks"><input type="text" name="remarks"
                                             maxlength="255" value="<?= $row->remarks ?>"></td>
                                     <td data-label="<?= l10n::l('balance') ?>" class="total" style="text-align: right">
@@ -374,7 +374,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                         <?= $row->direction == "1" ? "Dep" : "Lev" ?>
                                     </td>
                                     <td data-label='<?= l10n::l('amount') ?>' class='amount'>
-                                        <?= normalize_number($row->currency_amount) ?>
+                                        <?= normalize_number($row->currencyAmount) ?>
                                     </td>
                                     <td data-label='<?= l10n::l('remarks') ?>' class='remarks'><?= $row->remarks; ?></td>
                                     <td data-label='<?= l10n::l('balance') ?>' class='total'><?= normalize_number($balance) ?>
@@ -423,7 +423,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                         </select>
                                     </td>
                                     <td data-label="<?= l10n::l('amount') ?>" class="amount">
-                                        <input type="number" step="0.01" name="currency_amount" placeholder="0.00"
+                                        <input type="number" step="0.01" name="currencyAmount" placeholder="0.00"
                                             value="0.00">
                                     </td>
                                     <td data-label="<?= l10n::l('remarks') ?>" class="remarks">

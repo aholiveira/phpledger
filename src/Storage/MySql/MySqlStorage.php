@@ -297,9 +297,9 @@ class MySqlStorage implements DataStorageInterface
                     $ledger_entry->category_id = $category_list[array_rand($category_list)]->id;
                     $ledger_entry->entry_date = date("Y-m-d", mktime(0, 0, 0, $month, random_int(1, $days_in_month), $year));
                     $ledger_entry->direction = [-1, 1][array_rand([-1, 1])];
-                    $ledger_entry->currency_amount = random_int(1, 10000) / 100;
+                    $ledger_entry->currencyAmount = random_int(1, 10000) / 100;
                     $ledger_entry->currency_id = 'EUR';
-                    $ledger_entry->euroAmount = $ledger_entry->currency_amount * $ledger_entry->direction;
+                    $ledger_entry->euroAmount = $ledger_entry->currencyAmount * $ledger_entry->direction;
                     $ledger_entry->exchangeRate = 1;
                     $ledger_entry->username = config::get("user");
                     $ledger_entry->update();

@@ -26,7 +26,7 @@ class LedgerEntryController
         }
 
         // 2) grab and validate the other fields
-        foreach (['currency_amount', 'direction', 'category_id', 'currency_id', 'account_id'] as $fld) {
+        foreach (['currencyAmount', 'direction', 'category_id', 'currency_id', 'account_id'] as $fld) {
             if (!isset($input[$fld]) || $input[$fld] === '' || $input[$fld] === false) {
                 throw new DomainException(l10n::l("invalid_parameter", $fld));
             }
@@ -36,9 +36,9 @@ class LedgerEntryController
         $entry = ObjectFactory::ledgerentry();
         $entry->entry_date = $dt->format('Y-m-d');
         $entry->id = (int) $input['id'] ?? $entry::getNextId();
-        $entry->currency_amount = (float) $input['currency_amount'];
+        $entry->currencyAmount = (float) $input['currencyAmount'];
         $entry->direction = (int) $input['direction'];
-        $entry->euroAmount = $entry->direction * $entry->currency_amount;
+        $entry->euroAmount = $entry->direction * $entry->currencyAmount;
         $entry->category_id = (int) $input['category_id'];
         $entry->currency_id = $input['currency_id'];
         $entry->account_id = (int) $input['account_id'];

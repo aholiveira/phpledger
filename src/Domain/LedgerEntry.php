@@ -8,7 +8,7 @@ abstract class LedgerEntry extends AbstractDataObject implements DataObjectInter
     public string $entry_date;
     public int $category_id;
     public EntryCategory $category;
-    public float $currency_amount;
+    public float $currencyAmount;
     public string $currency_id;
     public Currency $currency;
     public float $euroAmount;

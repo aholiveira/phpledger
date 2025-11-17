@@ -111,8 +111,8 @@ function prepare_ledgerentry(): bool
         $object->account_id = $id < 10 ? 1 : (int) ($id / 10);
         $object->currency_id = 1;
         $object->direction = ($id % 2 == 0 ? 1 : -1);
-        $object->currency_amount = $id;
-        $object->euroAmount = $object->direction * $object->currency_amount;
+        $object->currencyAmount = $id;
+        $object->euroAmount = $object->direction * $object->currencyAmount;
         $object->remarks = "Entry $id";
         $object->username = "admin";
         $retval = $object->update() && $retval;

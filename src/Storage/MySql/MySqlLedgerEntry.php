@@ -50,14 +50,15 @@ class MySqlLedgerEntry extends LedgerEntry
             'conta_id' => 'account_id',
             'deb_cred' => 'direction',
             'moeda_mov' => 'currency_id',
-            'valor_mov' => 'currency_amount',
+            'valor_mov' => 'currencyAmount',
             'valor_euro' => 'euroAmount',
             'cambio' => 'exchangeRate',
             'obs' => 'remarks',
             'last_modified' => 'updatedAt',
             'updated_at' => 'updatedAt',
             'exchange_rate' => 'exchangeRate',
-            'euro_amount' => 'euroAmount'
+            'euro_amount' => 'euroAmount',
+            'currency_amount' => 'currencyAmount'
         ];
         $retval['columns'] = [
             "id" => "int(4) NOT NULL AUTO_INCREMENT",
@@ -66,7 +67,7 @@ class MySqlLedgerEntry extends LedgerEntry
             "account_id" => "int(3) DEFAULT NULL",
             "currency_id" => "char(3) NOT NULL DEFAULT 'EUR'",
             "direction" => "tinyint(1) NOT NULL DEFAULT 1",
-            "currency_amount" => "float(10,2) DEFAULT NULL",
+            "currencyAmount" => "float(10,2) DEFAULT NULL",
             "euroAmount" => "float(10,2) DEFAULT NULL",
             "exchangeRate" => "float(9,4) NOT NULL DEFAULT 1.0000",
             "a_pagar" => "tinyint(1) NOT NULL DEFAULT 0",
@@ -84,7 +85,7 @@ class MySqlLedgerEntry extends LedgerEntry
         $where = self::getWhereFromArray($field_filter);
         $sql = "SELECT id, entry_date, category_id,
             account_id,
-            round(currency_amount,2) as currency_amount, `direction`, currency_id,
+            round(currencyAmount,2) as currencyAmount, `direction`, currency_id,
             exchangeRate, euroAmount,
             remarks, username, createdAt, updatedAt
             FROM " . static::tableName() . "
@@ -113,7 +114,7 @@ class MySqlLedgerEntry extends LedgerEntry
     {
         $sql = "SELECT id, entry_date, category_id,
             account_id,
-            round(currency_amount,2) as currency_amount, `direction`, currency_id,
+            round(currencyAmount,2) as currencyAmount, `direction`, currency_id,
             exchangeRate, euroAmount,
             remarks, username, createdAt, updatedAt
             FROM " . static::tableName() . "
@@ -212,7 +213,7 @@ class MySqlLedgerEntry extends LedgerEntry
         }
         try {
             $sql = "INSERT INTO {$this->tableName()}
-            (id, entry_date, category_id, account_id, currency_id, direction, currency_amount, euroAmount, remarks, username, createdAt, updatedAt)
+            (id, entry_date, category_id, account_id, currency_id, direction, currencyAmount, euroAmount, remarks, username, createdAt, updatedAt)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL)
             ON DUPLICATE KEY UPDATE
                 entry_date=VALUES(entry_date),
@@ -220,7 +221,7 @@ class MySqlLedgerEntry extends LedgerEntry
                 account_id=VALUES(account_id),
                 currency_id=VALUES(currency_id),
                 direction=VALUES(direction),
-                currency_amount=VALUES(currency_amount),
+                currencyAmount=VALUES(currencyAmount),
                 euroAmount=VALUES(euroAmount),
                 remarks=VALUES(remarks),
                 username=VALUES(username),
@@ -237,7 +238,7 @@ class MySqlLedgerEntry extends LedgerEntry
                 $this->account_id,
                 $this->currency_id,
                 $this->direction,
-                $this->currency_amount,
+                $this->currencyAmount,
                 $this->euroAmount,
                 $this->remarks,
                 $this->username
