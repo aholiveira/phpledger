@@ -9,6 +9,7 @@
  *
  */
 use PHPLedger\Contracts\DataObjectInterface;
+use PHPLedger\Storage\MySql\LedgerEntry;
 class ledger_entry_view extends ObjectViewer
 {
     /** @var ledgerentry $_object */

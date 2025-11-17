@@ -8,12 +8,13 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+use PHPLedger\Domain\Account;
+use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Html;
 class account_view extends ObjectViewer
 {
     public function printObject(): string
     {
-        global $objectFactory;
         $retval = "";
         if (!isset($this->_object->id) || !($this->_object instanceof account)) {
             return $retval;
@@ -24,10 +25,10 @@ class account_view extends ObjectViewer
         $_object = $this->_object;
         $type_description = "";
         if (!empty($_object->type_id)) {
-            $account_type = $objectFactory->accounttype();
+            $account_type = ObjectFactory::accounttype();
             $account_type = $account_type->getById($_object->type_id);
             if (null === $account_type) {
-                $account_type = $objectFactory->accounttype();
+                $account_type = ObjectFactory::accounttype();
             }
             $type_description = $account_type->description;
         }
@@ -44,7 +45,6 @@ class account_view extends ObjectViewer
     }
     public function printForm(): string
     {
-        global $objectFactory;
         global $viewFactory;
 
         $retval = "";
@@ -56,7 +56,7 @@ class account_view extends ObjectViewer
          */
         $_object = ($this->_object);
         $id = isset($_object->id) ? $_object->id : $_object->getNextId();
-        $account_type = $objectFactory->accounttype();
+        $account_type = ObjectFactory::accounttype();
         if (isset($_object->type_id)) {
             $account_type = $account_type->getById($_object->type_id);
         }

@@ -13,7 +13,7 @@ abstract class ObjectViewer
     protected DataObjectInterface $_object;
     public function __construct(DataObjectInterface $object)
     {
-        $this->_object = $object;
+        $this->setObject($object);
     }
     public function __toString()
     {

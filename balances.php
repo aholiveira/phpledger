@@ -8,6 +8,7 @@
  *
  */
 include_once __DIR__ . "/contas_config.php";
+use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 
@@ -30,7 +31,7 @@ $pagetitle = "Saldos";
         <div class="main" id="main">
             <div class="saldos">
                 <?php
-                $object = $objectFactory->account();
+                $object = ObjectFactory::account();
                 $viewer = $viewFactory->account_balance_view($object);
                 print $viewer->printObjectList($object->getList(['activa' => ['operator' => '=', 'value' => '1']]));
                 ?>

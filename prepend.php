@@ -15,6 +15,7 @@ if (PHP_VERSION_ID < 70000) {
     die('PHP >= 7.0.0 required');
 }
 require __DIR__ . '/vendor/autoload.php';
+use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\SessionManager;
@@ -24,7 +25,6 @@ const VERSION = "0.4.100";
 const ROOT_DIR = __DIR__;
 const OBJECTS_DIR = ROOT_DIR . "/objects";
 const VIEWS_DIR = ROOT_DIR . "/views";
-const UTILS_DIR = ROOT_DIR . "/util";
 
 $gitHead = ROOT_DIR . "/.git/ORIG_HEAD";
 define("GITHASH", file_exists($gitHead) ? substr(file_get_contents($gitHead), 0, 12) : "main");
@@ -41,11 +41,12 @@ if (defined("DEBUG") && DEBUG === 1) {
 @header('Referrer-Policy: strict-origin-when-cross-origin');
 #@header("Content-Security-Policy: default-src 'self'; frame-ancestors 'none'; style-src 'self' 'unsafe-inline'; script-src * ");
 
-require_once OBJECTS_DIR . '/object_factory.php';
 require_once VIEWS_DIR . '/view_factory.php';
 
+$logger = new Logger(ROOT_DIR . "/logs/ledger.log");
 SessionManager::start();
 l10n::init();
+ObjectFactory::init("mysql", $logger);
 
 /**
  * Prints variable
@@ -55,7 +56,7 @@ l10n::init();
  *  * if false, the default, prints ALWAYS.
  *  * if true, print only if DEBUG is defined and true
  */
-$logger = new Logger(ROOT_DIR . "/logs/ledger.log");
+
 function debug_print($text)
 {
     if (defined("DEBUG") && DEBUG === 1) {

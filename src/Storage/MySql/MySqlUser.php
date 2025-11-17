@@ -1,0 +1,240 @@
+<?php
+
+/**
+ * User class
+ * Handles user registration and authentication
+ *
+ * @since 0.2.0
+ * @author Antonio Henrique Oliveira
+ * @copyright (c) 2017-2022, Antonio Henrique Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
+ */
+namespace PHPLedger\Storage\MySql;
+use PHPLedger\Domain\User;
+
+class MySqlUser extends User
+{
+    use MySqlObject {
+        MySqlObject::__construct as private traitConstruct;
+    }
+    protected static string $tableName = "users";
+    public function __construct()
+    {
+        $this->traitConstruct();
+        $this->_token_expiry = null;
+    }
+    public static function getDefinition(): array
+    {
+        $retval = [];
+        $retval['columns'] = [
+            "id" => "int(3) NOT NULL DEFAULT 0",
+            "username" => "char(100) NOT NULL",
+            "password" => "char(255) NOT NULL",
+            "fullname" => "char(255) NOT NULL DEFAULT ''",
+            "email" => "char(255) NOT NULL DEFAULT ''",
+            "role" => "int(3) NOT NULL DEFAULT 0",
+            "token" => "char(255) NOT NULL DEFAULT ''",
+            "token_expiry" => "datetime",
+            "active" => "int(1) NOT NULL DEFAULT 0"
+        ];
+        $retval['primary_key'] = "id";
+        return $retval;
+    }
+    public function update(): bool
+    {
+        $retval = false;
+        $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
+        try {
+            $stmt = @static::$dbConnection->prepare($sql);
+            if (!$stmt) {
+                return $retval;
+            }
+            if (!isset($this->id)) {
+                return $retval;
+            }
+            $stmt->bind_param("i", $this->id);
+            $stmt->execute();
+            $stmt->bind_result($return_id);
+            $sql = (null !== $stmt->fetch() && $return_id == $this->id) ?
+                "UPDATE {$this->tableName()} SET
+                    `username`=?,
+                    `password`=?,
+                    `fullname`=?,
+                    `email`=?,
+                    `role`=?,
+                    `token`=?,
+                    `token_expiry`=?,
+                    `active`=?
+                    WHERE `id`=?"
+                :
+                "INSERT INTO {$this->tableName()} (username, password, fullname, email, role, token, token_expiry, active, id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmt->close();
+            $stmt = static::$dbConnection->prepare($sql);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
+            if (empty($this->_token_expiry)) {
+                $this->_token_expiry = null;
+            }
+            $stmt->bind_param(
+                "sssssisii",
+                $this->_username,
+                $this->_password,
+                $this->_fullname,
+                $this->_email,
+                $this->_role,
+                $this->_token,
+                $this->_token_expiry,
+                $this->_active,
+                $this->id
+            );
+            $retval = $stmt->execute();
+            if ($retval === false) {
+                throw new \mysqli_sql_exception();
+            }
+            static::$dbConnection->commit();
+        } catch (\Exception $ex) {
+            $this->handleException($ex, $sql);
+            if (isset($stmt)) {
+                $stmt->close();
+            }
+        }
+        return $retval;
+    }
+    public static function getList(array $field_filter = []): array
+    {
+        $where = self::getWhereFromArray($field_filter);
+        $sql = "SELECT id,
+            username AS `_username`,
+            `password` AS `_password`,
+            `fullname` AS `_fullname`,
+            email AS `_email`,
+            `role` AS `_role`,
+            `token` AS `_token`,
+            `token_expiry` AS `_token_expiry`,
+            active AS `_active`
+            FROM " . static::tableName() . "
+            {$where}
+            ORDER BY username";
+        $retval = [];
+        try {
+            $stmt = static::$dbConnection->prepare($sql);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($newobject = $result->fetch_object(__CLASS__)) {
+                $retval[$newobject->id] = $newobject;
+            }
+            $stmt->close();
+        } catch (\Exception $ex) {
+            static::handleException($ex, $sql);
+        }
+        return $retval;
+    }
+    public static function getByUsername(string $username): ?User
+    {
+        $sql = "SELECT id,
+            username AS `_username`,
+            `password` AS `_password`,
+            `fullname` AS `_fullname`,
+            email AS `_email`,
+            `role` AS `_role`,
+            `token` AS `_token`,
+            `token_expiry` AS `_token_expiry`,
+            active AS `_active`
+            FROM " . static::tableName() . "
+            WHERE username=?";
+        try {
+            $stmt = @static::$dbConnection->prepare($sql);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $retval = $result->fetch_object(__CLASS__);
+            $stmt->close();
+        } catch (\Exception $ex) {
+            static::handleException($ex, $sql);
+        }
+        return $retval instanceof self ? $retval : null;
+    }
+    public static function getById(int $id): ?user
+    {
+        $sql = "SELECT id,
+        `username` AS `_username`,
+        `password` AS `_password`,
+        `fullname` AS `_fullname`,
+        `email` AS `_email`,
+        `role` AS `_role`,
+        `token` AS `_token`,
+        `token_expiry` AS `_token_expiry`,
+        `active` AS `_active`
+        FROM " . static::tableName() . "
+        WHERE id=?";
+        $retval = null;
+        try {
+            $stmt = @static::$dbConnection->prepare($sql);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $retval = $result->fetch_object(__CLASS__, [static::$dbConnection]);
+            $stmt->close();
+        } catch (\Exception $ex) {
+            static::handleException($ex, $sql);
+        }
+        return $retval instanceof self ? $retval : null;
+    }
+    public static function getByToken(string $token): ?user
+    {
+        $sql = "SELECT id,
+        `username` AS `_username`,
+        `password` AS `_password`,
+        `fullname` AS `_fullname`,
+        `email` AS `_email`,
+        `role` AS `_role`,
+        `token` AS `_token`,
+        `token_expiry` AS `_token_expiry`,
+        `active` AS `_active`
+        FROM " . static::tableName() . "
+        WHERE token=?";
+        $retval = null;
+        try {
+            $stmt = @static::$dbConnection->prepare($sql);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
+            $stmt->bind_param("s", $token);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $retval = $result->fetch_object(__CLASS__, [static::$dbConnection]);
+            $stmt->close();
+        } catch (\Exception $ex) {
+            static::handleException($ex, $sql);
+        }
+        return $retval instanceof self ? $retval : null;
+    }
+    public function delete(): bool
+    {
+        $retval = false;
+        try {
+            $sql = "DELETE FROM {$this->tableName()} WHERE `id`=?";
+            $stmt = static::$dbConnection->prepare($sql);
+            $stmt->bind_param("i", $this->id);
+            $retval = $stmt->execute();
+            $stmt->close();
+        } catch (\Exception $ex) {
+            $this->handleException($ex, $sql);
+            if (isset($stmt)) {
+                $stmt->close();
+            }
+        }
+        return $retval;
+    }
+}

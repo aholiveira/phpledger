@@ -2,18 +2,13 @@
 namespace PHPLedger\Controllers;
 use DomainException;
 use Exception;
+use PHPLedger\Domain\Defaults;
+use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\DateParser;
 use PHPLedger\Util\L10n;
 use RuntimeException;
 class LedgerEntryController
 {
-    private \ObjectFactory $factory;
-
-    public function __construct(\ObjectFactory $factory)
-    {
-        $this->factory = $factory;
-    }
-
     /**
      * Validate, build and persist one ledger‐entry from $input.
      * Throws on any validation error.
@@ -38,7 +33,7 @@ class LedgerEntryController
         }
 
         // 3) hydrate and save
-        $entry = $this->factory->ledgerentry();
+        $entry = ObjectFactory::ledgerentry();
         $entry->entry_date = $dt->format('Y-m-d');
         $entry->id = (int) $input['id'] ?? $entry::getNextId();
         $entry->currency_amount = (float) $input['currency_amount'];
@@ -55,9 +50,9 @@ class LedgerEntryController
             throw new RuntimeException(l10n::l("ledger_save_error"));
         }
 
-        // 4) update that user’s “defaults” record
-        $defaults = $this->factory->defaults()->getByUsername($_SESSION['user'])
-            ?? \Defaults::init();
+        // 4) update that user's "defaults" record
+        $defaults = ObjectFactory::defaults()::getByUsername($_SESSION['user'])
+            ?? Defaults::init();
 
         $defaults->category_id = $entry->category_id;
         $defaults->currency_id = $entry->currency_id;

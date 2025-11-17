@@ -7,14 +7,13 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-global $user;
-global $pass;
+require_once __DIR__ . "/prepend.php";
+use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 
-require_once __DIR__ . "/prepend.php";
-config::init(__DIR__ . '/config.json');
+Config::init(__DIR__ . '/config.json');
 $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";
 ?>
 <!DOCTYPE html>
@@ -23,8 +22,7 @@ $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";
 <head>
     <?php Html::header(); ?>
     <?php
-    $objectFactory = new ObjectFactory();
-    $user = $objectFactory->user();
+    $user = ObjectFactory::user();
     $message = "";
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if (array_key_exists("username", $_POST) && array_key_exists("email", $_POST)) {
@@ -32,12 +30,10 @@ $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";
             $email = filter_input(INPUT_POST, "email", FILTER_SANITIZE_ENCODED);
             $user->getByUsername($username);
             if (strcasecmp($user->getUsername(), $username) == 0 && strcasecmp(filter_var($user->getEmail(), FILTER_SANITIZE_ENCODED), $email) == 0) {
-                if ($user->resetPassword()) {
-                    //print "<meta http-equiv='REFRESH' content='10; URL=index.php'>";
-                    $message = "<p>Ir&aacute; receber um email com um link para efectuar a reposicao da palavra-passe.<br></p>";
-                } else {
-                    $message = "Falhou a criacao do token de reposicao ou o envio do email. Verifique as configuracoes ou os dados fornecidos e tente novamente.";
-                }
+                $message = $user->resetPassword() ?
+                    "<p>Ir&aacute; receber um email com um link para efectuar a reposicao da palavra-passe.<br></p>"
+                    :
+                    "Falhou a criacao do token de reposicao ou o envio do email. Verifique as configuracoes ou os dados fornecidos e tente novamente.";
             } else {
                 $message = "Os dados indicados est&atilde;o errados.";
             }
@@ -58,7 +54,8 @@ $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";
             <table>
                 <tr>
                     <td>Utilizador: </td>
-                    <td><input id="username" size="50" maxlength="250" type="text" name="username" value="" required></td>
+                    <td><input id="username" size="50" maxlength="250" type="text" name="username" value="" required>
+                    </td>
                 </tr>
                 <tr>
                     <td>Endere&ccedil;o de email: </td>

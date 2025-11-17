@@ -8,6 +8,7 @@
  *
  */
 include_once __DIR__ . "/contas_config.php";
+use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 $pagetitle = "Relatório mensal";
@@ -18,7 +19,7 @@ if (array_key_exists("year", $_GET)) {
         $year = date("Y");
     }
 }
-$report = $objectFactory->reportMonth();
+$report = ObjectFactory::reportMonth();
 $reportHtml = $viewFactory->report_month_view($report);
 $report->year = $year;
 $report->getReport(["year" => $year]);

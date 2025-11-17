@@ -7,16 +7,17 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+include_once __DIR__ . "/contas_config.php";
+use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Redirector;
 
-include_once __DIR__ . "/contas_config.php";
 $pagetitle = "Tipo de contas";
 $message = "";
 $retval = false;
-$object = $objectFactory->accounttype();
+$object = ObjectFactory::accounttype();
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
         http_response_code(400);

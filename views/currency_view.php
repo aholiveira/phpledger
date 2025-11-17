@@ -10,6 +10,7 @@ use PHPLedger\Contracts\DataObjectInterface;
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+use PHPLedger\Domain\Currency;
 class currency_view extends ObjectViewer
 {
     protected currency $object;

@@ -8,6 +8,7 @@
  *
  */
 include_once __DIR__ . "/contas_config.php";
+use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 $pagetitle = "Relatório anual";
@@ -25,7 +26,7 @@ if (array_key_exists("last_year", $_GET)) {
         $last_year = date("Y");
     }
 }
-$report = $objectFactory->reportYear();
+$report = ObjectFactory::reportYear();
 $reportHtml = $viewFactory->report_year_view($report);
 $report->getReport(["first_year" => $first_year, "last_year" => $last_year]);
 ?>

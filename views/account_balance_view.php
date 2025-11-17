@@ -8,6 +8,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+use PHPLedger\Domain\Account;
 use PHPLedger\Util\L10n;
 class account_balance_view extends ObjectViewer
 {

@@ -7,13 +7,15 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+include_once __DIR__ . "/contas_config.php";
+use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
-include_once __DIR__ . "/contas_config.php";
+
 $pagetitle = "Tipos de movimentos";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")) {
-    $object = $objectFactory->entryCategory();
+    $object = ObjectFactory::entryCategory();
     $retval = false;
     $update = filter_input(INPUT_POST, "update", FILTER_DEFAULT);
     if (strcasecmp($update, "gravar") == 0) {
@@ -76,7 +78,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
         <div id="main" class="main">
             <div class="entry_category_list">
                 <?php
-                $object = $objectFactory->entryCategory();
+                $object = ObjectFactory::entryCategory();
                 $viewer = $viewFactory->entry_category_view($object);
                 print $viewer->printObjectList($object->getList());
                 ?>

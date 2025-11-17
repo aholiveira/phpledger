@@ -4,6 +4,12 @@ class Logger
 {
     private string $logFile;
 
+    private static ?self $instance = null;
+    public static function instance(): self
+    {
+        static::$instance = static::$instance ?? new Logger(ROOT_DIR . "/logs/ledger.log");
+        return static::$instance;
+    }
     public function __construct(string $file)
     {
         $this->logFile = $file;

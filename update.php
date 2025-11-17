@@ -8,17 +8,18 @@
  *
  */
 
+use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Redirector;
+
 require_once "prepend.php";
 config::init(__DIR__ . '/config.json');
 
-$objectFactory = new \ObjectFactory();
 $viewFactory = new \view_factory();
-$data_storage = $objectFactory->dataStorage();
+$data_storage = ObjectFactory::dataStorage();
 $update_result = null;
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {

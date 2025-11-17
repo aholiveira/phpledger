@@ -23,6 +23,13 @@ include_once VIEWS_DIR . "/report_year_view.php";
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+use \PHPLedger\Domain\Account;
+use \PHPLedger\Domain\AccountType;
+use \PHPLedger\Domain\Currency;
+use \PHPLedger\Domain\EntryCategory;
+use \PHPLedger\Domain\LedgerEntry;
+use \PHPLedger\Domain\ReportMonth;
+use \PHPLedger\Domain\ReportYear;
 class view_factory
 {
     public function account_balance_view(account $object): account_balance_view

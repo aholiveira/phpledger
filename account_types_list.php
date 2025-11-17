@@ -8,6 +8,7 @@
  *
  */
 include_once __DIR__ . "/contas_config.php";
+use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 
@@ -32,7 +33,7 @@ $pagetitle = "Tipos de contas";
         </div>
         <div class="main" id="main">
             <?php
-            $object = $objectFactory->accounttype();
+            $object = ObjectFactory::accounttype();
             $viewer = $viewFactory->account_type_view($object);
             print $viewer->printObjectList($object->getList());
             ?>
