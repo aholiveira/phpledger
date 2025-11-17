@@ -21,9 +21,8 @@ use \PHPLedger\Util\Logger;
 use \PHPLedger\Util\SessionManager;
 
 const BACKEND = "mysql";
-const VERSION = "0.4.205";
+const VERSION = "0.4.206";
 const ROOT_DIR = __DIR__;
-const OBJECTS_DIR = ROOT_DIR . "/objects";
 const VIEWS_DIR = ROOT_DIR . "/views";
 
 $gitHead = ROOT_DIR . "/.git/ORIG_HEAD";
@@ -40,8 +39,6 @@ if (defined("DEBUG") && DEBUG === 1) {
 @header('Strict-Transport-Security: max-age=7776000');
 @header('Referrer-Policy: strict-origin-when-cross-origin');
 #@header("Content-Security-Policy: default-src 'self'; frame-ancestors 'none'; style-src 'self' 'unsafe-inline'; script-src * ");
-
-require_once VIEWS_DIR . '/view_factory.php';
 
 $logger = new Logger(ROOT_DIR . "/logs/ledger.log");
 SessionManager::start();

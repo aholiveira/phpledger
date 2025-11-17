@@ -11,6 +11,7 @@ include_once __DIR__ . "/contas_config.php";
 use \PHPLedger\Storage\ObjectFactory;
 use \PHPLedger\Util\Html;
 use \PHPLedger\Util\L10n;
+use \PHPLedger\Views\ViewFactory;
 $pagetitle = "Relatório anual";
 $first_year = date("Y") - 1;
 $last_year = date("Y");
@@ -27,7 +28,7 @@ if (array_key_exists("last_year", $_GET)) {
     }
 }
 $report = ObjectFactory::reportYear();
-$reportHtml = $viewFactory->report_year_view($report);
+$reportHtml = ViewFactory::instance()->report_year_view($report);
 $report->getReport(["first_year" => $first_year, "last_year" => $last_year]);
 ?>
 <!DOCTYPE html>

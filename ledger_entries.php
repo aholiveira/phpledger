@@ -13,6 +13,7 @@ use \PHPLedger\Util\CSRF;
 use \PHPLedger\Util\Html;
 use \PHPLedger\Util\L10n;
 use \PHPLedger\Util\Redirector;
+use \PHPLedger\Views\ViewFactory;
 
 if (!defined("ROOT_DIR")) {
     require_once __DIR__ . "/prepend.php";
@@ -162,7 +163,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         }
         // Tipos movimento
         $category_id = $edit > 0 ? $edit_entry->category_id : $defaults->category_id;
-        $entry_viewer = $viewFactory->entry_category_view(ObjectFactory::entryCategory()::getById($category_id));
+        $entry_viewer = ViewFactory::instance()->entry_category_view(ObjectFactory::entryCategory()::getById($category_id));
         $tipo_mov_opt = $entry_viewer->getSelectFromList(ObjectFactory::entryCategory()::getList([
             'active' => ['operator' => '=', 'value' => '1'],
             'tipo_id' => ['operator' => '>', 'value' => '0']
@@ -171,13 +172,13 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         // Moedas
         $currency_id = $edit > 0 ? $edit_entry->currency_id : $defaults->currency_id;
         $currency = ObjectFactory::currency();
-        $currency_viewer = $viewFactory->currency_view($currency);
+        $currency_viewer = ViewFactory::instance()->currency_view($currency);
         $moeda_opt = $currency_viewer->getSelectFromList(ObjectFactory::currency()::getList(), $currency_id);
 
         // Contas
         $conta_opt = "";
         $account_id = $edit > 0 ? $edit_entry->account_id : $defaults->account_id;
-        $account_viewer = $viewFactory->account_view(ObjectFactory::account()::getById($account_id));
+        $account_viewer = ViewFactory::instance()->account_view(ObjectFactory::account()::getById($account_id));
         $conta_opt = $account_viewer->getSelectFromList(ObjectFactory::account()::getList(['activa' => ['operator' => '=', 'value' => '1']]), $account_id);
         if (!is_array($filteredInput)) {
             $filteredInput = [];

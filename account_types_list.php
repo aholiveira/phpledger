@@ -11,6 +11,7 @@ include_once __DIR__ . "/contas_config.php";
 use \PHPLedger\Storage\ObjectFactory;
 use \PHPLedger\Util\Html;
 use \PHPLedger\Util\L10n;
+use \PHPLedger\Views\ViewFactory;
 
 $pagetitle = "Tipos de contas";
 
@@ -34,7 +35,7 @@ $pagetitle = "Tipos de contas";
         <div class="main" id="main">
             <?php
             $object = ObjectFactory::accounttype();
-            $viewer = $viewFactory->account_type_view($object);
+            $viewer = ViewFactory::instance()->account_type_view($object);
             print $viewer->printObjectList($object->getList());
             ?>
         </div>

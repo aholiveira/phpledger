@@ -10,7 +10,7 @@
 use \PHPLedger\Contracts\DataObjectInterface;
 abstract class ObjectViewer
 {
-    protected DataObjectInterface $_object;
+    protected DataObjectInterface $object;
     public function __construct(DataObjectInterface $object)
     {
         $this->setObject($object);
@@ -21,7 +21,7 @@ abstract class ObjectViewer
     }
     public function setObject(DataObjectInterface $object)
     {
-        $this->_object = $object;
+        $this->object = $object;
     }
     abstract public function printObject(): string;
     abstract public function printObjectList(array $object_list): string;
