@@ -12,9 +12,6 @@
  *
  */
 namespace PHPLedger\Storage\MySql;
-use PHPLedger\Domain\Account;
-use PHPLedger\Domain\Currency;
-use PHPLedger\Domain\EntryCategory;
 use PHPLedger\Domain\LedgerEntry;
 use PHPLedger\Util\Logger;
 class MySqlLedgerEntry extends LedgerEntry
