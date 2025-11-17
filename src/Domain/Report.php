@@ -16,7 +16,7 @@ abstract class Report implements ReportInterface
     public array $reportData = [];
     public array $columnHeaders;
     public array $dateFilters;
-    public array $savings;
+    public array $savings = [];
 
     abstract public function getReport(array $params = []): self;
     protected function updateSubtotal($category, array $childValues): void

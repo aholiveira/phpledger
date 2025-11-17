@@ -249,10 +249,6 @@ class MySqlLedgerEntry extends LedgerEntry
         }
         return $retval;
     }
-    public static function getNextId(string $field = "id"): int
-    {
-        return MySqlObject::getNextId($field);
-    }
     public function delete(): bool
     {
         return false;

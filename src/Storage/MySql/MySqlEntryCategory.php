@@ -12,11 +12,11 @@ namespace PHPLedger\Storage\MySql;
 use PHPLedger\Domain\EntryCategory;
 class MySqlEntryCategory extends EntryCategory
 {
+    protected static string $tableName = "tipo_mov";
     use MySqlObject {
         MySqlObject::__construct as private traitConstruct;
+        MySqlObject::getNextId as private traitGetNextId;
     }
-    protected static string $tableName = "tipo_mov";
-
     public function __construct()
     {
         $this->traitConstruct();
@@ -193,6 +193,6 @@ class MySqlEntryCategory extends EntryCategory
     }
     public static function getNextId(string $field = "tipo_id"): int
     {
-        return MySqlObject::getNextId($field);
+        return self::traitGetNextId($field);
     }
 }

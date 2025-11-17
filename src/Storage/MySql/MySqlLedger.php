@@ -11,7 +11,9 @@ namespace PHPLedger\Storage\MySql;
 use \PHPLedger\Domain\Ledger;
 class MySqlLedger extends Ledger
 {
-    use MySqlObject;
+    use MySqlObject {
+        MySqlObject::getNextId as private traitGetNextId;
+    }
     public string $name;
     protected static string $tableName = "`grupo_contas`";
     public static function getDefinition(): array
@@ -104,10 +106,6 @@ class MySqlLedger extends Ledger
             $this->handleException($ex, $sql);
         }
         return $retval;
-    }
-    public static function getNextId(string $field = "id"): int
-    {
-        return MySqlObject::getNextId($field);
     }
     public function delete(): bool
     {
