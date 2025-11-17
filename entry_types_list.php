@@ -11,6 +11,7 @@ include_once __DIR__ . "/contas_config.php";
 use \PHPLedger\Storage\ObjectFactory;
 use \PHPLedger\Util\Html;
 use \PHPLedger\Util\L10n;
+use \PHPLedger\Views\ViewFactory;
 
 $pagetitle = "Tipos de movimentos";
 
@@ -79,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
             <div class="entry_category_list">
                 <?php
                 $object = ObjectFactory::entryCategory();
-                $viewer = $viewFactory->entry_category_view($object);
+                $viewer = ViewFactory::instance()->entry_category_view($object);
                 print $viewer->printObjectList($object->getList());
                 ?>
             </div>

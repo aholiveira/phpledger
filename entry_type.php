@@ -11,6 +11,7 @@ include_once __DIR__ . "/contas_config.php";
 use \PHPLedger\Storage\ObjectFactory;
 use \PHPLedger\Util\Html;
 use \PHPLedger\Util\L10n;
+use \PHPLedger\Views\ViewFactory;
 $pagetitle = "Tipo de movimentos";
 ?>
 <!DOCTYPE html>
@@ -35,7 +36,7 @@ $pagetitle = "Tipo de movimentos";
                             $object = $object->getById($tipo_id);
                         }
                     }
-                    $viewer = $viewFactory->entry_category_view($object);
+                    $viewer = ViewFactory::instance()->entry_category_view($object);
                     print $viewer->printForm();
                     ?>
 

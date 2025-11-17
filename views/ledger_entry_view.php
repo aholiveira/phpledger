@@ -9,25 +9,25 @@
  *
  */
 use \PHPLedger\Contracts\DataObjectInterface;
-use \PHPLedger\Storage\MySql\LedgerEntry;
+use \PHPLedger\Domain\LedgerEntry;
 class ledger_entry_view extends ObjectViewer
 {
-    /** @var ledgerentry $_object */
-    protected DataObjectInterface $_object;
+    /** @var ledgerentry $object */
+    protected DataObjectInterface $object;
     public function printObject(): string
     {
         $retval = "";
-        if (empty($this->_object->id)) {
+        if (empty($this->object->id)) {
             return $retval;
         }
-        $retval .= "<td data-label='ID'><a id=\"{$this->_object->id}\" title=\"Editar\" href=\"ledger_entries.php?id={$this->_object->id}#{$this->_object->id}\">{$this->_object->id}</a></td>\n";
-        $retval .= "<td data-label='Data' style=\"text-align: center\">{$this->_object->entry_date}</td>\n";
-        $retval .= "<td data-label='Categoria'><a title=\"Mostrar movimentos apenas desta categoria\" href=\"ledger_entries.php?filter_tipo_mov={$this->_object->category->id}\">{$this->_object->category->description}</a></td>\n";
-        $retval .= "<td data-label='Moeda'>{$this->_object->currency->description}</td>\n";
-        $retval .= "<td data-label='Conta'><a title=\"Mostrar movimentos apenas desta conta\" href=\"ledger_entries.php?filter_account_id={$this->_object->account->id}\">{$this->_object->account->name}</a></td>\n";
-        $retval .= "<td data-label='D/C'>" . ($this->_object->direction == "1" ? "Dep" : "Lev") . "</td>\n";
-        $retval .= "<td data-label='Valor' class='amount'>" . normalize_number($this->_object->currency_amount) . "</td>\n";
-        $retval .= "<td data-label='Obs'>{$this->_object->remarks}</td>\n";
+        $retval .= "<td data-label='ID'><a id=\"{$this->object->id}\" title=\"Editar\" href=\"ledger_entries.php?id={$this->object->id}#{$this->object->id}\">{$this->object->id}</a></td>\n";
+        $retval .= "<td data-label='Data' style=\"text-align: center\">{$this->object->entry_date}</td>\n";
+        $retval .= "<td data-label='Categoria'><a title=\"Mostrar movimentos apenas desta categoria\" href=\"ledger_entries.php?filter_tipo_mov={$this->object->category->id}\">{$this->object->category->description}</a></td>\n";
+        $retval .= "<td data-label='Moeda'>{$this->object->currency->description}</td>\n";
+        $retval .= "<td data-label='Conta'><a title=\"Mostrar movimentos apenas desta conta\" href=\"ledger_entries.php?filter_account_id={$this->object->account->id}\">{$this->object->account->name}</a></td>\n";
+        $retval .= "<td data-label='D/C'>" . ($this->object->direction == "1" ? "Dep" : "Lev") . "</td>\n";
+        $retval .= "<td data-label='Valor' class='amount'>" . normalize_number($this->object->currency_amount) . "</td>\n";
+        $retval .= "<td data-label='Obs'>{$this->object->remarks}</td>\n";
         return $retval;
     }
     public function printObjectList(array $object_list): string
@@ -42,7 +42,7 @@ class ledger_entry_view extends ObjectViewer
         foreach ($object_list as $object) {
             if ($object instanceof ledgerentry) {
                 $saldo += $object->euro_amount;
-                if ($object->id == $this->_object->id) {
+                if ($object->id == $this->object->id) {
                     //$this->printForm();
                 } else {
                     $view = new ledger_entry_view($object);
@@ -59,19 +59,19 @@ class ledger_entry_view extends ObjectViewer
     /*public function printForm(): string
     {
         $retval = "";
-        $_object = $this->_object;
-        if (!$_object instanceof ledgerentry) return $retval;
+        $object = $this->object;
+        if (!$object instanceof ledgerentry) return $retval;
         $retval .= "<tr>";
         $retval .= "<td><label for=\"id\">ID</label></td>\r\n";
-        $retval .= "<td><input type=text readonly size=4 name=\"id\" value=" . (isset($_object->id)  ? $_object->id : $_object->getNextId()) . "></td>\r\n";
+        $retval .= "<td><input type=text readonly size=4 name=\"id\" value=" . (isset($object->id)  ? $object->id : $object->getNextId()) . "></td>\r\n";
         $retval .= "</tr>";
         $retval .= "<tr>";
         $retval .= "<td><label for=\"tipo_desc\">Nome</label></td>\n";
-        $retval .= "<td><input type=text size=30 maxlength=30 name=\"name\" value=\"" . (isset($_object->id) ? $_object->description : "") . "\"></td>";
+        $retval .= "<td><input type=text size=30 maxlength=30 name=\"name\" value=\"" . (isset($object->id) ? $object->description : "") . "\"></td>";
         $retval .= "</tr>";
         $retval .= "<tr>";
         $retval .= "<td><label for=\"active\">C&acirc;mbio</label></td>\n";
-        $retval .= "<td><input type=\"checkbox\" name=\"active\" " . ((isset($_object->id) && $_object->active) || !isset($_object->id) ? "checked" : "") . "></td>";
+        $retval .= "<td><input type=\"checkbox\" name=\"active\" " . ((isset($object->id) && $object->active) || !isset($object->id) ? "checked" : "") . "></td>";
         $retval .= "</tr>\r\n";
         return $retval;
     }*/

@@ -5,6 +5,7 @@ use \PHPLedger\Storage\Abstract\AbstractDataObject;
 use \PHPLedger\Storage\MySql\MySqlStorage;
 use \PHPLedger\Storage\ObjectFactory;
 use \PHPLedger\Util\Logger;
+use \PHPLedger\Views\ViewFactory;
 $retval = true;
 $classnames = [
     "account" => "account_view",
@@ -142,7 +143,7 @@ foreach ($classnames as $class => $view) {
     $retval = test_object($object, $id) && $retval;
     if (strlen($view) > 0) {
         $object = $object->getById($id);
-        $viewer = $viewFactory->$view($object);
+        $viewer = ViewFactory::instance()->$view($object);
         $retval = test_view($viewer, $object) && $retval;
     }
     $retval = run_additional($object, isset($viewer) ? $viewer : null) && $retval;
@@ -172,12 +173,11 @@ function run_additional($object, $viewer = null)
 }
 function test_report($report, $view)
 {
-    global $viewFactory;
     $retval = true;
     print str_pad("Testing {$report} ", constant("PADDING"), ".") . " : ";
     $object = ObjectFactory::$report();
     #assert(is_a($object->getReport(["year" => 2023]), $report));
-    $viewer = $viewFactory->$view($object);
+    $viewer = ViewFactory::instance()->$view($object);
     #$retval = assert(!empty($viewer->printAsTable())) && $retval;
     print ($retval ? constant("PASSED") : constant("FAILED")) . "\r\n";
     return $retval;

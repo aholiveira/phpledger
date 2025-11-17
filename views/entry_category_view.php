@@ -12,7 +12,6 @@ use \PHPLedger\Domain\EntryCategory;
 use \PHPLedger\Storage\ObjectFactory;
 class entry_category_view extends ObjectViewer
 {
-    protected EntryCategory $object;
     public function __construct(EntryCategory $object)
     {
         parent::__construct($object);
@@ -20,18 +19,18 @@ class entry_category_view extends ObjectViewer
     public function printObject(): string
     {
         $retval = "";
-        if (!isset($this->_object->id)) {
+        if (!isset($this->object->id)) {
             return $retval;
         }
-        $_object = $this->_object;
-        if (!($_object instanceof EntryCategory)) {
+        $object = $this->object;
+        if (!($object instanceof EntryCategory)) {
             return $retval;
         }
-        $retval .= "<td class='id' data-label='ID'><a href=\"entry_type.php?tipo_id={$_object->id}\" title=\"Editar a categoria\">{$_object->id}</a></td>";
-        $retval .= "<td class='category' data-label='Categoria'>" . (null === $_object->parent_id || $_object->parent_id == 0 ? "" : ($_object->parent_description ?? "")) . "</td>";
-        $retval .= "<td class='description' data-label='Descri&ccedil;&atilde;o'>{$_object->description}</td>";
-        $retval .= "<td class='amount' data-label='Valor'>" . normalize_number(abs($_object->getBalance())) . "</td>";
-        $retval .= "<td class='active checkbox' data-label='Activa'><input title=\"S&oacute; pode alterar o estado em modo de edi&ccedil;&atilde;o\" type=\"checkbox\" onclick=\"return false;\" name=active{$_object->id} " . ($_object->active ? "checked" : "") . "></td>\r\n";
+        $retval .= "<td class='id' data-label='ID'><a href=\"entry_type.php?tipo_id={$object->id}\" title=\"Editar a categoria\">{$object->id}</a></td>";
+        $retval .= "<td class='category' data-label='Categoria'>" . (null === $object->parent_id || $object->parent_id == 0 ? "" : ($object->parent_description ?? "")) . "</td>";
+        $retval .= "<td class='description' data-label='Descri&ccedil;&atilde;o'>{$object->description}</td>";
+        $retval .= "<td class='amount' data-label='Valor'>" . normalize_number(abs($object->getBalance())) . "</td>";
+        $retval .= "<td class='active checkbox' data-label='Activa'><input title=\"S&oacute; pode alterar o estado em modo de edi&ccedil;&atilde;o\" type=\"checkbox\" onclick=\"return false;\" name=active{$object->id} " . ($object->active ? "checked" : "") . "></td>\r\n";
         return $retval;
     }
     public function printObjectList(array $object_list): string
@@ -63,45 +62,45 @@ class entry_category_view extends ObjectViewer
     public function printForm(): string
     {
         $retval = "";
-        $_object = $this->_object;
-        if (!$_object instanceof EntryCategory) {
+        $object = $this->object;
+        if (!$object instanceof EntryCategory) {
             return $retval;
         }
-        if (isset($_object->id)) {
+        if (isset($object->id)) {
             $filter = [
                 'active' => ['operator' => '=', 'value' => '1'],
-                'tipo_id' => ['operator' => '<>', 'value' => "{$_object->id}"]
+                'tipo_id' => ['operator' => '<>', 'value' => "{$object->id}"]
             ];
         } else {
             $filter = ['active' => ['operator' => '=', 'value' => '1']];
         }
-        $category_list = $_object->getList($filter);
-        if (isset($_object->id)) {
+        $category_list = $object->getList($filter);
+        if (isset($object->id)) {
             foreach ($category_list as $key => $category) {
-                if ($category->parent_id == $_object->id || $category->id == $_object->id) {
+                if ($category->parent_id == $object->id || $category->id == $object->id) {
                     unset($category_list[$key]);
                 }
             }
         }
         $retval .= "<tr>";
         $retval .= "<td><label for=\"tipo_id\">ID</label></td>\r\n";
-        $retval .= "<td><input type=text readonly size=4 name=\"tipo_id\" value=" . (isset($_object->id) ? $_object->id : $_object->getNextId()) . "></td>\r\n";
+        $retval .= "<td><input type=text readonly size=4 name=\"tipo_id\" value=" . (isset($object->id) ? $object->id : $object->getNextId()) . "></td>\r\n";
         $retval .= "</tr>";
         $retval .= "<tr>";
         $retval .= "<td><label for=\"parent_id\">Categoria</label></td>\r\n";
         $retval .= "<td><select name=\"parent_id\">\r\n";
-        if ((isset($_object->id) && $_object->id !== 0) || !isset($_object->id)) {
-            $retval .= $this->getSelectFromList($category_list, isset($_object->parent_id) ? $_object->parent_id : 0);
+        if ((isset($object->id) && $object->id !== 0) || !isset($object->id)) {
+            $retval .= $this->getSelectFromList($category_list, isset($object->parent_id) ? $object->parent_id : 0);
         }
         $retval .= "</select>\n";
         $retval .= "</tr>";
         $retval .= "<tr>";
         $retval .= "<td><label for=\"tipo_desc\">Descri&ccedil;&atilde;o</label></td>\n";
-        $retval .= "<td><input type=text size=30 maxlength=30 name=\"tipo_desc\" value=\"" . (isset($_object->id) ? $_object->description : "") . "\"></td>";
+        $retval .= "<td><input type=text size=30 maxlength=30 name=\"tipo_desc\" value=\"" . (isset($object->id) ? $object->description : "") . "\"></td>";
         $retval .= "</tr>";
         $retval .= "<tr>";
         $retval .= "<td><label for=\"active\">Activa</label></td>\n";
-        $retval .= "<td><input type=\"checkbox\" name=\"active\" " . ((isset($_object->id) && $_object->active) || !isset($_object->id) ? "checked" : "") . "></td>";
+        $retval .= "<td><input type=\"checkbox\" name=\"active\" " . ((isset($object->id) && $object->active) || !isset($object->id) ? "checked" : "") . "></td>";
         $retval .= "</tr>\r\n";
         return $retval;
     }
@@ -109,11 +108,11 @@ class entry_category_view extends ObjectViewer
     {
         $retval = "";
         /**
-         * @var EntryCategory $_object
+         * @var EntryCategory $object
          */
-        $_object = $this->_object;
+        $object = $this->object;
         if (null === $selected) {
-            $selected = $_object->id;
+            $selected = $object->id;
         }
         foreach ($category_list as $category) {
             if (($category instanceof EntryCategory)) {

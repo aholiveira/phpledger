@@ -16,16 +16,16 @@ class account_type_view extends ObjectViewer
     public function printObject(): string
     {
         $retval = "";
-        if (!isset($this->_object->id)) {
+        if (!isset($this->object->id)) {
             return $retval;
         }
-        $_object = $this->_object;
-        if (!($_object instanceof accounttype)) {
+        $object = $this->object;
+        if (!($object instanceof accounttype)) {
             return $retval;
         }
-        $retval .= "<td data-label='ID' id=\"{$_object->id}\"><a title=\"Editar\" href=\"account_types.php?tipo_id={$_object->id}\">{$_object->id}</a></td>";
-        $retval .= "<td data-label='Descri&ccedil;&atilde;o'>{$_object->description}</td>";
-        $retval .= "<td data-label='Savings?' class=\"checkbox\"><input type=\"checkbox\" onclick=\"return false;\" name=savings{$_object->id} " . ($_object->savings ? "checked" : "") . "></td>\n";
+        $retval .= "<td data-label='ID' id=\"{$object->id}\"><a title=\"Editar\" href=\"account_types.php?tipo_id={$object->id}\">{$object->id}</a></td>";
+        $retval .= "<td data-label='Descri&ccedil;&atilde;o'>{$object->description}</td>";
+        $retval .= "<td data-label='Savings?' class=\"checkbox\"><input type=\"checkbox\" onclick=\"return false;\" name=savings{$object->id} " . ($object->savings ? "checked" : "") . "></td>\n";
         return $retval;
     }
     public function printObjectList(array $object_list): string
@@ -47,11 +47,11 @@ class account_type_view extends ObjectViewer
     {
         $retval = "";
         /**
-         * @var accounttype $_object
+         * @var accounttype $object
          */
-        $_object = $this->_object;
+        $object = $this->object;
         if (null === $selected) {
-            $selected = $_object->id;
+            $selected = $object->id;
         }
         foreach ($object_list as $object) {
             if (($object instanceof accounttype)) {

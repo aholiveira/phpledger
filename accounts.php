@@ -13,6 +13,7 @@ use \PHPLedger\Util\CSRF;
 use \PHPLedger\Util\Html;
 use \PHPLedger\Util\L10n;
 use \PHPLedger\Util\Redirector;
+use \PHPLedger\Views\ViewFactory;
 $pagetitle = "Contas";
 
 ?>
@@ -154,7 +155,7 @@ $pagetitle = "Contas";
                                     ?>
                                     <tr>
                                         <?php
-                                        $account_view = $viewFactory->account_view($account);
+                                        $account_view = ViewFactory::instance()->account_view($account);
                                         if (!empty($edit) && $account->id == $edit) {
                                             print $account_view->printForm();
                                         }
@@ -168,7 +169,7 @@ $pagetitle = "Contas";
                                 if (empty($edit)) {
                                     ?>
                                     <tr>
-                                        <?= $viewFactory->account_view(ObjectFactory::account())->printForm(); ?>
+                                        <?= ViewFactory::instance()->account_view(ObjectFactory::account())->printForm(); ?>
                                     </tr>
                                     <?php
                                 }

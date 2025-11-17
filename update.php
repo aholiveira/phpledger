@@ -18,7 +18,6 @@ use \PHPLedger\Util\Redirector;
 require_once "prepend.php";
 config::init(__DIR__ . '/config.json');
 
-$viewFactory = new \view_factory();
 $data_storage = ObjectFactory::dataStorage();
 $update_result = null;
 
