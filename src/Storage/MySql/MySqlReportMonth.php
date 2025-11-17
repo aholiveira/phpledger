@@ -40,10 +40,10 @@ class MySqlReportMonth extends ReportMonth
     {
         $this->year = array_key_exists("year", $params) ? $params["year"] : date("Y");
         $this->initColumnHeaders($this->year);
-        $sql = "SELECT category_id as `row_header`, MONTH(entry_date) AS `col_header`, ROUND(SUM(ROUND(euroAmount,5)),2) AS `value`
+        $sql = "SELECT categoryId as `row_header`, MONTH(entry_date) AS `col_header`, ROUND(SUM(ROUND(euroAmount,5)),2) AS `value`
             FROM movimentos
             WHERE YEAR(entry_date)=?
-            GROUP BY category_id, MONTH(entry_date)
+            GROUP BY categoryId, MONTH(entry_date)
             HAVING ROUND(SUM(ROUND(euroAmount,5)),2)<>0
             ORDER BY row_header, col_header";
         self::getData($sql, $this->year);

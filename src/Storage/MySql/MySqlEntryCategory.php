@@ -90,8 +90,8 @@ class MySqlEntryCategory extends EntryCategory
         $retval = 0;
         $sql = "SELECT ABS(ROUND(SUM(ROUND(euroAmount,5)),2)) as balance
             FROM movimentos
-            WHERE category_id=?
-            GROUP BY category_id";
+            WHERE categoryId=?
+            GROUP BY categoryId";
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {

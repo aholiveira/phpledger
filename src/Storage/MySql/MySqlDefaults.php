@@ -23,7 +23,7 @@ class MySqlDefaults extends Defaults
     {
         $this->traitConstruct();
         $this->id = $data["id"] ?? 1;
-        $this->category_id = $data["category_id"] ?? 990;
+        $this->categoryId = $data["categoryId"] ?? 990;
         $this->account_id = $data["account_id"] ?? 0;
         $this->currency_id = $data["currency_id"] ?? "EUR";
         $this->entry_date = $data["entry_date"] ?? date("Y-m-d");
@@ -56,7 +56,7 @@ class MySqlDefaults extends Defaults
         $where = self::getWhereFromArray($field_filter);
         $sql = "SELECT
             id as id,
-            tipo_mov as `category_id`,
+            tipo_mov as `categoryId`,
             conta_id as `account_id`,
             moeda_mov as `currency_id`,
             `data` as `entry_date`,
@@ -92,7 +92,7 @@ class MySqlDefaults extends Defaults
     {
         $sql = "SELECT
             id,
-            tipo_mov as `category_id`,
+            tipo_mov as `categoryId`,
             conta_id as `account_id`,
             moeda_mov as `currency_id`,
             `data` as `entry_date`,
@@ -125,7 +125,7 @@ class MySqlDefaults extends Defaults
     {
         $sql = "SELECT
             id,
-            tipo_mov as `category_id`,
+            tipo_mov as `categoryId`,
             conta_id as `account_id`,
             moeda_mov as `currency_id`,
             `data` as `entry_date`,
@@ -186,7 +186,7 @@ class MySqlDefaults extends Defaults
             }
             $stmt->bind_param(
                 "ssssssssi",
-                $this->category_id,
+                $this->categoryId,
                 $this->account_id,
                 $this->currency_id,
                 $this->entry_date,

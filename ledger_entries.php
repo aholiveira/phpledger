@@ -35,7 +35,7 @@ $input_variables_filter = [
     'data_movDD' => FILTER_SANITIZE_NUMBER_INT,
     'id' => FILTER_SANITIZE_NUMBER_INT,
     'account_id' => FILTER_SANITIZE_NUMBER_INT,
-    'category_id' => FILTER_SANITIZE_NUMBER_INT,
+    'categoryId' => FILTER_SANITIZE_NUMBER_INT,
     'currencyAmount' => [
         'filter' => FILTER_SANITIZE_NUMBER_FLOAT,
         'flags' => FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_THOUSAND
@@ -127,7 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             $ledger_filter[] = ['account_id' => ["operator" => '=', "value" => $filteredInput["filter_account_id"]]];
         }
         if (!empty($filteredInput["filter_entry_type"])) {
-            $ledger_filter[] = ['category_id' => ["operator" => '=', "value" => $filteredInput["filter_entry_type"]]];
+            $ledger_filter[] = ['categoryId' => ["operator" => '=', "value" => $filteredInput["filter_entry_type"]]];
         }
         $filter = "movimentos.entry_date>='{$sdate}' AND movimentos.entry_date<='{$edate}'";
         $parent_filter = "";
@@ -162,8 +162,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             $defaults = ObjectFactory::defaults()::init();
         }
         // Tipos movimento
-        $category_id = $edit > 0 ? $edit_entry->category_id : $defaults->category_id;
-        $entry_viewer = ViewFactory::instance()->entryCategoryView(ObjectFactory::entryCategory()::getById($category_id));
+        $categoryId = $edit > 0 ? $edit_entry->categoryId : $defaults->categoryId;
+        $entry_viewer = ViewFactory::instance()->entryCategoryView(ObjectFactory::entryCategory()::getById($categoryId));
         $tipo_mov_opt = $entry_viewer->getSelectFromList(ObjectFactory::entryCategory()::getList([
             'active' => ['operator' => '=', 'value' => '1'],
             'tipo_id' => ['operator' => '>', 'value' => '0']
@@ -320,7 +320,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                             value="<?= $row->entry_date ?>">
                                     </td>
                                     <td data-label="<?= l10n::l('category') ?>" class="category"><select
-                                            name="category_id"><?= $tipo_mov_opt ?></select></td>
+                                            name="categoryId"><?= $tipo_mov_opt ?></select></td>
                                     <td data-label="<?= l10n::l('currency') ?>" class="currency"><select
                                             name="currency_id"><?= $moeda_opt ?></select>
                                     </td>
@@ -348,7 +348,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                 }
                                 if (empty($edit) || $row->id != $edit) {
                                     $filteredInput3 = $filteredInput2;
-                                    $filteredInput3["filter_entry_type"] = $row->category_id;
+                                    $filteredInput3["filter_entry_type"] = $row->categoryId;
                                     $category_filter = http_build_query($filteredInput3);
                                     $filteredInput3 = $filteredInput2;
                                     $filteredInput3["filter_account_id"] = $row->account_id;
@@ -408,7 +408,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                             value="<?= $defaults->entry_date ?>">
                                     </td>
                                     <td data-label="<?= l10n::l('category') ?>" class="category">
-                                        <select name="category_id"> <?= $tipo_mov_opt ?> </select>
+                                        <select name="categoryId"> <?= $tipo_mov_opt ?> </select>
                                     </td>
                                     <td data-label="<?= l10n::l('currency') ?>" class="currency">
                                         <select name="currency_id"> <?= $moeda_opt ?> </select>

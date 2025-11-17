@@ -107,7 +107,7 @@ function prepare_ledgerentry(): bool
     for ($id = 1; $id < 60; $id++) {
         $object->id = $id;
         $object->entry_date = date("Y-m-d", mktime($hour = 0, null, null, date("m"), $id < 10 ? 1 : (int) ($id / 10 + 1)));
-        $object->category_id = $id;
+        $object->categoryId = $id;
         $object->account_id = $id < 10 ? 1 : (int) ($id / 10);
         $object->currency_id = 1;
         $object->direction = ($id % 2 == 0 ? 1 : -1);

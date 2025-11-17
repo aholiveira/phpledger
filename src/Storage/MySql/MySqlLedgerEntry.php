@@ -4,7 +4,7 @@
  * Ledger entry class
  * Holds an object for a ledger entry on the ledger table
  * @property string $entry_date The entry's date. This should be in Y-m-d format
- * @property int $category_id
+ * @property int $categoryId
  *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
@@ -45,7 +45,7 @@ class MySqlLedgerEntry extends LedgerEntry
         $retval = [];
         $retval['new'] = [
             'mov_id' => 'id',
-            'tipo_mov' => 'category_id',
+            'tipo_mov' => 'categoryId',
             'data_mov' => 'entry_date',
             'conta_id' => 'account_id',
             'deb_cred' => 'direction',
@@ -55,15 +55,17 @@ class MySqlLedgerEntry extends LedgerEntry
             'cambio' => 'exchangeRate',
             'obs' => 'remarks',
             'last_modified' => 'updatedAt',
+            'created_at' => 'createdAt',
             'updated_at' => 'updatedAt',
             'exchange_rate' => 'exchangeRate',
             'euro_amount' => 'euroAmount',
-            'currency_amount' => 'currencyAmount'
+            'currency_amount' => 'currencyAmount',
+            'category_id' => 'categoryId'
         ];
         $retval['columns'] = [
             "id" => "int(4) NOT NULL AUTO_INCREMENT",
             "entry_date" => "date DEFAULT NULL",
-            "category_id" => "int(3) DEFAULT NULL",
+            "categoryId" => "int(3) DEFAULT NULL",
             "account_id" => "int(3) DEFAULT NULL",
             "currency_id" => "char(3) NOT NULL DEFAULT 'EUR'",
             "direction" => "tinyint(1) NOT NULL DEFAULT 1",
@@ -83,7 +85,7 @@ class MySqlLedgerEntry extends LedgerEntry
     public static function getList(array $field_filter = []): array
     {
         $where = self::getWhereFromArray($field_filter);
-        $sql = "SELECT id, entry_date, category_id,
+        $sql = "SELECT id, entry_date, categoryId,
             account_id,
             round(currencyAmount,2) as currencyAmount, `direction`, currency_id,
             exchangeRate, euroAmount,
@@ -112,7 +114,7 @@ class MySqlLedgerEntry extends LedgerEntry
 
     public static function getById($id): ?ledgerentry
     {
-        $sql = "SELECT id, entry_date, category_id,
+        $sql = "SELECT id, entry_date, categoryId,
             account_id,
             round(currencyAmount,2) as currencyAmount, `direction`, currency_id,
             exchangeRate, euroAmount,
@@ -195,8 +197,8 @@ class MySqlLedgerEntry extends LedgerEntry
     }
     protected function getValuesForForeignFields()
     {
-        if (isset($this->category_id)) {
-            $this->category = MySqlEntryCategory::getById($this->category_id);
+        if (isset($this->categoryId)) {
+            $this->category = MySqlEntryCategory::getById($this->categoryId);
         }
         if (isset($this->account_id)) {
             $this->account = MySqlAccount::getById($this->account_id);
@@ -213,11 +215,11 @@ class MySqlLedgerEntry extends LedgerEntry
         }
         try {
             $sql = "INSERT INTO {$this->tableName()}
-            (id, entry_date, category_id, account_id, currency_id, direction, currencyAmount, euroAmount, remarks, username, createdAt, updatedAt)
+            (id, entry_date, categoryId, account_id, currency_id, direction, currencyAmount, euroAmount, remarks, username, createdAt, updatedAt)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL)
             ON DUPLICATE KEY UPDATE
                 entry_date=VALUES(entry_date),
-                category_id=VALUES(category_id),
+                categoryId=VALUES(categoryId),
                 account_id=VALUES(account_id),
                 currency_id=VALUES(currency_id),
                 direction=VALUES(direction),
@@ -234,7 +236,7 @@ class MySqlLedgerEntry extends LedgerEntry
                 "isiisiddss",
                 $this->id,
                 $this->entry_date,
-                $this->category_id,
+                $this->categoryId,
                 $this->account_id,
                 $this->currency_id,
                 $this->direction,

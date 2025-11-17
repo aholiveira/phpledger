@@ -6,7 +6,7 @@ use \PHPLedger\Storage\Abstract\AbstractDataObject;
 abstract class LedgerEntry extends AbstractDataObject implements DataObjectInterface
 {
     public string $entry_date;
-    public int $category_id;
+    public int $categoryId;
     public EntryCategory $category;
     public float $currencyAmount;
     public string $currency_id;
