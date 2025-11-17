@@ -30,10 +30,10 @@ class ReportAggregate implements ReportInterface
 
     public function getReport(array $params = []): ReportAggregate
     {
-        $sql = "SELECT tipo_id AS category_id, tipo_desc, sum(euro_amount) AS sum, month(entry_date) AS `month`
-                FROM movimentos INNER JOIN tipo_mov ON movimentos.category_id=tipo_id
+        $sql = "SELECT tipo_id AS categoryId, tipo_desc, sum(euroAmount) AS sum, month(entry_date) AS `month`
+                FROM movimentos INNER JOIN tipo_mov ON movimentos.categoryId=tipo_id
                 WHERE year(entry_date)=?
-                GROUP BY category_id, month(entry_date)
+                GROUP BY categoryId, month(entry_date)
                 ORDER BY `month`, tipo_desc";
         $tipo_desc = "";
         $sum = 0;
@@ -45,11 +45,11 @@ class ReportAggregate implements ReportInterface
         $stmt = $this->db->prepare($sql);
         $stmt->bind_param('i', $this->year);
         $stmt->execute();
-        $stmt->bind_result($category_id, $tipo_desc, $sum, $month);
+        $stmt->bind_result($categoryId, $tipo_desc, $sum, $month);
         while ($stmt->fetch()) {
             if ($sum <> 0) {
                 $this->expenseList[$tipo_desc][$month] = $sum;
-                $this->expenseId[$tipo_desc] = $category_id;
+                $this->expenseId[$tipo_desc] = $categoryId;
             }
             $month_list[$month] = $month;
         }

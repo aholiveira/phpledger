@@ -10,7 +10,7 @@
  */
 use \PHPLedger\Domain\Account;
 use \PHPLedger\Util\L10n;
-class account_balance_view extends ObjectViewer
+class accountBalanceView extends ObjectViewer
 {
     public function printObject(): string
     {
@@ -68,7 +68,7 @@ class account_balance_view extends ObjectViewer
                     . normalize_number($totals['balance'] <> 0 ? round($balance['balance'] / $totals['balance'] * 100, 2) : 0)
                     . "</td>";
                 $retval .= "<td class='entries-list' data-label='" . l10n::l('entries') . "'>"
-                    . "<a title='" . l10n::l('account_entries') . "' href='ledger_entries.php?filter_account_id={$object->id}'>"
+                    . "<a title='" . l10n::l('account_entries') . "' href='ledger_entries.php?filter_accountId={$object->id}'>"
                     . l10n::l('list') . "</a></td>";
                 $retval .= "</tr>\r\n";
             }

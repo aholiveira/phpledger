@@ -6,23 +6,23 @@ use \PHPLedger\Storage\Abstract\AbstractDataObject;
 abstract class LedgerEntry extends AbstractDataObject implements DataObjectInterface
 {
     public string $entry_date;
-    public int $category_id;
+    public int $categoryId;
     public EntryCategory $category;
-    public float $currency_amount;
+    public float $currencyAmount;
     public string $currency_id;
     public Currency $currency;
-    public float $euro_amount;
-    public float $exchange_rate;
-    public int $account_id;
+    public float $euroAmount;
+    public float $exchangeRate;
+    public int $accountId;
     public ?Account $account;
     public int $direction;
     public ?string $remarks;
     public string $username = "";
-    public string $created_at;
-    public string $updated_at;
+    public string $createdAt;
+    public string $updatedAt;
     public int $ledger_id;
-    abstract public function getBalanceBeforeDate($date, $account_id = null): ?float;
-    abstract public static function getList(array $field_filter = []): array;
+    abstract public function getBalanceBeforeDate($date, $accountId = null): ?float;
+    abstract public static function getList(array $fieldFilter = []): array;
     abstract public static function getById($id): ?ledgerentry;
 
 }

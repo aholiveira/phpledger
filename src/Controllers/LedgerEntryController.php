@@ -26,7 +26,7 @@ class LedgerEntryController
         }
 
         // 2) grab and validate the other fields
-        foreach (['currency_amount', 'direction', 'category_id', 'currency_id', 'account_id'] as $fld) {
+        foreach (['currencyAmount', 'direction', 'categoryId', 'currency_id', 'accountId'] as $fld) {
             if (!isset($input[$fld]) || $input[$fld] === '' || $input[$fld] === false) {
                 throw new DomainException(l10n::l("invalid_parameter", $fld));
             }
@@ -36,12 +36,12 @@ class LedgerEntryController
         $entry = ObjectFactory::ledgerentry();
         $entry->entry_date = $dt->format('Y-m-d');
         $entry->id = (int) $input['id'] ?? $entry::getNextId();
-        $entry->currency_amount = (float) $input['currency_amount'];
+        $entry->currencyAmount = (float) $input['currencyAmount'];
         $entry->direction = (int) $input['direction'];
-        $entry->euro_amount = $entry->direction * $entry->currency_amount;
-        $entry->category_id = (int) $input['category_id'];
+        $entry->euroAmount = $entry->direction * $entry->currencyAmount;
+        $entry->categoryId = (int) $input['categoryId'];
         $entry->currency_id = $input['currency_id'];
-        $entry->account_id = (int) $input['account_id'];
+        $entry->accountId = (int) $input['accountId'];
         $entry->remarks = $input['remarks'];
         $entry->remarks = $input['remarks'];
         $entry->username = $_SESSION['user'] ?? 'empty';
@@ -54,9 +54,9 @@ class LedgerEntryController
         $defaults = ObjectFactory::defaults()::getByUsername($_SESSION['user'])
             ?? ObjectFactory::defaults()::init();
 
-        $defaults->category_id = $entry->category_id;
+        $defaults->categoryId = $entry->categoryId;
         $defaults->currency_id = $entry->currency_id;
-        $defaults->account_id = $entry->account_id;
+        $defaults->accountId = $entry->accountId;
         $defaults->entry_date = $entry->entry_date;
         $defaults->direction = $entry->direction;
         $defaults->language = l10n::$lang;

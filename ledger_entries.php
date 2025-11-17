@@ -34,9 +34,9 @@ $input_variables_filter = [
     'data_movMM' => FILTER_SANITIZE_NUMBER_INT,
     'data_movDD' => FILTER_SANITIZE_NUMBER_INT,
     'id' => FILTER_SANITIZE_NUMBER_INT,
-    'account_id' => FILTER_SANITIZE_NUMBER_INT,
-    'category_id' => FILTER_SANITIZE_NUMBER_INT,
-    'currency_amount' => [
+    'accountId' => FILTER_SANITIZE_NUMBER_INT,
+    'categoryId' => FILTER_SANITIZE_NUMBER_INT,
+    'currencyAmount' => [
         'filter' => FILTER_SANITIZE_NUMBER_FLOAT,
         'flags' => FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_THOUSAND
     ],
@@ -44,7 +44,7 @@ $input_variables_filter = [
     'direction' => FILTER_SANITIZE_NUMBER_INT,
     'remarks' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
     'filter_entry_type' => FILTER_SANITIZE_NUMBER_INT,
-    'filter_account_id' => FILTER_SANITIZE_NUMBER_INT,
+    'filter_accountId' => FILTER_SANITIZE_NUMBER_INT,
     'filter_parent_id' => FILTER_SANITIZE_NUMBER_INT,
     'filter_sdateAA' => FILTER_SANITIZE_NUMBER_INT,
     'filter_sdateMM' => FILTER_SANITIZE_NUMBER_INT,
@@ -123,11 +123,11 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         }
         $ledger_filter[] = ["entry_date" => ["operator" => '>=', "value" => $sdate]];
         $ledger_filter[] = ["entry_date" => ["operator" => '<=', "value" => $edate]];
-        if (!empty($filteredInput["filter_account_id"])) {
-            $ledger_filter[] = ['account_id' => ["operator" => '=', "value" => $filteredInput["filter_account_id"]]];
+        if (!empty($filteredInput["filter_accountId"])) {
+            $ledger_filter[] = ['accountId' => ["operator" => '=', "value" => $filteredInput["filter_accountId"]]];
         }
         if (!empty($filteredInput["filter_entry_type"])) {
-            $ledger_filter[] = ['category_id' => ["operator" => '=', "value" => $filteredInput["filter_entry_type"]]];
+            $ledger_filter[] = ['categoryId' => ["operator" => '=', "value" => $filteredInput["filter_entry_type"]]];
         }
         $filter = "movimentos.entry_date>='{$sdate}' AND movimentos.entry_date<='{$edate}'";
         $parent_filter = "";
@@ -142,7 +142,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
         // Saldo anterior
         $ledger_entry = ObjectFactory::ledgerentry();
-        $balance = $ledger_entry->getBalanceBeforeDate($sdate, is_array($filteredInput) && $filteredInput["filter_account_id"] > 0 ? $filteredInput["filter_account_id"] : null);
+        $balance = $ledger_entry->getBalanceBeforeDate($sdate, is_array($filteredInput) && $filteredInput["filter_accountId"] > 0 ? $filteredInput["filter_accountId"] : null);
         $ledger_entry_cache = ObjectFactory::ledgerEntry()::getList($ledger_filter);
         $entry_filter_array = [];
         if ($edit > 0) {
@@ -162,8 +162,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             $defaults = ObjectFactory::defaults()::init();
         }
         // Tipos movimento
-        $category_id = $edit > 0 ? $edit_entry->category_id : $defaults->category_id;
-        $entry_viewer = ViewFactory::instance()->entry_category_view(ObjectFactory::entryCategory()::getById($category_id));
+        $categoryId = $edit > 0 ? $edit_entry->categoryId : $defaults->categoryId;
+        $entry_viewer = ViewFactory::instance()->entryCategoryView(ObjectFactory::entryCategory()::getById($categoryId));
         $tipo_mov_opt = $entry_viewer->getSelectFromList(ObjectFactory::entryCategory()::getList([
             'active' => ['operator' => '=', 'value' => '1'],
             'tipo_id' => ['operator' => '>', 'value' => '0']
@@ -172,14 +172,14 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         // Moedas
         $currency_id = $edit > 0 ? $edit_entry->currency_id : $defaults->currency_id;
         $currency = ObjectFactory::currency();
-        $currency_viewer = ViewFactory::instance()->currency_view($currency);
-        $moeda_opt = $currency_viewer->getSelectFromList(ObjectFactory::currency()::getList(), $currency_id);
+        $currencyViewer = ViewFactory::instance()->currencyView($currency);
+        $moeda_opt = $currencyViewer->getSelectFromList(ObjectFactory::currency()::getList(), $currency_id);
 
         // Contas
         $conta_opt = "";
-        $account_id = $edit > 0 ? $edit_entry->account_id : $defaults->account_id;
-        $account_viewer = ViewFactory::instance()->account_view(ObjectFactory::account()::getById($account_id));
-        $conta_opt = $account_viewer->getSelectFromList(ObjectFactory::account()::getList(['activa' => ['operator' => '=', 'value' => '1']]), $account_id);
+        $accountId = $edit > 0 ? $edit_entry->accountId : $defaults->accountId;
+        $accountViewer = ViewFactory::instance()->accountView(ObjectFactory::account()::getById($accountId));
+        $conta_opt = $accountViewer->getSelectFromList(ObjectFactory::account()::getList(['activa' => ['operator' => '=', 'value' => '1']]), $accountId);
         if (!is_array($filteredInput)) {
             $filteredInput = [];
         }
@@ -227,9 +227,9 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                         </td>
                     </tr>
                     <tr>
-                        <td><label for="filter_account_id"><?= l10n::l('account') ?></label> </td>
+                        <td><label for="filter_accountId"><?= l10n::l('account') ?></label> </td>
                         <td>
-                            <select name="filter_account_id" id="filter_account_id"
+                            <select name="filter_accountId" id="filter_accountId"
                                 data-placeholder="Seleccione a conta" data-max="2" data-search="false"
                                 data-select-all="true" data-list-all="true" data-width="300px" data-height="50px"
                                 data-multi-select>
@@ -259,15 +259,15 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             </form>
             <script>
                 document.getElementById("filter_entry_type").value = "<?= !empty($filteredInput["filter_entry_type"]) ? $filteredInput["filter_entry_type"] : ""; ?>";
-                document.getElementById("filter_account_id").value = "<?= !empty($filteredInput["filter_account_id"]) ? $filteredInput["filter_account_id"] : ""; ?>";
+                document.getElementById("filter_accountId").value = "<?= !empty($filteredInput["filter_accountId"]) ? $filteredInput["filter_accountId"] : ""; ?>";
             </script>
         </div>
         <div class="main" id="main">
             <form name="mov" action="?lang=<?= l10n::$lang ?>" method="POST">
                 <input name="lang" value="<?= l10n::$lang ?>" type="hidden" />
                 <?= CSRF::inputField() ?>
-                <input type="hidden" name="filter_account_id"
-                    value="<?= !empty($filteredInput["filter_account_id"]) ? $filteredInput["filter_account_id"] : ""; ?>">
+                <input type="hidden" name="filter_accountId"
+                    value="<?= !empty($filteredInput["filter_accountId"]) ? $filteredInput["filter_accountId"] : ""; ?>">
                 <input type="hidden" name="filter_parent_id"
                     value="<?= !empty($filteredInput["filter_parent_id"]) ? $filteredInput["filter_parent_id"] : ""; ?>">
                 <input type="hidden" name="filter_entry_type"
@@ -300,7 +300,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
                             foreach ($ledger_entry_cache as $row):
                                 print "<tr id='{$row->id}'>";
-                                $balance += $row->euro_amount;
+                                $balance += $row->euroAmount;
                                 if ($row->id == $edit) {
                                     ?>
                                     <td data-label=""><input type="hidden" name="id" value="<?= $row->id; ?>">
@@ -320,12 +320,12 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                             value="<?= $row->entry_date ?>">
                                     </td>
                                     <td data-label="<?= l10n::l('category') ?>" class="category"><select
-                                            name="category_id"><?= $tipo_mov_opt ?></select></td>
+                                            name="categoryId"><?= $tipo_mov_opt ?></select></td>
                                     <td data-label="<?= l10n::l('currency') ?>" class="currency"><select
                                             name="currency_id"><?= $moeda_opt ?></select>
                                     </td>
                                     <td data-label="<?= l10n::l('account') ?>" class="account"><select
-                                            name="account_id"><?= $conta_opt ?></select>
+                                            name="accountId"><?= $conta_opt ?></select>
                                     </td>
                                     <td data-label="<?= l10n::l('dc') ?>" class="direction">
                                         <select name="direction">
@@ -338,7 +338,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                         </select>
                                     </td>
                                     <td data-label="<?= l10n::l('amount') ?>" class="amount"><input type="number" step="0.01"
-                                            name="currency_amount" placeholder="0.00" value="<?= $row->currency_amount ?>"></td>
+                                            name="currencyAmount" placeholder="0.00" value="<?= $row->currencyAmount ?>"></td>
                                     <td data-label="<?= l10n::l('remarks') ?>" class="remarks"><input type="text" name="remarks"
                                             maxlength="255" value="<?= $row->remarks ?>"></td>
                                     <td data-label="<?= l10n::l('balance') ?>" class="total" style="text-align: right">
@@ -348,14 +348,14 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                 }
                                 if (empty($edit) || $row->id != $edit) {
                                     $filteredInput3 = $filteredInput2;
-                                    $filteredInput3["filter_entry_type"] = $row->category_id;
+                                    $filteredInput3["filter_entry_type"] = $row->categoryId;
                                     $category_filter = http_build_query($filteredInput3);
                                     $filteredInput3 = $filteredInput2;
-                                    $filteredInput3["filter_account_id"] = $row->account_id;
+                                    $filteredInput3["filter_accountId"] = $row->accountId;
                                     $account_filter = http_build_query($filteredInput3);
                                     ?>
                                     <td data-label='<?= l10n::l('id') ?>' class='id'><a
-                                            title="<?= l10n::l('click_to_edit') ?>&#10;<?= l10n::l('modified_by_at', $row->username, $row->updated_at) ?>"
+                                            title="<?= l10n::l('click_to_edit') ?>&#10;<?= l10n::l('modified_by_at', $row->username, $row->updatedAt) ?>"
                                             href="ledger_entries.php?<?= "{$filter_string}&amp;id={$row->id}" ?>"><?= $row->id ?></a>
                                     </td>
                                     <td data-label='<?= l10n::l('date') ?>' class='data'><?= $row->entry_date ?></td>
@@ -374,7 +374,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                         <?= $row->direction == "1" ? "Dep" : "Lev" ?>
                                     </td>
                                     <td data-label='<?= l10n::l('amount') ?>' class='amount'>
-                                        <?= normalize_number($row->currency_amount) ?>
+                                        <?= normalize_number($row->currencyAmount) ?>
                                     </td>
                                     <td data-label='<?= l10n::l('remarks') ?>' class='remarks'><?= $row->remarks; ?></td>
                                     <td data-label='<?= l10n::l('balance') ?>' class='total'><?= normalize_number($balance) ?>
@@ -408,13 +408,13 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                             value="<?= $defaults->entry_date ?>">
                                     </td>
                                     <td data-label="<?= l10n::l('category') ?>" class="category">
-                                        <select name="category_id"> <?= $tipo_mov_opt ?> </select>
+                                        <select name="categoryId"> <?= $tipo_mov_opt ?> </select>
                                     </td>
                                     <td data-label="<?= l10n::l('currency') ?>" class="currency">
                                         <select name="currency_id"> <?= $moeda_opt ?> </select>
                                     </td>
                                     <td data-label="<?= l10n::l('account') ?>" class="account">
-                                        <select name="account_id"> <?= $conta_opt; ?> </select>
+                                        <select name="accountId"> <?= $conta_opt; ?> </select>
                                     </td>
                                     <td data-label="<?= l10n::l('dc') ?>" class="direction">
                                         <select name="direction">
@@ -423,7 +423,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                         </select>
                                     </td>
                                     <td data-label="<?= l10n::l('amount') ?>" class="amount">
-                                        <input type="number" step="0.01" name="currency_amount" placeholder="0.00"
+                                        <input type="number" step="0.01" name="currencyAmount" placeholder="0.00"
                                             value="0.00">
                                     </td>
                                     <td data-label="<?= l10n::l('remarks') ?>" class="remarks">

@@ -29,24 +29,27 @@ class MySqlCurrency extends Currency
         $retval['new'] = [
             'moeda_id' => 'code',
             'moeda_desc' => 'description',
-            'taxa' => 'exchange_rate'
+            'taxa' => 'exchangeRate',
+            'exchange_rate' => 'exchangeRate',
+            'created_at' => 'createdAt',
+            'updated_at' => 'updatedAt'
         ];
         $retval['columns'] = [
             "id" => "int(4) NOT NULL DEFAULT 0",
             "code" => "char(3) NOT NULL DEFAULT ''",
             "description" => "char(30) DEFAULT NULL",
-            "exchange_rate" => "float(8,6) DEFAULT NULL",
+            "exchangeRate" => "float(8,6) DEFAULT NULL",
             "username" => "char(255) DEFAULT ''",
-            "created_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()",
-            "updated_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()"
+            "createdAt" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()",
+            "updatedAt" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()"
         ];
         $retval['primary_key'] = "moeda_id";
         return $retval;
     }
-    public static function getList(array $field_filter = []): array
+    public static function getList(array $fieldFilter = []): array
     {
-        $where = static::getWhereFromArray($field_filter);
-        $sql = "SELECT id, `code`, `description`, exchange_rate, username, created_at, updated_at FROM " . static::tableName() . " {$where} ORDER BY description";
+        $where = static::getWhereFromArray($fieldFilter);
+        $sql = "SELECT id, `code`, `description`, exchangeRate, username, createdAt, updatedAt FROM " . static::tableName() . " {$where} ORDER BY description";
         $retval = [];
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
@@ -67,7 +70,7 @@ class MySqlCurrency extends Currency
 
     public static function getById($id): ?currency
     {
-        $sql = "SELECT id, `code`, `description`, exchange_rate, username, created_at, updated_at FROM " . static::tableName() . " WHERE id=? ORDER BY `description`";
+        $sql = "SELECT id, `code`, `description`, exchangeRate, username, createdAt, updatedAt FROM " . static::tableName() . " WHERE id=? ORDER BY `description`";
         $retval = null;
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
@@ -87,7 +90,7 @@ class MySqlCurrency extends Currency
 
     public static function getByCode($code): ?currency
     {
-        $sql = "SELECT id, `code`, `description`, exchange_rate, username, created_at, updated_at FROM " . static::tableName() . " WHERE code=? ORDER BY `description`";
+        $sql = "SELECT id, `code`, `description`, exchangeRate, username, createdAt, updatedAt FROM " . static::tableName() . " WHERE code=? ORDER BY `description`";
         $retval = null;
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
@@ -110,23 +113,23 @@ class MySqlCurrency extends Currency
         $retval = false;
         try {
             $sql = "INSERT INTO {$this->tableName()}
-                    (`description`, `exchange_rate`, `code`, `username`, `created_at`, `updated_at`, `id`)
+                    (`description`, `exchangeRate`, `code`, `username`, `createdAt`, `updatedAt`, `id`)
                 VALUES (?, ?, ?, ?, NULL, NULL, ?)
                 ON DUPLICATE KEY UPDATE
                     `description`=VALUES(`description`),
-                    `exchange_rate`=VALUES(`exchange_rate`),
+                    `exchangeRate`=VALUES(`exchangeRate`),
                     `code`=VALUES(`code`),
                     `username`=VALUES(`username`),
-                    `created_at`=NULL,
-                    `updated_at`=NULL";
-            $stmt = static::$dbConnection->prepare($sql);
+                    `createdAt`=NULL,
+                    `updatedAt`=NULL";
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->bind_param(
                 "sdssi",
                 $this->description,
-                $this->exchange_rate,
+                $this->exchangeRate,
                 $this->code,
                 $this->username,
                 $this->id

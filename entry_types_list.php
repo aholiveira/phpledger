@@ -80,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
             <div class="entry_category_list">
                 <?php
                 $object = ObjectFactory::entryCategory();
-                $viewer = ViewFactory::instance()->entry_category_view($object);
+                $viewer = ViewFactory::instance()->entryCategoryView($object);
                 print $viewer->printObjectList($object->getList());
                 ?>
             </div>

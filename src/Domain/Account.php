@@ -10,9 +10,9 @@ abstract class Account extends AbstractDataObject implements DataObjectInterface
     public string $iban = "";
     public string $swift = "";
     public int $group = 0;
-    public int $type_id;
-    public string $open_date;
-    public string $close_date;
+    public int $typeId;
+    public string $openDate;
+    public string $closeDate;
     public int $active;
     public function getBalanceOnDate(\DateTimeInterface $date): array
     {

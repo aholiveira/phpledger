@@ -8,17 +8,17 @@ use \PHPLedger\Util\Logger;
 use \PHPLedger\Views\ViewFactory;
 $retval = true;
 $classnames = [
-    "account" => "account_view",
-    "accounttype" => "account_type_view",
+    "account" => "accountView",
+    "accounttype" => "accountTypeView",
     "currency" => "",
     "defaults" => "",
-    "EntryCategory" => "entry_category_view",
+    "EntryCategory" => "entryCategoryView",
     "Ledger" => "",
-    "LedgerEntry" => "ledger_entry_view",
+    "LedgerEntry" => "ledgerEntryView",
     "user" => ""
 ];
 $class_id = ["currency" => 1];
-$reports = ["ReportMonth" => "report_month_view", "ReportYear" => "report_year_view"];
+$reports = ["ReportMonth" => "reportMonthHtmlView", "ReportYear" => "reportYearHtmlView"];
 const PADDING = 35;
 const PASSED = "\033[32mPASSED\033[0m";
 const FAILED = "\033[31mFAILED\033[0m";
@@ -65,11 +65,11 @@ function prepare_account(): bool
             $object->id = $id;
             $object->number = "Account number {$id}";
             $object->name = "Account name {$id}";
-            $object->type_id = $id;
+            $object->typeId = $id;
             $object->iban = str_pad($id, 20, $id);
             $object->swift = "SWIFT" . str_pad($id, 2, $id);
-            $object->open_date = date("Y-m-d", mktime($hour = 0, $minute = 0, $second = 0, $month = 1, $day = $id, $year = date("Y")));
-            $object->close_date = date("Y-m-d", mktime($hour = 0, $minute = 0, $second = 0, $month = 1, $day = $id, $year = date("Y") + 1));
+            $object->openDate = date("Y-m-d", mktime($hour = 0, $minute = 0, $second = 0, $month = 1, $day = $id, $year = date("Y")));
+            $object->closeDate = date("Y-m-d", mktime($hour = 0, $minute = 0, $second = 0, $month = 1, $day = $id, $year = date("Y") + 1));
             $object->active = 1;
             $retval = $object->update() && $retval;
         }
@@ -107,12 +107,12 @@ function prepare_ledgerentry(): bool
     for ($id = 1; $id < 60; $id++) {
         $object->id = $id;
         $object->entry_date = date("Y-m-d", mktime($hour = 0, null, null, date("m"), $id < 10 ? 1 : (int) ($id / 10 + 1)));
-        $object->category_id = $id;
-        $object->account_id = $id < 10 ? 1 : (int) ($id / 10);
+        $object->categoryId = $id;
+        $object->accountId = $id < 10 ? 1 : (int) ($id / 10);
         $object->currency_id = 1;
         $object->direction = ($id % 2 == 0 ? 1 : -1);
-        $object->currency_amount = $id;
-        $object->euro_amount = $object->direction * $object->currency_amount;
+        $object->currencyAmount = $id;
+        $object->euroAmount = $object->direction * $object->currencyAmount;
         $object->remarks = "Entry $id";
         $object->username = "admin";
         $retval = $object->update() && $retval;
@@ -140,7 +140,7 @@ foreach ($classnames as $class => $view) {
     if (array_key_exists($class, $class_id)) {
         $id = $class_id[$class];
     }
-    $retval = test_object($object, $id) && $retval;
+    $retval = testObject($object, $id) && $retval;
     if (strlen($view) > 0) {
         $object = $object->getById($id);
         $viewer = ViewFactory::instance()->$view($object);
@@ -182,7 +182,7 @@ function test_report($report, $view)
     print ($retval ? constant("PASSED") : constant("FAILED")) . "\r\n";
     return $retval;
 }
-function test_object(AbstractDataObject $object, $id = 1)
+function testObject(AbstractDataObject $object, $id = 1)
 {
     $retval = true;
     global $logger;
@@ -193,11 +193,11 @@ function test_object(AbstractDataObject $object, $id = 1)
             $retval = assert($object->id === $id, "getById") && $retval;
         }
         $retval = assert($object->update() === true, "save#{$object}#");
-        $field_filter = [];
+        $fieldFilter = [];
         if ($object instanceof ledgerentry) {
-            $field_filter[] = ['entry_date' => ['operator' => 'BETWEEN', 'value' => date("Y-01-01 ") . "' AND '" . date("Y-12-31")]];
+            $fieldFilter[] = ['entry_date' => ['operator' => 'BETWEEN', 'value' => [date("Y-01-01 "), date("Y-12-31")]]];
         }
-        $retval = @assert(sizeof($object->getList($field_filter)) > 0, "getList#{$object}#") && $retval;
+        $retval = @assert(sizeof($object->getList($fieldFilter)) > 0, "getList#{$object}#") && $retval;
         $retval = @assert($object->getNextId() >= 0, "getNextId#{$object}#") && $retval;
         print ($retval ? constant("PASSED") : constant("FAILED")) . "\r\n";
     } catch (Exception $ex) {
@@ -215,11 +215,11 @@ function test_view(ObjectViewer $viewer, DataObjectInterface $object)
     try {
         print str_pad("Testing " . get_class($viewer) . " ", constant("PADDING"), ".") . " : ";
         $retval = assert(!empty($viewer->printObject())) && $retval;
-        $field_filter = [];
+        $fieldFilter = [];
         if ($object instanceof ledgerentry) {
-            $field_filter[] = ['entry_date' => ['operator' => 'BETWEEN', 'value' => "2022-01-01' AND '2022-01-02"]];
+            $fieldFilter[] = ['entry_date' => ['operator' => 'BETWEEN', 'value' => ["2022-01-01", "2022-01-02"]]];
         }
-        $retval = @assert(!empty($viewer->printObjectList($object->getList($field_filter))), "#printObjectList#") && $retval;
+        $retval = @assert(!empty($viewer->printObjectList($object->getList($fieldFilter))), "#printObjectList#") && $retval;
         $method = "printForm";
         if (method_exists($viewer, $method)) {
             $retval = @assert(!empty(@$viewer->$method()), "#{$method}#") && $retval;

@@ -12,6 +12,6 @@ abstract class AbstractDataObject implements DataObjectInterface
     abstract public function update(): bool;
     abstract public function delete(): bool;
     abstract public static function getNextId(): int;
-    abstract public static function getList(array $field_filter = []): array;
+    abstract public static function getList(array $fieldFilter = []): array;
     abstract public static function getById(int $id): ?DataObjectInterface;
 }

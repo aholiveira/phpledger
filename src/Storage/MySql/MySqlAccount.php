@@ -7,9 +7,9 @@
  * @property string $iban International Bank Account Number
  * @property string $swift The account's switft identifier
  * @property int $group Links the account to the group table. Used to group different accounts under
- * @property int $type_id Account type - linked to the account_type table
- * @property string $open_date The date the account was open in Y-m-d format
- * @property string $close_date The date the account was closed in Y-m-d format
+ * @property int $typeId Account type - linked to the account_type table
+ * @property string $openDate The date the account was open in Y-m-d format
+ * @property string $closeDate The date the account was closed in Y-m-d format
  * @property int $active Flag to indicate if the account is still active or not
  *
  * @author Antonio Henrique Oliveira
@@ -57,19 +57,19 @@ class MySqlAccount extends Account
         ];
         return $retval;
     }
-    public static function getList(array $field_filter = []): array
+    public static function getList(array $fieldFilter = []): array
     {
-        $where = static::getWhereFromArray($field_filter);
+        $where = static::getWhereFromArray($fieldFilter);
         $sql = "SELECT
             conta_id as id,
             conta_num as `number`,
             conta_nome as `name`,
             grupo as `group`,
-            tipo_id as `type_id`,
+            tipo_id as `typeId`,
             conta_nib as iban,
             swift,
-            conta_abertura as open_date,
-            conta_fecho as close_date,
+            conta_abertura as openDate,
+            conta_fecho as closeDate,
             activa as active
         FROM " . static::$tableName . "
         {$where}
@@ -99,11 +99,11 @@ class MySqlAccount extends Account
             conta_num as `number`,
             conta_nome as `name`,
             grupo as `group`,
-            tipo_id as `type_id`,
+            tipo_id as `typeId`,
             conta_nib as iban,
             swift,
-            conta_abertura as open_date,
-            conta_fecho as close_date,
+            conta_abertura as openDate,
+            conta_fecho as closeDate,
             activa as active
         FROM " . static::tableName() . "
         WHERE conta_id=?";
@@ -136,7 +136,7 @@ class MySqlAccount extends Account
     }
     public function getBalance(?\DateTimeInterface $startDate = null, ?\DateTimeInterface $endDate = null): array
     {
-        $where = "account_id=? ";
+        $where = "accountId=? ";
         $retval = ['income' => 0, 'expense' => 0, 'balance' => 0];
         $param_array = [$this->id];
         if (null !== $startDate) {
@@ -148,15 +148,15 @@ class MySqlAccount extends Account
             $param_array[] = $endDate->format("Y-m-d");
         }
         $sql = "SELECT
-                SUM(ROUND(IF(direction='1',euro_amount,0),2)) AS income,
-                SUM(ROUND(IF(direction='-1',-euro_amount,0),2)) AS expense,
-                ROUND(SUM(ROUND(IF(NOT ISNULL(euro_amount),euro_amount,0),5)),2) AS balance
+                SUM(ROUND(IF(direction='1',euroAmount,0),2)) AS income,
+                SUM(ROUND(IF(direction='-1',-euroAmount,0),2)) AS expense,
+                ROUND(SUM(ROUND(IF(NOT ISNULL(euroAmount),euroAmount,0),5)),2) AS balance
                 FROM movimentos
                 WHERE {$where}
-                GROUP BY account_id";
+                GROUP BY accountId";
         $retval = [];
         try {
-            $stmt = @static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -201,11 +201,11 @@ class MySqlAccount extends Account
                 $this->number,
                 $this->name,
                 $this->group,
-                $this->type_id,
+                $this->typeId,
                 $this->iban,
                 $this->swift,
-                $this->open_date,
-                $this->close_date,
+                $this->openDate,
+                $this->closeDate,
                 $this->active,
                 $this->id
             );
@@ -224,7 +224,7 @@ class MySqlAccount extends Account
         $retval = false;
         try {
             $sql = "DELETE FROM {$this->tableName()} WHERE conta_id=?";
-            $stmt = static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             $stmt->bind_param("s", $this->id);
             $retval = $stmt->execute();
             $stmt->close();

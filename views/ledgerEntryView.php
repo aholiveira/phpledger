@@ -10,7 +10,7 @@
  */
 use \PHPLedger\Contracts\DataObjectInterface;
 use \PHPLedger\Domain\LedgerEntry;
-class ledger_entry_view extends ObjectViewer
+class ledgerEntryView extends ObjectViewer
 {
     /** @var ledgerentry $object */
     protected DataObjectInterface $object;
@@ -24,9 +24,9 @@ class ledger_entry_view extends ObjectViewer
         $retval .= "<td data-label='Data' style=\"text-align: center\">{$this->object->entry_date}</td>\n";
         $retval .= "<td data-label='Categoria'><a title=\"Mostrar movimentos apenas desta categoria\" href=\"ledger_entries.php?filter_tipo_mov={$this->object->category->id}\">{$this->object->category->description}</a></td>\n";
         $retval .= "<td data-label='Moeda'>{$this->object->currency->description}</td>\n";
-        $retval .= "<td data-label='Conta'><a title=\"Mostrar movimentos apenas desta conta\" href=\"ledger_entries.php?filter_account_id={$this->object->account->id}\">{$this->object->account->name}</a></td>\n";
+        $retval .= "<td data-label='Conta'><a title=\"Mostrar movimentos apenas desta conta\" href=\"ledger_entries.php?filter_accountId={$this->object->account->id}\">{$this->object->account->name}</a></td>\n";
         $retval .= "<td data-label='D/C'>" . ($this->object->direction == "1" ? "Dep" : "Lev") . "</td>\n";
-        $retval .= "<td data-label='Valor' class='amount'>" . normalize_number($this->object->currency_amount) . "</td>\n";
+        $retval .= "<td data-label='Valor' class='amount'>" . normalize_number($this->object->currencyAmount) . "</td>\n";
         $retval .= "<td data-label='Obs'>{$this->object->remarks}</td>\n";
         return $retval;
     }
@@ -41,11 +41,11 @@ class ledger_entry_view extends ObjectViewer
         $retval .= "<tbody>\r\n";
         foreach ($object_list as $object) {
             if ($object instanceof ledgerentry) {
-                $saldo += $object->euro_amount;
+                $saldo += $object->euroAmount;
                 if ($object->id == $this->object->id) {
                     //$this->printForm();
                 } else {
-                    $view = new ledger_entry_view($object);
+                    $view = new ledgerEntryView($object);
                     $retval .= "<tr>" . $view->printObject();
                 }
                 $retval .= "<td data-label='Saldo' class='total'>" . normalize_number($saldo) . "</td>\r\n";

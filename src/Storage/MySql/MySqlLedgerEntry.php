@@ -4,7 +4,7 @@
  * Ledger entry class
  * Holds an object for a ledger entry on the ledger table
  * @property string $entry_date The entry's date. This should be in Y-m-d format
- * @property int $category_id
+ * @property int $categoryId
  *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
@@ -19,10 +19,10 @@ class MySqlLedgerEntry extends LedgerEntry
     use MySqlObject;
     protected static string $tableName = "movimentos";
 
-    protected static function getWhereFromArray(array $field_filter, ?string $table_name = null): string
+    protected static function getWhereFromArray(array $fieldFilter, ?string $table_name = null): string
     {
         $where = "";
-        foreach ($field_filter as $filter_entry) {
+        foreach ($fieldFilter as $filter_entry) {
             foreach ($filter_entry as $field => $filter) {
                 if (\strlen($where) > 0) {
                     $where .= " AND ";
@@ -45,51 +45,58 @@ class MySqlLedgerEntry extends LedgerEntry
         $retval = [];
         $retval['new'] = [
             'mov_id' => 'id',
-            'tipo_mov' => 'category_id',
+            'tipo_mov' => 'categoryId',
             'data_mov' => 'entry_date',
-            'conta_id' => 'account_id',
+            'conta_id' => 'accountId',
             'deb_cred' => 'direction',
             'moeda_mov' => 'currency_id',
-            'valor_mov' => 'currency_amount',
-            'valor_euro' => 'euro_amount',
-            'cambio' => 'exchange_rate',
+            'valor_mov' => 'currencyAmount',
+            'valor_euro' => 'euroAmount',
+            'cambio' => 'exchangeRate',
             'obs' => 'remarks',
-            'last_modified' => 'updated_at'
+            'last_modified' => 'updatedAt',
+            'created_at' => 'createdAt',
+            'updated_at' => 'updatedAt',
+            'exchange_rate' => 'exchangeRate',
+            'euro_amount' => 'euroAmount',
+            'currency_amount' => 'currencyAmount',
+            'category_id' => 'categoryId',
+            'account_id' => 'accountId'
         ];
         $retval['columns'] = [
             "id" => "int(4) NOT NULL AUTO_INCREMENT",
             "entry_date" => "date DEFAULT NULL",
-            "category_id" => "int(3) DEFAULT NULL",
-            "account_id" => "int(3) DEFAULT NULL",
+            "categoryId" => "int(3) DEFAULT NULL",
+            "accountId" => "int(3) DEFAULT NULL",
             "currency_id" => "char(3) NOT NULL DEFAULT 'EUR'",
             "direction" => "tinyint(1) NOT NULL DEFAULT 1",
-            "currency_amount" => "float(10,2) DEFAULT NULL",
-            "euro_amount" => "float(10,2) DEFAULT NULL",
-            "exchange_rate" => "float(9,4) NOT NULL DEFAULT 1.0000",
+            "currencyAmount" => "float(10,2) DEFAULT NULL",
+            "euroAmount" => "float(10,2) DEFAULT NULL",
+            "exchangeRate" => "float(9,4) NOT NULL DEFAULT 1.0000",
             "a_pagar" => "tinyint(1) NOT NULL DEFAULT 0",
             "com_talao" => "tinyint(1) NOT NULL DEFAULT 0",
             "remarks" => "char(255) DEFAULT NULL",
             "username" => "char(255) DEFAULT ''",
-            "created_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()",
-            "updated_at" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()"
+            "createdAt" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()",
+            "updatedAt" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()"
         ];
         $retval['primary_key'] = "id";
         return $retval;
     }
-    public static function getList(array $field_filter = []): array
+    public static function getList(array $fieldFilter = []): array
     {
-        $where = self::getWhereFromArray($field_filter);
-        $sql = "SELECT id, entry_date, category_id,
-            account_id,
-            round(currency_amount,2) as currency_amount, `direction`, currency_id,
-            exchange_rate, euro_amount AS euro_amount,
-            remarks, username, created_at, updated_at
+        $where = self::getWhereFromArray($fieldFilter);
+        $sql = "SELECT id, entry_date, categoryId,
+            accountId,
+            round(currencyAmount,2) as currencyAmount, `direction`, currency_id,
+            exchangeRate, euroAmount,
+            remarks, username, createdAt, updatedAt
             FROM " . static::tableName() . "
             {$where}
             ORDER BY entry_date, id";
         $retval = [];
         try {
-            $stmt = static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -108,16 +115,16 @@ class MySqlLedgerEntry extends LedgerEntry
 
     public static function getById($id): ?ledgerentry
     {
-        $sql = "SELECT id, entry_date, category_id,
-            account_id,
-            round(currency_amount,2) as currency_amount, `direction`, currency_id,
-            exchange_rate, euro_amount,
-            remarks, username, created_at, updated_at
+        $sql = "SELECT id, entry_date, categoryId,
+            accountId,
+            round(currencyAmount,2) as currencyAmount, `direction`, currency_id,
+            exchangeRate, euroAmount,
+            remarks, username, createdAt, updatedAt
             FROM " . static::tableName() . "
             WHERE id=?";
         $retval = null;
         try {
-            $stmt = @static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -134,21 +141,21 @@ class MySqlLedgerEntry extends LedgerEntry
         }
         return $retval;
     }
-    public function getBalanceBeforeDate($date, $account_id = null): ?float
+    public function getBalanceBeforeDate($date, $accountId = null): ?float
     {
         $retval = null;
-        $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(euro_amount),euro_amount,0),5)),2) AS balance
+        $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(euroAmount),euroAmount,0),5)),2) AS balance
                 FROM {$this->tableName()}
-                WHERE entry_date<?" . (null !== $account_id ? " AND account_id=?" : "");
+                WHERE entry_date<?" . (null !== $accountId ? " AND accountId=?" : "");
         try {
-            $stmt = @static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
-            if (null === $account_id) {
+            if (null === $accountId) {
                 $stmt->bind_param("s", $date);
             } else {
-                $stmt->bind_param("si", $date, $account_id);
+                $stmt->bind_param("si", $date, $accountId);
             }
             $stmt->execute();
             $stmt->bind_result($retval);
@@ -160,23 +167,23 @@ class MySqlLedgerEntry extends LedgerEntry
         return $retval;
     }
     /**
-     * @param array $field_filter an array of the form ('field_name' => array('operator' => SQL operator, 'value' => value to filter by))
+     * @param array $fieldFilter an array of the form ('field_name' => array('operator' => SQL operator, 'value' => value to filter by))
      * - where
      * - - field_name is a field which you want to filter by
      * - - operator is any valid SQL operator (LIKE, BETWEEN, <, >, <=, =>)
      * - - value is the value to be filtered
      */
 
-    public static function getBalanceForFilter(array $field_filter)
+    public static function getBalanceForFilter(array $fieldFilter)
     {
-        $where = self::getWhereFromArray($field_filter);
+        $where = self::getWhereFromArray($fieldFilter);
         $tableName = static::$tableName;
         $retval = null;
-        $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(euro_amount),euro_amount,0),5)),2) AS balance
+        $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(euroAmount),euroAmount,0),5)),2) AS balance
                 FROM {$tableName}
                 WHERE {$where}";
         try {
-            $stmt = @static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -191,11 +198,11 @@ class MySqlLedgerEntry extends LedgerEntry
     }
     protected function getValuesForForeignFields()
     {
-        if (isset($this->category_id)) {
-            $this->category = MySqlEntryCategory::getById($this->category_id);
+        if (isset($this->categoryId)) {
+            $this->category = MySqlEntryCategory::getById($this->categoryId);
         }
-        if (isset($this->account_id)) {
-            $this->account = MySqlAccount::getById($this->account_id);
+        if (isset($this->accountId)) {
+            $this->account = MySqlAccount::getById($this->accountId);
         }
         if (isset($this->currency_id)) {
             $this->currency = MySqlCurrency::getById($this->currency_id);
@@ -209,20 +216,20 @@ class MySqlLedgerEntry extends LedgerEntry
         }
         try {
             $sql = "INSERT INTO {$this->tableName()}
-            (id, entry_date, category_id, account_id, currency_id, direction, currency_amount, euro_amount, remarks, username, created_at, updated_at)
+            (id, entry_date, categoryId, accountId, currency_id, direction, currencyAmount, euroAmount, remarks, username, createdAt, updatedAt)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL)
             ON DUPLICATE KEY UPDATE
                 entry_date=VALUES(entry_date),
-                category_id=VALUES(category_id),
-                account_id=VALUES(account_id),
+                categoryId=VALUES(categoryId),
+                accountId=VALUES(accountId),
                 currency_id=VALUES(currency_id),
                 direction=VALUES(direction),
-                currency_amount=VALUES(currency_amount),
-                euro_amount=VALUES(euro_amount),
+                currencyAmount=VALUES(currencyAmount),
+                euroAmount=VALUES(euroAmount),
                 remarks=VALUES(remarks),
                 username=VALUES(username),
-                updated_at=NULL";
-            $stmt = static::$dbConnection->prepare($sql);
+                updatedAt=NULL";
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -230,12 +237,12 @@ class MySqlLedgerEntry extends LedgerEntry
                 "isiisiddss",
                 $this->id,
                 $this->entry_date,
-                $this->category_id,
-                $this->account_id,
+                $this->categoryId,
+                $this->accountId,
                 $this->currency_id,
                 $this->direction,
-                $this->currency_amount,
-                $this->euro_amount,
+                $this->currencyAmount,
+                $this->euroAmount,
                 $this->remarks,
                 $this->username
             );

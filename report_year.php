@@ -28,7 +28,7 @@ if (array_key_exists("last_year", $_GET)) {
     }
 }
 $report = ObjectFactory::reportYear();
-$reportHtml = ViewFactory::instance()->report_year_view($report);
+$reportHtml = ViewFactory::instance()->reportYearHtmlView($report);
 $report->getReport(["first_year" => $first_year, "last_year" => $last_year]);
 ?>
 <!DOCTYPE html>

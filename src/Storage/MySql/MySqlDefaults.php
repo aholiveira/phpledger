@@ -23,8 +23,8 @@ class MySqlDefaults extends Defaults
     {
         $this->traitConstruct();
         $this->id = $data["id"] ?? 1;
-        $this->category_id = $data["category_id"] ?? 990;
-        $this->account_id = $data["account_id"] ?? 0;
+        $this->categoryId = $data["categoryId"] ?? 990;
+        $this->accountId = $data["accountId"] ?? 0;
         $this->currency_id = $data["currency_id"] ?? "EUR";
         $this->entry_date = $data["entry_date"] ?? date("Y-m-d");
         $this->direction = $data["direction"] ?? 1;
@@ -51,13 +51,13 @@ class MySqlDefaults extends Defaults
         $retval['primary_key'] = "id";
         return $retval;
     }
-    public static function getList(array $field_filter = []): array
+    public static function getList(array $fieldFilter = []): array
     {
-        $where = self::getWhereFromArray($field_filter);
+        $where = self::getWhereFromArray($fieldFilter);
         $sql = "SELECT
             id as id,
-            tipo_mov as `category_id`,
-            conta_id as `account_id`,
+            tipo_mov as `categoryId`,
+            conta_id as `accountId`,
             moeda_mov as `currency_id`,
             `data` as `entry_date`,
             deb_cred as direction,
@@ -69,11 +69,7 @@ class MySqlDefaults extends Defaults
         ORDER BY id";
         $retval = [];
         try {
-            static::$dbConnection = MySqlStorage::getConnection();
-            if (!is_object(static::$dbConnection)) {
-                return $retval;
-            }
-            $stmt = static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -92,8 +88,8 @@ class MySqlDefaults extends Defaults
     {
         $sql = "SELECT
             id,
-            tipo_mov as `category_id`,
-            conta_id as `account_id`,
+            tipo_mov as `categoryId`,
+            conta_id as `accountId`,
             moeda_mov as `currency_id`,
             `data` as `entry_date`,
             deb_cred as direction,
@@ -104,7 +100,7 @@ class MySqlDefaults extends Defaults
             WHERE id=?";
         $retval = null;
         try {
-            $stmt = @static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -125,8 +121,8 @@ class MySqlDefaults extends Defaults
     {
         $sql = "SELECT
             id,
-            tipo_mov as `category_id`,
-            conta_id as `account_id`,
+            tipo_mov as `categoryId`,
+            conta_id as `accountId`,
             moeda_mov as `currency_id`,
             `data` as `entry_date`,
             deb_cred as direction,
@@ -137,7 +133,7 @@ class MySqlDefaults extends Defaults
             WHERE trim(lower(username))=trim(lower(?))";
         $retval = null;
         try {
-            $stmt = @static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -180,14 +176,14 @@ class MySqlDefaults extends Defaults
                     `language`=VALUES(`language`),
                     last_visited=VALUES(last_visited),
                     username=VALUES(username)";
-            $stmt = static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->bind_param(
                 "ssssssssi",
-                $this->category_id,
-                $this->account_id,
+                $this->categoryId,
+                $this->accountId,
                 $this->currency_id,
                 $this->entry_date,
                 $this->direction,
