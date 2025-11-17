@@ -45,7 +45,7 @@ class MySqlUser extends User
         $retval = false;
         $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
         try {
-            $stmt = @static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if (!$stmt) {
                 return $retval;
             }
@@ -70,7 +70,7 @@ class MySqlUser extends User
                 "INSERT INTO {$this->tableName()} (username, password, fullname, email, role, token, token_expiry, active, id)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt->close();
-            $stmt = static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -93,7 +93,7 @@ class MySqlUser extends User
             if ($retval === false) {
                 throw new \mysqli_sql_exception();
             }
-            static::$dbConnection->commit();
+            MySqlStorage::getConnection()->commit();
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
             if (isset($stmt)) {
@@ -102,9 +102,9 @@ class MySqlUser extends User
         }
         return $retval;
     }
-    public static function getList(array $field_filter = []): array
+    public static function getList(array $fieldFilter = []): array
     {
-        $where = self::getWhereFromArray($field_filter);
+        $where = self::getWhereFromArray($fieldFilter);
         $sql = "SELECT id,
             username AS `_username`,
             `password` AS `_password`,
@@ -119,7 +119,7 @@ class MySqlUser extends User
             ORDER BY username";
         $retval = [];
         try {
-            $stmt = static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -148,7 +148,7 @@ class MySqlUser extends User
             FROM " . static::tableName() . "
             WHERE username=?";
         try {
-            $stmt = @static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -177,14 +177,14 @@ class MySqlUser extends User
         WHERE id=?";
         $retval = null;
         try {
-            $stmt = @static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__, [static::$dbConnection]);
+            $retval = $result->fetch_object(__CLASS__);
             $stmt->close();
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
@@ -206,14 +206,14 @@ class MySqlUser extends User
         WHERE token=?";
         $retval = null;
         try {
-            $stmt = @static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->bind_param("s", $token);
             $stmt->execute();
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__, [static::$dbConnection]);
+            $retval = $result->fetch_object(__CLASS__);
             $stmt->close();
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
@@ -225,7 +225,7 @@ class MySqlUser extends User
         $retval = false;
         try {
             $sql = "DELETE FROM {$this->tableName()} WHERE `id`=?";
-            $stmt = static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             $stmt->bind_param("i", $this->id);
             $retval = $stmt->execute();
             $stmt->close();

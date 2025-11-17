@@ -46,9 +46,9 @@ class MySqlCurrency extends Currency
         $retval['primary_key'] = "moeda_id";
         return $retval;
     }
-    public static function getList(array $field_filter = []): array
+    public static function getList(array $fieldFilter = []): array
     {
-        $where = static::getWhereFromArray($field_filter);
+        $where = static::getWhereFromArray($fieldFilter);
         $sql = "SELECT id, `code`, `description`, exchangeRate, username, createdAt, updatedAt FROM " . static::tableName() . " {$where} ORDER BY description";
         $retval = [];
         try {
@@ -122,7 +122,7 @@ class MySqlCurrency extends Currency
                     `username`=VALUES(`username`),
                     `createdAt`=NULL,
                     `updatedAt`=NULL";
-            $stmt = static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }

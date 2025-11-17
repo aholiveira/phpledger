@@ -14,10 +14,8 @@ use \PHPLedger\Util\Logger;
 trait MySqlObject
 {
     protected static string $errorMessage;
-    protected static \mysqli $dbConnection;
     public function __construct()
     {
-        static::$dbConnection = MySqlStorage::getConnection();
     }
     public function setId($id)
     {
@@ -64,7 +62,7 @@ trait MySqlObject
     }
     /**
      *
-     * @param array $field_filter an array of the form ('field_name' => array('operator' => SQL operator, 'value' => value to filter by))
+     * @param array $fieldFilter an array of the form ('field_name' => array('operator' => SQL operator, 'value' => value to filter by))
      * - where
      * - - field_name is a field which you want to filter by
      * - - operator is any valid SQL operator (LIKE, BETWEEN, <, >, <=, =>)
@@ -72,16 +70,16 @@ trait MySqlObject
      * @param ?string $table_name table name to be used. if supplied where expression is built using "table_name.field_name" syntax
      * @return string SQL "WHERE" condition string built from the supplied values or an empty string
      */
-    protected static function getWhereFromArray(array $field_filter, ?string $table_name = null): string
+    protected static function getWhereFromArray(array $fieldFilter, ?string $table_name = null): string
     {
-        if (!$field_filter)
+        if (!$fieldFilter)
             return "";
 
         $db = MySqlStorage::getConnection();
         $allowedOps = ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'BETWEEN', 'IS'];
 
         $parts = [];
-        foreach ($field_filter as $field => $filter) {
+        foreach ($fieldFilter as $field => $filter) {
             $op = strtoupper($filter['operator']);
             if (!\in_array($op, $allowedOps))
                 continue;
@@ -100,7 +98,7 @@ trait MySqlObject
 
         return $parts ? "WHERE " . implode(" AND ", $parts) : "";
     }
-    abstract public static function getList(array $field_filter = []): array;
+    abstract public static function getList(array $fieldFilter = []): array;
     abstract public static function getDefinition(): array;
     abstract public function update(): bool;
     abstract public function delete(): bool;
@@ -128,7 +126,7 @@ trait MySqlObject
     }
     protected static function handleException(\Exception $ex, $sql = "")
     {
-        Logger::instance()->dump(static::$dbConnection, "DBLINK");
+        Logger::instance()->dump(MySqlStorage::getConnection(), "DBLINK");
         Logger::instance()->dump($sql, "SQL");
         Logger::instance()->dump($ex, "EXCEPTION");
         Logger::instance()->dump($ex->getMessage(), "EXMSG");

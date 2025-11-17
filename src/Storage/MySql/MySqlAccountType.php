@@ -34,9 +34,9 @@ class MysqlAccountType extends AccountType
         $retval['primary_key'] = "tipo_id";
         return $retval;
     }
-    public static function getList(array $field_filter = []): array
+    public static function getList(array $fieldFilter = []): array
     {
-        $where = static::getWhereFromArray($field_filter);
+        $where = static::getWhereFromArray($fieldFilter);
         $sql = "SELECT tipo_id as id, tipo_desc as description, savings FROM " . static::tableName() . " {$where}";
         $retval = [];
         try {

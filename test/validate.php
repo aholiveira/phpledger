@@ -108,7 +108,7 @@ function prepare_ledgerentry(): bool
         $object->id = $id;
         $object->entry_date = date("Y-m-d", mktime($hour = 0, null, null, date("m"), $id < 10 ? 1 : (int) ($id / 10 + 1)));
         $object->categoryId = $id;
-        $object->account_id = $id < 10 ? 1 : (int) ($id / 10);
+        $object->accountId = $id < 10 ? 1 : (int) ($id / 10);
         $object->currency_id = 1;
         $object->direction = ($id % 2 == 0 ? 1 : -1);
         $object->currencyAmount = $id;
@@ -193,11 +193,11 @@ function testObject(AbstractDataObject $object, $id = 1)
             $retval = assert($object->id === $id, "getById") && $retval;
         }
         $retval = assert($object->update() === true, "save#{$object}#");
-        $field_filter = [];
+        $fieldFilter = [];
         if ($object instanceof ledgerentry) {
-            $field_filter[] = ['entry_date' => ['operator' => 'BETWEEN', 'value' => date("Y-01-01 ") . "' AND '" . date("Y-12-31")]];
+            $fieldFilter[] = ['entry_date' => ['operator' => 'BETWEEN', 'value' => [date("Y-01-01 "), date("Y-12-31")]]];
         }
-        $retval = @assert(sizeof($object->getList($field_filter)) > 0, "getList#{$object}#") && $retval;
+        $retval = @assert(sizeof($object->getList($fieldFilter)) > 0, "getList#{$object}#") && $retval;
         $retval = @assert($object->getNextId() >= 0, "getNextId#{$object}#") && $retval;
         print ($retval ? constant("PASSED") : constant("FAILED")) . "\r\n";
     } catch (Exception $ex) {
@@ -215,11 +215,11 @@ function test_view(ObjectViewer $viewer, DataObjectInterface $object)
     try {
         print str_pad("Testing " . get_class($viewer) . " ", constant("PADDING"), ".") . " : ";
         $retval = assert(!empty($viewer->printObject())) && $retval;
-        $field_filter = [];
+        $fieldFilter = [];
         if ($object instanceof ledgerentry) {
-            $field_filter[] = ['entry_date' => ['operator' => 'BETWEEN', 'value' => "2022-01-01' AND '2022-01-02"]];
+            $fieldFilter[] = ['entry_date' => ['operator' => 'BETWEEN', 'value' => ["2022-01-01", "2022-01-02"]]];
         }
-        $retval = @assert(!empty($viewer->printObjectList($object->getList($field_filter))), "#printObjectList#") && $retval;
+        $retval = @assert(!empty($viewer->printObjectList($object->getList($fieldFilter))), "#printObjectList#") && $retval;
         $method = "printForm";
         if (method_exists($viewer, $method)) {
             $retval = @assert(!empty(@$viewer->$method()), "#{$method}#") && $retval;

@@ -36,9 +36,9 @@ class MySqlEntryCategory extends EntryCategory
         $retval['constraints'] = ["parent_id" => "`tipo_mov` (`tipo_id`) ON DELETE CASCADE ON UPDATE CASCADE"];
         return $retval;
     }
-    public static function getList(array $field_filter = []): array
+    public static function getList(array $fieldFilter = []): array
     {
-        $where = static::getWhereFromArray($field_filter);
+        $where = static::getWhereFromArray($fieldFilter);
         $sql = "WITH RECURSIVE category_tree AS (
             SELECT tipo_id AS id, parent_id, tipo_desc AS description, active
             FROM " . static::$tableName . "

@@ -293,7 +293,7 @@ class MySqlStorage implements DataStorageInterface
                 $entries_to_create = random_int(round(0.7 * $max_month_entries, 0), $max_month_entries);
                 for ($entry_counter = 1; $entry_counter <= $entries_to_create; $entry_counter++) {
                     $ledger_entry->id = $ledger_entry->getNextId();
-                    $ledger_entry->account_id = $account_list[array_rand($account_list)]->id;
+                    $ledger_entry->accountId = $account_list[array_rand($account_list)]->id;
                     $ledger_entry->categoryId = $category_list[array_rand($category_list)]->id;
                     $ledger_entry->entry_date = date("Y-m-d", mktime(0, 0, 0, $month, random_int(1, $days_in_month), $year));
                     $ledger_entry->direction = [-1, 1][array_rand([-1, 1])];

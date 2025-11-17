@@ -85,12 +85,12 @@ function run_tests(MySqlObject $object, $id = 1)
         }
         assert($object->update() === true, "save#{$object}#");
         debug_print("getList#{$object}#");
-        $field_filter = [];
+        $fieldFilter = [];
         if ($object instanceof ledgerentry) {
             debug_print("LEDGER ENTRY FILTER");
-            $field_filter = ['entry_date' => ['operator' => 'BETWEEN', 'value' => "'2022-01-01' AND '2022-01-02'"]];
+            $fieldFilter = ['entry_date' => ['operator' => 'BETWEEN', 'value' => ['2022-01-01', '2022-01-02']]];
         }
-        $object->getList($field_filter);
+        $object->getList($fieldFilter);
         debug_print("getNextId#{$object}#");
         assert($object->getNextId() >= 0);
     } catch (Exception $ex) {
@@ -103,12 +103,12 @@ function run_views(ObjectViewer $viewer, DataObjectInterface $object)
     try {
         debug_print("OBJECT: " . get_class($viewer));
         debug_print($viewer->printObject());
-        $field_filter = [];
+        $fieldFilter = [];
         if ($object instanceof ledgerentry) {
             debug_print("LEDGER ENTRY FILTER");
-            $field_filter = ['entry_date' => ['operator' => 'BETWEEN', 'value' => "'2022-01-01' AND '2022-01-02'"]];
+            $fieldFilter = ['entry_date' => ['operator' => 'BETWEEN', 'value' => ['2022-01-01', '2022-01-02']]];
         }
-        debug_print($viewer->printObjectList($object->getList($field_filter)));
+        debug_print($viewer->printObjectList($object->getList($fieldFilter)));
     } catch (Exception $ex) {
         debug_print($ex->getMessage());
     }

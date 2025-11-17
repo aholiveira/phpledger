@@ -57,9 +57,9 @@ class MySqlAccount extends Account
         ];
         return $retval;
     }
-    public static function getList(array $field_filter = []): array
+    public static function getList(array $fieldFilter = []): array
     {
-        $where = static::getWhereFromArray($field_filter);
+        $where = static::getWhereFromArray($fieldFilter);
         $sql = "SELECT
             conta_id as id,
             conta_num as `number`,
@@ -136,7 +136,7 @@ class MySqlAccount extends Account
     }
     public function getBalance(?\DateTimeInterface $startDate = null, ?\DateTimeInterface $endDate = null): array
     {
-        $where = "account_id=? ";
+        $where = "accountId=? ";
         $retval = ['income' => 0, 'expense' => 0, 'balance' => 0];
         $param_array = [$this->id];
         if (null !== $startDate) {
@@ -153,10 +153,10 @@ class MySqlAccount extends Account
                 ROUND(SUM(ROUND(IF(NOT ISNULL(euroAmount),euroAmount,0),5)),2) AS balance
                 FROM movimentos
                 WHERE {$where}
-                GROUP BY account_id";
+                GROUP BY accountId";
         $retval = [];
         try {
-            $stmt = @static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -224,7 +224,7 @@ class MySqlAccount extends Account
         $retval = false;
         try {
             $sql = "DELETE FROM {$this->tableName()} WHERE conta_id=?";
-            $stmt = static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             $stmt->bind_param("s", $this->id);
             $retval = $stmt->execute();
             $stmt->close();

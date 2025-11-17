@@ -26,13 +26,13 @@ class MySqlLedger extends Ledger
         $retval['primary_key'] = "id";
         return $retval;
     }
-    public static function getList(array $field_filter = []): array
+    public static function getList(array $fieldFilter = []): array
     {
-        $where = static::getWhereFromArray($field_filter);
+        $where = static::getWhereFromArray($fieldFilter);
         $sql = "SELECT id FROM " . static::tableName() . " {$where} ORDER BY id";
         $retval = [];
         try {
-            $stmt = @static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -54,7 +54,7 @@ class MySqlLedger extends Ledger
     {
         $sql = "SELECT id, nome as `name` FROM " . static::tableName() . " WHERE id=?";
         try {
-            $stmt = @static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -74,8 +74,8 @@ class MySqlLedger extends Ledger
         $retval = false;
         $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
         try {
-            static::$dbConnection->begin_transaction();
-            $stmt = @static::$dbConnection->prepare($sql);
+            MySqlStorage::getConnection()->begin_transaction();
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 return $retval;
             }
@@ -89,7 +89,7 @@ class MySqlLedger extends Ledger
                 "UPDATE {$this->tableName()} SET nome=? WHERE id=?" :
                 "INSERT INTO {$this->tableName()} (nome, id) VALUES (?, ?)";
             $stmt->close();
-            $stmt = static::$dbConnection->prepare($sql);
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
@@ -100,7 +100,7 @@ class MySqlLedger extends Ledger
             );
             $retval = $stmt->execute();
             $stmt->close();
-            static::$dbConnection->commit();
+            MySqlStorage::getConnection()->commit();
         } catch (\Exception $ex) {
             print "ERROR";
             $this->handleException($ex, $sql);

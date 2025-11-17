@@ -100,7 +100,7 @@ CREATE TABLE `movimentos` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
   `entry_date` date DEFAULT NULL,
   `categoryId` int(3) DEFAULT NULL,
-  `account_id` int(3) DEFAULT NULL,
+  `accountId` int(3) DEFAULT NULL,
   `currency_id` char(3) NOT NULL DEFAULT 'EUR',
   `direction` tinyint(1) NOT NULL DEFAULT 1,
   `currencyAmount` float(10,2) DEFAULT NULL,

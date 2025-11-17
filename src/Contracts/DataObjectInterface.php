@@ -23,6 +23,6 @@ interface DataObjectInterface
     public function update(): bool;
     public function delete(): bool;
     public static function getNextId(): int;
-    public static function getList(array $field_filter = []): array;
+    public static function getList(array $fieldFilter = []): array;
     public static function getById(int $id): ?DataObjectInterface;
 }

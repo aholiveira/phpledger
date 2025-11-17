@@ -26,7 +26,7 @@ class LedgerEntryController
         }
 
         // 2) grab and validate the other fields
-        foreach (['currencyAmount', 'direction', 'categoryId', 'currency_id', 'account_id'] as $fld) {
+        foreach (['currencyAmount', 'direction', 'categoryId', 'currency_id', 'accountId'] as $fld) {
             if (!isset($input[$fld]) || $input[$fld] === '' || $input[$fld] === false) {
                 throw new DomainException(l10n::l("invalid_parameter", $fld));
             }
@@ -41,7 +41,7 @@ class LedgerEntryController
         $entry->euroAmount = $entry->direction * $entry->currencyAmount;
         $entry->categoryId = (int) $input['categoryId'];
         $entry->currency_id = $input['currency_id'];
-        $entry->account_id = (int) $input['account_id'];
+        $entry->accountId = (int) $input['accountId'];
         $entry->remarks = $input['remarks'];
         $entry->remarks = $input['remarks'];
         $entry->username = $_SESSION['user'] ?? 'empty';
@@ -56,7 +56,7 @@ class LedgerEntryController
 
         $defaults->categoryId = $entry->categoryId;
         $defaults->currency_id = $entry->currency_id;
-        $defaults->account_id = $entry->account_id;
+        $defaults->accountId = $entry->accountId;
         $defaults->entry_date = $entry->entry_date;
         $defaults->direction = $entry->direction;
         $defaults->language = l10n::$lang;

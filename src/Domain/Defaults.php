@@ -6,7 +6,7 @@ use \PHPLedger\Storage\Abstract\AbstractDataObject;
 abstract class Defaults extends AbstractDataObject implements DataObjectInterface
 {
     public int $categoryId;
-    public int $account_id;
+    public int $accountId;
     public string $currency_id;
     public string $entry_date;
     public int $direction;
