@@ -21,7 +21,7 @@ use \PHPLedger\Util\Logger;
 use \PHPLedger\Util\SessionManager;
 
 const BACKEND = "mysql";
-const VERSION = "0.4.203";
+const VERSION = "0.4.204";
 const ROOT_DIR = __DIR__;
 const OBJECTS_DIR = ROOT_DIR . "/objects";
 const VIEWS_DIR = ROOT_DIR . "/views";
