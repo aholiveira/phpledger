@@ -11,15 +11,10 @@
 namespace PHPLedger\Contracts;
 interface DataObjectInterface
 {
-    /**
-     * @property int id
-     */
-    /**
-     * Validates if object contains valid data
-     * @return bool true if object is valid, false otherwise
-     */
     public function validate(): bool;
     public function errorMessage(): string;
+    public function create(): DataObjectInterface;
+    public function read(int $id): ?DataObjectInterface;
     public function update(): bool;
     public function delete(): bool;
     public static function getNextId(): int;

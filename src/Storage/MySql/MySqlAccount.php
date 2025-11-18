@@ -2,15 +2,6 @@
 
 /**
  * Holds a mysql-backed `account` object
- * @property string $name The name of the account
- * @property string $number The account's number
- * @property string $iban International Bank Account Number
- * @property string $swift The account's switft identifier
- * @property int $group Links the account to the group table. Used to group different accounts under
- * @property int $typeId Account type - linked to the account_type table
- * @property string $openDate The date the account was open in Y-m-d format
- * @property string $closeDate The date the account was closed in Y-m-d format
- * @property int $active Flag to indicate if the account is still active or not
  *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
@@ -19,7 +10,6 @@
  */
 namespace PHPLedger\Storage\MySql;
 use \PHPLedger\Domain\Account;
-use \PHPLedger\Util\Logger;
 class MySqlAccount extends Account
 {
     use MySqlObject {
