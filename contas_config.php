@@ -29,7 +29,7 @@ if (isset($_SESSION['user']) && basename($_SERVER['SCRIPT_NAME']) !== 'index.php
         'samesite' => 'Strict',
     ]);
 }
-if (!isset($_SESSION['user'])) {
+if (!isset($_SESSION['user']) && basename($_SERVER['SCRIPT_NAME']) !== 'reset_password.php') {
     if (!headers_sent()) {
         header("Location: index.php");
         exit();

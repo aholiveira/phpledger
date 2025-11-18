@@ -1,121 +1,124 @@
 <?php
-
-/**
- *
- * @author Antonio Henrique Oliveira
- * @copyright (c) 2017-2022, Antonio Henrique Oliveira
- * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
- *
- */
 include_once __DIR__ . "/contas_config.php";
-use \PHPLedger\Storage\ObjectFactory;
-use \PHPLedger\Util\Config;
-use \PHPLedger\Util\Html;
-use \PHPLedger\Util\L10n;
+if (!defined("ROOT_DIR"))
+    include_once __DIR__ . "/prepend.php";
 
-$pagetitle = "Redefini&ccedil;o de palavra-passe";
+use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Util\Config;
+use PHPLedger\Util\Html;
+use PHPLedger\Util\L10n;
 
+$pagetitle = "Redefinição de palavra-passe";
+$error = null;
+$success = null;
+
+$tokenId = filter_input(INPUT_GET, "tokenId", FILTER_SANITIZE_ENCODED);
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $tokenId = filter_input(INPUT_POST, "tokenId", FILTER_SANITIZE_ENCODED);
+}
+
+/* Validate token */
+if (empty($tokenId)) {
+    header("Refresh: 8; URL=index.php");
+    $error = "Token em falta. Será redirecionado para a página inicial.";
+} else {
+    $user = ObjectFactory::user()::getByToken($tokenId);
+    if (!$user instanceof user || !$user->isTokenValid($tokenId)) {
+        header("Refresh: 8; URL=index.php");
+        $error = "Token inválido ou expirado. Será redirecionado para a página inicial.";
+    }
+}
+
+/* POST handler */
+if ($_SERVER["REQUEST_METHOD"] === "POST" && !$error) {
+    $password = filter_input(INPUT_POST, "password", FILTER_UNSAFE_RAW);
+    $verifyPassword = filter_input(INPUT_POST, "verifyPassword", FILTER_UNSAFE_RAW);
+
+    if (!$password || !$verifyPassword) {
+        $error = "Tem que indicar uma palavra-passe.";
+    } elseif ($password !== $verifyPassword) {
+        $error = "As palavras-passe não coincidem.";
+    } else {
+        if ($user instanceof user && $user->isTokenValid($tokenId)) {
+            $user->setPassword($password);
+            $user->setToken('');
+            $user->setTokenExpiry(null);
+            if ($user->update()) {
+                header("Refresh: 8; URL=index.php");
+                $success = "Palavra-passe alterada com sucesso. Será redirecionado para a página inicial.";
+            } else {
+                $error = "Erro ao atualizar a palavra-passe.";
+            }
+        } else {
+            header("Refresh: 8; URL=index.php");
+            $error = "Token inválido ou expirado.";
+        }
+    }
+}
 ?>
 <!DOCTYPE html>
-<html lang="<?= l10n::html() ?>">
+<html lang="<?= L10n::html(); ?>">
 
 <head>
     <?php Html::header($pagetitle); ?>
-    <?php
-    $user = ObjectFactory::user();
-
-    if ($_SERVER["REQUEST_METHOD"] == "GET") {
-        $token_id = filter_input(INPUT_GET, "token_id", FILTER_SANITIZE_ENCODED);
-        if (!empty($token_id)) {
-            $user = $user::getByToken($token_id);
-            if ($user instanceof user) {
-                ?>
-                <meta http-equiv='REFRESH' content='10; URL=index.php'>
-                <p>Token invalido<br></p>
-                <p>Ir&aacute; ser redireccionado para a pagina inicial.<br></p>
-                <?php
-                exit(1);
-            } else {
-                if (null !== $user && !$user->isTokenValid($token_id)) {
-                    ?>
-                    <meta http-equiv='REFRESH' content='10; URL=index.php'>
-                    <p>Token invalido ou expirado<br></p>
-                    <p>Ir&aacute; ser redireccionado para a pagina inicial.<br></p>
-                    <?php
-                    exit(1);
-                }
-            }
-        }
-    }
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $token_id = filter_input(INPUT_POST, "token_id", FILTER_SANITIZE_ENCODED);
-        $password = filter_input(INPUT_POST, "password", FILTER_UNSAFE_RAW);
-        $verify_password = filter_input(INPUT_POST, "verify_password", FILTER_SANITIZE_ENCODED);
-        if (array_key_exists("password", $_POST) && array_key_exists("verify_password", $_POST)) {
-            if ($password === $verify_password) {
-                $user = $user::getByToken($token_id);
-                if (($user instanceof user) && $user->isTokenValid($token_id)) {
-                    $user->setPassword($password);
-                    $user->setToken('');
-                    $user->setTokenExpiry(null);
-                    if ($user->update()) {
-                        ?>
-                        <meta http-equiv='REFRESH' content='10; URL=index.php'>
-                        <p>Palavra-passe alterada com sucesso<br></p>
-                        <p>Ir&aacute; ser redireccionado para a p&aacute;gina inicial.<br></p>
-                        <?php
-                        exit(1);
-                    } else {
-                        ?>
-                        <p>Erro ao alterar utilizador<br></p>
-                        <p>Ir&aacute; ser redireccionado para a p&aacute;gina inicial.<br></p>
-                        <?php
-                        exit(1);
-                    }
-                }
-            } else {
-                ?>
-                <meta http-equiv='REFRESH' content='10; URL=reset_password.php?token_id={$token_id}'>
-                <p>As palavras-passe introduzidas n&atilde;o s&atilde;o iguais<br></p>
-                <?php
-                exit(1);
-            }
-        } else {
-            ?>
-            <meta http-equiv='REFRESH' content='10; URL=reset_password.php?token_id={$token_id}'>
-            <p>Tem que indicar uma palavra-passe<br></p>
-            <?php
-            exit(1);
-        }
-    }
-    ?>
 </head>
 
-<body onload="javascript:document.login.password.focus();">
-    <?php
-    ?>
+<body>
     <div id="login">
-        <h1><?= config::get("title"); ?></h1>
-        <p>Redefini&ccedil;&atilde;o de palavra-passe</p>
-        <form method="POST" action="reset_password.php" name="reset_password">
-            <input type="hidden" name="token_id" value="<?= $token_id; ?>">
-            <table>
-                <tr>
-                    <td>Nova palavra-passe: </td>
-                    <td><input size="10" maxlength="250" type="password" name="password" autocomplete="new-password"
-                            value="" required></td>
-                </tr>
-                <tr>
-                    <td>Confirmar palavra-passe: </td>
-                    <td><input size="10" maxlength="250" type="password" name="verify_password"
-                            autocomplete="new-password" value="" required></td>
-                </tr>
-                <tr>
-                    <td colspan="2" style="text-align: center"><input type="submit" value="Repor"></td>
-                </tr>
-            </table>
-        </form>
+        <h1><?= Config::get("title"); ?></h1>
+
+        <?php if ($error): ?>
+            <p style="color:red;"><?= $error ?></p>
+        <?php endif; ?>
+
+        <?php if ($success): ?>
+            <p style="color:green;"><?= $success ?></p>
+        <?php endif; ?>
+
+        <?php if (!$success): ?>
+            <form id="resetForm" method="POST" action="reset_password.php">
+                <input type="hidden" name="tokenId" value="<?= htmlspecialchars($tokenId ?? '') ?>">
+                <div class="formgrid">
+                    <p>Redefinição de palavra-passe</p>
+                    <label for="password">Nova palavra-passe:</label>
+                    <input id="password" type="password" name="password" autocomplete="new-password" required>
+
+                    <label for="verifyPassword">Confirmar palavra-passe:</label>
+                    <input id="verifyPassword" type="password" name="verifyPassword" autocomplete="new-password" required>
+
+                    <input id="submitButton" type="submit" value="Repor" class="submit" disabled>
+                    <p id="errorMsg" style="color:red;"></p>
+                </div>
+            </form>
+        <?php endif; ?>
+
     </div>
+    <script>
+        const password = document.getElementById('password');
+        const verify = document.getElementById('verifyPassword');
+        const submitBtn = document.getElementById('submitButton');
+        const errorMsg = document.getElementById('errorMsg');
+
+        function validatePasswords() {
+            if (password.value && verify.value && password.value === verify.value) {
+                submitBtn.disabled = false;
+                errorMsg.textContent = "";
+            } else {
+                submitBtn.disabled = true;
+                if (verify.value && password.value !== verify.value) {
+                    errorMsg.textContent = "As palavras-passe não coincidem";
+                } else {
+                    errorMsg.textContent = "";
+                }
+            }
+        }
+        password.addEventListener('input', validatePasswords);
+        verify.addEventListener('input', validatePasswords);
+        password.addEventListener('change', validatePasswords);
+        verify.addEventListener('change', validatePasswords);
+        password.addEventListener('paste', () => setTimeout(validatePasswords, 0));
+        verify.addEventListener('paste', () => setTimeout(validatePasswords, 0));
+    </script>
 </body>
 
 </html>
