@@ -201,6 +201,37 @@ button:hover {
     padding-top: 1em;
 }
 
+.formgrid {
+    display: grid;
+    width: 100%;
+    grid-template-columns: max-content 1fr;
+    gap: 10px 15px;
+    padding: 1em;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.formgrid label {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.formgrid input[type=password] {
+    margin-right: 1em;
+}
+
+.formgrid p,
+input[type=submit] {
+    grid-column: 1 / span 2;
+    justify-self: center;
+    margin-top: 10px;
+}
+
+.formgrid input[type=submit]:disabled {
+    background: #aaa;
+    cursor: not-allowed;
+}
+
 .update-screen {
     align-items: center;
     text-align: center;
