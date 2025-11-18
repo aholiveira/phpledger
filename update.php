@@ -67,7 +67,8 @@ $pagetitle = L10n::l('update_needed');
                         </form>
                     <?php else: ?>
                         <p><?= L10n::l('db_ok') ?></p>
-                        <p><?= L10n::l('go_login') ?> <a href="index.php"><?= L10n::l('login_screen') ?></a>.</p>
+                        <p><?= L10n::l('go_login') ?> <a href="index.php"
+                                aria-label="<?= L10n::l('login_screen') ?>"><?= L10n::l('login_screen') ?></a>.</p>
                     <?php endif; ?>
                 <?php elseif ($update_result): ?>
                     <p><?= $message ?></p>

@@ -96,8 +96,8 @@ class Html
         ?>
         <footer>
             <div class='footer'>
-                <span class='RCS'><a
-                        href="https://github.com/aholiveira/phpledger"><?= l10n::l("version", VERSION) ?></a></span>
+                <span class='RCS'><a href="https://github.com/aholiveira/phpledger"
+                        aria-label="<?= l10n::l("version", VERSION) ?>"><?= l10n::l("version", VERSION) ?></a></span>
                 <span class='RCS'
                     style="display: flex; align-items: center"><?= l10n::l("session_expires", date("Y-m-d H:i:s", $_SESSION['expires'])) ?>
                     <span style="margin-left: auto; display: flex;">

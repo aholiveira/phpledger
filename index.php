@@ -89,7 +89,8 @@ if (!empty($postUser)) {
                     <input type="submit" value="<?= l10n::l('login') ?>">
                 </p>
                 <p id="versionTagContent" class="version-tag">
-                    <a href="https://github.com/aholiveira/phpledger"><?= l10n::l('version', VERSION) ?></a>
+                    <a href="https://github.com/aholiveira/phpledger"
+                        aria-label="<?= l10n::l('version', VERSION) ?>"><?= l10n::l('version', VERSION) ?></a>
                 </p>
                 <p id="languageSelector" class="version-tag"><small><?php Html::languageSelector(false); ?></small></p>
             </div>
