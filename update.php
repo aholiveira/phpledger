@@ -58,8 +58,7 @@ $pagetitle = L10n::l('update_needed');
                         <p><?= L10n::l('cannot_use_app') ?></p>
                         <p><?= L10n::l('start_update') ?></p>
                         <p><?= $message ?></p>
-                        <form method="POST" role="form" aria-describedby="update-messages"
-                            action="update.php?lang=<?= L10n::$lang ?>">
+                        <form method="POST" aria-describedby="update-messages" action="update.php?lang=<?= L10n::$lang ?>">
                             <?= CSRF::inputField() ?>
                             <button class="submit" type="submit" name="action" value="update_db"
                                 aria-label="<?= L10n::l('do_update') ?>">
