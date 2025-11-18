@@ -57,7 +57,7 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php Html::header(); ?>
+    <?php Html::header($pagetitle); ?>
 </head>
 
 <body>

@@ -81,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php Html::header(); ?>
+    <?php Html::header($pagetitle); ?>
     <script src="ledger_entries.js"> </script>
 </head>
 

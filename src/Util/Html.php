@@ -76,7 +76,7 @@ class Html
         </script>
         <?php
     }
-    public static function header(): void
+    public static function header($pagetitle = ""): void
     {
         ?>
         <title>

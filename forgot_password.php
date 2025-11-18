@@ -20,7 +20,7 @@ $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php Html::header(); ?>
+    <?php Html::header($pagetitle); ?>
     <?php
     $user = ObjectFactory::user();
     $message = "";

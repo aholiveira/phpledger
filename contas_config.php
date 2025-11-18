@@ -37,7 +37,7 @@ if (!isset($_SESSION['user'])) {
         ?>
         <!DOCTYPE html>
         <html lang="pt-PT">
-        <?php Html::header(); ?>
+        <?php Html::header($pagetitle); ?>
         <meta http-equiv="refresh" content="5;url=index.php">
         <script>
             window.addEventListener("DOMContentLoaded", () => {

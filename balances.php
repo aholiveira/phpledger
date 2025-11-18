@@ -19,7 +19,7 @@ $pagetitle = "Saldos";
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php Html::header(); ?>
+    <?php Html::header($pagetitle); ?>
 </head>
 
 <body>
