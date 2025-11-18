@@ -142,16 +142,22 @@ class Html
         </aside>
         <?php
     }
-    public static function languageSelector(): void
+    public static function languageSelector(bool $div = true): void
     {
-        ?>
-        <div>
-            <?php if (l10n::$lang === 'pt-pt'): ?>
+        if ($div) {
+            ?>
+            <div>
+                <?php
+        }
+        if (l10n::$lang === 'pt-pt'): ?>
                 <a href="?lang=en-us">EN</a> | <span>PT</span>
             <?php else: ?>
                 <span>EN</span> | <a href="?lang=pt-pt">PT</a>
-            <?php endif; ?>
-        </div>
-        <?php
+            <?php endif;
+        if ($div) {
+            ?>
+            </div>
+            <?php
+        }
     }
 }

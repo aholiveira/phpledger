@@ -76,35 +76,23 @@ if (!empty($postUser)) {
         <form method="POST" action="?lang=<?= l10n::$lang ?>" name="login" autocomplete="off">
             <input name="lang" value="<?= l10n::$lang ?>" type="hidden" />
             <?= CSRF::inputField() ?>
-            <table>
-                <tr>
-                    <td><input required size="25" maxlength="50" type="text" name="username" id="username"
-                            placeholder="<?= l10n::l('username') ?>" autocomplete="username"
-                            value="<?= htmlspecialchars($postUser) ?>"></td>
-                </tr>
-                <tr>
-                    <td><input required size="25" maxlength="255" type="password" name="password"
-                            placeholder="<?= l10n::l('password') ?>" autocomplete="current-password" value=""></td>
-                </tr>
+            <div id="content">
+                <p><input required="" aria-required="true" size="25" maxlength="50" type="text" name="username"
+                        id="username" placeholder="<?= l10n::l('username') ?>" autocomplete="username"
+                        value="<?= htmlspecialchars($postUser) ?>"></p>
+                <p><input required size="25" maxlength="255" type="password" name="password"
+                        placeholder="<?= l10n::l('password') ?>" autocomplete="current-password" value=""></p>
                 <?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$userauth): ?>
-                    <tr>
-                        <td class="invalid-login" style="width: 100%"><?= l10n::l('invalid_credentials') ?></td>
-                    </tr>
+                    <p id="errorMessage" class="invalid-login" style="width: 100%"><?= l10n::l('invalid_credentials') ?></p>
                 <?php endif; ?>
-                <tr>
-                    <td style="text-align: center"><input type="submit" value="<?= l10n::l('login') ?>"></td>
-                </tr>
-                <tr>
-                    <td class="version-tag">
-                        <a href="https://github.com/aholiveira/phpledger"><?= l10n::l('version', VERSION) ?></a>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="version-tag">
-                        <?php Html::languageSelector(); ?>
-                    </td>
-                </tr>
-            </table>
+                <p id="formButton">
+                    <input type="submit" value="<?= l10n::l('login') ?>">
+                </p>
+                <p id="versionTagContent" class="version-tag">
+                    <a href="https://github.com/aholiveira/phpledger"><?= l10n::l('version', VERSION) ?></a>
+                </p>
+                <p id="languageSelector" class="version-tag"><small><?php Html::languageSelector(false); ?></small></p>
+            </div>
         </form>
     </div>
 </body>

@@ -214,12 +214,20 @@ div#login {
     padding: 1em;
 }
 
-div#login table {
+div#login p {
+    margin: 1em;
+}
+
+div#login div {
     margin: auto;
+    margin-top: 0.2em;
+    padding-top: 0.5em;
+    padding-bottom: 1em;
     align-self: center;
     background-color: #fff;
     border-radius: 6px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    width: fit-content;
 }
 
 div#login td {
