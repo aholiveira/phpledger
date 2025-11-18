@@ -66,7 +66,7 @@ if (!empty($postUser)) {
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php Html::header($pagetitle); ?>
+    <?php Html::header(); ?>
 </head>
 
 <body onload="document.getElementById('username').focus();">
