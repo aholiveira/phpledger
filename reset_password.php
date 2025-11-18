@@ -8,7 +8,7 @@
  *
  */
 include_once __DIR__ . "/contas_config.php";
-use \PHPLedger\Storage\MySql\ObjectFactory;
+use \PHPLedger\Storage\ObjectFactory;
 use \PHPLedger\Util\Config;
 use \PHPLedger\Util\Html;
 use \PHPLedger\Util\L10n;
@@ -20,7 +20,7 @@ $pagetitle = "Redefini&ccedil;o de palavra-passe";
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php Html::header(); ?>
+    <?php Html::header($pagetitle); ?>
     <?php
     $user = ObjectFactory::user();
 

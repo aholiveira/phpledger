@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php Html::header(); ?>
+    <?php Html::header($pagetitle); ?>
 </head>
 
 <body>

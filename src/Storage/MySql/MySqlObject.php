@@ -9,6 +9,7 @@
  *
  */
 namespace PHPLedger\Storage\MySql;
+use PHPLedger\Contracts\DataObjectInterface;
 use \PHPLedger\Util\Logger;
 
 trait MySqlObject
@@ -25,6 +26,16 @@ trait MySqlObject
     {
         return $this->id;
     }
+    public function create(): DataObjectInterface
+    {
+        $this->update();
+        return $this;
+    }
+    public function read(int $id): ?DataObjectInterface
+    {
+        return $this->getById($id);
+    }
+
     /**
      * Copies the object vars from $object into $this
      */

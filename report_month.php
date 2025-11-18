@@ -29,7 +29,7 @@ $report->getReport(["year" => $year]);
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php Html::header(); ?>
+    <?php Html::header($pagetitle); ?>
     <script>
         function toogleGroup(groupName) {
             var i, j, row, multiplier;

@@ -40,7 +40,7 @@ $pagetitle = L10n::l('update_needed');
 <html lang="<?= L10n::html() ?>">
 
 <head>
-    <?php Html::header(); ?>
+    <?php Html::header($pagetitle); ?>
     <title><?= $pagetitle ?></title>
     <?php if ($update_result): ?>
         <meta http-equiv="refresh" content="5;url=index.php">
