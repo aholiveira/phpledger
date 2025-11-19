@@ -10,7 +10,7 @@
  *
  */
 use PHPLedger\Domain\AccountType;
-class accountTypeView extends ObjectViewer
+class AccountTypeView extends ObjectViewer
 {
 
     public function printObject(): string

@@ -11,7 +11,7 @@ use PHPLedger\Contracts\DataObjectInterface;
  *
  */
 use PHPLedger\Domain\Currency;
-class currencyView extends ObjectViewer
+class CurrencyView extends ObjectViewer
 {
     public function __construct(currency $object)
     {
@@ -24,8 +24,9 @@ class currencyView extends ObjectViewer
             return $retval;
         }
         $object = $this->object;
-        if (!($object instanceof currency))
+        if (!($object instanceof currency)) {
             return $retval;
+        }
         $retval .= "<td><a title=\"Editar\" href=\"currency.php?tipo_id={$object->id}\">{$object->id}</a></td>";
         $retval .= "<td>{$object->code}</td>";
         $retval .= "<td>{$object->description}</td>";
