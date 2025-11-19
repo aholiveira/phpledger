@@ -12,6 +12,7 @@ use \PHPLedger\Domain\Currency;
 use \PHPLedger\Storage\MySql\MySqlObject;
 class MySqlCurrency extends Currency
 {
+    private static array $fields = ["id", "`code`", "`description`", "exchangeRate", "username", "createdAt", "updatedAt"];
     use MySqlObject {
         MySqlObject::__construct as private traitConstruct;
     }
@@ -48,8 +49,14 @@ class MySqlCurrency extends Currency
     }
     public static function getList(array $fieldFilter = []): array
     {
+
         $where = static::getWhereFromArray($fieldFilter);
-        $sql = "SELECT id, `code`, `description`, exchangeRate, username, createdAt, updatedAt FROM " . static::tableName() . " {$where} ORDER BY description";
+        /*$set = implode(",", array_map(fn($k) => "$k=?", array_keys($data)));
+        INSERT INTO {$this->table} (" . implode(",", $keys) . ")
+                VALUES (" . implode(",", array_fill(0, count($keys), "?")) . ")";
+*/
+
+        $sql = "SELECT " . implode(",", self::$fields) . " FROM " . static::tableName() . " {$where} ORDER BY description";
         $retval = [];
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
@@ -68,16 +75,16 @@ class MySqlCurrency extends Currency
         return $retval;
     }
 
-    public static function getById($id): ?currency
+    private static function getByField($field, $value): ?Currency
     {
-        $sql = "SELECT id, `code`, `description`, exchangeRate, username, createdAt, updatedAt FROM " . static::tableName() . " WHERE id=? ORDER BY `description`";
+        $sql = "SELECT " . implode(",", self::$fields) . " FROM " . static::tableName() . " WHERE $field=? ORDER BY `description`";
         $retval = null;
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
-            $stmt->bind_param("i", $id);
+            $stmt->bind_param("s", $value);
             $stmt->execute();
             $result = $stmt->get_result();
             $retval = $result->fetch_object(__CLASS__);
@@ -87,25 +94,14 @@ class MySqlCurrency extends Currency
         }
         return $retval;
     }
+    public static function getById($id): ?currency
+    {
+        return self::getByField("id", $id);
+    }
 
     public static function getByCode($code): ?currency
     {
-        $sql = "SELECT id, `code`, `description`, exchangeRate, username, createdAt, updatedAt FROM " . static::tableName() . " WHERE code=? ORDER BY `description`";
-        $retval = null;
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new \mysqli_sql_exception();
-            }
-            $stmt->bind_param("s", $code);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__);
-            $stmt->close();
-        } catch (\Exception $ex) {
-            static::handleException($ex, $sql);
-        }
-        return $retval;
+        return self::getByField("code", $code);
     }
 
     public function update(): bool
