@@ -25,17 +25,20 @@ class MySqlUser extends User
     }
     public static function getDefinition(): array
     {
+        $notNull = "NOT NULL";
+        $defaultEmpty = "DEFAULT ''";
+        $char255 = "char(255)";
         $retval = [];
         $retval['columns'] = [
-            "id" => "int(3) NOT NULL DEFAULT 0",
-            "username" => "char(100) NOT NULL",
-            "password" => "char(255) NOT NULL",
-            "fullname" => "char(255) NOT NULL DEFAULT ''",
-            "email" => "char(255) NOT NULL DEFAULT ''",
-            "role" => "int(3) NOT NULL DEFAULT 0",
-            "token" => "char(255) NOT NULL DEFAULT ''",
+            "id" => "int(3) $notNull DEFAULT 0",
+            "username" => "char(100) $notNull",
+            "password" => "$char255 $notNull",
+            "fullname" => "$char255 $notNull $defaultEmpty",
+            "email" => "$char255 $notNull $defaultEmpty",
+            "role" => "int(3) $notNull DEFAULT 0",
+            "token" => "$char255 $notNull $defaultEmpty",
             "token_expiry" => "datetime",
-            "active" => "int(1) NOT NULL DEFAULT 0"
+            "active" => "int(1) $notNull DEFAULT 0"
         ];
         $retval['primary_key'] = "id";
         return $retval;
