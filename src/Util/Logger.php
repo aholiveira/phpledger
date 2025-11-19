@@ -7,8 +7,8 @@ class Logger
     private static ?self $instance = null;
     public static function instance(): self
     {
-        static::$instance = static::$instance ?? new Logger(ROOT_DIR . "/logs/ledger.log");
-        return static::$instance;
+        self::$instance ??= new Logger(ROOT_DIR . "/logs/ledger.log");
+        return self::$instance;
     }
     public function __construct(string $file)
     {
@@ -38,8 +38,15 @@ class Logger
 
     private function writeLog(string $level, string $message, string $prefix = ""): void
     {
+        $prefix = trim($prefix);
+        $prefix = $prefix !== '' ? $prefix : '-';
         $timestamp = date('Y-m-d H:i:s');
-        $entry = "[$timestamp] [$level] [$prefix] $message\n";
+        $entry = "[$timestamp] [$level] [$prefix] $message" . PHP_EOL;
+
+        $dir = dirname($this->logFile);
+        if (!is_dir($dir)) {
+            mkdir($dir, 0750, true);
+        }
         file_put_contents($this->logFile, $entry, FILE_APPEND | LOCK_EX);
     }
 }

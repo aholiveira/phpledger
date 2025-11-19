@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Year Report
- * Class to generate a year report with a summary of income and expense per month
  *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira

@@ -14,7 +14,7 @@ class L10n
     public static function l(string $translation_id, mixed ...$replacements): string
     {
         $text = !empty($replacements)
-            ? sprintf(self::$l10n[$translation_id], ...$replacements)
+            ? \sprintf(self::$l10n[$translation_id], ...$replacements)
             : self::$l10n[$translation_id];
         return htmlspecialchars($text, ENT_NOQUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8', false);
     }

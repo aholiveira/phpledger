@@ -27,7 +27,7 @@ class Config
     {
         try {
             if (file_exists($configfile)) {
-                self::$_data = @json_decode(file_get_contents($configfile), true);
+                self::$_data = json_decode(file_get_contents($configfile), true);
                 return true;
             } else {
                 return false;
@@ -46,7 +46,7 @@ class Config
      */
     public static function set(string $key, $value): void
     {
-        if (!is_array(self::$_data)) {
+        if (!\is_array(self::$_data)) {
             self::$_data = [];
         }
         self::$_data[$key] = $value;
@@ -60,10 +60,10 @@ class Config
      */
     public static function get(string $key)
     {
-        if (!is_array(self::$_data)) {
+        if (!\is_array(self::$_data)) {
             self::$_data = [];
         }
-        if (array_key_exists($key, self::$_data)) {
+        if (\array_key_exists($key, self::$_data)) {
             return self::$_data[$key];
         } else {
             return null;

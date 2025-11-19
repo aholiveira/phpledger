@@ -1,7 +1,6 @@
 <?php
 
 /**
- * Implements basic functionally and holds common code for mysql-backed data objects
  *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira

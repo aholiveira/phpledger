@@ -13,12 +13,12 @@ class Email
 {
     public static function sendEmail($from, $to, $subject, $body): bool
     {
-        strlen(config::get("smtp")) > 0 ? ini_set("smtp", config::get("smtp")) : "";
-        strlen(config::get("smtp_port")) > 0 ? ini_set("smtp_port", config::get("smtp_port")) : "";
-        strlen(config::get("from")) > 0 ? ini_set("sendmail_from", config::get("from")) : "";
-        strlen(config::get("smtp_port")) > 0 ? ini_set("smtp_port", config::get("smtp_port")) : "";
-        strlen($from) > 0 ? ini_set("sendmail_from", $from) : "";
-        if (strlen($to) == 0 || strlen($subject) == 0 || strlen($body) == 0) {
+        \strlen(config::get("smtp")) > 0 ? ini_set("smtp", config::get("smtp")) : "";
+        \strlen(config::get("smtp_port")) > 0 ? ini_set("smtp_port", config::get("smtp_port")) : "";
+        \strlen(config::get("from")) > 0 ? ini_set("sendmail_from", config::get("from")) : "";
+        \strlen(config::get("smtp_port")) > 0 ? ini_set("smtp_port", config::get("smtp_port")) : "";
+        \strlen($from) > 0 ? ini_set("sendmail_from", $from) : "";
+        if (\strlen($to) == 0 || \strlen($subject) == 0 || \strlen($body) == 0) {
             return false;
         }
         $from = ini_get("sendmail_from");

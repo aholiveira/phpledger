@@ -1,8 +1,6 @@
 <?php
 
 /**
- * User class
- * Handles user registration and authentication
  *
  * @since 0.2.0
  * @author Antonio Henrique Oliveira

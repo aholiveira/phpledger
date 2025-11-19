@@ -15,7 +15,7 @@ class Redirector
     public static function to($url, $delay = 0): never
     {
         $url_path = strtok($url, '?'); // strip query params
-        if (!in_array($url_path, self::ALLOWED_REDIRECTS, true)) {
+        if (!\in_array($url_path, self::ALLOWED_REDIRECTS, true)) {
             $url = "ledger_entries.php";
         }
         if (!headers_sent()) {
