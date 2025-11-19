@@ -17,6 +17,65 @@ class MySqlAccount extends Account
         MySqlObject::getNextId as private traitGetNextId;
     }
     protected static string $tableName = "contas";
+    private static function baseSelect(): string
+    {
+        return "
+            SELECT
+                conta_id as id,
+                conta_num as `number`,
+                conta_nome as `name`,
+                grupo as `group`,
+                tipo_id as `typeId`,
+                conta_nib as iban,
+                swift,
+                conta_abertura as openDate,
+                conta_fecho as closeDate,
+                activa as active
+            FROM " . static::$tableName . " ";
+    }
+
+    private static function fetchAll(string $sql, array $params = []): array
+    {
+        $retval = [];
+        try {
+            $stmt = MySqlStorage::getConnection()->prepare($sql);
+            if ($stmt === false) {
+                throw new \mysqli_sql_exception();
+            }
+            if ($params) {
+                $types = str_repeat('s', \count($params));
+                $stmt->bind_param($types, ...$params);
+            }
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($obj = $result->fetch_object(__CLASS__)) {
+                $retval[$obj->id] = $obj;
+            }
+            $stmt->close();
+        } catch (\Exception $ex) {
+            static::handleException($ex, $sql);
+        }
+
+        return $retval;
+    }
+    private static function fetchOne(string $sql, array $params = []): Account
+    {
+        $all = static::fetchAll($sql, $params);
+        return array_shift($all) ?: new MySqlAccount();
+    }
+
+    public static function getList(array $fieldFilter = []): array
+    {
+        $where = static::getWhereFromArray($fieldFilter);
+        $sql = static::baseSelect() . " {$where} ORDER BY activa DESC, conta_nome";
+        return static::fetchAll($sql);
+    }
+
+    public static function getById($id): Account
+    {
+        $sql = static::baseSelect() . " WHERE conta_id=?";
+        return static::fetchOne($sql, [$id]);
+    }
 
     public static function getDefinition(): array
     {
@@ -45,74 +104,6 @@ class MySqlAccount extends Account
             'close_date' => 'conta_fecho',
             'active' => 'activa'
         ];
-        return $retval;
-    }
-    public static function getList(array $fieldFilter = []): array
-    {
-        $where = static::getWhereFromArray($fieldFilter);
-        $sql = "SELECT
-            conta_id as id,
-            conta_num as `number`,
-            conta_nome as `name`,
-            grupo as `group`,
-            tipo_id as `typeId`,
-            conta_nib as iban,
-            swift,
-            conta_abertura as openDate,
-            conta_fecho as closeDate,
-            activa as active
-        FROM " . static::$tableName . "
-        {$where}
-        ORDER BY activa DESC, conta_nome";
-        $retval = [];
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new \mysqli_sql_exception();
-            }
-            $stmt->execute();
-            $result = $stmt->get_result();
-            while ($newobject = $result->fetch_object(__CLASS__)) {
-                $retval[$newobject->id] = $newobject;
-            }
-            $stmt->close();
-        } catch (\Exception $ex) {
-            static::handleException($ex, $sql);
-        }
-        return $retval;
-    }
-
-    public static function getById($id): account
-    {
-        $sql = "SELECT
-            conta_id as id,
-            conta_num as `number`,
-            conta_nome as `name`,
-            grupo as `group`,
-            tipo_id as `typeId`,
-            conta_nib as iban,
-            swift,
-            conta_abertura as openDate,
-            conta_fecho as closeDate,
-            activa as active
-        FROM " . static::tableName() . "
-        WHERE conta_id=?";
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new \mysqli_sql_exception();
-            }
-            $stmt->bind_param("i", $id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__);
-            $stmt->close();
-            if (null === $retval) {
-                $retval = new MySqlAccount();
-            }
-        } catch (\Exception $ex) {
-            static::handleException($ex, $sql);
-        }
         return $retval;
     }
     /**
