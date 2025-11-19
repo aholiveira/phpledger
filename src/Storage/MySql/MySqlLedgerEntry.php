@@ -21,24 +21,25 @@ class MySqlLedgerEntry extends LedgerEntry
 
     protected static function getWhereFromArray(array $fieldFilter, ?string $table_name = null): string
     {
-        $where = "";
+        $conditions = [];
+
         foreach ($fieldFilter as $filter_entry) {
             foreach ($filter_entry as $field => $filter) {
-                if (\strlen($where) > 0) {
-                    $where .= " AND ";
-                }
-                $field_name = null === $table_name ? "`{$field}`" : "`{$table_name}`.`{$field}`";
-                if (strtolower($filter['operator']) === "in") {
-                    $where .= "{$field_name} {$filter['operator']} {$filter['value']}";
+                $field_name = $table_name !== null ? "`{$table_name}`.`{$field}`" : "`{$field}`";
+                $operator = strtolower($filter['operator']);
+                $value = $filter['value'];
+
+                if ($operator === 'in' && \is_array($value)) {
+                    $escaped_values = array_map(fn($v) => "'" . addslashes((string) $v) . "'", $value);
+                    $conditions[] = "{$field_name} IN (" . implode(', ', $escaped_values) . ")";
                 } else {
-                    $where .= "{$field_name} {$filter['operator']} '{$filter['value']}'";
+                    $escaped_value = addslashes((string) $value);
+                    $conditions[] = "{$field_name} {$filter['operator']} '{$escaped_value}'";
                 }
             }
         }
-        if (\strlen($where) > 0) {
-            $where = "WHERE {$where}";
-        }
-        return $where;
+
+        return $conditions ? 'WHERE ' . implode(' AND ', $conditions) : '';
     }
     public static function getDefinition(): array
     {
