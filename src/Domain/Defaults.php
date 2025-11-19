@@ -1,8 +1,8 @@
 <?php
 namespace PHPLedger\Domain;
 
-use \PHPLedger\Contracts\DataObjectInterface;
-use \PHPLedger\Storage\Abstract\AbstractDataObject;
+use PHPLedger\Contracts\DataObjectInterface;
+use PHPLedger\Storage\Abstract\AbstractDataObject;
 abstract class Defaults extends AbstractDataObject implements DataObjectInterface
 {
     public int $categoryId;

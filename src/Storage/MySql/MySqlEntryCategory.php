@@ -9,7 +9,7 @@
  *
  */
 namespace PHPLedger\Storage\MySql;
-use \PHPLedger\Domain\EntryCategory;
+use PHPLedger\Domain\EntryCategory;
 class MySqlEntryCategory extends EntryCategory
 {
     protected static string $tableName = "tipo_mov";

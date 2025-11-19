@@ -10,7 +10,7 @@
  */
 namespace PHPLedger\Storage\MySql;
 use PHPLedger\Contracts\DataObjectInterface;
-use \PHPLedger\Util\Logger;
+use PHPLedger\Util\Logger;
 
 trait MySqlObject
 {

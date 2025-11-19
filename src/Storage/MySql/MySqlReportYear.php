@@ -10,7 +10,7 @@
  *
  */
 namespace PHPLedger\Storage\MySql;
-use \PHPLedger\Domain\ReportYear;
+use PHPLedger\Domain\ReportYear;
 class MySqlReportYear extends ReportYear
 {
     use MySqlReport {

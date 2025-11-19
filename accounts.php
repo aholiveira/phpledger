@@ -8,12 +8,12 @@
  *
  */
 include_once __DIR__ . "/contas_config.php";
-use \PHPLedger\Storage\ObjectFactory;
-use \PHPLedger\Util\CSRF;
-use \PHPLedger\Util\Html;
-use \PHPLedger\Util\L10n;
-use \PHPLedger\Util\Redirector;
-use \PHPLedger\Views\ViewFactory;
+use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Util\CSRF;
+use PHPLedger\Util\Html;
+use PHPLedger\Util\L10n;
+use PHPLedger\Util\Redirector;
+use PHPLedger\Views\ViewFactory;
 $pagetitle = "Contas";
 
 ?>

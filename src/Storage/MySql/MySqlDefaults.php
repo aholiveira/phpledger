@@ -10,8 +10,8 @@
  *
  */
 namespace PHPLedger\Storage\MySql;
-use \PHPLedger\Domain\Defaults;
-use \PHPLedger\Util\Config;
+use PHPLedger\Domain\Defaults;
+use PHPLedger\Util\Config;
 class MySqlDefaults extends Defaults
 {
     use MySqlObject {

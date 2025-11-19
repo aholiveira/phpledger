@@ -9,8 +9,8 @@
  */
 
 namespace PHPLedger\Util;
-use \PHPLedger\Util\L10n;
-use \PHPLedger\Util\Config;
+use PHPLedger\Util\L10n;
+use PHPLedger\Util\Config;
 class Html
 {
     /**
