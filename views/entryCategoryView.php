@@ -29,7 +29,7 @@ class entryCategoryView extends ObjectViewer
         $retval .= "<td class='id' data-label='ID'><a href=\"entry_type.php?tipo_id={$object->id}\" title=\"Editar a categoria\">{$object->id}</a></td>";
         $retval .= "<td class='category' data-label='Categoria'>" . (null === $object->parent_id || $object->parent_id == 0 ? "" : ($object->parent_description ?? "")) . "</td>";
         $retval .= "<td class='description' data-label='Descri&ccedil;&atilde;o'>{$object->description}</td>";
-        $retval .= "<td class='amount' data-label='Valor'>" . normalize_number(abs($object->getBalance())) . "</td>";
+        $retval .= "<td class='amount' data-label='Valor'>" . normalizeNumber(abs($object->getBalance())) . "</td>";
         $retval .= "<td class='active checkbox' data-label='Activa'><input title=\"S&oacute; pode alterar o estado em modo de edi&ccedil;&atilde;o\" type=\"checkbox\" onclick=\"return false;\" name=active{$object->id} " . ($object->active ? "checked" : "") . "></td>\r\n";
         return $retval;
     }

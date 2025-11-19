@@ -21,7 +21,7 @@ use PHPLedger\Util\Logger;
 use PHPLedger\Util\SessionManager;
 
 const BACKEND = "mysql";
-const VERSION = "0.4.310";
+const VERSION = "0.4.311";
 const ROOT_DIR = __DIR__;
 const VIEWS_DIR = ROOT_DIR . "/views";
 
@@ -54,13 +54,13 @@ ObjectFactory::init("mysql", $logger);
  *  * if true, print only if DEBUG is defined and true
  */
 
-function debug_print($text)
+function debugPrint($text)
 {
     if (defined("DEBUG") && DEBUG === 1) {
         print nl2br("####DEBUG#$text#DEBUG####<br>\n");
     }
 }
-function normalize_number(?float $number): string
+function normalizeNumber(?float $number): string
 {
     return null === $number ? "" : number_format($number, 2);
 }

@@ -59,13 +59,13 @@ class accountBalanceView extends ObjectViewer
                     . "<a title='" . l10n::l('edit_account') . "' href='accounts.php?conta_id={$object->id}'>"
                     . "{$object->name}</a></td>";
                 $retval .= "<td class='deposits' data-label='" . l10n::l('deposits') . "'>"
-                    . normalize_number($balance['income']) . "</td>";
+                    . normalizeNumber($balance['income']) . "</td>";
                 $retval .= "<td class='withdrawls' data-label='" . l10n::l('withdrawals') . "'>"
-                    . normalize_number($balance['expense']) . "</td>";
+                    . normalizeNumber($balance['expense']) . "</td>";
                 $retval .= "<td class='balance' data-label='" . l10n::l('balance') . "'>"
-                    . normalize_number($balance['balance']) . "</td>";
+                    . normalizeNumber($balance['balance']) . "</td>";
                 $retval .= "<td class='percent' data-label='" . l10n::l('percent') . "'>"
-                    . normalize_number($totals['balance'] <> 0 ? round($balance['balance'] / $totals['balance'] * 100, 2) : 0)
+                    . normalizeNumber($totals['balance'] <> 0 ? round($balance['balance'] / $totals['balance'] * 100, 2) : 0)
                     . "</td>";
                 $retval .= "<td class='entries-list' data-label='" . l10n::l('entries') . "'>"
                     . "<a title='" . l10n::l('account_entries') . "' href='ledger_entries.php?filter_accountId={$object->id}'>"
@@ -77,10 +77,10 @@ class accountBalanceView extends ObjectViewer
         // Networth row
         $retval .= "<tr>";
         $retval .= "<td class='account' data-label='" . l10n::l('account') . "'>" . l10n::l('networth') . "</td>";
-        $retval .= "<td class='deposits' data-label='" . l10n::l('deposits') . "'>" . normalize_number($totals['income']) . "</td>";
-        $retval .= "<td class='withdrawls' data-label='" . l10n::l('withdrawals') . "'>" . normalize_number($totals['expense']) . "</td>";
-        $retval .= "<td class='balance' data-label='" . l10n::l('balance') . "'>" . normalize_number($totals['balance']) . "</td>";
-        $retval .= "<td class='percent' data-label='" . l10n::l('percent') . "'>" . normalize_number(100) . "</td>";
+        $retval .= "<td class='deposits' data-label='" . l10n::l('deposits') . "'>" . normalizeNumber($totals['income']) . "</td>";
+        $retval .= "<td class='withdrawls' data-label='" . l10n::l('withdrawals') . "'>" . normalizeNumber($totals['expense']) . "</td>";
+        $retval .= "<td class='balance' data-label='" . l10n::l('balance') . "'>" . normalizeNumber($totals['balance']) . "</td>";
+        $retval .= "<td class='percent' data-label='" . l10n::l('percent') . "'>" . normalizeNumber(100) . "</td>";
         $retval .= "<td class='entries-list' data-label='" . l10n::l('entries') . "'></td>";
         $retval .= "</tr>\r\n";
 
