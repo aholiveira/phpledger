@@ -31,7 +31,7 @@ class MySqlUser extends User
         $retval = [];
         $retval['columns'] = [
             "id" => "int(3) $notNull DEFAULT 0",
-            "username" => "char(100) $notNull ",
+            "username" => "char(100) $notNull",
             "password" => "$char255 $notNull",
             "fullname" => "$char255 $notNull $defaultEmpty",
             "email" => "$char255 $notNull $defaultEmpty",
