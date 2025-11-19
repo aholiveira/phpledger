@@ -21,7 +21,7 @@ use PHPLedger\Util\Logger;
 use PHPLedger\Util\SessionManager;
 
 const BACKEND = "mysql";
-const VERSION = "0.4.311";
+const VERSION = "0.4.312";
 const ROOT_DIR = __DIR__;
 const VIEWS_DIR = ROOT_DIR . "/views";
 
