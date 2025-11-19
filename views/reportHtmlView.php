@@ -76,12 +76,12 @@ class reportHtmlView
             if ($this->hasChildren($record)) {
                 $sum = array_key_exists($header, $record['subtotal']) ? $record['subtotal'][$header] : 0;
                 $lines .= (($value + $sum) <> 0 ? "<a href=\"ledger_entries.php?filter_sdate={$this->_report->dateFilters[$header]['start']}&amp;filter_edate={$this->_report->dateFilters[$header]['end']}&amp;filter_entry_type={$record['id']}&amp;filter_parent_id={$record['id']}\" title=\"Todos os movimentos da categoria e sub-categorias para este periodo\">" : "");
-                $lines .= normalize_number($value + $sum);
+                $lines .= normalizeNumber($value + $sum);
                 $lines .= (($value + $sum) <> 0 ? "</a>" : "") . "</span>\r\n";
                 $lines .= "<span style='display: none;' class='group{$record['id']}'>";
             }
             $lines .= $value <> 0 ? "<a href=\"ledger_entries.php?filter_sdate={$this->_report->dateFilters[$header]['start']}&amp;filter_edate={$this->_report->dateFilters[$header]['end']}&amp;filter_entry_type={$record['id']}\" title=\"Todos os movimentos da categoria para este periodo\">" : "";
-            $lines .= normalize_number($value);
+            $lines .= normalizeNumber($value);
             $lines .= ($value <> 0 ? "</a>" : "") . "</span>\r\n";
             $lines .= "</td>\r\n";
             if (array_key_exists($header, $this->_periodTotal)) {
@@ -138,12 +138,12 @@ class reportHtmlView
         if (array_key_exists('subtotal', $array)) {
             $average = $this->getArrayAverage($array['values']);
             $subaverage = $this->getArrayAverage($array['subtotal']);
-            $retval .= "<td data-label='Average' {$class}><span style='display: none;' class='{$spanclass}'>" . normalize_number($average) . "</span><span class='{$spanclass}'>" . normalize_number($average + $subaverage) . "</span></td>\r\n";
-            $retval .= "<td data-label='Total' {$class}><span style='display: none;' class='{$spanclass}'>" . normalize_number(array_sum($array['values'])) . "</span><span class='{$spanclass}'>" . normalize_number(array_sum($array['values']) + array_sum($array['subtotal'])) . "</span></td>\r\n";
+            $retval .= "<td data-label='Average' {$class}><span style='display: none;' class='{$spanclass}'>" . normalizeNumber($average) . "</span><span class='{$spanclass}'>" . normalizeNumber($average + $subaverage) . "</span></td>\r\n";
+            $retval .= "<td data-label='Total' {$class}><span style='display: none;' class='{$spanclass}'>" . normalizeNumber(array_sum($array['values'])) . "</span><span class='{$spanclass}'>" . normalizeNumber(array_sum($array['values']) + array_sum($array['subtotal'])) . "</span></td>\r\n";
         } else {
             $average = $this->getArrayAverage($array);
-            $retval .= "<td data-label='Average' {$class}>" . normalize_number($average) . "</td>\r\n";
-            $retval .= "<td data-label='Total' {$class}>" . normalize_number(array_sum($array)) . "</td>\r\n";
+            $retval .= "<td data-label='Average' {$class}>" . normalizeNumber($average) . "</td>\r\n";
+            $retval .= "<td data-label='Total' {$class}>" . normalizeNumber(array_sum($array)) . "</td>\r\n";
         }
         return $retval;
     }
@@ -155,7 +155,7 @@ class reportHtmlView
             $class = "class=\"{$tdclass}\"";
         }
         foreach ($this->_report->columnHeaders as $key => $header) {
-            $retval .= "<td data-label='{$header}' {$class}>" . normalize_number(array_key_exists($key, $array) ? $array[$key] : 0) . "</td>\r\n";
+            $retval .= "<td data-label='{$header}' {$class}>" . normalizeNumber(array_key_exists($key, $array) ? $array[$key] : 0) . "</td>\r\n";
         }
         return $retval;
     }

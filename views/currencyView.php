@@ -29,7 +29,7 @@ class currencyView extends ObjectViewer
         $retval .= "<td><a title=\"Editar\" href=\"currency.php?tipo_id={$object->id}\">{$object->id}</a></td>";
         $retval .= "<td>{$object->code}</td>";
         $retval .= "<td>{$object->description}</td>";
-        $retval .= "<td style=\"text-align: right\">" . normalize_number($object->exchangeRate) . "</td>";
+        $retval .= "<td style=\"text-align: right\">" . normalizeNumber($object->exchangeRate) . "</td>";
         return $retval;
     }
     public function printObjectList(array $object_list): string

@@ -26,7 +26,7 @@ class ledgerEntryView extends ObjectViewer
         $retval .= "<td data-label='Moeda'>{$this->object->currency->description}</td>\n";
         $retval .= "<td data-label='Conta'><a title=\"Mostrar movimentos apenas desta conta\" href=\"ledger_entries.php?filter_accountId={$this->object->account->id}\">{$this->object->account->name}</a></td>\n";
         $retval .= "<td data-label='D/C'>" . ($this->object->direction == "1" ? "Dep" : "Lev") . "</td>\n";
-        $retval .= "<td data-label='Valor' class='amount'>" . normalize_number($this->object->currencyAmount) . "</td>\n";
+        $retval .= "<td data-label='Valor' class='amount'>" . normalizeNumber($this->object->currencyAmount) . "</td>\n";
         $retval .= "<td data-label='Obs'>{$this->object->remarks}</td>\n";
         return $retval;
     }
@@ -48,7 +48,7 @@ class ledgerEntryView extends ObjectViewer
                     $view = new ledgerEntryView($object);
                     $retval .= "<tr>" . $view->printObject();
                 }
-                $retval .= "<td data-label='Saldo' class='total'>" . normalize_number($saldo) . "</td>\r\n";
+                $retval .= "<td data-label='Saldo' class='total'>" . normalizeNumber($saldo) . "</td>\r\n";
                 $retval .= "</tr>\r\n";
             }
         }

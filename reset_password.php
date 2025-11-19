@@ -1,7 +1,8 @@
 <?php
 include_once __DIR__ . "/contas_config.php";
-if (!defined("ROOT_DIR"))
+if (!defined("ROOT_DIR")) {
     include_once __DIR__ . "/prepend.php";
+}
 
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
@@ -11,7 +12,7 @@ use PHPLedger\Util\L10n;
 $pagetitle = "Redefinição de palavra-passe";
 $error = null;
 $success = null;
-
+$refreshHeader = "Refresh: 8; URL=index.php";
 $tokenId = filter_input(INPUT_GET, "tokenId", FILTER_SANITIZE_ENCODED);
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $tokenId = filter_input(INPUT_POST, "tokenId", FILTER_SANITIZE_ENCODED);
@@ -19,12 +20,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
 /* Validate token */
 if (empty($tokenId)) {
-    header("Refresh: 8; URL=index.php");
+    header($refreshHeader);
     $error = "Token em falta. Será redirecionado para a página inicial.";
 } else {
     $user = ObjectFactory::user()::getByToken($tokenId);
     if (!$user instanceof user || !$user->isTokenValid($tokenId)) {
-        header("Refresh: 8; URL=index.php");
+        header($refreshHeader);
         $error = "Token inválido ou expirado. Será redirecionado para a página inicial.";
     }
 }
@@ -44,13 +45,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && !$error) {
             $user->setToken('');
             $user->setTokenExpiry(null);
             if ($user->update()) {
-                header("Refresh: 8; URL=index.php");
+                header($refreshHeader);
                 $success = "Palavra-passe alterada com sucesso. Será redirecionado para a página inicial.";
             } else {
                 $error = "Erro ao atualizar a palavra-passe.";
             }
         } else {
-            header("Refresh: 8; URL=index.php");
+            header($refreshHeader);
             $error = "Token inválido ou expirado.";
         }
     }

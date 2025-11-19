@@ -54,13 +54,13 @@ ObjectFactory::init("mysql", $logger);
  *  * if true, print only if DEBUG is defined and true
  */
 
-function debug_print($text)
+function debugPrint($text)
 {
     if (defined("DEBUG") && DEBUG === 1) {
         print nl2br("####DEBUG#$text#DEBUG####<br>\n");
     }
 }
-function normalize_number(?float $number): string
+function normalizeNumber(?float $number): string
 {
     return null === $number ? "" : number_format($number, 2);
 }
