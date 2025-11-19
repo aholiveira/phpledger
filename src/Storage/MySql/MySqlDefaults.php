@@ -1,8 +1,6 @@
 <?php
 
 /**
- * Defaults class
- * Holds the object for default values for forms
  *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira

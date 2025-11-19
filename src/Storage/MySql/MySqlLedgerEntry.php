@@ -1,10 +1,6 @@
 <?php
 
 /**
- * Ledger entry class
- * Holds an object for a ledger entry on the ledger table
- * @property string $entry_date The entry's date. This should be in Y-m-d format
- * @property int $categoryId
  *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira

@@ -11,62 +11,49 @@
 namespace PHPLedger\Util;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Config;
-class Html
+final class Html
 {
-    /**
-     * Option list for year selection
-     * If no end value is provided current year is used
-     * If no selected value is provided, current year is selected
-     */
     public static function yearOptions(?int $selected = null, int $start = 1990, ?int $end = null): string
     {
-        return self::buildOptions($start, null === $end ? date("Y") : $end, null === $selected ? date("Y") : $selected);
+        return self::buildOptions($start, $end ?? date("Y"), $selected ?? (int) date("Y"));
     }
-    /**
-     * Option list for month selection
-     * If no end value is provided current month is used
-     * If no selected value is provided, current month is selected
-     */
     public static function monthOptions(?string $selected = null): string
     {
-        return self::buildOptions(1, 12, null === $selected ? date("n") : $selected);
+        return self::buildOptions(1, 12, $selected ?? date("n"));
     }
-    /**
-     * Option list for day selection
-     * If no end value is provided current day is used
-     * If no selected value is provided, current day is selected
-     */
     public static function dayOptions(?string $selected = null): string
     {
-        return self::buildOptions(1, 31, null === $selected ? date("d") : $selected);
+        return self::buildOptions(1, 31, $selected ?? date("d"));
     }
     public static function hourOptions(?string $selected = null): string
     {
-        return self::buildOptions(0, 23, null === $selected ? date("G") : $selected);
+        return self::buildOptions(0, 23, $selected ?? date("G"));
     }
     public static function minuteOptions(?string $selected = null): string
     {
-        return self::buildOptions(0, 59, null === $selected ? date("i") : $selected);
+        return self::buildOptions(0, 59, $selected ?? date("i"));
     }
     public static function buildOptions(int $start, int $end, ?string $selected = null): string
     {
+        $selectedValue = (int) $selected;
         $retval = "";
-        $length = strlen($end);
+        $length = \strlen((string) $end);
         for ($i = $start; $i <= $end; $i++) {
-            $retval .= sprintf("<option value=\"%d\" %s>%0{$length}d</option>\n", $i, ($i === (int) $selected ? "selected" : ""), $i);
+            $s = $i === $selectedValue ? ' selected' : '';
+            $retval .= \sprintf("<option value=\"%d\"%s>%0{$length}d</option>\n", $i, $s, $i);
         }
         return $retval;
     }
     public static function errortext(string $message): never
     {
         ?>
-        <p><?= $message ?></p>
+        <p><?= htmlspecialchars($message) ?></p>
         </div>
         </body>
 
         </html>
         <?php
-        die();
+        exit;
     }
     public static function myalert(string $message): void
     {
@@ -78,9 +65,11 @@ class Html
     }
     public static function header($pagetitle = ""): void
     {
+        $title = trim($pagetitle) !== '' ? "$pagetitle - " : '';
+        $fullTitle = $title . Config::get("title");
         ?>
         <title>
-            <?= htmlspecialchars((!empty($pagetitle) ? "$pagetitle - " : "") . config::get("title")) ?>
+            <?= htmlspecialchars($fullTitle) ?>
         </title>
         <script>
             document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone + "; path=/";
@@ -93,15 +82,15 @@ class Html
     }
     public static function footer(): void
     {
+        $expires = date("Y-m-d H:i:s", $_SESSION['expires']);
         ?>
         <footer>
             <div class='footer'>
                 <span class='RCS'><a href="https://github.com/aholiveira/phpledger"
-                        aria-label="<?= l10n::l("version", VERSION) ?>"><?= l10n::l("version", VERSION) ?></a></span>
-                <span class='RCS'
-                    style="display: flex; align-items: center"><?= l10n::l("session_expires", date("Y-m-d H:i:s", $_SESSION['expires'])) ?>
+                        aria-label="<?= L10n::l("version", VERSION) ?>"><?= L10n::l("version", VERSION) ?></a></span>
+                <span class='RCS' style="display: flex; align-items: center"><?= L10n::l("session_expires", $expires) ?>
                     <span style="margin-left: auto; display: flex;">
-                        <?php if (l10n::$lang === 'pt-pt'): ?>
+                        <?php if (L10n::$lang === 'pt-pt'): ?>
                             <a href="?lang=en-us">EN</a> | <span>PT</span>
                         <?php else: ?>
                             <span>EN</span> | <a href="?lang=pt-pt">PT</a>
@@ -114,33 +103,34 @@ class Html
     }
     public static function menu(): void
     {
+        $lang = L10n::$lang;
         ?>
         <aside class="menu">
             <nav>
                 <ul>
-                    <li><a id="ledger_entries" href="ledger_entries.php?lang=<?= l10n::$lang ?>"
-                            aria-label="<?= l10n::l("ledger_entries") ?>"><?= l10n::l("ledger_entries") ?></a>
+                    <li><a id="ledger_entries" href="ledger_entries.php?lang=<?= $lang ?>"
+                            aria-label="<?= L10n::l("ledger_entries") ?>"><?= L10n::l("ledger_entries") ?></a>
                     </li>
-                    <li><a id="balance" href="balances.php?lang=<?= l10n::$lang ?>"
-                            aria-label="<?= l10n::l("balances") ?>"><?= l10n::l("balances") ?></a>
+                    <li><a id="balance" href="balances.php?lang=<?= $lang ?>"
+                            aria-label="<?= L10n::l("balances") ?>"><?= L10n::l("balances") ?></a>
                     </li>
-                    <li><a id="accounts" href="accounts.php?lang=<?= l10n::$lang ?>"
-                            aria-label="<?= l10n::l("accounts") ?>"><?= l10n::l("accounts") ?></a>
+                    <li><a id="accounts" href="accounts.php?lang=<?= $lang ?>"
+                            aria-label="<?= L10n::l("accounts") ?>"><?= L10n::l("accounts") ?></a>
                     </li>
-                    <li><a id="account_type" href="account_types_list.php?lang=<?= l10n::$lang ?>"
-                            aria-label="<?= l10n::l("account_types") ?>"><?= l10n::l("account_types") ?></a>
+                    <li><a id="account_type" href="account_types_list.php?lang=<?= $lang ?>"
+                            aria-label="<?= L10n::l("account_types") ?>"><?= L10n::l("account_types") ?></a>
                     </li>
-                    <li><a id="entry_type" href="entry_types_list.php?lang=<?= l10n::$lang ?>"
-                            aria-label="<?= l10n::l("entry_types") ?>"><?= l10n::l("entry_types") ?></a>
+                    <li><a id="entry_type" href="entry_types_list.php?lang=<?= $lang ?>"
+                            aria-label="<?= L10n::l("entry_types") ?>"><?= L10n::l("entry_types") ?></a>
                     </li>
-                    <li><a id="report_month" href="report_month.php?lang=<?= l10n::$lang ?>&year=<?= date("Y") ?>"
-                            aria-label="<?= l10n::l("report_month") ?>"><?= l10n::l("report_month") ?></a>
+                    <li><a id="report_month" href="report_month.php?lang=<?= $lang ?>&year=<?= date("Y") ?>"
+                            aria-label="<?= L10n::l("report_month") ?>"><?= L10n::l("report_month") ?></a>
                     </li>
-                    <li><a id="report_year" href="report_year.php?lang=<?= l10n::$lang ?>&year=<?= date("Y") - 1 ?>"
-                            aria-label="<?= l10n::l("report_year") ?>"><?= l10n::l("report_year") ?></a>
+                    <li><a id="report_year" href="report_year.php?lang=<?= $lang ?>&year=<?= date("Y") - 1 ?>"
+                            aria-label="<?= L10n::l("report_year") ?>"><?= L10n::l("report_year") ?></a>
                     </li>
-                    <li><a id="logout" href="index.php?lang=<?= l10n::$lang ?>&do_logout=1"
-                            aria-label="<?= l10n::l("logout") ?>"><?= l10n::l("logout") ?></a>
+                    <li><a id="logout" href="index.php?lang=<?= $lang ?>&do_logout=1"
+                            aria-label="<?= L10n::l("logout") ?>"><?= L10n::l("logout") ?></a>
                 </ul>
             </nav>
         </aside>
@@ -148,12 +138,13 @@ class Html
     }
     public static function languageSelector(bool $div = true): void
     {
+        $lang = L10n::$lang;
         if ($div) {
             ?>
             <div>
                 <?php
         }
-        if (l10n::$lang === 'pt-pt'): ?>
+        if ($lang === 'pt-pt'): ?>
                 <a href="?lang=en-us">EN</a> | <span>PT</span>
             <?php else: ?>
                 <span>EN</span> | <a href="?lang=pt-pt">PT</a>
