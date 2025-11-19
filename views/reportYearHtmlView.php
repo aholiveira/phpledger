@@ -9,7 +9,7 @@
  *
  */
 use PHPLedger\Domain\ReportYear;
-class reportYearHtmlView extends reportHtmlView
+class ReportYearHtmlView extends reportHtmlView
 {
     public function __construct(ReportYear $report)
     {

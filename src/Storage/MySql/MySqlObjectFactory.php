@@ -13,7 +13,6 @@ use PHPLedger\Contracts\DataStorageInterface;
 use PHPLedger\Util\Logger;
 class MySqlObjectFactory implements DataObjectFactoryInterface
 {
-    private static ?\mysqli $dbConnection = null;
     private Logger $logger;
 
     public function __construct(string $backend = "mysql", ?Logger $logger = null)

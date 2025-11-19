@@ -10,7 +10,7 @@
  */
 use PHPLedger\Domain\EntryCategory;
 use PHPLedger\Storage\ObjectFactory;
-class entryCategoryView extends ObjectViewer
+class EntryCategoryView extends ObjectViewer
 {
     public function __construct(EntryCategory $object)
     {

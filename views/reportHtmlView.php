@@ -9,7 +9,7 @@
  *
  */
 use PHPLedger\Domain\report;
-class reportHtmlView
+class ReportHtmlView
 {
     private $_periodIncome;
     private $_periodExpense;

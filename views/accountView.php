@@ -12,7 +12,7 @@ use PHPLedger\Domain\Account;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Html;
 use PHPLedger\Views\ViewFactory;
-class accountView extends ObjectViewer
+class AccountView extends ObjectViewer
 {
     public function printObject(): string
     {

@@ -10,7 +10,7 @@
  */
 use PHPLedger\Contracts\DataObjectInterface;
 use PHPLedger\Domain\LedgerEntry;
-class ledgerEntryView extends ObjectViewer
+class LedgerEntryView extends ObjectViewer
 {
     /** @var ledgerentry $object */
     protected DataObjectInterface $object;

@@ -10,7 +10,7 @@
  */
 use PHPLedger\Domain\Account;
 use PHPLedger\Util\L10n;
-class accountBalanceView extends ObjectViewer
+class AccountBalanceView extends ObjectViewer
 {
     public function printObject(): string
     {
