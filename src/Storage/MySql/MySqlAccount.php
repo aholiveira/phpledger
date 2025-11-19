@@ -9,7 +9,7 @@
  *
  */
 namespace PHPLedger\Storage\MySql;
-use \PHPLedger\Domain\Account;
+use PHPLedger\Domain\Account;
 class MySqlAccount extends Account
 {
     use MySqlObject {

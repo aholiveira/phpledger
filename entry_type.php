@@ -8,10 +8,10 @@
  *
  */
 include_once __DIR__ . "/contas_config.php";
-use \PHPLedger\Storage\ObjectFactory;
-use \PHPLedger\Util\Html;
-use \PHPLedger\Util\L10n;
-use \PHPLedger\Views\ViewFactory;
+use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Util\Html;
+use PHPLedger\Util\L10n;
+use PHPLedger\Views\ViewFactory;
 $pagetitle = "Tipo de movimentos";
 ?>
 <!DOCTYPE html>

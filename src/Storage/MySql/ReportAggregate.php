@@ -10,7 +10,7 @@
  *
  */
 namespace PHPLedger\Storage\MySql;
-use \PHPLedger\Contracts\ReportInterface;
+use PHPLedger\Contracts\ReportInterface;
 class ReportAggregate implements ReportInterface
 {
     public int $year;

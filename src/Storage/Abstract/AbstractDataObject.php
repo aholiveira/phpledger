@@ -1,7 +1,7 @@
 <?php
 
 namespace PHPLedger\Storage\Abstract;
-use \PHPLedger\Contracts\DataObjectInterface;
+use PHPLedger\Contracts\DataObjectInterface;
 
 abstract class AbstractDataObject implements DataObjectInterface
 {

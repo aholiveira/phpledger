@@ -1,10 +1,10 @@
 <?php
 namespace PHPLedger\Domain;
 
-use \PHPLedger\Contracts\DataObjectInterface;
-use \PHPLedger\Storage\Abstract\AbstractDataObject;
-use \PHPLedger\Util\Config;
-use \PHPLedger\Util\Email;
+use PHPLedger\Contracts\DataObjectInterface;
+use PHPLedger\Storage\Abstract\AbstractDataObject;
+use PHPLedger\Util\Config;
+use PHPLedger\Util\Email;
 const USER_ROLE_ADM = 255;
 const USER_ROLE_RW = 192;
 const USER_ROLE_RO = 128;

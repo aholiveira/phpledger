@@ -1,9 +1,9 @@
 <?php
 
 namespace PHPLedger\Storage;
-use \PHPLedger\Contracts\DataObjectFactoryInterface;
-use \PHPLedger\Storage\Abstract\AbstractObjectFactory;
-use \PHPLedger\Util\Logger;
+use PHPLedger\Contracts\DataObjectFactoryInterface;
+use PHPLedger\Storage\Abstract\AbstractObjectFactory;
+use PHPLedger\Util\Logger;
 
 class ObjectFactory extends AbstractObjectFactory implements DataObjectFactoryInterface
 {

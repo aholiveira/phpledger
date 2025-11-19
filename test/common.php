@@ -6,7 +6,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-use \PHPLedger\Util\Config;
+use PHPLedger\Util\Config;
 
 if (!defined("DEBUG")) {
     define("DEBUG", true);

@@ -8,7 +8,7 @@
  *
  */
 namespace PHPLedger\Storage\MySql;
-use \PHPLedger\Domain\Ledger;
+use PHPLedger\Domain\Ledger;
 class MySqlLedger extends Ledger
 {
     use MySqlObject {

@@ -8,10 +8,10 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-use \PHPLedger\Domain\Account;
-use \PHPLedger\Storage\ObjectFactory;
-use \PHPLedger\Util\Html;
-use \PHPLedger\Views\ViewFactory;
+use PHPLedger\Domain\Account;
+use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Util\Html;
+use PHPLedger\Views\ViewFactory;
 class accountView extends ObjectViewer
 {
     public function printObject(): string

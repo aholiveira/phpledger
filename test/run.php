@@ -1,10 +1,10 @@
 <?php
 include_once "common.php";
-use \PHPLedger\Contracts\DataObjectInterface;
-use \PHPLedger\Storage\MySql\MySqlObject;
-use \PHPLedger\Storage\ObjectFactory;
-use \PHPLedger\Util\Logger;
-use \PHPLedger\Views\ViewFactory;
+use PHPLedger\Contracts\DataObjectInterface;
+use PHPLedger\Storage\MySql\MySqlObject;
+use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Util\Logger;
+use PHPLedger\Views\ViewFactory;
 
 debug_print("Running tests...");
 $logger = new Logger("run.log");
