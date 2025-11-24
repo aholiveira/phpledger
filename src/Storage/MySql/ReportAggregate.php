@@ -28,15 +28,15 @@ class ReportAggregate implements ReportInterface
 
     public function getReport(array $params = []): ReportAggregate
     {
-        $sql = "SELECT tipo_id AS categoryId, tipo_desc, sum(euroAmount) AS sum, month(entry_date) AS `month`
-                FROM movimentos INNER JOIN tipo_mov ON movimentos.categoryId=tipo_id
-                WHERE year(entry_date)=?
-                GROUP BY categoryId, month(entry_date)
+        $sql = "SELECT movimentos.categoryId, tipo_mov.description, sum(euroAmount) AS sum, month(entryDate) AS `month`
+                FROM movimentos INNER JOIN tipo_mov ON movimentos.categoryId=tipo_mov.id
+                WHERE year(entryDate)=?
+                GROUP BY categoryId, month(entryDate)
                 ORDER BY `month`, tipo_desc";
         $tipo_desc = "";
         $sum = 0;
         $month = 0;
-        if (!array_key_exists("year", $params)) {
+        if (!\array_key_exists("year", $params)) {
             return $this;
         }
         $this->year = $params["year"];
@@ -57,7 +57,7 @@ class ReportAggregate implements ReportInterface
         $savings_types = $account_type->getList(['savings' => ['operator' => '=', 'value' => '1']]);
         $savings_accounts = [];
         foreach ($savings_types as $saving_type) {
-            foreach ($account->getList(['tipo_id' => ['operator' => '=', 'value' => $saving_type->id]]) as $acc) {
+            foreach ($account->getList(['id' => ['operator' => '=', 'value' => $saving_type->id]]) as $acc) {
                 $savings_accounts[] = $acc;
             }
         }

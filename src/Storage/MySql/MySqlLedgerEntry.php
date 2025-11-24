@@ -43,10 +43,10 @@ class MySqlLedgerEntry extends LedgerEntry
         $retval['new'] = [
             'mov_id' => 'id',
             'tipo_mov' => 'categoryId',
-            'data_mov' => 'entry_date',
+            'data_mov' => 'entryDate',
             'conta_id' => 'accountId',
             'deb_cred' => 'direction',
-            'moeda_mov' => 'currency_id',
+            'moeda_mov' => 'currencyId',
             'valor_mov' => 'currencyAmount',
             'valor_euro' => 'euroAmount',
             'cambio' => 'exchangeRate',
@@ -58,14 +58,16 @@ class MySqlLedgerEntry extends LedgerEntry
             'euro_amount' => 'euroAmount',
             'currency_amount' => 'currencyAmount',
             'category_id' => 'categoryId',
-            'account_id' => 'accountId'
+            'account_id' => 'accountId',
+            'currency_id' => 'currencyId',
+            'entry_date' => 'entryDate'
         ];
         $retval['columns'] = [
             "id" => "int(4) NOT NULL AUTO_INCREMENT",
-            "entry_date" => "date DEFAULT NULL",
+            "entryDate" => "date DEFAULT NULL",
             "categoryId" => "int(3) DEFAULT NULL",
             "accountId" => "int(3) DEFAULT NULL",
-            "currency_id" => "char(3) NOT NULL DEFAULT 'EUR'",
+            "currencyId" => "char(3) NOT NULL DEFAULT 'EUR'",
             "direction" => "tinyint(1) NOT NULL DEFAULT 1",
             "currencyAmount" => "float(10,2) DEFAULT NULL",
             "euroAmount" => "float(10,2) DEFAULT NULL",
@@ -83,14 +85,14 @@ class MySqlLedgerEntry extends LedgerEntry
     public static function getList(array $fieldFilter = []): array
     {
         $where = self::getWhereFromArray($fieldFilter);
-        $sql = "SELECT id, entry_date, categoryId,
+        $sql = "SELECT id, entryDate, categoryId,
             accountId,
-            round(currencyAmount,2) as currencyAmount, `direction`, currency_id,
+            round(currencyAmount,2) as currencyAmount, `direction`, currencyId,
             exchangeRate, euroAmount,
             remarks, username, createdAt, updatedAt
             FROM " . static::tableName() . "
             {$where}
-            ORDER BY entry_date, id";
+            ORDER BY entryDate, id";
         $retval = [];
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
@@ -112,9 +114,9 @@ class MySqlLedgerEntry extends LedgerEntry
 
     public static function getById($id): ?ledgerentry
     {
-        $sql = "SELECT id, entry_date, categoryId,
+        $sql = "SELECT id, entryDate, categoryId,
             accountId,
-            round(currencyAmount,2) as currencyAmount, `direction`, currency_id,
+            round(currencyAmount,2) as currencyAmount, `direction`, currencyId,
             exchangeRate, euroAmount,
             remarks, username, createdAt, updatedAt
             FROM " . static::tableName() . "
@@ -143,7 +145,7 @@ class MySqlLedgerEntry extends LedgerEntry
         $retval = null;
         $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(euroAmount),euroAmount,0),5)),2) AS balance
                 FROM {$this->tableName()}
-                WHERE entry_date<?" . (null !== $accountId ? " AND accountId=?" : "");
+                WHERE entryDate<?" . (null !== $accountId ? " AND accountId=?" : "");
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
@@ -201,8 +203,8 @@ class MySqlLedgerEntry extends LedgerEntry
         if (isset($this->accountId)) {
             $this->account = MySqlAccount::getById($this->accountId);
         }
-        if (isset($this->currency_id)) {
-            $this->currency = MySqlCurrency::getById($this->currency_id);
+        if (isset($this->currencyId)) {
+            $this->currency = MySqlCurrency::getById($this->currencyId);
         }
     }
     public function update(): bool
@@ -213,13 +215,13 @@ class MySqlLedgerEntry extends LedgerEntry
         }
         try {
             $sql = "INSERT INTO {$this->tableName()}
-            (id, entry_date, categoryId, accountId, currency_id, direction, currencyAmount, euroAmount, remarks, username, createdAt, updatedAt)
+            (id, entryDate, categoryId, accountId, currencyId, direction, currencyAmount, euroAmount, remarks, username, createdAt, updatedAt)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL)
             ON DUPLICATE KEY UPDATE
-                entry_date=VALUES(entry_date),
+                entryDate=VALUES(entryDate),
                 categoryId=VALUES(categoryId),
                 accountId=VALUES(accountId),
-                currency_id=VALUES(currency_id),
+                currencyId=VALUES(currencyId),
                 direction=VALUES(direction),
                 currencyAmount=VALUES(currencyAmount),
                 euroAmount=VALUES(euroAmount),
@@ -233,10 +235,10 @@ class MySqlLedgerEntry extends LedgerEntry
             $stmt->bind_param(
                 "isiisiddss",
                 $this->id,
-                $this->entry_date,
+                $this->entryDate,
                 $this->categoryId,
                 $this->accountId,
-                $this->currency_id,
+                $this->currencyId,
                 $this->direction,
                 $this->currencyAmount,
                 $this->euroAmount,

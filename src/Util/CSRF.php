@@ -7,9 +7,6 @@ class CSRF
 
     public static function generateToken(): string
     {
-        if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
-            session_start();
-        }
         $token = bin2hex(random_bytes(32));
         $_SESSION[self::TOKEN_KEY] = [
             'value' => $token,
@@ -20,9 +17,6 @@ class CSRF
 
     public static function getToken(): ?string
     {
-        if (session_status() !== PHP_SESSION_ACTIVE && !headers_sent()) {
-            session_start();
-        }
         if (!isset($_SESSION[self::TOKEN_KEY])) {
             return null;
         }
@@ -35,9 +29,6 @@ class CSRF
 
     public static function validateToken(?string $token): bool
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
         $storedToken = self::getToken();
         if (!$storedToken || !$token) {
             return false;
@@ -51,9 +42,6 @@ class CSRF
 
     public static function removeToken(): void
     {
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
         unset($_SESSION[self::TOKEN_KEY]);
     }
 

@@ -36,12 +36,12 @@ class MySqlReportMonth extends ReportMonth
 
     public function getReport(array $params = []): self
     {
-        $this->year = array_key_exists("year", $params) ? $params["year"] : date("Y");
+        $this->year = \array_key_exists("year", $params) ? $params["year"] : date("Y");
         $this->initColumnHeaders($this->year);
-        $sql = "SELECT categoryId as `row_header`, MONTH(entry_date) AS `col_header`, ROUND(SUM(ROUND(euroAmount,5)),2) AS `value`
+        $sql = "SELECT categoryId as `row_header`, MONTH(entryDate) AS `col_header`, ROUND(SUM(ROUND(euroAmount,5)),2) AS `value`
             FROM movimentos
-            WHERE YEAR(entry_date)=?
-            GROUP BY categoryId, MONTH(entry_date)
+            WHERE YEAR(entryDate)=?
+            GROUP BY categoryId, MONTH(entryDate)
             HAVING ROUND(SUM(ROUND(euroAmount,5)),2)<>0
             ORDER BY row_header, col_header";
         self::getData($sql, $this->year);
@@ -51,7 +51,7 @@ class MySqlReportMonth extends ReportMonth
         $savings_types = $account_type->getList(['savings' => ['operator' => '=', 'value' => '1']]);
         $savings_accounts = [];
         foreach ($savings_types as $saving_type) {
-            foreach ($account->getList(['tipo_id' => ['operator' => '=', 'value' => $saving_type->id]]) as $acc) {
+            foreach ($account->getList(['typeId' => ['operator' => '=', 'value' => $saving_type->id]]) as $acc) {
                 $savings_accounts[] = $acc;
             }
         }

@@ -19,25 +19,27 @@ class MysqlAccountType extends AccountType
     public function __construct()
     {
         $this->traitConstruct();
-        static::getNextId();
     }
 
     public static function getDefinition(): array
     {
         $retval = [];
-        $retval['new'] = [];
+        $retval['new'] = [
+            'tipo_id' => 'id',
+            'tipo_desc' => 'description'
+        ];
         $retval['columns'] = [
-            "tipo_id" => "int(2) NOT NULL DEFAULT 0",
-            "tipo_desc" => "char(30) DEFAULT NULL",
+            "id" => "int(2) NOT NULL DEFAULT 0",
+            "description" => "char(30) DEFAULT NULL",
             "savings" => "int(1) NOT NULL DEFAULT 0"
         ];
-        $retval['primary_key'] = "tipo_id";
+        $retval['primary_key'] = "id";
         return $retval;
     }
     public static function getList(array $fieldFilter = []): array
     {
         $where = static::getWhereFromArray($fieldFilter);
-        $sql = "SELECT tipo_id as id, tipo_desc as description, savings FROM " . static::tableName() . " {$where}";
+        $sql = "SELECT id, `description`, savings FROM " . static::tableName() . " {$where}";
         $retval = [];
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
@@ -58,7 +60,7 @@ class MysqlAccountType extends AccountType
 
     public static function getById(int $id): ?AccountType
     {
-        $sql = "SELECT tipo_id as id, tipo_desc as description, savings FROM " . static::tableName() . " WHERE tipo_id=?";
+        $sql = "SELECT id, `description`, savings FROM " . static::tableName() . " WHERE id=?";
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
@@ -84,10 +86,10 @@ class MysqlAccountType extends AccountType
         $retval = false;
         try {
             $sql = "INSERT INTO {$this->tableName()}
-                (`tipo_desc`, `savings`, `tipo_id`)
+                (`description`, `savings`, `id`)
                 VALUES (?, ?, ?)
                 ON DUPLICATE KEY UPDATE
-                    `tipo_desc` = VALUES(`tipo_desc`),
+                    `description` = VALUES(`description`),
                     `savings` = VALUES(`savings`)";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
@@ -113,7 +115,7 @@ class MysqlAccountType extends AccountType
     {
         $retval = false;
         try {
-            $sql = "DELETE FROM {$this->tableName()} WHERE tipo_id=?";
+            $sql = "DELETE FROM {$this->tableName()} WHERE id=?";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             $stmt->bind_param("i", $this->id);
             $retval = $stmt->execute();
@@ -122,9 +124,5 @@ class MysqlAccountType extends AccountType
             $this->handleException($ex, $sql);
         }
         return $retval;
-    }
-    public static function getNextId(string $field = "tipo_id"): int
-    {
-        return self::traitGetNextId($field);
     }
 }

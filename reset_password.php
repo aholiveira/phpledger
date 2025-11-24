@@ -1,5 +1,4 @@
 <?php
-include_once __DIR__ . "/contas_config.php";
 if (!defined("ROOT_DIR")) {
     include_once __DIR__ . "/prepend.php";
 }

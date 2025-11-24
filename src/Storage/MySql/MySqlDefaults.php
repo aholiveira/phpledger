@@ -10,6 +10,7 @@
 namespace PHPLedger\Storage\MySql;
 use PHPLedger\Domain\Defaults;
 use PHPLedger\Util\Config;
+use PHPLedger\Util\Logger;
 class MySqlDefaults extends Defaults
 {
     use MySqlObject {
@@ -20,31 +21,42 @@ class MySqlDefaults extends Defaults
     public function __construct($data = null)
     {
         $this->traitConstruct();
-        $this->id = $data["id"] ?? 1;
-        $this->categoryId = $data["categoryId"] ?? 990;
-        $this->accountId = $data["accountId"] ?? 0;
-        $this->currency_id = $data["currency_id"] ?? "EUR";
-        $this->entry_date = $data["entry_date"] ?? date("Y-m-d");
-        $this->direction = $data["direction"] ?? 1;
-        $this->language = $data["language"] ?? 'pt-PT';
-        $this->last_visited = $data["last_visited"] ?? "";
-        $this->username = $data["username"] ?? config::get("admin_username");
+        if (!empty($data) && \is_array($data)) {
+            $this->id = $data["id"] ?? 1;
+            $this->categoryId = $data["categoryId"] ?? 990;
+            $this->accountId = $data["accountId"] ?? 0;
+            $this->currencyId = $data["currencyId"] ?? "EUR";
+            $this->entryDate = $data["entryDate"] ?? date("Y-m-d");
+            $this->direction = $data["direction"] ?? 1;
+            $this->language = $data["language"] ?? 'pt-PT';
+            $this->lastVisited = $data["lastVisited"] ?? "";
+            $this->showReportGraph = $data["showReportGraph"] ?? 0;
+            $this->username = $data["username"] ?? config::get("admin_username");
+        }
     }
     public static function getDefinition(): array
     {
         $retval = [];
-        $retval['new'] = [];
+        $retval['new'] = [
+            "tipo_mov" => "categoryId",
+            "conta_id" => "accountId",
+            "moeda_mov" => "currencyId",
+            "data" => "entryDate",
+            "deb_cred" => "direction",
+            "last_visited" => "lastVisited",
+            "show_report_graph" => "showReportGraph"
+        ];
         $retval['columns'] = [
             "id" => "int(1) NOT NULL DEFAULT 0",
-            "tipo_mov" => "int(3) DEFAULT NULL",
-            "conta_id" => "int(3) DEFAULT NULL",
-            "moeda_mov" => "char(3) DEFAULT NULL",
-            "data" => "date DEFAULT NULL",
-            "deb_cred" => "enum('1','-1') DEFAULT NULL",
+            "categoryId" => "int(3) DEFAULT NULL",
+            "accountId" => "int(3) DEFAULT NULL",
+            "currencyId" => "char(3) DEFAULT NULL",
+            "entryDate" => "date DEFAULT NULL",
+            "direction" => "enum('1','-1') DEFAULT NULL",
             "language" => "char(10) DEFAULT NULL",
-            "last_visited" => "char(255) DEFAULT NULL",
+            "lastVisited" => "char(255) DEFAULT NULL",
             "username" => "char(100) DEFAULT NULL",
-            "show_report_graph" => "int(1) NOT NULL DEFAULT 0",
+            "showReportGraph" => "int(1) NOT NULL DEFAULT 0",
         ];
         $retval['primary_key'] = "id";
         return $retval;
@@ -53,14 +65,14 @@ class MySqlDefaults extends Defaults
     {
         $where = self::getWhereFromArray($fieldFilter);
         $sql = "SELECT
-            id as id,
-            tipo_mov as `categoryId`,
-            conta_id as `accountId`,
-            moeda_mov as `currency_id`,
-            `data` as `entry_date`,
-            deb_cred as direction,
+            id,
+            `categoryId`,
+            `accountId`,
+            `currencyId`,
+            `entryDate`,
+            direction,
             `language`,
-            last_visited,
+            lastVisited,
             username
         FROM " . self::$tableName . "
         {$where}
@@ -86,13 +98,13 @@ class MySqlDefaults extends Defaults
     {
         $sql = "SELECT
             id,
-            tipo_mov as `categoryId`,
-            conta_id as `accountId`,
-            moeda_mov as `currency_id`,
-            `data` as `entry_date`,
-            deb_cred as direction,
+            `categoryId`,
+            `accountId`,
+            `currencyId`,
+            `entryDate`,
+            direction,
             `language`,
-            last_visited,
+            lastVisited,
             username
             FROM " . self::$tableName . "
             WHERE id=?";
@@ -119,13 +131,13 @@ class MySqlDefaults extends Defaults
     {
         $sql = "SELECT
             id,
-            tipo_mov as `categoryId`,
-            conta_id as `accountId`,
-            moeda_mov as `currency_id`,
-            `data` as `entry_date`,
-            deb_cred as direction,
+            `categoryId`,
+            `accountId`,
+            `currencyId`,
+            `entryDate`,
+            direction,
             `language`,
-            last_visited,
+            lastVisited,
             username
             FROM " . self::$tableName . "
             WHERE trim(lower(username))=trim(lower(?))";
@@ -141,9 +153,7 @@ class MySqlDefaults extends Defaults
                 throw new \mysqli_sql_exception();
             }
             $result = $stmt->get_result();
-            if ($row = $result->fetch_assoc()) {
-                $retval = new MySqlDefaults($row);
-            }
+            $retval = $result->fetch_object(__CLASS__);
             $stmt->close();
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
@@ -163,16 +173,16 @@ class MySqlDefaults extends Defaults
         $retval = false;
         try {
             $sql = "INSERT INTO {$this->tableName()}
-                    (tipo_mov, conta_id, moeda_mov, `data`, deb_cred, `language`, last_visited, username, id)
+                    (categoryId, accountId, currencyId, `entryDate`, direction, `language`, lastVisited, username, id)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON DUPLICATE KEY UPDATE
-                    tipo_mov=VALUES(tipo_mov),
-                    conta_id=VALUES(conta_id),
-                    moeda_mov=VALUES(moeda_mov),
-                    `data`=VALUES(`data`),
-                    deb_cred=VALUES(deb_cred),
+                    categoryId=VALUES(categoryId),
+                    accountId=VALUES(accountId),
+                    currencyId=VALUES(currencyId),
+                    `entryDate`=VALUES(`entryDate`),
+                    direction=VALUES(direction),
                     `language`=VALUES(`language`),
-                    last_visited=VALUES(last_visited),
+                    lastVisited=VALUES(lastVisited),
                     username=VALUES(username)";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
@@ -182,11 +192,11 @@ class MySqlDefaults extends Defaults
                 "ssssssssi",
                 $this->categoryId,
                 $this->accountId,
-                $this->currency_id,
-                $this->entry_date,
+                $this->currencyId,
+                $this->entryDate,
                 $this->direction,
                 $this->language,
-                $this->last_visited,
+                $this->lastVisited,
                 $this->username,
                 $this->id
             );

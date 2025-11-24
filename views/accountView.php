@@ -62,9 +62,9 @@ class AccountView extends ObjectViewer
         $accountTypeView = ViewFactory::instance()->accountTypeView($account_type);
         $tipo_opt = $accountTypeView->getSelectFromList($account_type->getList(), isset($object->typeId) ? $object->typeId : null);
         $retval .= "<td data-label='ID'><input type=\"hidden\" name=\"conta_id\" value=\"{$id}\">{$id}</td>\n";
-        $retval .= "<td data-label='Nome'><a id=\"{$id}\"></a><input type=text size=16 maxlength=30 name=\"conta_nome\" value=\"{$object->name}\"></td>";
-        $retval .= "<td data-label='Numero'><input type=text size=15 maxlength=30 name=\"conta_num\" value=\"{$object->number}\"></td>";
-        $retval .= "<td data-label='Tipo'><select name=\"tipo_id\">{$tipo_opt}</select>";
+        $retval .= "<td data-label='Nome'><a id=\"{$id}\"></a><input type=text size=16 maxlength=30 name=\"name\" value=\"{$object->name}\"></td>";
+        $retval .= "<td data-label='Numero'><input type=text size=15 maxlength=30 name=\"number\" value=\"{$object->number}\"></td>";
+        $retval .= "<td data-label='Tipo'><select name=\"typeId\">{$tipo_opt}</select>";
         $retval .= "<td data-label='NIB'><input type=text size=24 maxlength=24 name=\"conta_nib\" value=\"{$object->iban}\"></td>";
         $retval .= "<td data-label='Abertura'>\r\n";
         $retval .= "<select class=\"date-fallback\" style=\"display: none\" name=\"aberturaAA\">" . Html::yearOptions(isset($object->openDate) ? substr($object->openDate, 0, 4) : null) . "</select>\r\n";

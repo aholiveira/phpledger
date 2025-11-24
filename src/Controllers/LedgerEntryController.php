@@ -25,7 +25,7 @@ class LedgerEntryController
         }
 
         // 2) grab and validate the other fields
-        foreach (['currencyAmount', 'direction', 'categoryId', 'currency_id', 'accountId'] as $fld) {
+        foreach (['currencyAmount', 'direction', 'categoryId', 'currencyId', 'accountId'] as $fld) {
             if (!isset($input[$fld]) || $input[$fld] === '' || $input[$fld] === false) {
                 throw new DomainException(l10n::l("invalid_parameter", $fld));
             }
@@ -33,13 +33,13 @@ class LedgerEntryController
 
         // 3) hydrate and save
         $entry = ObjectFactory::ledgerentry();
-        $entry->entry_date = $dt->format('Y-m-d');
+        $entry->entryDate = $dt->format('Y-m-d');
         $entry->id = (int) $input['id'] ?? $entry::getNextId();
         $entry->currencyAmount = (float) $input['currencyAmount'];
         $entry->direction = (int) $input['direction'];
         $entry->euroAmount = $entry->direction * $entry->currencyAmount;
         $entry->categoryId = (int) $input['categoryId'];
-        $entry->currency_id = $input['currency_id'];
+        $entry->currencyId = $input['currencyId'];
         $entry->accountId = (int) $input['accountId'];
         $entry->remarks = $input['remarks'];
         $entry->remarks = $input['remarks'];
@@ -54,9 +54,9 @@ class LedgerEntryController
             ?? ObjectFactory::defaults()::init();
 
         $defaults->categoryId = $entry->categoryId;
-        $defaults->currency_id = $entry->currency_id;
+        $defaults->currencyId = $entry->currencyId;
         $defaults->accountId = $entry->accountId;
-        $defaults->entry_date = $entry->entry_date;
+        $defaults->entryDate = $entry->entryDate;
         $defaults->direction = $entry->direction;
         $defaults->language = l10n::$lang;
         $defaults->username = $_SESSION['user'] ?? 'empty';

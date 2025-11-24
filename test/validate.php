@@ -82,7 +82,7 @@ function prepare_entry_category(): bool
     $object = ObjectFactory::entryCategory();
     for ($id = 1; $id < 60; $id++) {
         $object->id = $id;
-        $object->parent_id = $id < 10 ? 0 : (int) ($id / 10);
+        $object->parentId = $id < 10 ? 0 : (int) ($id / 10);
         $object->description = "entry category $id";
         $object->active = 1;
         $retval = $object->update() && $retval;
@@ -106,10 +106,10 @@ function prepare_ledgerentry(): bool
     $object = ObjectFactory::ledgerentry();
     for ($id = 1; $id < 60; $id++) {
         $object->id = $id;
-        $object->entry_date = date("Y-m-d", mktime($hour = 0, null, null, date("m"), $id < 10 ? 1 : (int) ($id / 10 + 1)));
+        $object->entryDate = date("Y-m-d", mktime($hour = 0, null, null, date("m"), $id < 10 ? 1 : (int) ($id / 10 + 1)));
         $object->categoryId = $id;
         $object->accountId = $id < 10 ? 1 : (int) ($id / 10);
-        $object->currency_id = 1;
+        $object->currencyId = 1;
         $object->direction = ($id % 2 == 0 ? 1 : -1);
         $object->currencyAmount = $id;
         $object->euroAmount = $object->direction * $object->currencyAmount;
@@ -195,7 +195,7 @@ function testObject(AbstractDataObject $object, $id = 1)
         $retval = assert($object->update() === true, "save#{$object}#");
         $fieldFilter = [];
         if ($object instanceof ledgerentry) {
-            $fieldFilter[] = ['entry_date' => ['operator' => 'BETWEEN', 'value' => [date("Y-01-01 "), date("Y-12-31")]]];
+            $fieldFilter[] = ['entryDate' => ['operator' => 'BETWEEN', 'value' => [date("Y-01-01 "), date("Y-12-31")]]];
         }
         $retval = @assert(sizeof($object->getList($fieldFilter)) > 0, "getList#{$object}#") && $retval;
         $retval = @assert($object->getNextId() >= 0, "getNextId#{$object}#") && $retval;
@@ -217,7 +217,7 @@ function test_view(ObjectViewer $viewer, DataObjectInterface $object)
         $retval = assert(!empty($viewer->printObject())) && $retval;
         $fieldFilter = [];
         if ($object instanceof ledgerentry) {
-            $fieldFilter[] = ['entry_date' => ['operator' => 'BETWEEN', 'value' => ["2022-01-01", "2022-01-02"]]];
+            $fieldFilter[] = ['entryDate' => ['operator' => 'BETWEEN', 'value' => ["2022-01-01", "2022-01-02"]]];
         }
         $retval = @assert(!empty($viewer->printObjectList($object->getList($fieldFilter))), "#printObjectList#") && $retval;
         $method = "printForm";

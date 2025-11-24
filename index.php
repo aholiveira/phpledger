@@ -7,7 +7,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/prepend.php';
 
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
@@ -16,49 +16,44 @@ use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\Redirector;
-use PHPLedger\Util\SessionManager;
 
-const SESSION_TIMEOUT = 3600;
-if (isset($_GET['do_logout']) && $_GET['do_logout'] === '1') {
-    SessionManager::logout();
-    Redirector::to('index.php');
-}
-
-if (!defined("ROOT_DIR")) {
-    require_once "prepend.php";
-}
-config::init(__DIR__ . '/config.json');
-$userauth = false;
-$input_variables_filter = ['username' => FILTER_SANITIZE_FULL_SPECIAL_CHARS, 'password' => FILTER_UNSAFE_RAW];
-
+$userAuth = false;
 $postUser = "";
-$filtered_input = [];
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
-        http_response_code(400);
-        Redirector::to('index.php');
+$postPass = "";
+$inputFilter = [
+    'username' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+    'password' => FILTER_UNSAFE_RAW,
+    '_csrf_token' => FILTER_UNSAFE_RAW
+];
+# Handle POST login
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    if (!empty($_POST['_csrf_token']) && !CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
+        #http_response_code(400);
+        #exit("Invalid CSRF token");
     }
-    $filtered_input = filter_input_array(INPUT_POST, $input_variables_filter, true);
-    $postUser = trim($filtered_input["username"] ?? "");
-    $postPass = $filtered_input["password"] ?? "";
-}
-$dataStorage = ObjectFactory::dataStorage();
-if ($dataStorage->check() === false) {
-    Redirector::to("update.php?lang=" . l10n::$lang, 1);
-}
-if (!empty($postUser)) {
-    $userAuth = ObjectFactory::user()::getByUsername($postUser)->verifyPassword($postPass);
-    if ($userAuth) {
-        session_regenerate_id(true);
-        $_SESSION['user'] = $postUser;
-        $_SESSION['expires'] = time() + SESSION_TIMEOUT;
-        $defaults = ObjectFactory::defaults()->getById(1);
-        $defaults->entry_date = date("Y-m-d");
-        $defaults->language = l10n::$lang;
-        $defaults->update();
-        $target = sprintf("ledger_entries.php?lang=%s&filter_sdate=%s", l10n::$lang, date('Y-m-01'));
-        Logger::instance()->info("User [$postUser] logged in");
-        Redirector::to($target);
+    $filtered = filter_input_array(INPUT_POST, $inputFilter, true);
+    $postUser = trim($filtered['username'] ?? '');
+    $postPass = $filtered['password'] ?? '';
+    if (!empty($postUser)) {
+        $user = ObjectFactory::user()::getByUsername($postUser);
+        $userAuth = $user->verifyPassword($postPass);
+        if ($userAuth) {
+            session_regenerate_id(true);
+            $_SESSION['user'] = $postUser;
+            $_SESSION['expires'] = time() + SESSION_EXPIRE;
+            $defaults = ObjectFactory::defaults()->getByUserName($postUser);
+            $defaults->entryDate = date("Y-m-d");
+            $defaults->language = L10n::$lang;
+            Logger::instance()->info("User [$postUser] logged in");
+            $target = $defaults !== null ?
+                $defaults->lastVisited :
+                sprintf(
+                    "ledger_entries.php?lang=%s&filter_sdate=%s",
+                    L10n::$lang,
+                    date('Y-m-01')
+                );
+            Redirector::to($target);
+        }
     }
 }
 ?>
@@ -70,7 +65,6 @@ if (!empty($postUser)) {
 </head>
 
 <body onload="document.getElementById('username').focus();">
-
     <div id="login">
         <h1><?= htmlspecialchars(config::get("title")) ?></h1>
         <form method="POST" action="?lang=<?= l10n::$lang ?>" name="login" autocomplete="off">
@@ -84,6 +78,9 @@ if (!empty($postUser)) {
                         placeholder="<?= l10n::l('password') ?>" autocomplete="current-password" value=""></p>
                 <?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$userauth): ?>
                     <p id="errorMessage" class="invalid-login" style="width: 100%"><?= l10n::l('invalid_credentials') ?></p>
+                <?php endif; ?>
+                <?php if ($_REQUEST['expired'] ??= 0): ?>
+                    <p id="errorMessage" class="invalid-login" style="width: 100%"><?= l10n::l('expired_session') ?></p>
                 <?php endif; ?>
                 <p id="formButton">
                     <input type="submit" value="<?= l10n::l('login') ?>">

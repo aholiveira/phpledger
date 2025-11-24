@@ -12,6 +12,7 @@ class Logger
     }
     public function __construct(string $file)
     {
+        self::$instance = $this;
         $this->logFile = $file;
     }
 
@@ -35,7 +36,10 @@ class Logger
         $output = print_r($data, true);
         $this->writeLog('DUMP', $output, $prefix);
     }
-
+    public function dumpStack(): void
+    {
+        $this->dump(debug_backtrace());
+    }
     private function writeLog(string $level, string $message, string $prefix = ""): void
     {
         $prefix = trim($prefix);

@@ -18,7 +18,7 @@ use PHPLedger\Views\ViewFactory;
 if (!defined("ROOT_DIR")) {
     require_once __DIR__ . "/prepend.php";
 }
-require_once __DIR__ . "/contas_config.php";
+
 ini_set('zlib.output_compression', 'Off');
 ini_set('output_buffering', 'Off');
 ini_set('implicit_flush', '1');
@@ -40,12 +40,12 @@ $input_variables_filter = [
         'filter' => FILTER_SANITIZE_NUMBER_FLOAT,
         'flags' => FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_THOUSAND
     ],
-    'currency_id' => FILTER_SANITIZE_ENCODED,
+    'currencyId' => FILTER_SANITIZE_ENCODED,
     'direction' => FILTER_SANITIZE_NUMBER_INT,
     'remarks' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
     'filter_entry_type' => FILTER_SANITIZE_NUMBER_INT,
     'filter_accountId' => FILTER_SANITIZE_NUMBER_INT,
-    'filter_parent_id' => FILTER_SANITIZE_NUMBER_INT,
+    'filter_parentId' => FILTER_SANITIZE_NUMBER_INT,
     'filter_sdateAA' => FILTER_SANITIZE_NUMBER_INT,
     'filter_sdateMM' => FILTER_SANITIZE_NUMBER_INT,
     'filter_sdateDD' => FILTER_SANITIZE_NUMBER_INT,
@@ -121,19 +121,19 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                 $edate = date("Y-m-d");
             }
         }
-        $ledger_filter[] = ["entry_date" => ["operator" => '>=', "value" => $sdate]];
-        $ledger_filter[] = ["entry_date" => ["operator" => '<=', "value" => $edate]];
+        $ledgerFilter[] = ["entryDate" => ["operator" => '>=', "value" => $sdate]];
+        $ledgerFilter[] = ["entryDate" => ["operator" => '<=', "value" => $edate]];
         if (!empty($filteredInput["filter_accountId"])) {
-            $ledger_filter[] = ['accountId' => ["operator" => '=', "value" => $filteredInput["filter_accountId"]]];
+            $ledgerFilter[] = ['accountId' => ["operator" => '=', "value" => $filteredInput["filter_accountId"]]];
         }
         if (!empty($filteredInput["filter_entry_type"])) {
-            $ledger_filter[] = ['categoryId' => ["operator" => '=', "value" => $filteredInput["filter_entry_type"]]];
+            $ledgerFilter[] = ['categoryId' => ["operator" => '=', "value" => $filteredInput["filter_entry_type"]]];
         }
-        $filter = "movimentos.entry_date>='{$sdate}' AND movimentos.entry_date<='{$edate}'";
-        $parent_filter = "";
-        if (!empty($filteredInput["filter_parent_id"])) {
-            $parent_filter = "tipo_mov.parent_id={$filteredInput['filter_parent_id']} ";
-            //$ledger_filter[] = ["parent_id" => ["operator" => "IN", "value" => "({$filteredInput['filter_parent_id']})"]];
+        $filter = "movimentos.entryDate>='{$sdate}' AND movimentos.entryDate<='{$edate}'";
+        $parentFilter = "";
+        if (!empty($filteredInput["filter_parentId"])) {
+            $parentFilter = "tipo_mov.parentId={$filteredInput['filter_parentId']} ";
+            //$ledgerFilter[] = ["parentId" => ["operator" => "IN", "value" => "({$filteredInput['filter_parentId']})"]];
         }
         $edit = 0;
         if ($_SERVER["REQUEST_METHOD"] == "GET" && is_array($filteredInput) && !empty($filteredInput["id"])) {
@@ -141,17 +141,17 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         }
 
         // Saldo anterior
-        $ledger_entry = ObjectFactory::ledgerentry();
-        $balance = $ledger_entry->getBalanceBeforeDate($sdate, is_array($filteredInput) && $filteredInput["filter_accountId"] > 0 ? $filteredInput["filter_accountId"] : null);
-        $ledger_entry_cache = ObjectFactory::ledgerEntry()::getList($ledger_filter);
+        $ledgerEntry = ObjectFactory::ledgerentry();
+        $balance = $ledgerEntry->getBalanceBeforeDate($sdate, is_array($filteredInput) && $filteredInput["filter_accountId"] > 0 ? $filteredInput["filter_accountId"] : null);
+        $ledgerEntryCache = ObjectFactory::ledgerEntry()::getList($ledgerFilter);
         $entry_filter_array = [];
         if ($edit > 0) {
-            $edit_entry = ObjectFactory::ledgerEntry()::getById($edit);
-            if ($edit_entry->id != $edit) {
+            $editEntry = ObjectFactory::ledgerEntry()::getById($edit);
+            if ($editEntry->id != $edit) {
                 die(l10n::l('not_found', $edit));
             }
-            $ledger_entry = ObjectFactory::ledgerEntry()::getById($edit);
-            if ($ledger_entry->id != $edit) {
+            $ledgerEntry = ObjectFactory::ledgerEntry()::getById($edit);
+            if ($ledgerEntry->id != $edit) {
                 Html::myalert(l10n::l('not_found', $edit));
             }
         }
@@ -162,22 +162,22 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             $defaults = ObjectFactory::defaults()::init();
         }
         // Tipos movimento
-        $categoryId = $edit > 0 ? $edit_entry->categoryId : $defaults->categoryId;
+        $categoryId = $edit > 0 ? $editEntry->categoryId : $defaults->categoryId;
         $entry_viewer = ViewFactory::instance()->entryCategoryView(ObjectFactory::entryCategory()::getById($categoryId));
         $tipo_mov_opt = $entry_viewer->getSelectFromList(ObjectFactory::entryCategory()::getList([
             'active' => ['operator' => '=', 'value' => '1'],
-            'tipo_id' => ['operator' => '>', 'value' => '0']
+            'id' => ['operator' => '>', 'value' => '0']
         ]));
 
         // Moedas
-        $currency_id = $edit > 0 ? $edit_entry->currency_id : $defaults->currency_id;
+        $currencyId = $edit > 0 ? $editEntry->currencyId : $defaults->currencyId;
         $currency = ObjectFactory::currency();
         $currencyViewer = ViewFactory::instance()->currencyView($currency);
-        $moeda_opt = $currencyViewer->getSelectFromList(ObjectFactory::currency()::getList(), $currency_id);
+        $moeda_opt = $currencyViewer->getSelectFromList(ObjectFactory::currency()::getList(), $currencyId);
 
         // Contas
         $conta_opt = "";
-        $accountId = $edit > 0 ? $edit_entry->accountId : $defaults->accountId;
+        $accountId = $edit > 0 ? $editEntry->accountId : $defaults->accountId;
         $accountViewer = ViewFactory::instance()->accountView(ObjectFactory::account()::getById($accountId));
         $conta_opt = $accountViewer->getSelectFromList(ObjectFactory::account()::getList(['activa' => ['operator' => '=', 'value' => '1']]), $accountId);
         if (!is_array($filteredInput)) {
@@ -195,8 +195,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
         <div class="header" id="header">
             <form id="datefilter" name="datefilter" action="?lang=<?= l10n::$lang ?>" method="GET">
                 <input name="lang" value="<?= l10n::$lang ?>" type="hidden" />
-                <input type="hidden" name="filter_parent_id"
-                    value="<?= !empty($filteredInput["filter_parent_id"]) ? $filteredInput["filter_parent_id"] : "" ?>">
+                <input type="hidden" name="filter_parentId"
+                    value="<?= !empty($filteredInput["filter_parentId"]) ? $filteredInput["filter_parentId"] : "" ?>">
                 <input type="hidden" name="filter_entry_type"
                     value="<?= !empty($filteredInput["filter_entry_type"]) ? $filteredInput["filter_entry_type"] : "" ?>">
                 <table class="filter">
@@ -229,10 +229,9 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                     <tr>
                         <td><label for="filter_accountId"><?= l10n::l('account') ?></label> </td>
                         <td>
-                            <select name="filter_accountId" id="filter_accountId"
-                                data-placeholder="Seleccione a conta" data-max="2" data-search="false"
-                                data-select-all="true" data-list-all="true" data-width="300px" data-height="50px"
-                                data-multi-select>
+                            <select name="filter_accountId" id="filter_accountId" data-placeholder="Seleccione a conta"
+                                data-max="2" data-search="false" data-select-all="true" data-list-all="true"
+                                data-width="300px" data-height="50px" data-multi-select>
                                 <option value><?= l10n::l('no_filter') ?></option>
                                 <?= $conta_opt ?>
                             </select>
@@ -268,8 +267,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                 <?= CSRF::inputField() ?>
                 <input type="hidden" name="filter_accountId"
                     value="<?= !empty($filteredInput["filter_accountId"]) ? $filteredInput["filter_accountId"] : ""; ?>">
-                <input type="hidden" name="filter_parent_id"
-                    value="<?= !empty($filteredInput["filter_parent_id"]) ? $filteredInput["filter_parent_id"] : ""; ?>">
+                <input type="hidden" name="filter_parentId"
+                    value="<?= !empty($filteredInput["filter_parentId"]) ? $filteredInput["filter_parentId"] : ""; ?>">
                 <input type="hidden" name="filter_entry_type"
                     value="<?= !empty($filteredInput["filter_entry_type"]) ? $filteredInput["filter_entry_type"] : ""; ?>">
                 <input type="hidden" name="filter_sdate" value="<?= $sdate; ?>">
@@ -298,7 +297,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                             </tr>
                             <?php
 
-                            foreach ($ledger_entry_cache as $row):
+                            foreach ($ledgerEntryCache as $row):
                                 print "<tr id='{$row->id}'>";
                                 $balance += $row->euroAmount;
                                 if ($row->id == $edit) {
@@ -308,21 +307,21 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                     </td>
                                     <td data-label="<?= l10n::l('date') ?>" class="id">
                                         <select class="date-fallback" style="display: none" name="data_movAA">
-                                            <?= Html::yearOptions(substr($row->entry_date, 0, 4)) ?>
+                                            <?= Html::yearOptions(substr($row->entryDate, 0, 4)) ?>
                                         </select>
                                         <select class="date-fallback" style="display: none" name="data_movMM">
-                                            <?= Html::monthOptions(substr($row->entry_date, 5, 2)) ?>
+                                            <?= Html::monthOptions(substr($row->entryDate, 5, 2)) ?>
                                         </select>
                                         <select class="date-fallback" style="display: none" name="data_movDD">
-                                            <?= Html::dayOptions(substr($row->entry_date, 8, 2)) ?>
+                                            <?= Html::dayOptions(substr($row->entryDate, 8, 2)) ?>
                                         </select>
                                         <input class="date-fallback" type="date" id="data_mov" name="data_mov" required
-                                            value="<?= $row->entry_date ?>">
+                                            value="<?= $row->entryDate ?>">
                                     </td>
                                     <td data-label="<?= l10n::l('category') ?>" class="category"><select
                                             name="categoryId"><?= $tipo_mov_opt ?></select></td>
                                     <td data-label="<?= l10n::l('currency') ?>" class="currency"><select
-                                            name="currency_id"><?= $moeda_opt ?></select>
+                                            name="currencyId"><?= $moeda_opt ?></select>
                                     </td>
                                     <td data-label="<?= l10n::l('account') ?>" class="account"><select
                                             name="accountId"><?= $conta_opt ?></select>
@@ -358,10 +357,10 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                             title="<?= l10n::l('click_to_edit') ?>&#10;<?= l10n::l('modified_by_at', $row->username, $row->updatedAt) ?>"
                                             href="ledger_entries.php?<?= "{$filter_string}&amp;id={$row->id}" ?>"><?= $row->id ?></a>
                                     </td>
-                                    <td data-label='<?= l10n::l('date') ?>' class='data'><?= $row->entry_date ?></td>
+                                    <td data-label='<?= l10n::l('date') ?>' class='data'><?= $row->entryDate ?></td>
                                     <td data-label='<?= l10n::l('category') ?>' class='category'><a
                                             title="Filtrar lista para esta categoria"
-                                            href="ledger_entries.php?<?= $category_filter ?>"><?= ($row->category->parent_id > 0 ? $row->category->parent_description . "&#8594;" : "") . $row->category->description ?></a>
+                                            href="ledger_entries.php?<?= $category_filter ?>"><?= ($row->category->parentId > 0 ? $row->category->parentDescription . "&#8594;" : "") . $row->category->description ?></a>
                                     </td>
                                     <td data-label='<?= l10n::l('currency') ?>' class='currency'>
                                         <?= $row->currency->description ?>
@@ -396,22 +395,22 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                     </td>
                                     <td data-label="<?= l10n::l('date') ?>" class="data">
                                         <select class="date-fallback" style="display: none" name="data_movAA">
-                                            <?= Html::yearOptions(substr($defaults->entry_date, 0, 4)) ?>
+                                            <?= Html::yearOptions(substr($defaults->entryDate, 0, 4)) ?>
                                         </select>
                                         <select class="date-fallback" style="display: none" name="data_movMM">
-                                            <?= Html::monthOptions(substr($defaults->entry_date, 5, 2)) ?>
+                                            <?= Html::monthOptions(substr($defaults->entryDate, 5, 2)) ?>
                                         </select>
                                         <select class="date-fallback" style="display: none" name="data_movDD">
-                                            <?= Html::dayOptions(substr($defaults->entry_date, 8, 2)) ?>
+                                            <?= Html::dayOptions(substr($defaults->entryDate, 8, 2)) ?>
                                         </select>
                                         <input class="date-fallback" type="date" id="data_mov" name="data_mov" required
-                                            value="<?= $defaults->entry_date ?>">
+                                            value="<?= $defaults->entryDate ?>">
                                     </td>
                                     <td data-label="<?= l10n::l('category') ?>" class="category">
                                         <select name="categoryId"> <?= $tipo_mov_opt ?> </select>
                                     </td>
                                     <td data-label="<?= l10n::l('currency') ?>" class="currency">
-                                        <select name="currency_id"> <?= $moeda_opt ?> </select>
+                                        <select name="currencyId"> <?= $moeda_opt ?> </select>
                                     </td>
                                     <td data-label="<?= l10n::l('account') ?>" class="account">
                                         <select name="accountId"> <?= $conta_opt; ?> </select>
@@ -442,7 +441,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             </form>
         </div>
         <div class="main-footer">
-            <p><?= l10n::l('transactions_in_period', count($ledger_entry_cache)) ?></p>
+            <p><?= l10n::l('transactions_in_period', count($ledgerEntryCache)) ?></p>
         </div>
         <?php Html::footer(); ?>
     </div> <!-- Main grid -->

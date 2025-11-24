@@ -24,28 +24,33 @@ class MySqlEntryCategory extends EntryCategory
     public static function getDefinition(): array
     {
         $retval = [];
+        $retval['new'] = [
+            'tipo_id' => 'id',
+            'parent_id' => 'parentId',
+            'tipo_desc' => 'description'
+        ];
         $retval['columns'] = [
-            "tipo_id" => "int(3) NOT NULL DEFAULT 0",
-            "parent_id" => "int(3) DEFAULT NULL",
-            "tipo_desc" => "char(50) DEFAULT NULL",
+            "id" => "int(3) NOT NULL DEFAULT 0",
+            "parentId" => "int(3) DEFAULT NULL",
+            "description" => "char(50) DEFAULT NULL",
             "active" => "int(1) NOT NULL DEFAULT 0"
         ];
-        $retval['primary_key'] = "tipo_id";
-        $retval['keys'] = ["parent_id" => "parent_id"];
-        $retval['constraints'] = ["parent_id" => "`tipo_mov` (`tipo_id`) ON DELETE CASCADE ON UPDATE CASCADE"];
+        $retval['primary_key'] = "id";
+        $retval['keys'] = ["parentId" => "parentId"];
+        $retval['constraints'] = ["parentId" => "`tipo_mov` (`id`) ON DELETE CASCADE ON UPDATE CASCADE"];
         return $retval;
     }
     public static function getList(array $fieldFilter = []): array
     {
         $where = static::getWhereFromArray($fieldFilter);
         $sql = "WITH RECURSIVE category_tree AS (
-            SELECT tipo_id AS id, parent_id, tipo_desc AS description, active
+            SELECT id, parentId, description, active
             FROM " . static::$tableName . "
             {$where}
             UNION ALL
-            SELECT c.tipo_id, c.parent_id, c.tipo_desc, c.active
+            SELECT c.id, c.parentId, c.description, c.active
             FROM " . static::$tableName . " c
-            INNER JOIN category_tree ct ON c.parent_id = ct.id
+            INNER JOIN category_tree ct ON c.parentId = ct.id
         )
         SELECT * FROM category_tree ORDER BY active DESC, description";
         $retval = [];
@@ -60,17 +65,17 @@ class MySqlEntryCategory extends EntryCategory
             $result = $stmt->get_result();
 
             while ($row = $result->fetch_object(__CLASS__)) {
-                if ($row->parent_id === 0 || $row->parent_id === null) {
+                if ($row->parentId === 0 || $row->parentId === null) {
                     $retval[$row->id] = $row;
                 } else {
-                    $children_map[$row->parent_id][$row->id] = $row;
+                    $children_map[$row->parentId][$row->id] = $row;
                 }
             }
             $stmt->close();
-            foreach ($children_map as $parent_id => $child_objects) {
-                if (isset($retval[$parent_id])) {
-                    $retval[$parent_id]->children = $child_objects;
-                    $retval[$parent_id]->setChildDescriptions();
+            foreach ($children_map as $parentId => $child_objects) {
+                if (isset($retval[$parentId])) {
+                    $retval[$parentId]->children = $child_objects;
+                    $retval[$parentId]->setChildDescriptions();
                 }
             }
         } catch (\Exception $ex) {
@@ -81,7 +86,7 @@ class MySqlEntryCategory extends EntryCategory
     private function setChildDescriptions(): void
     {
         foreach ($this->children as $key => $child) {
-            $this->children[$key]->parent_description = $this->description;
+            $this->children[$key]->parentDescription = $this->description;
         }
     }
     public function getBalance(): float
@@ -108,10 +113,10 @@ class MySqlEntryCategory extends EntryCategory
     }
     public static function getById(int $id): self
     {
-        $sql = "SELECT c.tipo_id AS id, c.parent_id, c.tipo_desc AS `description`, c.active, p.tipo_desc AS parent_description
+        $sql = "SELECT c.id, c.parentId, c.description AS `description`, c.active, p.description AS parentDescription
             FROM " . static::tableName() . " c
-            LEFT JOIN " . static::tableName() . " p ON c.parent_id = p.tipo_id
-            WHERE c.tipo_id=? OR c.parent_id=?";
+            LEFT JOIN " . static::tableName() . " p ON c.parentId = p.id
+            WHERE c.id=? OR c.parentId=?";
         $children = [];
         $retval = new self();
         try {
@@ -142,8 +147,8 @@ class MySqlEntryCategory extends EntryCategory
         if ($this->id === null || $this->id < 0) {
             return false;
         }
-        if ($this->id === $this->parent_id) {
-            $this->validation_message = "Categoria nao pode ser igual a si mesma";
+        if ($this->id === $this->parentId) {
+            $this->validationMessage = "Categoria nao pode ser igual a si mesma";
             return false;
         }
         return true;
@@ -155,17 +160,17 @@ class MySqlEntryCategory extends EntryCategory
             return $retval;
         }
         try {
-            $sql = "INSERT INTO {$this->tableName()} (parent_id, tipo_desc, active, tipo_id)
+            $sql = "INSERT INTO {$this->tableName()} (parentId, `description`, active, id)
                 VALUES (?, ?, ?, ?)
                 ON DUPLICATE KEY UPDATE
-                    parent_id=VALUES(parent_id),
-                    tipo_desc=VALUES(tipo_desc),
+                    parentId=VALUES(parentId),
+                    `description`=VALUES(`description`),
                     active=VALUES(active)";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
-            $stmt->bind_param("isii", $this->parent_id, $this->description, $this->active, $this->id);
+            $stmt->bind_param("isii", $this->parentId, $this->description, $this->active, $this->id);
             $retval = $stmt->execute();
             $stmt->close();
         } catch (\Exception $ex) {
@@ -177,7 +182,7 @@ class MySqlEntryCategory extends EntryCategory
     {
         $retval = false;
         try {
-            $sql = "DELETE FROM {$this->tableName()} WHERE tipo_id=?";
+            $sql = "DELETE FROM {$this->tableName()} WHERE id=?";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
@@ -189,9 +194,5 @@ class MySqlEntryCategory extends EntryCategory
             $this->handleException($ex, $sql);
         }
         return $retval;
-    }
-    public static function getNextId(string $field = "tipo_id"): int
-    {
-        return self::traitGetNextId($field);
     }
 }

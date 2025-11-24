@@ -7,12 +7,12 @@ abstract class Defaults extends AbstractDataObject implements DataObjectInterfac
 {
     public int $categoryId;
     public int $accountId;
-    public string $currency_id;
-    public string $entry_date;
+    public string $currencyId;
+    public string $entryDate;
     public int $direction;
     public ?string $language;
     public ?string $username;
-    public ?string $last_visited;
+    public ?string $lastVisited;
     abstract public static function getByUsername(string $username): ?Defaults;
     abstract public static function init(): defaults;
 

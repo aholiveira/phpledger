@@ -12,7 +12,7 @@ namespace PHPLedger\Util;
 use Exception;
 class Config
 {
-    protected static $_data = [];
+    protected static $configData = [];
 
     private function __construct()
     {
@@ -27,7 +27,7 @@ class Config
     {
         try {
             if (file_exists($configfile)) {
-                self::$_data = json_decode(file_get_contents($configfile), true);
+                self::$configData = json_decode(file_get_contents($configfile), true);
                 return true;
             } else {
                 return false;
@@ -46,10 +46,10 @@ class Config
      */
     public static function set(string $key, $value): void
     {
-        if (!\is_array(self::$_data)) {
-            self::$_data = [];
+        if (!\is_array(self::$configData)) {
+            self::$configData = [];
         }
-        self::$_data[$key] = $value;
+        self::$configData[$key] = $value;
     }
 
     /**
@@ -60,11 +60,11 @@ class Config
      */
     public static function get(string $key)
     {
-        if (!\is_array(self::$_data)) {
-            self::$_data = [];
+        if (!\is_array(self::$configData)) {
+            self::$configData = [];
         }
-        if (\array_key_exists($key, self::$_data)) {
-            return self::$_data[$key];
+        if (\array_key_exists($key, self::$configData)) {
+            return self::$configData[$key];
         } else {
             return null;
         }

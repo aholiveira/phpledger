@@ -1,5 +1,6 @@
 <?php
 
+use PHPLedger\Util\CSRF;
 /**
  * Prepended file on each call to a PHP file
  * This does basic defines and checks if PHP version is supported
@@ -14,8 +15,11 @@
 if (PHP_VERSION_ID < 70000) {
     die('PHP >= 7.0.0 required');
 }
+
 require_once __DIR__ . '/vendor/autoload.php';
+
 use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Util\Config;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\SessionManager;
@@ -24,6 +28,7 @@ const BACKEND = "mysql";
 const VERSION = "0.4.313";
 const ROOT_DIR = __DIR__;
 const VIEWS_DIR = ROOT_DIR . "/views";
+const SESSION_EXPIRE = 3600;
 
 $gitHead = ROOT_DIR . "/.git/ORIG_HEAD";
 define("GITHASH", file_exists($gitHead) ? substr(file_get_contents($gitHead), 0, 12) : "main");
@@ -40,20 +45,52 @@ if (defined("DEBUG") && DEBUG === 1) {
 @header('Referrer-Policy: strict-origin-when-cross-origin');
 #@header("Content-Security-Policy: default-src 'self'; frame-ancestors 'none'; style-src 'self' 'unsafe-inline'; script-src * ");
 
-$logger = new Logger(ROOT_DIR . "/logs/ledger.log");
+$PUBLIC_PAGES = ['index.php', 'reset_password.php'];
 SessionManager::start();
-l10n::init();
+L10n::init();
+$logger = new Logger(ROOT_DIR . "/logs/ledger.log");
+Config::init(ROOT_DIR . '/config.json');
+# Identify the current PHP script
+$currentPage = strtolower(basename($_SERVER['SCRIPT_NAME']));
+$isPublic = in_array($currentPage, $PUBLIC_PAGES, true);
+
+# --- SESSION EXPIRED? ---
+if (SessionManager::isExpired()) {
+    SessionManager::logout();
+    SessionManager::start();
+    if (!$isPublic && !headers_sent()) {
+        header("Location: index.php?expired=1");
+        exit;
+    }
+}
+
+# --- AUTH REQUIRED FOR PROTECTED PAGES ---
+if (!$isPublic && !isset($_SESSION['user'])) {
+    if (!headers_sent()) {
+        header("Location: index.php");
+        exit;
+    }
+}
+# --- SESSION STILL VALID OR PUBLIC PAGE ---
+$_SESSION['expires'] = time() + SESSION_EXPIRE;
+# Timezone load (unchanged)
+if (
+    !isset($_SESSION['timezone']) && isset($_COOKIE['timezone'])
+    && in_array($_COOKIE['timezone'], timezone_identifiers_list(), true)
+) {
+    $_SESSION['timezone'] = $_COOKIE['timezone'];
+}
+
+$tz = $_SESSION['timezone'] ?? Config::get("timezone");
+date_default_timezone_set(in_array($tz, timezone_identifiers_list(), true) ? $tz : 'UTC');
 ObjectFactory::init("mysql", $logger);
 
-/**
- * Prints variable
- * @param mixed $var variable to print
- * @param string $comment comment to include before and after the variable printout
- * @param bool $debug
- *  * if false, the default, prints ALWAYS.
- *  * if true, print only if DEBUG is defined and true
- */
-
+if (!empty($_SESSION['user'])) {
+    $defaults = ObjectFactory::defaults()::getByUsername($_SESSION['user']);
+    $defaults->lastVisited = $_SERVER['REQUEST_URI'];
+    $defaults->update();
+}
+CSRF::generateToken();
 function debugPrint($text)
 {
     if (defined("DEBUG") && DEBUG === 1) {
