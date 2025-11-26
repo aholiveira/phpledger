@@ -1,45 +1,15 @@
 <?php
-include_once "common.php";
+require_once __DIR__ . '/../vendor/autoload.php';
+include __DIR__ . "/common.php";
+print __FILE__;
+print PHP_EOL;
 use PHPLedger\Contracts\DataObjectInterface;
 use PHPLedger\Storage\Abstract\AbstractDataObject;
 use PHPLedger\Storage\MySql\MySqlStorage;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Logger;
+use PHPLedger\Views\ObjectViewer;
 use PHPLedger\Views\ViewFactory;
-$retval = true;
-$classnames = [
-    "account" => "accountView",
-    "accounttype" => "accountTypeView",
-    "currency" => "",
-    "defaults" => "",
-    "EntryCategory" => "entryCategoryView",
-    "Ledger" => "",
-    "LedgerEntry" => "ledgerEntryView",
-    "user" => ""
-];
-$class_id = ["currency" => 1];
-$reports = ["ReportMonth" => "reportMonthHtmlView", "ReportYear" => "reportYearHtmlView"];
-const PADDING = 35;
-const PASSED = "\033[32mPASSED\033[0m";
-const FAILED = "\033[31mFAILED\033[0m";
-$logger = new Logger("validate.log");
-print "Running tests\r\n\r\n";
-$data_storage = new MySqlStorage();
-print str_pad("Testing data storage ", constant("PADDING"), ".") . " : ";
-if (!$data_storage->check()) {
-    print "\033[33mUPDATE\033[0m\r\n";
-    print $data_storage->message();
-    print str_pad("Testing storage update ", constant("PADDING"), ".") . " : ";
-    if ($data_storage->update()) {
-        print constant("PASSED") . "\r\n";
-        print $data_storage->message();
-    } else {
-        print constant("FAILED") . "\r\n";
-        exit(1);
-    }
-} else {
-    print constant("PASSED") . "\r\n";
-}
 function prepare_accounttype(): bool
 {
     $retval = true;
@@ -119,41 +89,6 @@ function prepare_ledgerentry(): bool
     }
     return $retval;
 }
-
-print str_pad("Preparing data ", constant("PADDING"), ".") . " : ";
-$retval = prepare_entry_category() && $retval;
-$retval = prepare_accounttype() && $retval;
-$retval = prepare_account() && $retval;
-$retval = prepare_ledger() && $retval;
-$retval = prepare_ledgerentry() && $retval;
-if ($retval) {
-    print constant("PASSED") . "\r\n";
-} else {
-    print constant("FAILED") . "\r\n";
-    exit(1);
-}
-foreach ($classnames as $class => $view) {
-    $id = 1;
-    unset($object);
-    unset($viewer);
-    $object = ObjectFactory::$class();
-    if (array_key_exists($class, $class_id)) {
-        $id = $class_id[$class];
-    }
-    $retval = testObject($object, $id) && $retval;
-    if (strlen($view) > 0) {
-        $object = $object->getById($id);
-        $viewer = ViewFactory::instance()->$view($object);
-        $retval = test_view($viewer, $object) && $retval;
-    }
-    $retval = run_additional($object, isset($viewer) ? $viewer : null) && $retval;
-}
-foreach ($reports as $report => $view) {
-    $retval = test_report($report, $view) && $retval;
-}
-print "\r\n" . str_pad("Test results ", constant("PADDING"), ".") . " : " . ($retval ? constant("PASSED") : constant("FAILED")) . "\r\n";
-exit($retval ? 0 : 1);
-
 function run_additional($object, $viewer = null)
 {
     $retval = true;
@@ -233,3 +168,71 @@ function test_view(ObjectViewer $viewer, DataObjectInterface $object)
     }
     return $retval;
 }
+
+$retval = true;
+$classnames = [
+    "account" => "accountView",
+    "accounttype" => "accountTypeView",
+    "currency" => "",
+    "defaults" => "",
+    "EntryCategory" => "entryCategoryView",
+    "Ledger" => "",
+    "LedgerEntry" => "ledgerEntryView",
+    "user" => ""
+];
+$class_id = ["currency" => 1];
+$reports = ["ReportMonth" => "reportMonthHtmlView", "ReportYear" => "reportYearHtmlView"];
+const PADDING = 35;
+const PASSED = "\033[32mPASSED\033[0m";
+const FAILED = "\033[31mFAILED\033[0m";
+print "Running tests\r\n\r\n";
+$logger = new Logger("/logs/validate.log");
+$data_storage = new MySqlStorage();
+print str_pad("Testing data storage ", constant("PADDING"), ".") . " : ";
+if (!$data_storage->check()) {
+    print "\033[33mUPDATE\033[0m\r\n";
+    print $data_storage->message();
+    print str_pad("Testing storage update ", constant("PADDING"), ".") . " : ";
+    if ($data_storage->update()) {
+        print constant("PASSED") . "\r\n";
+        print $data_storage->message();
+    } else {
+        print constant("FAILED") . "\r\n";
+        exit(1);
+    }
+} else {
+    print constant("PASSED") . "\r\n";
+}
+print str_pad("Preparing data ", constant("PADDING"), ".") . " : ";
+$retval = prepare_entry_category() && $retval;
+$retval = prepare_accounttype() && $retval;
+$retval = prepare_account() && $retval;
+$retval = prepare_ledger() && $retval;
+$retval = prepare_ledgerentry() && $retval;
+if ($retval) {
+    print constant("PASSED") . "\r\n";
+} else {
+    print constant("FAILED") . "\r\n";
+    exit(1);
+}
+foreach ($classnames as $class => $view) {
+    $id = 1;
+    unset($object);
+    unset($viewer);
+    $object = ObjectFactory::$class();
+    if (array_key_exists($class, $class_id)) {
+        $id = $class_id[$class];
+    }
+    $retval = testObject($object, $id) && $retval;
+    if (strlen($view) > 0) {
+        $object = $object->getById($id);
+        $viewer = ViewFactory::instance()->$view($object);
+        $retval = test_view($viewer, $object) && $retval;
+    }
+    $retval = run_additional($object, isset($viewer) ? $viewer : null) && $retval;
+}
+foreach ($reports as $report => $view) {
+    $retval = test_report($report, $view) && $retval;
+}
+print "\r\n" . str_pad("Test results ", constant("PADDING"), ".") . " : " . ($retval ? constant("PASSED") : constant("FAILED")) . "\r\n";
+exit($retval ? 0 : 1);

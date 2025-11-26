@@ -5,6 +5,7 @@ use PHPLedger\Storage\MySql\MySqlObject;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Logger;
 use PHPLedger\Views\ViewFactory;
+use PHPLedger\Views\ObjectViewer;
 
 debugPrint("Running tests...");
 $logger = new Logger("run.log");
