@@ -1,4 +1,5 @@
 <?php
+namespace PHPLedger\Views;
 
 /**
  * View for a ledger_entry

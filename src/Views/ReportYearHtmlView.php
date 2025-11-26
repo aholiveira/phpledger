@@ -1,17 +1,17 @@
 <?php
-
 /**
- * View for ReportMonth class
+ * View for ReportYear class
  *
  * @author Antonio Henrique Oliveira
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-use PHPLedger\Domain\ReportMonth;
-class ReportMonthHtmlView extends reportHtmlView
+namespace PHPLedger\Views;
+use PHPLedger\Domain\ReportYear;
+class ReportYearHtmlView extends reportHtmlView
 {
-    public function __construct(ReportMonth $report)
+    public function __construct(ReportYear $report)
     {
         parent::__construct($report);
     }

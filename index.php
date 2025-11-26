@@ -16,6 +16,7 @@ use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\Redirector;
+use PHPLedger\Util\SessionManager;
 
 $userAuth = false;
 $postUser = "";
@@ -25,13 +26,18 @@ $inputFilter = [
     'password' => FILTER_UNSAFE_RAW,
     '_csrf_token' => FILTER_UNSAFE_RAW
 ];
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['do_logout'])) {
+    SessionManager::logout();
+}
 # Handle POST login
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (!empty($_POST['_csrf_token']) && !CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
-        #http_response_code(400);
-        #exit("Invalid CSRF token");
-    }
+    SessionManager::start();
     $filtered = filter_input_array(INPUT_POST, $inputFilter, true);
+    if (!CSRF::validateToken($filtered['_csrf_token'] ?? null)) {
+        http_response_code(400);
+        Redirector::to("index.php");
+        exit("Invalid CSRF token");
+    }
     $postUser = trim($filtered['username'] ?? '');
     $postPass = $filtered['password'] ?? '';
     if (!empty($postUser)) {
@@ -76,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         value="<?= htmlspecialchars($postUser) ?>"></p>
                 <p><input required size="25" maxlength="255" type="password" name="password"
                         placeholder="<?= l10n::l('password') ?>" autocomplete="current-password" value=""></p>
-                <?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$userauth): ?>
+                <?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$userAuth): ?>
                     <p id="errorMessage" class="invalid-login" style="width: 100%"><?= l10n::l('invalid_credentials') ?></p>
                 <?php endif; ?>
                 <?php if ($_REQUEST['expired'] ??= 0): ?>

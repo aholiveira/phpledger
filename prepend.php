@@ -1,6 +1,7 @@
 <?php
 
 use PHPLedger\Util\CSRF;
+use PHPLedger\Util\Redirector;
 /**
  * Prepended file on each call to a PHP file
  * This does basic defines and checks if PHP version is supported
@@ -27,16 +28,12 @@ use PHPLedger\Util\SessionManager;
 const BACKEND = "mysql";
 const VERSION = "0.4.313";
 const ROOT_DIR = __DIR__;
-const VIEWS_DIR = ROOT_DIR . "/views";
 const SESSION_EXPIRE = 3600;
+
+$logger = new Logger(ROOT_DIR . "/logs/ledger.log");
 
 $gitHead = ROOT_DIR . "/.git/ORIG_HEAD";
 define("GITHASH", file_exists($gitHead) ? substr(file_get_contents($gitHead), 0, 12) : "main");
-if (defined("DEBUG") && DEBUG === 1) {
-    openlog("contas-dev-php", LOG_PID, LOG_DAEMON);
-    syslog(LOG_INFO, __FILE__);
-    closelog();
-}
 @header('Cache-Control: no-cache');
 @header('X-XSS-Protection: 1; mode=block');
 @header('X-Frame-Options: DENY');
@@ -48,7 +45,6 @@ if (defined("DEBUG") && DEBUG === 1) {
 $PUBLIC_PAGES = ['index.php', 'reset_password.php'];
 SessionManager::start();
 L10n::init();
-$logger = new Logger(ROOT_DIR . "/logs/ledger.log");
 Config::init(ROOT_DIR . '/config.json');
 # Identify the current PHP script
 $currentPage = strtolower(basename($_SERVER['SCRIPT_NAME']));
@@ -59,23 +55,22 @@ if (SessionManager::isExpired()) {
     SessionManager::logout();
     SessionManager::start();
     if (!$isPublic && !headers_sent()) {
-        header("Location: index.php?expired=1");
-        exit;
+        Redirector::to("Location: index.php?expired=1&lang=" . L10n::$lang);
     }
 }
 
 # --- AUTH REQUIRED FOR PROTECTED PAGES ---
 if (!$isPublic && !isset($_SESSION['user'])) {
     if (!headers_sent()) {
-        header("Location: index.php");
-        exit;
+        Redirector::to("index.php");
     }
 }
 # --- SESSION STILL VALID OR PUBLIC PAGE ---
 $_SESSION['expires'] = time() + SESSION_EXPIRE;
 # Timezone load (unchanged)
 if (
-    !isset($_SESSION['timezone']) && isset($_COOKIE['timezone'])
+    !isset($_SESSION['timezone'])
+    && isset($_COOKIE['timezone'])
     && in_array($_COOKIE['timezone'], timezone_identifiers_list(), true)
 ) {
     $_SESSION['timezone'] = $_COOKIE['timezone'];
@@ -84,13 +79,11 @@ if (
 $tz = $_SESSION['timezone'] ?? Config::get("timezone");
 date_default_timezone_set(in_array($tz, timezone_identifiers_list(), true) ? $tz : 'UTC');
 ObjectFactory::init("mysql", $logger);
-
 if (!empty($_SESSION['user'])) {
     $defaults = ObjectFactory::defaults()::getByUsername($_SESSION['user']);
     $defaults->lastVisited = $_SERVER['REQUEST_URI'];
     $defaults->update();
 }
-CSRF::generateToken();
 function debugPrint($text)
 {
     if (defined("DEBUG") && DEBUG === 1) {
