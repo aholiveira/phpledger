@@ -80,7 +80,7 @@ $tz = $_SESSION['timezone'] ?? Config::get("timezone");
 date_default_timezone_set(in_array($tz, timezone_identifiers_list(), true) ? $tz : 'UTC');
 ObjectFactory::init("mysql", $logger);
 if (!empty($_SESSION['user'])) {
-    $defaults = ObjectFactory::defaults()::getByUsername($_SESSION['user']) ?? ObjectFactory::defaults();
+    $defaults = ObjectFactory::defaults()::getByUsername($_SESSION['user']) ?? ObjectFactory::defaults()::init();
     $defaults->lastVisited = $_SERVER['REQUEST_URI'];
     $defaults->update();
 }
