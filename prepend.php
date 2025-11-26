@@ -42,7 +42,7 @@ define("GITHASH", file_exists($gitHead) ? substr(file_get_contents($gitHead), 0,
 @header('Referrer-Policy: strict-origin-when-cross-origin');
 #@header("Content-Security-Policy: default-src 'self'; frame-ancestors 'none'; style-src 'self' 'unsafe-inline'; script-src * ");
 
-$PUBLIC_PAGES = ['index.php', 'reset_password.php'];
+$PUBLIC_PAGES = ['index.php', 'reset_password.php', 'update.php'];
 SessionManager::start();
 L10n::init();
 Config::init(ROOT_DIR . '/config.json');

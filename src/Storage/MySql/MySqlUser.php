@@ -163,6 +163,7 @@ class MySqlUser extends User
             $stmt->close();
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
+            $retval = null;
         }
         return $retval instanceof self ? $retval : null;
     }
