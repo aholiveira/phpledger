@@ -26,7 +26,7 @@ use PHPLedger\Util\Logger;
 use PHPLedger\Util\SessionManager;
 
 const BACKEND = "mysql";
-const VERSION = "0.4.402";
+const VERSION = "0.4.403";
 const ROOT_DIR = __DIR__;
 const SESSION_EXPIRE = 3600;
 
@@ -80,7 +80,7 @@ $tz = $_SESSION['timezone'] ?? Config::get("timezone");
 date_default_timezone_set(in_array($tz, timezone_identifiers_list(), true) ? $tz : 'UTC');
 ObjectFactory::init("mysql", $logger);
 if (!empty($_SESSION['user'])) {
-    $defaults = ObjectFactory::defaults()::getByUsername($_SESSION['user']) ?? ObjectFactory::defaults();
+    $defaults = ObjectFactory::defaults()::getByUsername($_SESSION['user']) ?? ObjectFactory::defaults()::init();
     $defaults->lastVisited = $_SERVER['REQUEST_URI'];
     $defaults->update();
 }

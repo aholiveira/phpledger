@@ -10,7 +10,6 @@
 namespace PHPLedger\Storage\MySql;
 use PHPLedger\Domain\Defaults;
 use PHPLedger\Util\Config;
-use PHPLedger\Util\Logger;
 class MySqlDefaults extends Defaults
 {
     use MySqlObject {
@@ -32,6 +31,17 @@ class MySqlDefaults extends Defaults
             $this->lastVisited = $data["lastVisited"] ?? "";
             $this->showReportGraph = $data["showReportGraph"] ?? 0;
             $this->username = $data["username"] ?? config::get("admin_username");
+        } else {
+            $this->id = 1;
+            $this->categoryId = 990;
+            $this->accountId = 0;
+            $this->currencyId = "EUR";
+            $this->entryDate = date("Y-m-d");
+            $this->direction = 1;
+            $this->language = 'pt-PT';
+            $this->lastVisited = "";
+            $this->showReportGraph = 0;
+            $this->username = Config::get("admin_username");
         }
     }
     public static function getDefinition(): array
