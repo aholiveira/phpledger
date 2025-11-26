@@ -100,7 +100,7 @@ class MySqlStorage implements DataStorageInterface
                 $this->addMessage("Category '0' does not exist");
                 $retval = false;
             } else {
-                $entry_list = $entry_category->getList(['parentId' => ['operator' => 'is', 'value' => 'null'], 'id' => ['operator' => '>', 'value' => '0']]);
+                $entry_list = $entry_category->getList(['parentId' => ['operator' => 'is', 'value' => null], 'id' => ['operator' => '>', 'value' => '0']]);
                 if (\sizeof($entry_list) > 0) {
                     $this->addMessage("Table [tipo_mov] needs update");
                     $retval = false;
