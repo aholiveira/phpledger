@@ -40,8 +40,8 @@ trait MySqlObject
      */
     protected static function copyfromObject(MySqlObject $source, MySqlObject $destination): void
     {
-        $vars = is_object($source) ? get_object_vars($source) : $source;
-        if (!is_array($vars)) {
+        $vars = \is_object($source) ? get_object_vars($source) : $source;
+        if (!\is_array($vars)) {
             throw new \Exception('no props to import into the object!');
         }
         foreach ($vars as $key => $value) {
@@ -82,8 +82,9 @@ trait MySqlObject
      */
     protected static function getWhereFromArray(array $fieldFilter, ?string $table_name = null): string
     {
-        if (!$fieldFilter)
+        if (!$fieldFilter) {
             return "";
+        }
 
         $db = MySqlStorage::getConnection();
         $allowedOps = ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'BETWEEN', 'IS'];
@@ -91,8 +92,9 @@ trait MySqlObject
         $parts = [];
         foreach ($fieldFilter as $field => $filter) {
             $op = strtoupper($filter['operator']);
-            if (!\in_array($op, $allowedOps))
+            if (!\in_array($op, $allowedOps)) {
                 continue;
+            }
 
             $name = $table_name ? "`$table_name`.`$field`" : "`$field`";
 

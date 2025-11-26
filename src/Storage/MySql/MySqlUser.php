@@ -19,7 +19,7 @@ class MySqlUser extends User
     public function __construct()
     {
         $this->traitConstruct();
-        $this->_token_expiry = null;
+        $this->tokenExpiry = null;
     }
     public static function getDefinition(): array
     {
@@ -27,15 +27,18 @@ class MySqlUser extends User
         $defaultEmpty = "DEFAULT ''";
         $char255 = "char(255)";
         $retval = [];
+        $retval['new'] = [
+            'token_expiry' => 'tokenExpiry'
+        ];
         $retval['columns'] = [
             "id" => "int(3) $notNull DEFAULT 0",
             "username" => "char(100) $notNull",
             "password" => "$char255 $notNull",
-            "fullname" => "$char255 $notNull $defaultEmpty",
+            "fullName" => "$char255 $notNull $defaultEmpty",
             "email" => "$char255 $notNull $defaultEmpty",
             "role" => "int(3) $notNull DEFAULT 0",
             "token" => "$char255 $notNull $defaultEmpty",
-            "token_expiry" => "datetime",
+            "tokenExpiry" => "datetime",
             "active" => "int(1) $notNull DEFAULT 0"
         ];
         $retval['primary_key'] = "id";
@@ -60,34 +63,34 @@ class MySqlUser extends User
                 "UPDATE {$this->tableName()} SET
                     `username`=?,
                     `password`=?,
-                    `fullname`=?,
+                    `fullName`=?,
                     `email`=?,
                     `role`=?,
                     `token`=?,
-                    `token_expiry`=?,
+                    `tokenExpiry`=?,
                     `active`=?
                     WHERE `id`=?"
                 :
-                "INSERT INTO {$this->tableName()} (username, password, fullname, email, role, token, token_expiry, active, id)
+                "INSERT INTO {$this->tableName()} (username, password, fullName, email, role, token, tokenExpiry, active, id)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmt->close();
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
-            if (empty($this->_token_expiry)) {
-                $this->_token_expiry = null;
+            if (empty($this->tokenExpiry)) {
+                $this->tokenExpiry = null;
             }
             $stmt->bind_param(
                 "sssssisii",
-                $this->_username,
-                $this->_password,
-                $this->_fullname,
-                $this->_email,
-                $this->_role,
-                $this->_token,
-                $this->_token_expiry,
-                $this->_active,
+                $this->userName,
+                $this->password,
+                $this->fullName,
+                $this->email,
+                $this->role,
+                $this->token,
+                $this->tokenExpiry,
+                $this->active,
                 $this->id
             );
             $retval = $stmt->execute();
@@ -107,14 +110,14 @@ class MySqlUser extends User
     {
         $where = self::getWhereFromArray($fieldFilter);
         $sql = "SELECT id,
-            username AS `_username`,
-            `password` AS `_password`,
-            `fullname` AS `_fullname`,
-            email AS `_email`,
-            `role` AS `_role`,
-            `token` AS `_token`,
-            `token_expiry` AS `_token_expiry`,
-            active AS `_active`
+            userName,
+            `password`,
+            `fullName`,
+            email,
+            `role`,
+            `token`,
+            `tokenExpiry`,
+            `active`
             FROM " . static::tableName() . "
             {$where}
             ORDER BY username";
@@ -138,14 +141,14 @@ class MySqlUser extends User
     public static function getByUsername(string $username): ?User
     {
         $sql = "SELECT id,
-            username AS `_username`,
-            `password` AS `_password`,
-            `fullname` AS `_fullname`,
-            email AS `_email`,
-            `role` AS `_role`,
-            `token` AS `_token`,
-            `token_expiry` AS `_token_expiry`,
-            active AS `_active`
+            username AS `userName`,
+            `password`,
+            `fullName`,
+            email,
+            `role` AS `role`,
+            `token`,
+            `tokenExpiry`,
+            active
             FROM " . static::tableName() . "
             WHERE username=?";
         try {
@@ -166,14 +169,14 @@ class MySqlUser extends User
     public static function getById(int $id): ?user
     {
         $sql = "SELECT id,
-        `username` AS `_username`,
-        `password` AS `_password`,
-        `fullname` AS `_fullname`,
-        `email` AS `_email`,
-        `role` AS `_role`,
-        `token` AS `_token`,
-        `token_expiry` AS `_token_expiry`,
-        `active` AS `_active`
+        `userName`,
+        `password`,
+        `fullName`,
+        `email`,
+        `role`,
+        `token`,
+        `tokenExpiry`,
+        `active`
         FROM " . static::tableName() . "
         WHERE id=?";
         $retval = null;
@@ -195,14 +198,14 @@ class MySqlUser extends User
     public static function getByToken(string $token): ?user
     {
         $sql = "SELECT id,
-        `username` AS `_username`,
-        `password` AS `_password`,
-        `fullname` AS `_fullname`,
-        `email` AS `_email`,
-        `role` AS `_role`,
-        `token` AS `_token`,
-        `token_expiry` AS `_token_expiry`,
-        `active` AS `_active`
+        `userName`,
+        `password`,
+        `fullName`,
+        `email`,
+        `role`,
+        `token`,
+        `tokenExpiry`,
+        `active`
         FROM " . static::tableName() . "
         WHERE token=?";
         $retval = null;

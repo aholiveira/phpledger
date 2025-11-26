@@ -1,4 +1,5 @@
 <?php
+namespace PHPLedger\Views;
 
 /**
  * View for a ledger_entry
@@ -21,7 +22,7 @@ class LedgerEntryView extends ObjectViewer
             return $retval;
         }
         $retval .= "<td data-label='ID'><a id=\"{$this->object->id}\" title=\"Editar\" href=\"ledger_entries.php?id={$this->object->id}#{$this->object->id}\">{$this->object->id}</a></td>\n";
-        $retval .= "<td data-label='Data' style=\"text-align: center\">{$this->object->entry_date}</td>\n";
+        $retval .= "<td data-label='Data' style=\"text-align: center\">{$this->object->entryDate}</td>\n";
         $retval .= "<td data-label='Categoria'><a title=\"Mostrar movimentos apenas desta categoria\" href=\"ledger_entries.php?filter_tipo_mov={$this->object->category->id}\">{$this->object->category->description}</a></td>\n";
         $retval .= "<td data-label='Moeda'>{$this->object->currency->description}</td>\n";
         $retval .= "<td data-label='Conta'><a title=\"Mostrar movimentos apenas desta conta\" href=\"ledger_entries.php?filter_accountId={$this->object->account->id}\">{$this->object->account->name}</a></td>\n";
@@ -36,7 +37,7 @@ class LedgerEntryView extends ObjectViewer
         $retval .= "<thead><tr><th>ID</th><th>Data</th><th>Categoria</th><th>Moeda</th><th>Conta</th><th>D/C</th><th>Valor</th><th>Obs</th><th>Saldo</th></tr></thead>\r\n";
         $object = $object_list[array_key_first($object_list)];
         if ($object instanceof ledgerentry) {
-            $saldo = $object->getBalanceBeforeDate($object->entry_date);
+            $saldo = $object->getBalanceBeforeDate($object->entryDate);
         }
         $retval .= "<tbody>\r\n";
         foreach ($object_list as $object) {

@@ -4,29 +4,32 @@ class SessionManager
 {
     public static function start(): void
     {
-        $secure = !empty($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] === 'on' || $_SERVER['HTTPS'] === 1);
-        $cookieParams = [
-            'lifetime' => 0,
-            'path' => dirname($_SERVER['SCRIPT_NAME']) . '/',
-            'samesite' => 'Strict',
-            'secure' => $secure,
-            'httponly' => true
-        ];
         if (session_status() === PHP_SESSION_NONE) {
-            session_set_cookie_params($cookieParams);
+            ini_set('session.use_only_cookies', '1');
+            session_name(self::sessionName());
             session_start();
         }
     }
+    public static function sessionName(): string
+    {
+        return "phpledger_session";
+    }
+    public static function isExpired(): bool
+    {
+        self::start();
+        if (isset($_SESSION['expires']) && $_SESSION['expires'] < time()) {
+            return true;
+        }
+        return false;
+    }
     public static function logout(): void
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        self::start();
+        session_unset();
         $_SESSION = [];
         if (ini_get("session.use_cookies")) {
             $params = session_get_cookie_params();
-            setcookie(session_name(), session_id(), time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
+            setcookie(session_name(), "", time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
         }
-        session_destroy();
     }
 }

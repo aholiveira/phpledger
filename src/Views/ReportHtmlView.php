@@ -1,4 +1,5 @@
 <?php
+namespace PHPLedger\Views;
 
 /**
  * View for generic report class
@@ -66,7 +67,7 @@ class ReportHtmlView
             } else {
                 $lines .= "<td></td>\r\n";
             }
-            $lines .= "<td colspan=2 data-label='Categoria'><a href=\"ledger_entries.php?filter_sdate={$first_date}&amp;filter_edate={$last_date}&amp;filter_entry_type={$record['id']}&amp;filter_parent_id={$record['id']}\" title=\"Todos os movimentos da categoria e sub-categorias\">{$header}</a></td>\r\n";
+            $lines .= "<td colspan=2 data-label='Categoria'><a href=\"ledger_entries.php?filter_sdate={$first_date}&amp;filter_edate={$last_date}&amp;filter_entry_type={$record['id']}&amp;filter_parentId={$record['id']}\" title=\"Todos os movimentos da categoria e sub-categorias\">{$header}</a></td>\r\n";
         }
         foreach (array_keys($this->_report->columnHeaders) as $header) {
             $value = (sizeof($record['values']) > 0 && array_key_exists($header, $record['values'])) ? $record['values'][$header] : 0;
@@ -75,7 +76,7 @@ class ReportHtmlView
             $lines .= "<span class='group{$record['id']}'>";
             if ($this->hasChildren($record)) {
                 $sum = array_key_exists($header, $record['subtotal']) ? $record['subtotal'][$header] : 0;
-                $lines .= (($value + $sum) <> 0 ? "<a href=\"ledger_entries.php?filter_sdate={$this->_report->dateFilters[$header]['start']}&amp;filter_edate={$this->_report->dateFilters[$header]['end']}&amp;filter_entry_type={$record['id']}&amp;filter_parent_id={$record['id']}\" title=\"Todos os movimentos da categoria e sub-categorias para este periodo\">" : "");
+                $lines .= (($value + $sum) <> 0 ? "<a href=\"ledger_entries.php?filter_sdate={$this->_report->dateFilters[$header]['start']}&amp;filter_edate={$this->_report->dateFilters[$header]['end']}&amp;filter_entry_type={$record['id']}&amp;filter_parentId={$record['id']}\" title=\"Todos os movimentos da categoria e sub-categorias para este periodo\">" : "");
                 $lines .= normalizeNumber($value + $sum);
                 $lines .= (($value + $sum) <> 0 ? "</a>" : "") . "</span>\r\n";
                 $lines .= "<span style='display: none;' class='group{$record['id']}'>";

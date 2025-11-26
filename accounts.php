@@ -7,7 +7,10 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-include_once __DIR__ . "/contas_config.php";
+if (!defined("ROOT_DIR")) {
+    require_once __DIR__ . "/prepend.php";
+}
+
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Html;
@@ -52,11 +55,11 @@ $pagetitle = "Contas";
                 'filter' => FILTER_SANITIZE_ENCODED,
                 'options' => FILTER_NULL_ON_FAILURE
             ],
-            'conta_nome' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+            'name' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
             'conta_id' => FILTER_VALIDATE_INT,
-            'conta_num' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+            'number' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
             'activa' => FILTER_VALIDATE_BOOLEAN,
-            'tipo_id' => FILTER_VALIDATE_INT,
+            'typeId' => FILTER_VALIDATE_INT,
             'conta_nib' => FILTER_SANITIZE_FULL_SPECIAL_CHARS
         ];
         if ($_SERVER["REQUEST_METHOD"] === "GET") {
@@ -70,7 +73,7 @@ $pagetitle = "Contas";
             $filteredInput = filter_input_array(INPUT_POST, $input_variables_filter, true);
         }
         if (($filteredInput["update"] ?? null) === "Gravar") {
-            if (empty($filteredInput["conta_nome"])) {
+            if (empty($filteredInput["name"])) {
                 Html::myalert("Nome de conta invalido!");
                 $retval = false;
             }
@@ -96,12 +99,12 @@ $pagetitle = "Contas";
             }
             if ($retval) {
                 $object->id = $filteredInput["conta_id"];
-                $object->name = $filteredInput["conta_nome"];
+                $object->name = $filteredInput["name"];
                 $object->openDate = $openDate->format("Y-m-d");
                 $object->closeDate = $closeDate->format("Y-m-d");
-                $object->number = $filteredInput["conta_num"];
+                $object->number = $filteredInput["number"];
                 $object->active = boolval($filteredInput["activa"]) ? 1 : 0;
-                $object->typeId = $filteredInput["tipo_id"];
+                $object->typeId = $filteredInput["typeId"];
                 $object->iban = $filteredInput["conta_nib"];
                 $retval = $object->update();
             }

@@ -36,7 +36,7 @@ trait MySqlReport
     public function getReport(array $params = []): self
     {
         $category = MySqlObjectFactory::entryCategory();
-        $category_list = $category->getList(['parent_id' => ['operator' => '=', 'value' => '0']]);
+        $category_list = $category->getList(['parentId' => ['operator' => '=', 'value' => '0']]);
         foreach ($category_list as $category) {
             $this->processCategory($category);
         }

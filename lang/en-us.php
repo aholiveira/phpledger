@@ -63,4 +63,5 @@ return
         'invalid_parameter' => "Invalid parameter %s",
         'ledger_save_error' => "Error saving ledger entry",
         'defaults_save_error' => "Error saving defaults",
+        'expired_session' => "The session has expired."
     ];

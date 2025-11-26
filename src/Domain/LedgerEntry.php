@@ -5,11 +5,11 @@ use PHPLedger\Contracts\DataObjectInterface;
 use PHPLedger\Storage\Abstract\AbstractDataObject;
 abstract class LedgerEntry extends AbstractDataObject implements DataObjectInterface
 {
-    public string $entry_date;
+    public string $entryDate;
     public int $categoryId;
     public EntryCategory $category;
     public float $currencyAmount;
-    public string $currency_id;
+    public string $currencyId;
     public Currency $currency;
     public float $euroAmount;
     public float $exchangeRate;
@@ -20,7 +20,7 @@ abstract class LedgerEntry extends AbstractDataObject implements DataObjectInter
     public string $username = "";
     public string $createdAt;
     public string $updatedAt;
-    public int $ledger_id;
+    public int $ledgerId;
     abstract public function getBalanceBeforeDate($date, $accountId = null): ?float;
     abstract public static function getList(array $fieldFilter = []): array;
     abstract public static function getById($id): ?ledgerentry;

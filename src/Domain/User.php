@@ -10,26 +10,26 @@ const USER_ROLE_RW = 192;
 const USER_ROLE_RO = 128;
 abstract class User extends AbstractDataObject implements DataObjectInterface
 {
-    protected string $_username;
-    protected string $_password;
-    protected string $_email = '';
-    protected string $_fullname = '';
-    protected string $_token = '';
-    protected ?string $_token_expiry;
-    protected int $_active;
-    protected int $_role;
+    protected string $userName;
+    protected string $password;
+    protected string $email = '';
+    protected string $fullName = '';
+    protected string $token = '';
+    protected ?string $tokenExpiry;
+    protected int $active;
+    protected int $role;
     protected static int $_token_length = 32;
     public function setUsername(string $value)
     {
-        $this->_username = $value;
+        $this->userName = $value;
     }
     public function getUsername(): ?string
     {
-        return $this->_username;
+        return $this->userName;
     }
     public function setPassword(string $value)
     {
-        $this->_password = $this->hashPassword($value);
+        $this->password = $this->hashPassword($value);
     }
     /**
      * This returns the password hash.
@@ -38,55 +38,55 @@ abstract class User extends AbstractDataObject implements DataObjectInterface
      */
     public function getPassword(): ?string
     {
-        return $this->_password;
+        return $this->password;
     }
     public function setEmail(string $value)
     {
-        $this->_email = $value;
+        $this->email = $value;
     }
     public function getEmail(): ?string
     {
-        return $this->_email;
+        return $this->email;
     }
     public function setFullName(string $value)
     {
-        $this->_fullname = $value;
+        $this->fullName = $value;
     }
     public function getFullName(): ?string
     {
-        return $this->_fullname;
+        return $this->fullName;
     }
     public function setActive(int $value)
     {
-        $this->_active = $value;
+        $this->active = $value;
     }
     public function getActive(): ?int
     {
-        return $this->_active;
+        return $this->active;
     }
     public function setRole(int $value)
     {
-        $this->_role = $value;
+        $this->role = $value;
     }
     public function getRole(): ?int
     {
-        return $this->_role;
+        return $this->role;
     }
     public function getToken(): ?string
     {
-        return $this->_token;
+        return $this->token;
     }
     public function setToken(string $value)
     {
-        $this->_token = $value;
+        $this->token = $value;
     }
     public function getTokenExpiry(): ?string
     {
-        return $this->_token_expiry;
+        return $this->tokenExpiry;
     }
     public function setTokenExpiry(?string $value)
     {
-        $this->_token_expiry = $value;
+        $this->tokenExpiry = $value;
     }
     private function hashPassword(string $password): string
     {
@@ -113,12 +113,12 @@ abstract class User extends AbstractDataObject implements DataObjectInterface
     }
     public function isTokenValid(string $token): bool
     {
-        return date("Y-m-d H:i:s") <= $this->_token_expiry && $this->_token == $token;
+        return date("Y-m-d H:i:s") <= $this->tokenExpiry && $this->token == $token;
     }
     public function resetPassword(): bool
     {
         $retval = false;
-        if (!isset($this->_username) || !isset($this->_email)) {
+        if (!isset($this->userName) || !isset($this->email)) {
             return $retval;
         }
         $this->setToken($this->createToken());

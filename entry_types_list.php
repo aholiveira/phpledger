@@ -7,7 +7,10 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-include_once __DIR__ . "/contas_config.php";
+if (!defined("ROOT_DIR")) {
+    require_once __DIR__ . "/prepend.php";
+}
+
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
@@ -21,16 +24,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
     $update = filter_input(INPUT_POST, "update", FILTER_DEFAULT);
     if (strcasecmp($update, "gravar") == 0) {
         $action = "gravado";
-        $object->id = filter_input(INPUT_POST, "tipo_id", FILTER_VALIDATE_INT);
-        $object->description = filter_input(INPUT_POST, "tipo_desc", FILTER_DEFAULT);
-        $object->parent_id = null;
-        if (filter_has_var(INPUT_POST, "parent_id")) {
-            $parent_id = filter_input(INPUT_POST, "parent_id", FILTER_DEFAULT);
-            if (strcasecmp($parent_id, "NULL") != 0) {
-                $object->parent_id = $parent_id;
+        $object->id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
+        $object->description = filter_input(INPUT_POST, "description", FILTER_DEFAULT);
+        $object->parentId = null;
+        if (filter_has_var(INPUT_POST, "parentId")) {
+            $parentId = filter_input(INPUT_POST, "parentId", FILTER_DEFAULT);
+            if (strcasecmp($parentId, "NULL") != 0) {
+                $object->parentId = $parentId;
             }
         }
-        if ($object->parent_id == $object->id) {
+        if ($object->parentId == $object->id) {
             Html::myalert("N&atilde;o pode colocar uma categoria como ascendente dela propria!");
         }
         $object->active = 0;
@@ -48,8 +51,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && filter_has_var(INPUT_POST, "update")
     }
     if (strcasecmp($update, "apagar") == 0) {
         $action = "eliminado";
-        if (filter_has_var(INPUT_POST, "tipo_id")) {
-            $object->id = filter_input(INPUT_POST, "tipo_id", FILTER_VALIDATE_INT);
+        if (filter_has_var(INPUT_POST, "id")) {
+            $object->id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
             $retval = $object->delete();
         }
     }

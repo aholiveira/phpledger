@@ -7,9 +7,9 @@ abstract class EntryCategory extends AbstractDataObject implements DataObjectInt
 {
     public ?string $description;
     public int $active;
-    public ?int $parent_id;
-    public ?string $parent_description = null;
+    public ?int $parentId;
+    public ?string $parentDescription = null;
     public array $children;
-    public string $validation_message;
+    public string $validationMessage;
     abstract public function getBalance(): float;
 }

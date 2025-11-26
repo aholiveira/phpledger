@@ -63,4 +63,5 @@ return
         'invalid_parameter' => "Parâmetro %s inválido",
         'ledger_save_error' => "Erro ao gravar movimento",
         'defaults_save_error' => "Erro ao gravar defaults",
+        'expired_session' => "The session has expired."
     ];

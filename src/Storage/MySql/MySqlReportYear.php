@@ -41,10 +41,10 @@ class MySqlReportYear extends ReportYear
             $this->dateFilters[$year]['start'] = date("Ymd", mktime(0, 0, 0, 1, 1, $year));
             $this->dateFilters[$year]['end'] = date("Ymd", mktime(0, 0, 0, 12, 31, $year));
         }
-        $sql = "SELECT categoryId AS `row_header`, YEAR(entry_date) AS `col_header`, ROUND(SUM(ROUND(euroAmount,5)),2) AS `value`
+        $sql = "SELECT categoryId AS `row_header`, YEAR(entryDate) AS `col_header`, ROUND(SUM(ROUND(euroAmount,5)),2) AS `value`
             FROM movimentos
-            WHERE YEAR(entry_date) BETWEEN ? AND ?
-            GROUP BY categoryId, YEAR(entry_date)
+            WHERE YEAR(entryDate) BETWEEN ? AND ?
+            GROUP BY categoryId, YEAR(entryDate)
             HAVING ROUND(SUM(ROUND(euroAmount,5)),2)<>0
             ORDER BY `row_header`, `col_header`";
         self::getData($sql, $this->first_year, $this->last_year);
@@ -54,7 +54,7 @@ class MySqlReportYear extends ReportYear
         $savings_types = $account_type->getList(['savings' => ['operator' => '=', 'value' => '1']]);
         $savings_accounts = [];
         foreach ($savings_types as $saving_type) {
-            foreach ($account->getList(['tipo_id' => ['operator' => '=', 'value' => $saving_type->id]]) as $acc) {
+            foreach ($account->getList(['id' => ['operator' => '=', 'value' => $saving_type->id]]) as $acc) {
                 $savings_accounts[] = $acc;
             }
         }

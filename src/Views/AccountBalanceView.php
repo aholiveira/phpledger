@@ -8,6 +8,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+namespace PHPLedger\Views;
 use PHPLedger\Domain\Account;
 use PHPLedger\Util\L10n;
 class AccountBalanceView extends ObjectViewer
@@ -21,7 +22,7 @@ class AccountBalanceView extends ObjectViewer
          * @var account
          */
         $object = $this->object;
-        return "<td><a href=\"account_types.php?tipo_id={$object->id}\">{$object->id}</a></td>"
+        return "<td><a href=\"account_types.php?id={$object->id}\">{$object->id}</a></td>"
             . "<td>{$object->name}</td>";
     }
 
@@ -44,7 +45,7 @@ class AccountBalanceView extends ObjectViewer
 
         foreach ($object_list as $object) {
             if ($object instanceof account) {
-                $balances[$object->id] = $object->getBalanceOnDate(new DateTime());
+                $balances[$object->id] = $object->getBalanceOnDate(new \DateTime());
                 foreach ($type_names as $type_name) {
                     $totals[$type_name] += $balances[$object->id][$type_name];
                 }

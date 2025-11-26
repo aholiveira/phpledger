@@ -7,7 +7,10 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-include_once __DIR__ . "/contas_config.php";
+if (!defined("ROOT_DIR")) {
+    require_once __DIR__ . "/prepend.php";
+}
+
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Html;
@@ -24,12 +27,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         Redirector::to('ledger_entries.php');
     }
     if (stristr($_POST["update"], "gravar")) {
-        $object->id = htmlspecialchars(filter_input(INPUT_POST, "tipo_id", FILTER_VALIDATE_INT));
-        $object->description = htmlspecialchars(filter_input(INPUT_POST, "tipo_desc", FILTER_DEFAULT));
+        $object->id = htmlspecialchars(filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT));
+        $object->description = htmlspecialchars(filter_input(INPUT_POST, "description", FILTER_DEFAULT));
         $object->savings = filter_has_var(INPUT_POST, "savings") ? 1 : 0;
         $retval = $object->update();
     } else {
-        $object->id = filter_input(INPUT_POST, "tipo_id", FILTER_VALIDATE_INT);
+        $object->id = filter_input(INPUT_POST, "id", FILTER_VALIDATE_INT);
         if ($object->id > 0) {
             $retval = $object->delete();
         }
@@ -38,17 +41,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $message = "Ocorreu um erro na operacao.";
     } else {
         if (!headers_sent()) {
-            header("Location: account_types_list.php" . (isset($object->id) ? "?tipo_id={$object->id}" : ""));
+            header("Location: account_types_list.php" . (isset($object->id) ? "?id={$object->id}" : ""));
             exit;
         }
     }
 }
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $object->id = $object->getNextId();
-    if (filter_has_var(INPUT_GET, "tipo_id")) {
-        $tipo_id = filter_input(INPUT_GET, "tipo_id", FILTER_VALIDATE_INT);
-        if ($tipo_id > 0) {
-            $object = $object->getById($tipo_id);
+    if (filter_has_var(INPUT_GET, "id")) {
+        $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
+        if ($id > 0) {
+            $object = $object->getById($id);
         }
     }
 }
@@ -76,13 +79,13 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
                     <tr>
                         <td>ID</td>
                         <td data-label="ID">
-                            <input type="text" readonly size="4" name="tipo_id" value="<?= $object->id ?>">
+                            <input type="text" readonly size="4" name="id" value="<?= $object->id ?>">
                         </td>
                     </tr>
                     <tr>
                         <td>Descri&ccedil;&atilde;o</td>
                         <td data-label="Descri&ccedil;&atilde;o">
-                            <input type="text" size="30" maxlength="30" name="tipo_desc"
+                            <input type="text" size="30" maxlength="30" name="description"
                                 value="<?= $object->description ?>">
                         </td>
                     </tr>

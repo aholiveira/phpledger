@@ -7,7 +7,10 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-include_once __DIR__ . "/contas_config.php";
+if (!defined("ROOT_DIR")) {
+    require_once __DIR__ . "/prepend.php";
+}
+
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;

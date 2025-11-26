@@ -1,4 +1,5 @@
 <?php
+namespace PHPLedger\Views;
 
 /**
  * View for EntryCategory object
@@ -26,8 +27,8 @@ class EntryCategoryView extends ObjectViewer
         if (!($object instanceof EntryCategory)) {
             return $retval;
         }
-        $retval .= "<td class='id' data-label='ID'><a href=\"entry_type.php?tipo_id={$object->id}\" title=\"Editar a categoria\">{$object->id}</a></td>";
-        $retval .= "<td class='category' data-label='Categoria'>" . (null === $object->parent_id || $object->parent_id == 0 ? "" : ($object->parent_description ?? "")) . "</td>";
+        $retval .= "<td class='id' data-label='ID'><a href=\"entry_type.php?id={$object->id}\" title=\"Editar a categoria\">{$object->id}</a></td>";
+        $retval .= "<td class='category' data-label='Categoria'>" . (null === $object->parentId || $object->parentId == 0 ? "" : ($object->parentDescription ?? "")) . "</td>";
         $retval .= "<td class='description' data-label='Descri&ccedil;&atilde;o'>{$object->description}</td>";
         $retval .= "<td class='amount' data-label='Valor'>" . normalizeNumber(abs($object->getBalance())) . "</td>";
         $retval .= "<td class='active checkbox' data-label='Activa'><input title=\"S&oacute; pode alterar o estado em modo de edi&ccedil;&atilde;o\" type=\"checkbox\" onclick=\"return false;\" name=active{$object->id} " . ($object->active ? "checked" : "") . "></td>\r\n";
@@ -41,7 +42,7 @@ class EntryCategoryView extends ObjectViewer
         $view = new entryCategoryView(ObjectFactory::entryCategory());
         foreach ($object_list as $object) {
             if ($object instanceof EntryCategory) {
-                if ($object->parent_id === 0) {
+                if ($object->parentId === 0) {
                     $view->setObject($object);
                     $retval .= "<tr>" . $view->printObject() . "</tr>\r\n";
                     foreach ($object->children as $child) {
@@ -49,7 +50,7 @@ class EntryCategoryView extends ObjectViewer
                         $retval .= "<tr>" . $view->printObject() . "</tr>\r\n";
                     }
                 }
-                if (!isset($object->parent_id)) {
+                if (!isset($object->parentId)) {
                     $view->setObject($object);
                     $retval .= "<tr>" . $view->printObject() . "</tr>\r\n";
                 }
@@ -69,7 +70,7 @@ class EntryCategoryView extends ObjectViewer
         if (isset($object->id)) {
             $filter = [
                 'active' => ['operator' => '=', 'value' => '1'],
-                'tipo_id' => ['operator' => '<>', 'value' => "{$object->id}"]
+                'id' => ['operator' => '<>', 'value' => "{$object->id}"]
             ];
         } else {
             $filter = ['active' => ['operator' => '=', 'value' => '1']];
@@ -77,26 +78,26 @@ class EntryCategoryView extends ObjectViewer
         $category_list = $object->getList($filter);
         if (isset($object->id)) {
             foreach ($category_list as $key => $category) {
-                if ($category->parent_id == $object->id || $category->id == $object->id) {
+                if ($category->parentId == $object->id || $category->id == $object->id) {
                     unset($category_list[$key]);
                 }
             }
         }
         $retval .= "<tr>";
-        $retval .= "<td><label for=\"tipo_id\">ID</label></td>\r\n";
-        $retval .= "<td><input type=text readonly size=4 name=\"tipo_id\" value=" . (isset($object->id) ? $object->id : $object->getNextId()) . "></td>\r\n";
+        $retval .= "<td><label for=\"id\">ID</label></td>\r\n";
+        $retval .= "<td><input type=text readonly size=4 name=\"id\" value=" . (isset($object->id) ? $object->id : $object->getNextId()) . "></td>\r\n";
         $retval .= "</tr>";
         $retval .= "<tr>";
-        $retval .= "<td><label for=\"parent_id\">Categoria</label></td>\r\n";
-        $retval .= "<td><select name=\"parent_id\">\r\n";
+        $retval .= "<td><label for=\"parentId\">Categoria</label></td>\r\n";
+        $retval .= "<td><select name=\"parentId\">\r\n";
         if ((isset($object->id) && $object->id !== 0) || !isset($object->id)) {
-            $retval .= $this->getSelectFromList($category_list, isset($object->parent_id) ? $object->parent_id : 0);
+            $retval .= $this->getSelectFromList($category_list, isset($object->parentId) ? $object->parentId : 0);
         }
         $retval .= "</select>\n";
         $retval .= "</tr>";
         $retval .= "<tr>";
-        $retval .= "<td><label for=\"tipo_desc\">Descri&ccedil;&atilde;o</label></td>\n";
-        $retval .= "<td><input type=text size=30 maxlength=30 name=\"tipo_desc\" value=\"" . (isset($object->id) ? $object->description : "") . "\"></td>";
+        $retval .= "<td><label for=\"description\">Descri&ccedil;&atilde;o</label></td>\n";
+        $retval .= "<td><input type=text size=30 maxlength=30 name=\"description\" value=\"" . (isset($object->id) ? $object->description : "") . "\"></td>";
         $retval .= "</tr>";
         $retval .= "<tr>";
         $retval .= "<td><label for=\"active\">Activa</label></td>\n";
@@ -124,7 +125,7 @@ class EntryCategoryView extends ObjectViewer
                     }
                     $retval .= "</optgroup>\r\n";
                 } else {
-                    if ($category->parent_id == 0 || !isset($category->parent_id)) {
+                    if ($category->parentId == 0 || !isset($category->parentId)) {
                         $retval .= "<option value=\"{$category->id}\"" . ($selected == $category->id ? " selected " : "") . ">{$category->description}</option>\n";
                     }
                 }

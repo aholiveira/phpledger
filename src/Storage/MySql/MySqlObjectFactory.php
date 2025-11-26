@@ -17,7 +17,6 @@ class MySqlObjectFactory implements DataObjectFactoryInterface
 
     public function __construct(string $backend = "mysql", ?Logger $logger = null)
     {
-
         $this->logger = $logger ?? new Logger("ledger.log");
     }
     public static function dataStorage(): DataStorageInterface

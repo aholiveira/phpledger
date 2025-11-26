@@ -15,19 +15,19 @@ class MySqlStorage implements DataStorageInterface
 {
     private ?\mysqli $dbConnection = null;
     private string $message = "";
-    private $_tableCreateSQL;
-    private $_collation = "utf8mb4_general_ci";
-    private $_engine = "InnoDB";
-    private $_default_admin_username;
-    private $_default_admin_password;
+    private $tableCreateSQL;
+    private $dbCollation = "utf8mb4_general_ci";
+    private $dbEngine = "InnoDB";
+    private $defaultAdminUsername;
+    private $defaultAdminPassword;
     private Logger $logger;
     private static ?self $instance = null;
     public function __construct()
     {
         $this->message = "";
         $this->setTableCreateSQL();
-        $this->_default_admin_username = config::get("admin_username");
-        $this->_default_admin_password = config::get("admin_password");
+        $this->defaultAdminUsername = config::get("admin_username");
+        $this->defaultAdminPassword = config::get("admin_password");
         $this->logger = Logger::instance();
     }
     public static function instance(): self
@@ -80,18 +80,19 @@ class MySqlStorage implements DataStorageInterface
     {
         $retval = true;
         $db_name = config::get("database");
-        $tables = array_keys($this->_tableCreateSQL);
+        $tables = array_keys($this->tableCreateSQL);
         $this->connect();
-        if ($this->getDbCollation($db_name) != $this->_collation) {
-            $this->addMessage("Database [{$db_name}] collation not [{$this->_collation}]");
+        if ($this->getDbCollation($db_name) != $this->dbCollation) {
+            $this->addMessage("Database [{$db_name}] collation not [{$this->dbCollation}]");
             $retval = false;
         }
         foreach ($tables as $table_name) {
             $retval = $retval && $this->checkTable($table_name);
         }
+
         if ($this->tableExists("tipo_mov")) {
-            if (!$this->tableHasForeignKey("tipo_mov", "parent_id")) {
-                $this->addMessage("Table [tipo_mov] foreign key [parent_id] missing");
+            if (!$this->tableHasForeignKey("tipo_mov", "parentId")) {
+                $this->addMessage("Table [tipo_mov] foreign key [parentId] missing");
                 $retval = false;
             }
             $entry_category = MySqlObjectFactory::entryCategory()::getById(0);
@@ -99,8 +100,8 @@ class MySqlStorage implements DataStorageInterface
                 $this->addMessage("Category '0' does not exist");
                 $retval = false;
             } else {
-                $entry_list = $entry_category->getList(['parent_id' => ['operator' => 'is', 'value' => 'null'], 'tipo_id' => ['operator' => '>', 'value' => '0']]);
-                if (sizeof($entry_list) > 0) {
+                $entry_list = $entry_category->getList(['parentId' => ['operator' => 'is', 'value' => 'null'], 'id' => ['operator' => '>', 'value' => '0']]);
+                if (\sizeof($entry_list) > 0) {
                     $this->addMessage("Table [tipo_mov] needs update");
                     $retval = false;
                 }
@@ -109,7 +110,7 @@ class MySqlStorage implements DataStorageInterface
         if ($this->tableExists("users")) {
             try {
                 $user = new MySqlUser();
-                if (sizeof($user->getList()) == 0) {
+                if (\sizeof($user->getList()) == 0) {
                     $this->addMessage("Table [users] is empty");
                     $retval = false;
                 }
@@ -120,7 +121,7 @@ class MySqlStorage implements DataStorageInterface
         }
         if ($this->tableExists("ledgers")) {
             $ledger = new MySqlLedger();
-            if (sizeof($ledger->getList()) == 0) {
+            if (\sizeof($ledger->getList()) == 0) {
                 $this->addMessage("Table [ledgers] is empty");
                 $retval = false;
             }
@@ -131,14 +132,14 @@ class MySqlStorage implements DataStorageInterface
         }
         if ($this->tableExists("moedas")) {
             $currency = new MySqlCurrency();
-            if (sizeof($currency->getList()) == 0) {
+            if (\sizeof($currency->getList()) == 0) {
                 $this->addMessage("Table [currency] is empty");
                 $retval = false;
             }
         }
         if ($this->tableExists("tipo_mov")) {
             $accounttype = new MysqlAccountType();
-            if (sizeof($accounttype->getList()) == 0) {
+            if (\sizeof($accounttype->getList()) == 0) {
                 $this->addMessage("Table [account type] is empty");
                 $retval = false;
             }
@@ -162,13 +163,13 @@ class MySqlStorage implements DataStorageInterface
     public function update(): bool
     {
         $retval = true;
-        $tables = array_keys($this->_tableCreateSQL);
+        $tables = array_keys($this->tableCreateSQL);
         $db_name = config::get("database");
         if (
-            $this->getDbCollation($db_name) != $this->_collation &&
-            $this->setDbCollation($db_name, $this->_collation)
+            $this->getDbCollation($db_name) != $this->dbCollation &&
+            $this->setDbCollation($db_name, $this->dbCollation)
         ) {
-            $this->addMessage("Database [{$db_name}] collation could not be set to [{$this->_collation}]");
+            $this->addMessage("Database [{$db_name}] collation could not be set to [{$this->dbCollation}]");
             $retval = false;
         }
         foreach ($tables as $table_name) {
@@ -178,8 +179,8 @@ class MySqlStorage implements DataStorageInterface
         $user = new MySqlUser();
         if (sizeof($user->getList()) == 0) {
             $user->setId(1);
-            $user->setUsername($this->_default_admin_username);
-            $user->setPassword($this->_default_admin_password);
+            $user->setUsername($this->defaultAdminUsername);
+            $user->setPassword($this->defaultAdminPassword);
             $user->setFullName('Default admin');
             $user->setEmail('');
             $user->setRole(1);
@@ -194,7 +195,7 @@ class MySqlStorage implements DataStorageInterface
         $entry_category = MySqlObjectFactory::entryCategory()::getById(0);
         if ($entry_category->id !== 0) {
             $entry_category->id = 0;
-            $entry_category->parent_id = null;
+            $entry_category->parentId = null;
             $entry_category->description = "Sem categoria";
             $entry_category->active = 1;
             if (!$entry_category->update()) {
@@ -275,7 +276,7 @@ class MySqlStorage implements DataStorageInterface
     public function populateRandomData(): void
     {
         $category = MySqlObjectFactory::entryCategory();
-        $ledger_entry = MySqlObjectFactory::ledgerentry();
+        $ledgerEntry = MySqlObjectFactory::ledgerentry();
         $start_year = date("Y") - 3;
         $end_year = date("Y");
         $max_month_entries = 100;
@@ -292,17 +293,17 @@ class MySqlStorage implements DataStorageInterface
                 $days_in_month = ($year == date("Y") && $month == date("m") ? date("d") : cal_days_in_month(CAL_GREGORIAN, $month, $year));
                 $entries_to_create = random_int(round(0.7 * $max_month_entries, 0), $max_month_entries);
                 for ($entry_counter = 1; $entry_counter <= $entries_to_create; $entry_counter++) {
-                    $ledger_entry->id = $ledger_entry->getNextId();
-                    $ledger_entry->accountId = $account_list[array_rand($account_list)]->id;
-                    $ledger_entry->categoryId = $category_list[array_rand($category_list)]->id;
-                    $ledger_entry->entry_date = date("Y-m-d", mktime(0, 0, 0, $month, random_int(1, $days_in_month), $year));
-                    $ledger_entry->direction = [-1, 1][array_rand([-1, 1])];
-                    $ledger_entry->currencyAmount = random_int(1, 10000) / 100;
-                    $ledger_entry->currency_id = 'EUR';
-                    $ledger_entry->euroAmount = $ledger_entry->currencyAmount * $ledger_entry->direction;
-                    $ledger_entry->exchangeRate = 1;
-                    $ledger_entry->username = config::get("user");
-                    $ledger_entry->update();
+                    $ledgerEntry->id = $ledgerEntry->getNextId();
+                    $ledgerEntry->accountId = $account_list[array_rand($account_list)]->id;
+                    $ledgerEntry->categoryId = $category_list[array_rand($category_list)]->id;
+                    $ledgerEntry->entryDate = date("Y-m-d", mktime(0, 0, 0, $month, random_int(1, $days_in_month), $year));
+                    $ledgerEntry->direction = [-1, 1][array_rand([-1, 1])];
+                    $ledgerEntry->currencyAmount = random_int(1, 10000) / 100;
+                    $ledgerEntry->currencyId = 'EUR';
+                    $ledgerEntry->euroAmount = $ledgerEntry->currencyAmount * $ledgerEntry->direction;
+                    $ledgerEntry->exchangeRate = 1;
+                    $ledgerEntry->username = config::get("user");
+                    $ledgerEntry->update();
                 }
                 $curr_month = date_diff(new \DateTime(date("Y-m-d", mktime(0, 0, 0, $month, 1, $year))), new \DateTime(date("Y-m-d", mktime(0, 0, 0, 1, 1, $start_year))));
                 print number_format(($curr_month->y * 12 + $curr_month->m) / ($months->y * 12 + $curr_month->m + 1) * 100, 1) . "%\r\n";
@@ -317,23 +318,23 @@ class MySqlStorage implements DataStorageInterface
             return false;
         }
         $retval = true;
-        if ($this->getTableEngine($table_name) !== $this->_engine) {
-            $this->addMessage("Table [{$table_name}] engine not [{$this->_engine}]");
+        if ($this->getTableEngine($table_name) !== $this->dbEngine) {
+            $this->addMessage("Table [{$table_name}] engine not [{$this->dbEngine}]");
             $retval = false;
         }
-        if ($this->getTableCollation($table_name) !== $this->_collation) {
-            $this->addMessage("Table [{$table_name}] collation not [{$this->_collation}]");
+        if ($this->getTableCollation($table_name) !== $this->dbCollation) {
+            $this->addMessage("Table [{$table_name}] collation not [{$this->dbCollation}]");
             $retval = false;
         }
-        if (!empty($this->_tableCreateSQL[$table_name]['new'] ?? [])) {
-            foreach ($this->_tableCreateSQL[$table_name]['new'] as $old_column_name => $new_column_name) {
+        if (!empty($this->tableCreateSQL[$table_name]['new'] ?? [])) {
+            foreach ($this->tableCreateSQL[$table_name]['new'] as $old_column_name => $new_column_name) {
                 if ($this->tableHasColumn($table_name, $old_column_name) && !$this->tableHasColumn($table_name, $new_column_name)) {
                     $this->addMessage("Table [{$table_name}] column [{$old_column_name}] needs renaming to [{$new_column_name}]");
                     $retval = false;
                 }
             }
         }
-        $columns = $this->_tableCreateSQL[$table_name]['columns'];
+        $columns = $this->tableCreateSQL[$table_name]['columns'];
         $createSQL = $this->getSQLTableCreate($table_name);
         foreach ($columns as $column => $definition) {
             if (!$this->tableHasColumn($table_name, $column)) {
@@ -354,30 +355,31 @@ class MySqlStorage implements DataStorageInterface
             return false;
         }
         $retval = true;
-        if ($this->getTableEngine($table_name) != $this->_engine) {
-            if (!$this->setTableEngine($table_name, $this->_engine)) {
+        if ($this->getTableEngine($table_name) != $this->dbEngine) {
+            if (!$this->setTableEngine($table_name, $this->dbEngine)) {
                 $this->addMessage("Could not change engine on table [{$table_name}]");
                 $retval = false;
             }
         }
-        if ($this->getTableCollation($table_name) !== $this->_collation) {
-            if (!$this->setTableCollation($table_name, $this->_collation)) {
+        if ($this->getTableCollation($table_name) !== $this->dbCollation) {
+            if (!$this->setTableCollation($table_name, $this->dbCollation)) {
                 $this->addMessage("Could not change engine on table [{$table_name}]");
                 $retval = false;
             }
         }
-        if (!empty($this->_tableCreateSQL[$table_name]['new'] ?? [])) {
-            foreach ($this->_tableCreateSQL[$table_name]['new'] as $old_column_name => $new_column_name) {
-                if ($this->tableHasColumn($table_name, $old_column_name)) {
-                    if (!$this->renameColumnOnTable($old_column_name, $new_column_name, $table_name)) {
-                        $this->addMessage("Could not rename column [{$old_column_name}] on table [{$table_name}]");
-                        $retval = false;
-                    }
+        if (!empty($this->tableCreateSQL[$table_name]['new'] ?? [])) {
+            foreach ($this->tableCreateSQL[$table_name]['new'] as $old_column_name => $new_column_name) {
+                if (
+                    $this->tableHasColumn($table_name, $old_column_name) &&
+                    !$this->renameColumnOnTable($old_column_name, $new_column_name, $table_name)
+                ) {
+                    $this->addMessage("Could not rename column [{$old_column_name}] on table [{$table_name}]");
+                    $retval = false;
                 }
             }
         }
         $last_column = null;
-        foreach ($this->_tableCreateSQL[$table_name]['columns'] as $column_name => $column_definition) {
+        foreach ($this->tableCreateSQL[$table_name]['columns'] as $column_name => $column_definition) {
             if (!$this->tableHasColumn($table_name, $column_name)) {
                 $definition = $column_definition . ($last_column ? " AFTER `{$last_column}`" : "");
                 if (!$this->addColumnToTable($column_name, $table_name, $definition)) {
@@ -386,11 +388,12 @@ class MySqlStorage implements DataStorageInterface
                 }
             }
             $result = $this->getSQLTableCreate($table_name);
-            if (stripos($result, "`{$column_name}` {$column_definition}") === false) {
-                if ($this->changeColumnOnTable($column_name, $table_name, $column_definition) === false) {
-                    $this->addMessage("Could not change table [{$table_name}] column [{$column_name}] definition");
-                    $retval = false;
-                }
+            if (
+                stripos($result, "`{$column_name}` {$column_definition}") === false &&
+                $this->changeColumnOnTable($column_name, $table_name, $column_definition) === false
+            ) {
+                $this->addMessage("Could not change table [{$table_name}] column [{$column_name}] definition");
+                $retval = false;
             }
             $last_column = $column_name;
         }
@@ -400,9 +403,9 @@ class MySqlStorage implements DataStorageInterface
     {
         $retval = true;
         if ($this->tableExists("tipo_mov")) {
-            if (!$this->tableHasForeignKey("tipo_mov", "parent_id")) {
-                if (!$this->addForeignKeyToTable("parent_id", "tipo_mov(tipo_id) ON DELETE CASCADE ON UPDATE CASCADE", "tipo_mov")) {
-                    $this->addMessage("Could not add foreign key parent_id to table tipo_mov");
+            if (!$this->tableHasForeignKey("tipo_mov", "parentId")) {
+                if (!$this->addForeignKeyToTable("parentId", "tipo_mov(id) ON DELETE CASCADE ON UPDATE CASCADE", "tipo_mov")) {
+                    $this->addMessage("Could not add foreign key parentId to table tipo_mov");
                     $retval = false;
                 }
             }
@@ -416,16 +419,16 @@ class MySqlStorage implements DataStorageInterface
                 $this->addMessage("Adding category 0");
                 $entry_category->id = 0;
                 $entry_category->description = "Sem categoria";
-                $entry_category->parent_id = null;
+                $entry_category->parentId = null;
                 $entry_category->active = 1;
                 $entry_category->update();
-                $sql = "UPDATE tipo_mov SET parent_id=0 WHERE parent_id is null and tipo_id not in (select parent_id from tipo_mov where parent_id is not null group by parent_id) and tipo_id > 0";
+                $sql = "UPDATE tipo_mov SET parentId=0 WHERE parentId is null and id not in (select parentId from tipo_mov where parentId is not null group by parentId) and id > 0";
                 if (!$this->executeQuery($sql)) {
                     $this->addMessage("Could not update categories");
                     $retval = false;
                 }
             }
-            if (!$this->executeQuery("UPDATE tipo_mov set parent_id=0 where tipo_id>0 and parent_id is null")) {
+            if (!$this->executeQuery("UPDATE tipo_mov set parentId=0 where id>0 and parentId is null")) {
                 $this->addMessage("Could not update categories with null parent");
                 $retval = false;
             }
@@ -623,15 +626,15 @@ class MySqlStorage implements DataStorageInterface
             return "";
         }
     }
-    private function setDbCollation(string $db_name, string $collation): ?string
+    private function setDbCollation(string $db_name, string $dbCollation): ?string
     {
         $retval = "";
         $this->connect();
-        $sql = "ALTER DATABASE `{$db_name}` COLLATE='{$collation}'";
+        $sql = "ALTER DATABASE `{$db_name}` COLLATE='{$dbCollation}'";
         try {
             $retval = $this->executeQuery($sql);
             if ($retval) {
-                $this->addMessage("Changed collation on database [{$db_name}] to [{$collation}]");
+                $this->addMessage("Changed collation on database [{$db_name}] to [{$dbCollation}]");
             }
             return (bool) $retval;
         } catch (\Exception $ex) {
@@ -657,11 +660,11 @@ class MySqlStorage implements DataStorageInterface
         }
         return $retval;
     }
-    private function setTableCollation(string $table_name, string $collation): ?string
+    private function setTableCollation(string $table_name, string $dbCollation): ?string
     {
         $retval = "";
         $this->connect();
-        $sql = "ALTER TABLE `{$table_name}` COLLATE='{$collation}'";
+        $sql = "ALTER TABLE `{$table_name}` COLLATE='{$dbCollation}'";
         try {
             $retval = @$this->executeQuery($sql);
             $this->addMessage("Changed collation on table [{$table_name}]");
@@ -708,12 +711,12 @@ class MySqlStorage implements DataStorageInterface
         if ($this->tableExists($table_name)) {
             return true;
         }
-        if (!isset($this->_tableCreateSQL[$table_name])) {
+        if (!isset($this->tableCreateSQL[$table_name])) {
             $this->addMessage("No create definition for table [{$table_name}]");
             return false;
         }
         $columns = [];
-        $createSQL = $this->_tableCreateSQL[$table_name];
+        $createSQL = $this->tableCreateSQL[$table_name];
         foreach ($createSQL['columns'] as $column_name => $column_definition) {
             $columns[] = "`{$column_name}` {$column_definition}";
         }
@@ -731,7 +734,7 @@ class MySqlStorage implements DataStorageInterface
             }
         }
         $sql = "CREATE TABLE `{$table_name}` (" . implode(",", $columns) . ")
-         ENGINE={$this->_engine} DEFAULT COLLATE='{$this->_collation}'";
+         ENGINE={$this->dbEngine} DEFAULT COLLATE='{$this->dbCollation}'";
         try {
             $retval = $this->executeQuery($sql);
             if ($retval) {
@@ -754,10 +757,11 @@ class MySqlStorage implements DataStorageInterface
             'defaults' => MySqlDefaults::getDefinition(),
             'tipo_contas' => MysqlAccountType::getDefinition(),
             'users' => MySqlUser::getDefinition(),
-            'grupo_contas' => MySqlLedger::getDefinition()
+            'grupo_contas' => MySqlLedger::getDefinition(),
+            'tipo_mov' => MySqlEntryCategory::getDefinition()
         ];
         foreach ($tables as $name => $data) {
-            $this->_tableCreateSQL[$name] = $data ?? [];
+            $this->tableCreateSQL[$name] = $data ?? [];
         }
     }
 }

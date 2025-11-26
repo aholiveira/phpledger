@@ -22,14 +22,14 @@ class MySqlAccount extends Account
         return "
             SELECT
                 conta_id as id,
-                conta_num as `number`,
-                conta_nome as `name`,
+                `number`,
+                `name`,
                 grupo as `group`,
-                tipo_id as `typeId`,
+                `typeId`,
                 conta_nib as iban,
                 swift,
-                conta_abertura as openDate,
-                conta_fecho as closeDate,
+                openDate,
+                closeDate,
                 activa as active
             FROM " . static::$tableName . " ";
     }
@@ -67,7 +67,7 @@ class MySqlAccount extends Account
     public static function getList(array $fieldFilter = []): array
     {
         $where = static::getWhereFromArray($fieldFilter);
-        $sql = static::baseSelect() . " {$where} ORDER BY activa DESC, conta_nome";
+        $sql = static::baseSelect() . " {$where} ORDER BY activa DESC, name";
         return static::fetchAll($sql);
     }
 
@@ -82,27 +82,30 @@ class MySqlAccount extends Account
         $retval = [];
         $retval['columns'] = [
             "conta_id" => "int(3) NOT NULL DEFAULT 0",
-            "conta_num" => "char(30) NOT NULL DEFAULT ''",
-            "conta_nome" => "char(30) NOT NULL DEFAULT ''",
+            "number" => "char(30) NOT NULL DEFAULT ''",
+            "name" => "char(30) NOT NULL DEFAULT ''",
             "grupo" => "int(3) NOT NULL DEFAULT 0",
-            "tipo_id" => "int(2) DEFAULT NULL",
+            "typeId" => "int(2) DEFAULT NULL",
             "conta_nib" => "char(24) DEFAULT NULL",
             "swift" => "char(24) NOT NULL DEFAULT ''",
-            "conta_abertura" => "date DEFAULT NULL",
-            "conta_fecho" => "date DEFAULT NULL",
+            "openDate" => "date DEFAULT NULL",
+            "closeDate" => "date DEFAULT NULL",
             "activa" => "int(1) NOT NULL DEFAULT 0"
         ];
         $retval['primary_key'] = "conta_id";
         $retval['new'] = [
             'id' => 'conta_id',
-            'number' => 'conta_num',
-            'name' => 'conta_nome',
             'group' => 'grupo',
-            'type_id' => 'tipo_id',
+            'type_id' => 'typeId',
             'iban' => 'conta_nib',
-            'open_date' => 'conta_abertura',
-            'close_date' => 'conta_fecho',
-            'active' => 'activa'
+            'open_date' => 'openDate',
+            'close_date' => 'closeDate',
+            'active' => 'activa',
+            'conta_abertura' => 'openDate',
+            'conta_fecho' => 'closeDate',
+            'conta_num' => 'number',
+            'conta_nome' => 'name',
+            'tipo_id' => 'typeId'
         ];
         return $retval;
     }
@@ -121,11 +124,11 @@ class MySqlAccount extends Account
         $retval = ['income' => 0, 'expense' => 0, 'balance' => 0];
         $param_array = [$this->id];
         if (null !== $startDate) {
-            $where .= " AND `entry_date`>=? ";
+            $where .= " AND `entryDate`>=? ";
             $param_array[] = $startDate->format("Y-m-d");
         }
         if (null !== $endDate) {
-            $where .= " AND entry_date<=? ";
+            $where .= " AND entryDate<=? ";
             $param_array[] = $endDate->format("Y-m-d");
         }
         $sql = "SELECT
@@ -161,17 +164,17 @@ class MySqlAccount extends Account
         $retval = false;
         try {
             $sql = "INSERT INTO {$this->tableName()}
-                        (`conta_num`, `conta_nome`, `grupo`, `tipo_id`, `conta_nib`, `swift`, `conta_abertura`, `conta_fecho`, `activa`, `conta_id`)
+                        (`number`, `name`, `grupo`, `typeId`, `conta_nib`, `swift`, `openDate`, `closeDate`, `activa`, `conta_id`)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         ON DUPLICATE KEY UPDATE
-                            `conta_num`=VALUES(`conta_num`),
-                            `conta_nome`=VALUES(`conta_nome`),
+                            `number`=VALUES(`number`),
+                            `name`=VALUES(`name`),
                             `grupo`=VALUES(`grupo`),
-                            `tipo_id`=VALUES(`tipo_id`),
+                            `typeId`=VALUES(`typeId`),
                             `conta_nib`=VALUES(`conta_nib`),
                             `swift`=VALUES(`swift`),
-                            `conta_abertura`=VALUES(`conta_abertura`),
-                            `conta_fecho`=VALUES(`conta_fecho`),
+                            `openDate`=VALUES(`openDate`),
+                            `closeDate`=VALUES(`closeDate`),
                             `activa`=VALUES(`activa`)";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {

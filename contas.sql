@@ -20,12 +20,12 @@
 DROP TABLE IF EXISTS `contas`;
 CREATE TABLE `contas` (
   `conta_id` int(3) NOT NULL default '0',
-  `conta_num` char(30) NOT NULL default '',
-  `conta_nome` char(30) NOT NULL default '',
-  `tipo_id` int(2) default NULL,
+  `number` char(30) NOT NULL default '',
+  `name` char(30) NOT NULL default '',
+  `typeId` int(2) default NULL,
   `conta_nib` char(24) default NULL,
-  `conta_abertura` date default NULL,
-  `conta_fecho` date default NULL,
+  `openDate` date default NULL,
+  `closeDate` date default NULL,
   `activa` int(1) NOT NULL default '0',
   PRIMARY KEY  (`conta_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_general_ci;
@@ -98,10 +98,10 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `movimentos`;
 CREATE TABLE `movimentos` (
   `id` int(4) NOT NULL AUTO_INCREMENT,
-  `entry_date` date DEFAULT NULL,
+  `entryDate` date DEFAULT NULL,
   `categoryId` int(3) DEFAULT NULL,
   `accountId` int(3) DEFAULT NULL,
-  `currency_id` char(3) NOT NULL DEFAULT 'EUR',
+  `currencyId` char(3) NOT NULL DEFAULT 'EUR',
   `direction` tinyint(1) NOT NULL DEFAULT 1,
   `currencyAmount` float(10,2) DEFAULT NULL,
   `euroAmount` float(10,2) DEFAULT NULL,
@@ -118,10 +118,10 @@ CREATE TABLE `movimentos` (
 
 DROP TABLE IF EXISTS `tipo_contas`;
 CREATE TABLE `tipo_contas` (
-  `tipo_id` int(2) NOT NULL DEFAULT 0,
-  `tipo_desc` char(30) DEFAULT NULL,
+  `id` int(2) NOT NULL DEFAULT 0,
+  `description` char(30) DEFAULT NULL,
   `savings` int(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`tipo_id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_general_ci;
 
 --
@@ -141,13 +141,13 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `tipo_mov`;
 CREATE TABLE `tipo_mov` (
-  `tipo_id` int(3) NOT NULL DEFAULT 0,
-  `parent_id` int(3) DEFAULT NULL,
+  `id` int(3) NOT NULL DEFAULT 0,
+  `parentId` int(3) DEFAULT NULL,
   `tipo_desc` char(50) DEFAULT NULL,
   `active` int(1) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`tipo_id`),
-  KEY `parent_id` (`parent_id`),
-  CONSTRAINT `parent_id` FOREIGN KEY (`parent_id`) REFERENCES `tipo_mov` (`tipo_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`id`),
+  KEY `parentId` (`parentId`),
+  CONSTRAINT `parentId` FOREIGN KEY (`parentId`) REFERENCES `tipo_mov` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_general_ci;
 
 --

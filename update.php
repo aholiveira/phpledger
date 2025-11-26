@@ -20,7 +20,6 @@ config::init(__DIR__ . '/config.json');
 
 $data_storage = ObjectFactory::dataStorage();
 $update_result = null;
-
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
         http_response_code(400);
@@ -29,6 +28,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $action = $_POST['action'] ?? null;
     if ($action === 'update_db') {
         $update_result = $data_storage->update();
+        if ($update_result) {
+            if (!headers_sent()) {
+                header("Refresh: 8; URL=index.php");
+            }
+        }
     }
 }
 
@@ -42,9 +46,6 @@ $pagetitle = L10n::l('update_needed');
 <head>
     <?php Html::header($pagetitle); ?>
     <title><?= $pagetitle ?></title>
-    <?php if ($update_result): ?>
-        <meta http-equiv="refresh" content="5;url=index.php">
-    <?php endif; ?>
 </head>
 
 <body>

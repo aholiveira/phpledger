@@ -7,7 +7,10 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-include_once __DIR__ . "/contas_config.php";
+if (!defined("ROOT_DIR")) {
+    require_once __DIR__ . "/prepend.php";
+}
+
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
@@ -30,10 +33,10 @@ $pagetitle = "Tipo de movimentos";
                 <table class="entry_category">
                     <?php
                     $object = ObjectFactory::EntryCategory();
-                    if (filter_has_var(INPUT_GET, "tipo_id")) {
-                        $tipo_id = filter_input(INPUT_GET, "tipo_id", FILTER_VALIDATE_INT);
-                        if ($tipo_id > 0) {
-                            $object = $object->getById($tipo_id);
+                    if (filter_has_var(INPUT_GET, "id")) {
+                        $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
+                        if ($id > 0) {
+                            $object = $object->getById($id);
                         }
                     }
                     $viewer = ViewFactory::instance()->entryCategoryView($object);
