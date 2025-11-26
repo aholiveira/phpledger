@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             session_regenerate_id(true);
             $_SESSION['user'] = $postUser;
             $_SESSION['expires'] = time() + SESSION_EXPIRE;
-            $defaults = ObjectFactory::defaults()->getByUserName($postUser);
+            $defaults = ObjectFactory::defaults()->getByUserName($postUser) ?? ObjectFactory::defaults()::init();
             $defaults->entryDate = date("Y-m-d");
             $defaults->language = L10n::$lang;
             Logger::instance()->info("User [$postUser] logged in");
