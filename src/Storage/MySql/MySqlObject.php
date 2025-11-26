@@ -95,19 +95,17 @@ trait MySqlObject
             if (!\in_array($op, $allowedOps)) {
                 continue;
             }
-
             $name = $table_name ? "`$table_name`.`$field`" : "`$field`";
-
             if ($op === 'BETWEEN' && \is_array($filter['value'])) {
                 $v1 = "'" . $db->real_escape_string($filter['value'][0]) . "'";
                 $v2 = "'" . $db->real_escape_string($filter['value'][1]) . "'";
                 $parts[] = "$name BETWEEN $v1 AND $v2";
             } else {
-                $val = "'" . $db->real_escape_string($filter['value']) . "'";
+                $val = $filter['value'] === null && $op === "IS" ? "NULL" :
+                    $val = "'" . $db->real_escape_string($filter['value']) . "'";
                 $parts[] = "$name $op $val";
             }
         }
-
         return $parts ? "WHERE " . implode(" AND ", $parts) : "";
     }
     abstract public static function getList(array $fieldFilter = []): array;
