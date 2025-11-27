@@ -7,9 +7,13 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 namespace PHPLedger\Storage\MySql;
+
 use PHPLedger\Domain\Defaults;
 use PHPLedger\Util\Config;
+use PHPLedger\Util\Logger;
+
 class MySqlDefaults extends Defaults
 {
     use MySqlObject {
@@ -20,29 +24,19 @@ class MySqlDefaults extends Defaults
     public function __construct($data = null)
     {
         $this->traitConstruct();
-        if (!empty($data) && \is_array($data)) {
-            $this->id = $data["id"] ?? 1;
-            $this->categoryId = $data["categoryId"] ?? 990;
-            $this->accountId = $data["accountId"] ?? 0;
-            $this->currencyId = $data["currencyId"] ?? "EUR";
-            $this->entryDate = $data["entryDate"] ?? date("Y-m-d");
-            $this->direction = $data["direction"] ?? 1;
-            $this->language = $data["language"] ?? 'pt-PT';
-            $this->lastVisited = $data["lastVisited"] ?? "";
-            $this->showReportGraph = $data["showReportGraph"] ?? 0;
-            $this->username = $data["username"] ?? config::get("admin_username");
-        } else {
-            $this->id = 1;
-            $this->categoryId = 990;
-            $this->accountId = 0;
-            $this->currencyId = "EUR";
-            $this->entryDate = date("Y-m-d");
-            $this->direction = 1;
-            $this->language = 'pt-PT';
-            $this->lastVisited = "";
-            $this->showReportGraph = 0;
-            $this->username = Config::get("admin_username");
+        if ($data === null) {
+            $data = [];
         }
+        $this->id = $data["id"] ?? 1;
+        $this->categoryId = $data["categoryId"] ?? 990;
+        $this->accountId = $data["accountId"] ?? 0;
+        $this->currencyId = $data["currencyId"] ?? "EUR";
+        $this->entryDate = $data["entryDate"] ?? date("Y-m-d");
+        $this->direction = $data["direction"] ?? 1;
+        $this->language = $data["language"] ?? 'pt-PT';
+        $this->lastVisited = $data["lastVisited"] ?? "";
+        $this->showReportGraph = $data["showReportGraph"] ?? 0;
+        $this->username = $data["username"] ?? Config::get("admin_username");
     }
     public static function getDefinition(): array
     {
@@ -71,53 +65,50 @@ class MySqlDefaults extends Defaults
         $retval['primary_key'] = "id";
         return $retval;
     }
+    private static function getSelect(): string
+    {
+        $cols = array_keys(self::getDefinition()['columns']);
+        $cols = array_map(function ($c) {
+            return "`" . $c . "`";
+        }, $cols);
+        return "SELECT " . implode(", ", $cols) . " FROM `" . self::$tableName . "`";
+    }
     public static function getList(array $fieldFilter = []): array
     {
         $where = self::getWhereFromArray($fieldFilter);
-        $sql = "SELECT
-            id,
-            `categoryId`,
-            `accountId`,
-            `currencyId`,
-            `entryDate`,
-            direction,
-            `language`,
-            lastVisited,
-            username
-        FROM " . self::$tableName . "
-        {$where}
-        ORDER BY id";
+        $sql = self::getSelect() . " {$where} ORDER BY id";
         $retval = [];
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
-            $stmt->execute();
+            if ($stmt->execute() === false) {
+                throw new \mysqli_sql_exception();
+            }
             $result = $stmt->get_result();
-            while ($newobject = $result->fetch_object(__CLASS__)) {
+            if ($result === false) {
+                throw new \mysqli_sql_exception();
+            }
+            while ($data = $result->fetch_assoc()) {
+                $newobject = new self($data);
                 $retval[$newobject->id] = $newobject;
             }
-            $stmt->close();
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
+        } finally {
+            if (isset($stmt) && $stmt instanceof \mysqli_stmt) {
+                $stmt->close();
+            }
+            if (isset($result) && $result instanceof \mysqli_result) {
+                $result->close();
+            }
         }
         return $retval;
     }
-    public static function getById($id): ?Defaults
+    public static function getById(int $id): ?Defaults
     {
-        $sql = "SELECT
-            id,
-            `categoryId`,
-            `accountId`,
-            `currencyId`,
-            `entryDate`,
-            direction,
-            `language`,
-            lastVisited,
-            username
-            FROM " . self::$tableName . "
-            WHERE id=?";
+        $sql = self::getSelect() . " WHERE id=?";
         $retval = null;
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
@@ -125,32 +116,33 @@ class MySqlDefaults extends Defaults
                 throw new \mysqli_sql_exception();
             }
             $stmt->bind_param("i", $id);
-            $stmt->execute();
-            if (!$stmt) {
+            if ($stmt->execute() === false) {
                 throw new \mysqli_sql_exception();
             }
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__);
-            $stmt->close();
+            if ($result === false) {
+                throw new \mysqli_sql_exception();
+            }
+            $row = $result ? $result->fetch_assoc() : null;
+            if (!$row) {
+                return null;
+            }
+            $retval = new self($row);
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
+        } finally {
+            if (isset($stmt) && $stmt instanceof \mysqli_stmt) {
+                $stmt->close();
+            }
+            if (isset($result) && $result instanceof \mysqli_result) {
+                $result->close();
+            }
         }
         return $retval;
     }
-    public static function getByUsername(string $username): ?defaults
+    public static function getByUsername(string $username): ?Defaults
     {
-        $sql = "SELECT
-            id,
-            `categoryId`,
-            `accountId`,
-            `currencyId`,
-            `entryDate`,
-            direction,
-            `language`,
-            lastVisited,
-            username
-            FROM " . self::$tableName . "
-            WHERE trim(lower(username))=trim(lower(?))";
+        $sql = self::getSelect() . " WHERE username COLLATE utf8mb4_general_ci = trim(?)";
         $retval = null;
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
@@ -158,15 +150,27 @@ class MySqlDefaults extends Defaults
                 throw new \mysqli_sql_exception();
             }
             $stmt->bind_param("s", $username);
-            $stmt->execute();
-            if (!$stmt) {
+            if ($stmt->execute() === false) {
                 throw new \mysqli_sql_exception();
             }
             $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__);
-            $stmt->close();
+            if ($result === false) {
+                throw new \mysqli_sql_exception();
+            }
+            $row = $result->fetch_assoc();
+            if (!$row) {
+                return null;
+            }
+            $retval = new self($row);
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
+        } finally {
+            if (isset($stmt) && $stmt instanceof \mysqli_stmt) {
+                $stmt->close();
+            }
+            if (isset($result) && $result instanceof \mysqli_result) {
+                $result->close();
+            }
         }
         return $retval;
     }
@@ -174,7 +178,7 @@ class MySqlDefaults extends Defaults
      * Set values to the initial values
      * Use if there are no persisted defaults in the database
      */
-    public static function init(): defaults
+    public static function init(): Defaults
     {
         return new MySqlDefaults();
     }
@@ -183,23 +187,24 @@ class MySqlDefaults extends Defaults
         $retval = false;
         try {
             $sql = "INSERT INTO {$this->tableName()}
-                    (categoryId, accountId, currencyId, `entryDate`, direction, `language`, lastVisited, username, id)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (categoryId, accountId, currencyId, entryDate, direction, language, lastVisited, showReportGraph, username, id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON DUPLICATE KEY UPDATE
                     categoryId=VALUES(categoryId),
                     accountId=VALUES(accountId),
                     currencyId=VALUES(currencyId),
-                    `entryDate`=VALUES(`entryDate`),
+                    entryDate=VALUES(entryDate),
                     direction=VALUES(direction),
-                    `language`=VALUES(`language`),
+                    language=VALUES(language),
                     lastVisited=VALUES(lastVisited),
+                    showReportGraph=VALUES(showReportGraph),
                     username=VALUES(username)";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
             $stmt->bind_param(
-                "ssssssssi",
+                "iisssssisi",
                 $this->categoryId,
                 $this->accountId,
                 $this->currencyId,
@@ -207,16 +212,29 @@ class MySqlDefaults extends Defaults
                 $this->direction,
                 $this->language,
                 $this->lastVisited,
+                $this->showReportGraph,
                 $this->username,
                 $this->id
             );
             $retval = $stmt->execute();
-            $stmt->close();
-            if (!$retval) {
+            if (false === $retval) {
+                throw new \mysqli_sql_exception();
+            }
+            if (isset($result) && $result instanceof \mysqli_result) {
+                $result->close();
+            }
+            if ($retval === false) {
                 throw new \mysqli_sql_exception();
             }
         } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
+            static::handleException($ex, $sql);
+        } finally {
+            if (isset($stmt) && $stmt instanceof \mysqli_stmt) {
+                $stmt->close();
+            }
+            if (isset($result) && $result instanceof \mysqli_result) {
+                $result->close();
+            }
         }
         return $retval;
     }
