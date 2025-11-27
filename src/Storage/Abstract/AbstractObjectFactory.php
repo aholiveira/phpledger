@@ -1,4 +1,5 @@
 <?php
+
 namespace PHPLedger\Storage\Abstract;
 
 use Exception;

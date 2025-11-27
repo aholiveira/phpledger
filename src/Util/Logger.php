@@ -1,15 +1,14 @@
 <?php
+
 namespace PHPLedger\Util;
+
 enum LogLevel: int
 {
-    case DEBUG = 100;
-    case INFO = 200;
-    case NOTICE = 250;
-    case WARNING = 300;
-    case ERROR = 400;
-    case CRITICAL = 500;
-    case ALERT = 550;
-    case EMERGENCY = 600;
+    case ERROR = 0;
+    case WARNING = 1;
+    case NOTICE = 2;
+    case INFO = 3;
+    case DEBUG = 4;
 }
 
 class Logger
@@ -18,7 +17,6 @@ class Logger
     private LogLevel $logLevel;
     private static ?self $instance = null;
 
-
     public static function instance(): self
     {
         return self::$instance ??= new self(ROOT_DIR . "/logs/ledger.log");
@@ -26,6 +24,10 @@ class Logger
     public function __construct(string $file, LogLevel $logLevel = LogLevel::DEBUG)
     {
         $this->logFile = $file;
+        $this->logLevel = $logLevel;
+    }
+    public function setLogLevel(LogLevel $logLevel)
+    {
         $this->logLevel = $logLevel;
     }
     public function debug(string $message, string $prefix = ""): void
@@ -44,12 +46,10 @@ class Logger
     {
         $this->writeLog(LogLevel::WARNING, $message, $prefix);
     }
-
     public function error(string $message, string $prefix = ""): void
     {
         $this->writeLog(LogLevel::ERROR, $message, $prefix);
     }
-
     public function dump(mixed $data, string $prefix = ""): void
     {
         $output = print_r($data, true);
@@ -67,21 +67,17 @@ class Logger
             LogLevel::NOTICE => "NOTICE",
             LogLevel::WARNING => "WARN",
             LogLevel::ERROR => "ERROR",
-            LogLevel::CRITICAL => "CRIT",
-            LogLevel::ALERT => "ALERT",
-            LogLevel::EMERGENCY => "EMERG"
         };
     }
     private function writeLog(LogLevel $level, string $message, string $prefix = ""): void
     {
-        if ($level < $this->logLevel) {
+        if ($level->value > $this->logLevel->value) {
             return;
         }
         $prefix = trim($prefix);
         $prefix = $prefix !== '' ? $prefix : '-';
         $timestamp = date('Y-m-d H:i:s');
         $entry = "[$timestamp] [{$this->levelText($level)}] [$prefix] $message" . PHP_EOL;
-
         $dir = dirname($this->logFile);
         if (!is_dir($dir)) {
             mkdir($dir, 0750, true);

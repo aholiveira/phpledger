@@ -44,7 +44,7 @@ final class Html
         }
         return $retval;
     }
-    public static function errortext(string $message): never
+    public static function errortext(string $message, $exit = true): void
     {
         ?>
         <p><?= htmlspecialchars($message) ?></p>
@@ -53,7 +53,9 @@ final class Html
 
         </html>
         <?php
-        exit;
+        if ($exit) {
+            exit;
+        }
     }
     public static function myalert(string $message): void
     {
@@ -68,9 +70,7 @@ final class Html
         $title = trim($pagetitle) !== '' ? "$pagetitle - " : '';
         $fullTitle = $title . Config::get("title");
         ?>
-        <title>
-            <?= htmlspecialchars($fullTitle) ?>
-        </title>
+        <title><?= htmlspecialchars($fullTitle) ?></title>
         <script>
             document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone + "; path=/";
         </script>
