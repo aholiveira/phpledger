@@ -1,7 +1,4 @@
 <?php
-
-use PHPLedger\Util\CSRF;
-use PHPLedger\Util\Redirector;
 /**
  * Prepended file on each call to a PHP file
  * This does basic defines and checks if PHP version is supported
@@ -23,10 +20,11 @@ use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Logger;
+use PHPLedger\Util\Redirector;
 use PHPLedger\Util\SessionManager;
 
 const BACKEND = "mysql";
-const VERSION = "0.4.404";
+const VERSION = "0.4.501";
 const ROOT_DIR = __DIR__;
 const SESSION_EXPIRE = 3600;
 
@@ -56,6 +54,7 @@ if (SessionManager::isExpired()) {
     SessionManager::start();
     if (!$isPublic && !headers_sent()) {
         Redirector::to("Location: index.php?expired=1&lang=" . L10n::$lang);
+        exit;
     }
 }
 
@@ -63,6 +62,7 @@ if (SessionManager::isExpired()) {
 if (!$isPublic && !isset($_SESSION['user'])) {
     if (!headers_sent()) {
         Redirector::to("index.php");
+        exit;
     }
 }
 # --- SESSION STILL VALID OR PUBLIC PAGE ---

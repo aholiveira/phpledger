@@ -1,5 +1,7 @@
 <?php
+
 namespace PHPLedger\Util;
+
 class SessionManager
 {
     public static function start(): void
@@ -17,19 +19,45 @@ class SessionManager
     public static function isExpired(): bool
     {
         self::start();
-        if (isset($_SESSION['expires']) && $_SESSION['expires'] < time()) {
-            return true;
-        }
-        return false;
+        return isset($_SESSION['expires']) && $_SESSION['expires'] < time();
     }
     public static function logout(): void
     {
         self::start();
         session_unset();
         $_SESSION = [];
+
         if (ini_get("session.use_cookies")) {
-            $params = session_get_cookie_params();
-            setcookie(session_name(), "", time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
+            $p = session_get_cookie_params();
+            setcookie(session_name(), "", time() - 42000, $p["path"], $p["domain"], $p["secure"], $p["httponly"]);
         }
+    }
+    public static function refreshExpiration(int $ttl): void
+    {
+        $_SESSION['expires'] = time() + $ttl;
+    }
+    public static function guard(array $publicPages, int $ttl): bool
+    {
+        self::start();
+        $page = strtolower(basename($_SERVER['SCRIPT_NAME'] ?? ''));
+        $isPublic = in_array($page, $publicPages, true);
+
+        if (self::isExpired()) {
+            self::logout();
+            self::start();
+            if (!$isPublic && !headers_sent()) {
+                Redirector::to("Location: index.php?expired=1&lang=" . L10n::$lang);
+            }
+            return false;
+        }
+
+        if (!$isPublic && empty($_SESSION['user'])) {
+            if (!headers_sent()) {
+                Redirector::to("index.php");
+            }
+            return false;
+        }
+        self::refreshExpiration($ttl);
+        return true;
     }
 }

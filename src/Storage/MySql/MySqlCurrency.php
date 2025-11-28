@@ -7,9 +7,12 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 namespace PHPLedger\Storage\MySql;
+
 use PHPLedger\Domain\Currency;
 use PHPLedger\Storage\MySql\MySqlObject;
+
 class MySqlCurrency extends Currency
 {
     private static array $fields = ["id", "`code`", "`description`", "exchangeRate", "username", "createdAt", "updatedAt"];
@@ -22,7 +25,6 @@ class MySqlCurrency extends Currency
     public function __construct()
     {
         $this->traitConstruct();
-        $this->code = "";
     }
     public static function getDefinition(): array
     {
@@ -49,14 +51,8 @@ class MySqlCurrency extends Currency
     }
     public static function getList(array $fieldFilter = []): array
     {
-
         $where = static::getWhereFromArray($fieldFilter);
-        /*$set = implode(",", array_map(fn($k) => "$k=?", array_keys($data)));
-        INSERT INTO {$this->table} (" . implode(",", $keys) . ")
-                VALUES (" . implode(",", array_fill(0, count($keys), "?")) . ")";
-*/
-
-        $sql = "SELECT " . implode(",", self::$fields) . " FROM " . static::tableName() . " {$where} ORDER BY description";
+        $sql = "SELECT " . implode(",", array_keys(self::getDefinition()['columns'])) . " FROM " . static::tableName() . " {$where} ORDER BY description";
         $retval = [];
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
@@ -77,7 +73,7 @@ class MySqlCurrency extends Currency
 
     private static function getByField($field, $value): ?Currency
     {
-        $sql = "SELECT " . implode(",", self::$fields) . " FROM " . static::tableName() . " WHERE $field=? ORDER BY `description`";
+        $sql = "SELECT " . implode(",", array_keys(self::getDefinition()['columns'])) . " FROM " . static::tableName() . " WHERE $field=? ORDER BY `description`";
         $retval = null;
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);

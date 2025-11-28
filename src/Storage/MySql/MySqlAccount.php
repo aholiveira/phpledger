@@ -24,7 +24,7 @@ class MySqlAccount extends Account
                 conta_id as id,
                 `number`,
                 `name`,
-                grupo as `group`,
+                `grupo` AS `group`,
                 `typeId`,
                 conta_nib as iban,
                 swift,

@@ -11,14 +11,14 @@ namespace PHPLedger\Util;
 use PHPLedger\Util\Config;
 class Email
 {
-    public static function sendEmail($from, $to, $subject, $body): bool
+    public static function sendEmail($from, $to, $subject, $body, $test = false): bool
     {
-        \strlen(config::get("smtp")) > 0 ? ini_set("smtp", config::get("smtp")) : "";
-        \strlen(config::get("smtp_port")) > 0 ? ini_set("smtp_port", config::get("smtp_port")) : "";
-        \strlen(config::get("from")) > 0 ? ini_set("sendmail_from", config::get("from")) : "";
-        \strlen(config::get("smtp_port")) > 0 ? ini_set("smtp_port", config::get("smtp_port")) : "";
-        \strlen($from) > 0 ? ini_set("sendmail_from", $from) : "";
-        if (\strlen($to) == 0 || \strlen($subject) == 0 || \strlen($body) == 0) {
+        !empty(config::get("smtp")) ? ini_set("smtp", config::get("smtp")) : "";
+        !empty(config::get("smtp_port")) ? ini_set("smtp_port", config::get("smtp_port")) : "";
+        !empty(config::get("from")) ? ini_set("sendmail_from", config::get("from")) : "";
+        !empty(config::get("smtp_port")) ? ini_set("smtp_port", config::get("smtp_port")) : "";
+        !empty($from) ? ini_set("sendmail_from", $from) : "";
+        if (empty($from) || empty($to) || empty($subject) || empty($body)) {
             return false;
         }
         $from = ini_get("sendmail_from");
@@ -28,6 +28,10 @@ class Email
         $headers["Return-Path"] = $from;
         $headers["Content-Type"] = "text/plain; charset=us-ascii";
         $headers["X-Application"] = $title;
+
+        if ($test) {
+            return true;
+        }
         return @mail($to, $subject, str_replace("\n.\n", "\n..\n", $body), $headers, "-f {$from}");
     }
 }

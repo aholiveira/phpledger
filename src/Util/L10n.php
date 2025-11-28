@@ -11,12 +11,15 @@ class L10n
         self::$lang = self::$forcedLang ?? self::detectUserLang();
         self::$l10n = self::loadLang(self::$forcedLang);
     }
-    public static function l(string $translation_id, mixed ...$replacements): string
+    public static function l(string $translationId, mixed ...$replacements): string
     {
+        if (empty(self::$l10n[$translationId])) {
+            return "";
+        }
         $text = !empty($replacements)
-            ? \sprintf(self::$l10n[$translation_id], ...$replacements)
-            : self::$l10n[$translation_id];
-        return htmlspecialchars($text, ENT_NOQUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8', false);
+            ? \sprintf(self::$l10n[$translationId], ...$replacements)
+            : self::$l10n[$translationId];
+        return !empty($text) ? htmlspecialchars($text, ENT_NOQUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8', false) : "";
     }
     public static function html(): string
     {
@@ -47,6 +50,10 @@ class L10n
             $lang = 'pt-pt';
             $path = strtolower(ROOT_DIR . "/lang/$lang.php");
         }
-        return file_exists($path) ? include_once $path : [];
+        if (!file_exists($path)) {
+            return [];
+        }
+        $langData = include $path;
+        return \is_array($langData) ? $langData : [];
     }
 }

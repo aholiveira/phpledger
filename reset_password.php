@@ -3,6 +3,7 @@ if (!defined("ROOT_DIR")) {
     include_once __DIR__ . "/prepend.php";
 }
 
+use PHPLedger\Domain\User;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\Html;
@@ -23,7 +24,7 @@ if (empty($tokenId)) {
     $error = "Token em falta. Será redirecionado para a página inicial.";
 } else {
     $user = ObjectFactory::user()::getByToken($tokenId);
-    if (!$user instanceof user || !$user->isTokenValid($tokenId)) {
+    if (!$user instanceof User || !$user->isTokenValid($tokenId)) {
         header($refreshHeader);
         $error = "Token inválido ou expirado. Será redirecionado para a página inicial.";
     }

@@ -4,6 +4,7 @@ include __DIR__ . "/common.php";
 print __FILE__;
 print PHP_EOL;
 use PHPLedger\Contracts\DataObjectInterface;
+use PHPLedger\Domain\LedgerEntry;
 use PHPLedger\Storage\Abstract\AbstractDataObject;
 use PHPLedger\Storage\MySql\MySqlStorage;
 use PHPLedger\Storage\ObjectFactory;
@@ -129,7 +130,7 @@ function testObject(AbstractDataObject $object, $id = 1)
         }
         $retval = assert($object->update() === true, "save#{$object}#");
         $fieldFilter = [];
-        if ($object instanceof ledgerentry) {
+        if ($object instanceof LedgerEntry) {
             $fieldFilter[] = ['entryDate' => ['operator' => 'BETWEEN', 'value' => [date("Y-01-01 "), date("Y-12-31")]]];
         }
         $retval = @assert(sizeof($object->getList($fieldFilter)) > 0, "getList#{$object}#") && $retval;

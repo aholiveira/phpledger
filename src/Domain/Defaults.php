@@ -1,8 +1,10 @@
 <?php
+
 namespace PHPLedger\Domain;
 
 use PHPLedger\Contracts\DataObjectInterface;
 use PHPLedger\Storage\Abstract\AbstractDataObject;
+
 abstract class Defaults extends AbstractDataObject implements DataObjectInterface
 {
     public int $categoryId;
@@ -13,7 +15,7 @@ abstract class Defaults extends AbstractDataObject implements DataObjectInterfac
     public ?string $language;
     public ?string $username;
     public ?string $lastVisited;
+    public ?int $showReportGraph;
     abstract public static function getByUsername(string $username): ?Defaults;
     abstract public static function init(): defaults;
-
 }
