@@ -54,7 +54,7 @@ class MySqlReportYear extends ReportYear
         $savings_types = $account_type->getList(['savings' => ['operator' => '=', 'value' => '1']]);
         $savings_accounts = [];
         foreach ($savings_types as $saving_type) {
-            foreach ($account->getList(['id' => ['operator' => '=', 'value' => $saving_type->id]]) as $acc) {
+            foreach ($account->getList(['conta_id' => ['operator' => '=', 'value' => $saving_type->id]]) as $acc) {
                 $savings_accounts[] = $acc;
             }
         }
