@@ -17,13 +17,21 @@ beforeEach(function () {
 });
 
 it('returns false if from, to, subject, or body is empty', function () {
-    expect(Email::sendEmail('', 'a@b.com', 'subject', 'body', true))->toBeFalse();
-    expect(Email::sendEmail('from@a.com', '', 'subject', 'body', true))->toBeFalse();
-    expect(Email::sendEmail('from@a.com', 'to@b.com', '', 'body', true))->toBeFalse();
-    expect(Email::sendEmail('from@a.com', 'to@b.com', 'subject', '', true))->toBeFalse();
+    $from = 'from@a.com';
+    $to = 'to@b.com';
+    $subject = 'subject';
+    $body = 'body';
+    expect(Email::sendEmail('', $to, $subject, $body, true))->toBeFalse();
+    expect(Email::sendEmail($from, '', $subject, $body, true))->toBeFalse();
+    expect(Email::sendEmail($from, $to, '', $body, true))->toBeFalse();
+    expect(Email::sendEmail($from, $to, $subject, '', true))->toBeFalse();
 });
 
 it('returns true on valid email data', function () {
-    $result = Email::sendEmail('from@a.com', 'to@b.com', 'subject', 'body', true);
+    $from = 'from@a.com';
+    $to = 'to@b.com';
+    $subject = 'subject';
+    $body = 'body';
+    $result = Email::sendEmail($from, $to, $subject, $body, true);
     expect($result)->toBeTrue();
 });

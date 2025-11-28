@@ -16,6 +16,7 @@ trait MySqlObject
     protected static string $errorMessage;
     public function __construct()
     {
+        // Common in all classes. TODO: Will be refactored in the future
     }
     public function setId($id)
     {

@@ -4,7 +4,9 @@ use PHPLedger\Util\SessionManager;
 use PHPLedger\Util\L10n;
 
 beforeEach(function () {
-    if (session_status() === PHP_SESSION_ACTIVE) session_write_close();
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        session_write_close();
+    }
     $_SESSION = [];
     $_SERVER['SCRIPT_NAME'] = 'index.php';
     L10n::$lang = 'en';
