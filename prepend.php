@@ -24,7 +24,7 @@ use PHPLedger\Util\Redirector;
 use PHPLedger\Util\SessionManager;
 
 const BACKEND = "mysql";
-const VERSION = "0.4.404";
+const VERSION = "0.4.501";
 const ROOT_DIR = __DIR__;
 const SESSION_EXPIRE = 3600;
 
