@@ -1,10 +1,12 @@
 <?php
+
 namespace PHPLedger\Domain;
 
 use PHPLedger\Contracts\DataObjectInterface;
 use PHPLedger\Storage\Abstract\AbstractDataObject;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\Email;
+
 const USER_ROLE_ADM = 255;
 const USER_ROLE_RW = 192;
 const USER_ROLE_RO = 128;
@@ -19,6 +21,7 @@ abstract class User extends AbstractDataObject implements DataObjectInterface
     protected int $active;
     protected int $role;
     protected static int $_token_length = 32;
+    private string $dateFormat = "Y-m-d H:i:s";
     public function setUsername(string $value)
     {
         $this->userName = $value;
@@ -113,7 +116,7 @@ abstract class User extends AbstractDataObject implements DataObjectInterface
     }
     public function isTokenValid(string $token): bool
     {
-        return date("Y-m-d H:i:s") <= $this->tokenExpiry && $this->token == $token;
+        return date($this->dateFormat) <= $this->tokenExpiry && $this->token == $token;
     }
     public function resetPassword(): bool
     {
@@ -122,7 +125,7 @@ abstract class User extends AbstractDataObject implements DataObjectInterface
             return $retval;
         }
         $this->setToken($this->createToken());
-        $this->setTokenExpiry((new \DateTime(date("Y-m-d H:i:s")))->add(new \DateInterval("PT24H"))->format("Y-m-d H:i:s"));
+        $this->setTokenExpiry((new \DateTime())->add(new \DateInterval("PT24H"))->format($this->dateFormat));
         if ($this->update()) {
             $retval = true;
             $title = Config::get("title");
@@ -142,5 +145,4 @@ abstract class User extends AbstractDataObject implements DataObjectInterface
     abstract public static function getByUsername(string $username): ?User;
 
     abstract public static function getByToken(string $token): ?user;
-
 }
