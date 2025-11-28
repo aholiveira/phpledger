@@ -83,10 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <p><input required size="25" maxlength="255" type="password" name="password"
                         placeholder="<?= l10n::l('password') ?>" autocomplete="current-password" value=""></p>
                 <?php if ($_SERVER['REQUEST_METHOD'] === 'POST' && !$userAuth): ?>
-                    <p id="errorMessage" class="invalid-login" style="width: 100%"><?= l10n::l('invalid_credentials') ?></p>
+                    <p class="invalid-login" style="width: 100%"><?= l10n::l('invalid_credentials') ?></p>
                 <?php endif; ?>
                 <?php if ($_REQUEST['expired'] ??= 0): ?>
-                    <p id="errorMessage" class="invalid-login" style="width: 100%"><?= l10n::l('expired_session') ?></p>
+                    <p class="invalid-login" style="width: 100%"><?= l10n::l('expired_session') ?></p>
                 <?php endif; ?>
                 <p id="formButton">
                     <input type="submit" value="<?= l10n::l('login') ?>">
