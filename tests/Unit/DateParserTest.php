@@ -2,9 +2,9 @@
 
 namespace PHPLedgerTests\Unit\Util;
 
-use PHPLedger\Util\DateParser;
 use DateTimeImmutable;
 use InvalidArgumentException;
+use PHPLedger\Util\DateParser;
 
 it('parses a valid full date string', function () {
     $date = DateParser::parseNamed('d', ['d' => '2024-05-17']);

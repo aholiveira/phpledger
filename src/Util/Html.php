@@ -9,8 +9,8 @@
  */
 
 namespace PHPLedger\Util;
-use PHPLedger\Util\L10n;
 use PHPLedger\Util\Config;
+use PHPLedger\Util\L10n;
 final class Html
 {
     public static function yearOptions(?int $selected = null, int $start = 1990, ?int $end = null): string

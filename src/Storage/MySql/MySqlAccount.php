@@ -12,7 +12,6 @@
 namespace PHPLedger\Storage\MySql;
 
 use PHPLedger\Domain\Account;
-use PHPLedger\Util\Logger;
 
 class MySqlAccount extends Account
 {

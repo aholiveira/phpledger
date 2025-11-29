@@ -10,9 +10,9 @@ if (!\defined('ROOT_DIR')) {
     define('ROOT_DIR', __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
 }
 
+use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\Logger;
-use PHPLedger\Storage\ObjectFactory;
 
 function  checkAndUpdateDatabaseSchema()
 {
@@ -28,14 +28,14 @@ function  checkAndUpdateDatabaseSchema()
 
     if (!$storage->check(true)) {
         // Database needs updating
-        fwrite(STDERR, "⚠️ Database schema out of date. Running update..." . PHP_EOL);
+        fwrite(STDERR, "[WARN] Database schema out of date. Running update..." . PHP_EOL);
         $updated = $storage->update(true);
         if (!$updated) {
-            throw new \RuntimeException("Failed to update database schema: " . $storage->message());
+            throw new \RuntimeException("[X] Failed to update database schema: " . $storage->message());
         }
-        fwrite(STDERR, "✅ Database schema updated successfully." . PHP_EOL);
+        fwrite(STDERR, "[OK] Database schema updated successfully." . PHP_EOL);
     } else {
         // Database is already up-to-date
-        fwrite(STDERR, "✅ Database schema is up-to-date." . PHP_EOL);
+        fwrite(STDERR, "[OK] Database schema is up-to-date." . PHP_EOL);
     }
 }

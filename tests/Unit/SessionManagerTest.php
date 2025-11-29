@@ -1,7 +1,7 @@
 <?php
 
-use PHPLedger\Util\SessionManager;
 use PHPLedger\Util\L10n;
+use PHPLedger\Util\SessionManager;
 
 beforeEach(function () {
     if (session_status() === PHP_SESSION_ACTIVE) {

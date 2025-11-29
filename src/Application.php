@@ -9,7 +9,7 @@ use PHPLedger\Util\Logger;
 use PHPLedger\Util\Redirector;
 use PHPLedger\Util\SessionManager;
 
-const SESSION_EXPIRE = 120;
+const SESSION_EXPIRE = 3600;
 
 class Application
 {
