@@ -57,7 +57,7 @@ class AccountBalanceView extends ObjectViewer
                 $balance = $balances[$object->id];
                 $retval .= "<tr>";
                 $retval .= "<td class='account' data-label='" . l10n::l('account') . "'>"
-                    . "<a title='" . l10n::l('edit_account') . "' href='accounts.php?conta_id={$object->id}'>"
+                    . "<a title='" . l10n::l('edit_account') . "' href='accounts.php?id={$object->id}'>"
                     . "{$object->name}</a></td>";
                 $retval .= "<td class='deposits' data-label='" . l10n::l('deposits') . "'>"
                     . normalizeNumber($balance['income']) . "</td>";

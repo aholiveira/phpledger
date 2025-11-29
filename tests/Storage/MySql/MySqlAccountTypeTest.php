@@ -5,12 +5,17 @@ use PHPLedger\Storage\MySql\MysqlAccountType;
 use PHPLedger\Storage\MySql\MySqlStorage;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
-use PHPLedger\Util\Logger;
+
+beforeAll(function () {
+    if (!\defined('ROOT_DIR')) {
+        define('ROOT_DIR', __DIR__ . '/../../..');
+    }
+    // Initialize config and object factory
+    Config::init(ROOT_DIR . '/tests/config.json');
+});
 
 beforeEach(function () {
-    Config::init(ROOT_DIR . "/tests/config.json");
-    ObjectFactory::init("mysql", new Logger(ROOT_DIR . "/logs/test.log"));
-
+    ObjectFactory::init("mysql");
     $this->db = MySqlStorage::getConnection();
     $this->db->query("DELETE FROM tipo_contas");
 });

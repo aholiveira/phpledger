@@ -27,7 +27,14 @@ $inputFilter = [
     '_csrf_token' => FILTER_UNSAFE_RAW
 ];
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['do_logout'])) {
+    SessionManager::start();
+    $defaults = ObjectFactory::defaults()::getByUsername($_SESSION['user']);
+    if ($defaults !== null) {
+        $defaults->lastVisited = "";
+        $defaults->update();
+    }
     SessionManager::logout();
+    Redirector::to("index.php");
 }
 # Handle POST login
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -45,9 +52,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $userAuth = $user->verifyPassword($postPass);
         if ($userAuth) {
             session_regenerate_id(true);
+            SessionManager::refreshExpiration();
             $_SESSION['user'] = $postUser;
-            $_SESSION['expires'] = time() + SESSION_EXPIRE;
-            $defaults = ObjectFactory::defaults()->getByUserName($postUser) ?? ObjectFactory::defaults()::init();
+            $defaults = ObjectFactory::defaults()::getByUsername($postUser) ?? ObjectFactory::defaults()::init();
             $defaults->entryDate = date("Y-m-d");
             $defaults->language = L10n::$lang;
             Logger::instance()->info("User [$postUser] logged in");
@@ -58,6 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     L10n::$lang,
                     date('Y-m-01')
                 );
+            Logger::instance()->debug("Redirecting to [{$target}]");
             Redirector::to($target);
         }
     }

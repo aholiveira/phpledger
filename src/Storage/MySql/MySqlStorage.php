@@ -7,10 +7,13 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 namespace PHPLedger\Storage\MySql;
+
 use PHPLedger\Contracts\DataStorageInterface;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\Logger;
+
 class MySqlStorage implements DataStorageInterface
 {
     private ?\mysqli $dbConnection = null;
@@ -76,7 +79,8 @@ class MySqlStorage implements DataStorageInterface
     {
         return $this->message ?? "";
     }
-    public function check(): bool
+
+    public function check(bool $test = false): bool
     {
         $retval = true;
         $db_name = config::get("database");
@@ -95,33 +99,35 @@ class MySqlStorage implements DataStorageInterface
                 $this->addMessage("Table [tipo_mov] foreign key [parentId] missing");
                 $retval = false;
             }
-            $entry_category = MySqlObjectFactory::entryCategory()::getById(0);
-            if ($entry_category->id !== 0) {
-                $this->addMessage("Category '0' does not exist");
-                $retval = false;
-            } else {
-                $entry_list = $entry_category->getList(['parentId' => ['operator' => 'is', 'value' => null], 'id' => ['operator' => '>', 'value' => '0']]);
-                if (\sizeof($entry_list) > 0) {
-                    $this->addMessage("Table [tipo_mov] needs update");
+            if (!$test) {
+                $entry_category = MySqlObjectFactory::entryCategory()::getById(0);
+                if ($entry_category->id !== 0) {
+                    $this->addMessage("Category '0' does not exist");
                     $retval = false;
+                } else {
+                    $entry_list = $entry_category->getList(['parentId' => ['operator' => 'is', 'value' => null], 'id' => ['operator' => '>', 'value' => '0']]);
+                    if (\sizeof($entry_list) > 0) {
+                        $this->addMessage("Table [tipo_mov] needs update");
+                        $retval = false;
+                    }
                 }
             }
         }
         if ($this->tableExists("users")) {
             try {
                 $user = new MySqlUser();
-                if (\sizeof($user->getList()) == 0) {
+                if (!$test && \sizeof($user->getList()) === 0) {
                     $this->addMessage("Table [users] is empty");
                     $retval = false;
                 }
-            } catch (\Exception $ex) {
+            } catch (\Exception) {
                 $this->addMessage("Table [users] needs update");
                 $retval = false;
             }
         }
         if ($this->tableExists("ledgers")) {
             $ledger = new MySqlLedger();
-            if (\sizeof($ledger->getList()) == 0) {
+            if (!$test && \sizeof($ledger->getList()) === 0) {
                 $this->addMessage("Table [ledgers] is empty");
                 $retval = false;
             }
@@ -132,21 +138,21 @@ class MySqlStorage implements DataStorageInterface
         }
         if ($this->tableExists("moedas")) {
             $currency = new MySqlCurrency();
-            if (\sizeof($currency->getList()) == 0) {
+            if (!$test && \sizeof($currency->getList()) === 0) {
                 $this->addMessage("Table [currency] is empty");
                 $retval = false;
             }
         }
         if ($this->tableExists("tipo_mov")) {
             $accounttype = new MysqlAccountType();
-            if (\sizeof($accounttype->getList()) == 0) {
+            if (!$test && \sizeof($accounttype->getList()) === 0) {
                 $this->addMessage("Table [account type] is empty");
                 $retval = false;
             }
         }
         if ($this->tableExists("contas")) {
             $account = new MySqlAccount();
-            if (sizeof($account->getList()) == 0) {
+            if (!$test && sizeof($account->getList()) === 0) {
                 $this->addMessage("Table [accounts] is empty");
                 $retval = false;
             }
@@ -160,7 +166,7 @@ class MySqlStorage implements DataStorageInterface
         }
         return $retval;
     }
-    public function update(): bool
+    public function update(bool $test = false): bool
     {
         $retval = true;
         $tables = array_keys($this->tableCreateSQL);
@@ -248,12 +254,12 @@ class MySqlStorage implements DataStorageInterface
                 $account->number = '';
                 $account->name = 'Caixa';
                 $account->typeId = 1;
-                $account->group = 1;
+                $account->grupo = 1;
                 $account->iban = '';
                 $account->swift = '';
                 $account->openDate = date("Y-m-d");
                 $account->closeDate = date("Y-m-d", mktime(0, 0, 0, 1, 1, 1990));
-                $account->active = 1;
+                $account->activa = 1;
                 $account->id = 1;
                 if (!$account->update()) {
                     $this->addMessage("Could not save account");

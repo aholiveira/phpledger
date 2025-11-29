@@ -7,9 +7,12 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 namespace PHPLedger\Storage\MySql;
+
 use PHPLedger\Domain\LedgerEntry;
 use PHPLedger\Util\Logger;
+
 class MySqlLedgerEntry extends LedgerEntry
 {
     use MySqlObject;
@@ -36,6 +39,15 @@ class MySqlLedgerEntry extends LedgerEntry
         }
 
         return $conditions ? 'WHERE ' . implode(' AND ', $conditions) : '';
+    }
+    private static function getSelect(): string
+    {
+        return "SELECT id, entryDate, categoryId,
+            accountId,
+            round(currencyAmount,2) as currencyAmount, `direction`, currencyId,
+            exchangeRate, euroAmount,
+            remarks, username, createdAt, updatedAt
+            FROM " . static::tableName();
     }
     public static function getDefinition(): array
     {
@@ -85,14 +97,7 @@ class MySqlLedgerEntry extends LedgerEntry
     public static function getList(array $fieldFilter = []): array
     {
         $where = self::getWhereFromArray($fieldFilter);
-        $sql = "SELECT id, entryDate, categoryId,
-            accountId,
-            round(currencyAmount,2) as currencyAmount, `direction`, currencyId,
-            exchangeRate, euroAmount,
-            remarks, username, createdAt, updatedAt
-            FROM " . static::tableName() . "
-            {$where}
-            ORDER BY entryDate, id";
+        $sql = self::getSelect() . " {$where} ORDER BY entryDate, id";
         $retval = [];
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
@@ -114,13 +119,7 @@ class MySqlLedgerEntry extends LedgerEntry
 
     public static function getById($id): ?ledgerentry
     {
-        $sql = "SELECT id, entryDate, categoryId,
-            accountId,
-            round(currencyAmount,2) as currencyAmount, `direction`, currencyId,
-            exchangeRate, euroAmount,
-            remarks, username, createdAt, updatedAt
-            FROM " . static::tableName() . "
-            WHERE id=?";
+        $sql = self::getSelect() . " WHERE id=?";
         $retval = null;
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);

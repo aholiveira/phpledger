@@ -1,5 +1,7 @@
 <?php
 
+namespace PHPLedger;
+
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\L10n;
@@ -7,7 +9,7 @@ use PHPLedger\Util\Logger;
 use PHPLedger\Util\Redirector;
 use PHPLedger\Util\SessionManager;
 
-const SESSION_EXPIRE = 3600;
+const SESSION_EXPIRE = 120;
 
 class Application
 {
@@ -17,6 +19,11 @@ class Application
         self::sendHeaders();
         self::bootstrap();
         self::guardSession();
+        if (ObjectFactory::dataStorage()->check() === false) {
+            if (basename($_SERVER['SCRIPT_NAME']) !== 'update.php') {
+                Redirector::to("update.php");
+            }
+        }
         self::applyTimezone();
         self::updateUserLastVisited();
     }
@@ -44,7 +51,8 @@ class Application
         SessionManager::start();
         L10n::init();
         Config::init(ROOT_DIR . '/config.json');
-        ObjectFactory::init("mysql", new Logger(ROOT_DIR . "/logs/ledger.log"));
+        new Logger(ROOT_DIR . "/logs/ledger.log");
+        ObjectFactory::init(BACKEND);
     }
     private static function guardSession(): void
     {
@@ -71,6 +79,12 @@ class Application
     private static function updateUserLastVisited(): void
     {
         if (!empty($_SESSION['user'])) {
+            // Exclude certain pages from being recorded as "lastVisited" to avoid redirect loops
+            $page = strtolower(basename($_SERVER['SCRIPT_NAME'] ?? ''));
+            $excluded = ['index.php', 'update.php', 'reset_password.php', 'forgot_password.php'];
+            if (in_array($page, $excluded, true)) {
+                return;
+            }
             $factory = ObjectFactory::defaults();
             $defaults = $factory::getByUsername($_SESSION['user']) ?? $factory::init();
             $defaults->lastVisited = $_SERVER['REQUEST_URI'] ?? '/';

@@ -8,32 +8,19 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 namespace PHPLedger\Storage\MySql;
+
 use PHPLedger\Domain\Account;
+use PHPLedger\Util\Logger;
+
 class MySqlAccount extends Account
 {
+    use MySqlSelectTrait;
     use MySqlObject {
         MySqlObject::__construct as private traitConstruct;
-        MySqlObject::getNextId as private traitGetNextId;
     }
     protected static string $tableName = "contas";
-    private static function baseSelect(): string
-    {
-        return "
-            SELECT
-                conta_id as id,
-                `number`,
-                `name`,
-                `grupo` AS `group`,
-                `typeId`,
-                conta_nib as iban,
-                swift,
-                openDate,
-                closeDate,
-                activa as active
-            FROM " . static::$tableName . " ";
-    }
-
     private static function fetchAll(string $sql, array $params = []): array
     {
         $retval = [];
@@ -67,13 +54,13 @@ class MySqlAccount extends Account
     public static function getList(array $fieldFilter = []): array
     {
         $where = static::getWhereFromArray($fieldFilter);
-        $sql = static::baseSelect() . " {$where} ORDER BY activa DESC, name";
+        $sql =  self::getSelect() . " {$where} ORDER BY activa DESC, name";
         return static::fetchAll($sql);
     }
 
     public static function getById($id): Account
     {
-        $sql = static::baseSelect() . " WHERE conta_id=?";
+        $sql = self::getSelect() . " WHERE id=?";
         return static::fetchOne($sql, [$id]);
     }
 
@@ -81,23 +68,21 @@ class MySqlAccount extends Account
     {
         $retval = [];
         $retval['columns'] = [
-            "conta_id" => "int(3) NOT NULL DEFAULT 0",
+            "id" => "int(3) NOT NULL DEFAULT 0",
             "number" => "char(30) NOT NULL DEFAULT ''",
             "name" => "char(30) NOT NULL DEFAULT ''",
             "grupo" => "int(3) NOT NULL DEFAULT 0",
             "typeId" => "int(2) DEFAULT NULL",
-            "conta_nib" => "char(24) DEFAULT NULL",
+            "iban" => "char(24) DEFAULT NULL",
             "swift" => "char(24) NOT NULL DEFAULT ''",
             "openDate" => "date DEFAULT NULL",
             "closeDate" => "date DEFAULT NULL",
             "activa" => "int(1) NOT NULL DEFAULT 0"
         ];
-        $retval['primary_key'] = "conta_id";
+        $retval['primary_key'] = "id";
         $retval['new'] = [
-            'id' => 'conta_id',
             'group' => 'grupo',
             'type_id' => 'typeId',
-            'iban' => 'conta_nib',
             'open_date' => 'openDate',
             'close_date' => 'closeDate',
             'active' => 'activa',
@@ -105,7 +90,9 @@ class MySqlAccount extends Account
             'conta_fecho' => 'closeDate',
             'conta_num' => 'number',
             'conta_nome' => 'name',
-            'tipo_id' => 'typeId'
+            'tipo_id' => 'typeId',
+            'conta_nib' => 'iban',
+            'conta_id' => 'id'
         ];
         return $retval;
     }
@@ -164,14 +151,14 @@ class MySqlAccount extends Account
         $retval = false;
         try {
             $sql = "INSERT INTO {$this->tableName()}
-                        (`number`, `name`, `grupo`, `typeId`, `conta_nib`, `swift`, `openDate`, `closeDate`, `activa`, `conta_id`)
+                        (`number`, `name`, `grupo`, `typeId`, `iban`, `swift`, `openDate`, `closeDate`, `activa`, `id`)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         ON DUPLICATE KEY UPDATE
                             `number`=VALUES(`number`),
                             `name`=VALUES(`name`),
                             `grupo`=VALUES(`grupo`),
                             `typeId`=VALUES(`typeId`),
-                            `conta_nib`=VALUES(`conta_nib`),
+                            `iban`=VALUES(`iban`),
                             `swift`=VALUES(`swift`),
                             `openDate`=VALUES(`openDate`),
                             `closeDate`=VALUES(`closeDate`),
@@ -184,13 +171,13 @@ class MySqlAccount extends Account
                 "ssiissssii",
                 $this->number,
                 $this->name,
-                $this->group,
+                $this->grupo,
                 $this->typeId,
                 $this->iban,
                 $this->swift,
                 $this->openDate,
                 $this->closeDate,
-                $this->active,
+                $this->activa,
                 $this->id
             );
             $retval = $stmt->execute();
@@ -207,7 +194,7 @@ class MySqlAccount extends Account
     {
         $retval = false;
         try {
-            $sql = "DELETE FROM {$this->tableName()} WHERE conta_id=?";
+            $sql = "DELETE FROM {$this->tableName()} WHERE id=?";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             $stmt->bind_param("s", $this->id);
             $retval = $stmt->execute();
@@ -216,9 +203,5 @@ class MySqlAccount extends Account
             $this->handleException($ex, $sql);
         }
         return $retval;
-    }
-    public static function getNextId(string $field = "conta_id"): int
-    {
-        return self::traitGetNextId($field);
     }
 }

@@ -4,15 +4,17 @@ use PHPLedger\Storage\MySql\MySqlEntryCategory;
 use PHPLedger\Storage\MySql\MySqlStorage;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
-use PHPLedger\Util\Logger;
 
-if (!\defined('ROOT_DIR')) {
-    define('ROOT_DIR', __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
-}
+beforeAll(function () {
+    if (!\defined('ROOT_DIR')) {
+        define('ROOT_DIR', __DIR__ . '/../../..');
+    }
+    // Initialize config and object factory
+    Config::init(ROOT_DIR . '/tests/config.json');
+});
 
 beforeEach(function () {
-    Config::init(__DIR__ . '/../../config.json');
-    ObjectFactory::init("mysql", new Logger(ROOT_DIR . "/logs/ledger.log"));
+    ObjectFactory::init("mysql");
     $this->db = MySqlStorage::getConnection();
     $this->db->query("DELETE FROM movimentos");
     $this->db->query("DELETE FROM tipo_mov");

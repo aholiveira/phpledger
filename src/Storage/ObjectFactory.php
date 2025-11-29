@@ -4,13 +4,11 @@ namespace PHPLedger\Storage;
 
 use PHPLedger\Contracts\DataObjectFactoryInterface;
 use PHPLedger\Storage\Abstract\AbstractObjectFactory;
-use PHPLedger\Util\Logger;
 
 class ObjectFactory extends AbstractObjectFactory implements DataObjectFactoryInterface
 {
-    protected DataObjectFactoryInterface $backedFactory;
-    private function __construct($backend = "mysql")
+    private function __construct(string $backend)
     {
-        parent::init($backend, new Logger("/logs/ledger.log"));
+        parent::init($backend);
     }
 }

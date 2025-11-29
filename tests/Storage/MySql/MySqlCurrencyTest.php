@@ -4,14 +4,17 @@ use PHPLedger\Storage\MySql\MySqlCurrency;
 use PHPLedger\Storage\MySql\MySqlStorage;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
-use PHPLedger\Util\Logger;
 
-beforeEach(function () {
+beforeAll(function () {
     if (!\defined('ROOT_DIR')) {
         define('ROOT_DIR', __DIR__ . '/../../..');
     }
-    Config::init(__DIR__ . '/../../config.json');
-    ObjectFactory::init("mysql", new Logger(ROOT_DIR . "/logs/ledger.log"));
+    // Initialize config and object factory
+    Config::init(ROOT_DIR . '/tests/config.json');
+});
+
+beforeEach(function () {
+    ObjectFactory::init("mysql");
     $this->db = MySqlStorage::getConnection();
     $this->db->query("DELETE FROM moedas");
 });

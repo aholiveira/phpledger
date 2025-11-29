@@ -16,6 +16,7 @@ use PHPLedger\Util\Logger;
 
 class MySqlDefaults extends Defaults
 {
+    use MySqlSelectTrait;
     use MySqlObject {
         MySqlObject::__construct as private traitConstruct;
     }
@@ -64,14 +65,6 @@ class MySqlDefaults extends Defaults
         ];
         $retval['primary_key'] = "id";
         return $retval;
-    }
-    private static function getSelect(): string
-    {
-        $cols = array_keys(self::getDefinition()['columns']);
-        $cols = array_map(function ($c) {
-            return "`" . $c . "`";
-        }, $cols);
-        return "SELECT " . implode(", ", $cols) . " FROM `" . self::$tableName . "`";
     }
     public static function getList(array $fieldFilter = []): array
     {
@@ -142,6 +135,9 @@ class MySqlDefaults extends Defaults
     }
     public static function getByUsername(string $username): ?Defaults
     {
+        if (empty($username)) {
+            return null;
+        }
         $sql = self::getSelect() . " WHERE username COLLATE utf8mb4_general_ci = trim(?)";
         $retval = null;
         try {

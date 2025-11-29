@@ -4,14 +4,53 @@ use PHPLedger\Util\Logger;
 use PHPLedger\Util\LogLevel;
 
 beforeEach(function () {
-    $this->logDir = __DIR__ . '/tests/tmp/logs';
-    $this->logFile = $this->logDir . '/test.log';
+    $this->logDir = __DIR__ . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'logs';
+    $this->logFile = $this->logDir . DIRECTORY_SEPARATOR . 'test.log';
 
     if (is_dir($this->logDir)) {
-        array_map('unlink', glob($this->logDir . '/*'));
+        array_map('unlink', glob($this->logDir . DIRECTORY_SEPARATOR . '*'));
     } else {
         mkdir($this->logDir, 0750, true);
     }
+});
+
+afterAll(function () {
+    $testDir = __DIR__ . DIRECTORY_SEPARATOR . 'tests';
+    if (is_dir($testDir)) {
+        // Recursively remove directory and all its contents
+        removeDirectoryRecursively($testDir);
+    }
+});
+
+/**
+ * Recursively remove a directory and all its contents.
+ */
+function removeDirectoryRecursively(string $dir): void
+{
+    if (!is_dir($dir)) {
+        return;
+    }
+    $items = glob($dir . DIRECTORY_SEPARATOR . '*');
+    if ($items === false) {
+        return;
+    }
+    foreach ($items as $item) {
+        if (is_dir($item)) {
+            removeDirectoryRecursively($item);
+        } else {
+            unlink($item);
+        }
+    }
+    rmdir($dir);
+}
+
+it('writes an info log entry', function () {
+    $logger = new Logger($this->logFile);
+    $logger->info('Test info', 'PFX');
+    $content = file_get_contents($this->logFile);
+    expect($content)->toContain('[INFO]');
+    expect($content)->toContain('[PFX]');
+    expect($content)->toContain('Test info');
 });
 
 it('writes a debug log entry', function () {
@@ -24,13 +63,12 @@ it('writes a debug log entry', function () {
 });
 
 it('creates log directory automatically', function () {
-    $file = __DIR__ . '/tests/tmp/auto/logs/auto.log';
+    $file = __DIR__ . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'auto' . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . 'auto.log';
     $dir = dirname($file);
     if (is_dir($dir)) {
-        array_map('unlink', glob($dir . '/*'));
+        array_map('unlink', glob($dir . DIRECTORY_SEPARATOR . '*'));
         rmdir($dir);
     }
-
     $logger = new Logger($file);
     $logger->info('Auto dir');
     expect(is_file($file))->toBeTrue();

@@ -17,5 +17,5 @@ abstract class Defaults extends AbstractDataObject implements DataObjectInterfac
     public ?string $lastVisited;
     public ?int $showReportGraph;
     abstract public static function getByUsername(string $username): ?Defaults;
-    abstract public static function init(): defaults;
+    abstract public static function init(): Defaults;
 }

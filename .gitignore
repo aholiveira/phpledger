@@ -5,8 +5,7 @@
 *.cmd
 config.json
 !config.sample.*
-test/config.*
-!test/config.sample.*
 .vscode*
 *.log
 /vendor/
+test.php
