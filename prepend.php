@@ -21,7 +21,7 @@ use PHPLedger\Util\Logger;
 use PHPLedger\Application;
 
 const BACKEND = "mysql";
-const VERSION = "0.4.506";
+const VERSION = "0.4.507";
 const ROOT_DIR = __DIR__;
 
 new Logger(ROOT_DIR . "/logs/ledger.log");
