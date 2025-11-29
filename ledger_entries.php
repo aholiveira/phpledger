@@ -14,6 +14,7 @@ use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
+use PHPLedger\Util\NumberUtil;
 use PHPLedger\Util\Redirector;
 use PHPLedger\Views\ViewFactory;
 
@@ -295,7 +296,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                             <tr>
                                 <td class="balance-label" colspan="8"><?= l10n::l('previous_balance') ?></td>
                                 <td data-label="<?= l10n::l('previous_balance') ?>" class="balance">
-                                    <?= normalizeNumber($balance); ?>
+                                    <?= NumberUtil::normalize($balance); ?>
                                 </td>
                             </tr>
                             <?php
@@ -344,7 +345,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                     <td data-label="<?= l10n::l('remarks') ?>" class="remarks"><input type="text" name="remarks"
                                             maxlength="255" value="<?= $row->remarks ?>"></td>
                                     <td data-label="<?= l10n::l('balance') ?>" class="total" style="text-align: right">
-                                        <?= normalizeNumber($balance) ?>
+                                        <?= NumberUtil::normalize($balance) ?>
                                     </td>
                                 <?php
                                 }
@@ -376,10 +377,10 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                         <?= $row->direction == "1" ? "Dep" : "Lev" ?>
                                     </td>
                                     <td data-label='<?= l10n::l('amount') ?>' class='amount'>
-                                        <?= normalizeNumber($row->currencyAmount) ?>
+                                        <?= NumberUtil::normalize($row->currencyAmount) ?>
                                     </td>
                                     <td data-label='<?= l10n::l('remarks') ?>' class='remarks'><?= $row->remarks; ?></td>
-                                    <td data-label='<?= l10n::l('balance') ?>' class='total'><?= normalizeNumber($balance) ?>
+                                    <td data-label='<?= l10n::l('balance') ?>' class='total'><?= NumberUtil::normalize($balance) ?>
                                     </td>
                             <?php
                                 }
@@ -432,7 +433,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                         <input type="text" name="remarks" maxlength="255" value="">
                                     </td>
                                     <td data-label="<?= l10n::l('balance') ?>" class="total">
-                                        <?= normalizeNumber($balance) ?>
+                                        <?= NumberUtil::normalize($balance) ?>
                                     </td>
                                 </tr>
                             </tfoot>

@@ -11,22 +11,14 @@
  *
  */
 
-if (PHP_VERSION_ID < 70000) {
-    die('PHP >= 7.0.0 required');
+if (PHP_VERSION_ID < 80000) {
+    die('PHP >= 8.0.0 required');
 }
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use PHPLedger\Util\Logger;
 use PHPLedger\Application;
 
-const BACKEND = "mysql";
-const VERSION = "0.4.507";
 const ROOT_DIR = __DIR__;
 
-new Logger(ROOT_DIR . "/logs/ledger.log");
 Application::init();
-function normalizeNumber(?float $number): string
-{
-    return null === $number ? "" : number_format($number, 2);
-}

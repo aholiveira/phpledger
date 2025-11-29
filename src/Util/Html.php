@@ -11,6 +11,8 @@
 namespace PHPLedger\Util;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\L10n;
+use PHPLedger\Version;
+
 final class Html
 {
     public static function yearOptions(?int $selected = null, int $start = 1990, ?int $end = null): string
@@ -82,12 +84,12 @@ final class Html
     }
     public static function footer(): void
     {
-        $expires = date("Y-m-d H:i:s", $_SESSION['expires']);
+        $expires = date("Y-m-d H:i:s", $_SESSION['expires'] ?? time());
         ?>
         <footer>
             <div class='footer'>
                 <span class='RCS'><a href="https://github.com/aholiveira/phpledger"
-                        aria-label="<?= L10n::l("version", VERSION) ?>"><?= L10n::l("version", VERSION) ?></a></span>
+                        aria-label="<?= L10n::l("version", Version::string()) ?>"><?= L10n::l("version", Version::string()) ?></a></span>
                 <span class='RCS' style="display: flex; align-items: center"><?= L10n::l("session_expires", $expires) ?>
                     <span style="margin-left: auto; display: flex;">
                         <?php if (L10n::$lang === 'pt-pt'): ?>

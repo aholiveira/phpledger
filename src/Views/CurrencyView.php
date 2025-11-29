@@ -9,7 +9,9 @@ namespace PHPLedger\Views;
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 use PHPLedger\Domain\Currency;
+use PHPLedger\Util\NumberUtil;
 class CurrencyView extends ObjectViewer
 {
     public function __construct(currency $object)
@@ -29,7 +31,7 @@ class CurrencyView extends ObjectViewer
         $retval .= "<td><a title=\"Editar\" href=\"currency.php?id={$object->id}\">{$object->id}</a></td>";
         $retval .= "<td>{$object->code}</td>";
         $retval .= "<td>{$object->description}</td>";
-        $retval .= "<td style=\"text-align: right\">" . normalizeNumber($object->exchangeRate) . "</td>";
+        $retval .= "<td style=\"text-align: right\">" . NumberUtil::normalize($object->exchangeRate) . "</td>";
         return $retval;
     }
     public function printObjectList(array $object_list): string

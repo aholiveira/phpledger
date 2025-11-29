@@ -9,8 +9,10 @@ namespace PHPLedger\Views;
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 use PHPLedger\Domain\EntryCategory;
 use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Util\NumberUtil;
 class EntryCategoryView extends ObjectViewer
 {
     public function __construct(EntryCategory $object)
@@ -30,7 +32,7 @@ class EntryCategoryView extends ObjectViewer
         $retval .= "<td class='id' data-label='ID'><a href=\"entry_type.php?id={$object->id}\" title=\"Editar a categoria\">{$object->id}</a></td>";
         $retval .= "<td class='category' data-label='Categoria'>" . (null === $object->parentId || $object->parentId == 0 ? "" : ($object->parentDescription ?? "")) . "</td>";
         $retval .= "<td class='description' data-label='Descri&ccedil;&atilde;o'>{$object->description}</td>";
-        $retval .= "<td class='amount' data-label='Valor'>" . normalizeNumber(abs($object->getBalance())) . "</td>";
+        $retval .= "<td class='amount' data-label='Valor'>" . NumberUtil::normalize(abs($object->getBalance())) . "</td>";
         $retval .= "<td class='active checkbox' data-label='Activa'><input title=\"S&oacute; pode alterar o estado em modo de edi&ccedil;&atilde;o\" type=\"checkbox\" onclick=\"return false;\" name=active{$object->id} " . ($object->active ? "checked" : "") . "></td>\r\n";
         return $retval;
     }

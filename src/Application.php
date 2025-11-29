@@ -52,7 +52,8 @@ class Application
         L10n::init();
         Config::init(ROOT_DIR . '/config.json');
         new Logger(ROOT_DIR . "/logs/ledger.log");
-        ObjectFactory::init(BACKEND);
+        $backend = Config::get("backend") ?? "mysql";
+        ObjectFactory::init($backend);
     }
     private static function guardSession(): void
     {
