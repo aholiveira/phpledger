@@ -1,17 +1,19 @@
 <?php
+
 namespace PHPLedger\Contracts;
+
 interface DataStorageInterface
 {
     /**
      * Check if data storage needs to be updated
      * @return bool true if data storage is up-to-date, false if data storage needs updating
      */
-    public function check(): bool;
+    public function check(bool $test = false): bool;
     /**
      * Updates data storage according to current schema
      * @return bool true if update was successfull, false otherwise
      */
-    public function update(): bool;
+    public function update(bool $test = false): bool;
     /**
      * Populates data storage with random data
      */

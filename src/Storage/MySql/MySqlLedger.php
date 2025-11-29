@@ -7,10 +7,15 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 namespace PHPLedger\Storage\MySql;
+
 use PHPLedger\Domain\Ledger;
+use PHPLedger\Util\Logger;
+
 class MySqlLedger extends Ledger
 {
+    use MySqlSelectTrait;
     use MySqlObject {
         MySqlObject::getNextId as private traitGetNextId;
     }
@@ -26,84 +31,93 @@ class MySqlLedger extends Ledger
         $retval['primary_key'] = "id";
         return $retval;
     }
-    public static function getList(array $fieldFilter = []): array
+    private static function getSelect(): string
     {
-        $where = static::getWhereFromArray($fieldFilter);
-        $sql = "SELECT id FROM " . static::tableName() . " {$where} ORDER BY id";
+        return "SELECT id, nome as `name` FROM " . static::tableName();
+    }
+
+    private static function fetchAll(string $sql, array $params = []): ?array
+    {
         $retval = [];
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
-            $stmt->execute();
-            $stmt->bind_result($id);
-            while ($stmt->fetch()) {
-                $retval[$id] = null;
+            if ($params) {
+                $types = str_repeat('s', \count($params));
+                $stmt->bind_param($types, ...$params);
             }
-            $stmt->close();
-            foreach (array_keys($retval) as $id) {
-                $retval[$id] = static::getById($id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            while ($obj = $result->fetch_object(__CLASS__)) {
+                $retval[$obj->id] = $obj;
             }
         } catch (\Exception $ex) {
             static::handleException($ex, $sql);
+        } finally {
+            if (isset($stmt) && $stmt instanceof \mysqli_stmt) {
+                $stmt->close();
+            }
+            if (isset($result) && $result instanceof \mysqli_result) {
+                $result->close();
+            }
         }
         return $retval;
     }
-    public static function getById($id): ?ledger
+
+    private static function fetchOne(string $sql, array $params = []): ?self
     {
-        $sql = "SELECT id, nome as `name` FROM " . static::tableName() . " WHERE id=?";
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new \mysqli_sql_exception();
-            }
-            $stmt->bind_param("i", $id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $newobject = $result->fetch_object(__CLASS__);
-            $stmt->close();
-        } catch (\Exception $ex) {
-            static::handleException($ex, $sql);
-        }
-        return $newobject;
+        $all = static::fetchAll($sql, $params);
+        return empty($all) ? null : array_shift($all);
+    }
+
+    public static function getList(array $fieldFilter = []): array
+    {
+        $where = static::getWhereFromArray($fieldFilter);
+        $sql = self::getSelect() . " {$where} ORDER BY id";
+        Logger::instance()->dump($sql, __FUNCTION__ . " " . __CLASS__);
+        return static::fetchAll($sql);
+    }
+
+    public static function getById($id): ?self
+    {
+        $sql = self::getSelect() . " WHERE id=?";
+        Logger::instance()->dump($sql, __FUNCTION__ . " " . __CLASS__);
+        return static::fetchOne($sql, [$id]);
     }
 
     public function update(): bool
     {
         $retval = false;
-        $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
         try {
-            MySqlStorage::getConnection()->begin_transaction();
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                return $retval;
-            }
-            if (!isset($this->id)) {
-                return $retval;
-            }
-            $stmt->bind_param("s", $this->id);
-            $stmt->execute();
-            $stmt->bind_result($return_id);
-            $sql = (null !== $stmt->fetch() && $return_id == $this->id) ?
-                "UPDATE {$this->tableName()} SET nome=? WHERE id=?" :
-                "INSERT INTO {$this->tableName()} (nome, id) VALUES (?, ?)";
-            $stmt->close();
+            $sql = "INSERT INTO {$this->tableName()} (nome, id)
+                VALUES (?, ?)
+                ON DUPLICATE KEY UPDATE
+                    nome=VALUES(nome),
+                    id=VALUES(id)";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
+            if (strlen($this->name) > 30) {
+                $this->name = substr($this->name, 0, 30);
+            }
             $stmt->bind_param(
-                "ss",
+                "si",
                 $this->name,
                 $this->id
             );
             $retval = $stmt->execute();
-            $stmt->close();
-            MySqlStorage::getConnection()->commit();
         } catch (\Exception $ex) {
-            print "ERROR";
             $this->handleException($ex, $sql);
+        } finally {
+            if (isset($stmt) && $stmt instanceof \mysqli_stmt) {
+                $stmt->close();
+            }
+            if (isset($result) && $result instanceof \mysqli_result) {
+                $result->close();
+            }
         }
         return $retval;
     }

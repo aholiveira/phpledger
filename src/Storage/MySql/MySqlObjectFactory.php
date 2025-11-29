@@ -7,18 +7,14 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 namespace PHPLedger\Storage\MySql;
+
 use PHPLedger\Contracts\DataObjectFactoryInterface;
 use PHPLedger\Contracts\DataStorageInterface;
-use PHPLedger\Util\Logger;
+
 class MySqlObjectFactory implements DataObjectFactoryInterface
 {
-    private Logger $logger;
-
-    public function __construct(string $backend = "mysql", ?Logger $logger = null)
-    {
-        $this->logger = $logger ?? new Logger("ledger.log");
-    }
     public static function dataStorage(): DataStorageInterface
     {
         return MySqlStorage::instance();

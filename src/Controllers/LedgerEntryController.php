@@ -49,9 +49,13 @@ class LedgerEntryController
             throw new RuntimeException(l10n::l("ledger_save_error"));
         }
 
-        // 4) update that user's "defaults" record
-        $defaults = ObjectFactory::defaults()::getByUsername($_SESSION['user'])
-            ?? ObjectFactory::defaults()::init();
+        // 4) update that user's "defaults" record - be defensive when session user is missing
+        $username = $_SESSION['user'] ?? null;
+        $defaults = null;
+        if (!empty($username)) {
+            $defaults = ObjectFactory::defaults()::getByUsername($username);
+        }
+        $defaults = $defaults ?? ObjectFactory::defaults()::init();
 
         $defaults->categoryId = $entry->categoryId;
         $defaults->currencyId = $entry->currencyId;

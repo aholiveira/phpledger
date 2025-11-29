@@ -12,6 +12,7 @@ use PHPLedger\Domain\AccountType;
 class MysqlAccountType extends AccountType
 {
     protected static string $tableName = "tipo_contas";
+    use MySqlSelectTrait;
     use MySqlObject {
         MySqlObject::__construct as private traitConstruct;
         MySqlObject::getNextId as private traitGetNextId;
@@ -39,7 +40,7 @@ class MysqlAccountType extends AccountType
     public static function getList(array $fieldFilter = []): array
     {
         $where = static::getWhereFromArray($fieldFilter);
-        $sql = "SELECT id, `description`, savings FROM " . static::tableName() . " {$where}";
+        $sql = self::getSelect() . " {$where}";
         $retval = [];
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
@@ -60,7 +61,7 @@ class MysqlAccountType extends AccountType
 
     public static function getById(int $id): ?AccountType
     {
-        $sql = "SELECT id, `description`, savings FROM " . static::tableName() . " WHERE id=?";
+        $sql = self::getSelect() . " WHERE id=?";
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {

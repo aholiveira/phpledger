@@ -25,28 +25,32 @@ class SessionManager
     {
         self::start();
         session_unset();
-        $_SESSION = [];
 
         if (ini_get("session.use_cookies")) {
             $p = session_get_cookie_params();
             setcookie(session_name(), "", time() - 42000, $p["path"], $p["domain"], $p["secure"], $p["httponly"]);
         }
+        // Destroy the session data and close it to ensure no residual values remain
+        if (session_status() !== PHP_SESSION_NONE) {
+            session_destroy();
+            session_write_close();
+        }
     }
-    public static function refreshExpiration(int $ttl): void
+    public static function refreshExpiration(int $ttl = 3600): void
     {
         $_SESSION['expires'] = time() + $ttl;
     }
     public static function guard(array $publicPages, int $ttl): bool
     {
         self::start();
-        $page = strtolower(basename($_SERVER['SCRIPT_NAME'] ?? ''));
+        $page = strtolower(basename($_SERVER['PHP_SELF'] ?? ''));
         $isPublic = in_array($page, $publicPages, true);
 
         if (self::isExpired()) {
             self::logout();
             self::start();
             if (!$isPublic && !headers_sent()) {
-                Redirector::to("Location: index.php?expired=1&lang=" . L10n::$lang);
+                Redirector::to("index.php?expired=1&lang=" . L10n::$lang);
             }
             return false;
         }

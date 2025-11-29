@@ -2,8 +2,8 @@
 
 namespace PHPLedgerTests\Unit\Util;
 
-use PHPLedger\Util\Html;
 use PHPLedger\Util\Config;
+use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 
 if (!\defined('PHPLedger\Util\VERSION')) {

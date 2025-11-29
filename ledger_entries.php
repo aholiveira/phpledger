@@ -7,6 +7,8 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+require_once __DIR__ . "/prepend.php";
+
 use PHPLedger\Controllers\LedgerEntryController;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\CSRF;
@@ -15,15 +17,10 @@ use PHPLedger\Util\L10n;
 use PHPLedger\Util\Redirector;
 use PHPLedger\Views\ViewFactory;
 
-if (!defined("ROOT_DIR")) {
-    require_once __DIR__ . "/prepend.php";
-}
-
 ini_set('zlib.output_compression', 'Off');
 ini_set('output_buffering', 'Off');
 ini_set('implicit_flush', '1');
 ob_implicit_flush(true);
-
 $pagetitle = l10n::l("ledger_entries");
 $input_variables_filter = [
     'data_mov' => [
@@ -94,7 +91,9 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             const el = document.getElementById('notification');
             setTimeout(() => {
                 el.classList.add('hide');
-                el.addEventListener('transitionend', () => el.remove(), { once: true });
+                el.addEventListener('transitionend', () => el.remove(), {
+                    once: true
+                });
             }, 2500);
         </script>
     <?php endif ?>
@@ -156,8 +155,12 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
             }
         }
 
-        // Defaults
-        $defaults = ObjectFactory::defaults()::getByUsername($_SESSION["user"]);
+        // Defaults: guard against missing session user (e.g. after logout)
+        $username = $_SESSION['user'] ?? null;
+        $defaults = null;
+        if (!empty($username)) {
+            $defaults = ObjectFactory::defaults()::getByUsername($username);
+        }
         if (null === $defaults) {
             $defaults = ObjectFactory::defaults()::init();
         }
@@ -301,7 +304,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                 print "<tr id='{$row->id}'>";
                                 $balance += $row->euroAmount;
                                 if ($row->id == $edit) {
-                                    ?>
+                            ?>
                                     <td data-label=""><input type="hidden" name="id" value="<?= $row->id; ?>">
                                         <input class="submit" type="submit" name="save" value="<?= l10n::l('save') ?>">
                                     </td>
@@ -343,7 +346,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                     <td data-label="<?= l10n::l('balance') ?>" class="total" style="text-align: right">
                                         <?= normalizeNumber($balance) ?>
                                     </td>
-                                    <?php
+                                <?php
                                 }
                                 if (empty($edit) || $row->id != $edit) {
                                     $filteredInput3 = $filteredInput2;
@@ -352,7 +355,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                     $filteredInput3 = $filteredInput2;
                                     $filteredInput3["filter_accountId"] = $row->accountId;
                                     $account_filter = http_build_query($filteredInput3);
-                                    ?>
+                                ?>
                                     <td data-label='<?= l10n::l('id') ?>' class='id'><a
                                             title="<?= l10n::l('click_to_edit') ?>&#10;<?= l10n::l('modified_by_at', $row->username, $row->updatedAt) ?>"
                                             href="ledger_entries.php?<?= "{$filter_string}&amp;id={$row->id}" ?>"><?= $row->id ?></a>
@@ -378,7 +381,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                     <td data-label='<?= l10n::l('remarks') ?>' class='remarks'><?= $row->remarks; ?></td>
                                     <td data-label='<?= l10n::l('balance') ?>' class='total'><?= normalizeNumber($balance) ?>
                                     </td>
-                                    <?php
+                            <?php
                                 }
 
                                 print "</tr>\n";
@@ -387,7 +390,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                         </tbody>
                         <?php
                         if ($edit == 0) {
-                            ?>
+                        ?>
                             <tfoot>
                                 <tr id="last">
                                     <td data-label="" class="id"><input type="hidden" name="id" value="NULL">
@@ -433,7 +436,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
                                     </td>
                                 </tr>
                             </tfoot>
-                            <?php
+                        <?php
                         }
                         ?>
                     </table>

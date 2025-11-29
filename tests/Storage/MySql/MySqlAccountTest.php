@@ -4,12 +4,17 @@ use PHPLedger\Storage\MySql\MySqlAccount;
 use PHPLedger\Storage\MySql\MySqlStorage;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
-use PHPLedger\Util\Logger;
 
-const ROOT_DIR = __DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR;
+beforeAll(function () {
+    if (!\defined('ROOT_DIR')) {
+        define('ROOT_DIR', __DIR__ . '/../../..');
+    }
+    // Initialize config and object factory
+    Config::init(ROOT_DIR . '/tests/config.json');
+});
+
 beforeEach(function () {
-    Config::init(__DIR__ . '/../../config.json');
-    ObjectFactory::init("mysql", new Logger(ROOT_DIR . "/logs/ledger.log"));
+    ObjectFactory::init("mysql");
     $this->db = MySqlStorage::getConnection();
     $this->db->query("DELETE FROM movimentos");
     $this->db->query("DELETE FROM contas");
@@ -21,13 +26,13 @@ function createAccount(int $id = 1, string $name = 'Acc', string $num = '001'): 
     $a->id = $id;
     $a->number = $num;
     $a->name = $name;
-    $a->group = 1;
+    $a->grupo = 1;
     $a->typeId = 1;
     $a->iban = '';
     $a->swift = '';
     $a->openDate = date("Y-m-d");
     $a->closeDate = date("Y-m-d");
-    $a->active = 1;
+    $a->activa = 1;
     return $a;
 }
 
@@ -45,7 +50,7 @@ it('gets next id correctly', function () {
     expect(MySqlAccount::getNextId())->toBe(1);
 
     $this->db->query(
-        "INSERT INTO contas (conta_id, number, name, grupo, typeId, conta_nib, swift, openDate, closeDate, activa)
+        "INSERT INTO contas (id, number, name, grupo, typeId, iban, swift, openDate, closeDate, activa)
          VALUES (1,'n','x',1,1,'','', NOW(), NOW(), 1)"
     );
 
@@ -75,7 +80,7 @@ it('updates an existing account', function () {
 it('gets list with filters', function () {
     for ($i = 1; $i <= 3; $i++) {
         $a = createAccount($i, "Acc$i", "N$i");
-        $a->group = $i;
+        $a->grupo = $i;
         $a->update();
     }
 

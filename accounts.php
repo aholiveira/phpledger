@@ -56,11 +56,11 @@ $pagetitle = "Contas";
                 'options' => FILTER_NULL_ON_FAILURE
             ],
             'name' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
-            'conta_id' => FILTER_VALIDATE_INT,
+            'id' => FILTER_VALIDATE_INT,
             'number' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
             'activa' => FILTER_VALIDATE_BOOLEAN,
             'typeId' => FILTER_VALIDATE_INT,
-            'conta_nib' => FILTER_SANITIZE_FULL_SPECIAL_CHARS
+            'iban' => FILTER_SANITIZE_FULL_SPECIAL_CHARS
         ];
         if ($_SERVER["REQUEST_METHOD"] === "GET") {
             $filteredInput = filter_input_array(INPUT_GET, $input_variables_filter, true);
@@ -98,19 +98,19 @@ $pagetitle = "Contas";
                 $retval = false;
             }
             if ($retval) {
-                $object->id = $filteredInput["conta_id"];
+                $object->id = $filteredInput["id"];
                 $object->name = $filteredInput["name"];
                 $object->openDate = $openDate->format("Y-m-d");
                 $object->closeDate = $closeDate->format("Y-m-d");
                 $object->number = $filteredInput["number"];
-                $object->active = boolval($filteredInput["activa"]) ? 1 : 0;
+                $object->activa = boolval($filteredInput["activa"]) ? 1 : 0;
                 $object->typeId = $filteredInput["typeId"];
-                $object->iban = $filteredInput["conta_nib"];
+                $object->iban = $filteredInput["iban"];
                 $retval = $object->update();
             }
         }
         if (($filteredInput["update"] ?? null) === "Apagar") {
-            $object->id = $filteredInput["conta_id"];
+            $object->id = $filteredInput["id"];
             $retval = $object->delete();
         }
         if (is_array($filteredInput) && !empty($filteredInput["update"])) {
@@ -126,9 +126,9 @@ $pagetitle = "Contas";
             }
         }
         $edit = null;
-        $conta_id = is_array($filteredInput) ? $filteredInput["conta_id"] : null;
-        if ($_SERVER["REQUEST_METHOD"] == "GET" && !empty($conta_id)) {
-            $edit = $conta_id;
+        $id = is_array($filteredInput) ? $filteredInput["id"] : null;
+        if ($_SERVER["REQUEST_METHOD"] == "GET" && !empty($id)) {
+            $edit = $id;
         }
         $account_list = ObjectFactory::account()::getList();
         ?>

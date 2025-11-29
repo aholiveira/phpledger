@@ -16,6 +16,7 @@ use PHPLedger\Storage\MySql\MySqlObject;
 class MySqlCurrency extends Currency
 {
     private static array $fields = ["id", "`code`", "`description`", "exchangeRate", "username", "createdAt", "updatedAt"];
+    use MySqlSelectTrait;
     use MySqlObject {
         MySqlObject::__construct as private traitConstruct;
     }
@@ -52,7 +53,7 @@ class MySqlCurrency extends Currency
     public static function getList(array $fieldFilter = []): array
     {
         $where = static::getWhereFromArray($fieldFilter);
-        $sql = "SELECT " . implode(",", array_keys(self::getDefinition()['columns'])) . " FROM " . static::tableName() . " {$where} ORDER BY description";
+        $sql = self::getSelect() . " {$where} ORDER BY description";
         $retval = [];
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
@@ -73,7 +74,7 @@ class MySqlCurrency extends Currency
 
     private static function getByField($field, $value): ?Currency
     {
-        $sql = "SELECT " . implode(",", array_keys(self::getDefinition()['columns'])) . " FROM " . static::tableName() . " WHERE $field=? ORDER BY `description`";
+        $sql = self::getSelect() . " WHERE $field=? ORDER BY `description`";
         $retval = null;
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);

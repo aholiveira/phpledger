@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Prepended file on each call to a PHP file
  * This does basic defines and checks if PHP version is supported
@@ -16,80 +17,15 @@ if (PHP_VERSION_ID < 70000) {
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use PHPLedger\Storage\ObjectFactory;
-use PHPLedger\Util\Config;
-use PHPLedger\Util\L10n;
 use PHPLedger\Util\Logger;
-use PHPLedger\Util\Redirector;
-use PHPLedger\Util\SessionManager;
+use PHPLedger\Application;
 
 const BACKEND = "mysql";
-const VERSION = "0.4.506";
+const VERSION = "0.4.507";
 const ROOT_DIR = __DIR__;
-const SESSION_EXPIRE = 3600;
 
-$logger = new Logger(ROOT_DIR . "/logs/ledger.log");
-
-$gitHead = ROOT_DIR . "/.git/ORIG_HEAD";
-define("GITHASH", file_exists($gitHead) ? substr(file_get_contents($gitHead), 0, 12) : "main");
-@header('Cache-Control: no-cache');
-@header('X-XSS-Protection: 1; mode=block');
-@header('X-Frame-Options: DENY');
-@header('X-Content-Type-Options: nosniff');
-@header('Strict-Transport-Security: max-age=7776000');
-@header('Referrer-Policy: strict-origin-when-cross-origin');
-#@header("Content-Security-Policy: default-src 'self'; frame-ancestors 'none'; style-src 'self' 'unsafe-inline'; script-src * ");
-
-$PUBLIC_PAGES = ['index.php', 'reset_password.php', 'update.php'];
-SessionManager::start();
-L10n::init();
-Config::init(ROOT_DIR . '/config.json');
-# Identify the current PHP script
-$currentPage = strtolower(basename($_SERVER['SCRIPT_NAME']));
-$isPublic = in_array($currentPage, $PUBLIC_PAGES, true);
-
-# --- SESSION EXPIRED? ---
-if (SessionManager::isExpired()) {
-    SessionManager::logout();
-    SessionManager::start();
-    if (!$isPublic && !headers_sent()) {
-        Redirector::to("Location: index.php?expired=1&lang=" . L10n::$lang);
-        exit;
-    }
-}
-
-# --- AUTH REQUIRED FOR PROTECTED PAGES ---
-if (!$isPublic && !isset($_SESSION['user'])) {
-    if (!headers_sent()) {
-        Redirector::to("index.php");
-        exit;
-    }
-}
-# --- SESSION STILL VALID OR PUBLIC PAGE ---
-$_SESSION['expires'] = time() + SESSION_EXPIRE;
-# Timezone load (unchanged)
-if (
-    !isset($_SESSION['timezone'])
-    && isset($_COOKIE['timezone'])
-    && in_array($_COOKIE['timezone'], timezone_identifiers_list(), true)
-) {
-    $_SESSION['timezone'] = $_COOKIE['timezone'];
-}
-
-$tz = $_SESSION['timezone'] ?? Config::get("timezone");
-date_default_timezone_set(in_array($tz, timezone_identifiers_list(), true) ? $tz : 'UTC');
-ObjectFactory::init("mysql", $logger);
-if (!empty($_SESSION['user'])) {
-    $defaults = ObjectFactory::defaults()::getByUsername($_SESSION['user']) ?? ObjectFactory::defaults()::init();
-    $defaults->lastVisited = $_SERVER['REQUEST_URI'];
-    $defaults->update();
-}
-function debugPrint($text)
-{
-    if (defined("DEBUG") && DEBUG === 1) {
-        print nl2br("####DEBUG#$text#DEBUG####<br>\n");
-    }
-}
+new Logger(ROOT_DIR . "/logs/ledger.log");
+Application::init();
 function normalizeNumber(?float $number): string
 {
     return null === $number ? "" : number_format($number, 2);

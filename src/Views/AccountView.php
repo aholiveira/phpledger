@@ -34,25 +34,25 @@ class AccountView extends ObjectViewer
             }
             $type_description = $account_type->description;
         }
-        $retval .= "<td data-label='ID' class=\"number\"><a title=\"Editar\" href=\"accounts.php?conta_id={$object->id}\">{$object->id}</a></td>";
+        $retval .= "<td data-label='ID' class=\"number\"><a title=\"Editar\" href=\"accounts.php?id={$object->id}\">{$object->id}</a></td>";
         $retval .= "<td data-label='Nome' class=\"text\">{$object->name}</td>";
         $retval .= "<td data-label='Numero' class=\"number\">{$object->number}</td>";
         $retval .= "<td data-label='Tipo'>{$type_description}</td>";
         $retval .= "<td data-label='IBAN'>{$object->iban}</td>";
         $retval .= "<td data-label='Abertura'>{$object->openDate}</td>";
         $retval .= "<td data-label='Fecho'>{$object->closeDate}</td>";
-        $retval .= "<td data-label='Activa'>" . ($object->active ? "Sim" : "N&atilde;o") . "</td>";
-        $retval .= "<td><a href=\"accounts.php?update=Apagar&amp;conta_id={$object->id}\" onclick=\"return confirm('Pretende apagar o registo?');\">Apagar</a></td>";
+        $retval .= "<td data-label='Activa'>" . ($object->activa ? "Sim" : "N&atilde;o") . "</td>";
+        $retval .= "<td><a href=\"accounts.php?update=Apagar&amp;id={$object->id}\" onclick=\"return confirm('Pretende apagar o registo?');\">Apagar</a></td>";
         return $retval;
     }
     public function printForm(): string
     {
         $retval = "";
-        if (!($this->object instanceof account)) {
+        if (!($this->object instanceof Account)) {
             return $retval;
         }
         /**
-         * @var account $object
+         * @var Account $object
          */
         $object = ($this->object);
         $id = isset($object->id) ? $object->id : $object->getNextId();
@@ -62,11 +62,11 @@ class AccountView extends ObjectViewer
         }
         $accountTypeView = ViewFactory::instance()->accountTypeView($account_type);
         $tipo_opt = $accountTypeView->getSelectFromList($account_type->getList(), isset($object->typeId) ? $object->typeId : null);
-        $retval .= "<td data-label='ID'><input type=\"hidden\" name=\"conta_id\" value=\"{$id}\">{$id}</td>\n";
+        $retval .= "<td data-label='ID'><input type=\"hidden\" name=\"id\" value=\"{$id}\">{$id}</td>\n";
         $retval .= "<td data-label='Nome'><a id=\"{$id}\"></a><input type=text size=16 maxlength=30 name=\"name\" value=\"{$object->name}\"></td>";
         $retval .= "<td data-label='Numero'><input type=text size=15 maxlength=30 name=\"number\" value=\"{$object->number}\"></td>";
         $retval .= "<td data-label='Tipo'><select name=\"typeId\">{$tipo_opt}</select>";
-        $retval .= "<td data-label='NIB'><input type=text size=24 maxlength=24 name=\"conta_nib\" value=\"{$object->iban}\"></td>";
+        $retval .= "<td data-label='NIB'><input type=text size=24 maxlength=24 name=\"iban\" value=\"{$object->iban}\"></td>";
         $retval .= "<td data-label='Abertura'>\r\n";
         $retval .= "<select class=\"date-fallback\" style=\"display: none\" name=\"aberturaAA\">" . Html::yearOptions(isset($object->openDate) ? substr($object->openDate, 0, 4) : null) . "</select>\r\n";
         $retval .= "<select class=\"date-fallback\" style=\"display: none\" name=\"aberturaMM\">" . Html::monthOptions(isset($object->openDate) ? substr($object->openDate, 5, 2) : null) . "</select>\r\n";
@@ -79,7 +79,7 @@ class AccountView extends ObjectViewer
         $retval .= "<select class=\"date-fallback\" style=\"display: none\" name=\"fechoDD\">" . Html::dayOptions(isset($object->closeDate) ? substr($object->closeDate, 8, 2) : null) . "</select>\r\n";
         $retval .= "<input class=\"date-fallback\" type=\"date\" name=\"fecho\" required value=\"" . (isset($object->closeDate) ? $object->closeDate : date("Y-m-d")) . "\">\r\n";
         $retval .= "</td>\r\n";
-        $retval .= "<td data-label='Activa'><input  type=\"checkbox\" name=\"activa\" " . ((isset($object->active) && ($object->active == 1)) || empty($object->id) ? "checked" : "") . "></td>\r\n";
+        $retval .= "<td data-label='Activa'><input  type=\"checkbox\" name=\"activa\" " . ((isset($object->activa) && ($object->activa == 1)) || empty($object->id) ? "checked" : "") . "></td>\r\n";
         $retval .= "<td><input class=\"submit\" type=\"submit\" name=\"update\" value=Gravar></td>";
         return $retval;
     }

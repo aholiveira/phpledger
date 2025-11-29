@@ -19,15 +19,15 @@
 
 DROP TABLE IF EXISTS `contas`;
 CREATE TABLE `contas` (
-  `conta_id` int(3) NOT NULL default '0',
+  `id` int(3) NOT NULL default '0',
   `number` char(30) NOT NULL default '',
   `name` char(30) NOT NULL default '',
   `typeId` int(2) default NULL,
-  `conta_nib` char(24) default NULL,
+  `iban` char(24) default NULL,
   `openDate` date default NULL,
   `closeDate` date default NULL,
   `activa` int(1) NOT NULL default '0',
-  PRIMARY KEY  (`conta_id`)
+  PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_general_ci;
 
 --

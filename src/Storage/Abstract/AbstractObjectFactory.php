@@ -15,28 +15,24 @@ use PHPLedger\Domain\LedgerEntry;
 use PHPLedger\Domain\ReportMonth;
 use PHPLedger\Domain\ReportYear;
 use PHPLedger\Domain\User;
-use PHPLedger\Util\Logger;
 
 abstract class AbstractObjectFactory implements DataObjectFactoryInterface
 {
-    private static ?DataObjectFactoryInterface $backendFactory = null;
-    private static ?Logger $logger = null;
-    public static function init(string $backend = "mysql", ?Logger $logger = null): void
+    protected static ?DataObjectFactoryInterface $backendFactory = null;
+    public static function init(string $backend = "mysql"): void
     {
         if (static::$backendFactory === null) {
             switch ($backend) {
                 case "mysql":
-                    static::$backendFactory = new \PHPLedger\Storage\MySql\MySqlObjectFactory($backend, $logger);
+                    static::$backendFactory = new \PHPLedger\Storage\MySql\MySqlObjectFactory($backend);
                     break;
                 default:
                     throw new Exception("Storage not implemented");
             }
         }
-        static::$logger = $logger ?? new Logger("ledger.log");
     }
     public static function dataStorage(): DataStorageInterface
     {
-        static::init();
         return static::$backendFactory::dataStorage();
     }
     public static function account(): Account

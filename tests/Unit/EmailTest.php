@@ -2,8 +2,8 @@
 
 namespace PHPLedgerTests\Unit\Util;
 
-use PHPLedger\Util\Email;
 use PHPLedger\Util\Config;
+use PHPLedger\Util\Email;
 
 beforeEach(function () {
     $ref = new \ReflectionClass(Config::class);

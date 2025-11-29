@@ -7,8 +7,11 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 namespace PHPLedger\Storage\MySql;
+
 use PHPLedger\Domain\EntryCategory;
+
 class MySqlEntryCategory extends EntryCategory
 {
     protected static string $tableName = "tipo_mov";
@@ -172,9 +175,15 @@ class MySqlEntryCategory extends EntryCategory
             }
             $stmt->bind_param("isii", $this->parentId, $this->description, $this->active, $this->id);
             $retval = $stmt->execute();
-            $stmt->close();
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
+        } finally {
+            if (isset($stmt) && $stmt instanceof \mysqli_stmt) {
+                $stmt->close();
+            }
+            if (isset($result) && $result instanceof \mysqli_result) {
+                $result->close();
+            }
         }
         return $retval;
     }
