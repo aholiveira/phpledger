@@ -9,8 +9,10 @@ namespace PHPLedger\Views;
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 use PHPLedger\Contracts\DataObjectInterface;
 use PHPLedger\Domain\LedgerEntry;
+use PHPLedger\Util\NumberUtil;
 class LedgerEntryView extends ObjectViewer
 {
     /** @var ledgerentry $object */
@@ -27,7 +29,7 @@ class LedgerEntryView extends ObjectViewer
         $retval .= "<td data-label='Moeda'>{$this->object->currency->description}</td>\n";
         $retval .= "<td data-label='Conta'><a title=\"Mostrar movimentos apenas desta conta\" href=\"ledger_entries.php?filter_accountId={$this->object->account->id}\">{$this->object->account->name}</a></td>\n";
         $retval .= "<td data-label='D/C'>" . ($this->object->direction == "1" ? "Dep" : "Lev") . "</td>\n";
-        $retval .= "<td data-label='Valor' class='amount'>" . normalizeNumber($this->object->currencyAmount) . "</td>\n";
+        $retval .= "<td data-label='Valor' class='amount'>" . NumberUtil::normalize($this->object->currencyAmount) . "</td>\n";
         $retval .= "<td data-label='Obs'>{$this->object->remarks}</td>\n";
         return $retval;
     }
@@ -49,7 +51,7 @@ class LedgerEntryView extends ObjectViewer
                     $view = new ledgerEntryView($object);
                     $retval .= "<tr>" . $view->printObject();
                 }
-                $retval .= "<td data-label='Saldo' class='total'>" . normalizeNumber($saldo) . "</td>\r\n";
+                $retval .= "<td data-label='Saldo' class='total'>" . NumberUtil::normalize($saldo) . "</td>\r\n";
                 $retval .= "</tr>\r\n";
             }
         }

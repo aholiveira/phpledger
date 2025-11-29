@@ -17,6 +17,7 @@ use PHPLedger\Util\L10n;
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\Redirector;
 use PHPLedger\Util\SessionManager;
+use PHPLedger\Version;
 
 $userAuth = false;
 $postUser = "";
@@ -101,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </p>
                 <p id="versionTagContent" class="version-tag">
                     <a href="https://github.com/aholiveira/phpledger"
-                        aria-label="<?= l10n::l('version', VERSION) ?>"><?= l10n::l('version', VERSION) ?></a>
+                        aria-label="<?= l10n::l('version', Version::string()) ?>"><?= l10n::l('version', Version::string()) ?></a>
                 </p>
                 <p id="languageSelector" class="version-tag"><small><?php Html::languageSelector(false); ?></small></p>
             </div>
