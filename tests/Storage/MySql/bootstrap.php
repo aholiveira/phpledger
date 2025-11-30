@@ -7,18 +7,19 @@
 
 // Define ROOT_DIR FIRST before importing anything that uses it
 if (!\defined('ROOT_DIR')) {
-    define('ROOT_DIR', __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
+    define('ROOT_DIR', __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
 }
 
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\Logger;
+use PHPLedger\Util\LogLevel;
 
 function  checkAndUpdateDatabaseSchema()
 {
     // Initialize config and logger
     Config::init(ROOT_DIR . '/config.json');
-    new Logger(ROOT_DIR . "/logs/ledger.log");
+    new Logger(ROOT_DIR . '/logs/ledger.log', LogLevel::DEBUG);
     ObjectFactory::init("mysql");
     // Ensure database schema is up-to-date before running any tests
     $storage = ObjectFactory::dataStorage();

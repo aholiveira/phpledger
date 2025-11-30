@@ -50,9 +50,9 @@ class Application
     {
         SessionManager::start();
         L10n::init();
-        Config::init(ROOT_DIR . '/config.json');
-        new Logger(ROOT_DIR . "/logs/ledger.log");
-        $backend = Config::get("backend") ?? "mysql";
+        Config::init(ROOT_DIR . DIRECTORY_SEPARATOR . 'config.json');
+        new Logger(ROOT_DIR . DIRECTORY_SEPARATOR . "logs" . DIRECTORY_SEPARATOR . "ledger.log");
+        $backend = Config::get("storage.type") ??  "mysql";
         ObjectFactory::init($backend);
     }
     private static function guardSession(): void

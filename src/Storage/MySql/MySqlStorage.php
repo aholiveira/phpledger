@@ -23,15 +23,13 @@ class MySqlStorage implements DataStorageInterface
     private $dbEngine = "InnoDB";
     private $defaultAdminUsername;
     private $defaultAdminPassword;
-    private Logger $logger;
     private static ?self $instance = null;
     public function __construct()
     {
         $this->message = "";
         $this->setTableCreateSQL();
-        $this->defaultAdminUsername = config::get("admin_username");
-        $this->defaultAdminPassword = config::get("admin_password");
-        $this->logger = Logger::instance();
+        $this->defaultAdminUsername = Config::get("admin.username", "admin");
+        $this->defaultAdminPassword = Config::get("admin.password", "admin");
     }
     public static function instance(): self
     {
@@ -44,12 +42,16 @@ class MySqlStorage implements DataStorageInterface
     }
     private function connect(): void
     {
-        $host = config::get("host");
-        $user = config::get("user");
-        $pass = config::get("password");
-        $dbase = config::get("database");
+        $host = Config::get("storage.settings.host", "localhost");
+        $user = Config::get("storage.settings.user", "root");
+        $pass = Config::get("storage.settings.password", "");
+        $dbase = Config::get("storage.settings.database", "contas_test");
+        $port = Config::get("storage.settings.port", 3306);
+        $ssl = Config::get("storage.settings.ssl", false);
+        if ($port !== null) {
+            $host .= ':' . $port;
+        }
         try {
-
             mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
             if ($this->dbConnection instanceof \mysqli) {
                 if ($this->dbConnection->connect_errno) {
@@ -64,9 +66,18 @@ class MySqlStorage implements DataStorageInterface
                 }
             }
             $this->dbConnection = new \mysqli($host, $user, $pass, $dbase);
+            Logger::instance()->debug("MySQL connection established");
+            Logger::instance()->debug("MySQL host: {$host}");
+            Logger::instance()->debug("MySQL database: {$dbase}");
+            if ($ssl) {
+                Logger::instance()->info("Establishing MySQL SSL connection");
+                mysqli_ssl_set($this->dbConnection, null, null, null, null, null);
+            }
             $this->dbConnection->set_charset('utf8mb4');
         } catch (\mysqli_sql_exception $e) {
             throw new \RuntimeException("Database connection failed: " . $e->getMessage(), 0, $e);
+        } finally {
+            mysqli_report(MYSQLI_REPORT_OFF);
         }
     }
     public function addMessage(string $message): string
@@ -83,7 +94,7 @@ class MySqlStorage implements DataStorageInterface
     public function check(bool $test = false): bool
     {
         $retval = true;
-        $db_name = config::get("database");
+        $db_name =  Config::get("storage.settings.database");
         $tables = array_keys($this->tableCreateSQL);
         $this->connect();
         if ($this->getDbCollation($db_name) != $this->dbCollation) {
@@ -170,7 +181,7 @@ class MySqlStorage implements DataStorageInterface
     {
         $retval = true;
         $tables = array_keys($this->tableCreateSQL);
-        $db_name = config::get("database");
+        $db_name =  Config::get("storage.settings.database");
         if (
             $this->getDbCollation($db_name) != $this->dbCollation &&
             $this->setDbCollation($db_name, $this->dbCollation)
@@ -308,7 +319,7 @@ class MySqlStorage implements DataStorageInterface
                     $ledgerEntry->currencyId = 'EUR';
                     $ledgerEntry->euroAmount = $ledgerEntry->currencyAmount * $ledgerEntry->direction;
                     $ledgerEntry->exchangeRate = 1;
-                    $ledgerEntry->username = config::get("user");
+                    $ledgerEntry->username =  Config::get("storage.settings.user", "root");
                     $ledgerEntry->update();
                 }
                 $curr_month = date_diff(new \DateTime(date("Y-m-d", mktime(0, 0, 0, $month, 1, $year))), new \DateTime(date("Y-m-d", mktime(0, 0, 0, 1, 1, $start_year))));
@@ -458,8 +469,8 @@ class MySqlStorage implements DataStorageInterface
             $stmt->fetch();
             $stmt->close();
         } catch (\Exception $ex) {
-            $this->addMessage($ex);
-            $this->logger->dump($ex, "");
+            $this->addMessage($ex->getMessage());
+            $this->handleException($ex);
         }
         return $retval;
     }
@@ -479,8 +490,8 @@ class MySqlStorage implements DataStorageInterface
             $retval = $stmt->execute();
             $stmt->close();
         } catch (\Exception $ex) {
-            $this->logger->dump($ex, "");
-            $this->logger->dump(self::getConnection(), "");
+            $this->addMessage($ex->getMessage());
+            $this->handleException($ex);
         }
         return $retval;
     }
@@ -497,8 +508,7 @@ class MySqlStorage implements DataStorageInterface
             $stmt->fetch();
             $stmt->close();
         } catch (\Exception $ex) {
-            $this->logger->dump($ex, "");
-            $this->logger->dump(self::getConnection(), "");
+            $this->handleException($ex);
         }
         return $retval;
     }
@@ -512,8 +522,7 @@ class MySqlStorage implements DataStorageInterface
             $retval = ($count == 1);
         } catch (\Exception $ex) {
             $this->addMessage($ex->getMessage());
-            $this->logger->dump($ex, "");
-            $this->logger->dump(self::getConnection(), "");
+            $this->handleException($ex);
         }
         return $retval;
     }
@@ -532,8 +541,7 @@ class MySqlStorage implements DataStorageInterface
             return (bool) $retval;
         } catch (\Exception $ex) {
             $this->addMessage("Failed to add column [{$column_name}] to [{$table_name}]: " . $ex->getMessage());
-            $this->logger->dump($sql ?? '', "SQL failed");
-            $this->logger->dump($ex, "");
+            $this->handleException($ex);
             return false;
         }
     }
@@ -546,8 +554,8 @@ class MySqlStorage implements DataStorageInterface
             $this->addMessage("Table [{$table_name}] column [{$column_name}] definition changed");
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            $this->logger->dump($ex, "");
-            $this->logger->dump(self::getConnection(), "");
+            $this->addMessage($sql);
+            $this->handleException($ex);
         }
         return $retval;
     }
@@ -567,8 +575,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage($ex);
             $this->addMessage($sql);
-            $this->logger->dump($ex, "");
-            $this->logger->dump(self::getConnection(), "");
+            $this->handleException($ex);
         }
         return $retval;
     }
@@ -581,8 +588,7 @@ class MySqlStorage implements DataStorageInterface
             $retval = ($count == 1);
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            $this->logger->dump($ex, "");
-            $this->logger->dump(self::getConnection(), "");
+            $this->handleException($ex);
         }
         return $retval;
     }
@@ -598,8 +604,7 @@ class MySqlStorage implements DataStorageInterface
             $this->addMessage("Added foreign key [{$key_name}] to table [{$table_name}]");
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            $this->logger->dump($ex, "");
-            $this->logger->dump(self::getConnection(), "");
+            $this->handleException($ex);
         }
         return $retval;
     }
@@ -613,8 +618,7 @@ class MySqlStorage implements DataStorageInterface
             return $count === 1;
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            $this->logger->dump($ex, "");
-            $this->logger->dump(self::getConnection(), "");
+            $this->handleException($ex);
             return false;
         }
     }
@@ -627,8 +631,7 @@ class MySqlStorage implements DataStorageInterface
             return $retval ?: null;
         } catch (\Exception $ex) {
             $this->addMessage("Failed to get collation for database [{$db_name}]: " . $ex->getMessage());
-            $this->logger->dump($ex, "");
-            $this->logger->dump(self::getConnection(), "");
+            $this->handleException($ex);
             return "";
         }
     }
@@ -646,8 +649,7 @@ class MySqlStorage implements DataStorageInterface
         } catch (\Exception $ex) {
             $this->addMessage("Failed to change collation on database [{$db_name}]: " . $ex->getMessage());
             $this->addMessage($ex);
-            $this->logger->dump($ex, "");
-            $this->logger->dump(self::getConnection(), "");
+            $this->handleException($ex);
             return "";
         }
     }
@@ -660,8 +662,7 @@ class MySqlStorage implements DataStorageInterface
             $retval = @$this->fetchSingleValue($sql);
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            $this->logger->dump($ex, "");
-            $this->logger->dump(self::getConnection(), "");
+            $this->handleException($ex);
             $retval = "";
         }
         return $retval;
@@ -676,8 +677,7 @@ class MySqlStorage implements DataStorageInterface
             $this->addMessage("Changed collation on table [{$table_name}]");
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            $this->logger->dump($ex, "");
-            $this->logger->dump(self::getConnection(), "");
+            $this->handleException($ex);
             $retval = "";
         }
         return $retval;
@@ -691,8 +691,7 @@ class MySqlStorage implements DataStorageInterface
             $retval = @$this->fetchSingleValue($sql);
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            $this->logger->dump($ex, "");
-            $this->logger->dump(self::getConnection(), "");
+            $this->handleException($ex);
             $retval = "";
         }
         return $retval;
@@ -707,8 +706,7 @@ class MySqlStorage implements DataStorageInterface
             $this->addMessage("Changed engine on table [{$table_name}]");
         } catch (\Exception $ex) {
             $this->addMessage($ex);
-            $this->logger->dump($ex, "");
-            $this->logger->dump(self::getConnection(), "");
+            $this->handleException($ex);
         }
         return $retval;
     }
@@ -750,7 +748,7 @@ class MySqlStorage implements DataStorageInterface
             return (bool) $retval;
         } catch (\Exception $ex) {
             $this->addMessage("Failed to create table [{$table_name}]: " . $ex->getMessage());
-            $this->logger->dump($ex);
+            $this->handleException($ex);
             return false;
         }
     }
@@ -769,5 +767,10 @@ class MySqlStorage implements DataStorageInterface
         foreach ($tables as $name => $data) {
             $this->tableCreateSQL[$name] = $data ?? [];
         }
+    }
+    private function handleException(\Throwable $e): void
+    {
+        Logger::instance()->error("Unhandled exception: " . $e->getMessage());
+        Logger::instance()->dump($e, "Stack trace:");
     }
 }

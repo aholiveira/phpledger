@@ -16,7 +16,7 @@ use PHPLedger\Util\L10n;
 use PHPLedger\Util\Redirector;
 
 require_once "prepend.php";
-config::init(__DIR__ . '/config.json');
+Config::init(__DIR__ . '/config.json');
 
 $data_storage = ObjectFactory::dataStorage();
 $update_result = null;

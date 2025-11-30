@@ -16,7 +16,7 @@ if (!\defined('PHPLedger\Util\ROOT_DIR')) {
 beforeEach(function () {
     ini_set('short_open_tag', '1');
     // Setup dummy config and language
-    Config::set('title', 'TestApp');
+    Config::set('title', 'TestApp', false);
     L10n::init();
     L10n::$lang = 'pt-pt';
     if (!isset($_SESSION)) {

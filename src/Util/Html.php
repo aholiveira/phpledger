@@ -9,6 +9,9 @@
  */
 
 namespace PHPLedger\Util;
+
+use PHPLedger\Domain\User;
+use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\L10n;
 use PHPLedger\Version;
@@ -48,7 +51,7 @@ final class Html
     }
     public static function errortext(string $message, $exit = true): void
     {
-        ?>
+?>
         <p><?= htmlspecialchars($message) ?></p>
         </div>
         </body>
@@ -65,13 +68,13 @@ final class Html
         <script type="text/javascript" defer>
             alert(<?= json_encode($message) ?>);
         </script>
-        <?php
+    <?php
     }
     public static function header($pagetitle = ""): void
     {
         $title = trim($pagetitle) !== '' ? "$pagetitle - " : '';
         $fullTitle = $title . Config::get("title");
-        ?>
+    ?>
         <title><?= htmlspecialchars($fullTitle) ?></title>
         <script>
             document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone + "; path=/";
@@ -80,12 +83,12 @@ final class Html
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="styles.css">
-        <?php
+    <?php
     }
     public static function footer(): void
     {
         $expires = date("Y-m-d H:i:s", $_SESSION['expires'] ?? time());
-        ?>
+    ?>
         <footer>
             <div class='footer'>
                 <span class='RCS'><a href="https://github.com/aholiveira/phpledger"
@@ -101,12 +104,12 @@ final class Html
                 </span>
             </div>
         </footer>
-        <?php
+    <?php
     }
     public static function menu(): void
     {
         $lang = L10n::$lang;
-        ?>
+    ?>
         <aside class="menu">
             <nav>
                 <ul>
@@ -131,6 +134,15 @@ final class Html
                     <li><a id="report_year" href="report_year.php?lang=<?= $lang ?>&year=<?= date("Y") - 1 ?>"
                             aria-label="<?= L10n::l("report_year") ?>"><?= L10n::l("report_year") ?></a>
                     </li>
+                    <?php $userName = $_SESSION['user'] ?? null;
+                    if ($userName) {
+                        $user = ObjectFactory::user()::getByUsername($userName);
+                    } else {
+                        $user = null;
+                    }
+                    if ($user && $user->hasRole(User::USER_ROLE_ADM)): ?>
+                        <li><a href="config.php?lang=<?= $lang ?>"><?= L10n::l("configuration") ?></a></li>
+                    <?php endif; ?>
                     <li><a id="logout" href="index.php?lang=<?= $lang ?>&do_logout=1"
                             aria-label="<?= L10n::l("logout") ?>"><?= L10n::l("logout") ?></a>
                 </ul>
@@ -142,9 +154,9 @@ final class Html
     {
         $lang = L10n::$lang;
         if ($div) {
-            ?>
+        ?>
             <div>
-                <?php
+            <?php
         }
         if ($lang === 'pt-pt'): ?>
                 <a href="?lang=en-us">EN</a> | <span>PT</span>
@@ -154,7 +166,7 @@ final class Html
         if ($div) {
             ?>
             </div>
-            <?php
+<?php
         }
     }
 }
