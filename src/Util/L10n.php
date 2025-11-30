@@ -86,18 +86,18 @@ class L10n
             return self::$cache[$lang];
         }
 
-        $file = ROOT_DIR . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . $lang . '.php';
+        $file = ROOT_DIR . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . $lang . '.json';
         if (!file_exists($file)) {
             $lang = 'pt-pt';
-            $file = ROOT_DIR . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . $lang . '.php';
+            $file = ROOT_DIR . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . $lang . '.json';
         }
 
         if (!file_exists($file)) {
             self::$cache[$lang] = [];
             return [];
         }
-
-        $langData = include $file;
+        $json = file_get_contents($file);
+        $langData = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
         $arr = \is_array($langData) ? $langData : [];
         self::$cache[$lang] = $arr;
         return $arr;
