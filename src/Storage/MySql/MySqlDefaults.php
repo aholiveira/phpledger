@@ -12,6 +12,7 @@ namespace PHPLedger\Storage\MySql;
 
 use PHPLedger\Domain\Defaults;
 use PHPLedger\Util\Config;
+use PHPLedger\Util\Logger;
 
 class MySqlDefaults extends Defaults
 {
@@ -34,7 +35,8 @@ class MySqlDefaults extends Defaults
         $this->entryDate = $data["entryDate"] ?? date("Y-m-d");
         $this->direction = $data["direction"] ?? 1;
         $this->language = $data["language"] ?? 'pt-PT';
-        $this->lastVisited = $data["lastVisited"] ?? "";
+        $this->lastVisitedUri = $data["lastVisitedUri"] ?? "";
+        $this->lastVisitedAt = $data["lastVisitedAt"] ?? time();
         $this->showReportGraph = $data["showReportGraph"] ?? 0;
         $this->username = $data["username"] ?? Config::get("admin_username");
     }
@@ -47,8 +49,9 @@ class MySqlDefaults extends Defaults
             "moeda_mov" => "currencyId",
             "data" => "entryDate",
             "deb_cred" => "direction",
-            "last_visited" => "lastVisited",
-            "show_report_graph" => "showReportGraph"
+            "last_visited" => "lastVisitedUri",
+            "show_report_graph" => "showReportGraph",
+            "lastVisited" => "lastVisitedUri"
         ];
         $retval['columns'] = [
             "id" => "int(1) NOT NULL DEFAULT 0",
@@ -58,7 +61,8 @@ class MySqlDefaults extends Defaults
             "entryDate" => "date DEFAULT NULL",
             "direction" => "enum('1','-1') DEFAULT NULL",
             "language" => "char(10) DEFAULT NULL",
-            "lastVisited" => "char(255) DEFAULT NULL",
+            "lastVisitedUri" => "char(255) DEFAULT NULL",
+            "lastVisitedAt" => "int(11) DEFAULT NULL",
             "username" => "char(100) DEFAULT NULL",
             "showReportGraph" => "int(1) NOT NULL DEFAULT 0",
         ];
@@ -182,8 +186,8 @@ class MySqlDefaults extends Defaults
         $retval = false;
         try {
             $sql = "INSERT INTO {$this->tableName()}
-                    (categoryId, accountId, currencyId, entryDate, direction, language, lastVisited, showReportGraph, username, id)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    (categoryId, accountId, currencyId, entryDate, direction, language, lastVisitedUri, lastVisitedAt, showReportGraph, username, id)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON DUPLICATE KEY UPDATE
                     categoryId=VALUES(categoryId),
                     accountId=VALUES(accountId),
@@ -191,22 +195,37 @@ class MySqlDefaults extends Defaults
                     entryDate=VALUES(entryDate),
                     direction=VALUES(direction),
                     language=VALUES(language),
-                    lastVisited=VALUES(lastVisited),
+                    lastVisitedUri=VALUES(lastVisitedUri),
+                    lastVisitedAt=VALUES(lastVisitedAt),
                     showReportGraph=VALUES(showReportGraph),
                     username=VALUES(username)";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
+            $typeString = self::buildTypesString([
+                $this->categoryId,
+                $this->accountId,
+                $this->currencyId,
+                $this->entryDate,
+                $this->language,
+                "'" . $this->direction . "'",
+                $this->lastVisitedUri,
+                $this->lastVisitedAt,
+                $this->showReportGraph,
+                $this->username,
+                $this->id
+            ]);
             $stmt->bind_param(
-                "iisssssisi",
+                $typeString,
                 $this->categoryId,
                 $this->accountId,
                 $this->currencyId,
                 $this->entryDate,
                 $this->direction,
                 $this->language,
-                $this->lastVisited,
+                $this->lastVisitedUri,
+                $this->lastVisitedAt,
                 $this->showReportGraph,
                 $this->username,
                 $this->id
@@ -229,6 +248,27 @@ class MySqlDefaults extends Defaults
             }
             if (isset($result) && $result instanceof \mysqli_result) {
                 $result->close();
+            }
+        }
+        return $retval;
+    }
+    private static function buildTypesString(array $fields): string
+    {
+        $retval = "";
+        foreach ($fields as $field) {
+            switch (gettype($field)) {
+                case "integer":
+                    $retval .= "i";
+                    break;
+                case "double":
+                    $retval .= "d";
+                    break;
+                case "string":
+                    $retval .= "s";
+                    break;
+                default:
+                    $retval .= "b";
+                    break;
             }
         }
         return $retval;

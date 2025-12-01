@@ -38,7 +38,8 @@ it('creates a new defaults record with constructor values', function () {
         "entryDate" => "2024-01-02",
         "direction" => -1,
         "language" => "en-US",
-        "lastVisited" => "dashboard",
+        "lastVisitedUri" => "dashboard",
+        "lastVisitedAt" => 1700000000,
         "showReportGraph" => 1,
         "username" => "tester"
     ]);
@@ -53,7 +54,9 @@ it('creates a new defaults record with constructor values', function () {
     expect($f->entryDate)->toBe("2024-01-02");
     expect($f->direction)->toBe(-1);
     expect($f->language)->toBe("en-US");
-    expect($f->lastVisited)->toBe("dashboard");
+    expect($f->lastVisitedUri)->toBe("dashboard");
+    expect($f->lastVisitedAt)->toBe(1700000000);
+    expect($f->showReportGraph)->toBe(1);
     expect($f->username)->toBe("tester");
 });
 
@@ -66,19 +69,25 @@ it('updates an existing defaults record', function () {
         "entryDate" => "2024-01-01",
         "direction" => 1,
         "language" => "pt-PT",
-        "lastVisited" => "home",
+        "lastVisitedUri" => "home",
+        "lastVisitedAt" => 1690000000,
+        "showReportGraph" => 0,
         "username" => "admin"
     ]);
 
     $d->update();
 
-    $d->lastVisited = "reports";
+    $d->lastVisitedUri = "reports";
+    $d->lastVisitedAt = 1710000000;
+    $d->showReportGraph = 1;
     $d->language = "en-US";
     $d->direction = -1;
     $d->update();
 
     $f = MySqlDefaults::getById(1);
-    expect($f->lastVisited)->toBe("reports");
+    expect($f->lastVisitedUri)->toBe("reports");
+    expect($f->lastVisitedAt)->toBe(1710000000);
+    expect($f->showReportGraph)->toBe(1);
     expect($f->language)->toBe("en-US");
     expect($f->direction)->toBe(-1);
 });
