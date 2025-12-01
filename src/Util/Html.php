@@ -106,6 +106,10 @@ final class Html
         </footer>
     <?php
     }
+    /**
+     * Renders the main menu
+     * @return void
+     */
     public static function menu(): void
     {
         $lang = L10n::$lang;
@@ -113,43 +117,30 @@ final class Html
         <aside class="menu">
             <nav>
                 <ul>
-                    <li><a id="ledger_entries" href="ledger_entries.php?lang=<?= $lang ?>"
-                            aria-label="<?= L10n::l("ledger_entries") ?>"><?= L10n::l("ledger_entries") ?></a>
-                    </li>
-                    <li><a id="balance" href="balances.php?lang=<?= $lang ?>"
-                            aria-label="<?= L10n::l("balances") ?>"><?= L10n::l("balances") ?></a>
-                    </li>
-                    <li><a id="accounts" href="accounts.php?lang=<?= $lang ?>"
-                            aria-label="<?= L10n::l("accounts") ?>"><?= L10n::l("accounts") ?></a>
-                    </li>
-                    <li><a id="account_type" href="account_types_list.php?lang=<?= $lang ?>"
-                            aria-label="<?= L10n::l("account_types") ?>"><?= L10n::l("account_types") ?></a>
-                    </li>
-                    <li><a id="entry_type" href="entry_types_list.php?lang=<?= $lang ?>"
-                            aria-label="<?= L10n::l("entry_types") ?>"><?= L10n::l("entry_types") ?></a>
-                    </li>
-                    <li><a id="report_month" href="report_month.php?lang=<?= $lang ?>&year=<?= date("Y") ?>"
-                            aria-label="<?= L10n::l("report_month") ?>"><?= L10n::l("report_month") ?></a>
-                    </li>
-                    <li><a id="report_year" href="report_year.php?lang=<?= $lang ?>&year=<?= date("Y") - 1 ?>"
-                            aria-label="<?= L10n::l("report_year") ?>"><?= L10n::l("report_year") ?></a>
-                    </li>
-                    <?php $userName = $_SESSION['user'] ?? null;
+                    <li><a id="ledger_entries" href="index.php?action=ledger_entries&lang=<?= $lang ?>" aria-label="<?= L10n::l("ledger_entries") ?>"><?= L10n::l("ledger_entries") ?></a></li>
+                    <li><a id="balance" href="index.php?action=balances&lang=<?= $lang ?>" aria-label="<?= L10n::l("balances") ?>"><?= L10n::l("balances") ?></a></li>
+                    <li><a id="accounts" href="index.php?action=accounts&lang=<?= $lang ?>" aria-label="<?= L10n::l("accounts") ?>"><?= L10n::l("accounts") ?></a></li>
+                    <li><a id="account_type" href="index.php?action=account_types&lang=<?= $lang ?>" aria-label="<?= L10n::l("account_types") ?>"><?= L10n::l("account_types") ?></a></li>
+                    <li><a id="entry_type" href="index.php?action=entry_types&lang=<?= $lang ?>" aria-label="<?= L10n::l("entry_types") ?>"><?= L10n::l("entry_types") ?></a></li>
+                    <li><a id="report_month" href="index.php?action=report_month&lang=<?= $lang ?>&year=<?= date("Y") ?>" aria-label="<?= L10n::l("report_month") ?>"><?= L10n::l("report_month") ?></a></li>
+                    <li><a id="report_year" href="index.php?action=report_year&lang=<?= $lang ?>&year=<?= date("Y") - 1 ?>" aria-label="<?= L10n::l("report_year") ?>"><?= L10n::l("report_year") ?></a></li>
+                    <?php
+                    $userName = $_SESSION['user'] ?? null;
                     if ($userName) {
                         $user = ObjectFactory::user()::getByUsername($userName);
                     } else {
                         $user = null;
                     }
                     if ($user && $user->hasRole(User::USER_ROLE_ADM)): ?>
-                        <li><a href="config.php?lang=<?= $lang ?>"><?= L10n::l("configuration") ?></a></li>
+                        <li><a id="config" href="index.php?action=config&lang=<?= $lang ?>"><?= L10n::l("configuration") ?></a></li>
                     <?php endif; ?>
-                    <li><a id="logout" href="index.php?lang=<?= $lang ?>&do_logout=1"
-                            aria-label="<?= L10n::l("logout") ?>"><?= L10n::l("logout") ?></a>
+                    <li><a id="logout" href="index.php?action=login&lang=<?= $lang ?>&do_logout=1" aria-label="<?= L10n::l("logout") ?>"><?= L10n::l("logout") ?></a></li>
                 </ul>
             </nav>
         </aside>
         <?php
     }
+
     public static function languageSelector(bool $div = true): void
     {
         $lang = L10n::$lang;

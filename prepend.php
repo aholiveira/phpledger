@@ -19,6 +19,8 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 use PHPLedger\Application;
 
-const ROOT_DIR = __DIR__;
+if (!defined('ROOT_DIR')) {
+    define('ROOT_DIR', __DIR__);
+}
 
 Application::init();

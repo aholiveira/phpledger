@@ -81,7 +81,7 @@ a {
 
 a:hover {
     text-decoration: underline;
-    background-color: var(--highlight);
+    background-color: var(--bg-secondary);
 }
 
 a:visited {
@@ -117,10 +117,6 @@ table.lista tr:nth-child(odd) {
 table.lista tr:nth-child(even),
 tr.even {
     background-color: var(--highlight);
-}
-
-a:hover {
-    background-color: var(--bg-secondary);
 }
 
 p {
