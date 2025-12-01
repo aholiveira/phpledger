@@ -59,7 +59,7 @@ $report->getReport(["year" => $year]);
             }
         }
     </script>
-    <script type="text/javascript" src="common.js"></script>
+    <script type="text/javascript" src="assets/common.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 
