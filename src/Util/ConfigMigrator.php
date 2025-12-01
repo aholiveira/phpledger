@@ -27,7 +27,7 @@ class ConfigMigrator
         $newConfig['admin'] = self::migrateAdmin($oldConfig);
 
         // URL
-        $newConfig['url'] = $oldConfig['url'] ?? 'http://yourhostname/contas';
+        $newConfig['url'] = $oldConfig['url'] ?? 'https://yourhostname/contas';
 
         // Add version
         $newConfig['version'] = 2;
