@@ -4,6 +4,7 @@ namespace PHPLedger;
 
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
+use PHPLedger\Util\ConfigPath;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\Redirector;
@@ -50,7 +51,8 @@ class Application
     {
         SessionManager::start();
         L10n::init();
-        Config::init(ROOT_DIR . DIRECTORY_SEPARATOR . 'config.json');
+        ConfigPath::ensureMigrated();
+        Config::init(ConfigPath::get());
         new Logger(ROOT_DIR . DIRECTORY_SEPARATOR . "logs" . DIRECTORY_SEPARATOR . "ledger.log");
         $backend = Config::get("storage.type") ??  "mysql";
         ObjectFactory::init($backend);
