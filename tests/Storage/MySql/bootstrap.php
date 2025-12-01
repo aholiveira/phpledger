@@ -18,8 +18,8 @@ use PHPLedger\Util\LogLevel;
 function  checkAndUpdateDatabaseSchema()
 {
     // Initialize config and logger
-    Config::init(ROOT_DIR . '/config.json');
-    new Logger(ROOT_DIR . '/logs/ledger.log', LogLevel::DEBUG);
+    Config::init(ROOT_DIR . DIRECTORY_SEPARATOR . 'config.json');
+    Logger::init(ROOT_DIR . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . 'ledger.log', LogLevel::DEBUG);
     ObjectFactory::init("mysql");
     // Ensure database schema is up-to-date before running any tests
     $storage = ObjectFactory::dataStorage();

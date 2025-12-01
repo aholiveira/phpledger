@@ -31,7 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['do_logout'])) {
     SessionManager::start();
     $defaults = ObjectFactory::defaults()::getByUsername($_SESSION['user']);
     if ($defaults !== null) {
-        $defaults->lastVisited = "";
+        $defaults->lastVisitedUri = "";
+        $defaults->lastVisitedAt = time();
         $defaults->update();
     }
     SessionManager::logout();
@@ -59,8 +60,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $defaults->entryDate = date("Y-m-d");
             $defaults->language = L10n::$lang;
             Logger::instance()->info("User [$postUser] logged in");
+            if ($defaults->lastVisitedAt < time() - 3600 * 24) {
+                $defaults->lastVisitedUri = "";
+            }
             $target = $defaults !== null ?
-                $defaults->lastVisited :
+                $defaults->lastVisitedUri :
                 sprintf(
                     "ledger_entries.php?lang=%s&filter_sdate=%s",
                     L10n::$lang,
