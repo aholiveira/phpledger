@@ -1,0 +1,25 @@
+{
+    "version": 2,
+    "title": "Gestao financeira",
+    "storage": {
+        "type": "mysql",
+        "settings": {
+            "host": "localhost",
+            "database": "contas",
+            "user": "your-username",
+            "password": "your-password",
+            "port": "3306",
+            "ssl": false
+        }
+    },
+    "smtp": {
+        "host": "localhost",
+        "port": "25",
+        "from": "youremailhere@example.com"
+    },
+    "admin": {
+        "username": "admin",
+        "password": "admin"
+    },
+    "url": "http://yourhostname/contas"
+}

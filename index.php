@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body onload="document.getElementById('username').focus();">
     <div id="login">
-        <h1><?= htmlspecialchars(config::get("title")) ?></h1>
+        <h1><?= htmlspecialchars(Config::get("title")) ?></h1>
         <form method="POST" action="?lang=<?= l10n::$lang ?>" name="login" autocomplete="off">
             <input name="lang" value="<?= l10n::$lang ?>" type="hidden" />
             <?= CSRF::inputField() ?>

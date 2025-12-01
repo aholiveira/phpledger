@@ -7,22 +7,25 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 namespace PHPLedger\Util;
+
+use COM;
 use PHPLedger\Util\Config;
+
 class Email
 {
     public static function sendEmail($from, $to, $subject, $body, $test = false): bool
     {
-        !empty(config::get("smtp")) ? ini_set("smtp", config::get("smtp")) : "";
-        !empty(config::get("smtp_port")) ? ini_set("smtp_port", config::get("smtp_port")) : "";
-        !empty(config::get("from")) ? ini_set("sendmail_from", config::get("from")) : "";
-        !empty(config::get("smtp_port")) ? ini_set("smtp_port", config::get("smtp_port")) : "";
+        !empty(Config::get("smtp.host")) ? ini_set("smtp", Config::get("smtp.host")) : "";
+        !empty(Config::get("smtp.port")) ? ini_set("smtp_port", Config::get("smtp.port")) : "";
+        !empty(Config::get("smtp.from")) ? ini_set("sendmail_from", Config::get("smtp.from")) : "";
         !empty($from) ? ini_set("sendmail_from", $from) : "";
         if (empty($from) || empty($to) || empty($subject) || empty($body)) {
             return false;
         }
         $from = ini_get("sendmail_from");
-        $title = config::get("title");
+        $title = Config::get("title");
         $headers["From"] = "\"{$title}\" <{$from}>";
         $headers["User-Agent"] = "PHP";
         $headers["Return-Path"] = $from;

@@ -6,12 +6,13 @@ use PHPLedger\Contracts\DataObjectInterface;
 use PHPLedger\Storage\Abstract\AbstractDataObject;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\Email;
+use PHPLedger\Util\Logger;
 
-const USER_ROLE_ADM = 255;
-const USER_ROLE_RW = 192;
-const USER_ROLE_RO = 128;
 abstract class User extends AbstractDataObject implements DataObjectInterface
 {
+    public const USER_ROLE_ADM = 255;
+    public const USER_ROLE_RW = 192;
+    public const USER_ROLE_RO = 128;
     protected string $userName;
     protected string $password;
     protected string $email = '';
@@ -138,10 +139,17 @@ abstract class User extends AbstractDataObject implements DataObjectInterface
             $message .= "\r\n";
             $message .= "Cumprimentos,\r\n";
             $message .= "$title\r\n";
-            $retval = Email::sendEmail(config::get("from"), $this->getEmail(), "Reposicao de palavra-passe", $message);
+            $retval = Email::sendEmail(Config::get("from"), $this->getEmail(), "Reposicao de palavra-passe", $message);
         }
         return $retval;
     }
+    public function hasRole(int $role): bool
+    {
+        Logger::instance()->debug("Checking if user role {$this->role} >= required role $role");
+        Logger::instance()->dump($this);
+        return $this->role === $role;
+    }
+
     abstract public static function getByUsername(string $username): ?User;
 
     abstract public static function getByToken(string $token): ?user;
