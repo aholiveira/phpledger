@@ -132,25 +132,25 @@ it('throws when saving without a file', function () {
 
 it('throws when saving to a non-writable location', function () {
     $dir = sys_get_temp_dir() . '/non_writable_dir_' . uniqid();
-    mkdir($dir, 0555);
+    mkdir($dir, 0550);
     $file = $dir . '/config.json';
     Config::init($file);
     Config::set('title', 'x');
     Config::set('storage.type', 'file');
     Config::save();
-    chmod($dir, 0755);
+    chmod($dir, 0750);
     rmdir($dir);
 })->throws(Exception::class);
 
 it('throws when saving to a non-writable file', function () {
     $file = tempnam(sys_get_temp_dir(), 'cfg');
     file_put_contents($file, json_encode(['title' => 'x', 'storage' => ['type' => 'file']]));
-    chmod($file, 0444);
+    chmod($file, 0440);
     Config::init($file);
     Config::set('title', 'y');
     Config::set('storage.type', 'file');
     Config::save();
-    chmod($file, 0644);
+    chmod($file, 0640);
     unlink($file);
 })->throws(Exception::class);
 
