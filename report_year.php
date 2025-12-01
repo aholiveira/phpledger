@@ -52,7 +52,7 @@ $report->getReport(["first_year" => $first_year, "last_year" => $last_year]);
             updateRowColors("report");
         }
     </script>
-    <script type="text/javascript" src="common.js"></script>
+    <script type="text/javascript" src="assets/common.js"></script>
 </head>
 
 <body>
