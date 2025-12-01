@@ -90,7 +90,7 @@ it('renders menu html with language links', function () {
     Html::menu();
     $output = ob_get_clean();
     expect(str_contains($output, '<aside class="menu">'))->toBeTrue();
-    expect(str_contains($output, "?lang=" . L10n::$lang))->toBeTrue();
+    expect(str_contains($output, "&lang=" . L10n::$lang))->toBeTrue();
 });
 
 it('renders language selector in div', function () {
