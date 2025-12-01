@@ -34,12 +34,12 @@ class CurrencyView extends ObjectViewer
         $retval .= "<td style=\"text-align: right\">" . NumberUtil::normalize($object->exchangeRate) . "</td>";
         return $retval;
     }
-    public function printObjectList(array $object_list): string
+    public function printObjectList(array $objectList): string
     {
         $retval = "<table class=\"lista currency\">\n";
         $retval .= "<thead><tr><th>ID</th><th>C&oacute;digo</th><th>Nome</th><th>C&acirc;mbio</th></tr></thead>\r\n";
         $retval .= "<tbody>\r\n";
-        foreach ($object_list as $object) {
+        foreach ($objectList as $object) {
             if ($object instanceof currency) {
                 $view = new currencyView($object);
                 $retval .= "<tr>" . $view->printObject() . "</tr>\r\n";
@@ -74,7 +74,7 @@ class CurrencyView extends ObjectViewer
         $retval .= "</tr>\r\n";
         return $retval;
     }
-    public function getSelectFromList(array $object_list, ?string $selected = null): string
+    public function getSelectFromList(array $objectList, ?string $selected = null): string
     {
         $retval = "";
         /**
@@ -84,7 +84,7 @@ class CurrencyView extends ObjectViewer
         if (null === $selected) {
             $selected = $object->id;
         }
-        foreach ($object_list as $object) {
+        foreach ($objectList as $object) {
             if (($object instanceof currency)) {
                 $retval .= "<option value=\"{$object->id}\"" . ($selected == $object->id ? " selected " : "") . ">{$object->code} - {$object->description}</option>\r\n";
             }

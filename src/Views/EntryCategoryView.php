@@ -36,13 +36,13 @@ class EntryCategoryView extends ObjectViewer
         $retval .= "<td class='active checkbox' data-label='Activa'><input title=\"S&oacute; pode alterar o estado em modo de edi&ccedil;&atilde;o\" type=\"checkbox\" onclick=\"return false;\" name=active{$object->id} " . ($object->active ? "checked" : "") . "></td>\r\n";
         return $retval;
     }
-    public function printObjectList(array $object_list): string
+    public function printObjectList(array $objectList): string
     {
         $retval = "<table class=\"lista entry_category\">\r\n";
         $retval .= "<thead><tr><th>ID</th><th>Categoria</th><th>Descri&ccedil;&atilde;o</th><th>Valor</th><th>Activa</th></tr></thead>\r\n";
         $retval .= "<tbody>\r\n";
         $view = new entryCategoryView(ObjectFactory::entryCategory());
-        foreach ($object_list as $object) {
+        foreach ($objectList as $object) {
             if ($object instanceof EntryCategory) {
                 if ($object->parentId === 0) {
                     $view->setObject($object);

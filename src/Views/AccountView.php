@@ -83,12 +83,12 @@ class AccountView extends ObjectViewer
         $retval .= "<td><input class=\"submit\" type=\"submit\" name=\"update\" value=Gravar></td>";
         return $retval;
     }
-    public function printObjectList(array $object_list): string
+    public function printObjectList(array $objectList): string
     {
         $retval = "<table class=\"lista contas account\">\r\n";
         $retval .= "<thead><tr><th>ID<th>Nome<th>Numero<th>Tipo<th>NIB<th>Abertura<th>Fecho<th>Activa<th>Apagar</tr></thead>";
         $retval .= "<tbody>\r\n";
-        foreach ($object_list as $object) {
+        foreach ($objectList as $object) {
             if ($object instanceof account) {
                 $view = new accountView($object);
                 $retval .= "<tr>" . $view->printObject() . "</tr>\r\n";
@@ -98,7 +98,7 @@ class AccountView extends ObjectViewer
         $retval .= "</table>\r\n";
         return $retval;
     }
-    public function getSelectFromList(array $object_list, ?int $selected = null): string
+    public function getSelectFromList(array $objectList, ?int $selected = null): string
     {
         $retval = "";
         /**
@@ -108,7 +108,7 @@ class AccountView extends ObjectViewer
         if (null === $selected) {
             $selected = $object->id;
         }
-        foreach ($object_list as $object) {
+        foreach ($objectList as $object) {
             if (($object instanceof account)) {
                 $retval .= "<option value=\"{$object->id}\"" . ($selected == $object->id ? " selected " : "") . ">{$object->name}</option>\r\n";
             }

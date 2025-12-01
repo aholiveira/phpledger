@@ -15,7 +15,7 @@ class ConfigMigrator
         $newConfig = [];
 
         // Update title
-        $newConfig['title'] = 'Gestao financeira';
+        $newConfig['title'] = $oldConfig['title'] ?? 'Gestão financeira';
 
         // Migrate backend to storage
         $newConfig['storage'] = self::migrateMySQL($oldConfig);
@@ -44,7 +44,7 @@ class ConfigMigrator
                 'database' => $oldConfig['database'] ?? 'contas',
                 'user' => $oldConfig['user'] ?? 'your-username',
                 'password' => $oldConfig['password'] ?? 'your-password',
-                'port' => $oldConfig['port'] ?? '3306',
+                'port' => $oldConfig['port'] ?? 3306,
                 'ssl' => false,
             ]
         ];
@@ -58,7 +58,7 @@ class ConfigMigrator
         }
         $newConfig = [
             'host' => $oldConfig['smtp'] ?? 'localhost',
-            'port' => $oldConfig['smtp_port'] ?? '25',
+            'port' => $oldConfig['smtp_port'] ?? 25,
             'from' => $oldConfig['from'] ?? 'youremailhere@example.com'
         ];
         return $newConfig;

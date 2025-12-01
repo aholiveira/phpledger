@@ -30,11 +30,14 @@ final class Config
                 return false;
             }
             $data = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
+            $originalData = $data ?? [];
             if ($data === null || !is_array($data)) {
+                Logger::instance()->debug("Error on JSON");
                 return false;
             }
             $hasVersion = is_numeric($data['version'] ?? null);
             if (!$test && !$hasVersion) {
+                Logger::instance()->debug("No version detected. Going to migrate config");
                 $data = ConfigMigrator::migrate($data);
             } elseif (!$hasVersion) {
                 return false;
@@ -42,8 +45,10 @@ final class Config
             if (!$test && !self::validate($data)) {
                 return false;
             }
+            $configChanged = ($data !== $originalData);
             self::$configData = $data;
-            if (!$test) {
+            if (!$test && $configChanged) {
+                Logger::instance()->debug("Config has changed");
                 self::save();
             }
             return true;
@@ -83,6 +88,7 @@ final class Config
     {
         $parts = self::resolvePath($key);
         $ref = &self::$configData;
+        $original = self::$configData; // store original for comparison
         foreach ($parts as $i => $p) {
             $last = $i === array_key_last($parts);
 
@@ -95,7 +101,7 @@ final class Config
                 $ref = &$ref[$p];
             }
         }
-        if ($save) {
+        if ($save && self::$configData !== $original) {
             self::save();
         }
     }
@@ -149,13 +155,13 @@ final class Config
         Logger::instance()->debug("Saving configuration to temporary file: $tempFile");
         Logger::instance()->dump($json);
         if (file_put_contents($tempFile, $json, LOCK_EX) === false) {
-            #@unlink($tempFile);
+            @unlink($tempFile);
             Logger::instance()->error("Unable to write configuration file: " . $tempFile);
             throw new Exception("Unable to save configuration file");
         }
         Logger::instance()->debug("Replacing configuration file: " . self::$file);
         if (!rename($tempFile, self::$file)) {
-            #@unlink($tempFile);
+            @unlink($tempFile);
             Logger::instance()->error("Unable to replace configuration file: " . self::$file);
             throw new Exception("Unable to replace configuration file");
         }

@@ -33,16 +33,16 @@ class LedgerEntryView extends ObjectViewer
         $retval .= "<td data-label='Obs'>{$this->object->remarks}</td>\n";
         return $retval;
     }
-    public function printObjectList(array $object_list): string
+    public function printObjectList(array $objectList): string
     {
         $retval = "<table class=\"lista ledger_entry\">\r\n";
         $retval .= "<thead><tr><th>ID</th><th>Data</th><th>Categoria</th><th>Moeda</th><th>Conta</th><th>D/C</th><th>Valor</th><th>Obs</th><th>Saldo</th></tr></thead>\r\n";
-        $object = $object_list[array_key_first($object_list)];
+        $object = $objectList[array_key_first($objectList)];
         if ($object instanceof ledgerentry) {
             $saldo = $object->getBalanceBeforeDate($object->entryDate);
         }
         $retval .= "<tbody>\r\n";
-        foreach ($object_list as $object) {
+        foreach ($objectList as $object) {
             if ($object instanceof ledgerentry) {
                 $saldo += $object->euroAmount;
                 if ($object->id == $this->object->id) {
