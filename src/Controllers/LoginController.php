@@ -32,11 +32,13 @@ final class LoginController
 
     private function logout(): void
     {
-        $defaults = ObjectFactory::defaults()::getByUsername($_SESSION['user']);
-        if ($defaults !== null) {
-            $defaults->lastVisitedUri = '';
-            $defaults->lastVisitedAt = time();
-            $defaults->update();
+        if (!empty($_SESSION['user'])) {
+            $defaults = ObjectFactory::defaults()::getByUsername($_SESSION['user']);
+            if ($defaults !== null) {
+                $defaults->lastVisitedUri = '';
+                $defaults->lastVisitedAt = time();
+                $defaults->update();
+            }
         }
         SessionManager::logout();
         Redirector::to('index.php');
