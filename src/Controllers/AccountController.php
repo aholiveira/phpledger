@@ -41,7 +41,7 @@ final class AccountController
         $view = new AccountFormView();
         $view->render([
             'account' => $account,
-            'lang' => $_GET['lang'] ?? L10n::$lang,
+            'lang' => L10n::sanitizeLang($_GET['lang'] ?? null),
             'errors' => []
         ]);
     }
@@ -103,7 +103,7 @@ final class AccountController
         $view = new AccountFormView();
         $view->render([
             'account' => $a,
-            'lang' => $_POST['lang'] ?? L10n::$lang,
+            'lang' => L10n::sanitizeLang($_POST['lang'] ?? null),
             'errors' => $errors
         ]);
     }

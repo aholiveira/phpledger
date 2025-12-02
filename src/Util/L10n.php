@@ -102,7 +102,11 @@ class L10n
         self::$cache[$lang] = $arr;
         return $arr;
     }
-
+    public static function sanitizeLang(?string $lang): string
+    {
+        $allowed = ['en', 'pt', 'pt-pt', 'en-us'];
+        return in_array(strtolower($lang), $allowed, true) ? $lang : L10n::$lang;
+    }
     private static function normalizeLang(string $lang): string
     {
         return strtolower(str_replace('_', '-', trim($lang)));
