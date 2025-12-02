@@ -28,7 +28,7 @@ class AccountBalanceView extends ObjectViewer
             . "<td>{$object->name}</td>";
     }
 
-    public function printObjectList(array $object_list): string
+    public function printObjectList(array $objectList): string
     {
         $retval = "<table class=\"lista saldos\">\r\n";
         $retval .= "<thead><tr>"
@@ -45,7 +45,7 @@ class AccountBalanceView extends ObjectViewer
         $totals = array_fill_keys($type_names, 0);
         $balances = [];
 
-        foreach ($object_list as $object) {
+        foreach ($objectList as $object) {
             if ($object instanceof account) {
                 $balances[$object->id] = $object->getBalanceOnDate(new \DateTime());
                 foreach ($type_names as $type_name) {
@@ -54,7 +54,7 @@ class AccountBalanceView extends ObjectViewer
             }
         }
 
-        foreach ($object_list as $object) {
+        foreach ($objectList as $object) {
             if ($object instanceof account) {
                 $balance = $balances[$object->id];
                 $retval .= "<tr>";

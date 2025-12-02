@@ -30,12 +30,12 @@ class AccountTypeView extends ObjectViewer
         $retval .= "<td data-label='Savings?' class=\"checkbox\"><input type=\"checkbox\" onclick=\"return false;\" name=savings{$object->id} " . ($object->savings ? "checked" : "") . "></td>\n";
         return $retval;
     }
-    public function printObjectList(array $object_list): string
+    public function printObjectList(array $objectList): string
     {
         $retval = "<table class=\"lista account_type\">\r\n";
         $retval .= "<thead><tr><th>ID</th><th>Descri&ccedil;&atilde;o</th><th>Savings?</th></tr></thead>\r\n";
         $retval .= "<tbody>\r\n";
-        foreach ($object_list as $object) {
+        foreach ($objectList as $object) {
             if ($object instanceof accounttype) {
                 $view = new accountTypeView($object);
                 $retval .= "<tr>" . $view->printObject() . "</tr>\r\n";
@@ -45,7 +45,7 @@ class AccountTypeView extends ObjectViewer
         $retval .= "</table>\r\n";
         return $retval;
     }
-    public function getSelectFromList(array $object_list, ?int $selected = null): string
+    public function getSelectFromList(array $objectList, ?int $selected = null): string
     {
         $retval = "";
         /**
@@ -55,7 +55,7 @@ class AccountTypeView extends ObjectViewer
         if (null === $selected) {
             $selected = $object->id;
         }
-        foreach ($object_list as $object) {
+        foreach ($objectList as $object) {
             if (($object instanceof accounttype)) {
                 $retval .= "<option value=\"{$object->id}\"" . ($selected == $object->id ? " selected " : "") . ">{$object->description}</option>\r\n";
             }

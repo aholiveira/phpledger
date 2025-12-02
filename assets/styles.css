@@ -588,12 +588,10 @@ tr.expense {
 /* Config page layout */
 .main.config form {
     display: grid;
-    grid-template-columns: 20em 30em;
+    grid-template-columns: max-content;
     background: var(--bg-secondary);
-    padding: 1.5em;
     border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    max-width: 900px;
+    max-width: max-content;
     margin: 0;
     gap: 0.3em;
 }
@@ -607,7 +605,6 @@ tr.expense {
     text-align: right;
     padding-right: 0.5em;
     white-space: nowrap;
-    align-self: left;
     grid-column: 1 / 1;
 }
 
@@ -615,6 +612,8 @@ tr.expense {
 .main.config form select {
     box-sizing: border-box;
     grid-column: 2 / 2;
+    text-align: left;
+    justify-self: start;
 }
 
 .main.config form h3 {
@@ -625,6 +624,11 @@ tr.expense {
     border-bottom: 1px solid #ddd;
     padding-bottom: 4px;
     font-size: 1.05em;
+}
+
+.main.config form button,
+.main.config form select {
+    width: min-content;
 }
 
 .settings {

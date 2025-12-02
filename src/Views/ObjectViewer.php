@@ -26,5 +26,5 @@ abstract class ObjectViewer
         $this->object = $object;
     }
     abstract public function printObject(): string;
-    abstract public function printObjectList(array $object_list): string;
+    abstract public function printObjectList(array $objectList): string;
 }
