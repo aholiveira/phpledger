@@ -2,10 +2,11 @@
 
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\LogLevel;
+use PHPLedger\Util\Path;
 
 beforeEach(function () {
-    $this->logDir = __DIR__ . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'logs';
-    $this->logFile = $this->logDir . DIRECTORY_SEPARATOR . 'test.log';
+    $this->logDir = Path::combine(__DIR__, 'tests', 'tmp', 'logs');
+    $this->logFile = Path::combine($this->logDir, 'test.log');
 
     if (is_dir($this->logDir)) {
         array_map('unlink', glob($this->logDir . DIRECTORY_SEPARATOR . '*'));
@@ -15,7 +16,7 @@ beforeEach(function () {
 });
 
 afterAll(function () {
-    $testDir = __DIR__ . DIRECTORY_SEPARATOR . 'tests';
+    $testDir = Path::combine(__DIR__, 'tests');
     if (is_dir($testDir)) {
         // Recursively remove directory and all its contents
         removeDirectoryRecursively($testDir);
