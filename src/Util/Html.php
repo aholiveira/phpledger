@@ -11,6 +11,7 @@
 namespace PHPLedger\Util;
 
 use PHPLedger\Domain\User;
+use PHPLedger\Routing\Router;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\L10n;
@@ -88,17 +89,27 @@ final class Html
     public static function footer(): void
     {
         $expires = date("Y-m-d H:i:s", $_SESSION['expires'] ?? time());
+        $lang = L10n::$lang;
+        $currentAction = $_GET['action'] ?? 'login';
+
+        $enLink = self::buildSafeLink($currentAction, ['lang' => 'en-us']);
+        $ptLink = self::buildSafeLink($currentAction, ['lang' => 'pt-pt']);
     ?>
         <footer>
             <div class='footer'>
-                <span class='RCS'><a href="https://github.com/aholiveira/phpledger"
-                        aria-label="<?= L10n::l("version", Version::string()) ?>"><?= L10n::l("version", Version::string()) ?></a></span>
-                <span class='RCS' style="display: flex; align-items: center"><?= L10n::l("session_expires", $expires) ?>
+                <span class='RCS'>
+                    <a href="https://github.com/aholiveira/phpledger"
+                        aria-label="<?= L10n::l("version", Version::string()) ?>">
+                        <?= L10n::l("version", Version::string()) ?>
+                    </a>
+                </span>
+                <span class='RCS' style="display: flex; align-items: center">
+                    <?= L10n::l("session_expires", $expires) ?>
                     <span style="margin-left: auto; display: flex;">
-                        <?php if (L10n::$lang === 'pt-pt'): ?>
-                            <a href="?lang=en-us">EN</a> | <span>PT</span>
+                        <?php if ($lang === 'pt-pt'): ?>
+                            <a href="<?= $enLink ?>">EN</a> | <span>PT</span>
                         <?php else: ?>
-                            <span>EN</span> | <a href="?lang=pt-pt">PT</a>
+                            <span>EN</span> | <a href="<?= $ptLink ?>">PT</a>
                         <?php endif; ?>
                     </span>
                 </span>
@@ -106,6 +117,7 @@ final class Html
         </footer>
     <?php
     }
+
     /**
      * Renders the main menu
      * @return void
@@ -113,51 +125,66 @@ final class Html
     public static function menu(): void
     {
         $lang = L10n::$lang;
+        $userName = $_SESSION['user'] ?? null;
+        $user = $userName ? ObjectFactory::user()::getByUsername($userName) : null;
+        $links = [
+            'ledger_entries' => L10n::l("ledger_entries"),
+            'balances'       => L10n::l("balances"),
+            'accounts'       => L10n::l("accounts"),
+            'account_types'  => L10n::l("account_types"),
+            'entry_types'    => L10n::l("entry_types"),
+            'report_month'   => L10n::l("report_month"),
+            'report_year'    => L10n::l("report_year")
+        ];
+        if ($user && $user->hasRole(User::USER_ROLE_ADM)) {
+            $links['config'] = L10n::l("configuration");
+        }
+        $links['logout'] = L10n::l("logout");
     ?>
         <aside class="menu">
             <nav>
                 <ul>
-                    <li><a id="ledger_entries" href="index.php?action=ledger_entries&lang=<?= $lang ?>" aria-label="<?= L10n::l("ledger_entries") ?>"><?= L10n::l("ledger_entries") ?></a></li>
-                    <li><a id="balance" href="index.php?action=balances&lang=<?= $lang ?>" aria-label="<?= L10n::l("balances") ?>"><?= L10n::l("balances") ?></a></li>
-                    <li><a id="accounts" href="index.php?action=accounts&lang=<?= $lang ?>" aria-label="<?= L10n::l("accounts") ?>"><?= L10n::l("accounts") ?></a></li>
-                    <li><a id="account_type" href="index.php?action=account_types&lang=<?= $lang ?>" aria-label="<?= L10n::l("account_types") ?>"><?= L10n::l("account_types") ?></a></li>
-                    <li><a id="entry_type" href="index.php?action=entry_types&lang=<?= $lang ?>" aria-label="<?= L10n::l("entry_types") ?>"><?= L10n::l("entry_types") ?></a></li>
-                    <li><a id="report_month" href="index.php?action=report_month&lang=<?= $lang ?>&year=<?= date("Y") ?>" aria-label="<?= L10n::l("report_month") ?>"><?= L10n::l("report_month") ?></a></li>
-                    <li><a id="report_year" href="index.php?action=report_year&lang=<?= $lang ?>&year=<?= date("Y") - 1 ?>" aria-label="<?= L10n::l("report_year") ?>"><?= L10n::l("report_year") ?></a></li>
-                    <?php
-                    $userName = $_SESSION['user'] ?? null;
-                    if ($userName) {
-                        $user = ObjectFactory::user()::getByUsername($userName);
-                    } else {
-                        $user = null;
-                    }
-                    if ($user && $user->hasRole(User::USER_ROLE_ADM)): ?>
-                        <li><a id="config" href="index.php?action=config&lang=<?= $lang ?>"><?= L10n::l("configuration") ?></a></li>
-                    <?php endif; ?>
-                    <li><a id="logout" href="index.php?action=login&lang=<?= $lang ?>&do_logout=1" aria-label="<?= L10n::l("logout") ?>"><?= L10n::l("logout") ?></a></li>
+                    <?php foreach ($links as $action => $label):
+                        $link = self::buildSafeLink($action, ['lang' => $lang]);
+                    ?>
+                        <li><a id="<?= $action ?>" href="<?= $link ?>" aria-label="<?= htmlspecialchars($label) ?>"><?= htmlspecialchars($label) ?></a></li>
+                    <?php endforeach; ?>
                 </ul>
             </nav>
         </aside>
-        <?php
+<?php
     }
 
     public static function languageSelector(bool $div = true): void
     {
         $lang = L10n::$lang;
+        $currentAction = $_GET['action'] ?? 'login';
+        $otherLang = $lang === 'pt-pt' ? 'en-us' : 'pt-pt';
+        $link = self::buildSafeLink($currentAction, ['lang' => $otherLang]);
+
         if ($div) {
-        ?>
-            <div>
-            <?php
+            echo '<div>';
         }
-        if ($lang === 'pt-pt'): ?>
-                <a href="?lang=en-us">EN</a> | <span>PT</span>
-            <?php else: ?>
-                <span>EN</span> | <a href="?lang=pt-pt">PT</a>
-            <?php endif;
+
+        if ($lang === 'pt-pt') {
+            echo "<a href=\"$link\">EN</a> | <span>PT</span>";
+        } else {
+            echo "<span>EN</span> | <a href=\"$link\">PT</a>";
+        }
+
         if ($div) {
-            ?>
-            </div>
-<?php
+            echo '</div>';
         }
+    }
+
+    private static function buildSafeLink(string $action, array $extraParams = []): string
+    {
+        $allowed = Router::getAllowedActions();
+        if (!in_array($action, $allowed, true)) {
+            $action = 'login';
+        }
+
+        $params = array_merge(['action' => $action, 'lang' => L10n::$lang], $extraParams);
+        return 'index.php?' . http_build_query($params);
     }
 }

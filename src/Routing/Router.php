@@ -12,18 +12,18 @@ final class Router
 {
     private array $legacyPages = [
         'ledger_entries' => 'ledger_entries.php',
-        'balances'      => 'balances.php',
-        'entry_types'   => 'entry_types_list.php',
-        'report_month'  => 'report_month.php',
-        'report_year'   => 'report_year.php'
+        'balances'       => 'balances.php',
+        'entry_types'    => 'entry_types_list.php',
+        'report_month'   => 'report_month.php',
+        'report_year'    => 'report_year.php'
     ];
 
     private array $migratedActions = [
-        'login'  => LoginController::class,
-        'config' => ConfigController::class,
+        'login'         => LoginController::class,
+        'config'        => ConfigController::class,
         'account_types' => AccountTypeListController::class,
-        'accounts' => AccountsController::class,
-        'account'  => AccountController::class,
+        'accounts'      => AccountsController::class,
+        'account'       => AccountController::class,
     ];
 
     /**
@@ -32,6 +32,7 @@ final class Router
      * @return void
      * @throws \Exception
      */
+
     public function handleRequest(string $action): void
     {
         if (isset($this->migratedActions[$action])) {
@@ -49,8 +50,16 @@ final class Router
             }
         }
 
-        // fallback to login page
         header('Location: index.php?action=login');
         exit;
+    }
+
+    /** Returns a whitelist of all valid actions */
+    public static function getAllowedActions(): array
+    {
+        return array_merge(
+            array_keys((new self())->legacyPages),
+            array_keys((new self())->migratedActions)
+        );
     }
 }
