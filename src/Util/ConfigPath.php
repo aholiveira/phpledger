@@ -12,7 +12,7 @@ class ConfigPath
     public static function ensureMigrated(): void
     {
         $new = self::get();
-        $old = ROOT_DIR . '/config.json';
+        $old = Path::combine(ROOT_DIR, 'config.json');
 
         // If new file exists, do nothing
         if (file_exists($new)) {

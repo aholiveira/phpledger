@@ -86,10 +86,10 @@ class L10n
             return self::$cache[$lang];
         }
 
-        $file = ROOT_DIR . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . $lang . '.json';
+        $file = Path::combine(ROOT_DIR, 'lang', $lang . '.json');
         if (!file_exists($file)) {
             $lang = 'pt-pt';
-            $file = ROOT_DIR . DIRECTORY_SEPARATOR . 'lang' . DIRECTORY_SEPARATOR . $lang . '.json';
+            $file = Path::combine(ROOT_DIR, 'lang', $lang . '.json');
         }
 
         if (!file_exists($file)) {
@@ -105,7 +105,7 @@ class L10n
     public static function sanitizeLang(?string $lang): string
     {
         $allowed = ['en', 'pt', 'pt-pt', 'en-us'];
-        return in_array(strtolower($lang), $allowed, true) ? $lang : L10n::$lang;
+        return in_array(strtolower($lang ?? ''), $allowed, true) ? $lang : L10n::$lang;
     }
     private static function normalizeLang(string $lang): string
     {

@@ -8,6 +8,7 @@ use PHPLedger\Util\ConfigPath;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\LogLevel;
+use PHPLedger\Util\Path;
 use PHPLedger\Util\Redirector;
 use PHPLedger\Util\SessionManager;
 
@@ -54,7 +55,7 @@ class Application
         L10n::init();
         ConfigPath::ensureMigrated();
         Config::init(ConfigPath::get());
-        Logger::init(ROOT_DIR . DIRECTORY_SEPARATOR . "logs" . DIRECTORY_SEPARATOR . "ledger.log", LogLevel::INFO);
+        Logger::init(Path::combine(ROOT_DIR, "logs", "ledger.log"), LogLevel::INFO);
         $backend = Config::get("storage.type") ??  "mysql";
         ObjectFactory::init($backend);
     }

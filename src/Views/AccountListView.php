@@ -47,6 +47,7 @@ final class AccountListView
                                 <th><?= L10n::l("number") ?></th>
                                 <th><?= L10n::l("type") ?></th>
                                 <th><?= L10n::l("iban") ?></th>
+                                <th><?= L10n::l("swift") ?></th>
                                 <th><?= L10n::l("open") ?></th>
                                 <th><?= L10n::l("close") ?></th>
                                 <th><?= L10n::l("active") ?></th>
@@ -73,6 +74,7 @@ final class AccountListView
                                         ?>
                                     </td>
                                     <td data-label="<?= L10n::l("iban") ?>"><?= htmlspecialchars($obj->iban ?? '') ?></td>
+                                    <td data-label="<?= L10n::l("swift") ?>"><?= htmlspecialchars($obj->swift ?? '') ?></td>
                                     <td data-label="<?= L10n::l("open") ?>"><?= htmlspecialchars($obj->openDate ?? '') ?></td>
                                     <td data-label="<?= L10n::l("close") ?>"><?= htmlspecialchars($obj->closeDate ?? '') ?></td>
                                     <td data-label="<?= L10n::l("active") ?>"><?= !empty($obj->activa) ? L10n::l("yes") : L10n::l("no") ?></td>
