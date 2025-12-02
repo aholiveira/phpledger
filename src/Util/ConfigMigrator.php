@@ -37,7 +37,7 @@ class ConfigMigrator
     }
     private static function migrateMySQL(array $oldConfig): array
     {
-        $newConfig = [
+        return [
             'type' => $oldConfig['backend'] ?? 'mysql',
             'settings' => [
                 'host' => $oldConfig['host'] ?? 'localhost',
@@ -48,7 +48,6 @@ class ConfigMigrator
                 'ssl' => false,
             ]
         ];
-        return $newConfig;
     }
 
     private static function migrateMail(array $oldConfig): array
@@ -56,19 +55,17 @@ class ConfigMigrator
         if (isset($oldConfig['smtp']) && is_array($oldConfig['smtp'])) {
             return ['smtp' => $oldConfig['smtp']];
         }
-        $newConfig = [
+        return [
             'host' => $oldConfig['smtp'] ?? 'localhost',
             'port' => $oldConfig['smtp_port'] ?? 25,
             'from' => $oldConfig['from'] ?? 'youremailhere@example.com'
         ];
-        return $newConfig;
     }
     private static function migrateAdmin(array $oldConfig): array
     {
-        $newConfig = [
+        return [
             'username' => $oldConfig['admin_username'] ?? 'admin',
             'password' => $oldConfig['admin_password'] ?? 'admin'
         ];
-        return $newConfig;
     }
 }

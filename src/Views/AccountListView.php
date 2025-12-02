@@ -18,7 +18,7 @@ final class AccountListView
     public function render(array $data): void
     {
         $list = $data['list'] ?? [];
-        $lang = $data['lang'] ?? L10n::$lang;
+        $lang = htmlspecialchars($data['lang'] ?? L10n::$lang);
         $pagetitle = L10n::l('account_types');
         $cacheTypeId = [];
 ?>
