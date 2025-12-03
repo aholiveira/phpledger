@@ -6,6 +6,8 @@ final class Path
 {
     public static function combine(?string ...$parts): string
     {
-        return preg_replace('#/+#', '/', join(DIRECTORY_SEPARATOR, array_map(fn($p) => trim($p, '/\\'), $parts)));
+        $first = array_shift($parts);
+        $path  = $first . '/' . join('/', array_map(fn($p) => trim($p, "/\\"), $parts));
+        return preg_replace('#(?<!^)/+#', '/', $path);
     }
 }

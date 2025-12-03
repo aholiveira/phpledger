@@ -10,7 +10,6 @@ final class Config
     protected static string $validationMessage;
     private static string $file = '';
 
-    private function __construct() {}
     /**
      * Initializes the configuration by loading it from the specified file.
      * @param string $configfile The path to the configuration file.
