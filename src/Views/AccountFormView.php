@@ -20,14 +20,17 @@ final class AccountFormView
         <!DOCTYPE html>
         <html lang="<?= L10n::html(); ?>">
 
-        <head><?php Html::header($pagetitle); ?></head>
+        <head>
+            <title><?= Html::title($pagetitle) ?></title>
+            <?= Html::header() ?>
+        </head>
 
         <body>
             <div class="maingrid">
                 <?php Html::menu(); ?>
                 <div class="header">
                     <p style="margin:0">
-                        <a href="index.php?action=accounts&lang=<?= htmlspecialchars($lang) ?>"><?= L10n::l('Back to list') ?></a>
+                        <a href="index.php?action=accounts&lang=<?= htmlspecialchars($lang) ?>"><?php L10n::pl('Back to list'); ?></a>
                     </p>
                 </div>
                 <main>

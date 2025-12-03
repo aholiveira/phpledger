@@ -50,7 +50,7 @@ final class Html
         }
         return $retval;
     }
-    public static function errortext(string $message, $exit = true): void
+    public static function errortext(string $message, bool $exit = true): void
     {
 ?>
         <p><?= htmlspecialchars($message) ?></p>
@@ -71,12 +71,9 @@ final class Html
         </script>
     <?php
     }
-    public static function header($pagetitle = ""): void
+    public static function header(): void
     {
-        $title = trim($pagetitle) !== '' ? "$pagetitle - " : '';
-        $fullTitle = $title . Config::get("title");
     ?>
-        <title><?= htmlspecialchars($fullTitle) ?></title>
         <script>
             document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone + "; path=/";
         </script>
@@ -85,6 +82,12 @@ final class Html
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="assets/styles.css">
     <?php
+    }
+    public static function title(string $pagetitle = "")
+    {
+        $title = trim($pagetitle) !== '' ? "$pagetitle - " : '';
+        $fullTitle = $title . Config::get("title");
+        return  htmlspecialchars($fullTitle);
     }
     public static function footer(): void
     {

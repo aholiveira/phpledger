@@ -44,8 +44,8 @@ $pagetitle = L10n::l('update_needed');
 <html lang="<?= L10n::html() ?>">
 
 <head>
-    <?php Html::header($pagetitle); ?>
-    <title><?= $pagetitle ?></title>
+    <title><?= Html::title($pagetitle) ?></title>
+    <?= Html::header() ?>
 </head>
 
 <body>
