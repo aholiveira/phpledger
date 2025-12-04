@@ -8,8 +8,9 @@ use PHPLedger\Controllers\AccountTypeListController;
 use PHPLedger\Controllers\ApplicationErrorController;
 use PHPLedger\Controllers\LoginController;
 use PHPLedger\Controllers\ConfigController;
-use PHPLedger\Controllers\LedgerEntriesController;
+use PHPLedger\Controllers\ForgotPasswordController;
 use PHPLedger\Controllers\ResetPasswordController;
+use PHPLedger\Controllers\UpdateStorageController;
 
 final class Router
 {
@@ -22,13 +23,15 @@ final class Router
     ];
 
     private array $migratedActions = [
-        'login'         => LoginController::class,
-        'config'        => ConfigController::class,
         'account_types' => AccountTypeListController::class,
-        'accounts'      => AccountsController::class,
         'account'       => AccountController::class,
+        'accounts'      => AccountsController::class,
         'application_error' => ApplicationErrorController::class,
-        'resetpassword' => ResetPasswordController::class
+        'config'        => ConfigController::class,
+        'forgotpassword' => ForgotPasswordController::class,
+        'login'         => LoginController::class,
+        'resetpassword' => ResetPasswordController::class,
+        'update' => UpdateStorageController::class,
     ];
 
     /**
