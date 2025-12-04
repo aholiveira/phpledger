@@ -12,7 +12,6 @@ use PHPLedger\Domain\Account;
 use PHPLedger\Domain\AccountType;
 use PHPLedger\Domain\Currency;
 use PHPLedger\Domain\EntryCategory;
-use PHPLedger\Domain\LedgerEntry;
 use PHPLedger\Domain\ReportMonth;
 use PHPLedger\Domain\ReportYear;
 use PHPLedger\Views\AccountBalanceView;
@@ -20,7 +19,6 @@ use PHPLedger\Views\AccountTypeView;
 use PHPLedger\Views\AccountView;
 use PHPLedger\Views\CurrencyView;
 use PHPLedger\Views\EntryCategoryView;
-use PHPLedger\Views\LedgerEntryView;
 use PHPLedger\Views\ReportMonthHtmlView;
 use PHPLedger\Views\ReportYearHtmlView;
 class ViewFactory
@@ -52,10 +50,6 @@ class ViewFactory
     public function entryCategoryView(EntryCategory $object): EntryCategoryView
     {
         return new EntryCategoryView($object);
-    }
-    public function ledgerEntryView(LedgerEntry $object): LedgerEntryView
-    {
-        return new LedgerEntryView($object);
     }
     public function reportMonthHtmlView(ReportMonth $object): ReportMonthHtmlView
     {
