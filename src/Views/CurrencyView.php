@@ -1,4 +1,5 @@
 <?php
+
 namespace PHPLedger\Views;
 
 /**
@@ -12,12 +13,9 @@ namespace PHPLedger\Views;
 
 use PHPLedger\Domain\Currency;
 use PHPLedger\Util\NumberUtil;
+
 class CurrencyView extends ObjectViewer
 {
-    public function __construct(currency $object)
-    {
-        parent::__construct($object);
-    }
     public function printObject(): string
     {
         $retval = "";
@@ -85,7 +83,7 @@ class CurrencyView extends ObjectViewer
             $selected = $object->id;
         }
         foreach ($objectList as $object) {
-            if (($object instanceof currency)) {
+            if ($object instanceof currency) {
                 $retval .= "<option value=\"{$object->id}\"" . ($selected == $object->id ? " selected " : "") . ">{$object->code} - {$object->description}</option>\r\n";
             }
         }

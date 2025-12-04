@@ -20,12 +20,13 @@ class LoginView
         $postUser = htmlspecialchars($data['postUser'] ?? '');
         $userAuth = $data['userAuth'] ?? false;
         $expired = $data['expired'] ?? 0;
-        ?>
+?>
         <!DOCTYPE html>
         <html lang="<?= L10n::html() ?>">
 
         <head>
-            <?php Html::header(); ?>
+            <title><?= Html::title() ?></title>
+            <?= Html::header() ?>
         </head>
 
         <body onload="document.getElementById('username').focus();">
@@ -49,7 +50,7 @@ class LoginView
                         <p id="formButton"><input type="submit" value="<?= L10n::l('login') ?>"></p>
                         <p id="versionTagContent" class="version-tag">
                             <a href="https://github.com/aholiveira/phpledger"
-                               aria-label="<?= L10n::l('version', Version::string()) ?>">
+                                aria-label="<?= L10n::l('version', Version::string()) ?>">
                                 <?= L10n::l('version', Version::string()) ?>
                             </a>
                         </p>
@@ -58,7 +59,8 @@ class LoginView
                 </form>
             </div>
         </body>
+
         </html>
-        <?php
+<?php
     }
 }

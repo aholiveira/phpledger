@@ -7,7 +7,9 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 namespace PHPLedger\Storage\MySql;
+
 use PHPLedger\Contracts\DataObjectInterface;
 use PHPLedger\Util\Logger;
 
@@ -16,7 +18,9 @@ trait MySqlObject
     protected static string $errorMessage;
     public function __construct()
     {
-        // Common in all classes. TODO: Will be refactored in the future
+        if (!isset($this->id)) {
+            $this->id = null;
+        }
     }
     public function setId($id)
     {

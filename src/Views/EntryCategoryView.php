@@ -1,4 +1,5 @@
 <?php
+
 namespace PHPLedger\Views;
 
 /**
@@ -13,12 +14,9 @@ namespace PHPLedger\Views;
 use PHPLedger\Domain\EntryCategory;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\NumberUtil;
+
 class EntryCategoryView extends ObjectViewer
 {
-    public function __construct(EntryCategory $object)
-    {
-        parent::__construct($object);
-    }
     public function printObject(): string
     {
         $retval = "";
@@ -64,75 +62,100 @@ class EntryCategoryView extends ObjectViewer
     }
     public function printForm(): string
     {
-        $retval = "";
         $object = $this->object;
-        if (!$object instanceof EntryCategory) {
-            return $retval;
+        if (!($object instanceof EntryCategory)) {
+            return "";
         }
+        $retval = "";
+        $filter['active'] =  ['operator' => '=', 'value' => '1'];
         if (isset($object->id)) {
-            $filter = [
-                'active' => ['operator' => '=', 'value' => '1'],
-                'id' => ['operator' => '<>', 'value' => "{$object->id}"]
-            ];
-        } else {
-            $filter = ['active' => ['operator' => '=', 'value' => '1']];
+            $filter['id'] =  ['operator' => '<>', 'value' => "{$object->id}"];
         }
-        $category_list = $object->getList($filter);
-        if (isset($object->id)) {
-            foreach ($category_list as $key => $category) {
-                if ($category->parentId == $object->id || $category->id == $object->id) {
-                    unset($category_list[$key]);
-                }
-            }
-        }
+        $categoryList = $this->getFilteredCategories($object);
+
+        $idValue = isset($object->id) ? $object->id : $object->getNextId();
+        $parentId = isset($object->parentId) ? $object->parentId : 0;
+        $description = isset($object->id) ? $object->description : "";
+        $activeChecked = (isset($object->id) && $object->active) || !isset($object->id) ? "checked" : "";
+
         $retval .= "<tr>";
         $retval .= "<td><label for=\"id\">ID</label></td>\r\n";
-        $retval .= "<td><input type=text readonly size=4 name=\"id\" value=" . (isset($object->id) ? $object->id : $object->getNextId()) . "></td>\r\n";
+        $retval .= "<td><input type=text readonly size=4 name=\"id\" value=\"{$idValue}\"></td>\r\n";
         $retval .= "</tr>";
         $retval .= "<tr>";
         $retval .= "<td><label for=\"parentId\">Categoria</label></td>\r\n";
         $retval .= "<td><select name=\"parentId\">\r\n";
         if ((isset($object->id) && $object->id !== 0) || !isset($object->id)) {
-            $retval .= $this->getSelectFromList($category_list, isset($object->parentId) ? $object->parentId : 0);
+            $retval .= $this->getSelectFromList($categoryList, $parentId);
         }
         $retval .= "</select>\n";
         $retval .= "</tr>";
         $retval .= "<tr>";
         $retval .= "<td><label for=\"description\">Descri&ccedil;&atilde;o</label></td>\n";
-        $retval .= "<td><input type=text size=30 maxlength=30 name=\"description\" value=\"" . (isset($object->id) ? $object->description : "") . "\"></td>";
+        $retval .= "<td><input type=text size=30 maxlength=30 name=\"description\" value=\"{$description}\"></td>";
         $retval .= "</tr>";
         $retval .= "<tr>";
         $retval .= "<td><label for=\"active\">Activa</label></td>\n";
-        $retval .= "<td><input type=\"checkbox\" name=\"active\" " . ((isset($object->id) && $object->active) || !isset($object->id) ? "checked" : "") . "></td>";
+        $retval .= "<td><input type=\"checkbox\" name=\"active\" {$activeChecked}></td>";
         $retval .= "</tr>\r\n";
         return $retval;
     }
-    public function getSelectFromList(array $category_list, ?int $selected = null): string
+    private function getFilteredCategories(EntryCategory $object): array
     {
-        $retval = "";
-        /**
-         * @var EntryCategory $object
-         */
-        $object = $this->object;
-        if (null === $selected) {
-            $selected = $object->id;
+        $filter['active'] = ['operator' => '=', 'value' => '1'];
+        if (isset($object->id)) {
+            $filter['id'] = ['operator' => '<>', 'value' => "{$object->id}"];
         }
-        foreach ($category_list as $category) {
-            if (($category instanceof EntryCategory)) {
-                if ($category->id > 0 && sizeof($category->children) > 0) {
-                    $retval .= "<optgroup label=\"{$category->description}\">\r\n";
-                    $retval .= "<option value=\"{$category->id}\"" . ($selected == $category->id ? " selected " : "") . ">{$category->description}</option>\n";
-                    foreach ($category->children as $child) {
-                        $retval .= "<option value=\"{$child->id}\"" . ($selected == $child->id ? " selected " : "") . ">{$child->description}</option>\n";
-                    }
-                    $retval .= "</optgroup>\r\n";
-                } else {
-                    if ($category->parentId == 0 || !isset($category->parentId)) {
-                        $retval .= "<option value=\"{$category->id}\"" . ($selected == $category->id ? " selected " : "") . ">{$category->description}</option>\n";
-                    }
+        $categories = $object->getList($filter);
+        if (isset($object->id)) {
+            foreach ($categories as $key => $cat) {
+                if ($cat->parentId == $object->id || $cat->id == $object->id) {
+                    unset($categories[$key]);
                 }
             }
         }
-        return $retval;
+        return $categories;
+    }
+
+    public function getSelectFromList(array $category_list, ?int $selected = null): string
+    {
+        $object = $this->object;
+        if ($selected === null) {
+            $selected = $object->id;
+        }
+        $out = "";
+        foreach ($category_list as $category) {
+            if (!$category instanceof EntryCategory) {
+                continue;
+            }
+            $out .= $this->buildCategoryOptions($category, $selected);
+        }
+        return $out;
+    }
+    private function buildCategoryOptions(EntryCategory $category, int $selected): string
+    {
+        if ($category->id > 0 && count($category->children) > 0) {
+            return $this->buildOptionGroup($category, $selected);
+        }
+        if ($category->parentId === 0 || !isset($category->parentId)) {
+            return $this->buildOption($category, $selected);
+        }
+        return "";
+    }
+    private function buildOptionGroup(EntryCategory $category, int $selected): string
+    {
+        $out = "<optgroup label='{$category->description}'>\r\n";
+        $out .= $this->buildOption($category, $selected);
+
+        foreach ($category->children as $child) {
+            $out .= $this->buildOption($child, $selected);
+        }
+
+        return $out . "</optgroup>\r\n";
+    }
+    private function buildOption(EntryCategory $category, int $selected): string
+    {
+        $s = $selected === $category->id ? " selected " : "";
+        return "<option value='{$category->id}'{$s}>{$category->description}</option>\n";
     }
 }

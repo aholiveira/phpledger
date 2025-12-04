@@ -1,4 +1,5 @@
 <?php
+
 /**
  * View for ReportYear class
  *
@@ -7,16 +8,7 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 namespace PHPLedger\Views;
-use PHPLedger\Domain\ReportYear;
-class ReportYearHtmlView extends ReportHtmlView
-{
-    public function __construct(ReportYear $report)
-    {
-        parent::__construct($report);
-    }
-    public function printAsTable()
-    {
-        return parent::printAsTable();
-    }
-}
+
+class ReportYearHtmlView extends ReportHtmlView {}

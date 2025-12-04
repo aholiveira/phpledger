@@ -17,9 +17,6 @@ final class AccountTypeListController
         $list = $object->getList();
 
         $view = new AccountTypeListView();
-        $view->render([
-            'list' => $list,
-            'lang' => L10n::$lang
-        ]);
+        $view->render(['list' => $list, 'lang' => L10n::$lang]);
     }
 }

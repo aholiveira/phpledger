@@ -7,8 +7,11 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 namespace PHPLedger\Storage\MySql;
+
 use PHPLedger\Domain\AccountType;
+
 class MysqlAccountType extends AccountType
 {
     protected static string $tableName = "tipo_contas";

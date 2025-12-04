@@ -1,4 +1,5 @@
 <?php
+
 namespace PHPLedger\Views;
 
 /**
@@ -9,15 +10,5 @@ namespace PHPLedger\Views;
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
-use PHPLedger\Domain\ReportMonth;
-class ReportMonthHtmlView extends ReportHtmlView
-{
-    public function __construct(ReportMonth $report)
-    {
-        parent::__construct($report);
-    }
-    public function printAsTable()
-    {
-        return parent::printAsTable();
-    }
-}
+
+class ReportMonthHtmlView extends ReportHtmlView {}

@@ -1,4 +1,5 @@
 <?php
+
 namespace PHPLedger\Views;
 
 /**
@@ -9,10 +10,12 @@ namespace PHPLedger\Views;
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 use PHPLedger\Domain\Account;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Html;
 use PHPLedger\Views\ViewFactory;
+
 class AccountView extends ObjectViewer
 {
     public function printObject(): string
@@ -109,7 +112,7 @@ class AccountView extends ObjectViewer
             $selected = $object->id;
         }
         foreach ($objectList as $object) {
-            if (($object instanceof account)) {
+            if ($object instanceof account) {
                 $retval .= "<option value=\"{$object->id}\"" . ($selected == $object->id ? " selected " : "") . ">{$object->name}</option>\r\n";
             }
         }
