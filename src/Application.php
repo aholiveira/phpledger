@@ -98,7 +98,7 @@ class Application
         if (!empty($_SESSION['user'])) {
             // Exclude certain pages from being recorded as "lastVisited" to avoid redirect loops
             $page = strtolower(basename($_SERVER['SCRIPT_NAME'] ?? ''));
-            $excluded = ['index.php', 'update.php', 'reset_password.php', 'forgot_password.php'];
+            $excluded = ['index.php'];
             if (in_array($page, $excluded, true)) {
                 return;
             }

@@ -21,7 +21,7 @@ abstract class User extends AbstractDataObject implements DataObjectInterface
     protected ?string $tokenExpiry;
     protected int $active;
     protected int $role;
-    protected static int $_token_length = 32;
+    protected static int $tokenLength = 32;
     private string $dateFormat = "Y-m-d H:i:s";
     public function setUsername(string $value)
     {
@@ -113,7 +113,7 @@ abstract class User extends AbstractDataObject implements DataObjectInterface
     }
     public function createToken(): string
     {
-        return bin2hex(random_bytes(user::$_token_length));
+        return bin2hex(random_bytes(user::$tokenLength));
     }
     public function isTokenValid(string $token): bool
     {

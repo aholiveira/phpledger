@@ -15,8 +15,8 @@ class MySqlReportYear extends ReportYear
         MySqlReport::__construct as private traitConstruct;
         MySqlReport::getReport as private traitGetReport;
     }
-    protected int $first_year;
-    protected int $last_year;
+    protected int $firstYear;
+    protected int $lastYear;
     public array $reportData;
     public array $columnHeaders;
     public array $savings;
@@ -24,19 +24,19 @@ class MySqlReportYear extends ReportYear
     public function __construct()
     {
         $this->traitConstruct();
-        $this->first_year = 2999;
-        $this->last_year = 0;
+        $this->firstYear = 2999;
+        $this->lastYear = 0;
     }
     public function getReport(array $params = []): ReportYear
     {
-        $this->first_year = \array_key_exists("first_year", $params) ? $params["first_year"] : date("Y") - 1;
-        $this->last_year = \array_key_exists("last_year", $params) ? $params["last_year"] : date("Y");
-        if ($this->first_year > $this->last_year) {
-            $temp = $this->last_year;
-            $this->last_year = $this->first_year;
-            $this->first_year = $temp;
+        $this->firstYear = \array_key_exists("first_year", $params) ? $params["first_year"] : date("Y") - 1;
+        $this->lastYear = \array_key_exists("last_year", $params) ? $params["last_year"] : date("Y");
+        if ($this->firstYear > $this->lastYear) {
+            $temp = $this->lastYear;
+            $this->lastYear = $this->firstYear;
+            $this->firstYear = $temp;
         }
-        for ($year = $this->first_year; $year <= $this->last_year; $year++) {
+        for ($year = $this->firstYear; $year <= $this->lastYear; $year++) {
             $this->columnHeaders[$year] = $year;
             $this->dateFilters[$year]['start'] = date("Ymd", mktime(0, 0, 0, 1, 1, $year));
             $this->dateFilters[$year]['end'] = date("Ymd", mktime(0, 0, 0, 12, 31, $year));
@@ -47,7 +47,7 @@ class MySqlReportYear extends ReportYear
             GROUP BY categoryId, YEAR(entryDate)
             HAVING ROUND(SUM(ROUND(euroAmount,5)),2)<>0
             ORDER BY `row_header`, `col_header`";
-        self::getData($sql, $this->first_year, $this->last_year);
+        self::getData($sql, $this->firstYear, $this->lastYear);
         $this->traitGetReport($params);
         $account_type = MySqlObjectFactory::accounttype();
         $account = MySqlObjectFactory::account();
@@ -75,10 +75,10 @@ class MySqlReportYear extends ReportYear
     }
     public function getFirstYear(): int
     {
-        return $this->first_year;
+        return $this->firstYear;
     }
     public function getLastYear(): int
     {
-        return $this->last_year;
+        return $this->lastYear;
     }
 }

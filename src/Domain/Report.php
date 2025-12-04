@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Year Report
  * Class to generate a year report with a summary of income and expense per month
@@ -8,8 +9,11 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 namespace PHPLedger\Domain;
+
 use PHPLedger\Contracts\ReportInterface;
+
 abstract class Report implements ReportInterface
 {
     public array $reportData = [];

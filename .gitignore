@@ -8,4 +8,5 @@ config.json
 .vscode*
 *.log
 /vendor/
+/scripts
 test.php

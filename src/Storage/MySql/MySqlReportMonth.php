@@ -16,7 +16,6 @@ class MySqlReportMonth extends ReportMonth
         MySqlReport::getReport as private traitGetReport;
     }
     public int $year;
-    //public array $savings = [];
     public function __construct()
     {
         $this->traitConstruct();

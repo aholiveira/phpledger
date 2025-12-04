@@ -15,7 +15,6 @@ use PHPLedger\Storage\MySql\MySqlObject;
 
 class MySqlCurrency extends Currency
 {
-    private static array $fields = ["id", "`code`", "`description`", "exchangeRate", "username", "createdAt", "updatedAt"];
     use MySqlSelectTrait;
     use MySqlObject {
         MySqlObject::__construct as private traitConstruct;

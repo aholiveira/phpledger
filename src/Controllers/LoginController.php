@@ -87,7 +87,7 @@ final class LoginController
         }
 
         $target = $defaults->lastVisitedUri ?: sprintf(
-            'ledger_entries.php?lang=%s&filter_sdate=%s',
+            'index.php?action=ledger_entries&lang=%s&filter_sdate=%s',
             L10n::$lang,
             date('Y-m-01')
         );

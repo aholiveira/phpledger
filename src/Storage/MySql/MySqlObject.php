@@ -10,6 +10,7 @@
 
 namespace PHPLedger\Storage\MySql;
 
+use DomainException;
 use PHPLedger\Contracts\DataObjectInterface;
 use PHPLedger\Util\Logger;
 
@@ -47,7 +48,7 @@ trait MySqlObject
     {
         $vars = \is_object($source) ? get_object_vars($source) : $source;
         if (!\is_array($vars)) {
-            throw new \Exception('no props to import into the object!');
+            throw new DomainException('no props to import into the object!');
         }
         foreach ($vars as $key => $value) {
             $destination->$key = $value;
@@ -152,7 +153,7 @@ trait MySqlObject
     {
         $vars = get_object_vars($this);
         if (!is_array($vars)) {
-            throw new \Exception('no props to import into the object!');
+            throw new DomainException('no props to import into the object!');
         }
         foreach (array_keys($vars) as $key) {
             unset($this->$key);

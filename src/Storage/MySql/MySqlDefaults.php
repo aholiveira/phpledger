@@ -12,7 +12,6 @@ namespace PHPLedger\Storage\MySql;
 
 use PHPLedger\Domain\Defaults;
 use PHPLedger\Util\Config;
-use PHPLedger\Util\Logger;
 
 class MySqlDefaults extends Defaults
 {

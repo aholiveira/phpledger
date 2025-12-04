@@ -4,21 +4,12 @@ namespace PHPLedger\Util;
 
 class Redirector
 {
-    private const array ALLOWED_REDIRECTS = [
-        'ledger_entries.php',
-        'account_types_list.php',
-        'account_types.php',
-        'balances.php',
-        'entry_type.php',
-        'report_month.php',
-        'report_year.php',
-        'index.php'
-    ];
+    private const array ALLOWED_REDIRECTS = ['index.php'];
     public static function to($url, $delay = 0): void
     {
         $url_path = strtok($url, '?'); // strip query params
         if (!\in_array(basename($url_path), self::ALLOWED_REDIRECTS, true)) {
-            $url = "ledger_entries.php";
+            $url = "index.php";
         }
         if (!headers_sent()) {
             header($delay > 0 ? "Refresh: $delay; URL=$url" : "Location: $url", true, 303);
