@@ -1,11 +1,14 @@
 <?php
+
 namespace PHPLedger\Controllers;
+
 use DomainException;
 use Exception;
+use InvalidArgumentException;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\DateParser;
 use PHPLedger\Util\L10n;
-use RuntimeException;
+
 class LedgerEntryController
 {
     /**
@@ -27,7 +30,7 @@ class LedgerEntryController
         // 2) grab and validate the other fields
         foreach (['currencyAmount', 'direction', 'categoryId', 'currencyId', 'accountId'] as $fld) {
             if (!isset($input[$fld]) || $input[$fld] === '' || $input[$fld] === false) {
-                throw new DomainException(l10n::l("invalid_parameter", $fld));
+                throw new InvalidArgumentException(l10n::l("invalid_parameter", $fld));
             }
         }
 
@@ -46,7 +49,7 @@ class LedgerEntryController
         $entry->username = $_SESSION['user'] ?? 'empty';
 
         if (!$entry->update()) {
-            throw new RuntimeException(l10n::l("ledger_save_error"));
+            throw new DomainException(l10n::l("ledger_save_error"));
         }
 
         // 4) update that user's "defaults" record - be defensive when session user is missing
@@ -66,7 +69,7 @@ class LedgerEntryController
         $defaults->username = $_SESSION['user'] ?? 'empty';
 
         if (!$defaults->update()) {
-            throw new RuntimeException(l10n::l("defaults_save_error"));
+            throw new DomainException(l10n::l("defaults_save_error"));
         }
         return $entry->id;
     }

@@ -106,10 +106,15 @@ class ReportHtmlView
 
     private function buildRecordLink($id, $label, $startDate, $endDate, $includeParent = false): string
     {
-        $url = "ledger_entries.php?filter_sdate={$startDate}&amp;filter_edate={$endDate}&amp;filter_entry_type={$id}";
+        $filterArray = [
+            "filter_sdate" => $startDate,
+            "filter_edate" => $endDate,
+            "filter_entry_type" => $id
+        ];
         if ($includeParent) {
-            $url .= "&amp;filter_parentId={$id}";
+            $filterArray['filter_parentId'] = $id;
         }
+        $url = "index.php?action=ledger_entries&amp;" . http_build_query($filterArray, '', '&amp;');
         return "<a href=\"{$url}\" title=\"Todos os movimentos da categoria" . ($includeParent ? " e sub-categorias" : "") . "\">{$label}</a>";
     }
 
@@ -124,17 +129,13 @@ class ReportHtmlView
     {
         $lines = "<td data-label='{$this->report->columnHeaders[$header]}' class=\"saldos\">\r\n";
         $lines .= "<span class='group{$record['id']}'>";
-
         if ($this->hasChildren($record)) {
             $sum = $record['subtotal'][$header] ?? 0;
             $lines .= $this->wrapValueLink($value + $sum, $record['id'], $header, true);
             $lines .= "<span style='display: none;' class='group{$record['id']}'>";
         }
-
         $lines .= $this->wrapValueLink($value, $record['id'], $header);
-
         $lines .= "</span>\r\n</td>\r\n";
-
         return $lines;
     }
 
@@ -143,19 +144,22 @@ class ReportHtmlView
         $startDate = $this->report->dateFilters[$header]['start'];
         $endDate = $this->report->dateFilters[$header]['end'];
         $normalized = NumberUtil::normalize($value);
-
         if ($value == 0) {
             return $normalized;
         }
-
-        $url = "ledger_entries.php?filter_sdate={$startDate}&amp;filter_edate={$endDate}&amp;filter_entry_type={$recordId}";
+        $filterArray = [
+            "filter_sdate" => $startDate,
+            "filter_edate" => $endDate,
+            "filter_entry_type" => $recordId
+        ];
         if ($includeParent) {
-            $url .= "&amp;filter_parentId={$recordId}";
+            $filterArray['filter_parentId'] = $recordId;
             $title = "Todos os movimentos da categoria e sub-categorias para este periodo";
         } else {
             $title = "Todos os movimentos da categoria para este periodo";
         }
 
+        $url = "index.php?action=ledger_entries&amp;" . http_build_query($filterArray, '', '&amp;');
         return "<a href=\"{$url}\" title=\"{$title}\">{$normalized}</a>";
     }
 

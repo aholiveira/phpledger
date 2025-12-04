@@ -4,12 +4,12 @@ namespace PHPLedger\Controllers;
 
 use Exception;
 use PHPLedger\Domain\User;
+use PHPLedger\Exceptions\PHPLedgerException;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Redirector;
 use PHPLedger\Views\ConfigView;
-use RuntimeException;
 
 class ConfigController
 {
@@ -39,10 +39,10 @@ class ConfigController
         $user = !empty($_SESSION['user']) ? ObjectFactory::user()::getByUsername($_SESSION['user']) : null;
         if (!($user instanceof User)) {
             Redirector::to("index.php?action=login");
-            throw new RuntimeException('You must be logged in to view this page.');
+            throw new PHPLedgerException('You must be logged in to view this page.');
         }
         if (!$user->hasRole(User::USER_ROLE_ADM)) {
-            throw new RuntimeException("You do not have permission to view this page.");
+            throw new PHPLedgerException("You do not have permission to view this page.");
         }
     }
     private function processPost(): array

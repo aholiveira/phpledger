@@ -6,32 +6,34 @@ use PHPLedger\Controllers\AccountController;
 use PHPLedger\Controllers\AccountsController;
 use PHPLedger\Controllers\AccountTypeListController;
 use PHPLedger\Controllers\ApplicationErrorController;
+use PHPLedger\Controllers\BalancesController;
 use PHPLedger\Controllers\LoginController;
 use PHPLedger\Controllers\ConfigController;
+use PHPLedger\Controllers\EntryCategoryListController;
 use PHPLedger\Controllers\ForgotPasswordController;
+use PHPLedger\Controllers\LedgerEntriesController;
+use PHPLedger\Controllers\ReportMonthController;
+use PHPLedger\Controllers\ReportYearController;
 use PHPLedger\Controllers\ResetPasswordController;
 use PHPLedger\Controllers\UpdateStorageController;
 
 final class Router
 {
-    private array $legacyPages = [
-        'ledger_entries' => 'ledger_entries.php',
-        'balances'       => 'balances.php',
-        'entry_types'    => 'entry_types_list.php',
-        'report_month'   => 'report_month.php',
-        'report_year'    => 'report_year.php'
-    ];
-
-    private array $migratedActions = [
-        'account_types' => AccountTypeListController::class,
-        'account'       => AccountController::class,
-        'accounts'      => AccountsController::class,
+    private array $actionMap = [
+        'account_types'     => AccountTypeListController::class,
+        'account'           => AccountController::class,
+        'accounts'          => AccountsController::class,
         'application_error' => ApplicationErrorController::class,
-        'config'        => ConfigController::class,
-        'forgotpassword' => ForgotPasswordController::class,
-        'login'         => LoginController::class,
-        'resetpassword' => ResetPasswordController::class,
-        'update' => UpdateStorageController::class,
+        'balances'          => BalancesController::class,
+        'config'            => ConfigController::class,
+        'entry_types'       => EntryCategoryListController::class,
+        'forgotpassword'    => ForgotPasswordController::class,
+        'ledger_entries'    => LedgerEntriesController::class,
+        'login'             => LoginController::class,
+        'report_month'      => ReportMonthController::class,
+        'report_year'       => ReportYearController::class,
+        'resetpassword'     => ResetPasswordController::class,
+        'update'            => UpdateStorageController::class,
     ];
 
     /**
@@ -43,21 +45,12 @@ final class Router
 
     public function handleRequest(string $action): void
     {
-        if (isset($this->migratedActions[$action])) {
-            $controllerClass = $this->migratedActions[$action];
+        if (isset($this->actionMap[$action])) {
+            $controllerClass = $this->actionMap[$action];
             $controller = new $controllerClass();
             $controller->handle();
             return;
         }
-
-        if (isset($this->legacyPages[$action])) {
-            $file = $this->legacyPages[$action];
-            if (file_exists($file)) {
-                require $file;
-                return;
-            }
-        }
-
         header('Location: index.php?action=login');
         exit;
     }
@@ -65,9 +58,6 @@ final class Router
     /** Returns a whitelist of all valid actions */
     public static function getAllowedActions(): array
     {
-        return array_merge(
-            array_keys((new self())->legacyPages),
-            array_keys((new self())->migratedActions)
-        );
+        return array_keys((new self())->actionMap);
     }
 }
