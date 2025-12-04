@@ -5,8 +5,11 @@ namespace PHPLedger\Routing;
 use PHPLedger\Controllers\AccountController;
 use PHPLedger\Controllers\AccountsController;
 use PHPLedger\Controllers\AccountTypeListController;
+use PHPLedger\Controllers\ApplicationErrorController;
 use PHPLedger\Controllers\LoginController;
 use PHPLedger\Controllers\ConfigController;
+use PHPLedger\Controllers\LedgerEntriesController;
+use PHPLedger\Controllers\ResetPasswordController;
 
 final class Router
 {
@@ -24,6 +27,8 @@ final class Router
         'account_types' => AccountTypeListController::class,
         'accounts'      => AccountsController::class,
         'account'       => AccountController::class,
+        'application_error' => ApplicationErrorController::class,
+        'resetpassword' => ResetPasswordController::class
     ];
 
     /**
