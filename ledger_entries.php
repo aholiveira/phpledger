@@ -80,8 +80,8 @@ if ($_SERVER["REQUEST_METHOD"] === "GET") {
 
 <head>
     <title><?= Html::title($pagetitle) ?></title>
-    <?= Html::header() ?>
-    <script src="ledger_entries.js"> </script>
+    <?php Html::header(); ?>
+    <script src="assets/ledger_entries.js"> </script>
 </head>
 
 <body>

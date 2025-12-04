@@ -17,7 +17,7 @@ class ResetPasswordView
 
         <head>
             <title><?= Html::title($pagetitle) ?></title>
-            <?= Html::header() ?>
+            <?php Html::header(); ?>
         </head>
 
         <body>

@@ -23,11 +23,8 @@ class Application
         self::sendHeaders();
         self::bootstrap();
         self::guardSession();
-        if (
-            ObjectFactory::dataStorage()->check() === false &&
-            basename($_SERVER['SCRIPT_NAME']) !== 'update.php'
-        ) {
-            Redirector::to("update.php");
+        if (ObjectFactory::dataStorage()->check() === false && ($_GET['action'] ?? '') !== 'update') {
+            Redirector::to("index.php?action=update");
         }
         self::applyTimezone();
         self::updateUserLastVisited();
@@ -76,7 +73,7 @@ class Application
     private static function guardSession(): void
     {
         Logger::instance()->debug("Guarding session in Application::guardSession");
-        $publicPages = ['index.php', 'reset_password.php', 'update.php'];
+        $publicPages = ['index.php'];
         SessionManager::guard($publicPages, SESSION_EXPIRE);
     }
     private static function applyTimezone(): void

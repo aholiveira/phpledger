@@ -34,7 +34,7 @@ $report->getReport(["year" => $year]);
 
 <head>
     <title><?= Html::title($pagetitle) ?></title>
-    <?= Html::header() ?>
+    <?php Html::header(); ?>
     <script>
         function toogleGroup(groupName) {
             var i, j, row, multiplier;

@@ -26,7 +26,7 @@ class LoginView
 
         <head>
             <title><?= Html::title() ?></title>
-            <?= Html::header() ?>
+            <?php Html::header(); ?>
         </head>
 
         <body onload="document.getElementById('username').focus();">

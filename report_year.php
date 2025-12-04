@@ -40,7 +40,7 @@ $report->getReport(["first_year" => $first_year, "last_year" => $last_year]);
 
 <head>
     <title><?= Html::title($pagetitle) ?></title>
-    <?= Html::header() ?>
+    <?php Html::header(); ?>
     <script>
         function toogleGroup(groupName) {
             var i, j, row, multiplier;
