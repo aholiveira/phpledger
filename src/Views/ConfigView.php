@@ -23,7 +23,8 @@ class ConfigView
         <html lang="<?= L10n::html() ?>">
 
         <head>
-            <?php Html::header($pagetitle); ?>
+            <title><?= Html::title($pagetitle) ?></title>
+            <?= Html::header() ?>
         </head>
 
         <body>
@@ -63,15 +64,25 @@ class ConfigView
                                 </p>
                                 <div class="settings mysql" id="mysql-settings" style="display: <?= $st === 'mysql' ? 'grid' : 'none' ?>;">
                                     <h3><?= L10n::l("mysql_settings") ?></h3>
-                                    <p><label for="storage_host"><?= L10n::l("host") ?></label><input id="storage_host" name="storage_host" value="<?= htmlspecialchars($s['host'] ?? '') ?>"></p>
-                                    <p><label for="storage_port"><?= L10n::l("port") ?></label><input id="storage_port" name="storage_port" type="number" min="1" max="65535" value="<?= htmlspecialchars($s['port'] ?? 3306) ?>" required></p>
-                                    <p><label for="storage_database"><?= L10n::l("database") ?></label><input id="storage_database" name="storage_database" value="<?= htmlspecialchars($s['database'] ?? '') ?>"></p>
-                                    <p><label for="storage_user"><?= L10n::l("user") ?></label><input id="storage_user" name="storage_user" value="<?= htmlspecialchars($s['user'] ?? '') ?>"></p>
-                                    <p><label for="storage_password"><?= L10n::l("password") ?></label>
-                                        <!-- <div style="position:relative; display:inline-block;"> -->
-                                        <input id="storage_password" name="storage_password" type="password" value="<?= htmlspecialchars($s['password'] ?? '') ?>" style="padding-right: 30px;">
-                                        <!-- <span id="togglePassword" style="position:absolute; right:5px; top:50%; transform:translateY(-50%); cursor:pointer;">V</span> -->
-                                        <!-- </div> -->
+                                    <p>
+                                        <label for="storage_host"><?= L10n::l("host") ?></label>
+                                        <input id="storage_host" name="storage_host" value="<?= htmlspecialchars($s['host'] ?? '') ?>">
+                                    </p>
+                                    <p>
+                                        <label for="storage_port"><?= L10n::l("port") ?></label>
+                                        <input id="storage_port" name="storage_port" type="number" min="1" max="65535" value="<?= htmlspecialchars($s['port'] ?? 3306) ?>" required>
+                                    </p>
+                                    <p>
+                                        <label for="storage_database"><?= L10n::l("database") ?></label>
+                                        <input id="storage_database" name="storage_database" value="<?= htmlspecialchars($s['database'] ?? '') ?>">
+                                    </p>
+                                    <p>
+                                        <label for="storage_user"><?= L10n::l("user") ?></label>
+                                        <input id="storage_user" name="storage_user" value="<?= htmlspecialchars($s['user'] ?? '') ?>">
+                                    </p>
+                                    <p>
+                                        <label for="storage_password"><?= L10n::l("password") ?></label>
+                                        <input id="storage_password" name="storage_password" type="password" value="<?= htmlspecialchars($s['password'] ?? '') ?>">
                                     </p>
                                 </div>
                                 <button style="width:fit-content;" type="submit"><?= L10n::l("save") ?></button>

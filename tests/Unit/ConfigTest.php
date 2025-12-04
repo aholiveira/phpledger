@@ -102,12 +102,13 @@ it('invalidates MySQL storage missing required fields', function () {
 
 it('saves and reloads config', function () {
     $file = tempnam(sys_get_temp_dir(), 'cfg');
-    Config::init($file);
+    Config::init($file, true);
     Config::set('version', 2, false);
     Config::set('title', 'Test', false);
     Config::set('storage.type', 'mysql', false);
     Config::set('storage.settings.host', 'localhost', false);
     Config::set('storage.settings.user', 'root', false);
+    Config::set('storage.settings.port', 3306, false);
     Config::set('storage.settings.database', 'contas', false);
     Config::set('smtp.host', 'smtp.example.com', false);
     Config::set('smtp.port', 25, false);
