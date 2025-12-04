@@ -8,6 +8,7 @@
  *
  */
 require_once __DIR__ . "/prepend.php";
+
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\Html;
@@ -20,7 +21,8 @@ $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php Html::header($pagetitle); ?>
+    <title><?= Html::title($pagetitle) ?></title>
+    <?= Html::header() ?>
     <?php
     $user = ObjectFactory::user();
     $message = "";

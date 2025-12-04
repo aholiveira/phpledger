@@ -2,11 +2,14 @@
 
 namespace PHPLedger\Controllers;
 
+use Exception;
 use PHPLedger\Domain\User;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\CSRF;
+use PHPLedger\Util\Redirector;
 use PHPLedger\Views\ConfigView;
+use RuntimeException;
 
 class ConfigController
 {
@@ -14,38 +17,33 @@ class ConfigController
     {
         $view = new ConfigView();
         $success = false;
-
-        [$userOk, $hasPermission, $data, $messages] = $this->checkUserPermission();
-
-        if ($userOk && $hasPermission) {
+        $data = ["title" => ""];
+        $hasPermission = false;
+        $messages = [];
+        try {
+            $this->checkUserPermission();
+            $hasPermission = true;
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 [$data, $success, $messages] = $this->processPost();
             } else {
-                $messages = [];
                 $data = Config::getCurrent();
             }
+        } catch (Exception $e) {
+            $messages = [$e->getMessage()];
         }
         $view->render($data, $hasPermission, $success, $messages);
     }
 
-    private function checkUserPermission(): array
+    private function checkUserPermission(): void
     {
-        $data = ["title" => ""];
-        $messages = [];
-        $hasPermission = false;
-        $userOk = false;
         $user = !empty($_SESSION['user']) ? ObjectFactory::user()::getByUsername($_SESSION['user']) : null;
-        if ($user instanceof User) {
-            $userOk = true;
-            if ($user->hasRole(User::USER_ROLE_ADM)) {
-                $hasPermission = true;
-            } else {
-                $messages = ['You do not have permission to view this page.'];
-            }
-        } else {
-            $messages = ['You must be logged in to view this page.'];
+        if (!($user instanceof User)) {
+            Redirector::to("index.php?action=login");
+            throw new RuntimeException('You must be logged in to view this page.');
         }
-        return [$userOk, $hasPermission, $data, $messages];
+        if (!$user->hasRole(User::USER_ROLE_ADM)) {
+            throw new RuntimeException("You do not have permission to view this page.");
+        }
     }
     private function processPost(): array
     {

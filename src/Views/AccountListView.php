@@ -26,7 +26,8 @@ final class AccountListView
         <html lang="<?= L10n::html(); ?>">
 
         <head>
-            <?php Html::header($pagetitle); ?>
+            <title><?= Html::title($pagetitle) ?></title>
+            <?= Html::header() ?>
         </head>
 
         <body>
@@ -36,7 +37,7 @@ final class AccountListView
                 </div>
                 <?php Html::menu(); ?>
                 <div class="header">
-                    <p style="margin:0"><a href="index.php?action=account&lang=<?= $lang ?>"><?= L10n::l('add'); ?></a></p>
+                    <p style="margin:0"><a href="index.php?action=account&lang=<?= $lang ?>"><?php L10n::pl('add'); ?></a></p>
                 </div>
                 <div class="main" id="main">
                     <table class="lista contas account">
@@ -57,7 +58,7 @@ final class AccountListView
                         <tbody>
                             <?php foreach ($list as $obj): ?>
                                 <tr>
-                                    <td data-label="<?= L10n::l("id") ?>"><a href="index.php?action=account&id=<?= (int)($obj->id ?? 0) ?>&lang=<?= $lang ?>"><?= htmlspecialchars($obj->id ?? '') ?></a></td>
+                                    <td data-label="<?= L10n::l("id") ?>"><a href="index.php?action=account&id=<?= (int)($obj->id ?? 0) ?>&lang=<?= $lang ?>"><?php echo htmlspecialchars($obj->id ?? ''); ?></a></td>
                                     <td data-label="<?= L10n::l("name") ?>"><?= htmlspecialchars($obj->name ?? '') ?></td>
                                     <td data-label="<?= L10n::l("number") ?>"><?= htmlspecialchars($obj->number ?? '') ?></td>
                                     <td data-label="<?= L10n::l("type") ?>">

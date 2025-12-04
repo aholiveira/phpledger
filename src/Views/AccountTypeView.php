@@ -9,9 +9,11 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 namespace PHPLedger\Views;
 
 use PHPLedger\Domain\AccountType;
+
 class AccountTypeView extends ObjectViewer
 {
 
@@ -36,7 +38,7 @@ class AccountTypeView extends ObjectViewer
         $retval .= "<thead><tr><th>ID</th><th>Descri&ccedil;&atilde;o</th><th>Savings?</th></tr></thead>\r\n";
         $retval .= "<tbody>\r\n";
         foreach ($objectList as $object) {
-            if ($object instanceof accounttype) {
+            if ($object instanceof AccountType) {
                 $view = new accountTypeView($object);
                 $retval .= "<tr>" . $view->printObject() . "</tr>\r\n";
             }
@@ -49,14 +51,14 @@ class AccountTypeView extends ObjectViewer
     {
         $retval = "";
         /**
-         * @var accounttype $object
+         * @var AccountType $object
          */
         $object = $this->object;
         if (null === $selected) {
             $selected = $object->id;
         }
         foreach ($objectList as $object) {
-            if (($object instanceof accounttype)) {
+            if ($object instanceof AccountType) {
                 $retval .= "<option value=\"{$object->id}\"" . ($selected == $object->id ? " selected " : "") . ">{$object->description}</option>\r\n";
             }
         }

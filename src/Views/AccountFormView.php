@@ -12,6 +12,7 @@ final class AccountFormView
     public function render(array $data): void
     {
         $account = $data['account'];
+        $back = strtolower($data['back'] ?? "");
         $lang = $data['lang'] ?? L10n::$lang;
         $errors = $data['errors'] ?? [];
         $pagetitle = L10n::l('accounts');
@@ -20,14 +21,21 @@ final class AccountFormView
         <!DOCTYPE html>
         <html lang="<?= L10n::html(); ?>">
 
-        <head><?php Html::header($pagetitle); ?></head>
+        <head>
+            <title><?= Html::title($pagetitle) ?></title>
+            <?= Html::header() ?>
+        </head>
 
         <body>
             <div class="maingrid">
                 <?php Html::menu(); ?>
                 <div class="header">
                     <p style="margin:0">
-                        <a href="index.php?action=accounts&lang=<?= htmlspecialchars($lang) ?>"><?= L10n::l('Back to list') ?></a>
+                        <?php if ($back === "balances"): ?>
+                            <a href="index.php?action=balances&lang=<?= htmlspecialchars($lang) ?>"><?php L10n::pl('Back to list'); ?></a>
+                        <?php else: ?>
+                            <a href="index.php?action=accounts&lang=<?= htmlspecialchars($lang) ?>"><?php L10n::pl('Back to list'); ?></a>
+                        <?php endif ?>
                     </p>
                 </div>
                 <main>

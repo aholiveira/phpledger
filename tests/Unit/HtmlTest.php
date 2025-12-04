@@ -70,13 +70,6 @@ it('renders myalert javascript', function () {
     expect(str_contains($output, 'alert("Hello alert")'))->toBeTrue();
 });
 
-it('renders header html with page title', function () {
-    ob_start();
-    Html::header('My Page');
-    $output = ob_get_clean();
-    expect(str_contains($output, '<title>My Page - TestApp</title>'))->toBeTrue();
-});
-
 it('renders footer html with session expiration', function () {
     ob_start();
     Html::footer();

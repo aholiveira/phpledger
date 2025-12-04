@@ -15,13 +15,15 @@ use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 use PHPLedger\Views\ViewFactory;
+
 $pagetitle = "Tipo de movimentos";
 ?>
 <!DOCTYPE html>
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php Html::header($pagetitle); ?>
+    <title><?= Html::title($pagetitle) ?></title>
+    <?= Html::header() ?>
 </head>
 
 <body>
@@ -47,9 +49,9 @@ $pagetitle = "Tipo de movimentos";
                         <td><input type="submit" name="update" value="Gravar"></td>
                         <?php
                         if ($object->id != 0) {
-                            ?>
+                        ?>
                             <td><input type="submit" name="update" value="Apagar"></td>
-                            <?php
+                        <?php
                         }
                         ?>
                     </tr>

@@ -15,6 +15,7 @@ use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 use PHPLedger\Views\ViewFactory;
+
 $pagetitle = "Relatório mensal";
 $year = date("Y");
 if (array_key_exists("year", $_GET)) {
@@ -32,7 +33,8 @@ $report->getReport(["year" => $year]);
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php Html::header($pagetitle); ?>
+    <title><?= Html::title($pagetitle) ?></title>
+    <?= Html::header() ?>
     <script>
         function toogleGroup(groupName) {
             var i, j, row, multiplier;
@@ -184,7 +186,9 @@ $report->getReport(["year" => $year]);
         <?php Html::footer(); ?>
     </div>
     <script>
-        setTimeout(() => { document.getElementById("preloader").style.display = "none"; }, 0);
+        setTimeout(() => {
+            document.getElementById("preloader").style.display = "none";
+        }, 0);
     </script>
 </body>
 

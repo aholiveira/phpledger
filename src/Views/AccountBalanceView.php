@@ -59,7 +59,7 @@ class AccountBalanceView extends ObjectViewer
                 $balance = $balances[$object->id];
                 $retval .= "<tr>";
                 $retval .= "<td class='account' data-label='" . l10n::l('account') . "'>"
-                    . "<a title='" . l10n::l('edit_account') . "' href='accounts.php?id={$object->id}'>"
+                    . "<a title='" . l10n::l('edit_account') . "' href='index.php?action=account&back=balances&id={$object->id}'>"
                     . "{$object->name}</a></td>";
                 $retval .= "<td class='deposits' data-label='" . l10n::l('deposits') . "'>"
                     . NumberUtil::normalize($balance['income']) . "</td>";
@@ -71,7 +71,7 @@ class AccountBalanceView extends ObjectViewer
                     . NumberUtil::normalize($totals['balance'] <> 0 ? round($balance['balance'] / $totals['balance'] * 100, 2) : 0)
                     . "</td>";
                 $retval .= "<td class='entries-list' data-label='" . l10n::l('entries') . "'>"
-                    . "<a title='" . l10n::l('account_entries') . "' href='ledger_entries.php?filter_accountId={$object->id}'>"
+                    . "<a title='" . l10n::l('account_entries') . "' href='index.php?action=ledger_entries&filter_accountId={$object->id}'>"
                     . l10n::l('list') . "</a></td>";
                 $retval .= "</tr>\r\n";
             }

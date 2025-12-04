@@ -4,10 +4,15 @@ namespace PHPLedger\Util;
 
 use Exception;
 
+class ConfigException extends \Exception {}
+class ConfigInvalidException extends Exception {}
+class ConfigInvalidOrMissingException extends Exception {}
+class ConfigUnsupportedException extends Exception {}
+
 final class Config
 {
     protected static array $configData = [];
-    protected static string $validationMessage;
+    protected static string $validationMessage = "";
     private static string $file = '';
 
     /**
@@ -20,29 +25,14 @@ final class Config
     public static function init(string $configfile, $test = false): bool
     {
         try {
-            if (!file_exists($configfile)) {
-                return false;
+            if ($test) {
+                self::$file = $configfile;
             }
-            self::$file = $configfile;
-            $raw = file_get_contents(self::$file);
-            if ($raw === false) {
-                return false;
-            }
-            $data = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
+            $data = self::loadConfig($configfile);
             $originalData = $data ?? [];
-            if ($data === null || !is_array($data)) {
-                Logger::instance()->debug("Error on JSON");
-                return false;
-            }
-            $hasVersion = is_numeric($data['version'] ?? null);
-            if (!$test && !$hasVersion) {
-                Logger::instance()->debug("No version detected. Going to migrate config");
-                $data = ConfigMigrator::migrate($data);
-            } elseif (!$hasVersion) {
-                return false;
-            }
+            $data = self::checkVersion($data, $test);
             if (!$test && !self::validate($data)) {
-                return false;
+                throw new ConfigException("Could not validate config data");
             }
             $configChanged = ($data !== $originalData);
             self::$configData = $data;
@@ -50,11 +40,43 @@ final class Config
                 Logger::instance()->debug("Config has changed");
                 self::save();
             }
-            return true;
+            $status = true;
+        } catch (ConfigException $e) {
+            self::$validationMessage = $e->getMessage();
+            $status = false;
         } catch (Exception $e) {
             Logger::instance()->error("Config init failed: " . $e->getMessage());
-            return false;
+            $status = false;
         }
+        return $status;
+    }
+    private static function checkVersion(array $data, bool $test): array
+    {
+        $hasVersion = is_numeric($data['version'] ?? null);
+        if (!$test && !$hasVersion) {
+            Logger::instance()->debug("No version detected. Going to migrate config");
+            $data = ConfigMigrator::migrate($data);
+        }
+        return $data;
+    }
+    private static function loadConfig(string $configfile): array
+    {
+        $data = null;
+        if (!file_exists($configfile)) {
+            self::$file = $configfile;
+            throw new ConfigException("Config file does not exists");
+        }
+        $raw = file_get_contents($configfile);
+        if ($raw === false) {
+            throw new ConfigException("Invalid config data");
+        }
+        $data = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
+        self::$file = $configfile;
+        if ($data === null || !is_array($data)) {
+            Logger::instance()->debug("Error on JSON");
+            throw new ConfigException("Error on JSON");
+        }
+        return $data;
     }
     public static function getValidationMessage(): string
     {
@@ -90,7 +112,6 @@ final class Config
         $original = self::$configData; // store original for comparison
         foreach ($parts as $i => $p) {
             $last = $i === array_key_last($parts);
-
             if ($last) {
                 $ref[$p] = $value;
             } else {
@@ -128,27 +149,27 @@ final class Config
      */
     public static function save(): void
     {
-        if (!self::$file) {
+        if (empty(self::$file)) {
             Logger::instance()->error("Configuration file not set");
-            throw new Exception("Configuration file not set");
+            throw new ConfigException("Configuration file not set");
         }
         if (!self::validate(self::$configData)) {
             Logger::instance()->error("Configuration data is not valid: " . self::$validationMessage);
-            throw new Exception("Configuration data is not valid");
+            throw new ConfigException("Configuration data is not valid");
         }
         $dir = dirname(self::$file);
         if (!file_exists(self::$file) && (!is_dir($dir) || !is_writable($dir))) {
             Logger::instance()->error("Configuration directory is not writable: " . $dir);
-            throw new Exception("Configuration directory is not writable");
+            throw new ConfigException("Configuration directory is not writable");
         }
         if (file_exists(self::$file) && !is_writable(self::$file)) {
             Logger::instance()->error("Configuration file is not writable: " . self::$file);
-            throw new Exception("Configuration file is not writable");
+            throw new ConfigException("Configuration file is not writable");
         }
         $json = json_encode(self::$configData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         if ($json === false) {
             Logger::instance()->error("Unable to encode configuration data to JSON: " . json_last_error_msg());
-            throw new Exception("Unable to encode configuration data to JSON");
+            throw new ConfigException("Unable to encode configuration data to JSON");
         }
         $tempFile = tempnam($dir, 'cfg_');
         Logger::instance()->debug("Saving configuration to temporary file: $tempFile");
@@ -156,13 +177,13 @@ final class Config
         if (file_put_contents($tempFile, $json, LOCK_EX) === false) {
             @unlink($tempFile);
             Logger::instance()->error("Unable to write configuration file: " . $tempFile);
-            throw new Exception("Unable to save configuration file");
+            throw new ConfigException("Unable to save configuration file");
         }
         Logger::instance()->debug("Replacing configuration file: " . self::$file);
         if (!rename($tempFile, self::$file)) {
             @unlink($tempFile);
             Logger::instance()->error("Unable to replace configuration file: " . self::$file);
-            throw new Exception("Unable to replace configuration file");
+            throw new ConfigException("Unable to replace configuration file");
         }
     }
     /**
@@ -172,27 +193,37 @@ final class Config
      */
     public static function validate(array $cfg, $test = false): bool
     {
-        if (!$test && (!isset($cfg['version']) || !is_numeric($cfg['version']))) {
-            self::$validationMessage = "Invalid or missing 'version'";
-            return false;
+        try {
+            if (!$test && (!isset($cfg['version']) || !is_numeric($cfg['version']))) {
+                throw new ConfigInvalidOrMissingException("'version'");
+            }
+            if (!isset($cfg['title']) || !is_string($cfg['title']) || trim($cfg['title']) === '') {
+                throw new ConfigInvalidOrMissingException("'title'");
+            }
+            if (!isset($cfg['storage']) || !is_array($cfg['storage']) || !self::validateStorage($cfg['storage'] ?? [], $test)) {
+                throw new ConfigInvalidOrMissingException("'storage'");
+            }
+            if (!isset($cfg['smtp']) || !is_array($cfg['smtp']) || !self::validateSmtpSettings($cfg['smtp'] ?? [], $test)) {
+                throw new ConfigInvalidOrMissingException("'smtp'");
+            }
+            if (!isset($cfg['admin']) || !is_array($cfg['admin']) || !self::validateAdminSettings($cfg['admin'] ?? [], $test)) {
+                throw new ConfigInvalidOrMissingException("'admin'");
+            }
+            $status = true;
+        } catch (ConfigException $e) {
+            self::$validationMessage = $e->getMessage();
+            $status = false;
+        } catch (ConfigUnsupportedException $e) {
+            self::$validationMessage = "Unsupported {$e->getMessage()}";
+            $status = false;
+        } catch (ConfigInvalidException $e) {
+            self::$validationMessage = "Invalid {$e->getMessage()}";
+            $status = false;
+        } catch (ConfigInvalidOrMissingException $e) {
+            self::$validationMessage = "Invalid or missing {$e->getMessage()}";
+            $status = false;
         }
-        if (!isset($cfg['title']) || !is_string($cfg['title']) || trim($cfg['title']) === '') {
-            self::$validationMessage = "Invalid or missing 'title'";
-            return false;
-        }
-        if (!isset($cfg['storage']) || !is_array($cfg['storage']) || !self::validateStorage($cfg['storage'] ?? [], $test)) {
-            self::$validationMessage = "Invalid or missing 'storage'";
-            return false;
-        }
-        if (!isset($cfg['smtp']) || !is_array($cfg['smtp']) || !self::validateSmtpSettings($cfg['smtp'] ?? [], $test)) {
-            self::$validationMessage = "Invalid or missing 'smtp'";
-            return false;
-        }
-        if (!isset($cfg['admin']) || !is_array($cfg['admin']) || !self::validateAdminSettings($cfg['admin'] ?? [], $test)) {
-            self::$validationMessage = "Invalid or missing 'admin'";
-            return false;
-        }
-        return true;
+        return $status;
     }
     /**
      * Validates the storage configuration.
@@ -202,16 +233,13 @@ final class Config
     private static function validateStorage(array $storage, $test = false): bool
     {
         if (!isset($storage['type'])) {
-            self::$validationMessage = "Invalid or missing 'storage.type'";
-            return false;
+            throw new ConfigInvalidOrMissingException("'storage.type'");
         }
         if (!$test && $storage['type'] !== 'mysql') {
-            self::$validationMessage = "Unsupported 'storage.type'";
-            return false;
+            throw new ConfigUnsupportedException("'storage.type'");
         }
         if (!isset($storage['settings']) || !is_array($storage['settings'])) {
-            self::$validationMessage = "Invalid or missing 'storage.settings'";
-            return false;
+            throw new ConfigInvalidOrMissingException("'storage.settings'");
         }
         if ($storage['type'] === 'mysql') {
             return self::validateMySqlStorage($storage['settings'] ?? [], $test);
@@ -230,13 +258,11 @@ final class Config
         }
         foreach (['host', 'database', 'user'] as $k) {
             if (!isset($settings[$k]) || !is_string($settings[$k]) || trim($settings[$k]) === '') {
-                self::$validationMessage = "Invalid or missing 'storage.settings.$k'";
-                return false;
+                throw new ConfigInvalidOrMissingException("'storage.settings.$k'");
             }
         }
-        if (isset($settings['port']) && !is_numeric($settings['port'])) {
-            self::$validationMessage = "Invalid 'storage.settings.port'";
-            return false;
+        if (isset($settings['port']) && !is_numeric($settings['port']) || (int)$settings['port'] === 0) {
+            throw new ConfigInvalidException("'storage.settings.port'");
         }
         return true;
     }
@@ -251,12 +277,10 @@ final class Config
             return true;
         }
         if (!isset($settings['host']) || !is_string($settings['host']) || trim($settings['host']) === '') {
-            self::$validationMessage = "Invalid or missing 'smtp.host'";
-            return false;
+            throw new ConfigInvalidOrMissingException("'smtp.host'");
         }
-        if (isset($settings['port']) && !is_numeric($settings['port'])) {
-            self::$validationMessage = "Invalid 'smtp.port'";
-            return false;
+        if (isset($settings['port']) && !is_numeric($settings['port']) || (int)$settings['port'] === 0) {
+            throw new ConfigInvalidException("'smtp.port'");
         }
         if (
             !isset($settings['from']) ||
@@ -264,8 +288,7 @@ final class Config
             trim($settings['from']) === '' ||
             !filter_var($settings['from'], FILTER_VALIDATE_EMAIL)
         ) {
-            self::$validationMessage = "Invalid or missing 'smtp.from'";
-            return false;
+            throw new ConfigInvalidOrMissingException("'smtp.from'");
         }
         return true;
     }
@@ -279,9 +302,11 @@ final class Config
         if ($test) {
             return true;
         }
-        if (empty($settings['username']) || empty($settings['password'])) {
-            self::$validationMessage = "Invalid or missing 'admin.username' or 'admin.password'";
-            return false;
+        if (empty($settings['username'])) {
+            throw new ConfigInvalidOrMissingException("'admin.username'");
+        }
+        if (empty($settings['password'])) {
+            throw new ConfigInvalidOrMissingException("'admin.password'");
         }
         return true;
     }

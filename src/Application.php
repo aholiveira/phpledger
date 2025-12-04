@@ -16,19 +16,33 @@ const SESSION_EXPIRE = 3600;
 
 class Application
 {
+    private static string $errorMessage = "";
     public static function init(): void
     {
         self::defineGitHash();
         self::sendHeaders();
         self::bootstrap();
         self::guardSession();
-        if (ObjectFactory::dataStorage()->check() === false) {
-            if (basename($_SERVER['SCRIPT_NAME']) !== 'update.php') {
-                Redirector::to("update.php");
-            }
+        if (
+            ObjectFactory::dataStorage()->check() === false &&
+            basename($_SERVER['SCRIPT_NAME']) !== 'update.php'
+        ) {
+            Redirector::to("update.php");
         }
         self::applyTimezone();
         self::updateUserLastVisited();
+    }
+    public static function setErrorMessage(string $message): void
+    {
+        self::$errorMessage = $message;
+    }
+    public static function clearErrorMessage(): void
+    {
+        self::$errorMessage = "";
+    }
+    public static function getErrorMessage(): string
+    {
+        return self::$errorMessage;
     }
     private static function defineGitHash(): void
     {

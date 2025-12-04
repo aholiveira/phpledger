@@ -41,6 +41,7 @@ final class AccountController
         $view = new AccountFormView();
         $view->render([
             'account' => $account,
+            'back' => $_GET['back'] ?? "",
             'lang' => L10n::sanitizeLang($_GET['lang'] ?? null),
             'errors' => []
         ]);
@@ -54,21 +55,19 @@ final class AccountController
     private function processPost(): void
     {
         $action = $_POST['action'] ?? 'save';
-
+        $redirectUrl = 'index.php?action=accounts';
         if (!CSRF::validateToken($_POST['_csrf_token'] ?? '')) {
-            Redirector::to('index.php?action=accounts');
+            Redirector::to($redirectUrl);
             return;
         }
 
         if ($action === 'delete') {
             $id = (int) ($_POST['id'] ?? 0);
-            if ($id) {
-                if (($a = ObjectFactory::account()::getById($id)) !== null) {
-                    $a->delete();
-                    Logger::instance()->notice("Account deleted: {$id}");
-                }
+            if ($id && ($a = ObjectFactory::account()::getById($id)) !== null) {
+                $a->delete();
+                Logger::instance()->notice("Account deleted: {$id}");
             }
-            Redirector::to('index.php?action=accounts');
+            Redirector::to($redirectUrl);
             return;
         }
 
@@ -94,7 +93,7 @@ final class AccountController
         }
         if ($a->update()) {
             Logger::instance()->info("Account saved: " . ($a->id ?? '(new)'));
-            Redirector::to('index.php?action=accounts');
+            Redirector::to($redirectUrl);
         } else {
             Logger::instance()->info("Error saving account: " . ($a->id ?? '(new)'));
             $errors[] = 'other';

@@ -1,11 +1,12 @@
 <?php
 
 namespace PHPLedger\Storage\Abstract;
+
 use PHPLedger\Contracts\DataObjectInterface;
 
 abstract class AbstractDataObject implements DataObjectInterface
 {
-    public $id;
+    public ?int $id;
     protected static string $errorMessage;
     abstract public function validate(): bool;
     abstract public function errorMessage(): string;

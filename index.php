@@ -25,6 +25,11 @@ require_once __DIR__ . '/vendor/autoload.php';
 use PHPLedger\Application;
 use PHPLedger\Routing\Router;
 
-Application::init();
 $router = new Router();
-$router->handleRequest($_GET['action'] ?? 'login');
+try {
+    Application::init();
+    $router->handleRequest($_GET['action'] ?? 'login');
+} catch (Exception $e) {
+    Application::setErrorMessage($e->getMessage());
+    $router->handleRequest('application_error');
+}

@@ -50,6 +50,11 @@ class L10n
             : "";
     }
 
+    public static function pl(string $translationId, mixed ...$replacements): void
+    {
+        print self::l($translationId, ...$replacements);
+    }
+
     public static function html(): string
     {
         // ensure $lang has a value

@@ -1,4 +1,5 @@
 <?php
+
 namespace PHPLedger\Views;
 
 /**
@@ -12,96 +13,169 @@ namespace PHPLedger\Views;
 
 use PHPLedger\Domain\Report;
 use PHPLedger\Util\NumberUtil;
+
 class ReportHtmlView
 {
-    private $_periodIncome;
-    private $_periodExpense;
-    private $_periodTotal;
-    protected report $_report;
+    private array $periodIncome;
+    private array $periodExpense;
+    private array $periodTotal;
+    protected report $report;
     public function __construct(report $report)
     {
-        $this->_report = $report;
+        $this->report = $report;
     }
     public function printAsTable()
     {
-        if (!isset($this->_report->reportData)) {
+        if (!isset($this->report->reportData)) {
             return "";
         }
         $lines = "<thead><tr><th colspan=3>Categoria</th>";
-        foreach ($this->_report->columnHeaders as $month) {
+        foreach ($this->report->columnHeaders as $month) {
             $lines .= "<th>{$month}</th>\r\n";
         }
         $lines .= "<th>Average</th><th>Total</th></tr></thead>\r\n";
         $lines .= "<tbody>";
-        $this->_periodIncome = [];
-        $this->_periodExpense = [];
-        $this->_periodTotal = [];
-        foreach ($this->_report->reportData as $rowHeader => $dataRecord) {
-            $lines .= $this->print_row($rowHeader, $dataRecord);
+        $this->periodIncome = [];
+        $this->periodExpense = [];
+        $this->periodTotal = [];
+        foreach ($this->report->reportData as $rowHeader => $dataRecord) {
+            $lines .= $this->printRow($rowHeader, $dataRecord);
             if (array_key_exists('children', $dataRecord)) {
                 foreach ($dataRecord['children'] as $childHeader => $childRecord) {
-                    $lines .= $this->print_row($childHeader, $childRecord, $dataRecord);
+                    $lines .= $this->printRow($childHeader, $childRecord, $dataRecord);
                 }
             }
         }
         $lines .= "</tbody>\r\n";
         $lines .= "<tfoot>\r\n";
-        $lines .= $this->htmlArrayWithTitle($this->_periodIncome, "Income", "income", "saldos");
-        $lines .= $this->htmlArrayWithTitle($this->_periodExpense, "Expense", "expense", "saldos");
-        $lines .= $this->htmlArrayWithTitle($this->_periodTotal, "Total", "totals", "saldos");
-        $lines .= $this->htmlArrayWithTitle($this->_report->savings, "Savings", "savings", "saldos");
+        $lines .= $this->htmlArrayWithTitle($this->periodIncome, "Income", "income", "saldos");
+        $lines .= $this->htmlArrayWithTitle($this->periodExpense, "Expense", "expense", "saldos");
+        $lines .= $this->htmlArrayWithTitle($this->periodTotal, "Total", "totals", "saldos");
+        $lines .= $this->htmlArrayWithTitle($this->report->savings, "Savings", "savings", "saldos");
         $lines .= "</tfoot>\r\n";
         return $lines;
     }
-    private function print_row($header, $record, $parent = null): string
+    private function printRow($header, $record, $parent = null): string
     {
-        $lines = "";
-        $first_date = $this->_report->dateFilters[array_key_first($this->_report->dateFilters)]['start'];
-        $last_date = $this->_report->dateFilters[array_key_last($this->_report->dateFilters)]['end'];
-        if (null !== $parent) {
-            $lines .= "<tr style='display: none;' class=\"group{$parent['id']}\">\r\n";
-            $lines .= "<td></td><td></td><td class='subcategory-label' data-label='Sub-Categoria'><a href=\"ledger_entries.php?filter_sdate={$first_date}&amp;filter_edate={$last_date}&amp;filter_entry_type={$record['id']}\" title=\"Todos os movimentos da categoria\">{$header}</a></td>";
-        } else {
-            $lines .= "<tr class=\"group0\">\r\n";
-            if (array_key_exists('children', $record) && sizeof($record['children']) > 0) {
-                $lines .= "<td><span class=\"open\" id=\"open{$record['id']}\" onclick=\"toogleGroup('group{$record['id']}');this.style.display = 'none';document.getElementById('close{$record['id']}').style.removeProperty('display');\">&plus;</span>\r\n"
-                    . "<span class=\"close\" style=\"display: none;\" id=\"close{$record['id']}\" onclick=\"toogleGroup('group{$record['id']}');this.style.display = 'none';document.getElementById('open{$record['id']}').style.removeProperty('display');\">&minus;</span>\r\n";
-            } else {
-                $lines .= "<td></td>\r\n";
-            }
-            $lines .= "<td colspan=2 data-label='Categoria'><a href=\"ledger_entries.php?filter_sdate={$first_date}&amp;filter_edate={$last_date}&amp;filter_entry_type={$record['id']}&amp;filter_parentId={$record['id']}\" title=\"Todos os movimentos da categoria e sub-categorias\">{$header}</a></td>\r\n";
+        $firstDate = $this->report->dateFilters[array_key_first($this->report->dateFilters)]['start'];
+        $lastDate = $this->report->dateFilters[array_key_last($this->report->dateFilters)]['end'];
+
+        $lines = $this->buildRowStart($record, $parent, $header, $firstDate, $lastDate);
+
+        foreach (array_keys($this->report->columnHeaders) as $colHeader) {
+            $value = $this->getRecordValue($record, $colHeader);
+            $lines .= $this->buildColumnCell($record, $colHeader, $value);
+            $this->updateTotals($colHeader, $value);
         }
-        foreach (array_keys($this->_report->columnHeaders) as $header) {
-            $value = (sizeof($record['values']) > 0 && array_key_exists($header, $record['values'])) ? $record['values'][$header] : 0;
-            $sum = 0;
-            $lines .= "<td data-label='{$this->_report->columnHeaders[$header]}' class=\"saldos\">\r\n";
-            $lines .= "<span class='group{$record['id']}'>";
-            if ($this->hasChildren($record)) {
-                $sum = array_key_exists($header, $record['subtotal']) ? $record['subtotal'][$header] : 0;
-                $lines .= (($value + $sum) <> 0 ? "<a href=\"ledger_entries.php?filter_sdate={$this->_report->dateFilters[$header]['start']}&amp;filter_edate={$this->_report->dateFilters[$header]['end']}&amp;filter_entry_type={$record['id']}&amp;filter_parentId={$record['id']}\" title=\"Todos os movimentos da categoria e sub-categorias para este periodo\">" : "");
-                $lines .= NumberUtil::normalize($value + $sum);
-                $lines .= (($value + $sum) <> 0 ? "</a>" : "") . "</span>\r\n";
-                $lines .= "<span style='display: none;' class='group{$record['id']}'>";
-            }
-            $lines .= $value <> 0 ? "<a href=\"ledger_entries.php?filter_sdate={$this->_report->dateFilters[$header]['start']}&amp;filter_edate={$this->_report->dateFilters[$header]['end']}&amp;filter_entry_type={$record['id']}\" title=\"Todos os movimentos da categoria para este periodo\">" : "";
-            $lines .= NumberUtil::normalize($value);
-            $lines .= ($value <> 0 ? "</a>" : "") . "</span>\r\n";
-            $lines .= "</td>\r\n";
-            if (array_key_exists($header, $this->_periodTotal)) {
-                $this->_periodTotal[$header] += $value;
-            } else {
-                $this->_periodTotal[$header] = $value;
-            }
-            $this->addPeriodAmount($header, $value);
-        }
-        if ($this->hasChildren($record)) {
-            $lines .= $this->htmlArrayAverageAndSum($record, "totals", "group{$record['id']}");
-        } else {
-            $lines .= $this->htmlArrayAverageAndSum($record['values'], "totals", "group{$record['id']}");
-        }
+
+        $lines .= $this->buildRowTotals($record);
+
         $lines .= "</tr>\r\n";
+
         return $lines;
     }
+
+    private function buildRowStart($record, $parent, $header, $firstDate, $lastDate): string
+    {
+        if ($parent !== null) {
+            return "<tr style='display: none;' class=\"group{$parent['id']}\">\r\n"
+                . "<td></td><td></td><td class='subcategory-label' data-label='Sub-Categoria'>"
+                . $this->buildRecordLink($record['id'], $header, $firstDate, $lastDate)
+                . "</td>";
+        }
+
+        $row = "<tr class=\"group0\">\r\n";
+        if (!empty($record['children'])) {
+            $row .= $this->buildToggleIcons($record['id']);
+        } else {
+            $row .= "<td></td>\r\n";
+        }
+
+        $row .= "<td colspan=2 data-label='Categoria'>"
+            . $this->buildRecordLink($record['id'], $header, $firstDate, $lastDate, true)
+            . "</td>\r\n";
+
+        return $row;
+    }
+
+    private function buildToggleIcons($id): string
+    {
+        return "<td><span class=\"open\" id=\"open{$id}\" onclick=\"toogleGroup('group{$id}');this.style.display = 'none';document.getElementById('close{$id}').style.removeProperty('display');\">&plus;</span>\r\n"
+            . "<span class=\"close\" style=\"display: none;\" id=\"close{$id}\" onclick=\"toogleGroup('group{$id}');this.style.display = 'none';document.getElementById('open{$id}').style.removeProperty('display');\">&minus;</span>\r\n";
+    }
+
+    private function buildRecordLink($id, $label, $startDate, $endDate, $includeParent = false): string
+    {
+        $url = "ledger_entries.php?filter_sdate={$startDate}&amp;filter_edate={$endDate}&amp;filter_entry_type={$id}";
+        if ($includeParent) {
+            $url .= "&amp;filter_parentId={$id}";
+        }
+        return "<a href=\"{$url}\" title=\"Todos os movimentos da categoria" . ($includeParent ? " e sub-categorias" : "") . "\">{$label}</a>";
+    }
+
+    private function getRecordValue($record, $header): float
+    {
+        return (!empty($record['values']) && array_key_exists($header, $record['values']))
+            ? $record['values'][$header]
+            : 0;
+    }
+
+    private function buildColumnCell($record, $header, $value): string
+    {
+        $lines = "<td data-label='{$this->report->columnHeaders[$header]}' class=\"saldos\">\r\n";
+        $lines .= "<span class='group{$record['id']}'>";
+
+        if ($this->hasChildren($record)) {
+            $sum = $record['subtotal'][$header] ?? 0;
+            $lines .= $this->wrapValueLink($value + $sum, $record['id'], $header, true);
+            $lines .= "<span style='display: none;' class='group{$record['id']}'>";
+        }
+
+        $lines .= $this->wrapValueLink($value, $record['id'], $header);
+
+        $lines .= "</span>\r\n</td>\r\n";
+
+        return $lines;
+    }
+
+    private function wrapValueLink($value, $recordId, $header, $includeParent = false): string
+    {
+        $startDate = $this->report->dateFilters[$header]['start'];
+        $endDate = $this->report->dateFilters[$header]['end'];
+        $normalized = NumberUtil::normalize($value);
+
+        if ($value == 0) {
+            return $normalized;
+        }
+
+        $url = "ledger_entries.php?filter_sdate={$startDate}&amp;filter_edate={$endDate}&amp;filter_entry_type={$recordId}";
+        if ($includeParent) {
+            $url .= "&amp;filter_parentId={$recordId}";
+            $title = "Todos os movimentos da categoria e sub-categorias para este periodo";
+        } else {
+            $title = "Todos os movimentos da categoria para este periodo";
+        }
+
+        return "<a href=\"{$url}\" title=\"{$title}\">{$normalized}</a>";
+    }
+
+    private function updateTotals($header, $value): void
+    {
+        if (array_key_exists($header, $this->periodTotal)) {
+            $this->periodTotal[$header] += $value;
+        } else {
+            $this->periodTotal[$header] = $value;
+        }
+
+        $this->addPeriodAmount($header, $value);
+    }
+
+    private function buildRowTotals($record): string
+    {
+        $data = $this->hasChildren($record) ? $record : $record['values'];
+        return $this->htmlArrayAverageAndSum($data, "totals", "group{$record['id']}");
+    }
+
     private function hasChildren(array $record): bool
     {
         return array_key_exists('children', $record) && sizeof($record['children']) > 0;
@@ -109,16 +183,16 @@ class ReportHtmlView
     private function addPeriodAmount($period, $amount)
     {
         if ($amount >= 0) {
-            if (array_key_exists($period, $this->_periodIncome)) {
-                $this->_periodIncome[$period] += $amount;
+            if (array_key_exists($period, $this->periodIncome)) {
+                $this->periodIncome[$period] += $amount;
             } else {
-                $this->_periodIncome[$period] = $amount;
+                $this->periodIncome[$period] = $amount;
             }
         } else {
-            if (array_key_exists($period, $this->_periodExpense)) {
-                $this->_periodExpense[$period] += $amount;
+            if (array_key_exists($period, $this->periodExpense)) {
+                $this->periodExpense[$period] += $amount;
             } else {
-                $this->_periodExpense[$period] = $amount;
+                $this->periodExpense[$period] = $amount;
             }
         }
     }
@@ -157,7 +231,7 @@ class ReportHtmlView
         if (isset($tdclass)) {
             $class = "class=\"{$tdclass}\"";
         }
-        foreach ($this->_report->columnHeaders as $key => $header) {
+        foreach ($this->report->columnHeaders as $key => $header) {
             $retval .= "<td data-label='{$header}' {$class}>" . NumberUtil::normalize(array_key_exists($key, $array) ? $array[$key] : 0) . "</td>\r\n";
         }
         return $retval;

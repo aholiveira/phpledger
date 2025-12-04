@@ -23,7 +23,8 @@ $pagetitle = "Tipos de contas";
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php Html::header($pagetitle); ?>
+    <title><?= Html::title($pagetitle) ?></title>
+    <?= Html::header() ?>
 </head>
 
 <body>
@@ -45,7 +46,9 @@ $pagetitle = "Tipos de contas";
         <?php Html::footer(); ?>
     </div>
     <script>
-        setTimeout(() => { document.getElementById("preloader").style.display = "none"; }, 0);
+        setTimeout(() => {
+            document.getElementById("preloader").style.display = "none";
+        }, 0);
     </script>
 </body>
 

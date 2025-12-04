@@ -10,10 +10,12 @@
 if (!defined("ROOT_DIR")) {
     require_once __DIR__ . "/prepend.php";
 }
+
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 use PHPLedger\Views\ViewFactory;
+
 $pagetitle = "Relatório anual";
 $first_year = date("Y") - 1;
 $last_year = date("Y");
@@ -37,7 +39,8 @@ $report->getReport(["first_year" => $first_year, "last_year" => $last_year]);
 <html lang="<?= l10n::html() ?>">
 
 <head>
-    <?php Html::header($pagetitle); ?>
+    <title><?= Html::title($pagetitle) ?></title>
+    <?= Html::header() ?>
     <script>
         function toogleGroup(groupName) {
             var i, j, row, multiplier;
@@ -83,7 +86,9 @@ $report->getReport(["first_year" => $first_year, "last_year" => $last_year]);
         <?php Html::footer(); ?>
     </div>
     <script>
-        setTimeout(() => { document.getElementById("preloader").style.display = "none"; }, 0);
+        setTimeout(() => {
+            document.getElementById("preloader").style.display = "none";
+        }, 0);
     </script>
 </body>
 
