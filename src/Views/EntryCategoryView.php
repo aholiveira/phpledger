@@ -132,7 +132,7 @@ class EntryCategoryView extends ObjectViewer
         }
         return $out;
     }
-    private function buildCategoryOptions(EntryCategory $category, int $selected): string
+    private function buildCategoryOptions(EntryCategory $category, ?int $selected): string
     {
         if ($category->id > 0 && count($category->children) > 0) {
             return $this->buildOptionGroup($category, $selected);
@@ -142,7 +142,7 @@ class EntryCategoryView extends ObjectViewer
         }
         return "";
     }
-    private function buildOptionGroup(EntryCategory $category, int $selected): string
+    private function buildOptionGroup(EntryCategory $category, ?int $selected): string
     {
         $out = "<optgroup label='{$category->description}'>\r\n";
         $out .= $this->buildOption($category, $selected);
@@ -153,7 +153,7 @@ class EntryCategoryView extends ObjectViewer
 
         return $out . "</optgroup>\r\n";
     }
-    private function buildOption(EntryCategory $category, int $selected): string
+    private function buildOption(EntryCategory $category, ?int $selected): string
     {
         $s = $selected === $category->id ? " selected " : "";
         return "<option value='{$category->id}'{$s}>{$category->description}</option>\n";

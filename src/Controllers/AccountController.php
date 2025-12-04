@@ -41,6 +41,7 @@ final class AccountController
         $view = new AccountFormView();
         $view->render([
             'account' => $account,
+            'back' => $_GET['back'] ?? "",
             'lang' => L10n::sanitizeLang($_GET['lang'] ?? null),
             'errors' => []
         ]);
