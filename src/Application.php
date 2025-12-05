@@ -17,17 +17,33 @@ const SESSION_EXPIRE = 3600;
 class Application
 {
     private static string $errorMessage = "";
+    private static ?ObjectFactory $objectFactory = null;
+    private static ?SessionManager $sessionManager = null;
+    private static ?Logger $logger = null;
+    private static ?Redirector $redirector = null;
     public static function init(): void
     {
-        self::defineGitHash();
+        self::setDependencies();
         self::sendHeaders();
         self::bootstrap();
         self::guardSession();
-        if (ObjectFactory::dataStorage()->check() === false && ($_GET['action'] ?? '') !== 'update') {
-            Redirector::to("index.php?action=update");
+        if (self::$objectFactory::dataStorage()->check() === false && ($_GET['action'] ?? '') !== 'update') {
+            self::$redirector::to("index.php?action=update");
         }
         self::applyTimezone();
         self::updateUserLastVisited();
+    }
+
+    public static function setDependencies(
+        ?ObjectFactory $objectFactory = null,
+        ?SessionManager $sessionManager = null,
+        ?Logger $logger = null,
+        ?Redirector $redirector = null
+    ): void {
+        self::$objectFactory = $objectFactory;
+        self::$sessionManager = $sessionManager;
+        self::$logger = $logger;
+        self::$redirector = $redirector;
     }
     public static function setErrorMessage(string $message): void
     {
@@ -40,14 +56,6 @@ class Application
     public static function getErrorMessage(): string
     {
         return self::$errorMessage;
-    }
-    private static function defineGitHash(): void
-    {
-        if (!defined('GITHASH')) {
-            $gitHead = ROOT_DIR . "/.git/ORIG_HEAD";
-            $hash = file_exists($gitHead) ? substr(file_get_contents($gitHead), 0, 12) : "main";
-            define("GITHASH", $hash);
-        }
     }
     private static function sendHeaders(): void
     {
@@ -62,19 +70,19 @@ class Application
     }
     private static function bootstrap(): void
     {
-        SessionManager::start();
+        self::$sessionManager::start();
         L10n::init();
         ConfigPath::ensureMigrated();
         Config::init(ConfigPath::get());
-        Logger::init(Path::combine(ROOT_DIR, "logs", "ledger.log"), LogLevel::INFO);
+        self::$logger::init(Path::combine(ROOT_DIR, "logs", "ledger.log"), LogLevel::INFO);
         $backend = Config::get("storage.type") ??  "mysql";
-        ObjectFactory::init($backend);
+        self::$objectFactory::init($backend);
     }
     private static function guardSession(): void
     {
-        Logger::instance()->debug("Guarding session in Application::guardSession");
+        self::$logger::instance()->debug("Guarding session in Application::guardSession");
         $publicPages = ['index.php'];
-        SessionManager::guard($publicPages, SESSION_EXPIRE);
+        self::$sessionManager::guard($publicPages, SESSION_EXPIRE);
     }
     private static function applyTimezone(): void
     {
@@ -87,14 +95,14 @@ class Application
         }
 
         $tz = $_SESSION['timezone'] ?? Config::get("timezone");
-        Logger::instance()->debug("Applying timezone: " . ($tz ?? 'UTC'));
+        self::$logger::instance()->debug("Applying timezone: " . ($tz ?? 'UTC'));
         date_default_timezone_set(
             in_array($tz, timezone_identifiers_list(), true) ? $tz : 'UTC'
         );
     }
     private static function updateUserLastVisited(): void
     {
-        Logger::instance()->debug("Updating user's last visited page");
+        self::$logger::instance()->debug("Updating user's last visited page");
         if (!empty($_SESSION['user'])) {
             // Exclude certain pages from being recorded as "lastVisited" to avoid redirect loops
             $page = strtolower(basename($_SERVER['SCRIPT_NAME'] ?? ''));
@@ -102,7 +110,7 @@ class Application
             if (in_array($page, $excluded, true)) {
                 return;
             }
-            $factory = ObjectFactory::defaults();
+            $factory = self::$objectFactory::defaults();
             $defaults = $factory::getByUsername($_SESSION['user']) ?? $factory::init();
             $defaults->lastVisitedUri = $_SERVER['REQUEST_URI'] ?? '/';
             $defaults->lastVisitedAt = time();
