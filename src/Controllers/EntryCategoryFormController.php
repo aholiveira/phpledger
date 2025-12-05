@@ -11,9 +11,10 @@
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Views\EntryCategoryFormView;
 use PHPLedger\Views\ViewFactory;
 
-final class EntryCategoryController
+final class EntryCategoryFormController
 {
     public function handle(): void
     {
@@ -24,7 +25,9 @@ final class EntryCategoryController
                 $object = $object->getById($id);
             }
         }
-        $view = ViewFactory::instance()->entryCategoryView($object);
-        print $view->printForm();
+        $viewer = ViewFactory::instance()->entryCategoryView($object);
+        $form = $viewer->printForm();
+        $view = new EntryCategoryFormView;
+        $view->render($form, $object->id > 0);
     }
 }

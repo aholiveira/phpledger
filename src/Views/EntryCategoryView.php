@@ -27,7 +27,7 @@ class EntryCategoryView extends ObjectViewer
         if (!($object instanceof EntryCategory)) {
             return $retval;
         }
-        $retval .= "<td class='id' data-label='ID'><a href=\"entry_type.php?id={$object->id}\" title=\"Editar a categoria\">{$object->id}</a></td>";
+        $retval .= "<td class='id' data-label='ID'><a href=\"index.php?action=entry_type&id={$object->id}\" title=\"Editar a categoria\">{$object->id}</a></td>";
         $retval .= "<td class='category' data-label='Categoria'>" . (null === $object->parentId || $object->parentId == 0 ? "" : ($object->parentDescription ?? "")) . "</td>";
         $retval .= "<td class='description' data-label='Descri&ccedil;&atilde;o'>{$object->description}</td>";
         $retval .= "<td class='amount' data-label='Valor'>" . NumberUtil::normalize(abs($object->getBalance())) . "</td>";

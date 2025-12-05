@@ -23,6 +23,9 @@ class MySqlEntryCategory extends EntryCategory
     {
         $this->traitConstruct();
         $this->children = [];
+        if (!isset($this->active)) {
+            $this->active = 0;
+        }
     }
     public static function getDefinition(): array
     {

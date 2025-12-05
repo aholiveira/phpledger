@@ -27,7 +27,7 @@ class AccountTypeView extends ObjectViewer
         if (!($object instanceof accounttype)) {
             return $retval;
         }
-        $retval .= "<td data-label='ID' id=\"{$object->id}\"><a title=\"Editar\" href=\"account_types.php?id={$object->id}\">{$object->id}</a></td>";
+        $retval .= "<td data-label='ID' id=\"{$object->id}\"><a title=\"Editar\" href=\"index.php?action=account_type&id={$object->id}\">{$object->id}</a></td>";
         $retval .= "<td data-label='Descri&ccedil;&atilde;o'>{$object->description}</td>";
         $retval .= "<td data-label='Savings?' class=\"checkbox\"><input type=\"checkbox\" onclick=\"return false;\" name=savings{$object->id} " . ($object->savings ? "checked" : "") . "></td>\n";
         return $retval;
