@@ -24,7 +24,7 @@ class AccountBalanceView extends ObjectViewer
          * @var account
          */
         $object = $this->object;
-        return "<td><a href=\"account_types.php?id={$object->id}\">{$object->id}</a></td>"
+        return "<td><a href=\"index.php?action=account_type&id={$object->id}\">{$object->id}</a></td>"
             . "<td>{$object->name}</td>";
     }
 

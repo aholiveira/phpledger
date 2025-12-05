@@ -29,7 +29,7 @@ final class AccountTypeListView
                 </div>
                 <?php Html::menu(); ?>
                 <div class="header">
-                    <p style="margin:0"><a href="account_types.php?lang=<?= $lang ?>"><?php L10n::pl("Adicionar"); ?></a></p>
+                    <p style="margin:0"><a href="index.php?action=account_type&lang=<?= $lang ?>">Adicionar<?php L10n::pl("Adicionar"); ?></a></p>
                 </div>
                 <div class="main" id="main">
                     <?php

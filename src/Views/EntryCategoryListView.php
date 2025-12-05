@@ -40,7 +40,7 @@ class EntryCategoryListView
                 </div>
                 <?php Html::menu(); ?>
                 <div class="header">
-                    <p style="margin: 0"><a href="entry_type.php">Adicionar</a></p>
+                    <p style="margin: 0"><a href="index.php?action=entry_type">Adicionar</a></p>
                 </div>
                 <div id="main" class="main">
                     <div class="entry_category_list">

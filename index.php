@@ -12,8 +12,8 @@
 
 declare(strict_types=1);
 
-if (PHP_VERSION_ID < 80000) {
-    die('PHP >= 8.0.0 required');
+if (PHP_VERSION_ID < 80400) {
+    die('PHP >= 8.4.0 required');
 }
 
 if (!defined('ROOT_DIR')) {
