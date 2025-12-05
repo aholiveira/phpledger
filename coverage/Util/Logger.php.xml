@@ -1,0 +1,1658 @@
+<?xml version="1.0"?>
+<phpunit xmlns="https://schema.phpunit.de/coverage/1.0">
+  <file name="Logger.php" path="\Util">
+    <totals>
+      <lines total="154" comments="62" code="92" executable="28" executed="24" percent="85.71"/>
+      <methods count="13" tested="9" percent="69.23"/>
+      <functions count="0" tested="0" percent="0"/>
+      <classes count="1" tested="0" percent="0.00"/>
+      <traits count="0" tested="0" percent="0"/>
+    </totals>
+    <class name="PHPLedger\Util\Logger" start="14" executable="28" executed="24" crap="16.75">
+      <namespace name="PHPLedger\Util"/>
+      <method name="instance" signature="instance(): self" start="24" end="27" crap="1" executable="1" executed="1" coverage="100"/>
+      <method name="init" signature="init(string $file, PHPLedger\Util\LogLevel $logLevel): void" start="33" end="36" crap="2" executable="1" executed="0" coverage="0"/>
+      <method name="__construct" signature="__construct(string $file, PHPLedger\Util\LogLevel $logLevel)" start="42" end="46" crap="1" executable="2" executed="2" coverage="100"/>
+      <method name="setLogLevel" signature="setLogLevel(PHPLedger\Util\LogLevel $logLevel)" start="51" end="54" crap="2" executable="1" executed="0" coverage="0"/>
+      <method name="debug" signature="debug(string $message, string $prefix): void" start="60" end="63" crap="1" executable="1" executed="1" coverage="100"/>
+      <method name="info" signature="info(string $message, string $prefix): void" start="69" end="72" crap="1" executable="1" executed="1" coverage="100"/>
+      <method name="notice" signature="notice(string $message, string $prefix): void" start="78" end="81" crap="2" executable="1" executed="0" coverage="0"/>
+      <method name="warning" signature="warning(string $message, string $prefix): void" start="87" end="90" crap="2" executable="1" executed="0" coverage="0"/>
+      <method name="error" signature="error(string $message, string $prefix): void" start="96" end="99" crap="1" executable="1" executed="1" coverage="100"/>
+      <method name="dump" signature="dump(mixed $data, string $prefix): void" start="105" end="109" crap="1" executable="2" executed="2" coverage="100"/>
+      <method name="dumpStack" signature="dumpStack(): void" start="113" end="116" crap="1" executable="1" executed="1" coverage="100"/>
+      <method name="levelText" signature="levelText(PHPLedger\Util\LogLevel $level): string" start="122" end="131" crap="1" executable="5" executed="5" coverage="100"/>
+      <method name="writeLog" signature="writeLog(PHPLedger\Util\LogLevel $level, string $message, string $prefix): void" start="138" end="152" crap="4" executable="10" executed="10" coverage="100"/>
+    </class>
+    <coverage>
+      <line nr="26">
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_empty_array_when_no_ledgers_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_all_ledgers_from_database"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_ledger_objects_when_populated"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_filters_by_field_when_filter_provided"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_results_ordered_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_returns_null_when_ledger_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_a_ledger_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_correct_data_for_ledger_with_spaces_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_creates_a_new_ledger_when_id_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_updates_an_existing_ledger"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_handles_special_characters_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_trims_name_to_30_characters_due_to_column_constraint"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_simple_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_nested_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_default_for_missing_keys"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_without_a_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_location"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_false_initializing_with_invalid_JSON"/>
+        <covered by="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_year_options_with_selected_year"/>
+        <covered by="P\Tests\Unit\L10nTest::__pest_evaluable_it_sets_forced_language_when_init_is_called"/>
+      </line>
+      <line nr="44">
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_an_info_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_a_debug_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_prefix_as_dash_when_empty"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_dump_output"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="45">
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_an_info_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_a_debug_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_prefix_as_dash_when_empty"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_dump_output"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="62">
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_file"/>
+        <covered by="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_year_options_with_selected_year"/>
+        <covered by="P\Tests\Unit\L10nTest::__pest_evaluable_it_sets_forced_language_when_init_is_called"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_a_debug_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="71">
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_an_info_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_prefix_as_dash_when_empty"/>
+      </line>
+      <line nr="98">
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_simple_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_nested_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_default_for_missing_keys"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_without_a_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_location"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_false_initializing_with_invalid_JSON"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="107">
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_empty_array_when_no_ledgers_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_all_ledgers_from_database"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_ledger_objects_when_populated"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_filters_by_field_when_filter_provided"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_results_ordered_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_returns_null_when_ledger_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_a_ledger_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_correct_data_for_ledger_with_spaces_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_creates_a_new_ledger_when_id_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_updates_an_existing_ledger"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_handles_special_characters_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_trims_name_to_30_characters_due_to_column_constraint"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_dump_output"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump"/>
+      </line>
+      <line nr="108">
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_empty_array_when_no_ledgers_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_all_ledgers_from_database"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_ledger_objects_when_populated"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_filters_by_field_when_filter_provided"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_results_ordered_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_returns_null_when_ledger_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_a_ledger_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_correct_data_for_ledger_with_spaces_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_creates_a_new_ledger_when_id_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_updates_an_existing_ledger"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_handles_special_characters_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_trims_name_to_30_characters_due_to_column_constraint"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_dump_output"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump"/>
+      </line>
+      <line nr="115">
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump"/>
+      </line>
+      <line nr="125">
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_empty_array_when_no_ledgers_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_all_ledgers_from_database"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_ledger_objects_when_populated"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_filters_by_field_when_filter_provided"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_results_ordered_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_returns_null_when_ledger_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_a_ledger_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_correct_data_for_ledger_with_spaces_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_creates_a_new_ledger_when_id_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_updates_an_existing_ledger"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_handles_special_characters_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_trims_name_to_30_characters_due_to_column_constraint"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_simple_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_nested_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_default_for_missing_keys"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_without_a_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_location"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_false_initializing_with_invalid_JSON"/>
+        <covered by="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_year_options_with_selected_year"/>
+        <covered by="P\Tests\Unit\L10nTest::__pest_evaluable_it_sets_forced_language_when_init_is_called"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_an_info_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_a_debug_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_prefix_as_dash_when_empty"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_dump_output"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="126">
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_simple_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_nested_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_default_for_missing_keys"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_without_a_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_location"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_false_initializing_with_invalid_JSON"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_an_info_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_prefix_as_dash_when_empty"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="127">
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_simple_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_nested_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_default_for_missing_keys"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_without_a_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_location"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_false_initializing_with_invalid_JSON"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="128">
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_simple_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_nested_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_default_for_missing_keys"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_without_a_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_location"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_false_initializing_with_invalid_JSON"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="129">
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_empty_array_when_no_ledgers_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_all_ledgers_from_database"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_ledger_objects_when_populated"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_filters_by_field_when_filter_provided"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_results_ordered_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_returns_null_when_ledger_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_a_ledger_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_correct_data_for_ledger_with_spaces_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_creates_a_new_ledger_when_id_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_updates_an_existing_ledger"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_handles_special_characters_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_trims_name_to_30_characters_due_to_column_constraint"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_simple_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_nested_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_default_for_missing_keys"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_without_a_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_location"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_false_initializing_with_invalid_JSON"/>
+        <covered by="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_year_options_with_selected_year"/>
+        <covered by="P\Tests\Unit\L10nTest::__pest_evaluable_it_sets_forced_language_when_init_is_called"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_an_info_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_a_debug_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_prefix_as_dash_when_empty"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_dump_output"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="140">
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_empty_array_when_no_ledgers_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_all_ledgers_from_database"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_ledger_objects_when_populated"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_filters_by_field_when_filter_provided"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_results_ordered_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_returns_null_when_ledger_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_a_ledger_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_correct_data_for_ledger_with_spaces_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_creates_a_new_ledger_when_id_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_updates_an_existing_ledger"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_handles_special_characters_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_trims_name_to_30_characters_due_to_column_constraint"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_simple_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_nested_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_default_for_missing_keys"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_without_a_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_location"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_false_initializing_with_invalid_JSON"/>
+        <covered by="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_year_options_with_selected_year"/>
+        <covered by="P\Tests\Unit\L10nTest::__pest_evaluable_it_sets_forced_language_when_init_is_called"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_an_info_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_a_debug_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_prefix_as_dash_when_empty"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_dump_output"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="141">
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="143">
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_empty_array_when_no_ledgers_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_all_ledgers_from_database"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_ledger_objects_when_populated"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_filters_by_field_when_filter_provided"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_results_ordered_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_returns_null_when_ledger_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_a_ledger_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_correct_data_for_ledger_with_spaces_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_creates_a_new_ledger_when_id_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_updates_an_existing_ledger"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_handles_special_characters_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_trims_name_to_30_characters_due_to_column_constraint"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_simple_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_nested_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_default_for_missing_keys"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_without_a_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_location"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_false_initializing_with_invalid_JSON"/>
+        <covered by="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_year_options_with_selected_year"/>
+        <covered by="P\Tests\Unit\L10nTest::__pest_evaluable_it_sets_forced_language_when_init_is_called"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_an_info_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_a_debug_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_prefix_as_dash_when_empty"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_dump_output"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="144">
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_empty_array_when_no_ledgers_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_all_ledgers_from_database"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_ledger_objects_when_populated"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_filters_by_field_when_filter_provided"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_results_ordered_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_returns_null_when_ledger_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_a_ledger_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_correct_data_for_ledger_with_spaces_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_creates_a_new_ledger_when_id_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_updates_an_existing_ledger"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_handles_special_characters_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_trims_name_to_30_characters_due_to_column_constraint"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_simple_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_nested_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_default_for_missing_keys"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_without_a_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_location"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_false_initializing_with_invalid_JSON"/>
+        <covered by="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_year_options_with_selected_year"/>
+        <covered by="P\Tests\Unit\L10nTest::__pest_evaluable_it_sets_forced_language_when_init_is_called"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_an_info_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_a_debug_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_prefix_as_dash_when_empty"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_dump_output"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="145">
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_empty_array_when_no_ledgers_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_all_ledgers_from_database"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_ledger_objects_when_populated"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_filters_by_field_when_filter_provided"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_results_ordered_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_returns_null_when_ledger_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_a_ledger_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_correct_data_for_ledger_with_spaces_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_creates_a_new_ledger_when_id_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_updates_an_existing_ledger"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_handles_special_characters_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_trims_name_to_30_characters_due_to_column_constraint"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_simple_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_nested_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_default_for_missing_keys"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_without_a_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_location"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_false_initializing_with_invalid_JSON"/>
+        <covered by="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_year_options_with_selected_year"/>
+        <covered by="P\Tests\Unit\L10nTest::__pest_evaluable_it_sets_forced_language_when_init_is_called"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_an_info_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_a_debug_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_prefix_as_dash_when_empty"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_dump_output"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="146">
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_empty_array_when_no_ledgers_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_all_ledgers_from_database"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_ledger_objects_when_populated"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_filters_by_field_when_filter_provided"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_results_ordered_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_returns_null_when_ledger_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_a_ledger_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_correct_data_for_ledger_with_spaces_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_creates_a_new_ledger_when_id_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_updates_an_existing_ledger"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_handles_special_characters_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_trims_name_to_30_characters_due_to_column_constraint"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_simple_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_nested_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_default_for_missing_keys"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_without_a_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_location"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_false_initializing_with_invalid_JSON"/>
+        <covered by="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_year_options_with_selected_year"/>
+        <covered by="P\Tests\Unit\L10nTest::__pest_evaluable_it_sets_forced_language_when_init_is_called"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_an_info_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_a_debug_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_prefix_as_dash_when_empty"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_dump_output"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="147">
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_empty_array_when_no_ledgers_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_all_ledgers_from_database"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_ledger_objects_when_populated"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_filters_by_field_when_filter_provided"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_results_ordered_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_returns_null_when_ledger_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_a_ledger_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_correct_data_for_ledger_with_spaces_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_creates_a_new_ledger_when_id_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_updates_an_existing_ledger"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_handles_special_characters_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_trims_name_to_30_characters_due_to_column_constraint"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_simple_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_nested_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_default_for_missing_keys"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_without_a_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_location"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_false_initializing_with_invalid_JSON"/>
+        <covered by="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_year_options_with_selected_year"/>
+        <covered by="P\Tests\Unit\L10nTest::__pest_evaluable_it_sets_forced_language_when_init_is_called"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_an_info_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_a_debug_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_prefix_as_dash_when_empty"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_dump_output"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="148">
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_empty_array_when_no_ledgers_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_all_ledgers_from_database"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_ledger_objects_when_populated"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_filters_by_field_when_filter_provided"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_results_ordered_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_returns_null_when_ledger_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_a_ledger_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_correct_data_for_ledger_with_spaces_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_creates_a_new_ledger_when_id_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_updates_an_existing_ledger"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_handles_special_characters_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_trims_name_to_30_characters_due_to_column_constraint"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_simple_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_nested_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_default_for_missing_keys"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_without_a_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_location"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_false_initializing_with_invalid_JSON"/>
+        <covered by="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_year_options_with_selected_year"/>
+        <covered by="P\Tests\Unit\L10nTest::__pest_evaluable_it_sets_forced_language_when_init_is_called"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_an_info_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_a_debug_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_prefix_as_dash_when_empty"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_dump_output"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="149">
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically"/>
+      </line>
+      <line nr="151">
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_empty_array_when_no_ledgers_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_all_ledgers_from_database"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_ledger_objects_when_populated"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_filters_by_field_when_filter_provided"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_results_ordered_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_returns_null_when_ledger_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_a_ledger_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_correct_data_for_ledger_with_spaces_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_creates_a_new_ledger_when_id_does_not_exist"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_updates_an_existing_ledger"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_handles_special_characters_in_name"/>
+        <covered by="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_trims_name_to_30_characters_due_to_column_constraint"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_simple_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_nested_values"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_default_for_missing_keys"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_without_a_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_location"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_file"/>
+        <covered by="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_false_initializing_with_invalid_JSON"/>
+        <covered by="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_year_options_with_selected_year"/>
+        <covered by="P\Tests\Unit\L10nTest::__pest_evaluable_it_sets_forced_language_when_init_is_called"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_an_info_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_a_debug_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_prefix_as_dash_when_empty"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_dump_output"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+    </coverage>
+    <source>
+      <line no="1">
+        <token name="T_OPEN_TAG">&lt;?php</token>
+      </line>
+      <line no="2"/>
+      <line no="3">
+        <token name="T_NAMESPACE">namespace</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">PHPLedger\Util</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="4"/>
+      <line no="5">
+        <token name="T_ENUM">enum</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">int</token>
+      </line>
+      <line no="6">
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="7">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CASE">case</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">ERROR</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">0</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="8">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CASE">case</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">WARNING</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">1</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="9">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CASE">case</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">NOTICE</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">2</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="10">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CASE">case</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">INFO</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">3</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="11">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CASE">case</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">DEBUG</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">4</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="12">
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="13"/>
+      <line no="14">
+        <token name="T_CLASS">class</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">Logger</token>
+      </line>
+      <line no="15">
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="16">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PRIVATE">private</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$logFile</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="17">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PRIVATE">private</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$logLevel</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="18">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PRIVATE">private</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_QUESTION_MARK">?</token>
+        <token name="T_STRING">self</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$instance</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">null</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="19"/>
+      <line no="20">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="21">
+        <token name="T_DOC_COMMENT">     * Get the singleton instance of the Logger.</token>
+      </line>
+      <line no="22">
+        <token name="T_DOC_COMMENT">     * @return self</token>
+      </line>
+      <line no="23">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="24">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">instance</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">self</token>
+      </line>
+      <line no="25">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="26">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_VARIABLE">$instance</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COALESCE_EQUAL">??=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NEW">new</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">self</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">ROOT_DIR</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOT">.</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"/logs/ledger.log"</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="27">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="28">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="29">
+        <token name="T_DOC_COMMENT">     * Initialize the Logger singleton with a specific log file and level.</token>
+      </line>
+      <line no="30">
+        <token name="T_DOC_COMMENT">     * @param string $file</token>
+      </line>
+      <line no="31">
+        <token name="T_DOC_COMMENT">     * @param LogLevel $logLevel</token>
+      </line>
+      <line no="32">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="33">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">init</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$file</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$logLevel</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">DEBUG</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">void</token>
+      </line>
+      <line no="34">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="35">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_VARIABLE">$instance</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NEW">new</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">self</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$file</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$logLevel</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="36">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="37">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="38">
+        <token name="T_DOC_COMMENT">     * Constructor for Logger.</token>
+      </line>
+      <line no="39">
+        <token name="T_DOC_COMMENT">     * @param string $file</token>
+      </line>
+      <line no="40">
+        <token name="T_DOC_COMMENT">     * @param LogLevel $logLevel</token>
+      </line>
+      <line no="41">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="42">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">__construct</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$file</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$logLevel</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">DEBUG</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="43">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="44">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">logFile</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$file</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="45">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">logLevel</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$logLevel</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="46">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="47">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="48">
+        <token name="T_DOC_COMMENT">     * Set the log level.</token>
+      </line>
+      <line no="49">
+        <token name="T_DOC_COMMENT">     * @param LogLevel $logLevel</token>
+      </line>
+      <line no="50">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="51">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">setLogLevel</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$logLevel</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="52">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="53">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">logLevel</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$logLevel</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="54">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="55">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="56">
+        <token name="T_DOC_COMMENT">     * Log a debug message.</token>
+      </line>
+      <line no="57">
+        <token name="T_DOC_COMMENT">     * @param string $message</token>
+      </line>
+      <line no="58">
+        <token name="T_DOC_COMMENT">     * @param string $prefix</token>
+      </line>
+      <line no="59">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="60">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">debug</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$message</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">""</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">void</token>
+      </line>
+      <line no="61">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="62">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">writeLog</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">DEBUG</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$message</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="63">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="64">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="65">
+        <token name="T_DOC_COMMENT">     * Log an info message.</token>
+      </line>
+      <line no="66">
+        <token name="T_DOC_COMMENT">     * @param string $message</token>
+      </line>
+      <line no="67">
+        <token name="T_DOC_COMMENT">     * @param string $prefix</token>
+      </line>
+      <line no="68">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="69">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">info</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$message</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">""</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">void</token>
+      </line>
+      <line no="70">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="71">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">writeLog</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">INFO</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$message</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="72">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="73">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="74">
+        <token name="T_DOC_COMMENT">     * Log a notice message.</token>
+      </line>
+      <line no="75">
+        <token name="T_DOC_COMMENT">     * @param string $message</token>
+      </line>
+      <line no="76">
+        <token name="T_DOC_COMMENT">     * @param string $prefix</token>
+      </line>
+      <line no="77">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="78">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">notice</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$message</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">""</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">void</token>
+      </line>
+      <line no="79">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="80">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">writeLog</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">NOTICE</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$message</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="81">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="82">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="83">
+        <token name="T_DOC_COMMENT">     * Log a warning message.</token>
+      </line>
+      <line no="84">
+        <token name="T_DOC_COMMENT">     * @param string $message</token>
+      </line>
+      <line no="85">
+        <token name="T_DOC_COMMENT">     * @param string $prefix</token>
+      </line>
+      <line no="86">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="87">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">warning</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$message</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">""</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">void</token>
+      </line>
+      <line no="88">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="89">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">writeLog</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">WARNING</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$message</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="90">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="91">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="92">
+        <token name="T_DOC_COMMENT">     * Log an error message.</token>
+      </line>
+      <line no="93">
+        <token name="T_DOC_COMMENT">     * @param string $message</token>
+      </line>
+      <line no="94">
+        <token name="T_DOC_COMMENT">     * @param string $prefix</token>
+      </line>
+      <line no="95">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="96">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">error</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$message</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">""</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">void</token>
+      </line>
+      <line no="97">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="98">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">writeLog</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">ERROR</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$message</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="99">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="100">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="101">
+        <token name="T_DOC_COMMENT">     * Dump arbitrary data to the log.</token>
+      </line>
+      <line no="102">
+        <token name="T_DOC_COMMENT">     * @param mixed $data</token>
+      </line>
+      <line no="103">
+        <token name="T_DOC_COMMENT">     * @param string $prefix</token>
+      </line>
+      <line no="104">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="105">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">dump</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">mixed</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$data</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">""</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">void</token>
+      </line>
+      <line no="106">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="107">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$output</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">print_r</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$data</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">true</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="108">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">writeLog</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">DEBUG</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$output</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="109">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="110">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="111">
+        <token name="T_DOC_COMMENT">     * Dump the current stack trace to the log.</token>
+      </line>
+      <line no="112">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="113">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">dumpStack</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">void</token>
+      </line>
+      <line no="114">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="115">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">dump</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">debug_backtrace</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="116">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="117">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="118">
+        <token name="T_DOC_COMMENT">     * Get the textual representation of a log level.</token>
+      </line>
+      <line no="119">
+        <token name="T_DOC_COMMENT">     * @param LogLevel $level</token>
+      </line>
+      <line no="120">
+        <token name="T_DOC_COMMENT">     * @return string</token>
+      </line>
+      <line no="121">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="122">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PRIVATE">private</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">levelText</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$level</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">string</token>
+      </line>
+      <line no="123">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="124">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_MATCH">match</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$level</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="125">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">DEBUG</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"DEBUG"</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="126">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">INFO</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"INFO"</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="127">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">NOTICE</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"NOTICE"</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="128">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">WARNING</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"WARN"</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="129">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">ERROR</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"ERROR"</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="130">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="131">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="132">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="133">
+        <token name="T_DOC_COMMENT">     * Write a log entry to the log file.</token>
+      </line>
+      <line no="134">
+        <token name="T_DOC_COMMENT">     * @param LogLevel $level</token>
+      </line>
+      <line no="135">
+        <token name="T_DOC_COMMENT">     * @param string $message</token>
+      </line>
+      <line no="136">
+        <token name="T_DOC_COMMENT">     * @param string $prefix</token>
+      </line>
+      <line no="137">
+        <token name="T_DOC_COMMENT">     */</token>
+      </line>
+      <line no="138">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PRIVATE">private</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">writeLog</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">LogLevel</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$level</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$message</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">""</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">void</token>
+      </line>
+      <line no="139">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="140">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$level</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">value</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_GT">&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">logLevel</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">value</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="141">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="142">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="143">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">trim</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="144">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_NOT_IDENTICAL">!==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">''</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_QUESTION_MARK">?</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'-'</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="145">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$timestamp</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">date</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'Y-m-d H:i:s'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="146">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$entry</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">[</token>
+        <token name="T_VARIABLE">$timestamp</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">] [</token>
+        <token name="T_CURLY_OPEN">{</token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">levelText</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$level</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_CURLY">}</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">] [</token>
+        <token name="T_VARIABLE">$prefix</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">] </token>
+        <token name="T_VARIABLE">$message</token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOT">.</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">PHP_EOL</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="147">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$dir</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">dirname</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">logFile</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="148">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_EXCLAMATION_MARK">!</token>
+        <token name="T_STRING">is_dir</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$dir</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="149">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_STRING">mkdir</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$dir</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">0750</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">true</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="150">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="151">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_STRING">file_put_contents</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">logFile</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$entry</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">FILE_APPEND</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_PIPE">|</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">LOCK_EX</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="152">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="153">
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="154"/>
+    </source>
+  </file>
+</phpunit>

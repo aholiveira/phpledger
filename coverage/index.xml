@@ -1,0 +1,1079 @@
+<?xml version="1.0"?>
+<phpunit xmlns="https://schema.phpunit.de/coverage/1.0">
+  <build time="Fri Dec 5 0:34:43 UTC 2025" phpunit="10.5.36" coverage="10.1.16">
+    <runtime name="PHP" version="8.4.1" url="https://www.php.net/"/>
+    <driver name="xdebug" version="3.4.7"/>
+  </build>
+  <project source="C:\pessoal\work\contas\src">
+    <tests>
+      <test name="P\Tests\Storage\MySql\MySqlAccountTest::__pest_evaluable_it_gets_next_id_correctly" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlAccountTest::__pest_evaluable_it_inserts_and_fetches_an_account" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlAccountTest::__pest_evaluable_it_updates_an_existing_account" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlAccountTest::__pest_evaluable_it_gets_list_with_filters" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlAccountTest::__pest_evaluable_it_deletes_an_account" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlAccountTest::__pest_evaluable_it_calculates_balance" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlAccountTest::__pest_evaluable_it_calculates_balance_on_date" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlAccountTypeTest::__pest_evaluable_it_creates_a_new_account_type" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlAccountTypeTest::__pest_evaluable_it_updates_an_existing_account_type" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlAccountTypeTest::__pest_evaluable_it_retrieves_by_id_and_returns_empty_object_when_not_found" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlAccountTypeTest::__pest_evaluable_it_filters_list" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlAccountTypeTest::__pest_evaluable_it_deletes_an_account_type" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlDefaultsTest::__pest_evaluable_it_returns_empty_list_initially" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlDefaultsTest::__pest_evaluable_it_creates_a_new_defaults_record_with_constructor_values" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlDefaultsTest::__pest_evaluable_it_updates_an_existing_defaults_record" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlDefaultsTest::__pest_evaluable_it_fetches_list_with_filters" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlDefaultsTest::__pest_evaluable_it_fetches_by_username_case_insensitive_and_trimmed" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlDefaultsTest::__pest_evaluable_it_init_creates_default_instance_with_prefilled_values" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlDefaultsTest::__pest_evaluable_it_update_persists_default_init_values" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlEntryCategoryTest::__pest_evaluable_it_gets_next_id_correctly" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlEntryCategoryTest::__pest_evaluable_it_inserts_and_fetches_a_category" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlEntryCategoryTest::__pest_evaluable_it_gets_list_with_children__recursive_" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlEntryCategoryTest::__pest_evaluable_it_getById_returns_parentDescription_and_children" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlEntryCategoryTest::__pest_evaluable_it_calculates_balance_for_a_category" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlEntryCategoryTest::__pest_evaluable_it_validate_prevents_self_parenting" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getDefinition__&#x2192;_it_returns_correct_column_definitions" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getDefinition__&#x2192;_it_defines_id_and_nome_columns" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_empty_array_when_no_ledgers_exist" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_all_ledgers_from_database" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_ledger_objects_when_populated" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_filters_by_field_when_filter_provided" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getList__&#x2192;_it_returns_results_ordered_by_id" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_returns_null_when_ledger_does_not_exist" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_a_ledger_by_id" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__getById__&#x2192;_it_retrieves_correct_data_for_ledger_with_spaces_in_name" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_creates_a_new_ledger_when_id_does_not_exist" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_updates_an_existing_ledger" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_returns_false_when_id_is_not_set" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_handles_special_characters_in_name" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__update__&#x2192;_it_trims_name_to_30_characters_due_to_column_constraint" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger__delete__&#x2192;_it_returns_false__not_implemented_" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger_properties_and_instantiation__&#x2192;_it_can_instantiate_with_properties" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlLedgerTest::__pest_evaluable__MySqlLedger_properties_and_instantiation__&#x2192;_it_inherits_from_Ledger_domain_class" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__dataStorage__&#x2192;_it_returns_a_DataStorageInterface_instance" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__dataStorage__&#x2192;_it_returns_a_MySqlStorage_instance" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__dataStorage__&#x2192;_it_returns_the_same_instance_on_multiple_calls__singleton_" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__account__&#x2192;_it_returns_a_new_MySqlAccount_instance" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__account__&#x2192;_it_returns_a_new_instance_each_time" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__accountType__&#x2192;_it_returns_a_new_MySqlAccountType_instance" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__accountType__&#x2192;_it_returns_a_new_instance_each_time" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__currency__&#x2192;_it_returns_a_new_MySqlCurrency_instance" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__currency__&#x2192;_it_returns_a_new_instance_each_time" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__defaults__&#x2192;_it_returns_a_new_MySqlDefaults_instance" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__defaults__&#x2192;_it_returns_a_new_instance_each_time" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__entryCategory__&#x2192;_it_returns_a_new_MySqlEntryCategory_instance" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__entryCategory__&#x2192;_it_returns_a_new_instance_each_time" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__ledger__&#x2192;_it_returns_a_new_MySqlLedger_instance" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__ledger__&#x2192;_it_returns_a_new_instance_each_time" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__ledgerEntry__&#x2192;_it_returns_a_new_MySqlLedgerEntry_instance" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__ledgerEntry__&#x2192;_it_returns_a_new_instance_each_time" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__reportMonth__&#x2192;_it_returns_a_new_MySqlReportMonth_instance" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__reportMonth__&#x2192;_it_returns_a_new_instance_each_time" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__reportYear__&#x2192;_it_returns_a_new_MySqlReportYear_instance" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__reportYear__&#x2192;_it_returns_a_new_instance_each_time" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__user__&#x2192;_it_returns_a_new_MySqlUser_instance" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__user__&#x2192;_it_returns_a_new_instance_each_time" size="unknown" status="success"/>
+      <test name="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory_factory_pattern__&#x2192;_it_creates_objects_of_correct_type_from_factory" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_a_token_and_stores_it_in_session" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\CSRFTest::__pest_evaluable_it_gets_a_valid_token_from_session" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\CSRFTest::__pest_evaluable_it_returns_null_when_no_token_exists" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\CSRFTest::__pest_evaluable_it_returns_null_when_token_is_expired" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\CSRFTest::__pest_evaluable_it_validates_the_correct_token_and_invalidates_afterward" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_for_wrong_token" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_when_no_token_provided" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\CSRFTest::__pest_evaluable_it_removes_token_from_session" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_with_existing_token" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_and_token_when_none_exists" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\ConfigTest::__pest_evaluable_it_initializes_config_from_a_valid_JSON_file" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\ConfigTest::__pest_evaluable_it_fails_initialization_from_a_non_existing_file" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_simple_values" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\ConfigTest::__pest_evaluable_it_sets_and_retrieves_nested_values" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_default_for_missing_keys" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\ConfigTest::__pest_evaluable_it_overwrites_existing_keys" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\ConfigTest::__pest_evaluable_it_validates_correct_config" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\ConfigTest::__pest_evaluable_it_invalidates_config_missing_title" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\ConfigTest::__pest_evaluable_it_invalidates_config_missing_storage_type" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\ConfigTest::__pest_evaluable_it_invalidates_MySQL_storage_missing_required_fields" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\ConfigTest::__pest_evaluable_it_saves_and_reloads_config" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_without_a_file" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_location" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\ConfigTest::__pest_evaluable_it_throws_when_saving_to_a_non_writable_file" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\ConfigTest::__pest_evaluable_it_returns_false_initializing_with_invalid_JSON" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\DateParserTest::__pest_evaluable_it_parses_a_valid_full_date_string" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\DateParserTest::__pest_evaluable_it_throws_when_full_date_string_is_invalid" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\DateParserTest::__pest_evaluable_it_returns_null_when_no_date_fields_exist" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\DateParserTest::__pest_evaluable_it_parses_using_AA_MM_DD_parts" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\DateParserTest::__pest_evaluable_it_throws_when_AA_MM_DD_form_an_invalid_date" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\DateParserTest::__pest_evaluable_it_returns_null_when_AA_MM_DD_missing_completely" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\DateParserTest::__pest_evaluable_it_parses_when_some_parts_are_missing_but_enough_to_form_a_valid_date" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\DateParserTest::__pest_evaluable_it_throws_when_some_parts_missing_result_in_invalid_date" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\EmailTest::__pest_evaluable_it_returns_false_if_from__to__subject__or_body_is_empty" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\EmailTest::__pest_evaluable_it_returns_true_on_valid_email_data" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_year_options_with_selected_year" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_month_options_with_selected_month" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_day_options_with_selected_day" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_hour_options_with_selected_hour" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_minute_options_with_selected_minute" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_generic_options" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\HtmlTest::__pest_evaluable_it_renders_errortext_without_exit" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\HtmlTest::__pest_evaluable_it_renders_myalert_javascript" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\HtmlTest::__pest_evaluable_it_renders_footer_html_with_session_expiration" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\HtmlTest::__pest_evaluable_it_renders_menu_html_with_language_links" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\HtmlTest::__pest_evaluable_it_renders_language_selector_in_div" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\HtmlTest::__pest_evaluable_it_renders_language_selector_without_div" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\L10nTest::__pest_evaluable_it_sets_forced_language_when_init_is_called" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\L10nTest::__pest_evaluable_it_detects_user_language_from_request" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\L10nTest::__pest_evaluable_it_detects_user_language_from_browser_header" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\L10nTest::__pest_evaluable_it_returns_default_language_if_unknown" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\L10nTest::__pest_evaluable_it_returns_HTML_language_code" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\L10nTest::__pest_evaluable_it_returns_translation_for_a_given_id" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\L10nTest::__pest_evaluable_it_returns_empty_string_for_missing_translation" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_an_info_log_entry" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_a_debug_log_entry" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_prefix_as_dash_when_empty" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_dump_output" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\SessionManagerTest::__pest_evaluable_it_refreshExpiration_updates_TTL" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\SessionManagerTest::__pest_evaluable_it_guard_redirects_when_not_logged_in_and_not_public" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\SessionManagerTest::__pest_evaluable_it_guard_refreshes_TTL_for_authenticated_user" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\SessionManagerTest::__pest_evaluable_it_starts_a_session_with_the_correct_name" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\SessionManagerTest::__pest_evaluable_it_returns_true_when_session_is_expired" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\SessionManagerTest::__pest_evaluable_it_returns_false_when_session_is_not_expired" size="unknown" status="success"/>
+      <test name="P\Tests\Unit\SessionManagerTest::__pest_evaluable_it_logout_clears_session_data" size="unknown" status="success"/>
+    </tests>
+    <directory name="/">
+      <totals>
+        <lines total="8621" comments="719" code="7902" executable="4074" executed="944" percent="23.17"/>
+        <methods count="378" tested="84" percent="22.22"/>
+        <functions count="0" tested="0" percent="0"/>
+        <classes count="77" tested="5" percent="6.49"/>
+        <traits count="3" tested="0" percent="0.00"/>
+      </totals>
+      <directory name="Contracts">
+        <totals>
+          <lines total="104" comments="49" code="55" executable="0" executed="0" percent="0"/>
+          <methods count="0" tested="0" percent="0"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="0" tested="0" percent="0"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+        <file name="DataObjectFactoryInterface.php" href="Contracts/DataObjectFactoryInterface.php.xml">
+          <totals>
+            <lines total="25" comments="7" code="18" executable="0" executed="0" percent="0"/>
+            <methods count="0" tested="0" percent="0"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="0" tested="0" percent="0"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="DataObjectInterface.php" href="Contracts/DataObjectInterface.php.xml">
+          <totals>
+            <lines total="24" comments="8" code="16" executable="0" executed="0" percent="0"/>
+            <methods count="0" tested="0" percent="0"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="0" tested="0" percent="0"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="DataStorageInterface.php" href="Contracts/DataStorageInterface.php.xml">
+          <totals>
+            <lines total="33" comments="20" code="13" executable="0" executed="0" percent="0"/>
+            <methods count="0" tested="0" percent="0"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="0" tested="0" percent="0"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ReportInterface.php" href="Contracts/ReportInterface.php.xml">
+          <totals>
+            <lines total="22" comments="14" code="8" executable="0" executed="0" percent="0"/>
+            <methods count="0" tested="0" percent="0"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="0" tested="0" percent="0"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+      </directory>
+      <directory name="Controllers">
+        <totals>
+          <lines total="1064" comments="89" code="975" executable="481" executed="0" percent="0.00"/>
+          <methods count="30" tested="0" percent="0.00"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="16" tested="0" percent="0.00"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+        <file name="AccountController.php" href="Controllers/AccountController.php.xml">
+          <totals>
+            <lines total="110" comments="18" code="92" executable="52" executed="0" percent="0.00"/>
+            <methods count="3" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="AccountTypeListController.php" href="Controllers/AccountTypeListController.php.xml">
+          <totals>
+            <lines total="23" comments="0" code="23" executable="5" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="AccountsController.php" href="Controllers/AccountsController.php.xml">
+          <totals>
+            <lines total="28" comments="5" code="23" executable="7" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ApplicationErrorController.php" href="Controllers/ApplicationErrorController.php.xml">
+          <totals>
+            <lines total="16" comments="0" code="16" executable="2" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="BalancesController.php" href="Controllers/BalancesController.php.xml">
+          <totals>
+            <lines total="28" comments="7" code="21" executable="5" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ConfigController.php" href="Controllers/ConfigController.php.xml">
+          <totals>
+            <lines total="111" comments="0" code="111" executable="69" executed="0" percent="0.00"/>
+            <methods count="3" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="EntryCategoryController.php" href="Controllers/EntryCategoryController.php.xml">
+          <totals>
+            <lines total="31" comments="7" code="24" executable="7" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="EntryCategoryListController.php" href="Controllers/EntryCategoryListController.php.xml">
+          <totals>
+            <lines total="83" comments="7" code="76" executable="38" executed="0" percent="0.00"/>
+            <methods count="3" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ForgotPasswordController.php" href="Controllers/ForgotPasswordController.php.xml">
+          <totals>
+            <lines total="45" comments="7" code="38" executable="18" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="LedgerEntriesController.php" href="Controllers/LedgerEntriesController.php.xml">
+          <totals>
+            <lines total="23" comments="7" code="16" executable="2" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="LedgerEntryController.php" href="Controllers/LedgerEntryController.php.xml">
+          <totals>
+            <lines total="77" comments="8" code="69" executable="37" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="LoginController.php" href="Controllers/LoginController.php.xml">
+          <totals>
+            <lines total="109" comments="0" code="109" executable="53" executed="0" percent="0.00"/>
+            <methods count="5" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ReportMonthController.php" href="Controllers/ReportMonthController.php.xml">
+          <totals>
+            <lines total="203" comments="7" code="196" executable="116" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ReportYearController.php" href="Controllers/ReportYearController.php.xml">
+          <totals>
+            <lines total="44" comments="7" code="37" executable="16" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ResetPasswordController.php" href="Controllers/ResetPasswordController.php.xml">
+          <totals>
+            <lines total="84" comments="2" code="82" executable="37" executed="0" percent="0.00"/>
+            <methods count="4" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="UpdateStorageController.php" href="Controllers/UpdateStorageController.php.xml">
+          <totals>
+            <lines total="49" comments="7" code="42" executable="17" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+      </directory>
+      <directory name="Domain">
+        <totals>
+          <lines total="379" comments="52" code="327" executable="60" executed="0" percent="0.00"/>
+          <methods count="30" tested="0" percent="0.00"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="6" tested="0" percent="0.00"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+        <file name="Account.php" href="Domain/Account.php.xml">
+          <totals>
+            <lines total="25" comments="0" code="25" executable="1" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="AccountType.php" href="Domain/AccountType.php.xml">
+          <totals>
+            <lines total="11" comments="0" code="11" executable="0" executed="0" percent="0"/>
+            <methods count="0" tested="0" percent="0"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="0" tested="0" percent="0"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="Currency.php" href="Domain/Currency.php.xml">
+          <totals>
+            <lines total="15" comments="0" code="15" executable="0" executed="0" percent="0"/>
+            <methods count="0" tested="0" percent="0"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="0" tested="0" percent="0"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="Defaults.php" href="Domain/Defaults.php.xml">
+          <totals>
+            <lines total="61" comments="38" code="23" executable="2" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="EntryCategory.php" href="Domain/EntryCategory.php.xml">
+          <totals>
+            <lines total="16" comments="0" code="16" executable="1" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="Ledger.php" href="Domain/Ledger.php.xml">
+          <totals>
+            <lines total="10" comments="0" code="10" executable="0" executed="0" percent="0"/>
+            <methods count="0" tested="0" percent="0"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="0" tested="0" percent="0"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="LedgerEntry.php" href="Domain/LedgerEntry.php.xml">
+          <totals>
+            <lines total="29" comments="0" code="29" executable="3" executed="0" percent="0.00"/>
+            <methods count="3" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="Report.php" href="Domain/Report.php.xml">
+          <totals>
+            <lines total="35" comments="9" code="26" executable="5" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ReportMonth.php" href="Domain/ReportMonth.php.xml">
+          <totals>
+            <lines total="10" comments="0" code="10" executable="0" executed="0" percent="0"/>
+            <methods count="0" tested="0" percent="0"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="0" tested="0" percent="0"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ReportYear.php" href="Domain/ReportYear.php.xml">
+          <totals>
+            <lines total="10" comments="0" code="10" executable="0" executed="0" percent="0"/>
+            <methods count="0" tested="0" percent="0"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="0" tested="0" percent="0"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="User.php" href="Domain/User.php.xml">
+          <totals>
+            <lines total="157" comments="5" code="152" executable="48" executed="0" percent="0.00"/>
+            <methods count="22" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+      </directory>
+      <directory name="Exceptions">
+        <totals>
+          <lines total="8" comments="0" code="8" executable="0" executed="0" percent="0"/>
+          <methods count="0" tested="0" percent="0"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="0" tested="0" percent="0"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+        <file name="PHPLedgerException.php" href="Exceptions/PHPLedgerException.php.xml">
+          <totals>
+            <lines total="8" comments="0" code="8" executable="0" executed="0" percent="0"/>
+            <methods count="0" tested="0" percent="0"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="0" tested="0" percent="0"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+      </directory>
+      <directory name="Routing">
+        <totals>
+          <lines total="64" comments="7" code="57" executable="8" executed="1" percent="12.50"/>
+          <methods count="2" tested="1" percent="50.00"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="1" tested="0" percent="0.00"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+        <file name="Router.php" href="Routing/Router.php.xml">
+          <totals>
+            <lines total="64" comments="7" code="57" executable="8" executed="1" percent="12.50"/>
+            <methods count="2" tested="1" percent="50.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+      </directory>
+      <directory name="Storage">
+        <totals>
+          <lines total="3048" comments="164" code="2884" executable="1612" executed="569" percent="35.30"/>
+          <methods count="159" tested="43" percent="27.04"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="16" tested="2" percent="12.50"/>
+          <traits count="3" tested="0" percent="0.00"/>
+        </totals>
+        <directory name="Abstract">
+          <totals>
+            <lines total="96" comments="0" code="96" executable="22" executed="1" percent="4.55"/>
+            <methods count="19" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="2" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+          <file name="AbstractDataObject.php" href="Storage/Abstract/AbstractDataObject.php.xml">
+            <totals>
+              <lines total="19" comments="0" code="19" executable="7" executed="0" percent="0.00"/>
+              <methods count="7" tested="0" percent="0.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="AbstractObjectFactory.php" href="Storage/Abstract/AbstractObjectFactory.php.xml">
+            <totals>
+              <lines total="77" comments="0" code="77" executable="15" executed="1" percent="6.67"/>
+              <methods count="12" tested="0" percent="0.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+        </directory>
+        <directory name="MySql">
+          <totals>
+            <lines total="2937" comments="164" code="2773" executable="1589" executed="568" percent="35.75"/>
+            <methods count="139" tested="43" percent="30.94"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="13" tested="2" percent="15.38"/>
+            <traits count="3" tested="0" percent="0.00"/>
+          </totals>
+          <file name="MySqlAccount.php" href="Storage/MySql/MySqlAccount.php.xml">
+            <totals>
+              <lines total="207" comments="13" code="194" executable="116" executed="103" percent="88.79"/>
+              <methods count="9" tested="5" percent="55.56"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="MySqlAccountType.php" href="Storage/MySql/MySqlAccountType.php.xml">
+            <totals>
+              <lines total="133" comments="7" code="126" executable="69" executed="58" percent="84.06"/>
+              <methods count="6" tested="2" percent="33.33"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="MySqlCurrency.php" href="Storage/MySql/MySqlCurrency.php.xml">
+            <totals>
+              <lines total="144" comments="7" code="137" executable="72" executed="62" percent="86.11"/>
+              <methods count="8" tested="4" percent="50.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="MySqlDefaults.php" href="Storage/MySql/MySqlDefaults.php.xml">
+            <totals>
+              <lines total="280" comments="11" code="269" executable="171" executed="145" percent="84.80"/>
+              <methods count="9" tested="3" percent="33.33"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="MySqlEntryCategory.php" href="Storage/MySql/MySqlEntryCategory.php.xml">
+            <totals>
+              <lines total="208" comments="7" code="201" executable="115" executed="75" percent="65.22"/>
+              <methods count="9" tested="2" percent="22.22"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="MySqlLedger.php" href="Storage/MySql/MySqlLedger.php.xml">
+            <totals>
+              <lines total="129" comments="7" code="122" executable="57" executed="51" percent="89.47"/>
+              <methods count="8" tested="6" percent="75.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="MySqlLedgerEntry.php" href="Storage/MySql/MySqlLedgerEntry.php.xml">
+            <totals>
+              <lines total="259" comments="14" code="245" executable="152" executed="0" percent="0.00"/>
+              <methods count="10" tested="0" percent="0.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="MySqlObject.php" href="Storage/MySql/MySqlObject.php.xml">
+            <totals>
+              <lines total="163" comments="29" code="134" executable="57" executed="27" percent="47.37"/>
+              <methods count="15" tested="2" percent="13.33"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="0" tested="0" percent="0"/>
+              <traits count="1" tested="0" percent="0.00"/>
+            </totals>
+          </file>
+          <file name="MySqlObjectFactory.php" href="Storage/MySql/MySqlObjectFactory.php.xml">
+            <totals>
+              <lines total="63" comments="7" code="56" executable="11" executed="11" percent="100.00"/>
+              <methods count="11" tested="11" percent="100.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="1" percent="100.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="MySqlReport.php" href="Storage/MySql/MySqlReport.php.xml">
+            <totals>
+              <lines total="66" comments="7" code="59" executable="29" executed="1" percent="3.45"/>
+              <methods count="4" tested="1" percent="25.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="0" tested="0" percent="0"/>
+              <traits count="1" tested="0" percent="0.00"/>
+            </totals>
+          </file>
+          <file name="MySqlReportMonth.php" href="Storage/MySql/MySqlReportMonth.php.xml">
+            <totals>
+              <lines total="69" comments="7" code="62" executable="30" executed="9" percent="30.00"/>
+              <methods count="3" tested="2" percent="66.67"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="MySqlReportYear.php" href="Storage/MySql/MySqlReportYear.php.xml">
+            <totals>
+              <lines total="85" comments="7" code="78" executable="36" executed="3" percent="8.33"/>
+              <methods count="4" tested="1" percent="25.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="MySqlSelectTrait.php" href="Storage/MySql/MySqlSelectTrait.php.xml">
+            <totals>
+              <lines total="20" comments="4" code="16" executable="5" executed="5" percent="100.00"/>
+              <methods count="1" tested="1" percent="100.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="0" tested="1" percent="0"/>
+              <traits count="1" tested="0" percent="0.00"/>
+            </totals>
+          </file>
+          <file name="MySqlStorage.php" href="Storage/MySql/MySqlStorage.php.xml">
+            <totals>
+              <lines total="777" comments="20" code="757" executable="492" executed="16" percent="3.25"/>
+              <methods count="31" tested="2" percent="6.45"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="MySqlUser.php" href="Storage/MySql/MySqlUser.php.xml">
+            <totals>
+              <lines total="246" comments="7" code="239" executable="138" executed="2" percent="1.45"/>
+              <methods count="8" tested="1" percent="12.50"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+          <file name="ReportAggregate.php" href="Storage/MySql/ReportAggregate.php.xml">
+            <totals>
+              <lines total="88" comments="10" code="78" executable="39" executed="0" percent="0.00"/>
+              <methods count="3" tested="0" percent="0.00"/>
+              <functions count="0" tested="0" percent="0"/>
+              <classes count="1" tested="0" percent="0.00"/>
+              <traits count="0" tested="0" percent="0"/>
+            </totals>
+          </file>
+        </directory>
+        <file name="ObjectFactory.php" href="Storage/ObjectFactory.php.xml">
+          <totals>
+            <lines total="15" comments="0" code="15" executable="1" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+      </directory>
+      <directory name="Util">
+        <totals>
+          <lines total="1232" comments="191" code="1041" executable="489" executed="373" percent="76.28"/>
+          <methods count="74" tested="39" percent="52.70"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="14" tested="3" percent="21.43"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+        <file name="CSRF.php" href="Util/CSRF.php.xml">
+          <totals>
+            <lines total="50" comments="1" code="49" executable="22" executed="22" percent="100.00"/>
+            <methods count="5" tested="5" percent="100.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="1" percent="100.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="Config.php" href="Util/Config.php.xml">
+          <totals>
+            <lines total="314" comments="57" code="257" executable="149" executed="112" percent="75.17"/>
+            <methods count="14" tested="4" percent="28.57"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ConfigMigrator.php" href="Util/ConfigMigrator.php.xml">
+          <totals>
+            <lines total="72" comments="7" code="65" executable="34" executed="31" percent="91.18"/>
+            <methods count="4" tested="2" percent="50.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ConfigPath.php" href="Util/ConfigPath.php.xml">
+          <totals>
+            <lines total="38" comments="4" code="34" executable="11" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="DateParser.php" href="Util/DateParser.php.xml">
+          <totals>
+            <lines total="49" comments="12" code="37" executable="14" executed="14" percent="100.00"/>
+            <methods count="1" tested="1" percent="100.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="1" percent="100.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="Email.php" href="Util/Email.php.xml">
+          <totals>
+            <lines total="41" comments="7" code="34" executable="16" executed="15" percent="93.75"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="Html.php" href="Util/Html.php.xml">
+          <totals>
+            <lines total="194" comments="11" code="183" executable="90" executed="76" percent="84.44"/>
+            <methods count="14" tested="8" percent="57.14"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="L10n.php" href="Util/L10n.php.xml">
+          <totals>
+            <lines total="138" comments="15" code="123" executable="59" executed="46" percent="77.97"/>
+            <methods count="10" tested="4" percent="40.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="Logger.php" href="Util/Logger.php.xml">
+          <totals>
+            <lines total="154" comments="62" code="92" executable="28" executed="24" percent="85.71"/>
+            <methods count="13" tested="9" percent="69.23"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="NumberUtil.php" href="Util/NumberUtil.php.xml">
+          <totals>
+            <lines total="11" comments="0" code="11" executable="1" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="PasswordGenerator.php" href="Util/PasswordGenerator.php.xml">
+          <totals>
+            <lines total="67" comments="13" code="54" executable="24" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="Path.php" href="Util/Path.php.xml">
+          <totals>
+            <lines total="14" comments="0" code="14" executable="3" executed="3" percent="100.00"/>
+            <methods count="1" tested="1" percent="100.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="1" percent="100.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="Redirector.php" href="Util/Redirector.php.xml">
+          <totals>
+            <lines total="22" comments="1" code="21" executable="7" executed="4" percent="57.14"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="SessionManager.php" href="Util/SessionManager.php.xml">
+          <totals>
+            <lines total="68" comments="1" code="67" executable="31" executed="26" percent="83.87"/>
+            <methods count="6" tested="5" percent="83.33"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+      </directory>
+      <directory name="Views">
+        <totals>
+          <lines total="2559" comments="166" code="2393" executable="1362" executed="0" percent="0.00"/>
+          <methods count="65" tested="0" percent="0.00"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="22" tested="0" percent="0.00"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+        <file name="AccountBalanceView.php" href="Views/AccountBalanceView.php.xml">
+          <totals>
+            <lines total="94" comments="12" code="82" executable="53" executed="0" percent="0.00"/>
+            <methods count="2" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="AccountFormView.php" href="Views/AccountFormView.php.xml">
+          <totals>
+            <lines total="103" comments="0" code="103" executable="57" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="AccountListView.php" href="Views/AccountListView.php.xml">
+          <totals>
+            <lines total="108" comments="6" code="102" executable="64" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="AccountTypeListView.php" href="Views/AccountTypeListView.php.xml">
+          <totals>
+            <lines total="53" comments="0" code="53" executable="29" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="AccountTypeView.php" href="Views/AccountTypeView.php.xml">
+          <totals>
+            <lines total="68" comments="12" code="56" executable="28" executed="0" percent="0.00"/>
+            <methods count="3" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="AccountView.php" href="Views/AccountView.php.xml">
+          <totals>
+            <lines total="122" comments="17" code="105" executable="69" executed="0" percent="0.00"/>
+            <methods count="4" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ApplicationErrorView.php" href="Views/ApplicationErrorView.php.xml">
+          <totals>
+            <lines total="38" comments="0" code="38" executable="18" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="BalancesView.php" href="Views/BalancesView.php.xml">
+          <totals>
+            <lines total="55" comments="7" code="48" executable="28" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ConfigView.php" href="Views/ConfigView.php.xml">
+          <totals>
+            <lines total="180" comments="0" code="180" executable="124" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="CurrencyView.php" href="Views/CurrencyView.php.xml">
+          <totals>
+            <lines total="93" comments="11" code="82" executable="50" executed="0" percent="0.00"/>
+            <methods count="4" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="EntryCategoryListView.php" href="Views/EntryCategoryListView.php.xml">
+          <totals>
+            <lines total="67" comments="7" code="60" executable="31" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="EntryCategoryView.php" href="Views/EntryCategoryView.php.xml">
+          <totals>
+            <lines total="162" comments="8" code="154" executable="92" executed="0" percent="0.00"/>
+            <methods count="8" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ForgotPasswordView.php" href="Views/ForgotPasswordView.php.xml">
+          <totals>
+            <lines total="52" comments="7" code="45" executable="10" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="LedgerEntriesView.php" href="Views/LedgerEntriesView.php.xml">
+          <totals>
+            <lines total="472" comments="13" code="459" executable="287" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="LoginView.php" href="Views/LoginView.php.xml">
+          <totals>
+            <lines total="67" comments="5" code="62" executable="27" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ObjectViewer.php" href="Views/ObjectViewer.php.xml">
+          <totals>
+            <lines total="31" comments="8" code="23" executable="5" executed="0" percent="0.00"/>
+            <methods count="5" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ReportHtmlView.php" href="Views/ReportHtmlView.php.xml">
+          <totals>
+            <lines total="259" comments="8" code="251" executable="135" executed="0" percent="0.00"/>
+            <methods count="17" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ReportMonthHtmlView.php" href="Views/ReportMonthHtmlView.php.xml">
+          <totals>
+            <lines total="15" comments="8" code="7" executable="0" executed="0" percent="0"/>
+            <methods count="0" tested="0" percent="0"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="0" tested="0" percent="0"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ReportMonthView.php" href="Views/ReportMonthView.php.xml">
+          <totals>
+            <lines total="204" comments="7" code="197" executable="116" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ReportYearHtmlView.php" href="Views/ReportYearHtmlView.php.xml">
+          <totals>
+            <lines total="15" comments="8" code="7" executable="0" executed="0" percent="0"/>
+            <methods count="0" tested="0" percent="0"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="0" tested="0" percent="0"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ReportYearView.php" href="Views/ReportYearView.php.xml">
+          <totals>
+            <lines total="83" comments="7" code="76" executable="48" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ResetPasswordView.php" href="Views/ResetPasswordView.php.xml">
+          <totals>
+            <lines total="85" comments="0" code="85" executable="45" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="UpdateStorageView.php" href="Views/UpdateStorageView.php.xml">
+          <totals>
+            <lines total="70" comments="7" code="63" executable="36" executed="0" percent="0.00"/>
+            <methods count="1" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+        <file name="ViewFactory.php" href="Views/ViewFactory.php.xml">
+          <totals>
+            <lines total="63" comments="8" code="55" executable="10" executed="0" percent="0.00"/>
+            <methods count="8" tested="0" percent="0.00"/>
+            <functions count="0" tested="0" percent="0"/>
+            <classes count="1" tested="0" percent="0.00"/>
+            <traits count="0" tested="0" percent="0"/>
+          </totals>
+        </file>
+      </directory>
+      <file name="Application.php" href="Application.php.xml">
+        <totals>
+          <lines total="113" comments="1" code="112" executable="53" executed="0" percent="0.00"/>
+          <methods count="10" tested="0" percent="0.00"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="1" tested="0" percent="0.00"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+      </file>
+      <file name="Version.php" href="Version.php.xml">
+        <totals>
+          <lines total="50" comments="0" code="50" executable="9" executed="1" percent="11.11"/>
+          <methods count="8" tested="1" percent="12.50"/>
+          <functions count="0" tested="0" percent="0"/>
+          <classes count="1" tested="0" percent="0.00"/>
+          <traits count="0" tested="0" percent="0"/>
+        </totals>
+      </file>
+    </directory>
+  </project>
+</phpunit>
