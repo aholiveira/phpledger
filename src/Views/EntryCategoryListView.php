@@ -27,7 +27,7 @@ class EntryCategoryListView
 
         <head>
             <title><?= Html::title($this->pagetitle) ?></title>
-            <?= Html::header(); ?>
+            <?php Html::header(); ?>
         </head>
 
         <body>
