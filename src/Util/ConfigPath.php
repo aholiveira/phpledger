@@ -4,15 +4,20 @@ namespace PHPLedger\Util;
 
 class ConfigPath
 {
+    private static string $baseDir = ROOT_DIR;
+    public static function setbaseDir(string $baseDir)
+    {
+        self::$baseDir = $baseDir;
+    }
     public static function get(): string
     {
-        return ROOT_DIR . '/config/config.json';
+        return Path::combine(self::$baseDir, 'config', 'config.json');
     }
 
     public static function ensureMigrated(): void
     {
         $new = self::get();
-        $old = Path::combine(ROOT_DIR, 'config.json');
+        $old = Path::combine(self::$baseDir, 'config.json');
 
         // If new file exists, do nothing
         if (file_exists($new)) {

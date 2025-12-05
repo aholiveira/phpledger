@@ -56,7 +56,6 @@ final class Router
             return;
         }
         header('Location: index.php?action=login');
-        exit;
     }
 
     /** Returns a whitelist of all valid actions */

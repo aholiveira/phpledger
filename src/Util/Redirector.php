@@ -13,9 +13,6 @@ class Redirector
         }
         if (!headers_sent()) {
             header($delay > 0 ? "Refresh: $delay; URL=$url" : "Location: $url", true, 303);
-        } else {
-            echo "<meta http-equiv='REFRESH' content='{$delay}; URL=\"{$url}\"'>";
-            echo "<noscript><a href=\"{$url}\">Clique aqui para continuar</a></noscript>";
         }
     }
 }

@@ -12,8 +12,6 @@ class AccountTypeFormView
     public function render(AccountType $object, ?string $message): void
     {
         $pagetitle = "Tipo de contas";
-        $message = "";
-        $retval = false;
 ?>
         <!DOCTYPE html>
         <html lang="<?= l10n::html() ?>">
@@ -24,15 +22,13 @@ class AccountTypeFormView
         </head>
 
         <body>
-            <?php
-            if (strlen($message)) {
-                Html::myalert($message);
-            }
-            ?>
             <div class="maingrid" id="maingrid">
                 <?php Html::menu(); ?>
                 <div class="header" style="height: 0;"></div>
                 <div id="main" class="main">
+                    <?php if (!empty($message)): ?>
+                        <p><?= htmlspecialchars($message); ?></p>
+                    <?php endif ?>
                     <form method="POST">
                         <?= CSRF::inputField() ?>
                         <table class="single_item account_type_form">

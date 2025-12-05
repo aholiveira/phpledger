@@ -4,8 +4,8 @@ namespace PHPLedger\Controllers;
 
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\L10n;
-use PHPLedger\Views\AccountTypeListView;
 use PHPLedger\Util\SessionManager;
+use PHPLedger\Views\AccountTypeListView;
 
 final class AccountTypeListController
 {
