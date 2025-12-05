@@ -1,0 +1,647 @@
+<?xml version="1.0"?>
+<phpunit xmlns="https://schema.phpunit.de/coverage/1.0">
+  <file name="CSRF.php" path="\Util">
+    <totals>
+      <lines total="50" comments="1" code="49" executable="22" executed="22" percent="100.00"/>
+      <methods count="5" tested="5" percent="100.00"/>
+      <functions count="0" tested="0" percent="0"/>
+      <classes count="1" tested="1" percent="100.00"/>
+      <traits count="0" tested="0" percent="0"/>
+    </totals>
+    <class name="PHPLedger\Util\CSRF" start="3" executable="22" executed="22" crap="10">
+      <namespace name="PHPLedger\Util"/>
+      <method name="generateToken" signature="generateToken(): string" start="8" end="16" crap="1" executable="6" executed="6" coverage="100"/>
+      <method name="getToken" signature="getToken(): ?string" start="17" end="27" crap="3" executable="6" executed="6" coverage="100"/>
+      <method name="validateToken" signature="validateToken(?string $token): bool" start="28" end="39" crap="4" executable="7" executed="7" coverage="100"/>
+      <method name="removeToken" signature="removeToken(): void" start="40" end="43" crap="1" executable="1" executed="1" coverage="100"/>
+      <method name="inputField" signature="inputField(): string" start="44" end="48" crap="1" executable="2" executed="2" coverage="100"/>
+    </class>
+    <coverage>
+      <line nr="10">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_a_token_and_stores_it_in_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_gets_a_valid_token_from_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_returns_null_when_token_is_expired"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_validates_the_correct_token_and_invalidates_afterward"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_for_wrong_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_when_no_token_provided"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_removes_token_from_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_with_existing_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_and_token_when_none_exists"/>
+      </line>
+      <line nr="11">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_a_token_and_stores_it_in_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_gets_a_valid_token_from_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_returns_null_when_token_is_expired"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_validates_the_correct_token_and_invalidates_afterward"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_for_wrong_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_when_no_token_provided"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_removes_token_from_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_with_existing_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_and_token_when_none_exists"/>
+      </line>
+      <line nr="12">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_a_token_and_stores_it_in_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_gets_a_valid_token_from_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_returns_null_when_token_is_expired"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_validates_the_correct_token_and_invalidates_afterward"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_for_wrong_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_when_no_token_provided"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_removes_token_from_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_with_existing_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_and_token_when_none_exists"/>
+      </line>
+      <line nr="13">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_a_token_and_stores_it_in_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_gets_a_valid_token_from_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_returns_null_when_token_is_expired"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_validates_the_correct_token_and_invalidates_afterward"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_for_wrong_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_when_no_token_provided"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_removes_token_from_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_with_existing_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_and_token_when_none_exists"/>
+      </line>
+      <line nr="15">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_a_token_and_stores_it_in_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_gets_a_valid_token_from_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_returns_null_when_token_is_expired"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_validates_the_correct_token_and_invalidates_afterward"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_for_wrong_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_when_no_token_provided"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_removes_token_from_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_with_existing_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_and_token_when_none_exists"/>
+      </line>
+      <line nr="19">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_gets_a_valid_token_from_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_returns_null_when_no_token_exists"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_returns_null_when_token_is_expired"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_validates_the_correct_token_and_invalidates_afterward"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_for_wrong_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_when_no_token_provided"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_with_existing_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_and_token_when_none_exists"/>
+      </line>
+      <line nr="20">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_returns_null_when_no_token_exists"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_and_token_when_none_exists"/>
+      </line>
+      <line nr="22">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_gets_a_valid_token_from_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_returns_null_when_token_is_expired"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_validates_the_correct_token_and_invalidates_afterward"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_for_wrong_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_when_no_token_provided"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_with_existing_token"/>
+      </line>
+      <line nr="23">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_returns_null_when_token_is_expired"/>
+      </line>
+      <line nr="24">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_returns_null_when_token_is_expired"/>
+      </line>
+      <line nr="26">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_gets_a_valid_token_from_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_validates_the_correct_token_and_invalidates_afterward"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_for_wrong_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_when_no_token_provided"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_with_existing_token"/>
+      </line>
+      <line nr="30">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_validates_the_correct_token_and_invalidates_afterward"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_for_wrong_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_when_no_token_provided"/>
+      </line>
+      <line nr="31">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_validates_the_correct_token_and_invalidates_afterward"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_for_wrong_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_when_no_token_provided"/>
+      </line>
+      <line nr="32">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_when_no_token_provided"/>
+      </line>
+      <line nr="34">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_validates_the_correct_token_and_invalidates_afterward"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_for_wrong_token"/>
+      </line>
+      <line nr="35">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_validates_the_correct_token_and_invalidates_afterward"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_for_wrong_token"/>
+      </line>
+      <line nr="36">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_validates_the_correct_token_and_invalidates_afterward"/>
+      </line>
+      <line nr="38">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_validates_the_correct_token_and_invalidates_afterward"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_for_wrong_token"/>
+      </line>
+      <line nr="42">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_returns_null_when_token_is_expired"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_validates_the_correct_token_and_invalidates_afterward"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_removes_token_from_session"/>
+      </line>
+      <line nr="46">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_with_existing_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_and_token_when_none_exists"/>
+      </line>
+      <line nr="47">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_with_existing_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_and_token_when_none_exists"/>
+      </line>
+      <line nr="14">
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_a_token_and_stores_it_in_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_gets_a_valid_token_from_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_returns_null_when_token_is_expired"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_validates_the_correct_token_and_invalidates_afterward"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_for_wrong_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_fails_validation_when_no_token_provided"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_removes_token_from_session"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_with_existing_token"/>
+        <covered by="P\Tests\Unit\CSRFTest::__pest_evaluable_it_generates_input_field_and_token_when_none_exists"/>
+      </line>
+    </coverage>
+    <source>
+      <line no="1">
+        <token name="T_OPEN_TAG">&lt;?php</token>
+      </line>
+      <line no="2">
+        <token name="T_NAMESPACE">namespace</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">PHPLedger\Util</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="3">
+        <token name="T_CLASS">class</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">CSRF</token>
+      </line>
+      <line no="4">
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="5">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PRIVATE">private</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONST">const</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">TOKEN_KEY</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'_csrf_token'</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="6">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PRIVATE">private</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONST">const</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">int</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">TOKEN_EXPIRY_SECONDS</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">3600</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="7"/>
+      <line no="8">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">generateToken</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">string</token>
+      </line>
+      <line no="9">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="10">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$token</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">bin2hex</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">random_bytes</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_LNUMBER">32</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="11">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$_SESSION</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">TOKEN_KEY</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+      </line>
+      <line no="12">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'value'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$token</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="13">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'time'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">time</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_PLUS">+</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_INT_CAST">(int)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">TOKEN_EXPIRY_SECONDS</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="14">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="15">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$token</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="16">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="17">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">getToken</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_QUESTION_MARK">?</token>
+        <token name="T_STRING">string</token>
+      </line>
+      <line no="18">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="19">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_EXCLAMATION_MARK">!</token>
+        <token name="T_ISSET">isset</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$_SESSION</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">TOKEN_KEY</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="20">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">null</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="21">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="22">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$_SESSION</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">TOKEN_KEY</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'time'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LT">&lt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">time</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="23">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">removeToken</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="24">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">null</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="25">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="26">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$_SESSION</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">TOKEN_KEY</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'value'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="27">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="28">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">validateToken</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_QUESTION_MARK">?</token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$token</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">bool</token>
+      </line>
+      <line no="29">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="30">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$storedToken</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">getToken</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="31">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_EXCLAMATION_MARK">!</token>
+        <token name="T_VARIABLE">$storedToken</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_BOOLEAN_OR">||</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EXCLAMATION_MARK">!</token>
+        <token name="T_VARIABLE">$token</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="32">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">false</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="33">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="34">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$valid</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">hash_equals</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$storedToken</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$token</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="35">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$valid</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="36">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">removeToken</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COMMENT">// single-use token</token>
+      </line>
+      <line no="37">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="38">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$valid</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="39">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="40">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">removeToken</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">void</token>
+      </line>
+      <line no="41">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="42">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_UNSET">unset</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$_SESSION</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">TOKEN_KEY</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="43">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="44">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">inputField</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">string</token>
+      </line>
+      <line no="45">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="46">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$token</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">getToken</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COALESCE">??</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">generateToken</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="47">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'&lt;input type="hidden" name="'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOT">.</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">TOKEN_KEY</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOT">.</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'" value="'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOT">.</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">htmlspecialchars</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$token</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">ENT_QUOTES</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOT">.</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'"&gt;'</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="48">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="49">
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="50"/>
+    </source>
+  </file>
+</phpunit>

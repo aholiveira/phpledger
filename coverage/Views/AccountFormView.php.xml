@@ -1,0 +1,790 @@
+<?xml version="1.0"?>
+<phpunit xmlns="https://schema.phpunit.de/coverage/1.0">
+  <file name="AccountFormView.php" path="\Views">
+    <totals>
+      <lines total="103" comments="0" code="103" executable="57" executed="0" percent="0.00"/>
+      <methods count="1" tested="0" percent="0.00"/>
+      <functions count="0" tested="0" percent="0"/>
+      <classes count="1" tested="0" percent="0.00"/>
+      <traits count="0" tested="0" percent="0"/>
+    </totals>
+    <class name="PHPLedger\Views\AccountFormView" start="10" executable="57" executed="0" crap="72">
+      <namespace name="PHPLedger\Views"/>
+      <method name="render" signature="render(array $data): void" start="12" end="101" crap="72" executable="57" executed="0" coverage="0"/>
+    </class>
+    <source>
+      <line no="1">
+        <token name="T_OPEN_TAG">&lt;?php</token>
+      </line>
+      <line no="2"/>
+      <line no="3">
+        <token name="T_NAMESPACE">namespace</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">PHPLedger\Views</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="4"/>
+      <line no="5">
+        <token name="T_USE">use</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">PHPLedger\Util\Html</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="6">
+        <token name="T_USE">use</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">PHPLedger\Util\L10n</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="7">
+        <token name="T_USE">use</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">PHPLedger\Storage\ObjectFactory</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="8">
+        <token name="T_USE">use</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">PHPLedger\Util\CSRF</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="9"/>
+      <line no="10">
+        <token name="T_FINAL">final</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLASS">class</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">AccountFormView</token>
+      </line>
+      <line no="11">
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="12">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">render</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_ARRAY">array</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$data</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">void</token>
+      </line>
+      <line no="13">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="14">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$account</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$data</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'account'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="15">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$back</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">strtolower</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$data</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'back'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COALESCE">??</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">""</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="16">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$lang</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$data</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'lang'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COALESCE">??</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">L10n</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_VARIABLE">$lang</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="17">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$errors</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$data</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'errors'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COALESCE">??</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="18">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$pagetitle</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">L10n</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">l</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'accounts'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="19">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$types</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">ObjectFactory</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">accounttype</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">getList</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="20">
+        <token name="T_CLOSE_TAG">?&gt;</token>
+      </line>
+      <line no="21">
+        <token name="T_INLINE_HTML">        &lt;!DOCTYPE html&gt;</token>
+      </line>
+      <line no="22">
+        <token name="T_INLINE_HTML">        &lt;html lang="</token>
+        <token name="T_OPEN_TAG_WITH_ECHO">&lt;?=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">L10n</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">html</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+        <token name="T_INLINE_HTML">"&gt;</token>
+      </line>
+      <line no="23"/>
+      <line no="24">
+        <token name="T_INLINE_HTML">        &lt;head&gt;</token>
+      </line>
+      <line no="25">
+        <token name="T_INLINE_HTML">            &lt;title&gt;</token>
+        <token name="T_OPEN_TAG_WITH_ECHO">&lt;?=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">Html</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">title</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$pagetitle</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+        <token name="T_INLINE_HTML">&lt;/title&gt;</token>
+      </line>
+      <line no="26">
+        <token name="T_INLINE_HTML">            </token>
+        <token name="T_OPEN_TAG">&lt;?php </token>
+        <token name="T_STRING">Html</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">header</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+      </line>
+      <line no="27">
+        <token name="T_INLINE_HTML">        &lt;/head&gt;</token>
+      </line>
+      <line no="28"/>
+      <line no="29">
+        <token name="T_INLINE_HTML">        &lt;body&gt;</token>
+      </line>
+      <line no="30">
+        <token name="T_INLINE_HTML">            &lt;div class="maingrid"&gt;</token>
+      </line>
+      <line no="31">
+        <token name="T_INLINE_HTML">                </token>
+        <token name="T_OPEN_TAG">&lt;?php </token>
+        <token name="T_STRING">Html</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">menu</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+      </line>
+      <line no="32">
+        <token name="T_INLINE_HTML">                &lt;div class="header"&gt;</token>
+      </line>
+      <line no="33">
+        <token name="T_INLINE_HTML">                    &lt;p style="margin:0"&gt;</token>
+      </line>
+      <line no="34">
+        <token name="T_INLINE_HTML">                        </token>
+        <token name="T_OPEN_TAG">&lt;?php </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$back</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_IDENTICAL">===</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"balances"</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+      </line>
+      <line no="35">
+        <token name="T_INLINE_HTML">                            &lt;a href="index.php?action=balances&amp;lang=</token>
+        <token name="T_OPEN_TAG_WITH_ECHO">&lt;?=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">htmlspecialchars</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$lang</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+        <token name="T_INLINE_HTML">"&gt;</token>
+        <token name="T_OPEN_TAG">&lt;?php </token>
+        <token name="T_STRING">L10n</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">pl</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'Back to list'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+        <token name="T_INLINE_HTML">&lt;/a&gt;</token>
+      </line>
+      <line no="36">
+        <token name="T_INLINE_HTML">                        </token>
+        <token name="T_OPEN_TAG">&lt;?php </token>
+        <token name="T_ELSE">else</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+      </line>
+      <line no="37">
+        <token name="T_INLINE_HTML">                            &lt;a href="index.php?action=accounts&amp;lang=</token>
+        <token name="T_OPEN_TAG_WITH_ECHO">&lt;?=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">htmlspecialchars</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$lang</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+        <token name="T_INLINE_HTML">"&gt;</token>
+        <token name="T_OPEN_TAG">&lt;?php </token>
+        <token name="T_STRING">L10n</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">pl</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'Back to list'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+        <token name="T_INLINE_HTML">&lt;/a&gt;</token>
+      </line>
+      <line no="38">
+        <token name="T_INLINE_HTML">                        </token>
+        <token name="T_OPEN_TAG">&lt;?php </token>
+        <token name="T_ENDIF">endif</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+      </line>
+      <line no="39">
+        <token name="T_INLINE_HTML">                    &lt;/p&gt;</token>
+      </line>
+      <line no="40">
+        <token name="T_INLINE_HTML">                &lt;/div&gt;</token>
+      </line>
+      <line no="41">
+        <token name="T_INLINE_HTML">                &lt;main&gt;</token>
+      </line>
+      <line no="42">
+        <token name="T_INLINE_HTML">                    &lt;div class="main config single_item account_type_form" id="main"&gt;</token>
+      </line>
+      <line no="43">
+        <token name="T_INLINE_HTML">                        &lt;form method="POST" action="index.php?action=account"&gt;</token>
+      </line>
+      <line no="44">
+        <token name="T_INLINE_HTML">                            </token>
+        <token name="T_OPEN_TAG_WITH_ECHO">&lt;?=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">CSRF</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">inputField</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+      </line>
+      <line no="45">
+        <token name="T_INLINE_HTML">                            &lt;input type="hidden" name="id" value="</token>
+        <token name="T_OPEN_TAG_WITH_ECHO">&lt;?=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_INT_CAST">(int)</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$account</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">id</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COALESCE">??</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_LNUMBER">0</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+        <token name="T_INLINE_HTML">"&gt;</token>
+      </line>
+      <line no="46">
+        <token name="T_INLINE_HTML">                            &lt;p&gt;</token>
+      </line>
+      <line no="47">
+        <token name="T_INLINE_HTML">                                &lt;label for="name"&gt;Name&lt;/label&gt;</token>
+      </line>
+      <line no="48">
+        <token name="T_INLINE_HTML">                                &lt;input id="name" name="name" value="</token>
+        <token name="T_OPEN_TAG_WITH_ECHO">&lt;?=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">htmlspecialchars</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$account</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">name</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COALESCE">??</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">''</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+        <token name="T_INLINE_HTML">"&gt;</token>
+      </line>
+      <line no="49">
+        <token name="T_INLINE_HTML">                            &lt;/p&gt;</token>
+      </line>
+      <line no="50">
+        <token name="T_INLINE_HTML">                            </token>
+        <token name="T_OPEN_TAG">&lt;?php </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">in_array</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'name'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$errors</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">true</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+      </line>
+      <line no="51">
+        <token name="T_INLINE_HTML">                                &lt;p style="color:red"&gt;Name required&lt;/p&gt;</token>
+      </line>
+      <line no="52">
+        <token name="T_INLINE_HTML">                            </token>
+        <token name="T_OPEN_TAG">&lt;?php </token>
+        <token name="T_ENDIF">endif</token>
+        <token name="T_SEMICOLON">;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+      </line>
+      <line no="53">
+        <token name="T_INLINE_HTML">                            &lt;p&gt;</token>
+      </line>
+      <line no="54">
+        <token name="T_INLINE_HTML">                                &lt;label for="number"&gt;Number&lt;/label&gt;</token>
+      </line>
+      <line no="55">
+        <token name="T_INLINE_HTML">                                &lt;input id="number" name="number" value="</token>
+        <token name="T_OPEN_TAG_WITH_ECHO">&lt;?=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">htmlspecialchars</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$account</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">number</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COALESCE">??</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">''</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+        <token name="T_INLINE_HTML">"&gt;</token>
+      </line>
+      <line no="56">
+        <token name="T_INLINE_HTML">                            &lt;/p&gt;</token>
+      </line>
+      <line no="57">
+        <token name="T_INLINE_HTML">                            &lt;p&gt;</token>
+      </line>
+      <line no="58">
+        <token name="T_INLINE_HTML">                                &lt;label for="typeId"&gt;Type&lt;/label&gt;</token>
+      </line>
+      <line no="59">
+        <token name="T_INLINE_HTML">                                &lt;select id="typeId" name="typeId"&gt;</token>
+      </line>
+      <line no="60">
+        <token name="T_INLINE_HTML">                                    &lt;option value="0"&gt;&lt;/option&gt;</token>
+      </line>
+      <line no="61">
+        <token name="T_INLINE_HTML">                                    </token>
+        <token name="T_OPEN_TAG">&lt;?php </token>
+        <token name="T_FOREACH">foreach</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$types</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_AS">as</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$t</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+      </line>
+      <line no="62">
+        <token name="T_INLINE_HTML">                                        &lt;option value="</token>
+        <token name="T_OPEN_TAG_WITH_ECHO">&lt;?=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_INT_CAST">(int)</token>
+        <token name="T_VARIABLE">$t</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">id</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+        <token name="T_INLINE_HTML">" </token>
+        <token name="T_OPEN_TAG_WITH_ECHO">&lt;?=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_ISSET">isset</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$account</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">typeId</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_BOOLEAN_AND">&amp;&amp;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$account</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">typeId</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_EQUAL">==</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$t</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">id</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_QUESTION_MARK">?</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'selected'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">''</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+        <token name="T_INLINE_HTML">&gt;</token>
+      </line>
+      <line no="63">
+        <token name="T_INLINE_HTML">                                            </token>
+        <token name="T_OPEN_TAG_WITH_ECHO">&lt;?=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">htmlspecialchars</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$t</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">description</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+      </line>
+      <line no="64">
+        <token name="T_INLINE_HTML">                                        &lt;/option&gt;</token>
+      </line>
+      <line no="65">
+        <token name="T_INLINE_HTML">                                    </token>
+        <token name="T_OPEN_TAG">&lt;?php </token>
+        <token name="T_ENDFOREACH">endforeach</token>
+        <token name="T_SEMICOLON">;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+      </line>
+      <line no="66">
+        <token name="T_INLINE_HTML">                                &lt;/select&gt;</token>
+      </line>
+      <line no="67">
+        <token name="T_INLINE_HTML">                            &lt;/p&gt;</token>
+      </line>
+      <line no="68">
+        <token name="T_INLINE_HTML">                            &lt;p&gt;</token>
+      </line>
+      <line no="69">
+        <token name="T_INLINE_HTML">                                &lt;label for="iban"&gt;IBAN&lt;/label&gt;</token>
+      </line>
+      <line no="70">
+        <token name="T_INLINE_HTML">                                &lt;input id="iban" name="iban" width="100" value="</token>
+        <token name="T_OPEN_TAG_WITH_ECHO">&lt;?=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">htmlspecialchars</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$account</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">iban</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COALESCE">??</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">''</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+        <token name="T_INLINE_HTML">"&gt;</token>
+      </line>
+      <line no="71">
+        <token name="T_INLINE_HTML">                            &lt;/p&gt;</token>
+      </line>
+      <line no="72">
+        <token name="T_INLINE_HTML">                            &lt;p&gt;</token>
+      </line>
+      <line no="73">
+        <token name="T_INLINE_HTML">                                &lt;label for="swift"&gt;SWIFT&lt;/label&gt;</token>
+      </line>
+      <line no="74">
+        <token name="T_INLINE_HTML">                                &lt;input id="swift" name="swift" value="</token>
+        <token name="T_OPEN_TAG_WITH_ECHO">&lt;?=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">htmlspecialchars</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$account</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">swift</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COALESCE">??</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">''</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+        <token name="T_INLINE_HTML">"&gt;</token>
+      </line>
+      <line no="75">
+        <token name="T_INLINE_HTML">                            &lt;/p&gt;</token>
+      </line>
+      <line no="76">
+        <token name="T_INLINE_HTML">                            &lt;p&gt;</token>
+      </line>
+      <line no="77">
+        <token name="T_INLINE_HTML">                                &lt;label for="openDate"&gt;Open date&lt;/label&gt;</token>
+      </line>
+      <line no="78">
+        <token name="T_INLINE_HTML">                                &lt;input id="openDate" type="date" name="openDate" value="</token>
+        <token name="T_OPEN_TAG_WITH_ECHO">&lt;?=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">htmlspecialchars</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$account</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">openDate</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COALESCE">??</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">date</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'Y-m-d'</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+        <token name="T_INLINE_HTML">"&gt;</token>
+      </line>
+      <line no="79">
+        <token name="T_INLINE_HTML">                            &lt;/p&gt;</token>
+      </line>
+      <line no="80">
+        <token name="T_INLINE_HTML">                            &lt;p&gt;</token>
+      </line>
+      <line no="81">
+        <token name="T_INLINE_HTML">                                &lt;label for="closeDate"&gt;Close date&lt;/label&gt;</token>
+      </line>
+      <line no="82">
+        <token name="T_INLINE_HTML">                                &lt;input id="closeDate" type="date" name="closeDate" value="</token>
+        <token name="T_OPEN_TAG_WITH_ECHO">&lt;?=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">htmlspecialchars</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$account</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">closeDate</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COALESCE">??</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">''</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+        <token name="T_INLINE_HTML">"&gt;</token>
+      </line>
+      <line no="83">
+        <token name="T_INLINE_HTML">                            &lt;/p&gt;</token>
+      </line>
+      <line no="84">
+        <token name="T_INLINE_HTML">                            &lt;p&gt;</token>
+      </line>
+      <line no="85">
+        <token name="T_INLINE_HTML">                                &lt;label for="activa"&gt;Active&lt;/label&gt;</token>
+      </line>
+      <line no="86">
+        <token name="T_INLINE_HTML">                                &lt;input id="activa" type="checkbox" name="activa" </token>
+        <token name="T_OPEN_TAG_WITH_ECHO">&lt;?=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EXCLAMATION_MARK">!</token>
+        <token name="T_EMPTY">empty</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$account</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">activa</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_QUESTION_MARK">?</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'checked'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">''</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+        <token name="T_INLINE_HTML">&gt;</token>
+      </line>
+      <line no="87">
+        <token name="T_INLINE_HTML">                            &lt;/p&gt;</token>
+      </line>
+      <line no="88">
+        <token name="T_INLINE_HTML">                            &lt;p&gt;&lt;button type="submit"&gt;Save&lt;/button&gt;&lt;/p&gt;</token>
+      </line>
+      <line no="89">
+        <token name="T_INLINE_HTML">                            </token>
+        <token name="T_OPEN_TAG">&lt;?php </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_STRING">in_array</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'other'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$errors</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">true</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+      </line>
+      <line no="90">
+        <token name="T_INLINE_HTML">                                &lt;p style="color:red"&gt;Check your data&lt;/p&gt;</token>
+      </line>
+      <line no="91">
+        <token name="T_INLINE_HTML">                            </token>
+        <token name="T_OPEN_TAG">&lt;?php </token>
+        <token name="T_ENDIF">endif</token>
+        <token name="T_SEMICOLON">;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+      </line>
+      <line no="92">
+        <token name="T_INLINE_HTML">                        &lt;/form&gt;</token>
+      </line>
+      <line no="93">
+        <token name="T_INLINE_HTML">                    &lt;/div&gt;</token>
+      </line>
+      <line no="94">
+        <token name="T_INLINE_HTML">                &lt;/main&gt;</token>
+      </line>
+      <line no="95">
+        <token name="T_INLINE_HTML">                </token>
+        <token name="T_OPEN_TAG">&lt;?php </token>
+        <token name="T_STRING">Html</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">footer</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLOSE_TAG">?&gt;</token>
+      </line>
+      <line no="96">
+        <token name="T_INLINE_HTML">            &lt;/div&gt;</token>
+      </line>
+      <line no="97">
+        <token name="T_INLINE_HTML">        &lt;/body&gt;</token>
+      </line>
+      <line no="98"/>
+      <line no="99">
+        <token name="T_INLINE_HTML">        &lt;/html&gt;</token>
+      </line>
+      <line no="100">
+        <token name="T_OPEN_TAG">&lt;?php</token>
+      </line>
+      <line no="101">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="102">
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="103"/>
+    </source>
+  </file>
+</phpunit>

@@ -198,5 +198,6 @@ class ReportMonthView
         </body>
 
         </html>
-<? }
+<?php
+    }
 }

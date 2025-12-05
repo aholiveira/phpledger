@@ -1,0 +1,176 @@
+<?xml version="1.0"?>
+<phpunit xmlns="https://schema.phpunit.de/coverage/1.0">
+  <file name="Path.php" path="\Util">
+    <totals>
+      <lines total="14" comments="0" code="14" executable="3" executed="3" percent="100.00"/>
+      <methods count="1" tested="1" percent="100.00"/>
+      <functions count="0" tested="0" percent="0"/>
+      <classes count="1" tested="1" percent="100.00"/>
+      <traits count="0" tested="0" percent="0"/>
+    </totals>
+    <class name="PHPLedger\Util\Path" start="5" executable="3" executed="3" crap="1">
+      <namespace name="PHPLedger\Util"/>
+      <method name="combine" signature="combine(?string $parts): string" start="7" end="12" crap="1" executable="3" executed="3" coverage="100"/>
+    </class>
+    <coverage>
+      <line nr="9">
+        <covered by="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_year_options_with_selected_year"/>
+        <covered by="P\Tests\Unit\L10nTest::__pest_evaluable_it_sets_forced_language_when_init_is_called"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_an_info_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_a_debug_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_prefix_as_dash_when_empty"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_dump_output"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="10">
+        <covered by="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_year_options_with_selected_year"/>
+        <covered by="P\Tests\Unit\L10nTest::__pest_evaluable_it_sets_forced_language_when_init_is_called"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_an_info_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_a_debug_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_prefix_as_dash_when_empty"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_dump_output"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+      <line nr="11">
+        <covered by="P\Tests\Unit\HtmlTest::__pest_evaluable_it_builds_year_options_with_selected_year"/>
+        <covered by="P\Tests\Unit\L10nTest::__pest_evaluable_it_sets_forced_language_when_init_is_called"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_an_info_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_a_debug_log_entry"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_creates_log_directory_automatically"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_prefix_as_dash_when_empty"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_dump_output"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_writes_stack_dump"/>
+        <covered by="P\Tests\Unit\LoggerTest::__pest_evaluable_it_honours_log_level_and_skips_lower_severity"/>
+      </line>
+    </coverage>
+    <source>
+      <line no="1">
+        <token name="T_OPEN_TAG">&lt;?php</token>
+      </line>
+      <line no="2"/>
+      <line no="3">
+        <token name="T_NAMESPACE">namespace</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">PHPLedger\Util</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="4"/>
+      <line no="5">
+        <token name="T_FINAL">final</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CLASS">class</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">Path</token>
+      </line>
+      <line no="6">
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="7">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">combine</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_QUESTION_MARK">?</token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_ELLIPSIS">...</token>
+        <token name="T_VARIABLE">$parts</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">string</token>
+      </line>
+      <line no="8">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="9">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$first</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">array_shift</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$parts</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="10">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$path</token>
+        <token name="T_WHITESPACE">  </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$first</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOT">.</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'/'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOT">.</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">join</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'/'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">array_map</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_FN">fn</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$p</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">trim</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$p</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"/\\"</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$parts</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="11">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">preg_replace</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'#(?&lt;!^)/+#'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'/'</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$path</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="12">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="13">
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="14"/>
+    </source>
+  </file>
+</phpunit>

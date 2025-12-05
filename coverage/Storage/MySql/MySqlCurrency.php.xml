@@ -1,0 +1,1591 @@
+<?xml version="1.0"?>
+<phpunit xmlns="https://schema.phpunit.de/coverage/1.0">
+  <file name="MySqlCurrency.php" path="\Storage\MySql">
+    <totals>
+      <lines total="144" comments="7" code="137" executable="72" executed="62" percent="86.11"/>
+      <methods count="8" tested="4" percent="50.00"/>
+      <functions count="0" tested="0" percent="0"/>
+      <classes count="1" tested="0" percent="0.00"/>
+      <traits count="0" tested="0" percent="0"/>
+    </totals>
+    <class name="PHPLedger\Storage\MySql\MySqlCurrency" start="16" executable="72" executed="62" crap="16.69">
+      <namespace name="PHPLedger\Storage\MySql"/>
+      <method name="__construct" signature="__construct()" start="25" end="28" crap="1" executable="1" executed="1" coverage="100"/>
+      <method name="getDefinition" signature="getDefinition(): array" start="29" end="51" crap="1" executable="20" executed="20" coverage="100"/>
+      <method name="getList" signature="getList(array $fieldFilter): array" start="52" end="72" crap="4.16" executable="14" executed="11" coverage="78.571428571429"/>
+      <method name="getByField" signature="getByField($field, $value): ?PHPLedger\Domain\Currency" start="74" end="92" crap="3.11" executable="13" executed="10" coverage="76.923076923077"/>
+      <method name="getById" signature="getById($id): ?PHPLedger\Domain\Currency" start="93" end="96" crap="1" executable="1" executed="1" coverage="100"/>
+      <method name="getByCode" signature="getByCode($code): ?PHPLedger\Domain\Currency" start="98" end="101" crap="1" executable="1" executed="1" coverage="100"/>
+      <method name="update" signature="update(): bool" start="103" end="138" crap="4.05" executable="21" executed="18" coverage="85.714285714286"/>
+      <method name="delete" signature="delete(): bool" start="139" end="142" crap="2" executable="1" executed="0" coverage="0"/>
+    </class>
+    <coverage>
+      <line nr="27">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+        <covered by="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__currency__&#x2192;_it_returns_a_new_MySqlCurrency_instance"/>
+        <covered by="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory__currency__&#x2192;_it_returns_a_new_instance_each_time"/>
+        <covered by="P\Tests\Storage\MySql\MySqlObjectFactoryTest::__pest_evaluable__MySqlObjectFactory_factory_pattern__&#x2192;_it_creates_objects_of_correct_type_from_factory"/>
+      </line>
+      <line nr="31">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="32">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="40">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="49">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="50">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="54">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+      </line>
+      <line nr="55">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+      </line>
+      <line nr="56">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+      </line>
+      <line nr="58">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+      </line>
+      <line nr="59">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+      </line>
+      <line nr="62">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+      </line>
+      <line nr="63">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+      </line>
+      <line nr="64">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+      </line>
+      <line nr="65">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+      </line>
+      <line nr="67">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+      </line>
+      <line nr="71">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+      </line>
+      <line nr="76">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="77">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="79">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="80">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="83">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="84">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="85">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="86">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="87">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="91">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="95">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="100">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+      </line>
+      <line nr="105">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="107">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="117">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="118">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="121">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="122">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="123">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="124">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="125">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="126">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="127">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="129">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="130">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="131">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="132">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="137">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="33">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="34">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="35">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="36">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="37">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="38">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="39">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="41">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="42">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="43">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="44">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="45">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="46">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="47">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="48">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_empty"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="116">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+      <line nr="128">
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_a_currency_and_fetches_it_by_id"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_inserts_and_fetches_by_code"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_updates_an_existing_currency"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_gets_list_with_filters"/>
+        <covered by="P\Tests\Storage\MySql\MySqlCurrencyTest::__pest_evaluable_it_update_preserves_username"/>
+      </line>
+    </coverage>
+    <source>
+      <line no="1">
+        <token name="T_OPEN_TAG">&lt;?php</token>
+      </line>
+      <line no="2"/>
+      <line no="3">
+        <token name="T_DOC_COMMENT">/**</token>
+      </line>
+      <line no="4">
+        <token name="T_DOC_COMMENT"> *</token>
+      </line>
+      <line no="5">
+        <token name="T_DOC_COMMENT"> * @author Antonio Henrique Oliveira</token>
+      </line>
+      <line no="6">
+        <token name="T_DOC_COMMENT"> * @copyright (c) 2017-2022, Antonio Henrique Oliveira</token>
+      </line>
+      <line no="7">
+        <token name="T_DOC_COMMENT"> * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3</token>
+      </line>
+      <line no="8">
+        <token name="T_DOC_COMMENT"> *</token>
+      </line>
+      <line no="9">
+        <token name="T_DOC_COMMENT"> */</token>
+      </line>
+      <line no="10"/>
+      <line no="11">
+        <token name="T_NAMESPACE">namespace</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">PHPLedger\Storage\MySql</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="12"/>
+      <line no="13">
+        <token name="T_USE">use</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">PHPLedger\Domain\Currency</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="14">
+        <token name="T_USE">use</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_QUALIFIED">PHPLedger\Storage\MySql\MySqlObject</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="15"/>
+      <line no="16">
+        <token name="T_CLASS">class</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">MySqlCurrency</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EXTENDS">extends</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">Currency</token>
+      </line>
+      <line no="17">
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="18">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_USE">use</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">MySqlSelectTrait</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="19">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_USE">use</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">MySqlObject</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="20">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_STRING">MySqlObject</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">__construct</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_AS">as</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_PRIVATE">private</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">traitConstruct</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="21">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="22"/>
+      <line no="23">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PROTECTED">protected</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">string</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$tableName</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"moedas"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="24"/>
+      <line no="25">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">__construct</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+      </line>
+      <line no="26">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="27">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">traitConstruct</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="28">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="29">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">getDefinition</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_ARRAY">array</token>
+      </line>
+      <line no="30">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="31">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$retval</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="32">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$retval</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'new'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+      </line>
+      <line no="33">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'moeda_id'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'code'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="34">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'moeda_desc'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'description'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="35">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'taxa'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'exchangeRate'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="36">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'exchange_rate'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'exchangeRate'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="37">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'created_at'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'createdAt'</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="38">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'updated_at'</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'updatedAt'</token>
+      </line>
+      <line no="39">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="40">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$retval</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'columns'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+      </line>
+      <line no="41">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"id"</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"int(4) NOT NULL DEFAULT 0"</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="42">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"code"</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"char(3) NOT NULL DEFAULT ''"</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="43">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"description"</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"char(30) DEFAULT NULL"</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="44">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"exchangeRate"</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"float(8,6) DEFAULT NULL"</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="45">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"username"</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"char(255) DEFAULT ''"</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="46">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"createdAt"</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()"</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="47">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"updatedAt"</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_ARROW">=&gt;</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()"</token>
+      </line>
+      <line no="48">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="49">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$retval</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'primary_key'</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"moeda_id"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="50">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$retval</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="51">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="52">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">getList</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_ARRAY">array</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$fieldFilter</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_ARRAY">array</token>
+      </line>
+      <line no="53">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="54">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$where</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">getWhereFromArray</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$fieldFilter</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="55">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$sql</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">getSelect</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOT">.</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE"> </token>
+        <token name="T_CURLY_OPEN">{</token>
+        <token name="T_VARIABLE">$where</token>
+        <token name="T_CLOSE_CURLY">}</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE"> ORDER BY description</token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="56">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$retval</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="57">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_TRY">try</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="58">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$stmt</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">MySqlStorage</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">getConnection</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">prepare</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$sql</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="59">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$stmt</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_IDENTICAL">===</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">false</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="60">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_THROW">throw</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NEW">new</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_FULLY_QUALIFIED">\mysqli_sql_exception</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="61">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="62">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$stmt</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">execute</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="63">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$result</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$stmt</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">get_result</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="64">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_WHILE">while</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$newobject</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$result</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">fetch_object</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLASS_C">__CLASS__</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="65">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_VARIABLE">$retval</token>
+        <token name="T_OPEN_SQUARE">[</token>
+        <token name="T_VARIABLE">$newobject</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">id</token>
+        <token name="T_CLOSE_SQUARE">]</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$newobject</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="66">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="67">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$stmt</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">close</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="68">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CATCH">catch</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_NAME_FULLY_QUALIFIED">\Exception</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$ex</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="69">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">handleException</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$ex</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$sql</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="70">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="71">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$retval</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="72">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="73"/>
+      <line no="74">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PRIVATE">private</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">getByField</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$field</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$value</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_QUESTION_MARK">?</token>
+        <token name="T_STRING">Currency</token>
+      </line>
+      <line no="75">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="76">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$sql</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">getSelect</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOT">.</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE"> WHERE </token>
+        <token name="T_VARIABLE">$field</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">=? ORDER BY `description`</token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="77">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$retval</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">null</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="78">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_TRY">try</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="79">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$stmt</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">MySqlStorage</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">getConnection</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">prepare</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$sql</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="80">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$stmt</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_IDENTICAL">===</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">false</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="81">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_THROW">throw</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NEW">new</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_FULLY_QUALIFIED">\mysqli_sql_exception</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="82">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="83">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$stmt</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">bind_param</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"s"</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$value</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="84">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$stmt</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">execute</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="85">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$result</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$stmt</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">get_result</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="86">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$retval</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$result</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">fetch_object</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLASS_C">__CLASS__</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="87">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$stmt</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">close</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="88">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CATCH">catch</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_NAME_FULLY_QUALIFIED">\Exception</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$ex</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="89">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">handleException</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$ex</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$sql</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="90">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="91">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$retval</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="92">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="93">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">getById</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$id</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_QUESTION_MARK">?</token>
+        <token name="T_STRING">currency</token>
+      </line>
+      <line no="94">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="95">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">getByField</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"id"</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$id</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="96">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="97"/>
+      <line no="98">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STATIC">static</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">getByCode</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$code</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_QUESTION_MARK">?</token>
+        <token name="T_STRING">currency</token>
+      </line>
+      <line no="99">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="100">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">self</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">getByField</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"code"</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$code</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="101">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="102"/>
+      <line no="103">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">update</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">bool</token>
+      </line>
+      <line no="104">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="105">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_VARIABLE">$retval</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">false</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="106">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_TRY">try</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="107">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$sql</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_ENCAPSED_AND_WHITESPACE">INSERT INTO </token>
+        <token name="T_CURLY_OPEN">{</token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">tableName</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="108">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                    (`description`, `exchangeRate`, `code`, `username`, `createdAt`, `updatedAt`, `id`)</token>
+      </line>
+      <line no="109">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                VALUES (?, ?, ?, ?, NULL, NULL, ?)</token>
+      </line>
+      <line no="110">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                ON DUPLICATE KEY UPDATE</token>
+      </line>
+      <line no="111">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                    `description`=VALUES(`description`),</token>
+      </line>
+      <line no="112">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                    `exchangeRate`=VALUES(`exchangeRate`),</token>
+      </line>
+      <line no="113">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                    `code`=VALUES(`code`),</token>
+      </line>
+      <line no="114">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                    `username`=VALUES(`username`),</token>
+      </line>
+      <line no="115">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                    `createdAt`=NULL,</token>
+      </line>
+      <line no="116">
+        <token name="T_ENCAPSED_AND_WHITESPACE">                    `updatedAt`=NULL</token>
+        <token name="T_DOUBLE_QUOTES">"</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="117">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$stmt</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">MySqlStorage</token>
+        <token name="T_DOUBLE_COLON">::</token>
+        <token name="T_STRING">getConnection</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">prepare</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$sql</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="118">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$stmt</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_IS_IDENTICAL">===</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">false</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="119">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_THROW">throw</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NEW">new</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_FULLY_QUALIFIED">\mysqli_sql_exception</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="120">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="121">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$stmt</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">bind_param</token>
+        <token name="T_OPEN_BRACKET">(</token>
+      </line>
+      <line no="122">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">"sdssi"</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="123">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">description</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="124">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">exchangeRate</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="125">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">code</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="126">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">username</token>
+        <token name="T_COMMA">,</token>
+      </line>
+      <line no="127">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">id</token>
+      </line>
+      <line no="128">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="129">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$retval</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_EQUAL">=</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$stmt</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">execute</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="130">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$stmt</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">close</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="131">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_IF">if</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_EXCLAMATION_MARK">!</token>
+        <token name="T_VARIABLE">$retval</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="132">
+        <token name="T_WHITESPACE">                </token>
+        <token name="T_THROW">throw</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NEW">new</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_NAME_FULLY_QUALIFIED">\mysqli_sql_exception</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="133">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="134">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_CATCH">catch</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_NAME_FULLY_QUALIFIED">\Exception</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$ex</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="135">
+        <token name="T_WHITESPACE">            </token>
+        <token name="T_VARIABLE">$this</token>
+        <token name="T_OBJECT_OPERATOR">-&gt;</token>
+        <token name="T_STRING">handleException</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_VARIABLE">$ex</token>
+        <token name="T_COMMA">,</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$sql</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="136">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="137">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_VARIABLE">$retval</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="138">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="139">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_PUBLIC">public</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_FUNCTION">function</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">delete</token>
+        <token name="T_OPEN_BRACKET">(</token>
+        <token name="T_CLOSE_BRACKET">)</token>
+        <token name="T_COLON">:</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">bool</token>
+      </line>
+      <line no="140">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_OPEN_CURLY">{</token>
+      </line>
+      <line no="141">
+        <token name="T_WHITESPACE">        </token>
+        <token name="T_RETURN">return</token>
+        <token name="T_WHITESPACE"> </token>
+        <token name="T_STRING">false</token>
+        <token name="T_SEMICOLON">;</token>
+      </line>
+      <line no="142">
+        <token name="T_WHITESPACE">    </token>
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="143">
+        <token name="T_CLOSE_CURLY">}</token>
+      </line>
+      <line no="144"/>
+    </source>
+  </file>
+</phpunit>

@@ -9,5 +9,4 @@
 /scripts
 /vendor/
 config.json
-coverage
 test.php
