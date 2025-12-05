@@ -28,7 +28,11 @@ final class AccountTypeFormController
             $filtered = filter_input_array(INPUT_POST, $filterArray, true);
             if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
                 http_response_code(400);
-                Redirector::to($_SERVER['REQUEST_URI']);
+                if ($filtered['id'] !== null && $filtered['id'] !== false) {
+                    Redirector::to("index.php?action=account_type&id={$filtered['id']}");
+                } else {
+                    Redirector::to("index.php?action=account_type");
+                }
             }
             if (strtolower($filtered['update'] ?? '') === "gravar") {
                 $object->id = (int)($filtered['id'] === false ? $object->getNextId() : $filtered['id']);
