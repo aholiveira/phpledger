@@ -6,30 +6,32 @@ on:
 
 jobs:
   tests:
-      name: Tests
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout
-          uses: actions/checkout@v2
-          with:
-            fetch-depth: 0
-        - name: Setup PHP with Xdebug
-          uses: shivammathur/setup-php@v2
-          with:
-            php-version: '8.4'
-            coverage: xdebug
-        - name: Install dependencies with composer
-          run: composer update --no-ansi --no-interaction --no-progress
-        - name: Run SonarQube analysis
-          uses: sonarsource/sonarcloud-github-action@v2
-          with:
-            token: ${{ secrets.SONAR_TOKEN }}
-  release:
+    name: Run tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Setup PHP with Xdebug
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          coverage: xdebug
+      - name: Install dependencies with composer
+        run: composer update --no-ansi --no-interaction --no-progress
+      - name: Run SonarQube analysis
+        uses: sonarsource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  release:
+    name: Create release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
       - name: Set up PHP
-        uses: shivammathur/setup-php@v4
+        uses: shivammathur/setup-php@v2
         with:
           php-version: '8.4'
       - name: Install dependencies
