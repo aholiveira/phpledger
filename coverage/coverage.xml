@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1764938894">
-  <project timestamp="1764938894">
+<coverage generated="1764939366">
+  <project timestamp="1764939366">
     <file name="C:\pessoal\work\contas\src\Application.php">
       <class name="PHPLedger\Application" namespace="global">
         <metrics complexity="21" methods="10" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="52" coveredstatements="0" elements="62" coveredelements="0"/>
@@ -145,9 +145,9 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Controllers\AccountTypeFormController.php">
       <class name="PHPLedger\Controllers\AccountTypeFormController" namespace="global">
-        <metrics complexity="12" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="32" coveredstatements="0" elements="33" coveredelements="0"/>
+        <metrics complexity="14" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="34" coveredstatements="0" elements="35" coveredelements="0"/>
       </class>
-      <line num="17" type="method" name="handle" visibility="public" complexity="12" crap="156" count="0"/>
+      <line num="17" type="method" name="handle" visibility="public" complexity="14" crap="210" count="0"/>
       <line num="19" type="stmt" count="0"/>
       <line num="20" type="stmt" count="0"/>
       <line num="21" type="stmt" count="0"/>
@@ -161,26 +161,28 @@
       <line num="29" type="stmt" count="0"/>
       <line num="30" type="stmt" count="0"/>
       <line num="31" type="stmt" count="0"/>
-      <line num="33" type="stmt" count="0"/>
+      <line num="32" type="stmt" count="0"/>
       <line num="34" type="stmt" count="0"/>
-      <line num="35" type="stmt" count="0"/>
-      <line num="36" type="stmt" count="0"/>
       <line num="37" type="stmt" count="0"/>
+      <line num="38" type="stmt" count="0"/>
       <line num="39" type="stmt" count="0"/>
       <line num="40" type="stmt" count="0"/>
       <line num="41" type="stmt" count="0"/>
-      <line num="42" type="stmt" count="0"/>
+      <line num="43" type="stmt" count="0"/>
+      <line num="44" type="stmt" count="0"/>
       <line num="45" type="stmt" count="0"/>
       <line num="46" type="stmt" count="0"/>
-      <line num="48" type="stmt" count="0"/>
-      <line num="51" type="stmt" count="0"/>
+      <line num="49" type="stmt" count="0"/>
+      <line num="50" type="stmt" count="0"/>
       <line num="52" type="stmt" count="0"/>
-      <line num="53" type="stmt" count="0"/>
-      <line num="54" type="stmt" count="0"/>
       <line num="55" type="stmt" count="0"/>
+      <line num="56" type="stmt" count="0"/>
+      <line num="57" type="stmt" count="0"/>
       <line num="58" type="stmt" count="0"/>
       <line num="59" type="stmt" count="0"/>
-      <metrics loc="62" ncloc="57" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="32" coveredstatements="0" elements="33" coveredelements="0"/>
+      <line num="62" type="stmt" count="0"/>
+      <line num="63" type="stmt" count="0"/>
+      <metrics loc="66" ncloc="61" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="34" coveredstatements="0" elements="35" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Controllers\AccountTypeListController.php">
       <class name="PHPLedger\Controllers\AccountTypeListController" namespace="global">
@@ -5107,6 +5109,6 @@
       <line num="60" type="stmt" count="0"/>
       <metrics loc="63" ncloc="55" classes="1" methods="8" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="0" elements="18" coveredelements="0"/>
     </file>
-    <metrics files="95" loc="8831" ncloc="8100" classes="84" methods="382" coveredmethods="84" conditionals="0" coveredconditionals="0" statements="4169" coveredstatements="946" elements="4551" coveredelements="1030"/>
+    <metrics files="95" loc="8835" ncloc="8104" classes="84" methods="382" coveredmethods="84" conditionals="0" coveredconditionals="0" statements="4171" coveredstatements="946" elements="4553" coveredelements="1030"/>
   </project>
 </coverage>
