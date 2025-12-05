@@ -56,7 +56,7 @@
         <token name="T_WHITESPACE"> </token>
         <token name="T_EQUAL">=</token>
         <token name="T_WHITESPACE"> </token>
-        <token name="T_CONSTANT_ENCAPSED_STRING">'0.7.5'</token>
+        <token name="T_CONSTANT_ENCAPSED_STRING">'0.7.12'</token>
         <token name="T_SEMICOLON">;</token>
       </line>
       <line no="8"/>

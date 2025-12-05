@@ -157,8 +157,7 @@
       </line>
       <line no="30">
         <token name="T_INLINE_HTML">            </token>
-        <token name="T_OPEN_TAG_WITH_ECHO">&lt;?=</token>
-        <token name="T_WHITESPACE"> </token>
+        <token name="T_OPEN_TAG">&lt;?php </token>
         <token name="T_STRING">Html</token>
         <token name="T_DOUBLE_COLON">::</token>
         <token name="T_STRING">header</token>
