@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1764954354">
-  <project timestamp="1764954354">
+<coverage generated="1764954615">
+  <project timestamp="1764954615">
     <file name="C:\pessoal\work\contas\src\Application.php">
       <class name="PHPLedger\Application" namespace="global">
         <metrics complexity="19" methods="10" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="52" coveredstatements="0" elements="62" coveredelements="0"/>
@@ -3666,7 +3666,7 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Views\AccountTypeFormView.php">
       <class name="PHPLedger\Views\AccountTypeFormView" namespace="global">
-        <metrics complexity="3" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="25" coveredstatements="0" elements="26" coveredelements="0"/>
+        <metrics complexity="3" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="27" coveredstatements="0" elements="28" coveredelements="0"/>
       </class>
       <line num="12" type="method" name="render" visibility="public" complexity="3" crap="12" count="0"/>
       <line num="14" type="stmt" count="0"/>
@@ -3675,6 +3675,8 @@
       <line num="20" type="stmt" count="0"/>
       <line num="21" type="stmt" count="0"/>
       <line num="22" type="stmt" count="0"/>
+      <line num="24" type="stmt" count="0"/>
+      <line num="25" type="stmt" count="0"/>
       <line num="26" type="stmt" count="0"/>
       <line num="27" type="stmt" count="0"/>
       <line num="28" type="stmt" count="0"/>
@@ -3694,7 +3696,7 @@
       <line num="64" type="stmt" count="0"/>
       <line num="66" type="stmt" count="0"/>
       <line num="67" type="stmt" count="0"/>
-      <metrics loc="70" ncloc="70" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="25" coveredstatements="0" elements="26" coveredelements="0"/>
+      <metrics loc="70" ncloc="70" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="27" coveredstatements="0" elements="28" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Views\AccountTypeListView.php">
       <class name="PHPLedger\Views\AccountTypeListView" namespace="global">
@@ -5105,6 +5107,6 @@
       <line num="60" type="stmt" count="0"/>
       <metrics loc="63" ncloc="55" classes="1" methods="8" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="0" elements="18" coveredelements="0"/>
     </file>
-    <metrics files="95" loc="8840" ncloc="8109" classes="84" methods="383" coveredmethods="99" conditionals="0" coveredconditionals="0" statements="4166" coveredstatements="998" elements="4549" coveredelements="1097"/>
+    <metrics files="95" loc="8840" ncloc="8109" classes="84" methods="383" coveredmethods="99" conditionals="0" coveredconditionals="0" statements="4168" coveredstatements="998" elements="4551" coveredelements="1097"/>
   </project>
 </coverage>
