@@ -36,7 +36,8 @@ final class ConfigController extends AbstractViewController
 
     private function checkUserPermission(): void
     {
-        $user = !empty($_SESSION['user']) ? ObjectFactory::user()::getByUsername($_SESSION['user']) : null;
+        $username = $this->app->session()->get('user', '');
+        $user = !empty($username) ? ObjectFactory::user()::getByUsername($username) : null;
         if (!($user instanceof User)) {
             Redirector::to("index.php?action=login");
             throw new PHPLedgerException('You must be logged in to view this page.');

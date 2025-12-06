@@ -128,7 +128,7 @@ final class Html
     public static function menu(): void
     {
         $lang = L10n::$lang;
-        $userName = $_SESSION['user'] ?? null;
+        $userName = $_SESSION['app']['user'] ?? null;
         $user = $userName ? ObjectFactory::user()::getByUsername($userName) : null;
         $links = [
             'ledger_entries' => L10n::l("ledger_entries"),
