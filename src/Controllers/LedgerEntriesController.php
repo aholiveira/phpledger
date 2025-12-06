@@ -12,9 +12,9 @@ namespace PHPLedger\Controllers;
 
 use PHPLedger\Views\LedgerEntriesView;
 
-final class LedgerEntriesController
+final class LedgerEntriesController extends AbstractViewController
 {
-    public function handle()
+    protected function handle(): void
     {
         $view = new LedgerEntriesView;
         $view->render();

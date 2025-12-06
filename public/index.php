@@ -17,19 +17,28 @@ if (PHP_VERSION_ID < 80400) {
 }
 
 if (!defined('ROOT_DIR')) {
-    define('ROOT_DIR', __DIR__);
+    define('ROOT_DIR', dirname(__DIR__));
 }
 
-require_once __DIR__ . '/vendor/autoload.php';
+require_once ROOT_DIR . '/vendor/autoload.php';
 
 use PHPLedger\Application;
+use PHPLedger\Http\HttpRequest;
 use PHPLedger\Routing\Router;
+use PHPLedger\Util\Redirector;
+use PHPLedger\Util\SessionManager;
 
-$router = new Router();
+$app = new Application();
+$router = new Router($app);
+$request = new HttpRequest();
+$session = new SessionManager($app);
 try {
-    Application::init();
-    $router->handleRequest($_GET['action'] ?? 'login');
+    $action = strtolower($_GET['action'] ?? 'login');
+    if (!in_array($action, $router->publicActions(), true) && $session->isExpired()) {
+        Redirector::to("index.php");
+    }
+    $router->handleRequest($app, $action, $request);
 } catch (Exception $e) {
     Application::setErrorMessage($e->getMessage());
-    $router->handleRequest('application_error');
+    $router->handleRequest($app, 'application_error');
 }

@@ -14,9 +14,9 @@ use PHPLedger\Domain\User;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Views\ForgotPasswordView;
 
-final class ForgotPasswordController
+final class ForgotPasswordController extends AbstractViewController
 {
-    public function handle(): void
+    protected function handle(): void
     {
         $filterArray = [
             "username" => FILTER_SANITIZE_ENCODED,

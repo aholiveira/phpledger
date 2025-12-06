@@ -15,9 +15,9 @@ use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 use PHPLedger\Views\ViewFactory;
 
-final class ReportMonthController
+final class ReportMonthController extends AbstractViewController
 {
-    public function handle(): void
+    protected function handle(): void
     {
         $pagetitle = "Relatório mensal";
         $year = date("Y");

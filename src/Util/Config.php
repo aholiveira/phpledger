@@ -3,6 +3,7 @@
 namespace PHPLedger\Util;
 
 use Exception;
+use PHPLedger\Contracts\ConfigurationServiceInterface;
 
 class ConfigException extends \Exception {}
 class ConfigInvalidException extends Exception {}
@@ -22,7 +23,7 @@ final class Config
      * @return bool True if initialization was successful, false otherwise.
      * @throws Exception if there is an error reading or parsing the configuration file.
      */
-    public static function init(string $configfile, $test = false): bool
+    public static function init(string $configfile, bool $test = false): bool
     {
         try {
             if ($test) {
@@ -99,7 +100,6 @@ final class Config
     {
         return explode('.', $path);
     }
-
     /**
      * Sets a configuration value by its key.
      * @param string $key The configuration key.

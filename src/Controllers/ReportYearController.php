@@ -14,9 +14,9 @@ use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Views\ReportYearView;
 use PHPLedger\Views\ViewFactory;
 
-final class ReportYearController
+final class ReportYearController extends AbstractViewController
 {
-    public function handle(): void
+    protected function handle(): void
     {
         $filterArray = [
             "firstYear" => FILTER_VALIDATE_INT,

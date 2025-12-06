@@ -11,9 +11,9 @@ use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Redirector;
 use PHPLedger\Views\ConfigView;
 
-class ConfigController
+final class ConfigController extends AbstractViewController
 {
-    public function handle(): void
+    protected function handle(): void
     {
         $view = new ConfigView();
         $success = false;

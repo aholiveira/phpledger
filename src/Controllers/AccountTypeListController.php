@@ -4,18 +4,14 @@ namespace PHPLedger\Controllers;
 
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\L10n;
-use PHPLedger\Util\SessionManager;
 use PHPLedger\Views\AccountTypeListView;
 
-final class AccountTypeListController
+final class AccountTypeListController extends AbstractViewController
 {
-    public function handle(): void
+    protected function handle(): void
     {
-        SessionManager::start();
-
         $object = ObjectFactory::accounttype();
         $list = $object->getList();
-
         $view = new AccountTypeListView();
         $view->render(['list' => $list, 'lang' => L10n::$lang]);
     }

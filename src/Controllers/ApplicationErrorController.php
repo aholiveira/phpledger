@@ -5,9 +5,9 @@ namespace PHPLedger\Controllers;
 use PHPLedger\Application;
 use PHPLedger\Views\ApplicationErrorView;
 
-class ApplicationErrorController
+final class ApplicationErrorController extends AbstractViewController
 {
-    public function handle(): void
+    protected function handle(): void
     {
         $view = new ApplicationErrorView;
         $view->render(Application::getErrorMessage());

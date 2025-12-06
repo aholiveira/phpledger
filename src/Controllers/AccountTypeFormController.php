@@ -2,19 +2,20 @@
 
 namespace PHPLedger\Controllers;
 
+use PHPLedger\Contracts\ViewControllerInterface;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Redirector;
 use PHPLedger\Views\AccountTypeFormView;
 
-final class AccountTypeFormController
+final class AccountTypeFormController extends AbstractViewController
 {
     /**
      * Handle single account page (GET form or POST save/delete).
      *
      * @return void
      */
-    public function handle(): void
+    protected function handle(): void
     {
         $filterArray = [
             "id" => FILTER_VALIDATE_INT,

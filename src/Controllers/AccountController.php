@@ -7,28 +7,18 @@ use PHPLedger\Util\CSRF;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\Redirector;
-use PHPLedger\Util\SessionManager;
 use PHPLedger\Views\AccountFormView;
 
-final class AccountController
+final class AccountController extends AbstractViewController
 {
-    /**
-     * Handle single account page (GET form or POST save/delete).
-     *
-     * @return void
-     */
-    public function handle(): void
+    protected function handle(): void
     {
-        SessionManager::start();
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($this->request->method() === 'POST') {
             $this->processPost();
             return;
         }
-
         $this->renderForm();
     }
-
     /**
      * Render add/edit form.
      *
@@ -36,13 +26,13 @@ final class AccountController
      */
     private function renderForm(): void
     {
-        $id = isset($_GET['id']) ? (int) $_GET['id'] : 0;
+        $id = (int)$this->request->input('id', 0);
         $account = ($id ? ObjectFactory::account()::getById($id) : null) ?? ObjectFactory::account();
         $view = new AccountFormView();
         $view->render([
             'account' => $account,
-            'back' => $_GET['back'] ?? "",
-            'lang' => L10n::sanitizeLang($_GET['lang'] ?? null),
+            'back' => $this->request->input('back', ""),
+            'lang' => L10n::sanitizeLang($this->request->input('lang', null)),
             'errors' => []
         ]);
     }
@@ -54,15 +44,15 @@ final class AccountController
      */
     private function processPost(): void
     {
-        $action = $_POST['action'] ?? 'save';
         $redirectUrl = 'index.php?action=accounts';
-        if (!CSRF::validateToken($_POST['_csrf_token'] ?? '')) {
+        if (!CSRF::validateToken($this->request->input('_csrf_token', ''))) {
             Redirector::to($redirectUrl);
             return;
         }
 
+        $action = $this->request->input('action', 'save');
         if ($action === 'delete') {
-            $id = (int) ($_POST['id'] ?? 0);
+            $id = (int)$this->request->input('id', 0);
             if ($id && ($a = ObjectFactory::account()::getById($id)) !== null) {
                 $a->delete();
                 Logger::instance()->notice("Account deleted: {$id}");
@@ -72,19 +62,21 @@ final class AccountController
         }
 
         // Save path
-        $id = isset($_POST['id']) ? (int) $_POST['id'] : 0;
+        $id = (int)$this->request->input('id', 0);
         $a = ($id ? ObjectFactory::account()::getById($id) : null) ?? ObjectFactory::account();
-        $a->id = $a->id ?? $a->getNextId();
+        if ($a->id === null) {
+            $a->id = $a->getNextId();
+        }
         // Basic assignment and server-side required validation
-        $a->name = trim((string) ($_POST['name'] ?? ''));
-        $a->number = trim((string) ($_POST['number'] ?? ''));
-        $a->typeId = (int) ($_POST['typeId'] ?? 0);
-        $a->iban = trim((string) ($_POST['iban'] ?? ''));
-        $a->swift = trim((string) ($_POST['swift'] ?? ''));
-        $a->openDate = trim((string) ($_POST['openDate'] ?? date('Y-m-d')));
-        $a->closeDate = trim((string) ($_POST['closeDate'] ?? ''));
-        $a->activa = isset($_POST['activa']) ? 1 : 0;
-        $a->grupo = (int) ($_POST['grupo'] ?? 0);
+        $a->name = trim((string) ($this->request->input('name', '')));
+        $a->number = trim((string) ($this->request->input('number', '')));
+        $a->typeId = (int) ($this->request->input('typeId', 0));
+        $a->iban = trim((string) ($this->request->input('iban', '')));
+        $a->swift = trim((string) ($this->request->input('swift', '')));
+        $a->openDate = trim((string) ($this->request->input('openDate', date('Y-m-d'))));
+        $a->closeDate = trim((string) ($this->request->input('closeDate', '')));
+        $a->activa = $this->request->input('activa', 0) === 0 ? 0 : 1;
+        $a->grupo = (int) ($this->request->input('grupo', 0));
 
         // simple required validation for name (keep minimal as requested)
         $errors = [];
@@ -102,7 +94,7 @@ final class AccountController
         $view = new AccountFormView();
         $view->render([
             'account' => $a,
-            'lang' => L10n::sanitizeLang($_POST['lang'] ?? null),
+            'lang' => L10n::sanitizeLang($this->request->input('lang')),
             'errors' => $errors
         ]);
     }

@@ -7,7 +7,7 @@ use PHPLedger\Storage\Abstract\AbstractObjectFactory;
 
 class ObjectFactory extends AbstractObjectFactory implements DataObjectFactoryInterface
 {
-    private function __construct(string $backend)
+    public function __construct(string $backend)
     {
         parent::init($backend);
     }

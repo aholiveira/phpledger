@@ -14,9 +14,9 @@ use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Views\BalancesView;
 use PHPLedger\Views\ViewFactory;
 
-final class BalancesController
+final class BalancesController extends AbstractViewController
 {
-    public function handle(): void
+    protected function handle(): void
     {
         $object = ObjectFactory::account();
         $viewer = ViewFactory::instance()->accountBalanceView($object);
