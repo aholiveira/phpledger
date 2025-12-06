@@ -19,6 +19,9 @@ class SessionManager implements SessionServiceInterface
             session_name($this->sessionName());
             session_start();
         }
+        if ($this->isExpired()) {
+            $this->logout();
+        }
     }
     public function commit(): void
     {
@@ -35,7 +38,6 @@ class SessionManager implements SessionServiceInterface
     }
     public function logout(): void
     {
-        $this->start();
         $this->data = [];
         $_SESSION['app'] = [];
         session_unset();
