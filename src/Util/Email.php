@@ -10,7 +10,6 @@
 
 namespace PHPLedger\Util;
 
-use COM;
 use PHPLedger\Util\Config;
 
 class Email

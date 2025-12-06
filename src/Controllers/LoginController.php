@@ -6,18 +6,14 @@ use PHPLedger\Util\CSRF;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\Redirector;
-use PHPLedger\Util\SessionManager;
 use PHPLedger\Storage\ObjectFactory;
 
-final class LoginController
+final class LoginController extends AbstractViewController
 {
     private string $postUser = '';
     private bool $userAuth = false;
-
     public function handle(): void
     {
-        SessionManager::start();
-
         if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['do_logout'])) {
             $this->logout();
             return;
@@ -40,7 +36,7 @@ final class LoginController
                 $defaults->update();
             }
         }
-        SessionManager::logout();
+        $this->app->session()->logout();
         Redirector::to('index.php');
     }
 
@@ -74,8 +70,8 @@ final class LoginController
     private function afterSuccessfulLogin(): void
     {
         session_regenerate_id(true);
-        SessionManager::refreshExpiration();
-        $_SESSION['user'] = $this->postUser;
+        $this->app->session()->refreshExpiration();
+        $this->app->session()->set('user', $this->postUser);
 
         $defaults = ObjectFactory::defaults()::getByUsername($this->postUser) ?? ObjectFactory::defaults()::init();
         $defaults->entryDate = date('Y-m-d');

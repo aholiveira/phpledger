@@ -6,14 +6,13 @@ use PHPLedger\Domain\User;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Views\ResetPasswordView;
 
-final class ResetPasswordController
+final class ResetPasswordController extends AbstractViewController
 {
     private bool $success = false;
     private string $message = "";
     private ?string $tokenId = null;
     private string $refreshHeader = "Refresh: 8; URL=index.php";
     private ?User $user = null;
-
     public function handle(): void
     {
         $this->getTokenId();

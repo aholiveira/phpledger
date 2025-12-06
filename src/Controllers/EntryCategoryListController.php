@@ -16,10 +16,11 @@ use PHPLedger\Exceptions\PHPLedgerException;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Views\EntryCategoryListView;
 
-final class EntryCategoryListController
+final class EntryCategoryListController extends AbstractViewController
 {
     private EntryCategory $object;
-    public function handle(): void
+
+    protected function handle(): void
     {
         $success = false;
         try {

@@ -2,6 +2,9 @@
 
 namespace PHPLedger\Routing;
 
+use PHPLedger\Contracts\ApplicationObjectInterface;
+use PHPLedger\Contracts\RequestInterface;
+use PHPLedger\Contracts\ViewControllerInterface;
 use PHPLedger\Controllers\AccountController;
 use PHPLedger\Controllers\AccountsController;
 use PHPLedger\Controllers\AccountTypeFormController;
@@ -18,6 +21,7 @@ use PHPLedger\Controllers\ReportMonthController;
 use PHPLedger\Controllers\ReportYearController;
 use PHPLedger\Controllers\ResetPasswordController;
 use PHPLedger\Controllers\UpdateStorageController;
+use PHPLedger\Http\HttpRequest;
 
 final class Router
 {
@@ -40,24 +44,26 @@ final class Router
         'update'            => UpdateStorageController::class,
     ];
 
-    /**
-     * Handles the incoming request based on the action parameter.
-     * @param string $action The action to handle.
-     * @return void
-     * @throws \Exception
-     */
-
-    public function handleRequest(string $action): void
+    public function handleRequest(ApplicationObjectInterface $app, string $action, ?RequestInterface $request = null): void
     {
+        $request ??= new HttpRequest();
         if (isset($this->actionMap[$action])) {
             $controllerClass = $this->actionMap[$action];
             $controller = new $controllerClass();
-            $controller->handle();
+
+            if ($controller instanceof ViewControllerInterface) {
+                $controller->handleRequest($app, $request);
+            }
             return;
         }
         header('Location: index.php?action=login');
+        exit;
     }
 
+    public function publicActions(): array
+    {
+        return ['index', 'update', 'resetpassword', 'forgotpassword', 'applicationerror'];
+    }
     /** Returns a whitelist of all valid actions */
     public static function getAllowedActions(): array
     {

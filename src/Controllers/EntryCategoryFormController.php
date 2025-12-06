@@ -14,9 +14,9 @@ use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Views\EntryCategoryFormView;
 use PHPLedger\Views\ViewFactory;
 
-final class EntryCategoryFormController
+final class EntryCategoryFormController extends AbstractViewController
 {
-    public function handle(): void
+    protected function handle(): void
     {
         $object = ObjectFactory::EntryCategory();
         if (filter_has_var(INPUT_GET, "id")) {
