@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1765063189">
-  <project timestamp="1765063189">
+<coverage generated="1765063830">
+  <project timestamp="1765063830">
     <file name="C:\pessoal\work\contas\src\Application.php">
       <class name="PHPLedger\Application" namespace="global">
         <metrics complexity="24" methods="14" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="48" coveredstatements="0" elements="62" coveredelements="0"/>
@@ -3437,42 +3437,43 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Util\SessionManager.php">
       <class name="PHPLedger\Util\SessionManager" namespace="global">
-        <metrics complexity="13" methods="9" coveredmethods="9" conditionals="0" coveredconditionals="0" statements="24" coveredstatements="24" elements="33" coveredelements="33"/>
+        <metrics complexity="14" methods="9" coveredmethods="9" conditionals="0" coveredconditionals="0" statements="25" coveredstatements="25" elements="34" coveredelements="34"/>
       </class>
       <line num="10" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="5"/>
       <line num="12" type="stmt" count="5"/>
       <line num="13" type="stmt" count="5"/>
-      <line num="15" type="method" name="start" visibility="public" complexity="2" crap="2" count="5"/>
+      <line num="15" type="method" name="start" visibility="public" complexity="3" crap="3" count="5"/>
       <line num="17" type="stmt" count="5"/>
       <line num="18" type="stmt" count="5"/>
       <line num="19" type="stmt" count="5"/>
       <line num="20" type="stmt" count="5"/>
-      <line num="23" type="method" name="commit" visibility="public" complexity="1" crap="1" count="4"/>
-      <line num="25" type="stmt" count="4"/>
-      <line num="27" type="method" name="sessionName" visibility="public" complexity="1" crap="1" count="5"/>
-      <line num="29" type="stmt" count="5"/>
-      <line num="32" type="method" name="isExpired" visibility="public" complexity="2" crap="2" count="2"/>
-      <line num="34" type="stmt" count="2"/>
-      <line num="36" type="method" name="logout" visibility="public" complexity="3" crap="3" count="1"/>
-      <line num="38" type="stmt" count="1"/>
-      <line num="39" type="stmt" count="1"/>
-      <line num="40" type="stmt" count="1"/>
-      <line num="41" type="stmt" count="1"/>
-      <line num="42" type="stmt" count="1"/>
-      <line num="43" type="stmt" count="1"/>
-      <line num="44" type="stmt" count="1"/>
-      <line num="46" type="stmt" count="1"/>
-      <line num="47" type="stmt" count="1"/>
-      <line num="48" type="stmt" count="1"/>
-      <line num="51" type="method" name="refreshExpiration" visibility="public" complexity="1" crap="1" count="1"/>
-      <line num="53" type="stmt" count="1"/>
-      <line num="54" type="stmt" count="1"/>
-      <line num="56" type="method" name="get" visibility="public" complexity="1" crap="1" count="1"/>
-      <line num="58" type="stmt" count="1"/>
-      <line num="60" type="method" name="set" visibility="public" complexity="1" crap="1" count="3"/>
-      <line num="62" type="stmt" count="3"/>
-      <line num="63" type="stmt" count="3"/>
-      <metrics loc="66" ncloc="66" classes="1" methods="9" coveredmethods="9" conditionals="0" coveredconditionals="0" statements="24" coveredstatements="24" elements="33" coveredelements="33"/>
+      <line num="22" type="stmt" count="5"/>
+      <line num="23" type="stmt" count="1"/>
+      <line num="26" type="method" name="commit" visibility="public" complexity="1" crap="1" count="4"/>
+      <line num="28" type="stmt" count="4"/>
+      <line num="30" type="method" name="sessionName" visibility="public" complexity="1" crap="1" count="5"/>
+      <line num="32" type="stmt" count="5"/>
+      <line num="35" type="method" name="isExpired" visibility="public" complexity="2" crap="2" count="5"/>
+      <line num="37" type="stmt" count="5"/>
+      <line num="39" type="method" name="logout" visibility="public" complexity="3" crap="3" count="2"/>
+      <line num="41" type="stmt" count="2"/>
+      <line num="42" type="stmt" count="2"/>
+      <line num="43" type="stmt" count="2"/>
+      <line num="44" type="stmt" count="2"/>
+      <line num="45" type="stmt" count="2"/>
+      <line num="46" type="stmt" count="2"/>
+      <line num="48" type="stmt" count="2"/>
+      <line num="49" type="stmt" count="2"/>
+      <line num="50" type="stmt" count="2"/>
+      <line num="53" type="method" name="refreshExpiration" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="55" type="stmt" count="1"/>
+      <line num="56" type="stmt" count="1"/>
+      <line num="58" type="method" name="get" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="60" type="stmt" count="1"/>
+      <line num="62" type="method" name="set" visibility="public" complexity="1" crap="1" count="3"/>
+      <line num="64" type="stmt" count="3"/>
+      <line num="65" type="stmt" count="3"/>
+      <metrics loc="68" ncloc="68" classes="1" methods="9" coveredmethods="9" conditionals="0" coveredconditionals="0" statements="25" coveredstatements="25" elements="34" coveredelements="34"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Version.php">
       <class name="PHPLedger\Version" namespace="global">
@@ -5136,6 +5137,6 @@
       <line num="60" type="stmt" count="0"/>
       <metrics loc="63" ncloc="55" classes="1" methods="8" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="0" elements="18" coveredelements="0"/>
     </file>
-    <metrics files="102" loc="8924" ncloc="8200" classes="86" methods="385" coveredmethods="102" conditionals="0" coveredconditionals="0" statements="4169" coveredstatements="991" elements="4554" coveredelements="1093"/>
+    <metrics files="102" loc="8926" ncloc="8202" classes="86" methods="385" coveredmethods="102" conditionals="0" coveredconditionals="0" statements="4170" coveredstatements="992" elements="4555" coveredelements="1094"/>
   </project>
 </coverage>
