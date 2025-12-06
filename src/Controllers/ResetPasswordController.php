@@ -64,8 +64,8 @@ final class ResetPasswordController extends AbstractViewController
         } else {
             if ($this->user instanceof User && $this->user->isTokenValid($tokenId)) {
                 $this->user->setPassword($password);
-                $this->user->setToken('');
-                $this->user->setTokenExpiry(null);
+                $this->user->setProperty('token', '');
+                $this->user->setProperty('tokenExpiry', null);
                 if ($this->user->update()) {
                     header($this->refreshHeader);
                     $this->success = true;

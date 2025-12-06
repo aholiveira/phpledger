@@ -196,14 +196,14 @@ class MySqlStorage implements DataStorageInterface
         $user = new MySqlUser();
         if (sizeof($user->getList()) == 0) {
             $user->setId(1);
-            $user->setUsername($this->defaultAdminUsername);
-            $user->setPassword($this->defaultAdminPassword);
-            $user->setFullName('Default admin');
-            $user->setEmail('');
-            $user->setRole(1);
-            $user->setToken('');
-            $user->setTokenExpiry('');
-            $user->setActive(1);
+            $user->setProperty('username', $this->defaultAdminUsername);
+            $user->setProperty('password', $this->defaultAdminPassword);
+            $user->setProperty('fullName', 'Default admin');
+            $user->setProperty('email', '');
+            $user->setProperty('role', 1);
+            $user->setProperty('token', '');
+            $user->setProperty('tokenExpiry', '');
+            $user->setProperty('active', 1);
             if (!$user->update()) {
                 $this->addMessage("Could not add user admin");
                 $retval = false;
