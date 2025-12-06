@@ -23,13 +23,24 @@ abstract class User extends AbstractDataObject implements DataObjectInterface
     protected int $role;
     protected static int $tokenLength = 32;
     private string $dateFormat = "Y-m-d H:i:s";
-    public function setUsername(string $value)
+    public function setProperty(string $name, mixed $value): void
     {
-        $this->userName = $value;
+        $method = 'set' . ucfirst($name);
+        if (method_exists($this, $method)) {
+            $this->$method($value);
+            return;
+        }
+        if (property_exists($this, $name)) {
+            $this->$name = $value;
+        }
     }
-    public function getUsername(): ?string
+    public function getProperty(string $name, mixed $default = null): mixed
     {
-        return $this->userName;
+        $method = 'get' . ucfirst($name);
+        if (method_exists($this, $method)) {
+            return $this->$method();
+        }
+        return property_exists($this, $name) ? $this->$name : $default;
     }
     public function setPassword(string $value)
     {
@@ -43,54 +54,6 @@ abstract class User extends AbstractDataObject implements DataObjectInterface
     public function getPassword(): ?string
     {
         return $this->password;
-    }
-    public function setEmail(string $value)
-    {
-        $this->email = $value;
-    }
-    public function getEmail(): ?string
-    {
-        return $this->email;
-    }
-    public function setFullName(string $value)
-    {
-        $this->fullName = $value;
-    }
-    public function getFullName(): ?string
-    {
-        return $this->fullName;
-    }
-    public function setActive(int $value)
-    {
-        $this->active = $value;
-    }
-    public function getActive(): ?int
-    {
-        return $this->active;
-    }
-    public function setRole(int $value)
-    {
-        $this->role = $value;
-    }
-    public function getRole(): ?int
-    {
-        return $this->role;
-    }
-    public function getToken(): ?string
-    {
-        return $this->token;
-    }
-    public function setToken(string $value)
-    {
-        $this->token = $value;
-    }
-    public function getTokenExpiry(): ?string
-    {
-        return $this->tokenExpiry;
-    }
-    public function setTokenExpiry(?string $value)
-    {
-        $this->tokenExpiry = $value;
     }
     private function hashPassword(string $password): string
     {
@@ -125,21 +88,21 @@ abstract class User extends AbstractDataObject implements DataObjectInterface
         if (!isset($this->userName) || !isset($this->email)) {
             return $retval;
         }
-        $this->setToken($this->createToken());
-        $this->setTokenExpiry((new \DateTime())->add(new \DateInterval("PT24H"))->format($this->dateFormat));
+        $this->setProperty('token', $this->createToken());
+        $this->setProperty('tokenExpiry', (new \DateTime())->add(new \DateInterval("PT24H"))->format($this->dateFormat));
         if ($this->update()) {
             $retval = true;
             $title = Config::get("title");
             $url = Config::get("url");
             $message = "Esta' a receber este email porque solicitou a reposicao da sua palavra-passe na aplicacao '$title'.\r\n";
             $message .= "Para continuar o processo deve clique no link abaixo para definir uma nova senha.\r\n";
-            $message .= "{$url}reset_password.php?token_id={$this->getToken()}.\r\n";
-            $message .= "Este token e' valido ate' 'as {$this->getTokenExpiry()}.\r\n";
+            $message .= "{$url}reset_password.php?token_id={$this->getProperty('token')}.\r\n";
+            $message .= "Este token e' valido ate' 'as {$this->getProperty('tokenExpiry')}.\r\n";
             $message .= "Findo este prazo tera' que reiniciar o processo usando o link {$url}forgot_password.php.\r\n";
             $message .= "\r\n";
             $message .= "Cumprimentos,\r\n";
             $message .= "$title\r\n";
-            $retval = Email::sendEmail(Config::get("from"), $this->getEmail(), "Reposicao de palavra-passe", $message);
+            $retval = Email::sendEmail(Config::get("from"), $this->getProperty('email'), "Reposicao de palavra-passe", $message);
         }
         return $retval;
     }

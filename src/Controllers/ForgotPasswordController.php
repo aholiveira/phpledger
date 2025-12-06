@@ -31,7 +31,7 @@ final class ForgotPasswordController extends AbstractViewController
             if (!($user instanceof User)) {
                 $message = "Os dados indicados est&atilde;o errados.";
             }
-            if ($user !== null && strtolower($user->getEmail()) === $filtered["email"]) {
+            if ($user !== null && strtolower($user->getProperty('email')) === $filtered["email"]) {
                 $message = $user->resetPassword() ?
                     "<p>Ir&aacute; receber um email com um link para efectuar a reposicao da palavra-passe.<br></p>"
                     :

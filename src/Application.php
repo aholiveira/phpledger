@@ -42,7 +42,7 @@ final class Application implements ApplicationObjectInterface
     public function dataFactory(): DataObjectFactoryInterface
     {
         $backend = Config::get("storage.type") ??  "mysql";
-        return ($this->dataFactory ??= new ObjectFactory($backend));
+        return $this->dataFactory ??= new ObjectFactory($backend);
     }
     public function config(): ConfigurationServiceInterface
     {
@@ -50,19 +50,19 @@ final class Application implements ApplicationObjectInterface
     }
     public function session(): SessionServiceInterface
     {
-        return ($this->session ??= new SessionManager($this));
+        return $this->session ??= new SessionManager($this);
     }
     public function l10n(): L10n
     {
-        return ($this->l10n ??= new L10n());
+        return $this->l10n ??= new L10n();
     }
     public function redirector(): Redirector
     {
-        return ($this->redirector ??= new Redirector());
+        return $this->redirector ??= new Redirector();
     }
     public function logger(): Logger
     {
-        return ($this->logger ??= new Logger($this->logfile, LogLevel::INFO));
+        return $this->logger ??= new Logger($this->logfile, LogLevel::INFO);
     }
     public static function setErrorMessage(string $message): void
     {
