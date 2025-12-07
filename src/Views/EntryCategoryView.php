@@ -17,6 +17,7 @@ use PHPLedger\Util\NumberUtil;
 
 class EntryCategoryView extends ObjectViewer
 {
+
     public function printObject(): string
     {
         $retval = "";
@@ -39,7 +40,7 @@ class EntryCategoryView extends ObjectViewer
         $retval = "<table class=\"lista entry_category\">\r\n";
         $retval .= "<thead><tr><th>ID</th><th>Categoria</th><th>Descri&ccedil;&atilde;o</th><th>Valor</th><th>Activa</th></tr></thead>\r\n";
         $retval .= "<tbody>\r\n";
-        $view = new entryCategoryView(ObjectFactory::entryCategory());
+        $view = new entryCategoryView($this->app, ObjectFactory::entryCategory());
         foreach ($objectList as $object) {
             if ($object instanceof EntryCategory) {
                 if ($object->parentId === 0) {

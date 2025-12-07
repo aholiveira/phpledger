@@ -39,7 +39,7 @@ class CurrencyView extends ObjectViewer
         $retval .= "<tbody>\r\n";
         foreach ($objectList as $object) {
             if ($object instanceof currency) {
-                $view = new currencyView($object);
+                $view = new currencyView($this->app, $object);
                 $retval .= "<tr>" . $view->printObject() . "</tr>\r\n";
             }
         }

@@ -63,7 +63,7 @@ class AccountView extends ObjectViewer
         if (isset($object->typeId)) {
             $account_type = $account_type->getById($object->typeId);
         }
-        $accountTypeView = ViewFactory::instance()->accountTypeView($account_type);
+        $accountTypeView = ViewFactory::instance()->accountTypeView($this->app, $account_type);
         $tipo_opt = $accountTypeView->getSelectFromList($account_type->getList(), isset($object->typeId) ? $object->typeId : null);
         $retval .= "<td data-label='ID'><input type=\"hidden\" name=\"id\" value=\"{$id}\">{$id}</td>\n";
         $retval .= "<td data-label='Nome'><a id=\"{$id}\"></a><input type=text size=16 maxlength=30 name=\"name\" value=\"{$object->name}\"></td>";
@@ -93,7 +93,7 @@ class AccountView extends ObjectViewer
         $retval .= "<tbody>\r\n";
         foreach ($objectList as $object) {
             if ($object instanceof account) {
-                $view = new accountView($object);
+                $view = new accountView($this->app, $object);
                 $retval .= "<tr>" . $view->printObject() . "</tr>\r\n";
             }
         }

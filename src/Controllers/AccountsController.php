@@ -18,9 +18,9 @@ final class AccountsController extends AbstractViewController
     {
         $list = ObjectFactory::account()::getList();
         $view = new AccountListView();
-        $view->render([
+        $view->render($this->app, [
             'list' => $list,
-            'lang' => L10n::sanitizeLang($_GET['lang'] ?? null)
+            'lang' => $this->app->l10n()->sanitizeLang($_GET['lang'] ?? null)
         ]);
     }
 }

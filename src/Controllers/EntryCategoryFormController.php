@@ -25,9 +25,9 @@ final class EntryCategoryFormController extends AbstractViewController
                 $object = $object->getById($id);
             }
         }
-        $viewer = ViewFactory::instance()->entryCategoryView($object);
+        $viewer = ViewFactory::instance()->entryCategoryView($this->app, $object);
         $form = $viewer->printForm();
         $view = new EntryCategoryFormView;
-        $view->render($form, $object->id > 0);
+        $view->render($this->app, $form, $object->id > 0);
     }
 }

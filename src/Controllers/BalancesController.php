@@ -19,9 +19,9 @@ final class BalancesController extends AbstractViewController
     protected function handle(): void
     {
         $object = ObjectFactory::account();
-        $viewer = ViewFactory::instance()->accountBalanceView($object);
+        $viewer = ViewFactory::instance()->accountBalanceView($this->app, $object);
         $reportData = $viewer->printObjectList($object->getList(['activa' => ['operator' => '=', 'value' => '1']]));
         $view = new BalancesView;
-        $view->render($reportData);
+        $view->render($this->app, $reportData);
     }
 }

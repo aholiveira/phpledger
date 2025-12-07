@@ -17,6 +17,6 @@ final class LedgerEntriesController extends AbstractViewController
     protected function handle(): void
     {
         $view = new LedgerEntriesView;
-        $view->render();
+        $view->render($this->app);
     }
 }

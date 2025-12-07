@@ -10,18 +10,21 @@
 
 namespace PHPLedger\Views;
 
+use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 
 class ReportYearView
 {
     private string $pagetitle = "Relatório anual";
+    private ApplicationObjectInterface $app;
 
-    public function render(string $action, int $firstYear, int $lastYear, ReportYearHtmlView $reportHtml)
+    public function render(ApplicationObjectInterface $app, string $action, int $firstYear, int $lastYear, ReportYearHtmlView $reportHtml)
     {
+        $this->app = $app;
 ?>
         <!DOCTYPE html>
-        <html lang="<?= l10n::html() ?>">
+        <html lang="<?= $this->app->l10n()->html() ?>">
 
         <head>
             <title><?= Html::title($this->pagetitle) ?></title>

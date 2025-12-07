@@ -10,18 +10,21 @@
 
 namespace PHPLedger\Views;
 
+use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 
 class ForgotPasswordView
 {
+    private ApplicationObjectInterface $app;
+
     private $pagetitle = "Recupera&ccedil;&atilde;o de palavra-passe";
     public function render(string $message = ""): void
     {
 ?>
         <!DOCTYPE html>
-        <html lang="<?= l10n::html() ?>">
+        <html lang="<?= $this->app->l10n()->html() ?>">
 
         <head>
             <title><?= Html::title($this->pagetitle) ?></title>

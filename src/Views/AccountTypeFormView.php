@@ -2,19 +2,21 @@
 
 namespace PHPLedger\Views;
 
+use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Domain\AccountType;
 use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Html;
-use PHPLedger\Util\L10n;
 
 class AccountTypeFormView
 {
-    public function render(AccountType $object, ?string $message): void
+    private ApplicationObjectInterface $app;
+    public function render(ApplicationObjectInterface $app, AccountType $object, ?string $message): void
     {
+        $this->app = $app;
         $pagetitle = "Tipo de contas";
 ?>
         <!DOCTYPE html>
-        <html lang="<?= l10n::html() ?>">
+        <html lang="<?= $this->app->l10n()->html() ?>">
 
         <head>
             <title><?= Html::title($pagetitle) ?></title>

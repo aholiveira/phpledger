@@ -2,16 +2,10 @@
 
 namespace PHPLedger\Util;
 
-enum LogLevel: int
-{
-    case ERROR = 0;
-    case WARNING = 1;
-    case NOTICE = 2;
-    case INFO = 3;
-    case DEBUG = 4;
-}
+use PHPLedger\Contracts\LoggerServiceInterface;
+use PHPLedger\Contracts\LogLevel;
 
-class Logger
+class Logger implements LoggerServiceInterface
 {
     private string $logFile;
     private LogLevel $logLevel;
@@ -48,7 +42,7 @@ class Logger
      * Set the log level.
      * @param LogLevel $logLevel
      */
-    public function setLogLevel(LogLevel $logLevel)
+    public function setLogLevel(LogLevel $logLevel): void
     {
         $this->logLevel = $logLevel;
     }
@@ -115,21 +109,6 @@ class Logger
         $this->dump(debug_backtrace());
     }
     /**
-     * Get the textual representation of a log level.
-     * @param LogLevel $level
-     * @return string
-     */
-    private function levelText(LogLevel $level): string
-    {
-        return match ($level) {
-            LogLevel::DEBUG => "DEBUG",
-            LogLevel::INFO => "INFO",
-            LogLevel::NOTICE => "NOTICE",
-            LogLevel::WARNING => "WARN",
-            LogLevel::ERROR => "ERROR",
-        };
-    }
-    /**
      * Write a log entry to the log file.
      * @param LogLevel $level
      * @param string $message
@@ -143,7 +122,7 @@ class Logger
         $prefix = trim($prefix);
         $prefix = $prefix !== '' ? $prefix : '-';
         $timestamp = date('Y-m-d H:i:s');
-        $entry = "[$timestamp] [{$this->levelText($level)}] [$prefix] $message" . PHP_EOL;
+        $entry = "[$timestamp] [{$level->name}] [$prefix] $message" . PHP_EOL;
         $dir = dirname($this->logFile);
         if (!is_dir($dir)) {
             mkdir($dir, 0750, true);

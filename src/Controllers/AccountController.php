@@ -4,7 +4,6 @@ namespace PHPLedger\Controllers;
 
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\CSRF;
-use PHPLedger\Util\L10n;
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\Redirector;
 use PHPLedger\Views\AccountFormView;
@@ -29,10 +28,10 @@ final class AccountController extends AbstractViewController
         $id = (int)$this->request->input('id', 0);
         $account = ($id ? ObjectFactory::account()::getById($id) : null) ?? ObjectFactory::account();
         $view = new AccountFormView();
-        $view->render([
+        $view->render($this->app, [
             'account' => $account,
             'back' => $this->request->input('back', ""),
-            'lang' => L10n::sanitizeLang($this->request->input('lang', null)),
+            'lang' => $this->app->l10n()->sanitizeLang($this->request->input('lang', null)),
             'errors' => []
         ]);
     }
@@ -92,9 +91,9 @@ final class AccountController extends AbstractViewController
         }
 
         $view = new AccountFormView();
-        $view->render([
+        $view->render($this->app, [
             'account' => $a,
-            'lang' => L10n::sanitizeLang($this->request->input('lang')),
+            'lang' => $this->app->l10n()->sanitizeLang($this->request->input('lang')),
             'errors' => $errors
         ]);
     }

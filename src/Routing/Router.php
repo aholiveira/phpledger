@@ -38,6 +38,7 @@ final class Router
         'forgotpassword'    => ForgotPasswordController::class,
         'ledger_entries'    => LedgerEntriesController::class,
         'login'             => LoginController::class,
+        'logout'            => LoginController::class,
         'report_month'      => ReportMonthController::class,
         'report_year'       => ReportYearController::class,
         'resetpassword'     => ResetPasswordController::class,
@@ -50,7 +51,6 @@ final class Router
         if (isset($this->actionMap[$action])) {
             $controllerClass = $this->actionMap[$action];
             $controller = new $controllerClass();
-
             if ($controller instanceof ViewControllerInterface) {
                 $controller->handleRequest($app, $request);
             }
@@ -62,7 +62,7 @@ final class Router
 
     public function publicActions(): array
     {
-        return ['index', 'update', 'resetpassword', 'forgotpassword', 'applicationerror'];
+        return ['login', 'update', 'resetpassword', 'forgotpassword', 'applicationerror'];
     }
     /** Returns a whitelist of all valid actions */
     public static function getAllowedActions(): array

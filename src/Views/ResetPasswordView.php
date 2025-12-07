@@ -2,18 +2,20 @@
 
 namespace PHPLedger\Views;
 
+use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\Html;
-use PHPLedger\Util\L10n;
 
 class ResetPasswordView
 {
-    public function render(?string $tokenId, bool $success, string $message): void
+    private ApplicationObjectInterface $app;
+    public function render(ApplicationObjectInterface $app, ?string $tokenId, bool $success, string $message): void
     {
+        $this->app = $app;
         $pagetitle = "Recuperação de password";
 ?>
         <!DOCTYPE html>
-        <html lang="<?= L10n::html(); ?>">
+        <html lang="<?= $this->app->l10n()->html(); ?>">
 
         <head>
             <title><?= Html::title($pagetitle) ?></title>

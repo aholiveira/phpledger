@@ -2,17 +2,19 @@
 
 namespace PHPLedger\Views;
 
+use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Util\Html;
-use PHPLedger\Util\L10n;
 
 class ApplicationErrorView
 {
-    public function render(string $message): void
+    private ApplicationObjectInterface $app;
+    public function render(ApplicationObjectInterface $app, string $message): void
     {
-        $pagetitle = L10n::l("Application error");
+        $this->app = $app;
+        $pagetitle = $this->app->l10n()->l("Application error");
 ?>
         <!DOCTYPE html>
-        <html lang="<?= L10n::html() ?>">
+        <html lang="<?= $this->app->l10n()->html() ?>">
 
         <head>
             <title><?= Html::title($pagetitle) ?></title>

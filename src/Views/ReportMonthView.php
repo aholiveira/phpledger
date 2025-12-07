@@ -10,16 +10,17 @@
 
 namespace PHPLedger\Views;
 
+use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Html;
-use PHPLedger\Util\L10n;
 use PHPLedger\Views\ViewFactory;
 
 class ReportMonthView
 {
-
-    public function render(): void
+    private ApplicationObjectInterface $app;
+    public function render(ApplicationObjectInterface $app): void
     {
+        $this->app = $app;
         $pagetitle = "Relatório mensal";
         $year = date("Y");
         if (array_key_exists("year", $_GET)) {
@@ -34,7 +35,7 @@ class ReportMonthView
         $report->getReport(["year" => $year]);
 ?>
         <!DOCTYPE html>
-        <html lang="<?= l10n::html() ?>">
+        <html lang="<?= $this->app->l10n()->html() ?>">
 
         <head>
             <title><?= Html::title($pagetitle) ?></title>

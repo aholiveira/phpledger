@@ -50,7 +50,7 @@ final class EntryCategoryListController extends AbstractViewController
             $message = $e->getMessage();
         }
         $view = new EntryCategoryListView;
-        $view->render(isset($message) ? $message : "", $success);
+        $view->render($this->app, isset($message) ? $message : "", $success);
     }
 
     private function handleUpdate(array $filtered): bool

@@ -31,11 +31,25 @@ use PHPLedger\Util\SessionManager;
 $app = new Application();
 $router = new Router($app);
 $request = new HttpRequest();
-$session = new SessionManager($app);
+$session = new SessionManager();
 try {
-    $action = strtolower($_GET['action'] ?? 'login');
-    if (!in_array($action, $router->publicActions(), true) && $session->isExpired()) {
-        Redirector::to("index.php");
+    $frontend = "index.php?action=";
+    $action = strtolower($request->input('action', 'login'));
+    if ($action !== 'login' && $session->isExpired()) {
+        $session->logout();
+        Redirector::to("{$frontend}login&expired=1");
+    }
+    if (!in_array($action, $router->publicActions(), true) && !$session->isAuthenticated()) {
+        Redirector::to("{$frontend}login");
+    }
+    if ($action === 'login' && $session->isAuthenticated()) {
+        Redirector::to("{$frontend}ledger_entries");
+    }
+    if ($app->needsUpdate() && $action !== 'update') {
+        Redirector::to("{$frontend}update");
+    }
+    if ($session->isAuthenticated()) {
+        $session->refreshExpiration();
     }
     $router->handleRequest($app, $action, $request);
 } catch (Exception $e) {
