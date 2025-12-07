@@ -10,10 +10,10 @@ if (!\defined('ROOT_DIR')) {
     define('ROOT_DIR', __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
 }
 
+use PHPLedger\Contracts\LogLevel;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\Logger;
-use PHPLedger\Util\LogLevel;
 
 function  checkAndUpdateDatabaseSchema()
 {

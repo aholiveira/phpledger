@@ -4,28 +4,20 @@ namespace PHPLedgerTests\Unit\Util;
 
 use PHPLedger\Util\Config;
 use PHPLedger\Util\Html;
-use PHPLedger\Util\L10n;
-
-if (!\defined('PHPLedger\Util\VERSION')) {
-    define('PHPLedger\Util\VERSION', 'TestApp');
-}
-if (!\defined('PHPLedger\Util\ROOT_DIR')) {
-    define('PHPLedger\Util\ROOT_DIR', __DIR__ . DIRECTORY_SEPARATOR . ".." . DIRECTORY_SEPARATOR . "..");
-}
+use PHPLedger\Version;
 
 beforeEach(function () {
-    ini_set('short_open_tag', '1');
-    // Setup dummy config and language
     Config::set('title', 'TestApp', false);
-    L10n::init();
-    L10n::$lang = 'pt-pt';
     if (!isset($_SESSION)) {
         session_start();
         $_SESSION = [];
     }
     $_SESSION['expires'] = time() + 3600;
+    $_SESSION['user'] = 'adminuser';
+
 });
 
+// Option generation tests
 it('builds year options with selected year', function () {
     $output = Html::yearOptions(2024, 2020, 2025);
     expect(str_contains($output, '<option value="2024" selected>2024</option>'))->toBeTrue();
@@ -56,6 +48,7 @@ it('builds generic options', function () {
     expect(str_contains($output, '<option value="2" selected>2</option>'))->toBeTrue();
 });
 
+// Error and alert rendering
 it('renders errortext without exit', function () {
     ob_start();
     Html::errortext('Error message', false);
@@ -70,34 +63,22 @@ it('renders myalert javascript', function () {
     expect(str_contains($output, 'alert("Hello alert")'))->toBeTrue();
 });
 
-it('renders footer html with session expiration', function () {
+// Header
+it('renders header HTML', function () {
     ob_start();
-    Html::footer();
+    Html::header();
     $output = ob_get_clean();
-    expect(str_contains($output, '<footer>'))->toBeTrue();
-    expect(str_contains($output, date("Y-m-d", $_SESSION['expires'])))->toBeTrue();
+    expect(str_contains($output, '<meta charset="utf-8">'))->toBeTrue();
+    expect(str_contains($output, 'assets/styles.css'))->toBeTrue();
 });
 
-it('renders menu html with language links', function () {
-    ob_start();
-    Html::menu();
-    $output = ob_get_clean();
-    expect(str_contains($output, '<aside class="menu">'))->toBeTrue();
-    expect(str_contains($output, "&lang=" . L10n::$lang))->toBeTrue();
+// Title
+it('returns HTML-escaped title with page prefix', function () {
+    $title = Html::title('Page');
+    expect($title)->toBe('Page - TestApp');
 });
 
-it('renders language selector in div', function () {
-    ob_start();
-    Html::languageSelector(true);
-    $output = ob_get_clean();
-    expect(str_contains($output, '<div>'))->toBeTrue();
-    expect(str_contains($output, 'EN</a> | <span>PT'))->toBeTrue();
-});
-
-it('renders language selector without div', function () {
-    ob_start();
-    Html::languageSelector(false);
-    $output = ob_get_clean();
-    expect(str_contains($output, '<div>'))->toBeFalse();
-    expect(str_contains($output, 'EN</a> | <span>PT'))->toBeTrue();
+it('returns title without page prefix when empty', function () {
+    $title = Html::title('');
+    expect($title)->toBe('TestApp');
 });
