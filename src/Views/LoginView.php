@@ -52,7 +52,7 @@ class LoginView
                             <p class="invalid-login"><?= $this->app->l10n()->l('expired_session') ?></p>
                         <?php endif; ?>
                         <?php if ($needsauth): ?>
-                            <p class="invalid-login"><?= $this->app->l10n()->l('please_authenticate') ?></p>
+                            <p class="invalid-login"><?= $this->app->l10n()->l('not_authenticated') ?></p>
                         <?php endif; ?>
                         <p id="formButton"><input type="submit" value="<?= $this->app->l10n()->l('login') ?>"></p>
                         <p id="versionTagContent" class="version-tag">
