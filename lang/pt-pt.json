@@ -8,6 +8,7 @@
     "add": "Adicionar",
     "amount": "Valor",
     "application_name": "Nome da aplicação",
+    "Back to list": "Voltar à lista",
     "balance": "Saldo",
     "balances": "Saldos",
     "cannot_use_app": "Não poderá utilizar a aplicação sem concluir esta actualização.",
@@ -62,6 +63,7 @@
     "open": "Abertura",
     "password": "Palavra-passe",
     "percent": "Percentagem",
+    "please_authenticate": "É necessária autenticação para aceder a essa página.",
     "port": "Porto",
     "previous_balance": "Saldo anterior",
     "redirecting": "Será redireccionado para o ecrã de login em 5 segundos.",
@@ -76,6 +78,7 @@
     "start_update": "Prima o botão abaixo para iniciar o processo.",
     "start": "Início",
     "storage_type": "Tipo de armazenamento",
+    "swift": "SWIFT",
     "transactions_in_period": "Transacções no período: %s",
     "type": "Tipo",
     "update_fail": "Falha na actualização. Verifique as permissões do utilizador.",
@@ -86,7 +89,5 @@
     "version": "Versão %s",
     "withdraw": "Lev",
     "withdrawals": "Levantam.",
-    "yes": "Sim",
-    "Back to list": "Voltar à lista",
-    "swift": "SWIFT"
+    "yes": "Sim"
 }

@@ -23,6 +23,7 @@ class LoginView
         $postUser = htmlspecialchars($data['postUser'] ?? '');
         $userAuth = $data['userAuth'] ?? false;
         $expired = $data['expired'] ?? 0;
+        $needsauth = $data['needsauth'] ?? 0;
 ?>
         <!DOCTYPE html>
         <html lang="<?= $this->app->l10n()->html() ?>">
@@ -49,6 +50,9 @@ class LoginView
                         <?php endif; ?>
                         <?php if ($expired): ?>
                             <p class="invalid-login"><?= $this->app->l10n()->l('expired_session') ?></p>
+                        <?php endif; ?>
+                        <?php if ($needsauth): ?>
+                            <p class="invalid-login"><?= $this->app->l10n()->l('please_authenticate') ?></p>
                         <?php endif; ?>
                         <p id="formButton"><input type="submit" value="<?= $this->app->l10n()->l('login') ?>"></p>
                         <p id="versionTagContent" class="version-tag">

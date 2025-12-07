@@ -6,6 +6,7 @@ use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\Redirector;
 use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Views\LoginView;
 
 final class LoginController extends AbstractViewController
 {
@@ -92,11 +93,12 @@ final class LoginController extends AbstractViewController
 
     private function renderView(): void
     {
-        $view = new \PHPLedger\Views\LoginView();
+        $view = new LoginView();
         $view->render($this->app, [
             'postUser' => $this->postUser,
             'userAuth' => $this->userAuth,
-            'expired' => $this->request->input('expired', 0)
+            'expired' => $this->request->input('expired', 0),
+            'needsauth' => $this->request->input('needsauth', 0)
         ]);
     }
 }

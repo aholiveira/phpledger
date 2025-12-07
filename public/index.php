@@ -40,7 +40,7 @@ try {
         Redirector::to("{$frontend}login&expired=1");
     }
     if (!in_array($action, $router->publicActions(), true) && !$session->isAuthenticated()) {
-        Redirector::to("{$frontend}login");
+        Redirector::to("{$frontend}login&needsauth=1");
     }
     if ($action === 'login' && $session->isAuthenticated()) {
         Redirector::to("{$frontend}ledger_entries");
