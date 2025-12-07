@@ -16,7 +16,6 @@ use PHPLedger\Domain\AccountType;
 
 class AccountTypeView extends ObjectViewer
 {
-
     public function printObject(): string
     {
         $retval = "";
@@ -39,7 +38,7 @@ class AccountTypeView extends ObjectViewer
         $retval .= "<tbody>\r\n";
         foreach ($objectList as $object) {
             if ($object instanceof AccountType) {
-                $view = new accountTypeView($object);
+                $view = new accountTypeView($this->app, $object);
                 $retval .= "<tr>" . $view->printObject() . "</tr>\r\n";
             }
         }

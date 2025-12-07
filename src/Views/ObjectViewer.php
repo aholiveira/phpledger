@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Generic class for an object viewer
  *
@@ -7,15 +8,21 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 namespace PHPLedger\Views;
 
+use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Contracts\DataObjectInterface;
+
 abstract class ObjectViewer
 {
     protected DataObjectInterface $object;
-    public function __construct(DataObjectInterface $object)
+    protected ApplicationObjectInterface $app;
+
+    public function __construct(ApplicationObjectInterface $app, DataObjectInterface $object)
     {
         $this->setObject($object);
+        $this->app = $app;
     }
     public function __toString()
     {

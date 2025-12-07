@@ -1,11 +1,11 @@
 <?php
 
+use PHPLedger\Contracts\LogLevel;
 use PHPLedger\Util\Logger;
-use PHPLedger\Util\LogLevel;
 use PHPLedger\Util\Path;
 
 beforeEach(function () {
-    $this->logDir = Path::combine(__DIR__, 'tests', 'tmp', 'logs');
+    $this->logDir = Path::combine(__DIR__, 'tmp', 'logs');
     $this->logFile = Path::combine($this->logDir, 'test.log');
 
     if (is_dir($this->logDir)) {
@@ -16,31 +16,17 @@ beforeEach(function () {
 });
 
 afterAll(function () {
-    $testDir = Path::combine(__DIR__, 'tests');
-    if (is_dir($testDir)) {
-        // Recursively remove directory and all its contents
-        removeDirectoryRecursively($testDir);
+    $tmpDir = Path::combine(__DIR__, 'tmp');
+    if (is_dir($tmpDir)) {
+        removeDirectoryRecursively($tmpDir);
     }
 });
 
-/**
- * Recursively remove a directory and all its contents.
- */
 function removeDirectoryRecursively(string $dir): void
 {
-    if (!is_dir($dir)) {
-        return;
-    }
-    $items = glob($dir . DIRECTORY_SEPARATOR . '*');
-    if ($items === false) {
-        return;
-    }
-    foreach ($items as $item) {
-        if (is_dir($item)) {
-            removeDirectoryRecursively($item);
-        } else {
-            unlink($item);
-        }
+    if (!is_dir($dir)) return;
+    foreach (glob($dir . DIRECTORY_SEPARATOR . '*') as $item) {
+        is_dir($item) ? removeDirectoryRecursively($item) : unlink($item);
     }
     rmdir($dir);
 }
@@ -64,7 +50,7 @@ it('writes a debug log entry', function () {
 });
 
 it('creates log directory automatically', function () {
-    $file = __DIR__ . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR . 'auto' . DIRECTORY_SEPARATOR . 'logs' . DIRECTORY_SEPARATOR . 'auto.log';
+    $file = Path::combine(__DIR__, 'tmp', 'auto', 'logs', 'auto.log');
     $dir = dirname($file);
     if (is_dir($dir)) {
         array_map('unlink', glob($dir . DIRECTORY_SEPARATOR . '*'));
@@ -105,4 +91,28 @@ it('honours log level and skips lower severity', function () {
     $content = file_get_contents($this->logFile);
     expect($content)->not->toContain('This line should not be logged');
     expect($content)->toContain('This line should be logged');
+});
+
+it('singleton instance returns Logger object', function () {
+    $logger1 = Logger::instance();
+    $logger2 = Logger::instance();
+    expect($logger1)->toBeInstanceOf(Logger::class);
+    expect($logger1)->toBe($logger2); // same instance
+});
+
+it('init sets a new singleton instance', function () {
+    $file = Path::combine($this->logDir, 'init.log');
+    Logger::init($file, LogLevel::INFO);
+    $logger = Logger::instance();
+    $logger->info('Init test');
+    $content = file_get_contents($file);
+    expect($content)->toContain('Init test');
+});
+
+it('setLogLevel updates the current log level', function () {
+    $logger = new Logger($this->logFile, LogLevel::ERROR);
+    $logger->setLogLevel(LogLevel::DEBUG);
+    $logger->debug('Debug after level change');
+    $content = file_get_contents($this->logFile);
+    expect($content)->toContain('Debug after level change');
 });

@@ -8,11 +8,13 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 namespace PHPLedger\Views;
 
+use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Domain\Account;
-use PHPLedger\Util\L10n;
 use PHPLedger\Util\NumberUtil;
+
 class AccountBalanceView extends ObjectViewer
 {
     public function printObject(): string
@@ -32,12 +34,12 @@ class AccountBalanceView extends ObjectViewer
     {
         $retval = "<table class=\"lista saldos\">\r\n";
         $retval .= "<thead><tr>"
-            . "<th>" . l10n::l('account') . "</th>"
-            . "<th>" . l10n::l('deposits') . "</th>"
-            . "<th>" . l10n::l('withdrawals') . "</th>"
-            . "<th>" . l10n::l('balance') . "</th>"
-            . "<th>" . l10n::l('percent') . "</th>"
-            . "<th>" . l10n::l('entries') . "</th>"
+            . "<th>" . $this->app->l10n()->l('account') . "</th>"
+            . "<th>" . $this->app->l10n()->l('deposits') . "</th>"
+            . "<th>" . $this->app->l10n()->l('withdrawals') . "</th>"
+            . "<th>" . $this->app->l10n()->l('balance') . "</th>"
+            . "<th>" . $this->app->l10n()->l('percent') . "</th>"
+            . "<th>" . $this->app->l10n()->l('entries') . "</th>"
             . "</tr></thead>\r\n";
         $retval .= "<tbody>";
 
@@ -58,33 +60,33 @@ class AccountBalanceView extends ObjectViewer
             if ($object instanceof account) {
                 $balance = $balances[$object->id];
                 $retval .= "<tr>";
-                $retval .= "<td class='account' data-label='" . l10n::l('account') . "'>"
-                    . "<a title='" . l10n::l('edit_account') . "' href='index.php?action=account&back=balances&id={$object->id}'>"
+                $retval .= "<td class='account' data-label='" . $this->app->l10n()->l('account') . "'>"
+                    . "<a title='" . $this->app->l10n()->l('edit_account') . "' href='index.php?action=account&back=balances&id={$object->id}'>"
                     . "{$object->name}</a></td>";
-                $retval .= "<td class='deposits' data-label='" . l10n::l('deposits') . "'>"
+                $retval .= "<td class='deposits' data-label='" . $this->app->l10n()->l('deposits') . "'>"
                     . NumberUtil::normalize($balance['income']) . "</td>";
-                $retval .= "<td class='withdrawls' data-label='" . l10n::l('withdrawals') . "'>"
+                $retval .= "<td class='withdrawls' data-label='" . $this->app->l10n()->l('withdrawals') . "'>"
                     . NumberUtil::normalize($balance['expense']) . "</td>";
-                $retval .= "<td class='balance' data-label='" . l10n::l('balance') . "'>"
+                $retval .= "<td class='balance' data-label='" . $this->app->l10n()->l('balance') . "'>"
                     . NumberUtil::normalize($balance['balance']) . "</td>";
-                $retval .= "<td class='percent' data-label='" . l10n::l('percent') . "'>"
+                $retval .= "<td class='percent' data-label='" . $this->app->l10n()->l('percent') . "'>"
                     . NumberUtil::normalize($totals['balance'] <> 0 ? round($balance['balance'] / $totals['balance'] * 100, 2) : 0)
                     . "</td>";
-                $retval .= "<td class='entries-list' data-label='" . l10n::l('entries') . "'>"
-                    . "<a title='" . l10n::l('account_entries') . "' href='index.php?action=ledger_entries&filter_accountId={$object->id}'>"
-                    . l10n::l('list') . "</a></td>";
+                $retval .= "<td class='entries-list' data-label='" . $this->app->l10n()->l('entries') . "'>"
+                    . "<a title='" . $this->app->l10n()->l('account_entries') . "' href='index.php?action=ledger_entries&filter_accountId={$object->id}'>"
+                    . $this->app->l10n()->l('list') . "</a></td>";
                 $retval .= "</tr>\r\n";
             }
         }
 
         // Networth row
         $retval .= "<tr>";
-        $retval .= "<td class='account' data-label='" . l10n::l('account') . "'>" . l10n::l('networth') . "</td>";
-        $retval .= "<td class='deposits' data-label='" . l10n::l('deposits') . "'>" . NumberUtil::normalize($totals['income']) . "</td>";
-        $retval .= "<td class='withdrawls' data-label='" . l10n::l('withdrawals') . "'>" . NumberUtil::normalize($totals['expense']) . "</td>";
-        $retval .= "<td class='balance' data-label='" . l10n::l('balance') . "'>" . NumberUtil::normalize($totals['balance']) . "</td>";
-        $retval .= "<td class='percent' data-label='" . l10n::l('percent') . "'>" . NumberUtil::normalize(100) . "</td>";
-        $retval .= "<td class='entries-list' data-label='" . l10n::l('entries') . "'></td>";
+        $retval .= "<td class='account' data-label='" . $this->app->l10n()->l('account') . "'>" . $this->app->l10n()->l('networth') . "</td>";
+        $retval .= "<td class='deposits' data-label='" . $this->app->l10n()->l('deposits') . "'>" . NumberUtil::normalize($totals['income']) . "</td>";
+        $retval .= "<td class='withdrawls' data-label='" . $this->app->l10n()->l('withdrawals') . "'>" . NumberUtil::normalize($totals['expense']) . "</td>";
+        $retval .= "<td class='balance' data-label='" . $this->app->l10n()->l('balance') . "'>" . NumberUtil::normalize($totals['balance']) . "</td>";
+        $retval .= "<td class='percent' data-label='" . $this->app->l10n()->l('percent') . "'>" . NumberUtil::normalize(100) . "</td>";
+        $retval .= "<td class='entries-list' data-label='" . $this->app->l10n()->l('entries') . "'></td>";
         $retval .= "</tr>\r\n";
 
         $retval .= "</tbody>\r\n</table>\r\n";

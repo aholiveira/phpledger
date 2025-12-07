@@ -1,5 +1,6 @@
 !config.sample.*
 .vscode*
+.sonarlint
 *.bat
 *.bz2
 *.cmd

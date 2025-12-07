@@ -2,7 +2,7 @@
 
 namespace PHPLedger\Controllers;
 
-use PHPLedger\Contracts\ViewControllerInterface;
+use PHPLedger\Domain\AccountType;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Redirector;
@@ -10,6 +10,7 @@ use PHPLedger\Views\AccountTypeFormView;
 
 final class AccountTypeFormController extends AbstractViewController
 {
+    private ?string $message = null;
     /**
      * Handle single account page (GET form or POST save/delete).
      *
@@ -25,42 +26,47 @@ final class AccountTypeFormController extends AbstractViewController
             "update" => FILTER_DEFAULT
         ];
         $object = ObjectFactory::accounttype();
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $filtered = filter_input_array(INPUT_POST, $filterArray, true);
-            if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
-                http_response_code(400);
-                if ($filtered['id'] !== null && $filtered['id'] !== false) {
-                    Redirector::to("index.php?action=account_type&id={$filtered['id']}");
-                } else {
-                    Redirector::to("index.php?action=account_type");
-                }
-            }
-            if (strtolower($filtered['update'] ?? '') === "gravar") {
-                $object->id = (int)($filtered['id'] === false ? $object->getNextId() : $filtered['id']);
-                $object->description = htmlspecialchars($filtered['description'] ?? '');
-                $object->savings = empty($filtered['savings']) ? 0 : 1;
-                $retval = $object->update();
-            }
-            if (strtolower($filtered['update'] ?? '') === "apagar") {
-                $object->id = $filtered['id'] ?? 0;
-                if ($object->id > 0) {
-                    $retval = $object->delete();
-                }
-            }
-            if (!$retval) {
-                $message = "Ocorreu um erro na operacao.";
-            } else {
-                Redirector::to("index.php?action=account_types");
-            }
+        $filtered = filter_var_array($this->request->all(), $filterArray, true);
+        if ($this->request->method() === "POST") {
+            $this->handlePost($object, $filtered);
         }
-        if ($_SERVER["REQUEST_METHOD"] == "GET") {
-            $filtered = filter_input_array(INPUT_GET, $filterArray, true);
+        if ($this->request->method() === "GET") {
             $id = $filtered['id'] ?? 0;
             if ($id > 0) {
                 $object = $object->getById($id);
             }
         }
         $view = new AccountTypeFormView;
-        $view->render($object, isset($message) ? $message : null);
+        $view->render($this->app, $object, $this->message);
+    }
+    private function handlePost(AccountType $object, $filtered)
+    {
+        $retval = false;
+        if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
+            http_response_code(400);
+            $this->message = "Falhou a validação do token. Repita a operação.";
+            return;
+        }
+        if (strtolower($filtered['update'] ?? '') === "gravar") {
+            $retval = $this->handleSave($object, $filtered);
+        }
+        if (strtolower($filtered['update'] ?? '') === "apagar") {
+            $object->id = $filtered['id'] ?? 0;
+            if ($object->id > 0) {
+                $retval = $object->delete();
+            }
+        }
+        if ($retval) {
+            Redirector::to("index.php?action=account_types");
+        } else {
+            $this->message = "Ocorreu um erro na operação.";
+        }
+    }
+    private function handleSave(AccountType $object, array $filtered): bool
+    {
+        $object->id = (int)($filtered['id'] === false ? $object->getNextId() : $filtered['id']);
+        $object->description = htmlspecialchars($filtered['description'] ?? '');
+        $object->savings = empty($filtered['savings']) ? 0 : 1;
+        return $object->update();
     }
 }

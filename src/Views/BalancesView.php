@@ -10,17 +10,20 @@
 
 namespace PHPLedger\Views;
 
+use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Util\Html;
-use PHPLedger\Util\L10n;
 
 class BalancesView
 {
-    public function render(string $reportData): void
+    private ApplicationObjectInterface $app;
+
+    public function render(ApplicationObjectInterface $app, string $reportData): void
     {
+        $this->app = $app;
         $pagetitle = "Saldos";
 ?>
         <!DOCTYPE html>
-        <html lang="<?= l10n::html() ?>">
+        <html lang="<?= $this->app->l10n()->html() ?>">
 
         <head>
             <title><?= Html::title($pagetitle) ?></title>

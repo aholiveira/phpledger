@@ -3,7 +3,6 @@
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Storage\ObjectFactory;
-use PHPLedger\Util\L10n;
 use PHPLedger\Views\AccountTypeListView;
 
 final class AccountTypeListController extends AbstractViewController
@@ -13,6 +12,6 @@ final class AccountTypeListController extends AbstractViewController
         $object = ObjectFactory::accounttype();
         $list = $object->getList();
         $view = new AccountTypeListView();
-        $view->render(['list' => $list, 'lang' => L10n::$lang]);
+        $view->render($this->app, ['list' => $list, 'lang' => $this->app->l10n()->lang()]);
     }
 }

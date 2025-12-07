@@ -33,7 +33,7 @@ final class ReportMonthController extends AbstractViewController
         $report->getReport(["year" => $year]);
 ?>
         <!DOCTYPE html>
-        <html lang="<?= l10n::html() ?>">
+        <html lang="<?= $this->app->l10n()->html() ?>">
 
         <head>
             <title><?= Html::title($pagetitle) ?></title>

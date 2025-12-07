@@ -30,7 +30,7 @@ final class ReportYearController extends AbstractViewController
         $reportHtml = ViewFactory::instance()->reportYearHtmlView($report);
         $report->getReport(["first_year" => $firstYear, "last_year" => $lastYear]);
         $view = new ReportYearView;
-        $view->render("report_year", $firstYear, $lastYear, $reportHtml);
+        $view->render($this->app, "report_year", $firstYear, $lastYear, $reportHtml);
     }
     private function validateYear(string $value, int $default): int
     {

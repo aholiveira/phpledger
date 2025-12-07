@@ -7,10 +7,12 @@ use PHPLedger\Contracts\SessionServiceInterface;
 class SessionManager implements SessionServiceInterface
 {
     private array $data;
+    private bool $expired;
     public function __construct()
     {
         $this->start();
         $this->data = $_SESSION['app'] ?? [];
+        $this->isExpired();
     }
     public function start(): void
     {
@@ -18,9 +20,6 @@ class SessionManager implements SessionServiceInterface
             ini_set('session.use_only_cookies', '1');
             session_name($this->sessionName());
             session_start();
-        }
-        if ($this->isExpired()) {
-            $this->logout();
         }
     }
     public function commit(): void
@@ -31,10 +30,13 @@ class SessionManager implements SessionServiceInterface
     {
         return "phpledger_session";
     }
-
+    public function isAuthenticated(): bool
+    {
+        return isset($this->data['user']) && !$this->expired;
+    }
     public function isExpired(): bool
     {
-        return isset($this->data['expires']) && $this->data['expires'] < time();
+        return $this->expired = isset($this->data['expires']) && $this->data['expires'] < time();
     }
     public function logout(): void
     {

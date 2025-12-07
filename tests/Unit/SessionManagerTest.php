@@ -8,7 +8,6 @@ beforeEach(function () {
         session_write_close();
     }
     $_SERVER['SCRIPT_NAME'] = 'index.php';
-    L10n::$lang = 'en';
 });
 
 it('refreshExpiration updates TTL', function () {

@@ -8,6 +8,7 @@
     "add": "Add",
     "amount": "Amount",
     "application_name": "Application Name",
+    "Back to list": "Back to list",
     "balance": "Balance",
     "balances": "Balances",
     "cannot_use_app": "You cannot use the application until this update is completed.",
@@ -56,6 +57,7 @@
     "networth": "Networth",
     "no_filter": "No filter",
     "no": "No",
+    "not_authenticated": "You need authentication",
     "not_found": "Record with ID %s not found",
     "number": "Number",
     "open": "Open",
@@ -75,6 +77,7 @@
     "start_update": "Click the button below to begin the update process.",
     "start": "Start",
     "storage_type": "Storage type",
+    "swift": "SWIFT",
     "transactions_in_period": "Transactions in period: %s",
     "type": "Type",
     "update_fail": "Update failed. Please check user permissions.",
@@ -85,7 +88,5 @@
     "version": "Version %s",
     "withdraw": "Wdr",
     "withdrawals": "Withdrawals",
-    "yes": "Yes",
-    "Back to list": "Back to list",
-    "swift": "SWIFT"
+    "yes": "Yes"
 }

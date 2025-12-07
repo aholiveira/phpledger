@@ -41,8 +41,8 @@ final class UpdateStorageController extends AbstractViewController
 
         $needsUpdate = !$dataStorage->check();
         $message = nl2br(htmlspecialchars($dataStorage->message(), ENT_QUOTES, 'UTF-8'));
-        $pagetitle = L10n::l('update_needed');
+        $pagetitle = $this->app->l10n()->l('update_needed');
         $view = new UpdateStorageView;
-        $view->render($pagetitle, $needsUpdate, $updateResult, $message);
+        $view->render($this->app, $pagetitle, $needsUpdate, $updateResult, $message);
     }
 }

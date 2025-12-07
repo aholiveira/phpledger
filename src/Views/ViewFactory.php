@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Factory for viewer objects
  *
@@ -7,7 +8,10 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  *
  */
+
 namespace PHPLedger\Views;
+
+use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Domain\Account;
 use PHPLedger\Domain\AccountType;
 use PHPLedger\Domain\Currency;
@@ -21,6 +25,7 @@ use PHPLedger\Views\CurrencyView;
 use PHPLedger\Views\EntryCategoryView;
 use PHPLedger\Views\ReportMonthHtmlView;
 use PHPLedger\Views\ReportYearHtmlView;
+
 class ViewFactory
 {
     private static ?ViewFactory $viewFactory = null;
@@ -31,25 +36,25 @@ class ViewFactory
         }
         return static::$viewFactory;
     }
-    public function accountBalanceView(Account $object): AccountBalanceView
+    public function accountBalanceView(ApplicationObjectInterface $app, Account $object): AccountBalanceView
     {
-        return new AccountBalanceView($object);
+        return new AccountBalanceView($app, $object);
     }
-    public function accountTypeView(AccountType $object): AccountTypeView
+    public function accountTypeView(ApplicationObjectInterface $app, AccountType $object): AccountTypeView
     {
-        return new AccountTypeView($object);
+        return new AccountTypeView($app, $object);
     }
-    public function accountView(Account $object): AccountView
+    public function accountView(ApplicationObjectInterface $app, Account $object): AccountView
     {
-        return new AccountView($object);
+        return new AccountView($app, $object);
     }
-    public function currencyView(Currency $object): CurrencyView
+    public function currencyView(ApplicationObjectInterface $app, Currency $object): CurrencyView
     {
-        return new CurrencyView($object);
+        return new CurrencyView($app, $object);
     }
-    public function entryCategoryView(EntryCategory $object): EntryCategoryView
+    public function entryCategoryView(ApplicationObjectInterface $app, EntryCategory $object): EntryCategoryView
     {
-        return new EntryCategoryView($object);
+        return new EntryCategoryView($app, $object);
     }
     public function reportMonthHtmlView(ReportMonth $object): ReportMonthHtmlView
     {

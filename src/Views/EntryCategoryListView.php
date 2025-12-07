@@ -10,20 +10,23 @@
 
 namespace PHPLedger\Views;
 
+use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Html;
-use PHPLedger\Util\L10n;
 use PHPLedger\Views\ViewFactory;
 
 class EntryCategoryListView
 {
+    private ApplicationObjectInterface $app;
+
     private $pagetitle = "Tipos de movimentos";
 
-    public function render(string $message, bool $success): void
+    public function render(ApplicationObjectInterface $app, string $message, bool $success): void
     {
+        $this->app = $app;
 ?>
         <!DOCTYPE html>
-        <html lang="<?= l10n::html() ?>">
+        <html lang="<?= $this->app->l10n()->html() ?>">
 
         <head>
             <title><?= Html::title($this->pagetitle) ?></title>
@@ -46,7 +49,7 @@ class EntryCategoryListView
                     <div class="entry_category_list">
                         <?php
                         $object = ObjectFactory::entryCategory();
-                        $viewer = ViewFactory::instance()->entryCategoryView($object);
+                        $viewer = ViewFactory::instance()->entryCategoryView($this->app, $object);
                         print $viewer->printObjectList($object->getList());
                         ?>
                     </div>

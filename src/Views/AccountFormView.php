@@ -2,24 +2,26 @@
 
 namespace PHPLedger\Views;
 
+use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Util\Html;
-use PHPLedger\Util\L10n;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\CSRF;
 
 final class AccountFormView
 {
-    public function render(array $data): void
+    private ApplicationObjectInterface $app;
+    public function render(ApplicationObjectInterface $app, array $data): void
     {
+        $this->app = $app;
         $account = $data['account'];
         $back = strtolower($data['back'] ?? "");
-        $lang = $data['lang'] ?? L10n::$lang;
+        $lang = $data['lang'] ?? $this->app->l10n()->lang();
         $errors = $data['errors'] ?? [];
-        $pagetitle = L10n::l('accounts');
+        $pagetitle = $this->app->l10n()->l('accounts');
         $types = ObjectFactory::accounttype()->getList();
 ?>
         <!DOCTYPE html>
-        <html lang="<?= L10n::html(); ?>">
+        <html lang="<?= $this->app->l10n()->html(); ?>">
 
         <head>
             <title><?= Html::title($pagetitle) ?></title>
@@ -32,9 +34,9 @@ final class AccountFormView
                 <div class="header">
                     <p style="margin:0">
                         <?php if ($back === "balances"): ?>
-                            <a href="index.php?action=balances&lang=<?= htmlspecialchars($lang) ?>"><?php L10n::pl('Back to list'); ?></a>
+                            <a href="index.php?action=balances&lang=<?= htmlspecialchars($lang) ?>"><?php $this->app->l10n()->pl('Back to list'); ?></a>
                         <?php else: ?>
-                            <a href="index.php?action=accounts&lang=<?= htmlspecialchars($lang) ?>"><?php L10n::pl('Back to list'); ?></a>
+                            <a href="index.php?action=accounts&lang=<?= htmlspecialchars($lang) ?>"><?php $this->app->l10n()->pl('Back to list'); ?></a>
                         <?php endif ?>
                     </p>
                 </div>

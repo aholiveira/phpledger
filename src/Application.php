@@ -5,18 +5,19 @@ namespace PHPLedger;
 use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Contracts\ConfigurationServiceInterface;
 use PHPLedger\Contracts\DataObjectFactoryInterface;
+use PHPLedger\Contracts\L10nServiceInterface;
+use PHPLedger\Contracts\LoggerServiceInterface;
+use PHPLedger\Contracts\LogLevel;
 use PHPLedger\Contracts\SessionServiceInterface;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\ConfigPath;
+use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Logger;
-use PHPLedger\Util\LogLevel;
 use PHPLedger\Util\Path;
 use PHPLedger\Util\Redirector;
 use PHPLedger\Util\SessionManager;
-
-const SESSION_EXPIRE = 3600;
 
 final class Application implements ApplicationObjectInterface
 {
@@ -28,16 +29,20 @@ final class Application implements ApplicationObjectInterface
     private L10n $l10n;
     private ConfigurationServiceInterface $config;
     private string $logfile;
+    private bool $needsUpdate;
     public function __construct(string $logfile = "")
     {
         $this->logfile = empty($logfile) ? Path::combine(ROOT_DIR, "logs", "ledger.log") : $logfile;
+        Html::app($this);
         self::sendHeaders();
         self::bootstrap();
-        if ($this->dataFactory()::dataStorage()->check() === false && ($_GET['action'] ?? '') !== 'update') {
-            Redirector::to("index.php?action=update");
-        }
+        $this->needsUpdate = !($this->dataFactory()::dataStorage()->check());
         self::applyTimezone();
         self::updateUserLastVisited();
+    }
+    public function needsUpdate(): bool
+    {
+        return $this->needsUpdate;
     }
     public function dataFactory(): DataObjectFactoryInterface
     {
@@ -50,9 +55,9 @@ final class Application implements ApplicationObjectInterface
     }
     public function session(): SessionServiceInterface
     {
-        return $this->session ??= new SessionManager($this);
+        return $this->session ??= new SessionManager();
     }
-    public function l10n(): L10n
+    public function l10n(): L10nServiceInterface
     {
         return $this->l10n ??= new L10n();
     }
@@ -60,7 +65,7 @@ final class Application implements ApplicationObjectInterface
     {
         return $this->redirector ??= new Redirector();
     }
-    public function logger(): Logger
+    public function logger(): LoggerServiceInterface
     {
         return $this->logger ??= new Logger($this->logfile, LogLevel::INFO);
     }
@@ -90,7 +95,6 @@ final class Application implements ApplicationObjectInterface
     private function bootstrap(): void
     {
         $this->session()->start();
-        L10n::init();
         ConfigPath::ensureMigrated();
         Config::init(ConfigPath::get());
     }

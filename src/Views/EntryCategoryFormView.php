@@ -10,17 +10,20 @@
 
 namespace PHPLedger\Views;
 
+use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Util\Html;
-use PHPLedger\Util\L10n;
 
 class EntryCategoryFormView
 {
-    public function render(string $form, bool $new): void
+    private ApplicationObjectInterface $app;
+
+    public function render(ApplicationObjectInterface $app, string $form, bool $new): void
     {
+        $this->app = $app;
         $pagetitle = "Tipo de movimentos";
 ?>
         <!DOCTYPE html>
-        <html lang="<?= l10n::html() ?>">
+        <html lang="<?= $this->app->l10n()->html() ?>">
 
         <head>
             <title><?= Html::title($pagetitle) ?></title>

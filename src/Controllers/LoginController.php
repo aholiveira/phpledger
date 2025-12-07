@@ -3,10 +3,10 @@
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Util\CSRF;
-use PHPLedger\Util\L10n;
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\Redirector;
 use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Views\LoginView;
 
 final class LoginController extends AbstractViewController
 {
@@ -14,22 +14,21 @@ final class LoginController extends AbstractViewController
     private bool $userAuth = false;
     public function handle(): void
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['do_logout'])) {
+        if ($this->request->method() === 'GET' && $this->request->input('action', '') === 'logout') {
             $this->logout();
             return;
         }
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if ($this->request->method() === 'POST') {
             $this->login();
         }
-
         $this->renderView();
     }
 
     private function logout(): void
     {
-        if (!empty($_SESSION['user'])) {
-            $defaults = ObjectFactory::defaults()::getByUsername($_SESSION['user']);
+        $user = $this->app->session()->get('user', '');
+        if (!empty($user)) {
+            $defaults = ObjectFactory::defaults()::getByUsername($user);
             if ($defaults !== null) {
                 $defaults->lastVisitedUri = '';
                 $defaults->lastVisitedAt = time();
@@ -42,7 +41,7 @@ final class LoginController extends AbstractViewController
 
     private function login(): void
     {
-        $filtered = filter_input_array(INPUT_POST, [
+        $filtered = filter_var_array($this->request->all(), [
             'username' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
             'password' => FILTER_UNSAFE_RAW,
             '_csrf_token' => FILTER_UNSAFE_RAW
@@ -75,7 +74,7 @@ final class LoginController extends AbstractViewController
 
         $defaults = ObjectFactory::defaults()::getByUsername($this->postUser) ?? ObjectFactory::defaults()::init();
         $defaults->entryDate = date('Y-m-d');
-        $defaults->language = L10n::$lang;
+        $defaults->language = $this->app->l10n()->lang();
         Logger::instance()->info("User [{$this->postUser}] logged in");
 
         if ($defaults->lastVisitedAt < time() - 3600 * 24) {
@@ -84,7 +83,7 @@ final class LoginController extends AbstractViewController
 
         $target = $defaults->lastVisitedUri ?: sprintf(
             'index.php?action=ledger_entries&lang=%s&filter_sdate=%s',
-            L10n::$lang,
+            $this->app->l10n()->lang(),
             date('Y-m-01')
         );
 
@@ -94,11 +93,12 @@ final class LoginController extends AbstractViewController
 
     private function renderView(): void
     {
-        $view = new \PHPLedger\Views\LoginView();
-        $view->render([
+        $view = new LoginView();
+        $view->render($this->app, [
             'postUser' => $this->postUser,
             'userAuth' => $this->userAuth,
-            'expired' => $_REQUEST['expired'] ?? 0
+            'expired' => $this->request->input('expired', 0),
+            'needsauth' => $this->request->input('needsauth', 0)
         ]);
     }
 }

@@ -5,6 +5,7 @@ namespace PHPLedger\Contracts;
 interface SessionServiceInterface
 {
     public function start(): void;
+    public function isAuthenticated(): bool;
     public function isExpired(): bool;
     public function logout(): void;
     public function refreshExpiration(int $ttl = 3600): void;
