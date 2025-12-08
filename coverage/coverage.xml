@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1765200074">
-  <project timestamp="1765200074">
+<coverage generated="1765200783">
+  <project timestamp="1765200783">
     <file name="C:\pessoal\work\contas\src\Application.php">
       <class name="PHPLedger\Application" namespace="global">
         <metrics complexity="23" methods="15" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="47" coveredstatements="0" elements="62" coveredelements="0"/>
@@ -940,7 +940,7 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Routing\Router.php">
       <class name="PHPLedger\Routing\Router" namespace="global">
-        <metrics complexity="5" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="11" coveredstatements="0" elements="14" coveredelements="0"/>
+        <metrics complexity="5" methods="3" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="11" coveredstatements="1" elements="14" coveredelements="2"/>
       </class>
       <line num="48" type="method" name="handleRequest" visibility="public" complexity="3" crap="12" count="0"/>
       <line num="50" type="stmt" count="0"/>
@@ -954,9 +954,9 @@
       <line num="60" type="stmt" count="0"/>
       <line num="63" type="method" name="publicActions" visibility="public" complexity="1" crap="2" count="0"/>
       <line num="65" type="stmt" count="0"/>
-      <line num="68" type="method" name="getAllowedActions" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="70" type="stmt" count="0"/>
-      <metrics loc="73" ncloc="72" classes="1" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="11" coveredstatements="0" elements="14" coveredelements="0"/>
+      <line num="68" type="method" name="getAllowedActions" visibility="public" complexity="1" crap="1" count="6"/>
+      <line num="70" type="stmt" count="6"/>
+      <metrics loc="73" ncloc="72" classes="1" methods="3" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="11" coveredstatements="1" elements="14" coveredelements="2"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Storage\Abstract\AbstractDataObject.php">
       <class name="PHPLedger\Storage\Abstract\AbstractDataObject" namespace="global">
@@ -2970,20 +2970,20 @@
       <line num="84" type="stmt" count="0"/>
       <line num="90" type="method" name="getCurrent" visibility="public" complexity="1" crap="2" count="0"/>
       <line num="92" type="stmt" count="0"/>
-      <line num="99" type="method" name="resolvePath" visibility="private" complexity="1" crap="1" count="78"/>
-      <line num="101" type="stmt" count="78"/>
-      <line num="108" type="method" name="set" visibility="public" complexity="7" crap="7" count="18"/>
-      <line num="110" type="stmt" count="18"/>
-      <line num="111" type="stmt" count="18"/>
-      <line num="112" type="stmt" count="18"/>
-      <line num="113" type="stmt" count="18"/>
-      <line num="114" type="stmt" count="18"/>
-      <line num="115" type="stmt" count="18"/>
-      <line num="116" type="stmt" count="18"/>
+      <line num="99" type="method" name="resolvePath" visibility="private" complexity="1" crap="1" count="84"/>
+      <line num="101" type="stmt" count="84"/>
+      <line num="108" type="method" name="set" visibility="public" complexity="7" crap="7" count="24"/>
+      <line num="110" type="stmt" count="24"/>
+      <line num="111" type="stmt" count="24"/>
+      <line num="112" type="stmt" count="24"/>
+      <line num="113" type="stmt" count="24"/>
+      <line num="114" type="stmt" count="24"/>
+      <line num="115" type="stmt" count="24"/>
+      <line num="116" type="stmt" count="24"/>
       <line num="118" type="stmt" count="2"/>
       <line num="119" type="stmt" count="2"/>
       <line num="121" type="stmt" count="2"/>
-      <line num="124" type="stmt" count="18"/>
+      <line num="124" type="stmt" count="24"/>
       <line num="125" type="stmt" count="3"/>
       <line num="134" type="method" name="get" visibility="public" complexity="4" crap="4" count="65"/>
       <line num="136" type="stmt" count="65"/>
@@ -3201,7 +3201,7 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Util\Html.php">
       <class name="PHPLedger\Util\Html" namespace="global">
-        <metrics complexity="26" methods="14" coveredmethods="9" conditionals="0" coveredconditionals="0" statements="87" coveredstatements="26" elements="101" coveredelements="35"/>
+        <metrics complexity="26" methods="14" coveredmethods="12" conditionals="0" coveredconditionals="0" statements="87" coveredstatements="85" elements="101" coveredelements="97"/>
       </class>
       <line num="21" type="method" name="yearOptions" visibility="public" complexity="1" crap="1" count="1"/>
       <line num="23" type="stmt" count="1"/>
@@ -3240,71 +3240,71 @@
       <line num="87" type="stmt" count="2"/>
       <line num="88" type="stmt" count="2"/>
       <line num="89" type="stmt" count="2"/>
-      <line num="91" type="method" name="footer" visibility="public" complexity="2" crap="6" count="0"/>
-      <line num="93" type="stmt" count="0"/>
-      <line num="94" type="stmt" count="0"/>
-      <line num="96" type="stmt" count="0"/>
-      <line num="97" type="stmt" count="0"/>
-      <line num="99" type="stmt" count="0"/>
-      <line num="100" type="stmt" count="0"/>
-      <line num="101" type="stmt" count="0"/>
-      <line num="102" type="stmt" count="0"/>
-      <line num="103" type="stmt" count="0"/>
-      <line num="104" type="stmt" count="0"/>
-      <line num="105" type="stmt" count="0"/>
-      <line num="108" type="stmt" count="0"/>
-      <line num="109" type="stmt" count="0"/>
-      <line num="110" type="stmt" count="0"/>
-      <line num="111" type="stmt" count="0"/>
-      <line num="113" type="stmt" count="0"/>
-      <line num="115" type="stmt" count="0"/>
-      <line num="116" type="stmt" count="0"/>
-      <line num="117" type="stmt" count="0"/>
-      <line num="118" type="stmt" count="0"/>
-      <line num="119" type="stmt" count="0"/>
-      <line num="126" type="method" name="menu" visibility="public" complexity="3" crap="12" count="0"/>
-      <line num="128" type="stmt" count="0"/>
-      <line num="129" type="stmt" count="0"/>
-      <line num="130" type="stmt" count="0"/>
-      <line num="131" type="stmt" count="0"/>
-      <line num="132" type="stmt" count="0"/>
-      <line num="133" type="stmt" count="0"/>
-      <line num="134" type="stmt" count="0"/>
-      <line num="135" type="stmt" count="0"/>
-      <line num="136" type="stmt" count="0"/>
-      <line num="137" type="stmt" count="0"/>
-      <line num="138" type="stmt" count="0"/>
-      <line num="139" type="stmt" count="0"/>
-      <line num="141" type="stmt" count="0"/>
-      <line num="143" type="stmt" count="0"/>
-      <line num="144" type="stmt" count="0"/>
-      <line num="145" type="stmt" count="0"/>
-      <line num="146" type="stmt" count="0"/>
-      <line num="147" type="stmt" count="0"/>
-      <line num="149" type="stmt" count="0"/>
-      <line num="151" type="stmt" count="0"/>
-      <line num="152" type="stmt" count="0"/>
-      <line num="153" type="stmt" count="0"/>
-      <line num="154" type="stmt" count="0"/>
-      <line num="157" type="method" name="languageSelector" visibility="public" complexity="5" crap="30" count="0"/>
-      <line num="159" type="stmt" count="0"/>
-      <line num="160" type="stmt" count="0"/>
-      <line num="161" type="stmt" count="0"/>
-      <line num="162" type="stmt" count="0"/>
-      <line num="164" type="stmt" count="0"/>
-      <line num="165" type="stmt" count="0"/>
-      <line num="168" type="stmt" count="0"/>
-      <line num="169" type="stmt" count="0"/>
-      <line num="171" type="stmt" count="0"/>
-      <line num="174" type="stmt" count="0"/>
-      <line num="175" type="stmt" count="0"/>
-      <line num="179" type="method" name="buildSafeLink" visibility="private" complexity="2" crap="6" count="0"/>
-      <line num="181" type="stmt" count="0"/>
-      <line num="182" type="stmt" count="0"/>
+      <line num="91" type="method" name="footer" visibility="public" complexity="2" crap="2" count="2"/>
+      <line num="93" type="stmt" count="2"/>
+      <line num="94" type="stmt" count="2"/>
+      <line num="96" type="stmt" count="2"/>
+      <line num="97" type="stmt" count="2"/>
+      <line num="99" type="stmt" count="2"/>
+      <line num="100" type="stmt" count="2"/>
+      <line num="101" type="stmt" count="2"/>
+      <line num="102" type="stmt" count="2"/>
+      <line num="103" type="stmt" count="2"/>
+      <line num="104" type="stmt" count="2"/>
+      <line num="105" type="stmt" count="2"/>
+      <line num="108" type="stmt" count="2"/>
+      <line num="109" type="stmt" count="2"/>
+      <line num="110" type="stmt" count="2"/>
+      <line num="111" type="stmt" count="1"/>
+      <line num="113" type="stmt" count="1"/>
+      <line num="115" type="stmt" count="2"/>
+      <line num="116" type="stmt" count="2"/>
+      <line num="117" type="stmt" count="2"/>
+      <line num="118" type="stmt" count="2"/>
+      <line num="119" type="stmt" count="2"/>
+      <line num="126" type="method" name="menu" visibility="public" complexity="3" crap="3" count="2"/>
+      <line num="128" type="stmt" count="2"/>
+      <line num="129" type="stmt" count="2"/>
+      <line num="130" type="stmt" count="2"/>
+      <line num="131" type="stmt" count="2"/>
+      <line num="132" type="stmt" count="2"/>
+      <line num="133" type="stmt" count="2"/>
+      <line num="134" type="stmt" count="2"/>
+      <line num="135" type="stmt" count="2"/>
+      <line num="136" type="stmt" count="2"/>
+      <line num="137" type="stmt" count="2"/>
+      <line num="138" type="stmt" count="2"/>
+      <line num="139" type="stmt" count="1"/>
+      <line num="141" type="stmt" count="2"/>
+      <line num="143" type="stmt" count="2"/>
+      <line num="144" type="stmt" count="2"/>
+      <line num="145" type="stmt" count="2"/>
+      <line num="146" type="stmt" count="2"/>
+      <line num="147" type="stmt" count="2"/>
+      <line num="149" type="stmt" count="2"/>
+      <line num="151" type="stmt" count="2"/>
+      <line num="152" type="stmt" count="2"/>
+      <line num="153" type="stmt" count="2"/>
+      <line num="154" type="stmt" count="2"/>
+      <line num="157" type="method" name="languageSelector" visibility="public" complexity="5" crap="5" count="2"/>
+      <line num="159" type="stmt" count="2"/>
+      <line num="160" type="stmt" count="2"/>
+      <line num="161" type="stmt" count="2"/>
+      <line num="162" type="stmt" count="2"/>
+      <line num="164" type="stmt" count="2"/>
+      <line num="165" type="stmt" count="1"/>
+      <line num="168" type="stmt" count="2"/>
+      <line num="169" type="stmt" count="1"/>
+      <line num="171" type="stmt" count="1"/>
+      <line num="174" type="stmt" count="2"/>
+      <line num="175" type="stmt" count="1"/>
+      <line num="179" type="method" name="buildSafeLink" visibility="private" complexity="2" crap="2.03" count="6"/>
+      <line num="181" type="stmt" count="6"/>
+      <line num="182" type="stmt" count="6"/>
       <line num="183" type="stmt" count="0"/>
-      <line num="186" type="stmt" count="0"/>
-      <line num="187" type="stmt" count="0"/>
-      <metrics loc="190" ncloc="179" classes="1" methods="14" coveredmethods="9" conditionals="0" coveredconditionals="0" statements="87" coveredstatements="26" elements="101" coveredelements="35"/>
+      <line num="186" type="stmt" count="6"/>
+      <line num="187" type="stmt" count="6"/>
+      <metrics loc="190" ncloc="179" classes="1" methods="14" coveredmethods="12" conditionals="0" coveredconditionals="0" statements="87" coveredstatements="85" elements="101" coveredelements="97"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Util\L10n.php">
       <class name="PHPLedger\Util\L10n" namespace="global">
@@ -3526,8 +3526,8 @@
       <class name="PHPLedger\Version" namespace="global">
         <metrics complexity="8" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="9" elements="17" coveredelements="17"/>
       </class>
-      <line num="9" type="method" name="string" visibility="public" complexity="1" crap="1" count="2"/>
-      <line num="11" type="stmt" count="2"/>
+      <line num="9" type="method" name="string" visibility="public" complexity="1" crap="1" count="4"/>
+      <line num="11" type="stmt" count="4"/>
       <line num="14" type="method" name="parts" visibility="public" complexity="1" crap="1" count="5"/>
       <line num="16" type="stmt" count="5"/>
       <line num="19" type="method" name="major" visibility="public" complexity="1" crap="1" count="1"/>
@@ -5202,6 +5202,6 @@
       <line num="65" type="stmt" count="0"/>
       <metrics loc="68" ncloc="60" classes="1" methods="8" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="0" elements="18" coveredelements="0"/>
     </file>
-    <metrics files="106" loc="9104" ncloc="8350" classes="87" methods="390" coveredmethods="109" conditionals="0" coveredconditionals="0" statements="4215" coveredstatements="941" elements="4605" coveredelements="1050"/>
+    <metrics files="106" loc="9104" ncloc="8350" classes="87" methods="390" coveredmethods="113" conditionals="0" coveredconditionals="0" statements="4215" coveredstatements="1001" elements="4605" coveredelements="1114"/>
   </project>
 </coverage>
