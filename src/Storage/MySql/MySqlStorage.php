@@ -11,6 +11,7 @@
 namespace PHPLedger\Storage\MySql;
 
 use PHPLedger\Contracts\DataStorageInterface;
+use PHPLedger\Domain\EntryCategory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\Logger;
 
@@ -104,7 +105,6 @@ class MySqlStorage implements DataStorageInterface
         foreach ($tables as $table_name) {
             $retval = $retval && $this->checkTable($table_name);
         }
-
         if ($this->tableExists("tipo_mov")) {
             if (!$this->tableHasForeignKey("tipo_mov", "parentId")) {
                 $this->addMessage("Table [tipo_mov] foreign key [parentId] missing");
@@ -118,7 +118,7 @@ class MySqlStorage implements DataStorageInterface
                 } else {
                     $entry_list = $entry_category->getList(['parentId' => ['operator' => 'is', 'value' => null], 'id' => ['operator' => '>', 'value' => '0']]);
                     if (\sizeof($entry_list) > 0) {
-                        $this->addMessage("Table [tipo_mov] needs update");
+                        $this->addMessage("Table [tipo_mov] needs update - invalid account parents");
                         $retval = false;
                     }
                 }
@@ -220,6 +220,18 @@ class MySqlStorage implements DataStorageInterface
                 $retval = false;
             }
         }
+        $entry_list = $entry_category->getList(['parentId' => ['operator' => 'is', 'value' => null], 'id' => ['operator' => '>', 'value' => '0']]);
+        if (\sizeof($entry_list) > 0) {
+            foreach ($entry_list as $entry) {
+                $this->addMessage("Fixing entry category" . $entry->id);
+                if ($entry instanceof EntryCategory) {
+                    $entry->parentId = 0;
+                    $entry->update();
+                }
+            }
+            $this->addMessage("Table [tipo_mov] needs update - invalid account parents");
+            $retval = false;
+        }
         $ledger = new MySqlLedger();
         if (sizeof($ledger->getList()) == 0) {
             $ledger->setId(id: 1);
@@ -259,6 +271,7 @@ class MySqlStorage implements DataStorageInterface
                 $retval = false;
             }
         }
+
         if ($this->tableExists("contas")) {
             $account = new MySqlAccount();
             if (sizeof($account->getList()) == 0) {

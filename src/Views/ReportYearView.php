@@ -12,7 +12,6 @@ namespace PHPLedger\Views;
 
 use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Util\Html;
-use PHPLedger\Util\L10n;
 
 class ReportYearView
 {
@@ -51,7 +50,7 @@ class ReportYearView
                 <div id="preloader">
                     <div class="spinner"></div>
                 </div>
-                <?php Html::menu(); ?>
+                <?php Html::menu($this->app->l10n(), $this->app->session()->get('isAdmin', false)); ?>
                 <div id="header" class="header">
                     <form name="filtro" method="GET">
                         <input type="hidden" name="action" value="<?= $action ?>">
@@ -70,7 +69,7 @@ class ReportYearView
                 <script type="text/javascript">
                     updateRowColors("report");
                 </script>
-                <?php Html::footer(); ?>
+                <?php Html::footer($this->app, $action); ?>
             </div>
             <script>
                 setTimeout(() => {

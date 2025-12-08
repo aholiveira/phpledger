@@ -10,7 +10,7 @@ use PHPLedger\Util\Html;
 class AccountTypeFormView
 {
     private ApplicationObjectInterface $app;
-    public function render(ApplicationObjectInterface $app, AccountType $object, ?string $message): void
+    public function render(ApplicationObjectInterface $app, AccountType $object, ?string $message, string $action): void
     {
         $this->app = $app;
         $pagetitle = "Tipo de contas";
@@ -25,43 +25,36 @@ class AccountTypeFormView
 
         <body>
             <div class="maingrid" id="maingrid">
-                <?php Html::menu(); ?>
+                <?php Html::menu($this->app->l10n(), $this->app->session()->get('isAdmin', false)); ?>
                 <div class="header" style="height: 0;"></div>
-                <div id="main" class="main">
+                <div class="main config" id="main">
                     <?php if (!empty($message)): ?>
                         <p><?= htmlspecialchars($message); ?></p>
                     <?php endif ?>
-                    <form method="POST">
+                    <form method="POST" action="index.php?action=account_type&id=<?= $object->id ?>">
+                        <input type="hidden" name="action" value="account_type">
                         <?= CSRF::inputField() ?>
-                        <table class="single_item account_type_form">
-                            <tr>
-                                <td>ID</td>
-                                <td data-label="ID">
-                                    <input type="text" readonly size="4" name="id" value="<?= $object->id ?>">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Descri&ccedil;&atilde;o</td>
-                                <td data-label="Descri&ccedil;&atilde;o">
-                                    <input type="text" size="30" maxlength="30" name="description"
-                                        value="<?= $object->description ?>">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Poupan&ccedil;a</td>
-                                <td data-label="Poupan&ccedil;a">
-                                    <input type="checkbox" name="savings" <?= $object->savings ? "checked" : "" ?>>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><input type="submit" name="update" value="Gravar"></td>
-                                <td><input type="submit" name="update" value="Apagar"
-                                        onclick="return confirm('Pretende apagar o registo?');"></td>
-                            </tr>
-                        </table>
+                        <p>
+                            <label for="id">ID</label>
+                            <input type="text" readonly size="4" id="id" name="id" value="<?= $object->id ?>">
+                        </p>
+                        <p>
+                            <label for="description">Descri&ccedil;&atilde;o</label>
+                            <input type="text" size="30" maxlength="30" name="description" value="<?= $object->description ?>">
+                        </p>
+                        <p>
+                            <label for="savings">Poupan&ccedil;a</label>
+                            <input type="checkbox" id="savings" name="savings" <?= $object->savings ? "checked" : "" ?>>
+                        </p>
+                        <p>
+                            <span style="grid-column: 2/2;">
+                                <input type="submit" name="update" value="Gravar">
+                                <input type="submit" name="update" value="Apagar" onclick="return confirm('Pretende apagar o registo?');">
+                            </span>
+                        </p>
                     </form>
                 </div>
-                <?php Html::footer(); ?>
+                <?php Html::footer($this->app, $action); ?>
             </div>
         </body>
 

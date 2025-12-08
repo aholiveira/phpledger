@@ -37,7 +37,7 @@ final class AccountListView
                 <div id="preloader">
                     <div class="spinner"></div>
                 </div>
-                <?php Html::menu(); ?>
+                <?php Html::menu($this->app->l10n(), $this->app->session()->get('isAdmin', false)); ?>
                 <div class="header">
                     <p style="margin:0"><a href="index.php?action=account&lang=<?= $lang ?>"><?php $this->app->l10n()->pl('add'); ?></a></p>
                 </div>
@@ -84,7 +84,8 @@ final class AccountListView
                                     <td data-label="<?= $this->app->l10n()->l("actions") ?>">
                                         <form method="POST" action="index.php?action=account" style="display:inline" onsubmit="return confirm('Delete this account?');">
                                             <?= CSRF::inputField() ?>
-                                            <input type="hidden" name="action" value="delete">
+                                            <input type="hidden" name="action" value="account">
+                                            <input type="hidden" name="itemaction" value="delete">
                                             <input type="hidden" name="id" value="<?= (int)($obj->id ?? 0) ?>">
                                             <button type="submit" style="background:none;border:none;color:inherit;cursor:pointer;padding:0"><?= $this->app->l10n()->l("delete") ?></button>
                                         </form>
@@ -94,7 +95,7 @@ final class AccountListView
                         </tbody>
                     </table>
                 </div>
-                <?php Html::footer(); ?>
+                <?php Html::footer($this->app, $data['action']); ?>
             </div>
             <script>
                 setTimeout(() => {

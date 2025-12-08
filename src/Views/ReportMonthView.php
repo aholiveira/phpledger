@@ -18,7 +18,7 @@ use PHPLedger\Views\ViewFactory;
 class ReportMonthView
 {
     private ApplicationObjectInterface $app;
-    public function render(ApplicationObjectInterface $app): void
+    public function render(ApplicationObjectInterface $app, string $action): void
     {
         $this->app = $app;
         $pagetitle = "Relatório mensal";
@@ -75,7 +75,7 @@ class ReportMonthView
                 <div id="preloader">
                     <div class="spinner"></div>
                 </div>
-                <?php Html::menu(); ?>
+                <?php Html::menu($this->app->l10n(), $this->app->session()->get('isAdmin', false)); ?>
                 <div id="header" class="header">
                     <form name="filtro" method="GET">
                         <input type="hidden" name="action" value="report_month">
@@ -189,7 +189,7 @@ class ReportMonthView
                         };
                     </script>
                 </div>
-                <?php Html::footer(); ?>
+                <?php Html::footer($this->app, $action); ?>
             </div>
             <script>
                 setTimeout(() => {

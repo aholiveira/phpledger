@@ -19,15 +19,15 @@ final class EntryCategoryFormController extends AbstractViewController
     protected function handle(): void
     {
         $object = ObjectFactory::EntryCategory();
-        if (filter_has_var(INPUT_GET, "id")) {
-            $id = filter_input(INPUT_GET, "id", FILTER_VALIDATE_INT);
-            if ($id > 0) {
-                $object = $object->getById($id);
-            }
+        $filterArray = ['id' => FILTER_VALIDATE_INT];
+        $filtered = filter_var_array($this->request->all(), $filterArray, true);
+        $id = is_numeric($filtered['id'] ?? 0) ? (int)$filtered['id'] : 0;
+        if ($id > 0) {
+            $object = $object->getById($id);
         }
         $viewer = ViewFactory::instance()->entryCategoryView($this->app, $object);
         $form = $viewer->printForm();
         $view = new EntryCategoryFormView;
-        $view->render($this->app, $form, $object->id > 0);
+        $view->render($this->app, $form, $object->id > 0, $this->request->input('action'));
     }
 }

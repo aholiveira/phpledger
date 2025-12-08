@@ -33,7 +33,6 @@ final class Application implements ApplicationObjectInterface
     public function __construct(string $logfile = "")
     {
         $this->logfile = empty($logfile) ? Path::combine(ROOT_DIR, "logs", "ledger.log") : $logfile;
-        Html::app($this);
         self::sendHeaders();
         self::bootstrap();
         $this->needsUpdate = !($this->dataFactory()::dataStorage()->check());

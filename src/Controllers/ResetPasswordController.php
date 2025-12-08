@@ -33,20 +33,15 @@ final class ResetPasswordController extends AbstractViewController
         }
 
         /* POST handler */
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        if ($this->request->method() === "POST") {
             $this->handlePost();
         }
         $view = new ResetPasswordView;
-        $view->render($this->tokenId, $this->success, $this->message);
+        $view->render($this->app, $this->tokenId, $this->success, $this->message);
     }
     private function getTokenId(): void
     {
-        if ($_SERVER["REQUEST_METHOD"] === "GET") {
-            $this->tokenId = filter_input(INPUT_GET, "tokenId", FILTER_SANITIZE_ENCODED);
-        }
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $this->tokenId = filter_input(INPUT_POST, "tokenId", FILTER_SANITIZE_ENCODED);
-        }
+        $this->tokenId = filter_var($this->request->input("tokenId"), FILTER_SANITIZE_ENCODED);
     }
     private function handleGet(): void
     {
@@ -54,9 +49,15 @@ final class ResetPasswordController extends AbstractViewController
     }
     private function handlePost(): void
     {
-        $password = filter_input(INPUT_POST, "password", FILTER_UNSAFE_RAW);
-        $verifyPassword = filter_input(INPUT_POST, "verifyPassword", FILTER_UNSAFE_RAW);
-        $tokenId = filter_input(INPUT_POST, "tokenId", FILTER_SANITIZE_ENCODED);
+        $filterArray = [
+            "password" => FILTER_UNSAFE_RAW,
+            "verifyPassword" => FILTER_UNSAFE_RAW,
+            "tokenId" => FILTER_SANITIZE_ENCODED
+        ];
+        $filtered = filter_var_array($this->request->all(), $filterArray, true);
+        $password = $filtered['password'] ?? '';
+        $verifyPassword = $filtered['verifyPassword'];
+        $tokenId = $filtered['tokenId'];
         if (empty($password) || empty($verifyPassword)) {
             $this->message = "Tem que indicar uma palavra-passe.";
         } elseif ($password !== $verifyPassword) {

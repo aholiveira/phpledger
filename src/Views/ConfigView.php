@@ -10,7 +10,7 @@ class ConfigView
 {
     private ApplicationObjectInterface $app;
 
-    public function render(ApplicationObjectInterface $app, array $config, bool $hasPermission, bool $success, array $messages = []): void
+    public function render(ApplicationObjectInterface $app, array $config, bool $hasPermission, bool $success, string $action, array $messages = []): void
     {
         $this->app = $app;
         $pagetitle = $this->app->l10n()->l("Configuration");
@@ -47,7 +47,7 @@ class ConfigView
             <?php endif ?>
 
             <div class="maingrid">
-                <?php Html::menu(); ?>
+                <?php Html::menu($this->app->l10n(), $this->app->session()->get('isAdmin', false)); ?>
                 <div class="header" style="height: 0;"></div>
                 <main>
                     <div class="main config" id="main">
@@ -93,7 +93,7 @@ class ConfigView
                         <?php endif; ?>
                     </div>
                 </main>
-                <?php Html::footer(); ?>
+                <?php Html::footer($this->app, $action); ?>
             </div>
         </body>
         <script>

@@ -37,7 +37,7 @@ final class AccountTypeFormController extends AbstractViewController
             }
         }
         $view = new AccountTypeFormView;
-        $view->render($this->app, $object, $this->message);
+        $view->render($this->app, $object, $this->message, $this->request->input('action'));
     }
     private function handlePost(AccountType $object, $filtered)
     {

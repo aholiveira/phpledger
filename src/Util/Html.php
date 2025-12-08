@@ -11,19 +11,13 @@
 namespace PHPLedger\Util;
 
 use PHPLedger\Contracts\ApplicationObjectInterface;
-use PHPLedger\Domain\User;
+use PHPLedger\Contracts\L10nServiceInterface;
 use PHPLedger\Routing\Router;
-use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Version;
 
 final class Html
 {
-    private static ApplicationObjectInterface $app;
-    public static function app(ApplicationObjectInterface $app)
-    {
-        static::$app = $app;
-    }
     public static function yearOptions(?int $selected = null, int $start = 1990, ?int $end = null): string
     {
         return self::buildOptions($start, $end ?? date("Y"), $selected ?? (int) date("Y"));
@@ -94,25 +88,24 @@ final class Html
         $fullTitle = $title . Config::get("title");
         return  htmlspecialchars($fullTitle);
     }
-    public static function footer(): void
+    public static function footer(ApplicationObjectInterface $app, string $currentAction): void
     {
-        $expires = date("Y-m-d H:i:s", self::$app->session()->get('expires', time()));
-        $lang = self::$app->l10n()->lang();
-        $currentAction = $_GET['action'] ?? 'login';
+        $expires = date("Y-m-d H:i:s", $app->session()->get('expires', time()));
+        $lang = $app->l10n()->lang();
 
-        $enLink = self::buildSafeLink($currentAction, ['lang' => 'en-us']);
-        $ptLink = self::buildSafeLink($currentAction, ['lang' => 'pt-pt']);
+        $enLink = self::buildSafeLink($app->l10n(), $currentAction, ['lang' => 'en-us']);
+        $ptLink = self::buildSafeLink($app->l10n(), $currentAction, ['lang' => 'pt-pt']);
     ?>
         <footer>
             <div class='footer'>
                 <span class='RCS'>
                     <a href="https://github.com/aholiveira/phpledger"
-                        aria-label="<?= self::$app->l10n()->l("version", Version::string()) ?>">
-                        <?= self::$app->l10n()->l("version", Version::string()) ?>
+                        aria-label="<?= $app->l10n()->l("version", Version::string()) ?>">
+                        <?= $app->l10n()->l("version", Version::string()) ?>
                     </a>
                 </span>
                 <span class='RCS' style="display: flex; align-items: center">
-                    <?= self::$app->l10n()->l("session_expires", $expires) ?>
+                    <?= $app->l10n()->l("session_expires", $expires) ?>
                     <span style="margin-left: auto; display: flex;">
                         <?php if ($lang === 'pt-pt'): ?>
                             <a href="<?= $enLink ?>">EN</a> | <span>PT</span>
@@ -130,30 +123,28 @@ final class Html
      * Renders the main menu
      * @return void
      */
-    public static function menu(): void
+    public static function menu(L10nServiceInterface $l10n, bool $isAdmin = false): void
     {
-        $lang = self::$app->l10n()->lang();
-        $userName = self::$app->session()->get('user', null);
-        $user = $userName ? ObjectFactory::user()::getByUsername($userName) : null;
+        $lang = $l10n->lang();
         $links = [
-            'ledger_entries' => self::$app->l10n()->l("ledger_entries"),
-            'balances'       => self::$app->l10n()->l("balances"),
-            'accounts'       => self::$app->l10n()->l("accounts"),
-            'account_types'  => self::$app->l10n()->l("account_types"),
-            'entry_types'    => self::$app->l10n()->l("entry_types"),
-            'report_month'   => self::$app->l10n()->l("report_month"),
-            'report_year'    => self::$app->l10n()->l("report_year")
+            'ledger_entries' => $l10n->l("ledger_entries"),
+            'balances'       => $l10n->l("balances"),
+            'accounts'       => $l10n->l("accounts"),
+            'account_types'  => $l10n->l("account_types"),
+            'entry_types'    => $l10n->l("entry_types"),
+            'report_month'   => $l10n->l("report_month"),
+            'report_year'    => $l10n->l("report_year")
         ];
-        if ($user && $user->hasRole(User::USER_ROLE_ADM)) {
-            $links['config'] = self::$app->l10n()->l("configuration");
+        if ($isAdmin) {
+            $links['config'] = $l10n->l("configuration");
         }
-        $links['logout'] = self::$app->l10n()->l("logout");
+        $links['logout'] = $l10n->l("logout");
     ?>
         <aside class="menu">
             <nav>
                 <ul>
                     <?php foreach ($links as $action => $label):
-                        $link = self::buildSafeLink($action, ['lang' => $lang]);
+                        $link = self::buildSafeLink($l10n, $action, ['lang' => $lang]);
                     ?>
                         <li><a id="<?= $action ?>" href="<?= $link ?>" aria-label="<?= htmlspecialchars($label) ?>"><?= htmlspecialchars($label) ?></a></li>
                     <?php endforeach; ?>
@@ -163,12 +154,12 @@ final class Html
 <?php
     }
 
-    public static function languageSelector(bool $div = true): void
+    public static function languageSelector(L10nServiceInterface $l10n, bool $div = true): void
     {
-        $lang = self::$app->l10n()->lang();
+        $lang = $l10n->lang();
         $currentAction = $_GET['action'] ?? 'login';
         $otherLang = $lang === 'pt-pt' ? 'en-us' : 'pt-pt';
-        $link = self::buildSafeLink($currentAction, ['lang' => $otherLang]);
+        $link = self::buildSafeLink($l10n, $currentAction, ['lang' => $otherLang]);
 
         if ($div) {
             echo '<div>';
@@ -185,14 +176,14 @@ final class Html
         }
     }
 
-    private static function buildSafeLink(string $action, array $extraParams = []): string
+    private static function buildSafeLink(L10nServiceInterface $l10n, string $action, array $extraParams = []): string
     {
         $allowed = Router::getAllowedActions();
         if (!in_array($action, $allowed, true)) {
             $action = 'login';
         }
 
-        $params = array_merge(['action' => $action, 'lang' => self::$app->l10n()->lang()], $extraParams);
+        $params = array_merge(['action' => $action, 'lang' => $l10n->lang()], $extraParams);
         return 'index.php?' . http_build_query($params);
     }
 }

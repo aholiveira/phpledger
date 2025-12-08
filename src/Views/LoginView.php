@@ -61,7 +61,7 @@ class LoginView
                                 <?= $this->app->l10n()->l('version', Version::string()) ?>
                             </a>
                         </p>
-                        <p id="languageSelector" class="version-tag"><small><?php Html::languageSelector(false); ?></small></p>
+                        <p id="languageSelector" class="version-tag"><small><?php Html::languageSelector($this->app->l10n(), false); ?></small></p>
                     </div>
                 </form>
             </div>

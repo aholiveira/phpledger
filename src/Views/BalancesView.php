@@ -17,7 +17,7 @@ class BalancesView
 {
     private ApplicationObjectInterface $app;
 
-    public function render(ApplicationObjectInterface $app, string $reportData): void
+    public function render(ApplicationObjectInterface $app, string $reportData, string $action): void
     {
         $this->app = $app;
         $pagetitle = "Saldos";
@@ -35,14 +35,14 @@ class BalancesView
                 <div id="preloader">
                     <div class="spinner"></div>
                 </div>
-                <?php Html::menu(); ?>
+                <?php Html::menu($this->app->l10n(), $this->app->session()->get('isAdmin', false)); ?>
                 <div class="header" style="height: 0;"></div>
                 <div class="main" id="main">
                     <div class="saldos">
                         <?= $reportData ?>
                     </div>
                 </div>
-                <?php Html::footer(); ?>
+                <?php Html::footer($this->app, $action); ?>
             </div>
             <script>
                 setTimeout(() => {

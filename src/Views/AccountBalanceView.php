@@ -11,7 +11,6 @@
 
 namespace PHPLedger\Views;
 
-use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Domain\Account;
 use PHPLedger\Util\NumberUtil;
 

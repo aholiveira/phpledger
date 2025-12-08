@@ -32,7 +32,7 @@ class UpdateStorageView
         <body>
             <main class="maingrid">
                 <div class="main update-screen">
-                    <?php Html::languageSelector(); ?>
+                    <?php Html::languageSelector($this->app->l10n()); ?>
                     <section id="update-messages" aria-live="polite">
                         <?php if ($updateResult === null): ?>
                             <?php if ($needsUpdate): ?>
@@ -42,7 +42,7 @@ class UpdateStorageView
                                 <p><?= $message ?></p>
                                 <form method="POST" aria-describedby="update-messages" action="index.php?action=update&lang=<?= $this->app->l10n()->lang() ?>">
                                     <?= CSRF::inputField() ?>
-                                    <button class="submit" type="submit" name="action" value="update_db"
+                                    <button class="submit" type="submit" name="action" value="update"
                                         aria-label="<?= $this->app->l10n()->l('do_update') ?>">
                                         <?= $this->app->l10n()->l('do_update') ?>
                                     </button>

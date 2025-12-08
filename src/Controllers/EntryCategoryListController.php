@@ -24,7 +24,7 @@ final class EntryCategoryListController extends AbstractViewController
     {
         $success = false;
         try {
-            if ($_SERVER["REQUEST_METHOD"] == "POST") {
+            if ($this->request->method() == "POST") {
                 $filterArray = [
                     "id" => FILTER_VALIDATE_INT,
                     "description" => FILTER_DEFAULT,
@@ -32,7 +32,7 @@ final class EntryCategoryListController extends AbstractViewController
                     "active" => FILTER_DEFAULT,
                     "update" => FILTER_DEFAULT
                 ];
-                $filtered = filter_input_array(INPUT_POST, $filterArray, true);
+                $filtered = filter_var_array($this->request->all(), $filterArray, true);
                 $action = strtolower($filtered["update"] ?? "");
                 $this->object = ObjectFactory::entryCategory();
                 if ($action === "gravar") {
@@ -50,7 +50,7 @@ final class EntryCategoryListController extends AbstractViewController
             $message = $e->getMessage();
         }
         $view = new EntryCategoryListView;
-        $view->render($this->app, isset($message) ? $message : "", $success);
+        $view->render($this->app, isset($message) ? $message : "", $success, $this->request->input('action'));
     }
 
     private function handleUpdate(array $filtered): bool
