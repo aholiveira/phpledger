@@ -31,7 +31,7 @@ final class UpdateStorageController extends AbstractViewController
                 Redirector::to('index.php?action=update');
             }
             $action = $this->request->input('action', null);
-            if ($action === 'update_db') {
+            if ($action === 'update') {
                 $updateResult = $dataStorage->update();
                 if ($updateResult && !headers_sent()) {
                     header("Refresh: 8; URL=index.php");

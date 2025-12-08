@@ -22,9 +22,10 @@ use PHPLedger\Views\ViewFactory;
 final class LedgerEntriesView
 {
     private ApplicationObjectInterface $app;
-    public function render(ApplicationObjectInterface $app): void
+    public function render(ApplicationObjectInterface $app, array $data): void
     {
         $this->app = $app;
+        $action = $data['action'];
         ini_set('zlib.output_compression', 'Off');
         ini_set('output_buffering', 'Off');
         ini_set('implicit_flush', '1');
@@ -110,7 +111,7 @@ final class LedgerEntriesView
                 <div id="preloader">
                     <div class="spinner"></div>
                 </div>
-                <?php Html::menu();
+                <?php Html::menu($this->app->l10n(), $this->app->session()->get('isAdmin', false));
                 if (!empty($filteredInput["filter_sdate"])) {
                     $sdate = strlen($filteredInput["filter_sdate"]) ? $filteredInput["filter_sdate"] : date("Y-m-01");
                 } else {
@@ -457,7 +458,7 @@ final class LedgerEntriesView
                 <div class="main-footer">
                     <p><?= $this->app->l10n()->l('transactions_in_period', count($ledgerEntryCache)) ?></p>
                 </div>
-                <?php Html::footer(); ?>
+                <?php Html::footer($this->app, $action); ?>
             </div> <!-- Main grid -->
             <script>
                 toggleDateElements("data_mov");

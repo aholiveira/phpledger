@@ -22,6 +22,6 @@ final class BalancesController extends AbstractViewController
         $viewer = ViewFactory::instance()->accountBalanceView($this->app, $object);
         $reportData = $viewer->printObjectList($object->getList(['activa' => ['operator' => '=', 'value' => '1']]));
         $view = new BalancesView;
-        $view->render($this->app, $reportData);
+        $view->render($this->app, $reportData, $this->request->input('action'));
     }
 }

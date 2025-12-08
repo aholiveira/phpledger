@@ -3,8 +3,6 @@
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Storage\ObjectFactory;
-use PHPLedger\Util\L10n;
-use PHPLedger\Util\SessionManager;
 use PHPLedger\Views\AccountListView;
 
 final class AccountsController extends AbstractViewController
@@ -20,7 +18,8 @@ final class AccountsController extends AbstractViewController
         $view = new AccountListView();
         $view->render($this->app, [
             'list' => $list,
-            'lang' => $this->app->l10n()->sanitizeLang($_GET['lang'] ?? null)
+            'lang' => $this->app->l10n()->sanitizeLang($_GET['lang'] ?? null),
+            'action' => $this->request->input('action', 'accounts')
         ]);
     }
 }

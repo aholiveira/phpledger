@@ -12,7 +12,6 @@ namespace PHPLedger\Controllers;
 
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Html;
-use PHPLedger\Util\L10n;
 use PHPLedger\Views\ViewFactory;
 
 final class ReportMonthController extends AbstractViewController
@@ -73,7 +72,7 @@ final class ReportMonthController extends AbstractViewController
                 <div id="preloader">
                     <div class="spinner"></div>
                 </div>
-                <?php Html::menu(); ?>
+                <?php Html::menu($this->app->l10n(), $this->app->session()->get('isAdmin', false)); ?>
                 <div id="header" class="header">
                     <form name="filtro" method="GET">
                         <input type="hidden" name="action" value="report_month">
@@ -187,7 +186,7 @@ final class ReportMonthController extends AbstractViewController
                         };
                     </script>
                 </div>
-                <?php Html::footer(); ?>
+                <?php Html::footer($this->app, $this->request->input('action')); ?>
             </div>
             <script>
                 setTimeout(() => {

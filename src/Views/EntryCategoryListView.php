@@ -21,7 +21,7 @@ class EntryCategoryListView
 
     private $pagetitle = "Tipos de movimentos";
 
-    public function render(ApplicationObjectInterface $app, string $message, bool $success): void
+    public function render(ApplicationObjectInterface $app, string $message, bool $success, string $action): void
     {
         $this->app = $app;
 ?>
@@ -41,7 +41,7 @@ class EntryCategoryListView
                 <div id="preloader">
                     <div class="spinner"></div>
                 </div>
-                <?php Html::menu(); ?>
+                <?php Html::menu($this->app->l10n(), $this->app->session()->get('isAdmin', false)); ?>
                 <div class="header">
                     <p style="margin: 0"><a href="index.php?action=entry_type">Adicionar</a></p>
                 </div>
@@ -54,7 +54,7 @@ class EntryCategoryListView
                         ?>
                     </div>
                 </div>
-                <?php Html::footer(); ?>
+                <?php Html::footer($this->app, $action); ?>
             </div>
             <script>
                 setTimeout(() => {

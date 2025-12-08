@@ -17,7 +17,7 @@ class EntryCategoryFormView
 {
     private ApplicationObjectInterface $app;
 
-    public function render(ApplicationObjectInterface $app, string $form, bool $new): void
+    public function render(ApplicationObjectInterface $app, string $form, bool $new, string $action): void
     {
         $this->app = $app;
         $pagetitle = "Tipo de movimentos";
@@ -32,7 +32,7 @@ class EntryCategoryFormView
 
         <body>
             <div class="maingrid">
-                <?php Html::menu(); ?>
+                <?php Html::menu($this->app->l10n(), $this->app->session()->get('isAdmin', false)); ?>
                 <div class="header" style="height: 0;"></div>
                 <div id="main" class="main">
                     <form method="POST" action="index.php?action=entry_types">
@@ -48,7 +48,7 @@ class EntryCategoryFormView
                         </table>
                     </form>
                 </div>
-                <?php Html::footer(); ?>
+                <?php Html::footer($this->app, $action); ?>
             </div>
         </body>
 

@@ -32,6 +32,7 @@ final class AccountController extends AbstractViewController
             'account' => $account,
             'back' => $this->request->input('back', ""),
             'lang' => $this->app->l10n()->sanitizeLang($this->request->input('lang', null)),
+            'action' => $this->request->input('action'),
             'errors' => []
         ]);
     }
@@ -49,7 +50,7 @@ final class AccountController extends AbstractViewController
             return;
         }
 
-        $action = $this->request->input('action', 'save');
+        $action = $this->request->input('itemaction', 'save');
         if ($action === 'delete') {
             $id = (int)$this->request->input('id', 0);
             if ($id && ($a = ObjectFactory::account()::getById($id)) !== null) {
@@ -59,7 +60,6 @@ final class AccountController extends AbstractViewController
             Redirector::to($redirectUrl);
             return;
         }
-
         // Save path
         $id = (int)$this->request->input('id', 0);
         $a = ($id ? ObjectFactory::account()::getById($id) : null) ?? ObjectFactory::account();
@@ -94,7 +94,8 @@ final class AccountController extends AbstractViewController
         $view->render($this->app, [
             'account' => $a,
             'lang' => $this->app->l10n()->sanitizeLang($this->request->input('lang')),
-            'errors' => $errors
+            'errors' => $errors,
+            'action' => $this->request->input('action')
         ]);
     }
 }

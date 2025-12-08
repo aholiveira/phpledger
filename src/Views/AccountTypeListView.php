@@ -30,7 +30,7 @@ final class AccountTypeListView
                 <div id="preloader">
                     <div class="spinner"></div>
                 </div>
-                <?php Html::menu(); ?>
+                <?php Html::menu($this->app->l10n(), $this->app->session()->get('isAdmin', false)); ?>
                 <div class="header">
                     <p style="margin:0"><a href="index.php?action=account_type&lang=<?= $lang ?>">Adicionar<?php $this->app->l10n()->pl("Adicionar"); ?></a></p>
                 </div>
@@ -40,7 +40,7 @@ final class AccountTypeListView
                     print $viewer->printObjectList($list);
                     ?>
                 </div>
-                <?php Html::footer(); ?>
+                <?php Html::footer($this->app, $data['action']); ?>
             </div>
             <script>
                 setTimeout(() => {

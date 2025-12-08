@@ -31,7 +31,7 @@ final class ConfigController extends AbstractViewController
         } catch (Exception $e) {
             $messages = [$e->getMessage()];
         }
-        $view->render($this->app, $data, $hasPermission, $success, $messages);
+        $view->render($this->app, $data, $hasPermission, $success, $this->request->input('action'), $messages);
     }
 
     private function checkUserPermission(): void

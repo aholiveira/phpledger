@@ -30,7 +30,7 @@ final class AccountFormView
 
         <body>
             <div class="maingrid">
-                <?php Html::menu(); ?>
+                <?php Html::menu($this->app->l10n(), $this->app->session()->get('isAdmin', false)); ?>
                 <div class="header">
                     <p style="margin:0">
                         <?php if ($back === "balances"): ?>
@@ -42,8 +42,9 @@ final class AccountFormView
                 </div>
                 <main>
                     <div class="main config single_item account_type_form" id="main">
-                        <form method="POST" action="index.php?action=account">
+                        <form method="POST" action="index.php?action=account&id=<?= (int)($account->id ?? 0) ?>">
                             <?= CSRF::inputField() ?>
+                            <input type="hidden" name="action" value="account">
                             <input type="hidden" name="id" value="<?= (int)($account->id ?? 0) ?>">
                             <p>
                                 <label for="name">Name</label>
@@ -94,7 +95,7 @@ final class AccountFormView
                         </form>
                     </div>
                 </main>
-                <?php Html::footer(); ?>
+                <?php Html::footer($this->app, $data['action']); ?>
             </div>
         </body>
 

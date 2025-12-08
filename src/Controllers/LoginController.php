@@ -2,6 +2,7 @@
 
 namespace PHPLedger\Controllers;
 
+use PHPLedger\Domain\User;
 use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\Redirector;
@@ -62,6 +63,7 @@ final class LoginController extends AbstractViewController
 
             if ($this->userAuth) {
                 $this->afterSuccessfulLogin();
+                $this->app->session()->set('isAdmin', $user->hasRole(User::USER_ROLE_ADM));
             }
         }
     }
