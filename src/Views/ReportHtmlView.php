@@ -109,7 +109,7 @@ class ReportHtmlView
         $filterArray = [
             "filter_sdate" => $startDate,
             "filter_edate" => $endDate,
-            "filter_entry_type" => $id
+            "filter_entryType" => $id
         ];
         if ($includeParent) {
             $filterArray['filter_parentId'] = $id;
@@ -150,7 +150,7 @@ class ReportHtmlView
         $filterArray = [
             "filter_sdate" => $startDate,
             "filter_edate" => $endDate,
-            "filter_entry_type" => $recordId
+            "filter_entryType" => $recordId
         ];
         if ($includeParent) {
             $filterArray['filter_parentId'] = $recordId;
