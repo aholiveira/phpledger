@@ -84,7 +84,7 @@ final class LoginController extends AbstractViewController
         }
 
         $target = $defaults->lastVisitedUri ?: sprintf(
-            'index.php?action=ledger_entries&lang=%s&filter_sdate=%s',
+            'index.php?action=ledger_entries&lang=%s&filter_startDate=%s',
             $this->app->l10n()->lang(),
             date('Y-m-01')
         );

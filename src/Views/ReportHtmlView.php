@@ -107,8 +107,8 @@ class ReportHtmlView
     private function buildRecordLink($id, $label, $startDate, $endDate, $includeParent = false): string
     {
         $filterArray = [
-            "filter_sdate" => $startDate,
-            "filter_edate" => $endDate,
+            "filter_startDate" => $startDate,
+            "filter_endDate" => $endDate,
             "filter_entryType" => $id
         ];
         if ($includeParent) {
@@ -148,8 +148,8 @@ class ReportHtmlView
             return $normalized;
         }
         $filterArray = [
-            "filter_sdate" => $startDate,
-            "filter_edate" => $endDate,
+            "filter_startDate" => $startDate,
+            "filter_endDate" => $endDate,
             "filter_entryType" => $recordId
         ];
         if ($includeParent) {
