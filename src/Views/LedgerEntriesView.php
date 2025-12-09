@@ -102,28 +102,28 @@ final class LedgerEntriesView
             <input type="hidden" name="filter_parentId" value="<?= !empty($filters["parentId"]) ? $filters["parentId"] : "" ?>">
             <input type="hidden" name="filter_entryType" value="<?= !empty($filters["entryType"]) ? $filters["entryType"] : "" ?>">
             <p>
-                <label for="filter_startDate"><?= $this->app->l10n()->l('start') ?></label>
-                <span id="filter_startDate">
+                <label for="filter_startDateSpan"><?= $this->app->l10n()->l('start') ?></label>
+                <span id="filter_startDateSpan">
                     <select class="date-fallback" style="display: none" name="filter_startDateAA"
                         onchange="update_date('filter_startDate');"><?= Html::yearOptions(substr($startDate, 0, 4)) ?></select>
                     <select class="date-fallback" style="display: none" name="filter_startDateMM"
                         onchange="update_date('filter_startDate');"><?= Html::monthOptions(substr($startDate, 5, 2)) ?></select>
                     <select class="date-fallback" style="display: none" name="filter_startDateDD"
                         onchange="update_date('filter_startDate');"><?= Html::dayOptions(substr($startDate, 8, 2)) ?></select>
-                    <input class="date-fallback" type="date" name="filter_startDate" required
+                    <input class="date-fallback" type="date" id="filter_startDate" name="filter_startDate" required
                         value="<?= $startDate ?>">
                 </span>
             </p>
             <p>
-                <label for="filter_endDate"><?= $this->app->l10n()->l('end') ?></label>
-                <span id="filter_endDate">
+                <label for="filter_endDateSpan"><?= $this->app->l10n()->l('end') ?></label>
+                <span id="filter_endDateSpan">
                     <select class="date-fallback" style="display: none" name="filter_endDateAA"
                         onchange="update_date('filter_endDate');"><?= Html::yearOptions(substr($endDate, 0, 4)) ?></select>
                     <select class="date-fallback" style="display: none" name="filter_endDateMM"
                         onchange="update_date('filter_endDate');"><?= Html::monthOptions(substr($endDate, 5, 2)) ?></select>
                     <select class="date-fallback" style="display: none" name="filter_endDateDD"
                         onchange="update_date('filter_endDate');"><?= Html::dayOptions(substr($endDate, 8, 2)) ?></select>
-                    <input class="date-fallback" type="date" name="filter_endDate" required
+                    <input class="date-fallback" type="date" id="filter_endDate" name="filter_endDate" required
                         value="<?= $endDate ?>">
                 </span>
             </p>
