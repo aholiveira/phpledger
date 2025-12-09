@@ -11,11 +11,14 @@
 namespace PHPLedger\Storage\MySql;
 
 use PHPLedger\Domain\Ledger;
+use PHPLedger\Storage\MySql\Traits\MySqlFetchAllTrait;
+use PHPLedger\Storage\MySql\Traits\MySqlSelectTrait;
 use PHPLedger\Util\Logger;
 
 class MySqlLedger extends Ledger
 {
     use MySqlSelectTrait;
+    use MySqlFetchAllTrait;
     use MySqlObject {
         MySqlObject::getNextId as private traitGetNextId;
     }
@@ -35,37 +38,6 @@ class MySqlLedger extends Ledger
     {
         return "SELECT id, nome as `name` FROM " . static::tableName();
     }
-
-    private static function fetchAll(string $sql, array $params = []): ?array
-    {
-        $retval = [];
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new \mysqli_sql_exception();
-            }
-            if ($params) {
-                $types = str_repeat('s', \count($params));
-                $stmt->bind_param($types, ...$params);
-            }
-            $stmt->execute();
-            $result = $stmt->get_result();
-            while ($obj = $result->fetch_object(__CLASS__)) {
-                $retval[$obj->id] = $obj;
-            }
-        } catch (\Exception $ex) {
-            static::handleException($ex, $sql);
-        } finally {
-            if (isset($stmt) && $stmt instanceof \mysqli_stmt) {
-                $stmt->close();
-            }
-            if (isset($result) && $result instanceof \mysqli_result) {
-                $result->close();
-            }
-        }
-        return $retval;
-    }
-
     private static function fetchOne(string $sql, array $params = []): ?self
     {
         $all = static::fetchAll($sql, $params);

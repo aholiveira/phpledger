@@ -11,6 +11,7 @@
 namespace PHPLedger\Storage\MySql;
 
 use PHPLedger\Domain\Defaults;
+use PHPLedger\Storage\MySql\Traits\MySqlSelectTrait;
 use PHPLedger\Util\Config;
 
 class MySqlDefaults extends Defaults
