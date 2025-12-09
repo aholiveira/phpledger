@@ -51,11 +51,11 @@ class ReportYearView
                     <div class="spinner"></div>
                 </div>
                 <?php Html::menu($this->app->l10n(), $this->app->session()->get('isAdmin', false)); ?>
-                <div id="header" class="header">
+                <div id="header" class="header main config">
                     <form name="filtro" method="GET">
                         <input type="hidden" name="action" value="<?= $action ?>">
-                        <p>Ano inicial <input type="text" name="firstYear" maxlength="4" size="6" value="<?= $firstYear; ?>"></p>
-                        <p>Ano final <input type="text" name="lastYear" maxlength="4" size="6" value="<?= $lastYear; ?>"></p>
+                        <p><label for="firstYear">Ano inicial</label><input type="text" id="firstYear" name="firstYear" maxlength="4" size="6" value="<?= $firstYear; ?>"></p>
+                        <p><label for="lastYear">Ano final</label><input type="text" id="lastYear" name="lastYear" maxlength="4" size="6" value="<?= $lastYear; ?>"></p>
                         <p><input type="submit" value="Obter"></p>
                     </form>
                 </div>

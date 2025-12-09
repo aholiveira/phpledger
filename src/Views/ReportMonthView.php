@@ -76,10 +76,10 @@ class ReportMonthView
                     <div class="spinner"></div>
                 </div>
                 <?php Html::menu($this->app->l10n(), $this->app->session()->get('isAdmin', false)); ?>
-                <div id="header" class="header">
+                <div id="header" class="header main config">
                     <form name="filtro" method="GET">
                         <input type="hidden" name="action" value="report_month">
-                        <p>Ano <input type="text" name="year" maxlength="4" size="6" value="<?php print $year; ?>"></p>
+                        <p><label for="year">Ano</label><input type="text" id="year" name="year" maxlength="4" size="6" value="<?php print $year; ?>"></p>
                         <p><input type="submit" value="Obter"></p>
                     </form>
                 </div>
