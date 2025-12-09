@@ -12,6 +12,7 @@ namespace PHPLedger\Storage\MySql;
 
 use PHPLedger\Domain\Currency;
 use PHPLedger\Storage\MySql\MySqlObject;
+use PHPLedger\Storage\MySql\Traits\MySqlSelectTrait;
 
 class MySqlCurrency extends Currency
 {

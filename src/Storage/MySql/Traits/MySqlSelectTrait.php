@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPLedger\Storage\MySql;
+namespace PHPLedger\Storage\MySql\Traits;
 
 /**
  * Trait providing a standard getSelect() method for MySql storage classes.

@@ -12,38 +12,20 @@
 namespace PHPLedger\Storage\MySql;
 
 use PHPLedger\Domain\Account;
+use PHPLedger\Storage\MySql\Traits\MySqlDeleteTrait;
+use PHPLedger\Storage\MySql\Traits\MySqlFetchAllTrait;
+use PHPLedger\Storage\MySql\Traits\MySqlSelectTrait;
 
 class MySqlAccount extends Account
 {
     use MySqlSelectTrait;
+    use MySqlFetchAllTrait;
+    use MySqlDeleteTrait;
     use MySqlObject {
         MySqlObject::__construct as private traitConstruct;
     }
     protected static string $tableName = "contas";
-    private static function fetchAll(string $sql, array $params = []): array
-    {
-        $retval = [];
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new \mysqli_sql_exception();
-            }
-            if ($params) {
-                $types = str_repeat('s', \count($params));
-                $stmt->bind_param($types, ...$params);
-            }
-            $stmt->execute();
-            $result = $stmt->get_result();
-            while ($obj = $result->fetch_object(__CLASS__)) {
-                $retval[$obj->id] = $obj;
-            }
-            $stmt->close();
-        } catch (\Exception $ex) {
-            static::handleException($ex, $sql);
-        }
 
-        return $retval;
-    }
     private static function fetchOne(string $sql, array $params = []): Account
     {
         $all = static::fetchAll($sql, $params);
@@ -184,20 +166,6 @@ class MySqlAccount extends Account
             if (!$retval) {
                 throw new \mysqli_sql_exception();
             }
-        } catch (\Exception $ex) {
-            $this->handleException($ex, $sql);
-        }
-        return $retval;
-    }
-    public function delete(): bool
-    {
-        $retval = false;
-        try {
-            $sql = "DELETE FROM {$this->tableName()} WHERE id=?";
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            $stmt->bind_param("s", $this->id);
-            $retval = $stmt->execute();
-            $stmt->close();
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         }
