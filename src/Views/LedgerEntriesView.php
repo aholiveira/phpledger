@@ -11,77 +11,27 @@
 namespace PHPLedger\Views;
 
 use PHPLedger\Contracts\ApplicationObjectInterface;
-use PHPLedger\Controllers\LedgerEntryController;
-use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Domain\LedgerEntry;
 use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\NumberUtil;
-use PHPLedger\Util\Redirector;
-use PHPLedger\Views\ViewFactory;
+use PHPLedger\Views\Templates\LedgerEntryViewTemplate;
 
 final class LedgerEntriesView
 {
     private ApplicationObjectInterface $app;
+    private array $data;
     public function render(ApplicationObjectInterface $app, array $data): void
     {
         $this->app = $app;
+        $this->data = $data;
         $action = $data['action'];
-        ini_set('zlib.output_compression', 'Off');
-        ini_set('output_buffering', 'Off');
-        ini_set('implicit_flush', '1');
-        ob_implicit_flush(true);
+        $filteredInput = $data['filteredInput'];
+        $savedEntryId = $data['savedEntryId'] ?? 0;
+        $success = $data['success'];
+        $errorMessage = $data['errorMessage'];
+        $ledgerEntryCache = $data['ledgerEntryList'];
         $pagetitle = $this->app->l10n()->l("ledger_entries");
-        $input_variables_filter = [
-            'data_mov' => [
-                'filter' => FILTER_VALIDATE_REGEXP,
-                'options' => ['regexp' => '/([0-9]{1,4})(-|\/)?([0-9]{1,2})(-|\/)?([0-9-]{1,4})/']
-            ],
-            'data_movAA' => FILTER_SANITIZE_NUMBER_INT,
-            'data_movMM' => FILTER_SANITIZE_NUMBER_INT,
-            'data_movDD' => FILTER_SANITIZE_NUMBER_INT,
-            'id' => FILTER_SANITIZE_NUMBER_INT,
-            'accountId' => FILTER_SANITIZE_NUMBER_INT,
-            'categoryId' => FILTER_SANITIZE_NUMBER_INT,
-            'currencyAmount' => [
-                'filter' => FILTER_SANITIZE_NUMBER_FLOAT,
-                'flags' => FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_THOUSAND
-            ],
-            'currencyId' => FILTER_SANITIZE_ENCODED,
-            'direction' => FILTER_SANITIZE_NUMBER_INT,
-            'remarks' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
-            'filter_entry_type' => FILTER_SANITIZE_NUMBER_INT,
-            'filter_accountId' => FILTER_SANITIZE_NUMBER_INT,
-            'filter_parentId' => FILTER_SANITIZE_NUMBER_INT,
-            'filter_sdateAA' => FILTER_SANITIZE_NUMBER_INT,
-            'filter_sdateMM' => FILTER_SANITIZE_NUMBER_INT,
-            'filter_sdateDD' => FILTER_SANITIZE_NUMBER_INT,
-            'filter_sdate' => FILTER_SANITIZE_ENCODED,
-            'filter_edate' => FILTER_SANITIZE_ENCODED,
-            'filter_edateAA' => FILTER_SANITIZE_NUMBER_INT,
-            'filter_edateMM' => FILTER_SANITIZE_NUMBER_INT,
-            'filter_edateDD' => FILTER_SANITIZE_NUMBER_INT,
-            'lang' => FILTER_SANITIZE_ENCODED
-        ];
-        $filteredInput = [];
-        $savedEntryId = null;
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
-                http_response_code(400);
-                Redirector::to('index.php?action=ledger_entries');
-            }
-            $filteredInput = filter_input_array(INPUT_POST, $input_variables_filter, true);
-            try {
-                $savedEntryId = (new LedgerEntryController())->handleSave($this->app, $filteredInput);
-                $success = true;
-            } catch (\Exception $e) {
-                $error_essage = $e->getMessage();
-                $success = false;
-            }
-        }
-        if ($_SERVER["REQUEST_METHOD"] === "GET") {
-            $filteredInput = filter_input_array(INPUT_GET, $input_variables_filter, true);
-        }
-
 ?>
         <!DOCTYPE html>
         <html lang="<?= $this->app->l10n()->html() ?>">
@@ -93,9 +43,9 @@ final class LedgerEntriesView
         </head>
 
         <body>
-            <?php if (!empty($savedEntryId)): ?>
+            <?php if ($savedEntryId > 0): ?>
                 <div id="notification" class="notification <?= $success ? "success" : "fail" ?>">
-                    <?= $success ? $this->app->l10n()->l("save_success", $savedEntryId) : $error_essage ?>
+                    <?= $success ? $this->app->l10n()->l("save_success", $savedEntryId) : $errorMessage ?>
                 </div>
                 <script>
                     const el = document.getElementById('notification');
@@ -111,349 +61,16 @@ final class LedgerEntriesView
                 <div id="preloader">
                     <div class="spinner"></div>
                 </div>
-                <?php Html::menu($this->app->l10n(), $this->app->session()->get('isAdmin', false));
-                if (!empty($filteredInput["filter_sdate"])) {
-                    $sdate = strlen($filteredInput["filter_sdate"]) ? $filteredInput["filter_sdate"] : date("Y-m-01");
-                } else {
-                    if (!empty($filteredInput["filter_sdateAA"])) {
-                        $sdate = sprintf("%04d-%02d-%02d", $filteredInput["filter_sdateAA"], $filteredInput["filter_sdateMM"], $filteredInput["filter_sdateDD"]);
-                    } else {
-                        $sdate = date("Y-m-01");
-                    }
-                }
-                if (!empty($filteredInput["filter_edate"])) {
-                    $edate = strlen($filteredInput["filter_edate"]) ? str_replace("-", "", $filteredInput["filter_edate"]) : date("Ymd");
-                } else {
-                    if (is_array($filteredInput) && !empty($filteredInput["filter_edateAA"])) {
-                        $edate = sprintf("%04d-%02d-%02d", $filteredInput["filter_edateAA"], $filteredInput["filter_edateMM"], $filteredInput["filter_edateDD"]);
-                    } else {
-                        $edate = date("Y-m-d");
-                    }
-                }
-                $ledgerFilter[] = ["entryDate" => ["operator" => '>=', "value" => $sdate]];
-                $ledgerFilter[] = ["entryDate" => ["operator" => '<=', "value" => $edate]];
-                if (!empty($filteredInput["filter_accountId"])) {
-                    $ledgerFilter[] = ['accountId' => ["operator" => '=', "value" => $filteredInput["filter_accountId"]]];
-                }
-                if (!empty($filteredInput["filter_entry_type"])) {
-                    $ledgerFilter[] = ['categoryId' => ["operator" => '=', "value" => $filteredInput["filter_entry_type"]]];
-                }
-                $filter = "movimentos.entryDate>='{$sdate}' AND movimentos.entryDate<='{$edate}'";
-                $parentFilter = "";
-                if (!empty($filteredInput["filter_parentId"])) {
-                    $parentFilter = "tipo_mov.parentId={$filteredInput['filter_parentId']} ";
-                    //$ledgerFilter[] = ["parentId" => ["operator" => "IN", "value" => "({$filteredInput['filter_parentId']})"]];
-                }
-                $edit = 0;
-                if ($_SERVER["REQUEST_METHOD"] == "GET" && is_array($filteredInput) && !empty($filteredInput["id"])) {
-                    $edit = $filteredInput["id"];
-                }
-
-                // Saldo anterior
-                $ledgerEntry = ObjectFactory::ledgerentry();
-                $balance = $ledgerEntry->getBalanceBeforeDate($sdate, is_array($filteredInput) && $filteredInput["filter_accountId"] > 0 ? $filteredInput["filter_accountId"] : null);
-                $ledgerEntryCache = ObjectFactory::ledgerEntry()::getList($ledgerFilter);
-                $entry_filter_array = [];
-                if ($edit > 0) {
-                    $editEntry = ObjectFactory::ledgerEntry()::getById($edit);
-                    if ($editEntry->id != $edit) {
-                        die($this->app->l10n()->l('not_found', $edit));
-                    }
-                    $ledgerEntry = ObjectFactory::ledgerEntry()::getById($edit);
-                    if ($ledgerEntry->id != $edit) {
-                        Html::myalert($this->app->l10n()->l('not_found', $edit));
-                    }
-                }
-
-                // Defaults: guard against missing session user (e.g. after logout)
-                $username = $_SESSION['user'] ?? null;
-                $defaults = null;
-                if (!empty($username)) {
-                    $defaults = ObjectFactory::defaults()::getByUsername($username);
-                }
-                if (null === $defaults) {
-                    $defaults = ObjectFactory::defaults()::init();
-                }
-                // Tipos movimento
-                $categoryId = $edit > 0 ? $editEntry->categoryId : $defaults->categoryId;
-                $entry_viewer = ViewFactory::instance()->entryCategoryView($this->app, ObjectFactory::entryCategory()::getById($categoryId));
-                $tipo_mov_opt = $entry_viewer->getSelectFromList(ObjectFactory::entryCategory()::getList([
-                    'active' => ['operator' => '=', 'value' => '1'],
-                    'id' => ['operator' => '>', 'value' => '0']
-                ]));
-
-                // Moedas
-                $currencyId = $edit > 0 ? $editEntry->currencyId : $defaults->currencyId;
-                $currency = ObjectFactory::currency();
-                $currencyViewer = ViewFactory::instance()->currencyView($this->app, $currency);
-                $moeda_opt = $currencyViewer->getSelectFromList(ObjectFactory::currency()::getList(), $currencyId);
-
-                // Contas
-                $conta_opt = "";
-                $accountId = $edit > 0 ? $editEntry->accountId : $defaults->accountId;
-                $accountViewer = ViewFactory::instance()->accountView($this->app, ObjectFactory::account()::getById($accountId));
-                $conta_opt = $accountViewer->getSelectFromList(ObjectFactory::account()::getList(['activa' => ['operator' => '=', 'value' => '1']]), $accountId);
-                if (!is_array($filteredInput)) {
-                    $filteredInput = [];
-                }
-                $filteredInput2 = [];
-                foreach ($filteredInput as $k => $v) {
-                    if (stristr($k, "filter_")) {
-                        $filteredInput2[$k] = $v;
-                    }
-                }
-                $filteredInput2['lang'] = $this->app->l10n()->lang();
-                $filter_string = http_build_query($filteredInput2);
-                ?>
-                <div class="header" id="header">
-                    <form id="datefilter" name="datefilter" action="?lang=<?= $this->app->l10n()->lang() ?>" method="GET">
-                        <input name="action" value="ledger_entries" type="hidden">
-                        <input name="lang" value="<?= $this->app->l10n()->lang() ?>" type="hidden">
-                        <input type="hidden" name="filter_parentId"
-                            value="<?= !empty($filteredInput["filter_parentId"]) ? $filteredInput["filter_parentId"] : "" ?>">
-                        <input type="hidden" name="filter_entry_type"
-                            value="<?= !empty($filteredInput["filter_entry_type"]) ? $filteredInput["filter_entry_type"] : "" ?>">
-                        <table class="filter">
-                            <tr>
-                                <td><?= $this->app->l10n()->l('start') ?></td>
-                                <td>
-                                    <select class="date-fallback" style="display: none" name="filter_sdateAA"
-                                        onchange="update_date('filter_sdate');"><?= Html::yearOptions(substr($sdate, 0, 4)) ?></select>
-                                    <select class="date-fallback" style="display: none" name="filter_sdateMM"
-                                        onchange="update_date('filter_sdate');"><?= Html::monthOptions(substr($sdate, 5, 2)) ?></select>
-                                    <select class="date-fallback" style="display: none" name="filter_sdateDD"
-                                        onchange="update_date('filter_sdate');"><?= Html::dayOptions(substr($sdate, 8, 2)) ?></select>
-                                    <input class="date-fallback" type="date" id="filter_sdate" name="filter_sdate" required
-                                        value="<?= (new \DateTime("{$sdate}"))->format("Y-m-d") ?>">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><?= $this->app->l10n()->l('end') ?></td>
-                                <td>
-                                    <select class="date-fallback" style="display: none" name="filter_edateAA"
-                                        onchange="update_date('filter_edate');"><?= Html::yearOptions(substr($edate, 0, 4)) ?></select>
-                                    <select class="date-fallback" style="display: none" name="filter_edateMM"
-                                        onchange="update_date('filter_edate');"><?= Html::monthOptions(substr($edate, 5, 2)) ?></select>
-                                    <select class="date-fallback" style="display: none" name="filter_edateDD"
-                                        onchange="update_date('filter_edate');"><?= Html::dayOptions(substr($edate, 8, 2)) ?></select>
-                                    <input class="date-fallback" type="date" id="filter_edate" name="filter_edate" required
-                                        value="<?= (new \DateTime("{$edate}"))->format("Y-m-d") ?>">
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><label for="filter_accountId"><?= $this->app->l10n()->l('account') ?></label> </td>
-                                <td>
-                                    <select name="filter_accountId" id="filter_accountId" data-placeholder="Seleccione a conta"
-                                        data-max="2" data-search="false" data-select-all="true" data-list-all="true"
-                                        data-width="300px" data-height="50px" data-multi-select>
-                                        <option value><?= $this->app->l10n()->l('no_filter') ?></option>
-                                        <?= $conta_opt ?>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><label for="filter_entry_type"><?= $this->app->l10n()->l('category') ?></label></td>
-                                <td>
-                                    <select name="filter_entry_type" id="filter_entry_type">
-                                        <option value><?= $this->app->l10n()->l('no_filter') ?></option>
-                                        <?= $tipo_mov_opt ?>
-                                    </select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td></td>
-                                <td>
-                                    <input class="submit" type="submit" value="<?= $this->app->l10n()->l('filter') ?>">
-                                    <input class="submit" type="button" value="<?= $this->app->l10n()->l('clear_filter') ?>"
-                                        onclick="clear_filter(); document.getElementById('datefilter').requestSubmit();">
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
+                <?php Html::menu($this->app->l10n(), $this->app->session()->get('isAdmin', false)); ?>
+                <div class="header main config" id="header">
+                    <?php $this->printFilter(); ?>
                     <script>
-                        document.getElementById("filter_entry_type").value = "<?= !empty($filteredInput["filter_entry_type"]) ? $filteredInput["filter_entry_type"] : ""; ?>";
+                        document.getElementById("filter_entryType").value = "<?= !empty($filteredInput["filter_entryType"]) ? $filteredInput["filter_entryType"] : ""; ?>";
                         document.getElementById("filter_accountId").value = "<?= !empty($filteredInput["filter_accountId"]) ? $filteredInput["filter_accountId"] : ""; ?>";
                     </script>
                 </div>
                 <div class="main" id="main">
-                    <form name="mov" method="POST">
-                        <input name="lang" value="<?= $this->app->l10n()->lang() ?>" type="hidden" />
-                        <input name="action" type="hidden" value="ledger_entries" />
-                        <?= CSRF::inputField() ?>
-                        <input type="hidden" name="filter_accountId"
-                            value="<?= !empty($filteredInput["filter_accountId"]) ? $filteredInput["filter_accountId"] : ""; ?>">
-                        <input type="hidden" name="filter_parentId"
-                            value="<?= !empty($filteredInput["filter_parentId"]) ? $filteredInput["filter_parentId"] : ""; ?>">
-                        <input type="hidden" name="filter_entry_type"
-                            value="<?= !empty($filteredInput["filter_entry_type"]) ? $filteredInput["filter_entry_type"] : ""; ?>">
-                        <input type="hidden" name="filter_sdate" value="<?= $sdate; ?>">
-                        <input type="hidden" name="filter_edate" value="<?= $edate; ?>">
-                        <div class="table-wrapper">
-                            <table class="lista ledger_entry_list">
-                                <thead>
-                                    <tr>
-                                        <th scope="col"><?= $this->app->l10n()->l('id') ?></th>
-                                        <th scope="col"><?= $this->app->l10n()->l('date') ?></th>
-                                        <th scope="col"><?= $this->app->l10n()->l('category') ?></th>
-                                        <th scope="col"><?= $this->app->l10n()->l('currency') ?></th>
-                                        <th scope="col"><?= $this->app->l10n()->l('account') ?></th>
-                                        <th scope="col"><?= $this->app->l10n()->l('dc') ?></th>
-                                        <th scope="col"><?= $this->app->l10n()->l('amount') ?></th>
-                                        <th scope="col"><?= $this->app->l10n()->l('remarks') ?></th>
-                                        <th scope="col"><?= $this->app->l10n()->l('balance') ?></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td class="balance-label" colspan="8"><?= $this->app->l10n()->l('previous_balance') ?></td>
-                                        <td data-label="<?= $this->app->l10n()->l('previous_balance') ?>" class="balance">
-                                            <?= NumberUtil::normalize($balance); ?>
-                                        </td>
-                                    </tr>
-                                    <?php
-
-                                    foreach ($ledgerEntryCache as $row):
-                                        print "<tr id='{$row->id}'>";
-                                        $balance += $row->euroAmount;
-                                        if ($row->id == $edit) {
-                                    ?>
-                                            <td data-label=""><input type="hidden" name="id" value="<?= $row->id; ?>">
-                                                <input class="submit" type="submit" name="save" value="<?= $this->app->l10n()->l('save') ?>">
-                                            </td>
-                                            <td data-label="<?= $this->app->l10n()->l('date') ?>" class="id">
-                                                <select class="date-fallback" style="display: none" name="data_movAA">
-                                                    <?= Html::yearOptions(substr($row->entryDate, 0, 4)) ?>
-                                                </select>
-                                                <select class="date-fallback" style="display: none" name="data_movMM">
-                                                    <?= Html::monthOptions(substr($row->entryDate, 5, 2)) ?>
-                                                </select>
-                                                <select class="date-fallback" style="display: none" name="data_movDD">
-                                                    <?= Html::dayOptions(substr($row->entryDate, 8, 2)) ?>
-                                                </select>
-                                                <input class="date-fallback" type="date" id="data_mov" name="data_mov" required
-                                                    value="<?= $row->entryDate ?>">
-                                            </td>
-                                            <td data-label="<?= $this->app->l10n()->l('category') ?>" class="category"><select
-                                                    name="categoryId"><?= $tipo_mov_opt ?></select></td>
-                                            <td data-label="<?= $this->app->l10n()->l('currency') ?>" class="currency"><select
-                                                    name="currencyId"><?= $moeda_opt ?></select>
-                                            </td>
-                                            <td data-label="<?= $this->app->l10n()->l('account') ?>" class="account"><select
-                                                    name="accountId"><?= $conta_opt ?></select>
-                                            </td>
-                                            <td data-label="<?= $this->app->l10n()->l('dc') ?>" class="direction">
-                                                <select name="direction">
-                                                    <option value="1" <?= $row->direction == "1" ? " selected " : "" ?>>
-                                                        <?= $this->app->l10n()->l('deposit') ?>
-                                                    </option>
-                                                    <option value="-1" <?= $row->direction == "-1" ? " selected " : "" ?>>
-                                                        <?= $this->app->l10n()->l('withdraw') ?>
-                                                    </option>
-                                                </select>
-                                            </td>
-                                            <td data-label="<?= $this->app->l10n()->l('amount') ?>" class="amount"><input type="number" step="0.01"
-                                                    name="currencyAmount" placeholder="0.00" value="<?= $row->currencyAmount ?>"></td>
-                                            <td data-label="<?= $this->app->l10n()->l('remarks') ?>" class="remarks"><input type="text" name="remarks"
-                                                    maxlength="255" value="<?= $row->remarks ?>"></td>
-                                            <td data-label="<?= $this->app->l10n()->l('balance') ?>" class="total" style="text-align: right">
-                                                <?= NumberUtil::normalize($balance) ?>
-                                            </td>
-                                        <?php
-                                        }
-                                        if (empty($edit) || $row->id != $edit) {
-                                            $filteredInput3 = $filteredInput2;
-                                            $filteredInput3["filter_entry_type"] = $row->categoryId;
-                                            $category_filter = http_build_query($filteredInput3);
-                                            $filteredInput3 = $filteredInput2;
-                                            $filteredInput3["filter_accountId"] = $row->accountId;
-                                            $account_filter = http_build_query($filteredInput3);
-                                        ?>
-                                            <td data-label='<?= $this->app->l10n()->l('id') ?>' class='id'><a
-                                                    title="<?= $this->app->l10n()->l('click_to_edit') ?>&#10;<?= $this->app->l10n()->l('modified_by_at', $row->username, $row->updatedAt) ?>"
-                                                    href="index.php?action=ledger_entries&amp;<?= "{$filter_string}&amp;id={$row->id}" ?>"><?= $row->id ?></a>
-                                            </td>
-                                            <td data-label='<?= $this->app->l10n()->l('date') ?>' class='data'><?= $row->entryDate ?></td>
-                                            <td data-label='<?= $this->app->l10n()->l('category') ?>' class='category'><a
-                                                    title="Filtrar lista para esta categoria"
-                                                    href="index.php?action=ledger_entries?<?= $category_filter ?>"><?= ($row->category->parentId > 0 ? $row->category->parentDescription . "&#8594;" : "") . $row->category->description ?></a>
-                                            </td>
-                                            <td data-label='<?= $this->app->l10n()->l('currency') ?>' class='currency'>
-                                                <?= $row->currency->description ?>
-                                            </td>
-                                            <td data-label='<?= $this->app->l10n()->l('account') ?>' class='account'><a
-                                                    title="Filtrar lista para esta conta"
-                                                    href="index.php?action=ledger_entries?<?= $account_filter ?>"><?= $row->account->name ?></a>
-                                            </td>
-                                            <td data-label='<?= $this->app->l10n()->l('dc') ?>' class='direction'>
-                                                <?= $row->direction == "1" ? "Dep" : "Lev" ?>
-                                            </td>
-                                            <td data-label='<?= $this->app->l10n()->l('amount') ?>' class='amount'>
-                                                <?= NumberUtil::normalize($row->currencyAmount) ?>
-                                            </td>
-                                            <td data-label='<?= $this->app->l10n()->l('remarks') ?>' class='remarks'><?= $row->remarks; ?></td>
-                                            <td data-label='<?= $this->app->l10n()->l('balance') ?>' class='total'><?= NumberUtil::normalize($balance) ?>
-                                            </td>
-                                    <?php
-                                        }
-
-                                        print "</tr>\n";
-                                    endforeach;
-                                    ?>
-                                </tbody>
-                                <?php
-                                if ($edit == 0) {
-                                ?>
-                                    <tfoot>
-                                        <tr id="last">
-                                            <td data-label="" class="id"><input type="hidden" name="id" value="NULL">
-                                                <input class="submit" type="submit" name="save" value="<?= $this->app->l10n()->l('save') ?>">
-                                            </td>
-                                            <td data-label="<?= $this->app->l10n()->l('date') ?>" class="data">
-                                                <select class="date-fallback" style="display: none" name="data_movAA">
-                                                    <?= Html::yearOptions(substr($defaults->entryDate, 0, 4)) ?>
-                                                </select>
-                                                <select class="date-fallback" style="display: none" name="data_movMM">
-                                                    <?= Html::monthOptions(substr($defaults->entryDate, 5, 2)) ?>
-                                                </select>
-                                                <select class="date-fallback" style="display: none" name="data_movDD">
-                                                    <?= Html::dayOptions(substr($defaults->entryDate, 8, 2)) ?>
-                                                </select>
-                                                <input class="date-fallback" type="date" id="data_mov" name="data_mov" required
-                                                    value="<?= $defaults->entryDate ?>">
-                                            </td>
-                                            <td data-label="<?= $this->app->l10n()->l('category') ?>" class="category">
-                                                <select name="categoryId"> <?= $tipo_mov_opt ?> </select>
-                                            </td>
-                                            <td data-label="<?= $this->app->l10n()->l('currency') ?>" class="currency">
-                                                <select name="currencyId"> <?= $moeda_opt ?> </select>
-                                            </td>
-                                            <td data-label="<?= $this->app->l10n()->l('account') ?>" class="account">
-                                                <select name="accountId"> <?= $conta_opt; ?> </select>
-                                            </td>
-                                            <td data-label="<?= $this->app->l10n()->l('dc') ?>" class="direction">
-                                                <select name="direction">
-                                                    <option value="1"><?= $this->app->l10n()->l('deposit') ?></option>
-                                                    <option value="-1" selected><?= $this->app->l10n()->l('withdraw') ?></option>
-                                                </select>
-                                            </td>
-                                            <td data-label="<?= $this->app->l10n()->l('amount') ?>" class="amount">
-                                                <input type="number" step="0.01" name="currencyAmount" placeholder="0.00"
-                                                    value="0.00">
-                                            </td>
-                                            <td data-label="<?= $this->app->l10n()->l('remarks') ?>" class="remarks">
-                                                <input type="text" name="remarks" maxlength="255" value="">
-                                            </td>
-                                            <td data-label="<?= $this->app->l10n()->l('balance') ?>" class="total">
-                                                <?= NumberUtil::normalize($balance) ?>
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-                                <?php
-                                }
-                                ?>
-                            </table>
-                        </div>
-                    </form>
+                    <?php $this->printBody(); ?>
                 </div>
                 <div class="main-footer">
                     <p><?= $this->app->l10n()->l('transactions_in_period', count($ledgerEntryCache)) ?></p>
@@ -469,6 +86,246 @@ final class LedgerEntriesView
         </body>
 
         </html>
+    <?php
+    }
+    private function printFilter()
+    {
+        $filters = $this->data['filters'] ?? [];
+        $startDate = $filters['startDate'] ?? date("Y-m-01");
+        $endDate = $filters['endDate'] ?? date("Y-m-d");
+        $accountSelectOptions = $this->data['accountSelectOptions'] ?? [];
+        $entryTypesSelectOptions = $this->data['entryTypesSelectOptions'] ?? [];
+    ?>
+        <form id="datefilter" name="datefilter" action="?lang=<?= $this->app->l10n()->lang() ?>" method="GET">
+            <input name="action" value="ledger_entries" type="hidden">
+            <input name="lang" value="<?= $this->app->l10n()->lang() ?>" type="hidden">
+            <input type="hidden" name="filter_parentId" value="<?= !empty($filters["parentId"]) ? $filters["parentId"] : "" ?>">
+            <input type="hidden" name="filter_entryType" value="<?= !empty($filters["entryType"]) ? $filters["entryType"] : "" ?>">
+            <p>
+                <label for="filter_startDateSpan"><?= $this->app->l10n()->l('start') ?></label>
+                <span id="filter_startDateSpan">
+                    <select class="date-fallback" style="display: none" name="filter_startDateAA"
+                        onchange="update_date('filter_startDate');"><?= Html::yearOptions(substr($startDate, 0, 4)) ?></select>
+                    <select class="date-fallback" style="display: none" name="filter_startDateMM"
+                        onchange="update_date('filter_startDate');"><?= Html::monthOptions(substr($startDate, 5, 2)) ?></select>
+                    <select class="date-fallback" style="display: none" name="filter_startDateDD"
+                        onchange="update_date('filter_startDate');"><?= Html::dayOptions(substr($startDate, 8, 2)) ?></select>
+                    <input class="date-fallback" type="date" id="filter_startDate" name="filter_startDate" required
+                        value="<?= $startDate ?>">
+                </span>
+            </p>
+            <p>
+                <label for="filter_endDateSpan"><?= $this->app->l10n()->l('end') ?></label>
+                <span id="filter_endDateSpan">
+                    <select class="date-fallback" style="display: none" name="filter_endDateAA"
+                        onchange="update_date('filter_endDate');"><?= Html::yearOptions(substr($endDate, 0, 4)) ?></select>
+                    <select class="date-fallback" style="display: none" name="filter_endDateMM"
+                        onchange="update_date('filter_endDate');"><?= Html::monthOptions(substr($endDate, 5, 2)) ?></select>
+                    <select class="date-fallback" style="display: none" name="filter_endDateDD"
+                        onchange="update_date('filter_endDate');"><?= Html::dayOptions(substr($endDate, 8, 2)) ?></select>
+                    <input class="date-fallback" type="date" id="filter_endDate" name="filter_endDate" required
+                        value="<?= $endDate ?>">
+                </span>
+            </p>
+            <p>
+                <label for="filter_accountId"><?= $this->app->l10n()->l('account') ?></label>
+                <select name="filter_accountId" id="filter_accountId" data-placeholder="Seleccione a conta"
+                    data-max="2" data-search="false" data-select-all="true" data-list-all="true"
+                    data-width="300px" data-height="50px" data-multi-select>
+                    <option value><?= $this->app->l10n()->l('no_filter') ?></option>
+                    <?= $accountSelectOptions ?>
+                </select>
+            </p>
+            <p>
+                <label for="filter_entryType"><?= $this->app->l10n()->l('category') ?></label>
+                <select name="filter_entryType" id="filter_entryType">
+                    <option value><?= $this->app->l10n()->l('no_filter') ?></option>
+                    <?= $entryTypesSelectOptions ?>
+                </select>
+            </p>
+            <p>
+                <span style="grid-column: 2 / 2;">
+                    <input class="submit" type="submit" value="<?= $this->app->l10n()->l('filter') ?>">
+                    <input class="submit" type="button" value="<?= $this->app->l10n()->l('clear_filter') ?>"
+                        onclick="clear_filter(); document.getElementById('datefilter').requestSubmit();">
+                </span>
+            </p>
+        </form>
+    <?php
+    }
+    private function printBody()
+    {
+        $filters = $this->data['filters'];
+        $startDate = $filters['startDate'] ?? date("Y-m-01");
+        $endDate = $filters['endDate'] ?? date("Y-m-d");
+        $balance = (float)($this->data['balance'] ?? 0);
+        $ledgerEntryCache = $this->data['ledgerEntryList'];
+        $lang = $this->app->l10n()->lang();
+        $editId = is_numeric($filters['id'] ?? '') ? $filters['id'] : 0;
+    ?>
+        <form name="mov" method="POST" lang="<?= $lang ?>">
+            <?= CSRF::inputField() ?>
+            <input name="lang" value="<?= $this->app->l10n()->lang() ?>" type="hidden" />
+            <input name="action" type="hidden" value="ledger_entries" />
+            <input type="hidden" name="filter_accountId" value="<?= !empty($filters["accountId"]) ? $filters["accountId"] : ""; ?>">
+            <input type="hidden" name="filter_parentId" value="<?= !empty($filters["parentId"]) ? $filters["parentId"] : ""; ?>">
+            <input type="hidden" name="filter_entryType" value="<?= !empty($filters["entryType"]) ? $filters["entryType"] : ""; ?>">
+            <input type="hidden" name="filter_startDate" value="<?= $startDate; ?>">
+            <input type="hidden" name="filter_endDate" value="<?= $endDate; ?>">
+            <div class="table-wrapper">
+                <table class="lista ledger_entry_list">
+                    <thead>
+                        <tr>
+                            <th scope="col"><?= $this->app->l10n()->l('id') ?></th>
+                            <th scope="col"><?= $this->app->l10n()->l('date') ?></th>
+                            <th scope="col"><?= $this->app->l10n()->l('category') ?></th>
+                            <th scope="col"><?= $this->app->l10n()->l('currency') ?></th>
+                            <th scope="col"><?= $this->app->l10n()->l('account') ?></th>
+                            <th scope="col"><?= $this->app->l10n()->l('dc') ?></th>
+                            <th scope="col"><?= $this->app->l10n()->l('amount') ?></th>
+                            <th scope="col"><?= $this->app->l10n()->l('remarks') ?></th>
+                            <th scope="col"><?= $this->app->l10n()->l('balance') ?></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="balance-label" colspan="8"><?= $this->app->l10n()->l('previous_balance') ?></td>
+                            <td data-label="<?= $this->app->l10n()->l('previous_balance') ?>" class="balance">
+                                <?= NumberUtil::normalize($balance); ?>
+                            </td>
+                        </tr>
+                        <?php
+                        foreach ($ledgerEntryCache as $row):
+                            $balance += $row->euroAmount;
+                            if ($row->id !== $editId) {
+                                $this->printRow($row, $filters, $lang, $balance);
+                            } else {
+                                $this->printEditor($row, $balance);
+                            }
+                        endforeach;
+                        if ($editId === 0) {
+                            $this->printEditor(null, $balance);
+                        }
+                        ?>
+                    </tbody>
+                </table>
+            </div>
+        </form>
+        <?php
+    }
+    private function printRow(LedgerEntry $row, array $filters, string $lang, float $balance)
+    {
+        $baseLink = "index.php?action=ledger_entries&";
+        $filtersArray = array_combine(
+            array_map(fn($k) => "filter_$k", array_keys($filters)),
+            array_values($filters)
+        );
+        $idQuery = http_build_query(array_merge($filtersArray, ['id' => $row->id]));
+        $categoryQuery = http_build_query(array_merge($filtersArray, ['filter_entryType' => $row->categoryId]));
+        $accountQuery = http_build_query(array_merge($filtersArray, ['filter_accountId' => $row->accountId]));
+        $templateData['lang'] = $lang;
+        $templateData['rowId'] = $row->id;
+        $templateData['label'] = [
+            'id' => $this->app->l10n()->l('id'),
+            'date' => $this->app->l10n()->l('date'),
+            'category' => $this->app->l10n()->l('category'),
+            'currency' => $this->app->l10n()->l('currency'),
+            'account' => $this->app->l10n()->l('account'),
+            'dc' => $this->app->l10n()->l('dc'),
+            'amount' => $this->app->l10n()->l('amount'),
+            'remarks' => $this->app->l10n()->l('remarks'),
+            'balance' => $this->app->l10n()->l('balance'),
+        ];
+        $templateData['text'] = [
+            'id' => $row->id,
+            'date' => $row->entryDate,
+            'category' => ($row->category->parentId > 0 ? $row->category->parentDescription . "&#8594;" : "") . $row->category->description,
+            'currency' => $row->currency->description,
+            'account' => $row->account->name,
+            'dc' => $row->direction == "1" ? "Dep" : "Lev",
+            'amount' => NumberUtil::normalize($row->currencyAmount),
+            'remarks' => $row->remarks,
+            'balance' => NumberUtil::normalize($balance)
+        ];
+        $templateData['href'] = [
+            'id' => "{$baseLink}{$idQuery}",
+            'category' => "{$baseLink}{$categoryQuery}",
+            'account' => "{$baseLink}{$accountQuery}"
+        ];
+        $templateData['title'] = [
+            'id' => "{$this->app->l10n()->l('click_to_edit')}&#10;{$this->app->l10n()->l('modified_by_at',$row->username,$row->updatedAt)}",
+            'category' => "Filtrar lista para esta categoria",
+            'account' => "Filtrar lista para esta conta",
+        ];
+        $rowTemplate = new LedgerEntryViewTemplate();
+        $rowTemplate->render($templateData);
+    }
+    private function printEditor(?LedgerEntry $row, float $balance)
+    {
+        $defaults = $this->data['defaults'];
+        $accountSelectOptions = $this->data['accountSelectOptions'];
+        $currencySelectOptions = $this->data['currencySelectOptions'];
+        $entryTypesSelectOptions = $this->data['entryTypesSelectOptions'];
+        $editRow['id'] = $row !== null ? $row->id : "NULL";
+        $editRow['date'] = $row !== null ? $row->entryDate : $defaults->entryDate;
+        $editRow['amount'] = $row !== null ? $row->currencyAmount : 0.00;
+        $editRow['direction'] = $row !== null ? $row->direction : 0.00;
+        $editRow['remarks'] = $row !== null ? $row->remarks : "";
+        if ($row === null) {
+        ?>
+            <tfoot>
+            <?php
+        }
+            ?>
+            <tr>
+                <td data-label=""><input type="hidden" name="id" value="<?= $editRow['id'] ?>">
+                    <input class="submit" type="submit" name="save" value="<?= $this->app->l10n()->l('save') ?>">
+                </td>
+                <td data-label="<?= $this->app->l10n()->l('date') ?>" class="id">
+                    <select class="date-fallback" style="display: none" name="data_movAA">
+                        <?= Html::yearOptions(substr($editRow['date'], 0, 4)) ?>
+                    </select>
+                    <select class="date-fallback" style="display: none" name="data_movMM">
+                        <?= Html::monthOptions(substr($editRow['date'], 5, 2)) ?>
+                    </select>
+                    <select class="date-fallback" style="display: none" name="data_movDD">
+                        <?= Html::dayOptions(substr($editRow['date'], 8, 2)) ?>
+                    </select>
+                    <input class="date-fallback" type="date" id="data_mov" name="data_mov" required value="<?= $editRow['date'] ?>">
+                </td>
+                <td data-label="<?= $this->app->l10n()->l('category') ?>" class="category"><select
+                        name="categoryId"><?= $entryTypesSelectOptions ?></select></td>
+                <td data-label="<?= $this->app->l10n()->l('currency') ?>" class="currency"><select
+                        name="currencyId"><?= $currencySelectOptions ?></select>
+                </td>
+                <td data-label="<?= $this->app->l10n()->l('account') ?>" class="account"><select
+                        name="accountId"><?= $accountSelectOptions ?></select>
+                </td>
+                <td data-label="<?= $this->app->l10n()->l('dc') ?>" class="direction">
+                    <select name="direction">
+                        <option value="1" <?= (int)$editRow['direction'] === 1 ? " selected " : "" ?>>
+                            <?= $this->app->l10n()->l('deposit') ?>
+                        </option>
+                        <option value="-1" <?= (int)$editRow['direction'] === -1 ? " selected " : "" ?>>
+                            <?= $this->app->l10n()->l('withdraw') ?>
+                        </option>
+                    </select>
+                </td>
+                <td data-label="<?= $this->app->l10n()->l('amount') ?>" class="amount"><input type="number" step="0.01"
+                        name="currencyAmount" placeholder="0.00" value="<?= $editRow['amount'] ?>"></td>
+                <td data-label="<?= $this->app->l10n()->l('remarks') ?>" class="remarks"><input type="text" name="remarks"
+                        maxlength="255" value="<?= $editRow['remarks'] ?>"></td>
+                <td data-label="<?= $this->app->l10n()->l('balance') ?>" class="total" style="text-align: right">
+                    <?= NumberUtil::normalize($balance) ?>
+                </td>
+            </tr>
+            <?php
+            if ($row === null) {
+            ?>
+            </tfoot>
+        <?php
+            }
+        ?>
 <?php
     }
 }

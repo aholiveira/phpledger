@@ -86,33 +86,67 @@ trait MySqlObject
      * @param ?string $table_name table name to be used. if supplied where expression is built using "table_name.field_name" syntax
      * @return string SQL "WHERE" condition string built from the supplied values or an empty string
      */
-    protected static function getWhereFromArray(array $fieldFilter, ?string $table_name = null): string
+    protected static function getWhereFromArray(array $fieldFilter, ?string $table = null): string
     {
         if (!$fieldFilter) {
             return "";
         }
 
         $db = MySqlStorage::getConnection();
-        $allowedOps = ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'BETWEEN', 'IS'];
+        $allowed = ['=', '!=', '<', '>', '<=', '>=', 'LIKE', 'BETWEEN', 'IS', 'IN'];
+
+        $escape = fn($v) => "'" . $db->real_escape_string($v) . "'";
+        $fieldName = fn($f) => $table ? "`$table`.`$f`" : "`$f`";
 
         $parts = [];
+
         foreach ($fieldFilter as $field => $filter) {
             $op = strtoupper($filter['operator']);
-            if (!\in_array($op, $allowedOps)) {
+            if (!in_array($op, $allowed)) {
                 continue;
             }
-            $name = $table_name ? "`$table_name`.`$field`" : "`$field`";
-            if ($op === 'BETWEEN' && \is_array($filter['value'])) {
-                $v1 = "'" . $db->real_escape_string($filter['value'][0]) . "'";
-                $v2 = "'" . $db->real_escape_string($filter['value'][1]) . "'";
-                $parts[] = "$name BETWEEN $v1 AND $v2";
-            } else {
-                $val = $filter['value'] === null && $op === "IS" ? "NULL" :
-                    $val = "'" . $db->real_escape_string($filter['value']) . "'";
-                $parts[] = "$name $op $val";
+
+            $name = $fieldName($field);
+            $val = $filter['value'];
+
+            $sql = self::buildCondition($name, $op, $val, $escape);
+            if ($sql) {
+                $parts[] = $sql;
             }
         }
+
         return $parts ? "WHERE " . implode(" AND ", $parts) : "";
+    }
+
+    private static function buildCondition(string $name, string $op, mixed $val, callable $escape): ?string
+    {
+        return match ($op) {
+            'BETWEEN' => self::handleBetween($name, $val, $escape),
+            'IN'      => self::handleIn($name, $val, $escape),
+            'IS', '=', '!=', '<', '>', '<=', '>=', 'LIKE' => self::handleDefault($name, $op, $val, $escape),
+            default   => null,
+        };
+    }
+
+    private static function handleBetween(string $name, mixed $val, callable $escape): ?string
+    {
+        if (!is_array($val) || count($val) < 2) {
+            return null;
+        }
+        return "$name BETWEEN {$escape($val[0])} AND {$escape($val[1])}";
+    }
+
+    private static function handleIn(string $name, mixed $val, callable $escape): string
+    {
+        $vals = is_array($val) ? $val : [$val];
+        $list = implode(',', array_map($escape, $vals));
+        return "$name IN ($list)";
+    }
+
+    private static function handleDefault(string $name, string $op, mixed $val, callable $escape): string
+    {
+        $valueSql = ($val === null && $op === "IS") ? "NULL" : $escape($val);
+        return "$name $op $valueSql";
     }
     abstract public static function getList(array $fieldFilter = []): array;
     abstract public static function getDefinition(): array;
