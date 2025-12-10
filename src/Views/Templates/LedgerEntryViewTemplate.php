@@ -2,7 +2,7 @@
 
 namespace PHPLedger\Views\Templates;
 
-class LedgerEntryViewTemplate extends AbstractViewTemplate
+final class LedgerEntryViewTemplate extends AbstractViewTemplate
 {
     public function render(array $data): void
     {
