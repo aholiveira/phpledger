@@ -11,8 +11,6 @@
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Domain\Account;
-use PHPLedger\Storage\ObjectFactory;
-use PHPLedger\Util\Html;
 use PHPLedger\Util\NumberUtil;
 use PHPLedger\Views\Templates\BalancesViewTemplate;
 
@@ -20,7 +18,7 @@ final class BalancesController extends AbstractViewController
 {
     protected function handle(): void
     {
-        $object = ObjectFactory::account();
+        $object = $this->app->dataFactory()->account();
         $objectList = $object->getList(['activa' => ['operator' => '=', 'value' => '1']]);
         $type_names = ['income', 'expense', 'balance'];
         $totals = array_fill_keys($type_names, 0);
