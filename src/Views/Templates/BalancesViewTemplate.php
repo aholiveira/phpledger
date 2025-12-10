@@ -48,7 +48,7 @@ final class BalancesViewTemplate extends AbstractViewTemplate
                             </thead>
                             <tbody>
                                 <?php
-                                foreach ($rows as $row):
+                                foreach ($rows as $row) {
                                 ?>
                                     <tr>
                                         <td class="account" data-label="<?= $l10n['account'] ?>">
@@ -66,7 +66,7 @@ final class BalancesViewTemplate extends AbstractViewTemplate
                                         </td>
                                     </tr>
                                 <?php
-                                endforeach;
+                                }
                                 ?>
                             </tbody>
                         </table>
