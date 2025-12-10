@@ -56,11 +56,9 @@ final class BalancesViewTemplate extends AbstractViewTemplate
                                             <?= $row['text']['name'] ?>
                                             <?= !empty($row['href']['name']) ? "</a>" : "" ?>
                                         </td>
-                                        <td class="deposits" data-label="<?= $l10n['deposits'] ?>"><?= $row['text']['deposits'] ?></td>
-                                        <td class="withdrawals" data-label="<?= $l10n['withdrawals'] ?>"><?= $row['text']['withdrawals'] ?></td>
-                                        <td class="balance" data-label="<?= $l10n['balance'] ?>"><?= $row['text']['balance'] ?></td>
-                                        <td class="percent" data-label="<?= $l10n['percent'] ?>"><?= $row['text']['percent'] ?></td>
-
+                                        <?php foreach (["deposits", "withdrawals", "balance", "percent"] as $r): ?>
+                                            <td class="<?= $r ?>" data-label="<?= $l10n[$r] ?>"><?= $row['text'][$r] ?></td>
+                                        <?php endforeach; ?>
                                         <td class="entries-list" data-label="<?= $l10n['entries'] ?>">
                                             <?php if (!empty($row['href']['entries'])): ?>
                                                 <a title="<?= $l10n['account_entries'] ?>" href="<?= $row['href']['entries'] ?>"><?= $l10n['list'] ?></a>
