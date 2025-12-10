@@ -26,6 +26,9 @@ class MySqlEntryCategory extends EntryCategory
         if (!isset($this->active)) {
             $this->active = 0;
         }
+        if (!isset($this->parentId) || $this->parentId === null) {
+            $this->parentId = 0;
+        }
     }
     public static function getDefinition(): array
     {
@@ -175,6 +178,9 @@ class MySqlEntryCategory extends EntryCategory
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
+            }
+            if ($this->id !== 0 && (!isset($this->parentId) || $this->parentId === null)) {
+                $this->parentId = 0;
             }
             $stmt->bind_param("isii", $this->parentId, $this->description, $this->active, $this->id);
             $retval = $stmt->execute();

@@ -24,7 +24,7 @@ final class EntryCategoryListController extends AbstractViewController
     {
         $success = false;
         try {
-            if ($this->request->method() == "POST") {
+            if ($this->request->method() === "POST") {
                 $filterArray = [
                     "id" => FILTER_VALIDATE_INT,
                     "description" => FILTER_DEFAULT,
@@ -35,10 +35,10 @@ final class EntryCategoryListController extends AbstractViewController
                 $filtered = filter_var_array($this->request->all(), $filterArray, true);
                 $action = strtolower($filtered["update"] ?? "");
                 $this->object = ObjectFactory::entryCategory();
-                if ($action === "gravar") {
+                if ($action === "save") {
                     $success = $this->handleUpdate($filtered);
                 }
-                if ($action === "apagar") {
+                if ($action === "delete") {
                     $success = $this->handleDelete($filtered);
                 }
                 if (!$success) {
@@ -55,10 +55,10 @@ final class EntryCategoryListController extends AbstractViewController
 
     private function handleUpdate(array $filtered): bool
     {
-        $this->object->id = (int)$filtered['id'] ?? 0;
+        $this->object->id = empty($filtered['id']) ? $this->object->getNextId() : $filtered['id'];
         $this->object->description = $filtered['description'] ?? "";
         if (isset($filtered['parentId'])) {
-            $this->object->parentId = $filtered['parentId'] !== 0 ? $filtered['parentId'] : null;
+            $this->object->parentId = $filtered['parentId'] !== 0 ? $filtered['parentId'] : 0;
         }
         if ($this->object->parentId === $this->object->id) {
             throw new PHPLedgerException("N&atilde;o pode colocar uma categoria como ascendente dela propria!");
