@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1765329923">
-  <project timestamp="1765329923">
+<coverage generated="1765330158">
+  <project timestamp="1765330158">
     <file name="C:\pessoal\work\contas\src\Application.php">
       <class name="PHPLedger\Application" namespace="global">
         <metrics complexity="23" methods="15" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="47" coveredstatements="0" elements="62" coveredelements="0"/>
@@ -404,52 +404,20 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Controllers\EntryCategoryFormController.php">
       <class name="PHPLedger\Controllers\EntryCategoryFormController" namespace="global">
-        <metrics complexity="6" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="42" coveredstatements="0" elements="43" coveredelements="0"/>
+        <metrics complexity="3" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="0" elements="11" coveredelements="0"/>
       </class>
-      <line num="22" type="method" name="handle" visibility="protected" complexity="6" crap="42" count="0"/>
+      <line num="19" type="method" name="handle" visibility="protected" complexity="3" crap="12" count="0"/>
+      <line num="21" type="stmt" count="0"/>
+      <line num="22" type="stmt" count="0"/>
+      <line num="23" type="stmt" count="0"/>
       <line num="24" type="stmt" count="0"/>
       <line num="25" type="stmt" count="0"/>
       <line num="26" type="stmt" count="0"/>
-      <line num="27" type="stmt" count="0"/>
       <line num="28" type="stmt" count="0"/>
       <line num="29" type="stmt" count="0"/>
+      <line num="30" type="stmt" count="0"/>
       <line num="31" type="stmt" count="0"/>
-      <line num="32" type="stmt" count="0"/>
-      <line num="33" type="stmt" count="0"/>
-      <line num="34" type="stmt" count="0"/>
-      <line num="35" type="stmt" count="0"/>
-      <line num="36" type="stmt" count="0"/>
-      <line num="37" type="stmt" count="0"/>
-      <line num="38" type="stmt" count="0"/>
-      <line num="40" type="stmt" count="0"/>
-      <line num="41" type="stmt" count="0"/>
-      <line num="42" type="stmt" count="0"/>
-      <line num="43" type="stmt" count="0"/>
-      <line num="44" type="stmt" count="0"/>
-      <line num="45" type="stmt" count="0"/>
-      <line num="46" type="stmt" count="0"/>
-      <line num="47" type="stmt" count="0"/>
-      <line num="48" type="stmt" count="0"/>
-      <line num="49" type="stmt" count="0"/>
-      <line num="50" type="stmt" count="0"/>
-      <line num="51" type="stmt" count="0"/>
-      <line num="52" type="stmt" count="0"/>
-      <line num="53" type="stmt" count="0"/>
-      <line num="54" type="stmt" count="0"/>
-      <line num="55" type="stmt" count="0"/>
-      <line num="56" type="stmt" count="0"/>
-      <line num="57" type="stmt" count="0"/>
-      <line num="58" type="stmt" count="0"/>
-      <line num="59" type="stmt" count="0"/>
-      <line num="60" type="stmt" count="0"/>
-      <line num="61" type="stmt" count="0"/>
-      <line num="62" type="stmt" count="0"/>
-      <line num="63" type="stmt" count="0"/>
-      <line num="64" type="stmt" count="0"/>
-      <line num="65" type="stmt" count="0"/>
-      <line num="66" type="stmt" count="0"/>
-      <line num="67" type="stmt" count="0"/>
-      <metrics loc="70" ncloc="63" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="42" coveredstatements="0" elements="43" coveredelements="0"/>
+      <metrics loc="34" ncloc="27" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="0" elements="11" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Controllers\EntryCategoryListController.php">
       <class name="PHPLedger\Controllers\EntryCategoryListController" namespace="global">
@@ -5398,6 +5366,6 @@
       <line num="65" type="stmt" count="0"/>
       <metrics loc="68" ncloc="60" classes="1" methods="8" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="0" elements="18" coveredelements="0"/>
     </file>
-    <metrics files="111" loc="9360" ncloc="8611" classes="91" methods="402" coveredmethods="125" conditionals="0" coveredconditionals="0" statements="4372" coveredstatements="1072" elements="4774" coveredelements="1197"/>
+    <metrics files="111" loc="9324" ncloc="8575" classes="91" methods="402" coveredmethods="125" conditionals="0" coveredconditionals="0" statements="4340" coveredstatements="1072" elements="4742" coveredelements="1197"/>
   </project>
 </coverage>
