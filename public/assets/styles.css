@@ -416,6 +416,13 @@ tr.expense {
     color: #990000;
 }
 
+.editlink {
+    text-align: center;
+}
+
+.active {
+    text-align: center;
+}
 @media only screen and (max-width: 1024px) {
     div {
         margin-left: 0;
