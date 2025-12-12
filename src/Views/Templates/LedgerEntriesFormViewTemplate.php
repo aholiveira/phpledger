@@ -19,7 +19,7 @@ final class LedgerEntriesFormViewTemplate extends AbstractViewTemplate
     {
         extract($data, EXTR_SKIP);
 ?>
-        <?php if ($formData['id'] === null) {
+        <?php if ($formData['id'] === 0) {
         ?>
             <tfoot>
             <?php
@@ -83,7 +83,7 @@ final class LedgerEntriesFormViewTemplate extends AbstractViewTemplate
                 <td data-label="<?= $labels['balance'] ?>" class="total" style="text-align: right"><?= $formData['balance'] ?></td>
             </tr>
             <?php
-            if ($formData['id'] === null) {
+            if ($formData['id'] === 0) {
             ?>
             </tfoot>
         <?php
