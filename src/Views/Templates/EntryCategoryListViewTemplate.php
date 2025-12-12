@@ -28,7 +28,7 @@ final class EntryCategoryListViewTemplate extends AbstractViewTemplate
                 <div id="preloader">
                     <div class="spinner"></div>
                 </div>
-                <?php Html::menu($app->l10n(), $isAdmin); ?>
+                <?php $ui->menu($label, $menu); ?>
                 <div class="header">
                     <p style="margin:0"><a href="index.php?action=entry_type"><?= $label['add'] ?></a></p>
                 </div>
@@ -68,7 +68,7 @@ final class EntryCategoryListViewTemplate extends AbstractViewTemplate
                         </table>
                     </div>
                 </div>
-                <?php Html::footer($app, $action); ?>
+                <?php $ui->footer($label, $footer); ?>
             </div>
             <script>
                 setTimeout(() => {
