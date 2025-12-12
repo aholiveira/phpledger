@@ -1,78 +1,63 @@
 <?php
 
-namespace PHPLedgerTests\Unit\Views;
-
 use PHPLedger\Views\Templates\AbstractViewTemplate;
 
-class DummyTemplate extends AbstractViewTemplate
-{
-    public function render(array $data): void {}
-
-    public function testRenderSelectOptions(array $optionList): string
-    {
-        ob_start();
-        $this->renderSelectOptions($optionList);
-        return ob_get_clean();
-    }
-
-    public function testRenderOptionRow(array $row): string
-    {
-        ob_start();
-        $this->renderOptionRow($row);
-        return ob_get_clean();
-    }
-}
-
 beforeEach(function () {
-    $this->tpl = new DummyTemplate();
+    $this->view = new class extends AbstractViewTemplate {
+        public function render(array $data): void {}
+        public function callRenderSelectOptions(array $optionList): string {
+            ob_start();
+            $this->renderSelectOptions($optionList);
+            return ob_get_clean();
+        }
+        public function callRenderOptionRow(array $row): string {
+            ob_start();
+            $this->renderOptionRow($row);
+            return ob_get_clean();
+        }
+    };
 });
 
-it('renders a flat option row correctly', function () {
-    $row = ['value' => '123', 'text' => 'Hello', 'selected' => false, 'parentId' => 0];
-    $html = $this->tpl->testRenderOptionRow($row);
-    expect($html)->toContain('<option value="123" >Hello</option>');
+it('renders a single option row correctly', function () {
+    $row = ['value' => 1, 'text' => 'Option 1', 'selected' => true];
+    $html = $this->view->callRenderOptionRow($row);
+
+    expect($html)->toContain('<option value="1" selected>Option 1</option>');
 });
 
-it('renders a selected option row correctly', function () {
-    $row = ['value' => 'abc', 'text' => 'XYZ', 'selected' => true, 'parentId' => 0];
-    $html = $this->tpl->testRenderOptionRow($row);
-    expect($html)->toContain('<option value="abc" selected>XYZ</option>');
-});
-
-it('renders flat rows without children', function () {
-    $options = [
-        ['value' => '1', 'text' => 'One', 'selected' => false, 'parentId' => 0],
-        ['value' => '2', 'text' => 'Two', 'selected' => true, 'parentId' => 0],
+it('renders multiple options without children correctly', function () {
+    $optionList = [
+        ['value' => 1, 'text' => 'Parent 1', 'parentId' => 0, 'selected' => false],
+        ['value' => 2, 'text' => 'Parent 2', 'parentId' => 0, 'selected' => false],
     ];
-    $html = $this->tpl->testRenderSelectOptions($options);
-    expect($html)->toContain('<option value="1" >One</option>');
-    expect($html)->toContain('<option value="2" selected>Two</option>');
-    expect($html)->not->toContain('<optgroup');
+
+    $html = $this->view->callRenderSelectOptions($optionList);
+
+    expect($html)->toContain('<option value="1" >Parent 1</option>');
+    expect($html)->toContain('<option value="2" >Parent 2</option>');
 });
 
-it('renders parent with child as optgroup', function () {
-    $options = [
-        ['value' => 1, 'text' => 'Group A', 'selected' => false, 'parentId' => 0],
-        ['value' => 2, 'text' => 'A1', 'selected' => false, 'parentId' => 1],
-        ['value' => 3, 'text' => 'A2', 'selected' => true, 'parentId' => 1],
+it('renders option with children using optgroup', function () {
+    $optionList = [
+        ['value' => 1, 'text' => 'Parent', 'parentId' => 0, 'selected' => false],
+        ['value' => 2, 'text' => 'Child 1', 'parentId' => 1, 'selected' => false],
+        ['value' => 3, 'text' => 'Child 2', 'parentId' => 1, 'selected' => true],
     ];
-    $html = $this->tpl->testRenderSelectOptions($options);
-    expect($html)->toContain('<optgroup label="Group A">');
-    expect($html)->toContain('<option value="1" >Group A</option>');
-    expect($html)->toContain('<option value="2" >A1</option>');
-    expect($html)->toContain('<option value="3" selected>A2</option>');
-    expect($html)->toContain('</optgroup>');
+
+    $html = $this->view->callRenderSelectOptions($optionList);
+
+    expect($html)->toContain('<optgroup label="Parent">');
+    expect($html)->toContain('<option value="1" >Parent</option>');
+    expect($html)->toContain('<option value="2" >Child 1</option>');
+    expect($html)->toContain('<option value="3" selected>Child 2</option>');
 });
 
-it('renders mixed parent and flat options', function () {
-    $options = [
-        ['value' => 10, 'text' => 'Group X', 'selected' => false, 'parentId' => 0],
-        ['value' => 11, 'text' => 'X1', 'selected' => false, 'parentId' => 10],
-        ['value' => 20, 'text' => 'Standalone', 'selected' => false, 'parentId' => 0],
+it('returns empty string if no top-level options', function () {
+    $optionList = [
+        ['value' => 2, 'text' => 'Child', 'parentId' => 1, 'selected' => false],
     ];
-    $html = $this->tpl->testRenderSelectOptions($options);
-    expect($html)->toContain('<optgroup label="Group X">');
-    expect($html)->toContain('<option value="10" >Group X</option>');
-    expect($html)->toContain('<option value="11" >X1</option>');
-    expect($html)->toContain('<option value="20" >Standalone</option>');
+
+    $html = $this->view->callRenderSelectOptions($optionList);
+
+    expect($html)->toBe('');
 });

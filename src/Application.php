@@ -12,7 +12,6 @@ use PHPLedger\Contracts\SessionServiceInterface;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\ConfigPath;
-use PHPLedger\Util\Html;
 use PHPLedger\Util\L10n;
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\Path;
