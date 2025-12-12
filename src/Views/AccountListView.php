@@ -60,7 +60,7 @@ final class AccountListView
                         <tbody>
                             <?php foreach ($list as $obj): ?>
                                 <tr>
-                                    <td data-label="<?= $this->app->l10n()->l("id") ?>"><a href="index.php?action=account&id=<?= (int)($obj->id ?? 0) ?>&lang=<?= $lang ?>"><?php echo htmlspecialchars($obj->id ?? ''); ?></a></td>
+                                    <td data-label="<?= $this->app->l10n()->l("id") ?>"><?= htmlspecialchars($obj->id ?? '') ?></a></td>
                                     <td data-label="<?= $this->app->l10n()->l("name") ?>"><?= htmlspecialchars($obj->name ?? '') ?></td>
                                     <td data-label="<?= $this->app->l10n()->l("number") ?>"><?= htmlspecialchars($obj->number ?? '') ?></td>
                                     <td data-label="<?= $this->app->l10n()->l("type") ?>">
@@ -81,15 +81,7 @@ final class AccountListView
                                     <td data-label="<?= $this->app->l10n()->l("open") ?>"><?= htmlspecialchars($obj->openDate ?? '') ?></td>
                                     <td data-label="<?= $this->app->l10n()->l("close") ?>"><?= htmlspecialchars($obj->closeDate ?? '') ?></td>
                                     <td data-label="<?= $this->app->l10n()->l("active") ?>"><?= !empty($obj->activa) ? $this->app->l10n()->l("yes") : $this->app->l10n()->l("no") ?></td>
-                                    <td data-label="<?= $this->app->l10n()->l("actions") ?>">
-                                        <form method="POST" action="index.php?action=account" style="display:inline" onsubmit="return confirm('Delete this account?');">
-                                            <?= CSRF::inputField() ?>
-                                            <input type="hidden" name="action" value="account">
-                                            <input type="hidden" name="itemaction" value="delete">
-                                            <input type="hidden" name="id" value="<?= (int)($obj->id ?? 0) ?>">
-                                            <button type="submit" style="background:none;border:none;color:inherit;cursor:pointer;padding:0"><?= $this->app->l10n()->l("delete") ?></button>
-                                        </form>
-                                    </td>
+                                    <td data-label="<?= $this->app->l10n()->l("actions") ?>"><a href="index.php?action=account&id=<?= (int)($obj->id ?? 0) ?>&lang=<?= $lang ?>"><?= $this->app->l10n()->l("edit") ?></a></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
