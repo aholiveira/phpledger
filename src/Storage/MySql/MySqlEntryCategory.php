@@ -11,6 +11,7 @@
 namespace PHPLedger\Storage\MySql;
 
 use PHPLedger\Domain\EntryCategory;
+use PHPLedger\Util\Logger;
 
 class MySqlEntryCategory extends EntryCategory
 {
@@ -176,8 +177,12 @@ class MySqlEntryCategory extends EntryCategory
             if ($stmt === false) {
                 throw new \mysqli_sql_exception();
             }
-            $stmt->bind_param("isii", $this->parentId, $this->description, $this->active, $this->id);
+            if ($this->id === null) {
+                $this->id = $this->getNextId();
+            }
+            $stmt->bind_param("ssss", $this->parentId, $this->description, $this->active, $this->id);
             $retval = $stmt->execute();
+            Logger::instance()->debug("Stored id [{$this->id}]", __CLASS__ . " " . __FUNCTION__ . "");
         } catch (\Exception $ex) {
             $this->handleException($ex, $sql);
         } finally {

@@ -13,8 +13,8 @@ namespace PHPLedger\Controllers;
 use Exception;
 use PHPLedger\Domain\EntryCategory;
 use PHPLedger\Exceptions\PHPLedgerException;
-use PHPLedger\Storage\ObjectFactory;
-use PHPLedger\Views\EntryCategoryListView;
+use PHPLedger\Util\NumberUtil;
+use PHPLedger\Views\Templates\EntryCategoryListViewTemplate;
 
 final class EntryCategoryListController extends AbstractViewController
 {
@@ -24,7 +24,7 @@ final class EntryCategoryListController extends AbstractViewController
     {
         $success = false;
         try {
-            if ($this->request->method() == "POST") {
+            if ($this->request->method() === "POST") {
                 $filterArray = [
                     "id" => FILTER_VALIDATE_INT,
                     "description" => FILTER_DEFAULT,
@@ -34,11 +34,11 @@ final class EntryCategoryListController extends AbstractViewController
                 ];
                 $filtered = filter_var_array($this->request->all(), $filterArray, true);
                 $action = strtolower($filtered["update"] ?? "");
-                $this->object = ObjectFactory::entryCategory();
-                if ($action === "gravar") {
+                $this->object = $this->app->dataFactory()->entryCategory();
+                if ($action === "save") {
                     $success = $this->handleUpdate($filtered);
                 }
-                if ($action === "apagar") {
+                if ($action === "delete") {
                     $success = $this->handleDelete($filtered);
                 }
                 if (!$success) {
@@ -49,16 +49,50 @@ final class EntryCategoryListController extends AbstractViewController
         } catch (Exception $e) {
             $message = $e->getMessage();
         }
-        $view = new EntryCategoryListView;
-        $view->render($this->app, isset($message) ? $message : "", $success, $this->request->input('action'));
+        $object = $this->app->dataFactory()->entryCategory();
+        $objectList = $object->getList();
+        $rows = [];
+
+        foreach ($objectList as $category) {
+            if ($category->id > 0) {
+                $rows[] = $this->makeRow($category);
+            }
+            foreach ($category->children as $child) {
+                $rows[] = $this->makeRow($child);
+            }
+        }
+        $template = new EntryCategoryListViewTemplate();
+        $template->render([
+            'title'    => 'Tipos de movimentos',
+            'app'      => $this->app,
+            'object'   => $object,
+            'lang'     => $this->app->l10n()->html(),
+            'action'   => $this->request->input('action', 'entry_types'),
+            'isAdmin'  => $this->app->session()->get('isAdmin', false),
+            'message'  => htmlentities($message ?? ''),
+            'success'  => $success ?? false,
+            'rows'     => $rows,
+            'label'    => [
+                'add'         => htmlspecialchars('Adicionar'),
+                'id'          => htmlspecialchars('ID'),
+                'category'    => htmlspecialchars('Categoria'),
+                'description' => htmlspecialchars('Descrição'),
+                'amount'      => htmlspecialchars('Valor'),
+                'active'      => htmlspecialchars('Activa'),
+                'edit'        => htmlspecialchars('Editar'),
+                'edit_category' => htmlspecialchars('Editar esta categoria'),
+                'actions'     => htmlspecialchars('Acções'),
+            ]
+
+        ]);
     }
 
     private function handleUpdate(array $filtered): bool
     {
-        $this->object->id = (int)$filtered['id'] ?? 0;
+        $this->object->id = empty($filtered['id']) ? $this->object->getNextId() : $filtered['id'];
         $this->object->description = $filtered['description'] ?? "";
         if (isset($filtered['parentId'])) {
-            $this->object->parentId = $filtered['parentId'] !== 0 ? $filtered['parentId'] : null;
+            $this->object->parentId = $filtered['parentId'] !== 0 ? $filtered['parentId'] : 0;
         }
         if ($this->object->parentId === $this->object->id) {
             throw new PHPLedgerException("N&atilde;o pode colocar uma categoria como ascendente dela propria!");
@@ -79,5 +113,16 @@ final class EntryCategoryListController extends AbstractViewController
             return $this->object->delete();
         }
         return false;
+    }
+    private function makeRow(EntryCategory $c): array
+    {
+        return [
+            'href'        => ($c->id ?? 0) > 0 ? "index.php?action=entry_type&id={$c->id}" : "",
+            'id'          => $c->id ?? "",
+            'parentId'      => $c->parentId,
+            'description' => $c->description ?? '',
+            'amount'      => NumberUtil::normalize(abs($c->getBalance())),
+            'active'      => $c->active
+        ];
     }
 }

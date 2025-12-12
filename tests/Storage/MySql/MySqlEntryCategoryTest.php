@@ -17,7 +17,7 @@ beforeEach(function () {
     ObjectFactory::init("mysql");
     $this->db = MySqlStorage::getConnection();
     $this->db->query("DELETE FROM movimentos");
-    $this->db->query("DELETE FROM tipo_mov");
+    $this->db->query("DELETE FROM tipo_mov WHERE id > 0");
 });
 
 function createCategory(int $id = 1, ?int $parentId = null, string $desc = 'Cat', int $active = 1): MySqlEntryCategory
@@ -44,8 +44,8 @@ it('gets next id correctly', function () {
     expect(MySqlEntryCategory::getNextId())->toBe(1);
 
     // insert a row using the model so next-id advances
-    createCategory(1, null, 'X')->update();
-
+    $update = createCategory(1, null, 'X')->update();
+    expect($update)->toBeTrue();
     expect(MySqlEntryCategory::getNextId())->toBe(2);
 });
 
