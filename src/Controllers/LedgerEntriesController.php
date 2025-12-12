@@ -214,8 +214,8 @@ final class LedgerEntriesController extends AbstractViewController
             'id' => $editId,
             'date' => $editId > 0 ? $editEntry->entryDate : $this->defaults->entryDate,
             'entryCategoryRows' => $this->prepareEntryCategoryRows($selectedEntryCategoryId),
-            'currencyRows' => $this->prepareCurrencyRows($selectedCurrencyId),
-            'accountRows' => $this->prepareAccountRows($selectedAccountId),
+            'currencyRows' => $this->prepareCurrencyRows((int)$selectedCurrencyId),
+            'accountRows' => $this->prepareAccountRows((int)$selectedAccountId),
             'direction' => [
                 [
                     'text' => $this->app->l10n()->l('deposit'),
