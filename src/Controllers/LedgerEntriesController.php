@@ -53,41 +53,36 @@ final class LedgerEntriesController extends AbstractViewController
         [$savedEntryId, $success, $errorMessage] = $this->processRequest($this->request, $filteredInput);
         ob_start();
         $preloaderView = new LedgerEntriesPreloaderTemplate();
-        $templateData = [
-            'lang' => $lang,
+        $templateData = array_merge($this->uiData, [
             'pagetitle' => $pagetitle,
-            'success' => $success,
-            'label' => [
-                'notification' => $success ? $this->app->l10n()->l("save_success", $savedEntryId) : $errorMessage,
-            ]
-        ];
+            'success' => $success
+        ]);
+        $templateData['label']['notification'] = $success ? $this->app->l10n()->l("save_success", $savedEntryId) : $errorMessage;
         ob_end_flush();
         $preloaderView->render($templateData);
         $this->populateCaches();
-        $labels = [
-            'id' => $this->app->l10n()->l('id'),
-            'date' => $this->app->l10n()->l('date'),
-            'category' => $this->app->l10n()->l('category'),
-            'currency' => $this->app->l10n()->l('currency'),
-            'account' => $this->app->l10n()->l('account'),
-            'dc' => $this->app->l10n()->l('dc'),
-            'amount' => $this->app->l10n()->l('amount'),
-            'remarks' => $this->app->l10n()->l('remarks'),
-            'balance' => $this->app->l10n()->l('balance'),
-            'start' => $this->app->l10n()->l('start'),
-            'end' => $this->app->l10n()->l('end'),
-            'no_filter' => $this->app->l10n()->l('no_filter'),
-            'filter' => 'Filtrar',
-            'clear_filter' => 'Limpar filtro',
-            'previous_balance' => 'Saldo anterior',
-            'editlink' => 'Editar',
-            'action' => htmlentities('Acções'),
-            'save' => 'Gravar',
-            'direction' => 'D/C',
-            'deposit' => $this->app->l10n()->l('deposit'),
-            'withdrawal' => $this->app->l10n()->l('withdraw')
-        ];
-
+        $templateData['label'] = array_merge($templateData['label'], $this->buildL10nLabels($this->app->l10n(), [
+            'id',
+            'date',
+            'category',
+            'currency',
+            'account',
+            'dc',
+            'amount',
+            'remarks',
+            'balance',
+            'start',
+            'end',
+            'no_filter',
+            'filter',
+            'clear_filter',
+            'previous_balance',
+            'edit',
+            'actions',
+            'save',
+            'deposit',
+            'withdraw'
+        ]));
         $filterFormData = $this->prepareFilterFormData($filters);
         $ledgerFilters = $this->getLedgerFilters($filters);
 
@@ -111,23 +106,16 @@ final class LedgerEntriesController extends AbstractViewController
         $templateData = array_merge(
             $templateData,
             [
-                'l10n' => $this->app->l10n(),
-                'isAdmin' => $this->app->session()->get('isAdmin', false),
-                'action' => $this->request->input('action'),
                 'isEditing' => $this->isEditing,
                 'editId' => $filters['editId'],
                 'filteredInput' => $filters,
-                'success' => $success,
-                'errorMessage' => $errorMessage,
                 'filters' => $filters,
                 'defaults' => $this->defaults,
                 'startBalance' => $startBalance,
                 'transactionsInPeriod' => $this->app->l10n()->l('transactions_in_period', count($ledgerEntryRows)),
                 'ledgerEntryRows' => $ledgerEntryRows ?? [],
-                'labels' => $labels,
                 'formData' => $this->prepareFormData($ledgerEntryObject, $filters, (float)$formBalance) ?? [],
                 'filterFormData' => $filterFormData,
-                'app' => $this->app,
             ]
         );
         $view = new LedgerEntriesMainViewTemplate;

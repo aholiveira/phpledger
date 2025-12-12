@@ -23,22 +23,22 @@ final class LedgerEntriesTableViewTemplate extends AbstractViewTemplate
                 <table class="lista ledger_entry_list">
                     <thead>
                         <tr>
-                            <th scope="col"><?= $labels['action'] ?></th>
-                            <th scope="col"><?= $labels['id'] ?></th>
-                            <th scope="col"><?= $labels['date'] ?></th>
-                            <th scope="col"><?= $labels['category'] ?></th>
-                            <th scope="col"><?= $labels['currency'] ?></th>
-                            <th scope="col"><?= $labels['account'] ?></th>
-                            <th scope="col"><?= $labels['dc'] ?></th>
-                            <th scope="col"><?= $labels['amount'] ?></th>
-                            <th scope="col"><?= $labels['remarks'] ?></th>
-                            <th scope="col"><?= $labels['balance'] ?></th>
+                            <th scope="col"><?= $label['actions'] ?></th>
+                            <th scope="col"><?= $label['id'] ?></th>
+                            <th scope="col"><?= $label['date'] ?></th>
+                            <th scope="col"><?= $label['category'] ?></th>
+                            <th scope="col"><?= $label['currency'] ?></th>
+                            <th scope="col"><?= $label['account'] ?></th>
+                            <th scope="col"><?= $label['dc'] ?></th>
+                            <th scope="col"><?= $label['amount'] ?></th>
+                            <th scope="col"><?= $label['remarks'] ?></th>
+                            <th scope="col"><?= $label['balance'] ?></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="balance-label" colspan="9"><?= $labels['previous_balance'] ?></td>
-                            <td data-label="<?= $labels['previous_balance'] ?>" class="balance">
+                            <td class="balance-label" colspan="9"><?= $label['previous_balance'] ?></td>
+                            <td data-label="<?= $label['previous_balance'] ?>" class="balance">
                                 <?= NumberUtil::normalize($startBalance); ?>
                             </td>
                         </tr>
@@ -47,7 +47,7 @@ final class LedgerEntriesTableViewTemplate extends AbstractViewTemplate
                         $formTemplate = new LedgerEntriesFormViewTemplate();
                         $rowTemplateData = [
                             'lang' => $lang,
-                            'labels' => $labels
+                            'label' => $label
                         ];
                         foreach ($ledgerEntryRows as $row):
                             $rowTemplateData = array_merge(

@@ -18,11 +18,11 @@ final class LedgerEntriesFilterViewTemplate extends AbstractViewTemplate
     {
         extract($data, EXTR_SKIP);
 ?>
-        <form id="datefilter" name="datefilter" action="?lang=<?= $l10n->lang() ?>" method="GET">
+        <form id="datefilter" name="datefilter" action="?lang=<?= $lang ?>" method="GET">
             <input name="action" value="ledger_entries" type="hidden">
             <input name="lang" value="<?= $lang ?>" type="hidden">
             <p>
-                <label for="filter_startDateSpan"><?= $labels['start'] ?></label>
+                <label for="filter_startDateSpan"><?= $label['start'] ?></label>
                 <span id="filter_startDateSpan">
                     <select class="date-fallback" style="display: none" name="filter_startDateAA"
                         onchange="update_date('filter_startDate');"><?= Html::yearOptions(substr($filterFormData['startDate'], 0, 4)) ?></select>
@@ -34,7 +34,7 @@ final class LedgerEntriesFilterViewTemplate extends AbstractViewTemplate
                 </span>
             </p>
             <p>
-                <label for="filter_endDateSpan"><?= $labels['end'] ?></label>
+                <label for="filter_endDateSpan"><?= $label['end'] ?></label>
                 <span id="filter_endDateSpan">
                     <select class="date-fallback" style="display: none" name="filter_endDateAA"
                         onchange="update_date('filter_endDate');"><?= Html::yearOptions(substr($filterFormData['endDate'], 0, 4)) ?></select>
@@ -46,25 +46,25 @@ final class LedgerEntriesFilterViewTemplate extends AbstractViewTemplate
                 </span>
             </p>
             <p>
-                <label for="filter_accountId"><?= $labels['account'] ?></label>
+                <label for="filter_accountId"><?= $label['account'] ?></label>
                 <select name="filter_accountId" id="filter_accountId" data-placeholder="Seleccione a conta"
                     data-max="2" data-search="false" data-select-all="true" data-list-all="true"
                     data-width="300px" data-height="50px" data-multi-select>
-                    <option value><?= $labels['no_filter'] ?></option>
+                    <option value><?= $label['no_filter'] ?></option>
                     <?php $this->renderSelectOptions($filterFormData['accounts']); ?>
                 </select>
             </p>
             <p>
-                <label for="filter_entryType"><?= $labels['category'] ?></label>
+                <label for="filter_entryType"><?= $label['category'] ?></label>
                 <select name="filter_entryType" id="filter_entryType">
-                    <option value><?= $labels['no_filter'] ?></option>
+                    <option value><?= $label['no_filter'] ?></option>
                     <?php $this->renderSelectOptions($filterFormData['entryCategory']); ?>
                 </select>
             </p>
             <p>
                 <span style="grid-column: 2 / 2;">
-                    <input class="submit" type="submit" value="<?= $labels['filter'] ?>">
-                    <input class="submit" type="button" value="<?= $labels['clear_filter'] ?>"
+                    <input class="submit" type="submit" value="<?= $label['filter'] ?>">
+                    <input class="submit" type="button" value="<?= $label['clear_filter'] ?>"
                         onclick="clear_filter(); document.getElementById('datefilter').requestSubmit();">
                 </span>
             </p>
