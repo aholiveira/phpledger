@@ -5,7 +5,7 @@ namespace PHPLedger\Util;
 use Exception;
 use PHPLedger\Contracts\ConfigurationServiceInterface;
 
-class ConfigException extends \Exception {}
+class ConfigException extends Exception {}
 class ConfigInvalidException extends Exception {}
 class ConfigInvalidOrMissingException extends Exception {}
 class ConfigUnsupportedException extends Exception {}

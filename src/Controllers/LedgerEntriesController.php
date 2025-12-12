@@ -313,7 +313,7 @@ final class LedgerEntriesController extends AbstractViewController
                 $savedEntryId = $this->handleSave($filteredInput);
                 $success = true;
                 $this->isEditing = false;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $errorMessage = $e->getMessage();
             }
         }

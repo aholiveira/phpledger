@@ -10,6 +10,8 @@
 
 namespace PHPLedger\Storage\MySql;
 
+use Exception;
+use mysqli_sql_exception;
 use PHPLedger\Domain\Currency;
 use PHPLedger\Storage\MySql\MySqlObject;
 use PHPLedger\Storage\MySql\Traits\MySqlSelectTrait;
@@ -58,7 +60,7 @@ class MySqlCurrency extends Currency
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->execute();
             $result = $stmt->get_result();
@@ -66,7 +68,7 @@ class MySqlCurrency extends Currency
                 $retval[$newobject->id] = $newobject;
             }
             $stmt->close();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             static::handleException($ex, $sql);
         }
         return $retval;
@@ -79,14 +81,14 @@ class MySqlCurrency extends Currency
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->bind_param("s", $value);
             $stmt->execute();
             $result = $stmt->get_result();
             $retval = $result->fetch_object(__CLASS__);
             $stmt->close();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             static::handleException($ex, $sql);
         }
         return $retval;
@@ -117,7 +119,7 @@ class MySqlCurrency extends Currency
                     `updatedAt`=NULL";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->bind_param(
                 "sdssi",
@@ -130,9 +132,9 @@ class MySqlCurrency extends Currency
             $retval = $stmt->execute();
             $stmt->close();
             if (!$retval) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $retval;

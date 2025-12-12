@@ -10,6 +10,8 @@
 
 namespace PHPLedger\Storage\MySql;
 
+use Exception;
+use mysqli_sql_exception;
 use PHPLedger\Domain\AccountType;
 use PHPLedger\Storage\MySql\Traits\MySqlDeleteTrait;
 use PHPLedger\Storage\MySql\Traits\MySqlSelectTrait;
@@ -51,7 +53,7 @@ class MysqlAccountType extends AccountType
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->execute();
             $result = $stmt->get_result();
@@ -59,7 +61,7 @@ class MysqlAccountType extends AccountType
                 $retval[$newobject->id] = $newobject;
             }
             $stmt->close();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             static::handleException($ex, $sql);
         }
         return $retval;
@@ -71,7 +73,7 @@ class MysqlAccountType extends AccountType
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->bind_param("i", $id);
             $stmt->execute();
@@ -81,7 +83,7 @@ class MysqlAccountType extends AccountType
             if (null === $retval) {
                 $retval = new self();
             }
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             static::handleException($ex, $sql);
         }
         return $retval;
@@ -100,7 +102,7 @@ class MysqlAccountType extends AccountType
                     `savings` = VALUES(`savings`)";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->bind_param(
                 "sii",
@@ -111,9 +113,9 @@ class MysqlAccountType extends AccountType
             $retval = $stmt->execute();
             $stmt->close();
             if (!$retval) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $retval;

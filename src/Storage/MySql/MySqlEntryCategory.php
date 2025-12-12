@@ -10,6 +10,10 @@
 
 namespace PHPLedger\Storage\MySql;
 
+use Exception;
+use mysqli_result;
+use mysqli_sql_exception;
+use mysqli_stmt;
 use PHPLedger\Domain\EntryCategory;
 use PHPLedger\Util\Logger;
 
@@ -66,7 +70,7 @@ class MySqlEntryCategory extends EntryCategory
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->execute();
             $result = $stmt->get_result();
@@ -85,7 +89,7 @@ class MySqlEntryCategory extends EntryCategory
                     $retval[$parentId]->setChildDescriptions();
                 }
             }
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             static::handleException($ex, $sql);
         }
         return $retval;
@@ -106,14 +110,14 @@ class MySqlEntryCategory extends EntryCategory
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->bind_param("i", $this->id);
             $stmt->execute();
             $stmt->bind_result($retval);
             $stmt->fetch();
             $stmt->close();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $retval;
@@ -129,7 +133,7 @@ class MySqlEntryCategory extends EntryCategory
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->bind_param("ii", $id, $id);
             $stmt->execute();
@@ -144,7 +148,7 @@ class MySqlEntryCategory extends EntryCategory
             $stmt->close();
             $retval->children = $children;
             $retval->setChildDescriptions();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             static::handleException($ex, $sql);
         }
         return $retval;
@@ -175,7 +179,7 @@ class MySqlEntryCategory extends EntryCategory
                     active=VALUES(active)";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             if ($this->id === null) {
                 $this->id = $this->getNextId();
@@ -183,13 +187,13 @@ class MySqlEntryCategory extends EntryCategory
             $stmt->bind_param("ssss", $this->parentId, $this->description, $this->active, $this->id);
             $retval = $stmt->execute();
             Logger::instance()->debug("Stored id [{$this->id}]", __CLASS__ . " " . __FUNCTION__ . "");
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleException($ex, $sql);
         } finally {
-            if (isset($stmt) && $stmt instanceof \mysqli_stmt) {
+            if (isset($stmt) && $stmt instanceof mysqli_stmt) {
                 $stmt->close();
             }
-            if (isset($result) && $result instanceof \mysqli_result) {
+            if (isset($result) && $result instanceof mysqli_result) {
                 $result->close();
             }
         }
@@ -202,12 +206,12 @@ class MySqlEntryCategory extends EntryCategory
             $sql = "DELETE FROM {$this->tableName()} WHERE id=?";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->bind_param("i", $this->id);
             $retval = $stmt->execute();
             $stmt->close();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $retval;

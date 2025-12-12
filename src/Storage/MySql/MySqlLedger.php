@@ -10,6 +10,8 @@
 
 namespace PHPLedger\Storage\MySql;
 
+use Exception;
+use mysqli_sql_exception;
 use PHPLedger\Domain\Ledger;
 use PHPLedger\Storage\MySql\Traits\MySqlFetchAllTrait;
 use PHPLedger\Storage\MySql\Traits\MySqlSelectTrait;
@@ -70,7 +72,7 @@ class MySqlLedger extends Ledger
                     id=VALUES(id)";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             if (strlen($this->name) > 30) {
                 $this->name = substr($this->name, 0, 30);
@@ -81,7 +83,7 @@ class MySqlLedger extends Ledger
                 $this->id
             );
             $retval = $stmt->execute();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleException($ex, $sql);
         } finally {
             if (isset($stmt) && $stmt instanceof \mysqli_stmt) {

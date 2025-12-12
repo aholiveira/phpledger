@@ -2,6 +2,8 @@
 
 namespace PHPLedger\Storage\MySql\Traits;
 
+use Exception;
+use mysqli_sql_exception;
 use PHPLedger\Storage\MySql\MySqlStorage;
 
 trait MySqlFetchAllTrait
@@ -12,7 +14,7 @@ trait MySqlFetchAllTrait
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             if ($params) {
                 $types = str_repeat('s', \count($params));
@@ -24,7 +26,7 @@ trait MySqlFetchAllTrait
                 $retval[$obj->id] = $obj;
             }
             $stmt->close();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             static::handleException($ex, $sql);
         }
 

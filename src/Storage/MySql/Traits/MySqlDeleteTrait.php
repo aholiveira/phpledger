@@ -2,6 +2,7 @@
 
 namespace PHPLedger\Storage\MySql\Traits;
 
+use Exception;
 use PHPLedger\Storage\MySql\MySqlStorage;
 
 trait MySqlDeleteTrait
@@ -15,7 +16,7 @@ trait MySqlDeleteTrait
             $stmt->bind_param("s", $this->id);
             $retval = $stmt->execute();
             $stmt->close();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $retval;
