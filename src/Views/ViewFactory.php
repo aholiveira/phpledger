@@ -12,16 +12,11 @@
 namespace PHPLedger\Views;
 
 use PHPLedger\Contracts\ApplicationObjectInterface;
-use PHPLedger\Domain\Account;
 use PHPLedger\Domain\AccountType;
-use PHPLedger\Domain\Currency;
 use PHPLedger\Domain\EntryCategory;
 use PHPLedger\Domain\ReportMonth;
 use PHPLedger\Domain\ReportYear;
-use PHPLedger\Views\AccountBalanceView;
 use PHPLedger\Views\AccountTypeView;
-use PHPLedger\Views\AccountView;
-use PHPLedger\Views\CurrencyView;
 use PHPLedger\Views\EntryCategoryView;
 use PHPLedger\Views\ReportMonthHtmlView;
 use PHPLedger\Views\ReportYearHtmlView;
@@ -36,21 +31,9 @@ class ViewFactory
         }
         return static::$viewFactory;
     }
-    public function accountBalanceView(ApplicationObjectInterface $app, Account $object): AccountBalanceView
-    {
-        return new AccountBalanceView($app, $object);
-    }
     public function accountTypeView(ApplicationObjectInterface $app, AccountType $object): AccountTypeView
     {
         return new AccountTypeView($app, $object);
-    }
-    public function accountView(ApplicationObjectInterface $app, Account $object): AccountView
-    {
-        return new AccountView($app, $object);
-    }
-    public function currencyView(ApplicationObjectInterface $app, Currency $object): CurrencyView
-    {
-        return new CurrencyView($app, $object);
     }
     public function entryCategoryView(ApplicationObjectInterface $app, EntryCategory $object): EntryCategoryView
     {
