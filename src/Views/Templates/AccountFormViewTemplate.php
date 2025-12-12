@@ -22,7 +22,7 @@ final class AccountFormViewTemplate extends AbstractViewTemplate
 
         <body>
             <div class="maingrid">
-                <?php Html::menu($l10n, $isAdmin); ?>
+                <?php $ui->menu($label, $menu); ?>
                 <div class="header">
                     <p style="margin:0">
                         <?php if ($back === "balances"): ?>
@@ -73,7 +73,7 @@ final class AccountFormViewTemplate extends AbstractViewTemplate
                                 <input id="closeDate" type="date" name="closeDate" value="<?= $text['closeDate'] ?>">
                             </p>
                             <p>
-                                <label for="activa"><?= $label['activa'] ?></label>
+                                <label for="activa"><?= $label['active'] ?></label>
                                 <input id="activa" type="checkbox" name="activa" <?= $text['activa'] ? 'checked' : '' ?>>
                             </p>
                             <p>
@@ -86,7 +86,7 @@ final class AccountFormViewTemplate extends AbstractViewTemplate
                         </form>
                     </div>
                 </main>
-                <?php Html::footer($app, $action); ?>
+                <?php $ui->footer($label, $footer); ?>
             </div>
         </body>
 

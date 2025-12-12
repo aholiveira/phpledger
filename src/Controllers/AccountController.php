@@ -47,33 +47,29 @@ final class AccountController extends AbstractViewController
                 'selected' => (($this->account->typeId ?? 0) === $r->id)
             ];
         }
-        $view->render([
+        $this->uiData['label'] = array_merge($this->uiData['label'], $this->buildL10nLabels($this->app->l10n(), [
+            'back_to_balances',
+            'back_to_list',
+            'name',
+            'number',
+            'type',
+            'iban',
+            'swift',
+            'openDate',
+            'closeDate',
+            'active',
+            'save',
+            'delete',
+            'check_your_data',
+            'name_required',
+        ]));
+        $view->render(array_merge($this->uiData, [
             'account' => $this->account,
             'back' => $this->request->input('back', ""),
             'lang' => $this->app->l10n()->html(),
-            'l10n' => $this->app->l10n(),
-            'isAdmin' => $this->app->session()->get('isAdmin', false),
-            'action' => $this->request->input('action'),
             'pagetitle' => $this->app->l10n()->l('accounts'),
             'errors' => $this->errors ?? [],
             'accountTypes' => $accountTypes,
-            'app' => $this->app,
-            'label' => [
-                'back_to_balances' => $this->app->l10n()->l('Back to balances'),
-                'back_to_list' => $this->app->l10n()->l('Back to list'),
-                'name' => 'Name',
-                'number' => 'Number',
-                'type' => 'Type',
-                'iban' => 'IBAN',
-                'swift' => 'SWIFT',
-                'openDate' => 'Open date',
-                'closeDate' => 'Close date',
-                'activa' => 'Activa',
-                'save' => 'Save',
-                'delete' => 'Delete',
-                'check_your_data' => 'Check your data',
-                'name_required' => 'Name required',
-            ],
             'text' => [
                 'id' => $this->account->id ?? 0,
                 'name' => $this->account->name ?? '',
@@ -84,7 +80,7 @@ final class AccountController extends AbstractViewController
                 'closeDate' => $this->account->closeDate ?? '',
                 'activa' => ($this->account->activa ?? 0) === 1,
             ]
-        ]);
+        ]));
     }
 
     /**
