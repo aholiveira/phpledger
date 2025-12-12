@@ -186,7 +186,7 @@ final class LedgerEntriesController extends AbstractViewController
                     'account' => $row->account->name,
                     'direction' => (int)$row->direction === 1 ? $deposit : $withdrawal,
                     'amount' => NumberUtil::normalize($row->currencyAmount),
-                    'remarks' => htmlspecialchars($row->remarks),
+                    'remarks' => $row->remarks,
                     'balance' => NumberUtil::normalize($balance)
                 ],
                 'href' => [
@@ -210,7 +210,7 @@ final class LedgerEntriesController extends AbstractViewController
         $selectedEntryCategoryId = (int)($editId > 0 ? $editEntry->categoryId : $this->defaults->categoryId);
         $selectedCurrencyId = $editId > 0 ? $editEntry->currencyId : $this->defaults->currencyId;
         $selectedAccountId = $editId > 0 ? $editEntry->accountId : $this->defaults->accountId;
-        $formData = [
+        return [
             'id' => $editId,
             'date' => $editId > 0 ? $editEntry->entryDate : $this->defaults->entryDate,
             'entryCategoryRows' => $this->prepareEntryCategoryRows($selectedEntryCategoryId),
@@ -232,7 +232,6 @@ final class LedgerEntriesController extends AbstractViewController
             'remarks' => htmlspecialchars($editId > 0 ? $editEntry->remarks : ''),
             'balance' => NumberUtil::normalize($balance),
         ];
-        return $formData;
     }
     private function prepareAccountRows(int $selectedId): array
     {
@@ -318,10 +317,8 @@ final class LedgerEntriesController extends AbstractViewController
                 $errorMessage = $e->getMessage();
             }
         }
-        if ($request->method() === 'GET') {
-            if ((int)$request->input('editId', 0) !== 0) {
-                $this->isEditing = true;
-            }
+        if ($request->method() === 'GET' && (int)$request->input('editId', 0) !== 0) {
+            $this->isEditing = true;
         }
         return [$savedEntryId, $success, $errorMessage];
     }
