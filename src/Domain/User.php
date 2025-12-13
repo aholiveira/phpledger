@@ -2,13 +2,15 @@
 
 namespace PHPLedger\Domain;
 
-use PHPLedger\Contracts\DataObjectInterface;
+use DateInterval;
+use DateTime;
+use PHPLedger\Contracts\Domain\UserObjectInterface;
 use PHPLedger\Storage\Abstract\AbstractDataObject;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\Email;
 use PHPLedger\Util\Logger;
 
-abstract class User extends AbstractDataObject implements DataObjectInterface
+abstract class User extends AbstractDataObject implements UserObjectInterface
 {
     public const USER_ROLE_ADM = 255;
     public const USER_ROLE_RW = 192;
@@ -89,7 +91,7 @@ abstract class User extends AbstractDataObject implements DataObjectInterface
             return $retval;
         }
         $this->setProperty('token', $this->createToken());
-        $this->setProperty('tokenExpiry', (new \DateTime())->add(new \DateInterval("PT24H"))->format($this->dateFormat));
+        $this->setProperty('tokenExpiry', (new DateTime())->add(new DateInterval("PT24H"))->format($this->dateFormat));
         if ($this->update()) {
             $retval = true;
             $title = Config::get("title");

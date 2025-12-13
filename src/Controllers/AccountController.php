@@ -2,19 +2,20 @@
 
 namespace PHPLedger\Controllers;
 
-use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Domain\Account;
 use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\Redirector;
-use PHPLedger\Views\AccountFormView;
+use PHPLedger\Views\Templates\AccountFormViewTemplate;
 
 final class AccountController extends AbstractViewController
 {
+    protected array $errors;
+    protected Account $account;
     protected function handle(): void
     {
         if ($this->request->method() === 'POST') {
             $this->processPost();
-            return;
         }
         $this->renderForm();
     }
@@ -25,16 +26,60 @@ final class AccountController extends AbstractViewController
      */
     private function renderForm(): void
     {
-        $id = (int)$this->request->input('id', 0);
-        $account = ($id ? ObjectFactory::account()::getById($id) : null) ?? ObjectFactory::account();
-        $view = new AccountFormView();
-        $view->render($this->app, [
-            'account' => $account,
+        if (!(($this->account ?? null) instanceof Account)) {
+            $id = (int)$this->request->input('id', 0);
+            $this->account = ($id ? $this->app->dataFactory()::account()::getById($id) : null) ?? $this->app->dataFactory()::account();
+        }
+        $view = new AccountFormViewTemplate();
+        $accountTypes = [];
+        $accountTypes[] = [
+            'value' => 0,
+            'parentId' => null,
+            'text' => "",
+            'selected' => (($this->account->typeId ?? 0) === 0)
+        ];
+        foreach ($this->app->dataFactory()::accounttype()::getList() as $r) {
+            $accountTypes[] = [
+                'value' => $r->id,
+                'parentId' => null,
+                'text' => $r->description,
+                'selected' => (($this->account->typeId ?? 0) === $r->id)
+            ];
+        }
+        $this->uiData['label'] = array_merge($this->uiData['label'], $this->buildL10nLabels($this->app->l10n(), [
+            'back_to_balances',
+            'back_to_list',
+            'name',
+            'number',
+            'type',
+            'iban',
+            'swift',
+            'openDate',
+            'closeDate',
+            'active',
+            'save',
+            'delete',
+            'check_your_data',
+            'name_required',
+        ]));
+        $view->render(array_merge($this->uiData, [
+            'account' => $this->account,
             'back' => $this->request->input('back', ""),
-            'lang' => $this->app->l10n()->sanitizeLang($this->request->input('lang', null)),
-            'action' => $this->request->input('action'),
-            'errors' => []
-        ]);
+            'lang' => $this->app->l10n()->html(),
+            'pagetitle' => $this->app->l10n()->l('accounts'),
+            'errors' => $this->errors ?? [],
+            'accountTypes' => $accountTypes,
+            'text' => [
+                'id' => $this->account->id ?? 0,
+                'name' => $this->account->name ?? '',
+                'number' => $this->account->number ?? '',
+                'iban' => $this->account->iban ?? '',
+                'swift' => $this->account->swift ?? '',
+                'openDate' => $this->account->openDate ?? date("Y-m-d"),
+                'closeDate' => $this->account->closeDate ?? '',
+                'activa' => ($this->account->activa ?? 0) === 1,
+            ]
+        ]));
     }
 
     /**
@@ -53,7 +98,7 @@ final class AccountController extends AbstractViewController
         $action = $this->request->input('itemaction', 'save');
         if ($action === 'delete') {
             $id = (int)$this->request->input('id', 0);
-            if ($id && ($a = ObjectFactory::account()::getById($id)) !== null) {
+            if ($id && ($a = $this->app->dataFactory()::account()::getById($id)) !== null) {
                 $a->delete();
                 Logger::instance()->notice("Account deleted: {$id}");
             }
@@ -62,7 +107,7 @@ final class AccountController extends AbstractViewController
         }
         // Save path
         $id = (int)$this->request->input('id', 0);
-        $a = ($id ? ObjectFactory::account()::getById($id) : null) ?? ObjectFactory::account();
+        $a = ($id ? $this->app->dataFactory()::account()::getById($id) : null) ?? $this->app->dataFactory()::account();
         if ($a->id === null) {
             $a->id = $a->getNextId();
         }
@@ -78,24 +123,17 @@ final class AccountController extends AbstractViewController
         $a->grupo = (int) ($this->request->input('grupo', 0));
 
         // simple required validation for name (keep minimal as requested)
-        $errors = [];
         if ($a->name === '') {
-            $errors[] = 'name';
+            $this->errors[] = 'name';
         }
         if ($a->update()) {
             Logger::instance()->info("Account saved: " . ($a->id ?? '(new)'));
             Redirector::to($redirectUrl);
         } else {
             Logger::instance()->info("Error saving account: " . ($a->id ?? '(new)'));
-            $errors[] = 'other';
+            $this->errors[] = 'other';
         }
 
-        $view = new AccountFormView();
-        $view->render($this->app, [
-            'account' => $a,
-            'lang' => $this->app->l10n()->sanitizeLang($this->request->input('lang')),
-            'errors' => $errors,
-            'action' => $this->request->input('action')
-        ]);
+        $this->account = $a;
     }
 }

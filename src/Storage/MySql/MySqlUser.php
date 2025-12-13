@@ -8,6 +8,9 @@
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  */
 namespace PHPLedger\Storage\MySql;
+
+use Exception;
+use mysqli_sql_exception;
 use PHPLedger\Domain\User;
 
 class MySqlUser extends User
@@ -76,7 +79,7 @@ class MySqlUser extends User
             $stmt->close();
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             if (empty($this->tokenExpiry)) {
                 $this->tokenExpiry = null;
@@ -95,10 +98,10 @@ class MySqlUser extends User
             );
             $retval = $stmt->execute();
             if ($retval === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             MySqlStorage::getConnection()->commit();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleException($ex, $sql);
             if (isset($stmt)) {
                 $stmt->close();
@@ -125,7 +128,7 @@ class MySqlUser extends User
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->execute();
             $result = $stmt->get_result();
@@ -133,7 +136,7 @@ class MySqlUser extends User
                 $retval[$newobject->id] = $newobject;
             }
             $stmt->close();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             static::handleException($ex, $sql);
         }
         return $retval;
@@ -154,14 +157,14 @@ class MySqlUser extends User
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->bind_param("s", $username);
             $stmt->execute();
             $result = $stmt->get_result();
             $retval = $result->fetch_object(__CLASS__);
             $stmt->close();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             static::handleException($ex, $sql);
             $retval = null;
         }
@@ -184,14 +187,14 @@ class MySqlUser extends User
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->bind_param("i", $id);
             $stmt->execute();
             $result = $stmt->get_result();
             $retval = $result->fetch_object(__CLASS__);
             $stmt->close();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             static::handleException($ex, $sql);
         }
         return $retval instanceof self ? $retval : null;
@@ -213,14 +216,14 @@ class MySqlUser extends User
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->bind_param("s", $token);
             $stmt->execute();
             $result = $stmt->get_result();
             $retval = $result->fetch_object(__CLASS__);
             $stmt->close();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             static::handleException($ex, $sql);
         }
         return $retval instanceof self ? $retval : null;
@@ -234,7 +237,7 @@ class MySqlUser extends User
             $stmt->bind_param("i", $this->id);
             $retval = $stmt->execute();
             $stmt->close();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleException($ex, $sql);
             if (isset($stmt)) {
                 $stmt->close();

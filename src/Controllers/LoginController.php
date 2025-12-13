@@ -3,11 +3,11 @@
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Domain\User;
+use PHPLedger\Util\Config;
 use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\Redirector;
-use PHPLedger\Storage\ObjectFactory;
-use PHPLedger\Views\LoginView;
+use PHPLedger\Views\Templates\LoginViewTemplate;
 
 final class LoginController extends AbstractViewController
 {
@@ -29,7 +29,7 @@ final class LoginController extends AbstractViewController
     {
         $user = $this->app->session()->get('user', '');
         if (!empty($user)) {
-            $defaults = ObjectFactory::defaults()::getByUsername($user);
+            $defaults = $this->app->dataFactory()::defaults()::getByUsername($user);
             if ($defaults !== null) {
                 $defaults->lastVisitedUri = '';
                 $defaults->lastVisitedAt = time();
@@ -58,7 +58,7 @@ final class LoginController extends AbstractViewController
         $postPass = $filtered['password'] ?? '';
 
         if (!empty($this->postUser)) {
-            $user = ObjectFactory::user()::getByUsername($this->postUser);
+            $user = $this->app->dataFactory()::user()::getByUsername($this->postUser);
             $this->userAuth = $user->verifyPassword($postPass);
 
             if ($this->userAuth) {
@@ -74,7 +74,8 @@ final class LoginController extends AbstractViewController
         $this->app->session()->refreshExpiration();
         $this->app->session()->set('user', $this->postUser);
 
-        $defaults = ObjectFactory::defaults()::getByUsername($this->postUser) ?? ObjectFactory::defaults()::init();
+        $defaults = $this->app->dataFactory()::defaults();
+        $defaults = $defaults::getByUsername($this->postUser) ?? $defaults::init();
         $defaults->entryDate = date('Y-m-d');
         $defaults->language = $this->app->l10n()->lang();
         Logger::instance()->info("User [{$this->postUser}] logged in");
@@ -95,12 +96,31 @@ final class LoginController extends AbstractViewController
 
     private function renderView(): void
     {
-        $view = new LoginView();
-        $view->render($this->app, [
-            'postUser' => $this->postUser,
-            'userAuth' => $this->userAuth,
-            'expired' => $this->request->input('expired', 0),
-            'needsauth' => $this->request->input('needsauth', 0)
-        ]);
+        $this->uiData['label'] = array_merge(
+            $this->uiData['label'],
+            $this->buildL10nLabels($this->app->l10n(), [
+                'username',
+                'password',
+                'login'
+            ])
+        );
+        $this->uiData['footer']['languageSelectorHtml'] = $this->buildLanguageSelectorHtml($this->app->l10n()->lang(), ['action' => 'login']);
+        $view = new LoginViewTemplate();
+        if ($this->request->method() === "POST" && !$this->userAuth) {
+            $errorMessage = $this->app->l10n()->l('invalid_credentials');
+        }
+        if ($this->request->input('needsauth', 0)) {
+            $errorMessage = $this->app->l10n()->l('not_authenticated');
+        }
+        if ($this->request->input('expired', 0)) {
+            $errorMessage = $this->app->l10n()->l('expired_session');
+        }
+
+        $view->render(array_merge($this->uiData, [
+            'postUser' => $this->postUser ?? '',
+            'errorMessage' => $errorMessage ?? '',
+            'csrf' => CSRF::inputField(),
+            'pagetitle' => Config::get('title'),
+        ]));
     }
 }

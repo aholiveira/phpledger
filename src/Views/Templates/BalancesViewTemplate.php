@@ -22,7 +22,7 @@ final class BalancesViewTemplate extends AbstractViewTemplate
         <html lang="<?= $lang ?>">
 
         <head>
-            <title><?= Html::title($title) ?></title>
+            <title><?= Html::title($pagetitle) ?></title>
             <?php Html::header() ?>
         </head>
 
@@ -31,19 +31,19 @@ final class BalancesViewTemplate extends AbstractViewTemplate
                 <div id="preloader">
                     <div class="spinner"></div>
                 </div>
-                <?php Html::menu($app->l10n(), $isAdmin); ?>
+                <?php $ui->menu($label, $menu); ?>
                 <div class="header" style="height: 0;"></div>
                 <div class="main" id="main">
                     <div class="saldos">
                         <table class="lista saldos">
                             <thead>
                                 <tr>
-                                    <th><?= $l10n['account'] ?></th>
-                                    <th><?= $l10n['deposits'] ?></th>
-                                    <th><?= $l10n['withdrawals'] ?></th>
-                                    <th><?= $l10n['balance'] ?></th>
-                                    <th><?= $l10n['percent'] ?></th>
-                                    <th><?= $l10n['entries'] ?></th>
+                                    <th><?= $label['account'] ?></th>
+                                    <th><?= $label['deposits'] ?></th>
+                                    <th><?= $label['withdrawals'] ?></th>
+                                    <th><?= $label['balance'] ?></th>
+                                    <th><?= $label['percent'] ?></th>
+                                    <th><?= $label['entries'] ?></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -51,17 +51,13 @@ final class BalancesViewTemplate extends AbstractViewTemplate
                                 foreach ($rows as $row) {
                                 ?>
                                     <tr>
-                                        <td class="account" data-label="<?= $l10n['account'] ?>">
-                                            <?= !empty($row['href']['name']) ? "<a title=\"{$l10n['edit_account']}\" href=\"{$row['href']['name']}\">" : "" ?>
-                                            <?= $row['text']['name'] ?>
-                                            <?= !empty($row['href']['name']) ? "</a>" : "" ?>
-                                        </td>
+                                        <td class="account" data-label="<?= $label['account'] ?>"><?= !empty($row['href']['name']) ? "<a title=\"{$label['edit_account']}\" href=\"{$row['href']['name']}\">" : "" ?><?= $row['text']['name'] ?><?= !empty($row['href']['name']) ? "</a>" : "" ?></td>
                                         <?php foreach (["deposits", "withdrawals", "balance", "percent"] as $r): ?>
-                                            <td class="<?= $r ?>" data-label="<?= $l10n[$r] ?>"><?= $row['text'][$r] ?></td>
+                                            <td class="<?= $r ?>" data-label="<?= $label[$r] ?>"><?= $row['text'][$r] ?></td>
                                         <?php endforeach; ?>
-                                        <td class="entries-list" data-label="<?= $l10n['entries'] ?>">
+                                        <td class="entries-list" data-label="<?= $label['entries'] ?>">
                                             <?php if (!empty($row['href']['entries'])): ?>
-                                                <a title="<?= $l10n['account_entries'] ?>" href="<?= $row['href']['entries'] ?>"><?= $l10n['list'] ?></a>
+                                                <a title="<?= $label['account_entries'] ?>" href="<?= $row['href']['entries'] ?>"><?= $label['list'] ?></a>
                                             <?php endif; ?>
                                         </td>
                                     </tr>
@@ -72,7 +68,7 @@ final class BalancesViewTemplate extends AbstractViewTemplate
                         </table>
                     </div>
                 </div>
-                <?php Html::footer($app, $action); ?>
+                <?php $ui->footer($label, $footer); ?>
             </div>
             <script>
                 setTimeout(() => {

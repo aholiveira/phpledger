@@ -18,9 +18,9 @@ final class LedgerEntriesMainViewTemplate extends AbstractViewTemplate
     {
         extract($data, EXTR_SKIP);
 ?>
-        <?php Html::menu($l10n, $isAdmin); ?>
+        <?php $ui->menu($label, $menu); ?>
         <div class="header main config" id="header">
-            <?php (new LedgerEntriesFilterViewTemplate)->render(compact('l10n', 'lang', 'filterFormData', 'labels', 'filters')); ?>
+            <?php (new LedgerEntriesFilterViewTemplate)->render(compact('lang', 'filterFormData', 'label', 'filters')); ?>
             <script>
                 document.getElementById("filter_entryType").value = "<?= !empty($filters["entryType"]) ? $filters["entryType"] : ""; ?>";
                 document.getElementById("filter_accountId").value = "<?= !empty($filters["accountId"]) ? $filters["accountId"] : ""; ?>";
@@ -31,7 +31,7 @@ final class LedgerEntriesMainViewTemplate extends AbstractViewTemplate
                 'lang' => $lang,
                 'isEditing' => $isEditing,
                 'editId' => $editId,
-                'labels' => $labels,
+                'label' => $label,
                 'formData' => $formData,
                 'startBalance' => $startBalance,
                 'ledgerEntryRows' => $ledgerEntryRows,
@@ -41,7 +41,7 @@ final class LedgerEntriesMainViewTemplate extends AbstractViewTemplate
         <div class="main-footer">
             <p><?= $transactionsInPeriod ?></p>
         </div>
-        <?php Html::footer($app, $action); ?>
+        <?php $ui->footer($label, $footer); ?>
         </div> <!-- Main grid -->
         <script>
             toggleDateElements("data_mov");

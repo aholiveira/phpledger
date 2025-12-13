@@ -64,7 +64,7 @@ class MySqlTestObjectTestable extends MySqlTestObject {
         parent::setErrorMessage($msg);
     }
 
-    public static function handleExceptionPublic(\Exception $ex, $sql = "") {
+    public static function handleExceptionPublic(Exception $ex, $sql = "") {
         parent::handleException($ex, $sql);
     }
 }

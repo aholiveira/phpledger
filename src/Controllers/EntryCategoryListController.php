@@ -61,8 +61,19 @@ final class EntryCategoryListController extends AbstractViewController
                 $rows[] = $this->makeRow($child);
             }
         }
+        $this->uiData['label'] = array_merge($this->uiData['label'], $this->buildL10nLabels($this->app->l10n(), [
+            'add',
+            'id',
+            'category',
+            'description',
+            'amount',
+            'active',
+            'edit',
+            'edit_category',
+            'actions',
+        ]));
         $template = new EntryCategoryListViewTemplate();
-        $template->render([
+        $template->render(array_merge($this->uiData, [
             'title'    => 'Tipos de movimentos',
             'app'      => $this->app,
             'object'   => $object,
@@ -72,19 +83,7 @@ final class EntryCategoryListController extends AbstractViewController
             'message'  => htmlentities($message ?? ''),
             'success'  => $success ?? false,
             'rows'     => $rows,
-            'label'    => [
-                'add'         => htmlspecialchars('Adicionar'),
-                'id'          => htmlspecialchars('ID'),
-                'category'    => htmlspecialchars('Categoria'),
-                'description' => htmlspecialchars('Descrição'),
-                'amount'      => htmlspecialchars('Valor'),
-                'active'      => htmlspecialchars('Activa'),
-                'edit'        => htmlspecialchars('Editar'),
-                'edit_category' => htmlspecialchars('Editar esta categoria'),
-                'actions'     => htmlspecialchars('Acções'),
-            ]
-
-        ]);
+        ]));
     }
 
     private function handleUpdate(array $filtered): bool

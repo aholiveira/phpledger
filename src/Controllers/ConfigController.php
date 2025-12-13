@@ -103,7 +103,7 @@ final class ConfigController extends AbstractViewController
             Config::save();
             $success = true;
             $messages = ['Configuration saved successfully.'];
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $messages = ['Unable to save configuration: ' . $e->getMessage()];
         }
         return [$new, $success, $messages];

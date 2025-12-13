@@ -10,6 +10,8 @@
 
 namespace PHPLedger\Storage\MySql;
 
+use Exception;
+use mysqli_sql_exception;
 use PHPLedger\Domain\LedgerEntry;
 use PHPLedger\Util\Logger;
 
@@ -102,7 +104,7 @@ class MySqlLedgerEntry extends LedgerEntry
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->execute();
             $result = $stmt->get_result();
@@ -111,7 +113,7 @@ class MySqlLedgerEntry extends LedgerEntry
                 $retval[$newobject->id] = $newobject;
             }
             $stmt->close();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             static::handleException($ex, $sql);
         }
         return $retval;
@@ -124,7 +126,7 @@ class MySqlLedgerEntry extends LedgerEntry
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->bind_param("i", $id);
             $stmt->execute();
@@ -134,7 +136,7 @@ class MySqlLedgerEntry extends LedgerEntry
             if ($retval instanceof MySqlLedgerEntry) {
                 $retval->getValuesForForeignFields();
             }
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             static::handleException($ex, $sql);
         }
         return $retval;
@@ -148,7 +150,7 @@ class MySqlLedgerEntry extends LedgerEntry
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             if (null === $accountId) {
                 $stmt->bind_param("s", $date);
@@ -159,7 +161,7 @@ class MySqlLedgerEntry extends LedgerEntry
             $stmt->bind_result($retval);
             $stmt->fetch();
             $stmt->close();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $retval;
@@ -183,13 +185,13 @@ class MySqlLedgerEntry extends LedgerEntry
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->execute();
             $stmt->bind_result($retval);
             $stmt->fetch();
             $stmt->close();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             Logger::instance()->dump($ex, "");
         }
         return $retval;
@@ -229,7 +231,7 @@ class MySqlLedgerEntry extends LedgerEntry
                 updatedAt=NULL";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->bind_param(
                 "isiisiddss",
@@ -246,7 +248,7 @@ class MySqlLedgerEntry extends LedgerEntry
             );
             $retval = $stmt->execute();
             $stmt->close();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $retval;

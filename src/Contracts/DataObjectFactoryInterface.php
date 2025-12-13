@@ -8,11 +8,15 @@
  *
  */
 namespace PHPLedger\Contracts;
+
+use PHPLedger\Contracts\Domain\DefaultsObjectInterface;
+use PHPLedger\Contracts\Domain\UserObjectInterface;
+
 interface DataObjectFactoryInterface
 {
     public static function dataStorage(): DataStorageInterface;
-    public static function defaults(): DataObjectInterface;
-    public static function user(): DataObjectInterface;
+    public static function defaults(): DefaultsObjectInterface;
+    public static function user(): UserObjectInterface;
     public static function account(): DataObjectInterface;
     public static function accountType(): DataObjectInterface;
     public static function currency(): DataObjectInterface;

@@ -8,7 +8,10 @@
  *
  */
 namespace PHPLedger\Storage\MySql;
+
+use DateTimeImmutable;
 use PHPLedger\Domain\ReportMonth;
+
 class MySqlReportMonth extends ReportMonth
 {
     use MySqlReport {
@@ -56,7 +59,7 @@ class MySqlReportMonth extends ReportMonth
         }
         $this->savings = [];
         foreach (array_keys($this->columnHeaders) as $header) {
-            $startDate = new \DateTimeImmutable("{$this->year}-$header-01");
+            $startDate = new DateTimeImmutable("{$this->year}-$header-01");
             $endDate = $startDate->modify('last day of this month');
             foreach ($savings_accounts as $account) {
                 $balances = $account->getBalance($startDate, $endDate);

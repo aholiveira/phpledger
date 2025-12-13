@@ -2,10 +2,10 @@
 
 namespace PHPLedger\Domain;
 
-use PHPLedger\Contracts\DataObjectInterface;
+use PHPLedger\Contracts\Domain\DefaultsObjectInterface;
 use PHPLedger\Storage\Abstract\AbstractDataObject;
 
-abstract class Defaults extends AbstractDataObject implements DataObjectInterface
+abstract class Defaults extends AbstractDataObject implements DefaultsObjectInterface
 {
     /**
      * @var int store the default category ID

@@ -32,17 +32,20 @@ final class BalancesController extends AbstractViewController
                 }
             }
         }
-        $l10n = [
-            'account' => $this->app->l10n()->l('account'),
-            'deposits' => $this->app->l10n()->l('deposits'),
-            'withdrawals' => $this->app->l10n()->l('withdrawals'),
-            'balance' => $this->app->l10n()->l('balance'),
-            'percent' => $this->app->l10n()->l('percent'),
-            'entries' => $this->app->l10n()->l('entries'),
-            'edit_account' => $this->app->l10n()->l('edit_account'),
-            'account_entries' => $this->app->l10n()->l('account_entries'),
-            'list' => $this->app->l10n()->l('list')
-        ];
+        $this->uiData['label'] = array_merge(
+            $this->uiData['label'],
+            $this->buildL10nLabels($this->app->l10n(), [
+                'account',
+                'deposits',
+                'withdrawals',
+                'balance',
+                'percent',
+                'entries',
+                'edit_account',
+                'account_entries',
+                'list'
+            ])
+        );
         $rows = [];
         foreach ($objectList as $object) {
             if ($object instanceof Account) {
@@ -72,17 +75,13 @@ final class BalancesController extends AbstractViewController
             'href' => ['name' => '', 'entries' => '']
         ];
 
-        $templateData = [
-            'title' => "Saldos",
-            'lang' => $this->app->l10n()->html(),
-            'app' => $this->app,
-            'action' => $this->request->input('action', 'balances'),
-            'isAdmin' => $this->app->session()->get('isAdmin', false),
-            'rows' => $rows,
-            'l10n' => $l10n,
-            'totals' => $totals,
-        ];
         $view = new BalancesViewTemplate;
-        $view->render($templateData);
+        $view->render(array_merge($this->uiData, [
+            'pagetitle' => "Saldos",
+            'lang' => $this->app->l10n()->html(),
+            'action' => $this->request->input('action', 'balances'),
+            'rows' => $rows,
+            'totals' => $totals,
+        ]));
     }
 }

@@ -8,10 +8,14 @@
  *
  */
 namespace PHPLedger\Storage\MySql;
+
+use mysqli_sql_exception;
+use mysqli;
+
 trait MySqlReport
 {
     protected array $queryData;
-    protected \mysqli $db;
+    protected mysqli $db;
     public function __construct()
     {
         $this->db = MySqlStorage::getConnection();
@@ -21,7 +25,7 @@ trait MySqlReport
         $this->queryData = [];
         $stmt = $this->db->prepare($query);
         if ($stmt === false) {
-            throw new \mysqli_sql_exception();
+            throw new mysqli_sql_exception();
         }
         $stmt->bind_param(str_repeat('s', sizeof($vars)), ...$vars);
         $stmt->execute();

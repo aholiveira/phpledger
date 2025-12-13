@@ -11,6 +11,7 @@
 namespace PHPLedger\Storage\MySql;
 
 use DomainException;
+use Exception;
 use PHPLedger\Contracts\DataObjectInterface;
 use PHPLedger\Util\Logger;
 
@@ -174,7 +175,7 @@ trait MySqlObject
     {
         return static::$tableName;
     }
-    protected static function handleException(\Exception $ex, $sql = "")
+    protected static function handleException(Exception $ex, $sql = "")
     {
         Logger::instance()->dump(MySqlStorage::getConnection(), "DBLINK");
         Logger::instance()->dump($sql, "SQL");

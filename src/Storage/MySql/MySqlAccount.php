@@ -11,6 +11,9 @@
 
 namespace PHPLedger\Storage\MySql;
 
+use DateTimeInterface;
+use Exception;
+use mysqli_sql_exception;
 use PHPLedger\Domain\Account;
 use PHPLedger\Storage\MySql\Traits\MySqlDeleteTrait;
 use PHPLedger\Storage\MySql\Traits\MySqlFetchAllTrait;
@@ -82,11 +85,11 @@ class MySqlAccount extends Account
      * representing the corresponding amounts (euro-based) for that account and
      * on or before the reference date
      */
-    public function getBalanceOnDate(\DateTimeInterface $date): array
+    public function getBalanceOnDate(DateTimeInterface $date): array
     {
         return $this->getBalance(null, $date);
     }
-    public function getBalance(?\DateTimeInterface $startDate = null, ?\DateTimeInterface $endDate = null): array
+    public function getBalance(?DateTimeInterface $startDate = null, ?DateTimeInterface $endDate = null): array
     {
         $where = "accountId=? ";
         $retval = ['income' => 0, 'expense' => 0, 'balance' => 0];
@@ -110,7 +113,7 @@ class MySqlAccount extends Account
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->bind_param(str_repeat('s', sizeof($param_array)), ...$param_array);
             $stmt->execute();
@@ -122,7 +125,7 @@ class MySqlAccount extends Account
                 'balance' => null === $balance ? 0.0 : $balance
             ];
             $stmt->close();
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $retval;
@@ -146,7 +149,7 @@ class MySqlAccount extends Account
                             `activa`=VALUES(`activa`)";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
             $stmt->bind_param(
                 "ssiissssii",
@@ -164,9 +167,9 @@ class MySqlAccount extends Account
             $retval = $stmt->execute();
             $stmt->close();
             if (!$retval) {
-                throw new \mysqli_sql_exception();
+                throw new mysqli_sql_exception();
             }
-        } catch (\Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleException($ex, $sql);
         }
         return $retval;
