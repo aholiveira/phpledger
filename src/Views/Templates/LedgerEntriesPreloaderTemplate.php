@@ -20,20 +20,7 @@ final class LedgerEntriesPreloaderTemplate extends AbstractViewTemplate
         </head>
 
         <body>
-            <?php if (!empty($label['notification'])): ?>
-                <div id="notification" class="notification <?= $success ? "success" : "fail" ?>">
-                    <?= $label['notification'] ?>
-                </div>
-                <script>
-                    const el = document.getElementById('notification');
-                    setTimeout(() => {
-                        el.classList.add('hide');
-                        el.addEventListener('transitionend', () => el.remove(), {
-                            once: true
-                        });
-                    }, 2500);
-                </script>
-            <?php endif ?>
+            <?php $ui->notification($label['notification'], $success) ?>
             <div class="maingrid">
                 <div id="preloader">
                     <div class="spinner"></div>

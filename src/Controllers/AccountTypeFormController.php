@@ -3,10 +3,10 @@
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Domain\AccountType;
-use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Exceptions\PHPLedgerException;
 use PHPLedger\Util\CSRF;
-use PHPLedger\Util\Redirector;
-use PHPLedger\Views\AccountTypeFormView;
+use PHPLedger\Views\Templates\AccountTypeFormViewTemplate;
+use Throwable;
 
 final class AccountTypeFormController extends AbstractViewController
 {
@@ -25,10 +25,17 @@ final class AccountTypeFormController extends AbstractViewController
             "action" => FILTER_DEFAULT,
             "update" => FILTER_DEFAULT
         ];
-        $object = ObjectFactory::accounttype();
+        $object = $this->app->dataFactory()::accounttype();
         $filtered = filter_var_array($this->request->all(), $filterArray, true);
+        $l10n = $this->app->l10n();
         if ($this->request->method() === "POST") {
-            $this->handlePost($object, $filtered);
+            try {
+                $this->handlePost($object, $filtered);
+                $this->message = $l10n->l('save_success', $object->id);
+                $success = true;
+            } catch (Throwable $e) {
+                $this->message = $e->getMessage();
+            }
         }
         if ($this->request->method() === "GET") {
             $id = $filtered['id'] ?? 0;
@@ -36,30 +43,47 @@ final class AccountTypeFormController extends AbstractViewController
                 $object = $object->getById($id);
             }
         }
-        $view = new AccountTypeFormView;
-        $view->render($this->app, $object, $this->message, $this->request->input('action'));
+        $this->uiData['label'] = array_merge(
+            $this->uiData['label'],
+            $this->buildL10nLabels($this->app->l10n(), [
+                'id',
+                'description',
+                'savings',
+                'save',
+                'delete',
+                'are_you_sure_you_want_to_delete',
+                'back_to_list'
+            ])
+        );
+        $view = new AccountTypeFormViewTemplate;
+        $view->render(array_merge($this->uiData, [
+            'notification' => $this->message ?? '',
+            'success' => $success ?? false,
+            'row' => [
+                'id' => $object->id ?? '',
+                'description' => $object->description ?? '',
+                'savings' => $object->savings ?? false,
+            ]
+        ]));
     }
-    private function handlePost(AccountType $object, $filtered)
+    private function handlePost(AccountType $object, $filtered): void
     {
-        $retval = false;
         if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
             http_response_code(400);
-            $this->message = "Falhou a validação do token. Repita a operação.";
-            return;
+            throw new PHPLedgerException("Falhou a validação do token. Repita a operação.");
         }
-        if (strtolower($filtered['update'] ?? '') === "gravar") {
-            $retval = $this->handleSave($object, $filtered);
-        }
-        if (strtolower($filtered['update'] ?? '') === "apagar") {
-            $object->id = $filtered['id'] ?? 0;
-            if ($object->id > 0) {
-                $retval = $object->delete();
+        if (strtolower($filtered['update'] ?? '') === "save") {
+            if (!$this->handleSave($object, $filtered)) {
+                throw new PHPLedgerException("Ocorreu um erro ao gravar");
             }
         }
-        if ($retval) {
-            Redirector::to("index.php?action=account_types");
-        } else {
-            $this->message = "Ocorreu um erro na operação.";
+        if (strtolower($filtered['update'] ?? '') === "delete") {
+            $object->id = $filtered['id'] ?? 0;
+            if ($object->id > 0) {
+                if (!$object->delete()) {
+                    throw new PHPLedgerException("Ocorreu um erro ao eliminar");
+                }
+            }
         }
     }
     private function handleSave(AccountType $object, array $filtered): bool

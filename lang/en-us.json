@@ -80,6 +80,7 @@
     "report_year": "Annual report",
     "save_success": "Saved successfully - ID: %s",
     "save": "Save",
+    "savings": "Savings",
     "session_expires": "Session expires at %s",
     "smtp_host": "SMTP host",
     "smtp_port": "SMTP port",

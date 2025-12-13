@@ -11,11 +11,8 @@
 
 namespace PHPLedger\Views;
 
-use PHPLedger\Contracts\ApplicationObjectInterface;
-use PHPLedger\Domain\AccountType;
 use PHPLedger\Domain\ReportMonth;
 use PHPLedger\Domain\ReportYear;
-use PHPLedger\Views\AccountTypeView;
 use PHPLedger\Views\ReportMonthHtmlView;
 use PHPLedger\Views\ReportYearHtmlView;
 
@@ -28,10 +25,6 @@ class ViewFactory
             self::$viewFactory = new ViewFactory();
         }
         return static::$viewFactory;
-    }
-    public function accountTypeView(ApplicationObjectInterface $app, AccountType $object): AccountTypeView
-    {
-        return new AccountTypeView($app, $object);
     }
     public function reportMonthHtmlView(ReportMonth $object): ReportMonthHtmlView
     {

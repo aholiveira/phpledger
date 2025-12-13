@@ -64,10 +64,8 @@ final class AccountListViewTemplate extends AbstractViewTemplate
                         </tbody>
                     </table>
                 </div>
-
                 <?php $ui->footer($label, $footer); ?>
             </div>
-
             <script>
                 setTimeout(() => {
                     document.getElementById('preloader').style.display = 'none';

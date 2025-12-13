@@ -10,20 +10,18 @@
 
 namespace PHPLedger\Controllers;
 
-use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\ConfigPath;
 use PHPLedger\Util\CSRF;
-use PHPLedger\Util\L10n;
 use PHPLedger\Util\Redirector;
-use PHPLedger\Views\UpdateStorageView;
+use PHPLedger\Views\Templates\UpdateStorageViewTemplate;
 
 final class UpdateStorageController extends AbstractViewController
 {
     protected function handle(): void
     {
         Config::init(ConfigPath::get());
-        $dataStorage = ObjectFactory::dataStorage();
+        $dataStorage = $this->app->dataFactory()::dataStorage();
         $updateResult = null;
         if ($this->request->method() === "POST") {
             if (!CSRF::validateToken($this->request->input('_csrf_token', null))) {
@@ -34,15 +32,46 @@ final class UpdateStorageController extends AbstractViewController
             if ($action === 'update') {
                 $updateResult = $dataStorage->update();
                 if ($updateResult && !headers_sent()) {
-                    header("Refresh: 8; URL=index.php");
+                    Redirector::to("index.php", 8);
+                    $showSection = "update_sucess";
                 }
             }
         }
-
+        $l10n = $this->app->l10n();
         $needsUpdate = !$dataStorage->check();
-        $message = nl2br(htmlspecialchars($dataStorage->message(), ENT_QUOTES, 'UTF-8'));
-        $pagetitle = $this->app->l10n()->l('update_needed');
-        $view = new UpdateStorageView;
-        $view->render($this->app, $pagetitle, $needsUpdate, $updateResult, $message);
+        if ($this->request->method() === "GET") {
+            if ($needsUpdate) {
+                $showSection = "needs_update";
+            } else {
+                $showSection = "storage_is_ok";
+            }
+        }
+        $this->uiData['label'] = array_merge(
+            $this->uiData['label'],
+            $this->buildL10nLabels(
+                $l10n,
+                [
+                    'db_needs_update',
+                    'cannot_use_app',
+                    'start_update',
+                    'do_update',
+                    'db_ok',
+                    'go_login',
+                    'login_screen',
+                    'db_updated',
+                    'redirecting',
+                    'update_fail',
+                    'error_msg'
+                ]
+            )
+        );
+        $view = new UpdateStorageViewTemplate;
+        $view->render(array_merge($this->uiData, [
+            'pagetitle' => $l10n->l('update_needed'),
+            'message' => $dataStorage->message(),
+            'needsUpdate' => $needsUpdate,
+            'updateResult' => $updateResult,
+            'showSection' => $showSection ?? '',
+        ]));
     }
 }

@@ -10,8 +10,6 @@
 
 namespace PHPLedger\Views\Templates;
 
-use PHPLedger\Util\Html;
-
 final class LedgerEntriesMainViewTemplate extends AbstractViewTemplate
 {
     public function render(array $data): void
