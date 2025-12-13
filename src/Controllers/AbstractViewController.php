@@ -99,15 +99,15 @@ abstract class AbstractViewController implements ViewControllerInterface
             'lang' => $lang
         ];
     }
-    protected function buildLanguageSelectorHtml(string $current): string
+    protected function buildLanguageSelectorHtml(string $current, array $requestParams = []): string
     {
-        $params = $this->request->all();
+        $params = empty($requestParams) ? $this->request->all() : $requestParams;
         unset($params['lang']);
         $other = $current === 'pt-pt' ? 'en-us' : 'pt-pt';
         $params['lang'] = $other;
         $url = 'index.php?' . http_build_query($params);
-        return $current === 'pt-pt'
-            ? "<a href=\"$url\">EN</a> | <span>PT</span>"
-            : "<span>EN</span> | <a href=\"$url\">PT</a>";
+        $first = $other === 'pt-pt' ? '<span>EN</span>' : '<a href="' . $url . '">EN</a>';
+        $second = $other === 'pt-pt' ? '<a href="' . $url . '">PT</a>' : '<span>PT</span>';
+        return "$first | $second";
     }
 }

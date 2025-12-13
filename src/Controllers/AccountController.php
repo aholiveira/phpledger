@@ -3,7 +3,6 @@
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Domain\Account;
-use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Logger;
 use PHPLedger\Util\Redirector;
@@ -29,7 +28,7 @@ final class AccountController extends AbstractViewController
     {
         if (!(($this->account ?? null) instanceof Account)) {
             $id = (int)$this->request->input('id', 0);
-            $this->account = ($id ? ObjectFactory::account()::getById($id) : null) ?? ObjectFactory::account();
+            $this->account = ($id ? $this->app->dataFactory()::account()::getById($id) : null) ?? $this->app->dataFactory()::account();
         }
         $view = new AccountFormViewTemplate();
         $accountTypes = [];
@@ -99,7 +98,7 @@ final class AccountController extends AbstractViewController
         $action = $this->request->input('itemaction', 'save');
         if ($action === 'delete') {
             $id = (int)$this->request->input('id', 0);
-            if ($id && ($a = ObjectFactory::account()::getById($id)) !== null) {
+            if ($id && ($a = $this->app->dataFactory()::account()::getById($id)) !== null) {
                 $a->delete();
                 Logger::instance()->notice("Account deleted: {$id}");
             }
@@ -108,7 +107,7 @@ final class AccountController extends AbstractViewController
         }
         // Save path
         $id = (int)$this->request->input('id', 0);
-        $a = ($id ? ObjectFactory::account()::getById($id) : null) ?? ObjectFactory::account();
+        $a = ($id ? $this->app->dataFactory()::account()::getById($id) : null) ?? $this->app->dataFactory()::account();
         if ($a->id === null) {
             $a->id = $a->getNextId();
         }

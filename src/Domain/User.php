@@ -4,13 +4,13 @@ namespace PHPLedger\Domain;
 
 use DateInterval;
 use DateTime;
-use PHPLedger\Contracts\DataObjectInterface;
+use PHPLedger\Contracts\Domain\UserObjectInterface;
 use PHPLedger\Storage\Abstract\AbstractDataObject;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\Email;
 use PHPLedger\Util\Logger;
 
-abstract class User extends AbstractDataObject implements DataObjectInterface
+abstract class User extends AbstractDataObject implements UserObjectInterface
 {
     public const USER_ROLE_ADM = 255;
     public const USER_ROLE_RW = 192;
