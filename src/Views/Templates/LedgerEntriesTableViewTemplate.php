@@ -66,7 +66,7 @@ final class LedgerEntriesTableViewTemplate extends AbstractViewTemplate
                                 $formTemplate->render($rowTemplateData);
                             }
                         endforeach;
-                        if (!($editId > 0)) {
+                        if ((int)($editId ?? 0) === 0) {
                             $rowTemplateData['formData'] = $formData;
                             $rowTemplateData['filters'] = $filters;
                             $formTemplate->render($rowTemplateData);

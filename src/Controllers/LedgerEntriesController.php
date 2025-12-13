@@ -38,7 +38,6 @@ final class LedgerEntriesController extends AbstractViewController
 
     protected function handle(): void
     {
-        $lang = $this->app->l10n()->html();
         $pagetitle = $this->app->l10n()->l("ledger_entries");
         $this->dataFactory = $this->app->dataFactory();
         $this->defaults = $this->dataFactory->defaults();
@@ -90,7 +89,7 @@ final class LedgerEntriesController extends AbstractViewController
          * @var LedgerEntry
          */
         $ledgerEntryObject = $this->dataFactory->ledgerentry();
-        $startBalance = $ledgerEntryObject->getBalanceBeforeDate($filters['startDate'], $filters["accountId"]);
+        $startBalance = $ledgerEntryObject->getBalanceBeforeDate($filters['startDate'], $filters["accountId"]) ?? 0;
         $ledgerEntryRows = $this->prepareLedgerEntryRows($ledgerEntryObject, $ledgerFilters, $filters, $startBalance);
         if (empty($ledgerEntryRows)) {
             $formBalance = $startBalance;

@@ -21,8 +21,8 @@ it('renders the menu correctly', function () {
     $html = ob_get_clean();
 
     expect($html)->toContain('<aside class="menu">');
-    expect($html)->toContain('<a id="accounts" href="index.php?action=accounts&lang=en">Accounts</a>');
-    expect($html)->toContain('<a id="ledger" href="index.php?action=ledger&lang=en">Ledger Entries</a>');
+    expect($html)->toContain('<a id="accounts" aria-label="Accounts" href="index.php?action=accounts&lang=en">Accounts</a>');
+    expect($html)->toContain('<a id="ledger" aria-label="Ledger Entries" href="index.php?action=ledger&lang=en">Ledger Entries</a>');
 });
 
 it('renders the footer correctly', function () {

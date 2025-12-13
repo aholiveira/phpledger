@@ -57,7 +57,7 @@ final class EntryCategoryListViewTemplate extends AbstractViewTemplate
                                         <td class="active" data-label="<?= $label['active'] ?>"><?= $row['active'] ? '✓' : '–' ?></td>
                                         <td class="editlink" data-label="<?= $label['edit'] ?>">
                                             <?php if (isset($row['id'], $row['href']) && $row['id'] > 0): ?>
-                                                <a href="<?= $row['href'] ?>" title="<?= $label['edit_category'] ?>"><?= $label['edit'] ?></a>
+                                                <a href="<?= $row['href'] ?>" title="<?= $label['edit_category'] ?>" aria-label="<?= $label['edit'] ?>"><?= $label['edit'] ?></a>
                                             <?php else: ?>
                                                 <span class="disabled">–</span>
                                             <?php endif; ?>

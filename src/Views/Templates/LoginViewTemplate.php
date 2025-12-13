@@ -2,14 +2,11 @@
 
 namespace PHPLedger\Views\Templates;
 
-use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Util\Html;
 use PHPLedger\Views\Templates\AbstractViewTemplate;
 
 final class LoginViewTemplate extends AbstractViewTemplate
 {
-    private ApplicationObjectInterface $app;
-
     /**
      * Renders the login view.
      *

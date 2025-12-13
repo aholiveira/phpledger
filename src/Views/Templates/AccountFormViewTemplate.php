@@ -26,9 +26,9 @@ final class AccountFormViewTemplate extends AbstractViewTemplate
                 <div class="header">
                     <p style="margin:0">
                         <?php if ($back === "balances"): ?>
-                            <a href="index.php?action=balances&lang=<?= htmlspecialchars($lang) ?>"><?= $label['back_to_balances'] ?></a>
+                            <a href="index.php?action=balances&lang=<?= htmlspecialchars($lang) ?>" aria-label="<?= $label['back_to_balances'] ?>"><?= $label['back_to_balances'] ?></a>
                         <?php else: ?>
-                            <a href="index.php?action=accounts&lang=<?= htmlspecialchars($lang) ?>"><?= $label['back_to_list'] ?></a>
+                            <a href="index.php?action=accounts&lang=<?= htmlspecialchars($lang) ?>" aria-label="<?= $label['back_to_list'] ?>"><?= $label['back_to_list'] ?></a>
                         <?php endif ?>
                     </p>
                 </div>

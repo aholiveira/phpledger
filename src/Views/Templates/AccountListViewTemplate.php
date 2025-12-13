@@ -26,9 +26,7 @@ final class AccountListViewTemplate extends AbstractViewTemplate
                 <?php $ui->menu($label, $menu); ?>
                 <div class="header">
                     <p style="margin:0">
-                        <a href="index.php?action=account&lang=<?= htmlspecialchars($lang) ?>">
-                            <?= $label['add'] ?>
-                        </a>
+                        <a href="index.php?action=account&lang=<?= htmlspecialchars($lang) ?>" aria-label="<?= $label['add'] ?>"><?= $label['add'] ?></a>
                     </p>
                 </div>
                 <div class="main" id="main">
@@ -60,7 +58,7 @@ final class AccountListViewTemplate extends AbstractViewTemplate
                                     <td data-label="<?= $label['open'] ?>"><?= htmlspecialchars($row['openDate']) ?></td>
                                     <td data-label="<?= $label['close'] ?>"><?= htmlspecialchars($row['closeDate']) ?></td>
                                     <td class="active" data-label="<?= $label['active'] ?>"><?= $row['activa'] ? '✓' : '–' ?></td>
-                                    <td data-label="<?= $label['actions'] ?>"><a href="index.php?action=account&id=<?= (int)$row['id'] ?>&lang=<?= htmlspecialchars($lang) ?>"><?= $label['edit'] ?></a></td>
+                                    <td data-label="<?= $label['actions'] ?>"><a href="index.php?action=account&id=<?= (int)$row['id'] ?>&lang=<?= htmlspecialchars($lang) ?>" aria-label="<?= $label['edit'] ?>"><?= $label['edit'] ?></a></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>
