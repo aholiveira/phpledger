@@ -24,7 +24,7 @@ final class EntryCategoryFormViewTemplate extends AbstractViewTemplate
                 <?php $ui->menu($label, $menu); ?>
                 <div class="header" style="height: 0;"></div>
                 <div id="main" class="main config">
-                    <form method="POST" action="index.php?action=entry_types">
+                    <form method="POST" action="index.php?action=entry_types" lang="<?= $lang ?>">
                         <input type="hidden" name="action" value="entry_types">
                         <?= CSRF::inputField() ?>
                         <p><label for="id"><?= $label['id'] ?></label><input type="text" readonly size="4" name="id" value="<?= $text['id'] ?>"></p>

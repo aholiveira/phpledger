@@ -1,7 +1,7 @@
 <?php
 
-use PHPLedger\Views\Templates\AccountListViewTemplate;
 use PHPLedger\Util\UiBuilder;
+use PHPLedger\Views\Templates\AccountListViewTemplate;
 
 beforeEach(function () {
     $this->view = new AccountListViewTemplate();
@@ -65,8 +65,8 @@ it('renders the account list correctly', function () {
     expect($html)->toContain('<td data-label="ID">1</td>');
     expect($html)->toContain('<td class="active" data-label="Active">✓</td>');
     expect($html)->toContain('<td class="active" data-label="Active">–</td>');
-    expect($html)->toContain('<a href="index.php?action=account&id=1&lang=en">Edit</a>');
-    expect($html)->toContain('<a href="index.php?action=account&id=2&lang=en">Edit</a>');
+    expect($html)->toContain('<a href="index.php?action=account&id=1&lang=en" aria-label="Edit">Edit</a>');
+    expect($html)->toContain('<a href="index.php?action=account&id=2&lang=en" aria-label="Edit">Edit</a>');
 });
 
 it('renders the preloader script', function () {
