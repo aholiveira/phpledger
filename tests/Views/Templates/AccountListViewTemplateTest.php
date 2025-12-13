@@ -63,8 +63,8 @@ it('renders the account list correctly', function () {
     expect($html)->toContain('<table class="lista contas account">');
     expect($html)->toContain('<th>ID</th>');
     expect($html)->toContain('<td data-label="ID">1</td>');
-    expect($html)->toContain('<td data-label="Active">Yes</td>');
-    expect($html)->toContain('<td data-label="Active">No</td>');
+    expect($html)->toContain('<td class="active" data-label="Active">✓</td>');
+    expect($html)->toContain('<td class="active" data-label="Active">–</td>');
     expect($html)->toContain('<a href="index.php?action=account&id=1&lang=en">Edit</a>');
     expect($html)->toContain('<a href="index.php?action=account&id=2&lang=en">Edit</a>');
 });
