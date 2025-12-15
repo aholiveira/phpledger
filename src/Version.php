@@ -4,7 +4,7 @@ namespace PHPLedger;
 
 final class Version
 {
-    private const VERSION = '0.7.75';
+    private const VERSION = '0.7.76';
 
     public static function string(): string
     {
