@@ -6,6 +6,7 @@
 *.cmd
 *.log
 *.zip
+*.code-workspace
 /nbproject/private/
 /scripts
 /vendor/
