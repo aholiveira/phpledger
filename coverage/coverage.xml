@@ -1,82 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1765592499">
-  <project timestamp="1765592499">
+<coverage generated="1765760486">
+  <project timestamp="1765760486">
     <file name="C:\pessoal\work\contas\src\Application.php">
       <class name="PHPLedger\Application" namespace="global">
-        <metrics complexity="23" methods="15" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="47" coveredstatements="0" elements="62" coveredelements="0"/>
+        <metrics complexity="24" methods="16" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="49" coveredstatements="0" elements="65" coveredelements="0"/>
       </class>
-      <line num="32" type="method" name="__construct" visibility="public" complexity="2" crap="6" count="0"/>
-      <line num="34" type="stmt" count="0"/>
-      <line num="35" type="stmt" count="0"/>
+      <line num="34" type="method" name="__construct" visibility="public" complexity="2" crap="6" count="0"/>
       <line num="36" type="stmt" count="0"/>
       <line num="37" type="stmt" count="0"/>
       <line num="38" type="stmt" count="0"/>
       <line num="39" type="stmt" count="0"/>
-      <line num="41" type="method" name="needsUpdate" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="43" type="stmt" count="0"/>
-      <line num="45" type="method" name="dataFactory" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="47" type="stmt" count="0"/>
-      <line num="48" type="stmt" count="0"/>
-      <line num="50" type="method" name="config" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="52" type="stmt" count="0"/>
-      <line num="54" type="method" name="session" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="56" type="stmt" count="0"/>
-      <line num="58" type="method" name="l10n" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="60" type="stmt" count="0"/>
-      <line num="62" type="method" name="redirector" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="64" type="stmt" count="0"/>
-      <line num="66" type="method" name="logger" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="68" type="stmt" count="0"/>
-      <line num="70" type="method" name="setErrorMessage" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="72" type="stmt" count="0"/>
-      <line num="74" type="method" name="clearErrorMessage" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="76" type="stmt" count="0"/>
-      <line num="78" type="method" name="getErrorMessage" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="80" type="stmt" count="0"/>
-      <line num="82" type="method" name="sendHeaders" visibility="private" complexity="2" crap="6" count="0"/>
-      <line num="84" type="stmt" count="0"/>
-      <line num="85" type="stmt" count="0"/>
-      <line num="86" type="stmt" count="0"/>
+      <line num="40" type="stmt" count="0"/>
+      <line num="41" type="stmt" count="0"/>
+      <line num="43" type="method" name="needsUpdate" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="45" type="stmt" count="0"/>
+      <line num="47" type="method" name="dataFactory" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="49" type="stmt" count="0"/>
+      <line num="50" type="stmt" count="0"/>
+      <line num="52" type="method" name="reportFactory" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="54" type="stmt" count="0"/>
+      <line num="55" type="stmt" count="0"/>
+      <line num="57" type="method" name="config" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="59" type="stmt" count="0"/>
+      <line num="61" type="method" name="session" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="63" type="stmt" count="0"/>
+      <line num="65" type="method" name="l10n" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="67" type="stmt" count="0"/>
+      <line num="69" type="method" name="redirector" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="71" type="stmt" count="0"/>
+      <line num="73" type="method" name="logger" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="75" type="stmt" count="0"/>
+      <line num="77" type="method" name="setErrorMessage" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="79" type="stmt" count="0"/>
+      <line num="81" type="method" name="clearErrorMessage" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="83" type="stmt" count="0"/>
+      <line num="85" type="method" name="getErrorMessage" visibility="public" complexity="1" crap="2" count="0"/>
       <line num="87" type="stmt" count="0"/>
-      <line num="88" type="stmt" count="0"/>
-      <line num="89" type="stmt" count="0"/>
-      <line num="90" type="stmt" count="0"/>
-      <line num="93" type="method" name="bootstrap" visibility="private" complexity="1" crap="2" count="0"/>
+      <line num="89" type="method" name="sendHeaders" visibility="private" complexity="2" crap="6" count="0"/>
+      <line num="91" type="stmt" count="0"/>
+      <line num="92" type="stmt" count="0"/>
+      <line num="93" type="stmt" count="0"/>
+      <line num="94" type="stmt" count="0"/>
       <line num="95" type="stmt" count="0"/>
       <line num="96" type="stmt" count="0"/>
       <line num="97" type="stmt" count="0"/>
-      <line num="99" type="method" name="applyTimezone" visibility="private" complexity="5" crap="30" count="0"/>
+      <line num="100" type="method" name="bootstrap" visibility="private" complexity="1" crap="2" count="0"/>
       <line num="102" type="stmt" count="0"/>
       <line num="103" type="stmt" count="0"/>
       <line num="104" type="stmt" count="0"/>
-      <line num="106" type="stmt" count="0"/>
+      <line num="106" type="method" name="applyTimezone" visibility="private" complexity="5" crap="30" count="0"/>
       <line num="109" type="stmt" count="0"/>
       <line num="110" type="stmt" count="0"/>
       <line num="111" type="stmt" count="0"/>
-      <line num="112" type="stmt" count="0"/>
       <line num="113" type="stmt" count="0"/>
-      <line num="115" type="method" name="updateUserLastVisited" visibility="private" complexity="3" crap="12" count="0"/>
+      <line num="116" type="stmt" count="0"/>
       <line num="117" type="stmt" count="0"/>
       <line num="118" type="stmt" count="0"/>
+      <line num="119" type="stmt" count="0"/>
       <line num="120" type="stmt" count="0"/>
-      <line num="121" type="stmt" count="0"/>
-      <line num="122" type="stmt" count="0"/>
-      <line num="123" type="stmt" count="0"/>
+      <line num="122" type="method" name="updateUserLastVisited" visibility="private" complexity="3" crap="12" count="0"/>
+      <line num="124" type="stmt" count="0"/>
       <line num="125" type="stmt" count="0"/>
-      <line num="126" type="stmt" count="0"/>
       <line num="127" type="stmt" count="0"/>
       <line num="128" type="stmt" count="0"/>
       <line num="129" type="stmt" count="0"/>
-      <metrics loc="133" ncloc="132" classes="1" methods="15" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="47" coveredstatements="0" elements="62" coveredelements="0"/>
+      <line num="130" type="stmt" count="0"/>
+      <line num="132" type="stmt" count="0"/>
+      <line num="133" type="stmt" count="0"/>
+      <line num="134" type="stmt" count="0"/>
+      <line num="135" type="stmt" count="0"/>
+      <line num="136" type="stmt" count="0"/>
+      <metrics loc="140" ncloc="139" classes="1" methods="16" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="49" coveredstatements="0" elements="65" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Contracts\ApplicationObjectInterface.php">
-      <metrics loc="13" ncloc="13" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      <metrics loc="16" ncloc="16" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Contracts\ConfigurationServiceInterface.php">
       <metrics loc="15" ncloc="15" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Contracts\DataObjectFactoryInterface.php">
-      <metrics loc="29" ncloc="22" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      <metrics loc="28" ncloc="21" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Contracts\DataObjectInterface.php">
       <metrics loc="24" ncloc="16" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
@@ -87,6 +90,12 @@
     <file name="C:\pessoal\work\contas\src\Contracts\Domain\DefaultsObjectInterface.php">
       <metrics loc="16" ncloc="12" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
+    <file name="C:\pessoal\work\contas\src\Contracts\Domain\LedgerEntryObjectInterface.php">
+      <metrics loc="13" ncloc="13" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
+    <file name="C:\pessoal\work\contas\src\Contracts\Domain\Reports\CategorySummaryInterface.php">
+      <metrics loc="11" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
     <file name="C:\pessoal\work\contas\src\Contracts\Domain\UserObjectInterface.php">
       <metrics loc="24" ncloc="24" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
@@ -95,9 +104,6 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Contracts\LoggerServiceInterface.php">
       <metrics loc="62" ncloc="25" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
-    </file>
-    <file name="C:\pessoal\work\contas\src\Contracts\ReportInterface.php">
-      <metrics loc="22" ncloc="8" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Contracts\RequestInterface.php">
       <metrics loc="11" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
@@ -116,16 +122,15 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Controllers\AbstractViewController.php">
       <class name="PHPLedger\Controllers\AbstractViewController" namespace="global">
-        <metrics complexity="12" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="77" coveredstatements="77" elements="82" coveredelements="82"/>
+        <metrics complexity="12" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="78" coveredstatements="78" elements="83" coveredelements="83"/>
       </class>
-      <line num="18" type="method" name="handleRequest" visibility="public" complexity="1" crap="1" count="3"/>
-      <line num="20" type="stmt" count="3"/>
+      <line num="19" type="method" name="handleRequest" visibility="public" complexity="1" crap="1" count="3"/>
       <line num="21" type="stmt" count="3"/>
       <line num="22" type="stmt" count="3"/>
       <line num="23" type="stmt" count="3"/>
       <line num="24" type="stmt" count="3"/>
-      <line num="26" type="method" name="buildBaseLabels" visibility="private" complexity="1" crap="1" count="3"/>
-      <line num="28" type="stmt" count="3"/>
+      <line num="25" type="stmt" count="3"/>
+      <line num="27" type="method" name="buildBaseLabels" visibility="private" complexity="1" crap="1" count="3"/>
       <line num="29" type="stmt" count="3"/>
       <line num="30" type="stmt" count="3"/>
       <line num="31" type="stmt" count="3"/>
@@ -147,13 +152,13 @@
       <line num="47" type="stmt" count="3"/>
       <line num="48" type="stmt" count="3"/>
       <line num="49" type="stmt" count="3"/>
-      <line num="51" type="method" name="buildL10nLabels" visibility="protected" complexity="2" crap="2" count="4"/>
-      <line num="53" type="stmt" count="4"/>
+      <line num="50" type="stmt" count="3"/>
+      <line num="52" type="method" name="buildL10nLabels" visibility="protected" complexity="2" crap="2" count="4"/>
       <line num="54" type="stmt" count="4"/>
       <line num="55" type="stmt" count="4"/>
-      <line num="57" type="stmt" count="4"/>
-      <line num="59" type="method" name="prepareUi" visibility="protected" complexity="3" crap="3" count="3"/>
-      <line num="61" type="stmt" count="3"/>
+      <line num="56" type="stmt" count="4"/>
+      <line num="58" type="stmt" count="4"/>
+      <line num="60" type="method" name="prepareUi" visibility="protected" complexity="3" crap="3" count="3"/>
       <line num="62" type="stmt" count="3"/>
       <line num="63" type="stmt" count="3"/>
       <line num="64" type="stmt" count="3"/>
@@ -171,13 +176,13 @@
       <line num="76" type="stmt" count="3"/>
       <line num="77" type="stmt" count="3"/>
       <line num="78" type="stmt" count="3"/>
-      <line num="80" type="stmt" count="3"/>
+      <line num="79" type="stmt" count="3"/>
       <line num="81" type="stmt" count="3"/>
       <line num="82" type="stmt" count="3"/>
       <line num="83" type="stmt" count="3"/>
       <line num="84" type="stmt" count="3"/>
       <line num="85" type="stmt" count="3"/>
-      <line num="87" type="stmt" count="3"/>
+      <line num="86" type="stmt" count="3"/>
       <line num="88" type="stmt" count="3"/>
       <line num="89" type="stmt" count="3"/>
       <line num="90" type="stmt" count="3"/>
@@ -191,16 +196,18 @@
       <line num="98" type="stmt" count="3"/>
       <line num="99" type="stmt" count="3"/>
       <line num="100" type="stmt" count="3"/>
-      <line num="102" type="method" name="buildLanguageSelectorHtml" visibility="protected" complexity="5" crap="5" count="3"/>
-      <line num="104" type="stmt" count="3"/>
-      <line num="105" type="stmt" count="3"/>
+      <line num="101" type="stmt" count="3"/>
+      <line num="102" type="stmt" count="3"/>
+      <line num="104" type="method" name="buildLanguageSelectorHtml" visibility="protected" complexity="5" crap="5" count="3"/>
       <line num="106" type="stmt" count="3"/>
       <line num="107" type="stmt" count="3"/>
       <line num="108" type="stmt" count="3"/>
       <line num="109" type="stmt" count="3"/>
       <line num="110" type="stmt" count="3"/>
       <line num="111" type="stmt" count="3"/>
-      <metrics loc="114" ncloc="114" classes="1" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="77" coveredstatements="77" elements="82" coveredelements="82"/>
+      <line num="112" type="stmt" count="3"/>
+      <line num="113" type="stmt" count="3"/>
+      <metrics loc="116" ncloc="116" classes="1" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="78" coveredstatements="78" elements="83" coveredelements="83"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Controllers\AccountController.php">
       <class name="PHPLedger\Controllers\AccountController" namespace="global">
@@ -301,9 +308,9 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Controllers\AccountTypeFormController.php">
       <class name="PHPLedger\Controllers\AccountTypeFormController" namespace="global">
-        <metrics complexity="13" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="35" coveredstatements="0" elements="38" coveredelements="0"/>
+        <metrics complexity="15" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="57" coveredstatements="0" elements="60" coveredelements="0"/>
       </class>
-      <line num="19" type="method" name="handle" visibility="protected" complexity="4" crap="20" count="0"/>
+      <line num="19" type="method" name="handle" visibility="protected" complexity="5" crap="30" count="0"/>
       <line num="21" type="stmt" count="0"/>
       <line num="22" type="stmt" count="0"/>
       <line num="23" type="stmt" count="0"/>
@@ -319,40 +326,76 @@
       <line num="34" type="stmt" count="0"/>
       <line num="35" type="stmt" count="0"/>
       <line num="36" type="stmt" count="0"/>
-      <line num="39" type="stmt" count="0"/>
+      <line num="37" type="stmt" count="0"/>
       <line num="40" type="stmt" count="0"/>
-      <line num="42" type="method" name="handlePost" visibility="private" complexity="6" crap="42" count="0"/>
-      <line num="44" type="stmt" count="0"/>
-      <line num="45" type="stmt" count="0"/>
+      <line num="41" type="stmt" count="0"/>
+      <line num="42" type="stmt" count="0"/>
+      <line num="43" type="stmt" count="0"/>
       <line num="46" type="stmt" count="0"/>
       <line num="47" type="stmt" count="0"/>
       <line num="48" type="stmt" count="0"/>
+      <line num="49" type="stmt" count="0"/>
       <line num="50" type="stmt" count="0"/>
       <line num="51" type="stmt" count="0"/>
+      <line num="52" type="stmt" count="0"/>
       <line num="53" type="stmt" count="0"/>
       <line num="54" type="stmt" count="0"/>
       <line num="55" type="stmt" count="0"/>
       <line num="56" type="stmt" count="0"/>
+      <line num="57" type="stmt" count="0"/>
+      <line num="58" type="stmt" count="0"/>
       <line num="59" type="stmt" count="0"/>
       <line num="60" type="stmt" count="0"/>
+      <line num="61" type="stmt" count="0"/>
       <line num="62" type="stmt" count="0"/>
-      <line num="65" type="method" name="handleSave" visibility="private" complexity="3" crap="12" count="0"/>
+      <line num="63" type="stmt" count="0"/>
+      <line num="64" type="stmt" count="0"/>
+      <line num="65" type="stmt" count="0"/>
+      <line num="66" type="stmt" count="0"/>
       <line num="67" type="stmt" count="0"/>
-      <line num="68" type="stmt" count="0"/>
-      <line num="69" type="stmt" count="0"/>
-      <line num="70" type="stmt" count="0"/>
-      <metrics loc="73" ncloc="68" classes="1" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="35" coveredstatements="0" elements="38" coveredelements="0"/>
+      <line num="69" type="method" name="handlePost" visibility="private" complexity="7" crap="56" count="0"/>
+      <line num="71" type="stmt" count="0"/>
+      <line num="72" type="stmt" count="0"/>
+      <line num="73" type="stmt" count="0"/>
+      <line num="75" type="stmt" count="0"/>
+      <line num="76" type="stmt" count="0"/>
+      <line num="77" type="stmt" count="0"/>
+      <line num="80" type="stmt" count="0"/>
+      <line num="81" type="stmt" count="0"/>
+      <line num="82" type="stmt" count="0"/>
+      <line num="83" type="stmt" count="0"/>
+      <line num="84" type="stmt" count="0"/>
+      <line num="89" type="method" name="handleSave" visibility="private" complexity="3" crap="12" count="0"/>
+      <line num="91" type="stmt" count="0"/>
+      <line num="92" type="stmt" count="0"/>
+      <line num="93" type="stmt" count="0"/>
+      <line num="94" type="stmt" count="0"/>
+      <metrics loc="97" ncloc="92" classes="1" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="57" coveredstatements="0" elements="60" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Controllers\AccountTypeListController.php">
       <class name="PHPLedger\Controllers\AccountTypeListController" namespace="global">
-        <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="4" coveredstatements="0" elements="5" coveredelements="0"/>
+        <metrics complexity="2" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="18" coveredstatements="0" elements="19" coveredelements="0"/>
       </class>
-      <line num="10" type="method" name="handle" visibility="protected" complexity="1" crap="2" count="0"/>
+      <line num="9" type="method" name="handle" visibility="protected" complexity="2" crap="6" count="0"/>
+      <line num="11" type="stmt" count="0"/>
       <line num="12" type="stmt" count="0"/>
       <line num="13" type="stmt" count="0"/>
       <line num="14" type="stmt" count="0"/>
       <line num="15" type="stmt" count="0"/>
-      <metrics loc="18" ncloc="18" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="4" coveredstatements="0" elements="5" coveredelements="0"/>
+      <line num="16" type="stmt" count="0"/>
+      <line num="17" type="stmt" count="0"/>
+      <line num="18" type="stmt" count="0"/>
+      <line num="19" type="stmt" count="0"/>
+      <line num="21" type="stmt" count="0"/>
+      <line num="22" type="stmt" count="0"/>
+      <line num="23" type="stmt" count="0"/>
+      <line num="24" type="stmt" count="0"/>
+      <line num="25" type="stmt" count="0"/>
+      <line num="26" type="stmt" count="0"/>
+      <line num="27" type="stmt" count="0"/>
+      <line num="28" type="stmt" count="0"/>
+      <line num="29" type="stmt" count="0"/>
+      <metrics loc="32" ncloc="32" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="18" coveredstatements="0" elements="19" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Controllers\AccountsController.php">
       <class name="PHPLedger\Controllers\AccountsController" namespace="global">
@@ -478,7 +521,7 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Controllers\ConfigController.php">
       <class name="PHPLedger\Controllers\ConfigController" namespace="global">
-        <metrics complexity="11" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="70" coveredstatements="0" elements="73" coveredelements="0"/>
+        <metrics complexity="12" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="86" coveredstatements="0" elements="89" coveredelements="0"/>
       </class>
       <line num="16" type="method" name="handle" visibility="protected" complexity="3" crap="12" count="0"/>
       <line num="18" type="stmt" count="0"/>
@@ -486,56 +529,55 @@
       <line num="20" type="stmt" count="0"/>
       <line num="21" type="stmt" count="0"/>
       <line num="22" type="stmt" count="0"/>
-      <line num="24" type="stmt" count="0"/>
       <line num="25" type="stmt" count="0"/>
       <line num="26" type="stmt" count="0"/>
-      <line num="27" type="stmt" count="0"/>
+      <line num="28" type="stmt" count="0"/>
       <line num="29" type="stmt" count="0"/>
       <line num="31" type="stmt" count="0"/>
-      <line num="32" type="stmt" count="0"/>
+      <line num="33" type="stmt" count="0"/>
       <line num="34" type="stmt" count="0"/>
-      <line num="37" type="method" name="checkUserPermission" visibility="private" complexity="4" crap="20" count="0"/>
+      <line num="36" type="stmt" count="0"/>
+      <line num="37" type="stmt" count="0"/>
+      <line num="38" type="stmt" count="0"/>
       <line num="39" type="stmt" count="0"/>
       <line num="40" type="stmt" count="0"/>
       <line num="41" type="stmt" count="0"/>
       <line num="42" type="stmt" count="0"/>
       <line num="43" type="stmt" count="0"/>
+      <line num="44" type="stmt" count="0"/>
       <line num="45" type="stmt" count="0"/>
       <line num="46" type="stmt" count="0"/>
-      <line num="49" type="method" name="processPost" visibility="private" complexity="4" crap="20" count="0"/>
+      <line num="47" type="stmt" count="0"/>
+      <line num="48" type="stmt" count="0"/>
+      <line num="49" type="stmt" count="0"/>
+      <line num="50" type="stmt" count="0"/>
       <line num="51" type="stmt" count="0"/>
       <line num="52" type="stmt" count="0"/>
       <line num="53" type="stmt" count="0"/>
+      <line num="54" type="stmt" count="0"/>
       <line num="55" type="stmt" count="0"/>
       <line num="56" type="stmt" count="0"/>
       <line num="57" type="stmt" count="0"/>
-      <line num="60" type="stmt" count="0"/>
-      <line num="61" type="stmt" count="0"/>
-      <line num="62" type="stmt" count="0"/>
-      <line num="63" type="stmt" count="0"/>
+      <line num="58" type="stmt" count="0"/>
+      <line num="59" type="stmt" count="0"/>
+      <line num="62" type="method" name="checkUserPermission" visibility="private" complexity="4" crap="20" count="0"/>
       <line num="64" type="stmt" count="0"/>
       <line num="65" type="stmt" count="0"/>
-      <line num="66" type="stmt" count="0"/>
       <line num="67" type="stmt" count="0"/>
       <line num="68" type="stmt" count="0"/>
       <line num="69" type="stmt" count="0"/>
-      <line num="70" type="stmt" count="0"/>
       <line num="71" type="stmt" count="0"/>
       <line num="72" type="stmt" count="0"/>
-      <line num="73" type="stmt" count="0"/>
-      <line num="74" type="stmt" count="0"/>
-      <line num="75" type="stmt" count="0"/>
-      <line num="76" type="stmt" count="0"/>
-      <line num="77" type="stmt" count="0"/>
+      <line num="76" type="method" name="processPost" visibility="private" complexity="5" crap="30" count="0"/>
       <line num="78" type="stmt" count="0"/>
       <line num="79" type="stmt" count="0"/>
       <line num="80" type="stmt" count="0"/>
-      <line num="81" type="stmt" count="0"/>
       <line num="82" type="stmt" count="0"/>
       <line num="83" type="stmt" count="0"/>
-      <line num="85" type="stmt" count="0"/>
-      <line num="86" type="stmt" count="0"/>
+      <line num="84" type="stmt" count="0"/>
       <line num="87" type="stmt" count="0"/>
+      <line num="88" type="stmt" count="0"/>
+      <line num="89" type="stmt" count="0"/>
       <line num="90" type="stmt" count="0"/>
       <line num="91" type="stmt" count="0"/>
       <line num="92" type="stmt" count="0"/>
@@ -547,13 +589,30 @@
       <line num="98" type="stmt" count="0"/>
       <line num="99" type="stmt" count="0"/>
       <line num="100" type="stmt" count="0"/>
+      <line num="101" type="stmt" count="0"/>
+      <line num="102" type="stmt" count="0"/>
       <line num="103" type="stmt" count="0"/>
       <line num="104" type="stmt" count="0"/>
       <line num="105" type="stmt" count="0"/>
       <line num="106" type="stmt" count="0"/>
       <line num="107" type="stmt" count="0"/>
       <line num="109" type="stmt" count="0"/>
-      <metrics loc="112" ncloc="112" classes="1" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="70" coveredstatements="0" elements="73" coveredelements="0"/>
+      <line num="110" type="stmt" count="0"/>
+      <line num="113" type="stmt" count="0"/>
+      <line num="114" type="stmt" count="0"/>
+      <line num="116" type="stmt" count="0"/>
+      <line num="117" type="stmt" count="0"/>
+      <line num="118" type="stmt" count="0"/>
+      <line num="119" type="stmt" count="0"/>
+      <line num="120" type="stmt" count="0"/>
+      <line num="121" type="stmt" count="0"/>
+      <line num="124" type="stmt" count="0"/>
+      <line num="125" type="stmt" count="0"/>
+      <line num="126" type="stmt" count="0"/>
+      <line num="127" type="stmt" count="0"/>
+      <line num="128" type="stmt" count="0"/>
+      <line num="131" type="stmt" count="0"/>
+      <metrics loc="134" ncloc="134" classes="1" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="86" coveredstatements="0" elements="89" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Controllers\EntryCategoryFormController.php">
       <class name="PHPLedger\Controllers\EntryCategoryFormController" namespace="global">
@@ -1055,7 +1114,7 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Controllers\LoginController.php">
       <class name="PHPLedger\Controllers\LoginController" namespace="global">
-        <metrics complexity="19" methods="5" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="71" coveredstatements="0" elements="76" coveredelements="0"/>
+        <metrics complexity="19" methods="5" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="70" coveredstatements="0" elements="75" coveredelements="0"/>
       </class>
       <line num="16" type="method" name="handle" visibility="public" complexity="4" crap="20" count="0"/>
       <line num="18" type="stmt" count="0"/>
@@ -1132,26 +1191,34 @@
       <line num="121" type="stmt" count="0"/>
       <line num="122" type="stmt" count="0"/>
       <line num="123" type="stmt" count="0"/>
-      <line num="124" type="stmt" count="0"/>
-      <metrics loc="127" ncloc="127" classes="1" methods="5" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="71" coveredstatements="0" elements="76" coveredelements="0"/>
+      <metrics loc="126" ncloc="126" classes="1" methods="5" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="70" coveredstatements="0" elements="75" coveredelements="0"/>
     </file>
-    <file name="C:\pessoal\work\contas\src\Controllers\ReportMonthController.php">
-      <class name="PHPLedger\Controllers\ReportMonthController" namespace="global">
-        <metrics complexity="19" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="116" coveredstatements="0" elements="117" coveredelements="0"/>
+    <file name="C:\pessoal\work\contas\src\Controllers\ReportController.php">
+      <class name="PHPLedger\Controllers\ReportController" namespace="global">
+        <metrics complexity="10" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="58" coveredstatements="0" elements="60" coveredelements="0"/>
       </class>
-      <line num="19" type="method" name="handle" visibility="protected" complexity="19" crap="380" count="0"/>
+      <line num="13" type="method" name="handle" visibility="protected" complexity="6" crap="42" count="0"/>
+      <line num="15" type="stmt" count="0"/>
+      <line num="16" type="stmt" count="0"/>
+      <line num="17" type="stmt" count="0"/>
+      <line num="18" type="stmt" count="0"/>
+      <line num="20" type="stmt" count="0"/>
       <line num="21" type="stmt" count="0"/>
       <line num="22" type="stmt" count="0"/>
-      <line num="23" type="stmt" count="0"/>
       <line num="24" type="stmt" count="0"/>
       <line num="25" type="stmt" count="0"/>
       <line num="26" type="stmt" count="0"/>
+      <line num="27" type="stmt" count="0"/>
+      <line num="28" type="stmt" count="0"/>
       <line num="29" type="stmt" count="0"/>
       <line num="30" type="stmt" count="0"/>
       <line num="31" type="stmt" count="0"/>
       <line num="32" type="stmt" count="0"/>
+      <line num="33" type="stmt" count="0"/>
       <line num="34" type="stmt" count="0"/>
       <line num="35" type="stmt" count="0"/>
+      <line num="36" type="stmt" count="0"/>
+      <line num="37" type="stmt" count="0"/>
       <line num="38" type="stmt" count="0"/>
       <line num="39" type="stmt" count="0"/>
       <line num="40" type="stmt" count="0"/>
@@ -1164,123 +1231,33 @@
       <line num="47" type="stmt" count="0"/>
       <line num="48" type="stmt" count="0"/>
       <line num="49" type="stmt" count="0"/>
-      <line num="50" type="stmt" count="0"/>
-      <line num="51" type="stmt" count="0"/>
-      <line num="52" type="stmt" count="0"/>
+      <line num="52" type="method" name="resolvePeriod" visibility="private" complexity="4" crap="20" count="0"/>
       <line num="54" type="stmt" count="0"/>
       <line num="55" type="stmt" count="0"/>
       <line num="56" type="stmt" count="0"/>
       <line num="57" type="stmt" count="0"/>
       <line num="58" type="stmt" count="0"/>
       <line num="59" type="stmt" count="0"/>
-      <line num="60" type="stmt" count="0"/>
       <line num="61" type="stmt" count="0"/>
       <line num="62" type="stmt" count="0"/>
       <line num="63" type="stmt" count="0"/>
       <line num="64" type="stmt" count="0"/>
       <line num="65" type="stmt" count="0"/>
       <line num="66" type="stmt" count="0"/>
-      <line num="67" type="stmt" count="0"/>
-      <line num="68" type="stmt" count="0"/>
+      <line num="69" type="stmt" count="0"/>
       <line num="70" type="stmt" count="0"/>
       <line num="71" type="stmt" count="0"/>
       <line num="72" type="stmt" count="0"/>
-      <line num="73" type="stmt" count="0"/>
       <line num="74" type="stmt" count="0"/>
       <line num="75" type="stmt" count="0"/>
       <line num="76" type="stmt" count="0"/>
       <line num="77" type="stmt" count="0"/>
       <line num="78" type="stmt" count="0"/>
       <line num="79" type="stmt" count="0"/>
-      <line num="91" type="stmt" count="0"/>
-      <line num="93" type="stmt" count="0"/>
-      <line num="94" type="stmt" count="0"/>
-      <line num="95" type="stmt" count="0"/>
-      <line num="96" type="stmt" count="0"/>
-      <line num="97" type="stmt" count="0"/>
-      <line num="98" type="stmt" count="0"/>
-      <line num="99" type="stmt" count="0"/>
-      <line num="100" type="stmt" count="0"/>
-      <line num="101" type="stmt" count="0"/>
-      <line num="102" type="stmt" count="0"/>
-      <line num="103" type="stmt" count="0"/>
-      <line num="104" type="stmt" count="0"/>
-      <line num="106" type="stmt" count="0"/>
-      <line num="109" type="stmt" count="0"/>
-      <line num="110" type="stmt" count="0"/>
-      <line num="111" type="stmt" count="0"/>
-      <line num="112" type="stmt" count="0"/>
-      <line num="113" type="stmt" count="0"/>
-      <line num="115" type="stmt" count="0"/>
-      <line num="122" type="stmt" count="0"/>
-      <line num="123" type="stmt" count="0"/>
-      <line num="124" type="stmt" count="0"/>
-      <line num="125" type="stmt" count="0"/>
-      <line num="126" type="stmt" count="0"/>
-      <line num="127" type="stmt" count="0"/>
-      <line num="128" type="stmt" count="0"/>
-      <line num="129" type="stmt" count="0"/>
-      <line num="130" type="stmt" count="0"/>
-      <line num="131" type="stmt" count="0"/>
-      <line num="132" type="stmt" count="0"/>
-      <line num="133" type="stmt" count="0"/>
-      <line num="134" type="stmt" count="0"/>
-      <line num="135" type="stmt" count="0"/>
-      <line num="136" type="stmt" count="0"/>
-      <line num="138" type="stmt" count="0"/>
-      <line num="139" type="stmt" count="0"/>
-      <line num="140" type="stmt" count="0"/>
-      <line num="141" type="stmt" count="0"/>
-      <line num="142" type="stmt" count="0"/>
-      <line num="144" type="stmt" count="0"/>
-      <line num="145" type="stmt" count="0"/>
-      <line num="146" type="stmt" count="0"/>
-      <line num="147" type="stmt" count="0"/>
-      <line num="151" type="stmt" count="0"/>
-      <line num="153" type="stmt" count="0"/>
-      <line num="154" type="stmt" count="0"/>
-      <line num="155" type="stmt" count="0"/>
-      <line num="156" type="stmt" count="0"/>
-      <line num="157" type="stmt" count="0"/>
-      <line num="159" type="stmt" count="0"/>
-      <line num="160" type="stmt" count="0"/>
-      <line num="162" type="stmt" count="0"/>
-      <line num="163" type="stmt" count="0"/>
-      <line num="189" type="stmt" count="0"/>
-      <line num="190" type="stmt" count="0"/>
-      <line num="191" type="stmt" count="0"/>
-      <line num="192" type="stmt" count="0"/>
-      <line num="193" type="stmt" count="0"/>
-      <line num="194" type="stmt" count="0"/>
-      <line num="195" type="stmt" count="0"/>
-      <line num="196" type="stmt" count="0"/>
-      <line num="198" type="stmt" count="0"/>
-      <line num="199" type="stmt" count="0"/>
-      <metrics loc="202" ncloc="195" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="116" coveredstatements="0" elements="117" coveredelements="0"/>
-    </file>
-    <file name="C:\pessoal\work\contas\src\Controllers\ReportYearController.php">
-      <class name="PHPLedger\Controllers\ReportYearController" namespace="global">
-        <metrics complexity="7" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="16" coveredstatements="0" elements="18" coveredelements="0"/>
-      </class>
-      <line num="19" type="method" name="handle" visibility="protected" complexity="3" crap="12" count="0"/>
-      <line num="21" type="stmt" count="0"/>
-      <line num="22" type="stmt" count="0"/>
-      <line num="23" type="stmt" count="0"/>
-      <line num="24" type="stmt" count="0"/>
-      <line num="25" type="stmt" count="0"/>
-      <line num="26" type="stmt" count="0"/>
-      <line num="27" type="stmt" count="0"/>
-      <line num="28" type="stmt" count="0"/>
-      <line num="29" type="stmt" count="0"/>
-      <line num="30" type="stmt" count="0"/>
-      <line num="31" type="stmt" count="0"/>
-      <line num="32" type="stmt" count="0"/>
-      <line num="33" type="stmt" count="0"/>
-      <line num="35" type="method" name="validateYear" visibility="private" complexity="4" crap="20" count="0"/>
-      <line num="37" type="stmt" count="0"/>
-      <line num="38" type="stmt" count="0"/>
-      <line num="40" type="stmt" count="0"/>
-      <metrics loc="44" ncloc="37" classes="1" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="16" coveredstatements="0" elements="18" coveredelements="0"/>
+      <line num="80" type="stmt" count="0"/>
+      <line num="81" type="stmt" count="0"/>
+      <line num="82" type="stmt" count="0"/>
+      <metrics loc="85" ncloc="85" classes="1" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="58" coveredstatements="0" elements="60" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Controllers\ResetPasswordController.php">
       <class name="PHPLedger\Controllers\ResetPasswordController" namespace="global">
@@ -1334,27 +1311,56 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Controllers\UpdateStorageController.php">
       <class name="PHPLedger\Controllers\UpdateStorageController" namespace="global">
-        <metrics complexity="6" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="0" elements="18" coveredelements="0"/>
+        <metrics complexity="8" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="46" coveredstatements="0" elements="47" coveredelements="0"/>
       </class>
-      <line num="23" type="method" name="handle" visibility="protected" complexity="6" crap="42" count="0"/>
+      <line num="21" type="method" name="handle" visibility="protected" complexity="8" crap="72" count="0"/>
+      <line num="23" type="stmt" count="0"/>
+      <line num="24" type="stmt" count="0"/>
       <line num="25" type="stmt" count="0"/>
       <line num="26" type="stmt" count="0"/>
       <line num="27" type="stmt" count="0"/>
       <line num="28" type="stmt" count="0"/>
       <line num="29" type="stmt" count="0"/>
-      <line num="30" type="stmt" count="0"/>
       <line num="31" type="stmt" count="0"/>
+      <line num="32" type="stmt" count="0"/>
       <line num="33" type="stmt" count="0"/>
       <line num="34" type="stmt" count="0"/>
       <line num="35" type="stmt" count="0"/>
       <line num="36" type="stmt" count="0"/>
-      <line num="37" type="stmt" count="0"/>
+      <line num="40" type="stmt" count="0"/>
+      <line num="41" type="stmt" count="0"/>
       <line num="42" type="stmt" count="0"/>
       <line num="43" type="stmt" count="0"/>
       <line num="44" type="stmt" count="0"/>
-      <line num="45" type="stmt" count="0"/>
       <line num="46" type="stmt" count="0"/>
-      <metrics loc="49" ncloc="42" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="0" elements="18" coveredelements="0"/>
+      <line num="49" type="stmt" count="0"/>
+      <line num="50" type="stmt" count="0"/>
+      <line num="51" type="stmt" count="0"/>
+      <line num="52" type="stmt" count="0"/>
+      <line num="53" type="stmt" count="0"/>
+      <line num="54" type="stmt" count="0"/>
+      <line num="55" type="stmt" count="0"/>
+      <line num="56" type="stmt" count="0"/>
+      <line num="57" type="stmt" count="0"/>
+      <line num="58" type="stmt" count="0"/>
+      <line num="59" type="stmt" count="0"/>
+      <line num="60" type="stmt" count="0"/>
+      <line num="61" type="stmt" count="0"/>
+      <line num="62" type="stmt" count="0"/>
+      <line num="63" type="stmt" count="0"/>
+      <line num="64" type="stmt" count="0"/>
+      <line num="65" type="stmt" count="0"/>
+      <line num="66" type="stmt" count="0"/>
+      <line num="67" type="stmt" count="0"/>
+      <line num="68" type="stmt" count="0"/>
+      <line num="69" type="stmt" count="0"/>
+      <line num="70" type="stmt" count="0"/>
+      <line num="71" type="stmt" count="0"/>
+      <line num="72" type="stmt" count="0"/>
+      <line num="73" type="stmt" count="0"/>
+      <line num="74" type="stmt" count="0"/>
+      <line num="75" type="stmt" count="0"/>
+      <metrics loc="78" ncloc="71" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="46" coveredstatements="0" elements="47" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Domain\Account.php">
       <class name="PHPLedger\Domain\Account" namespace="global">
@@ -1413,15 +1419,16 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Domain\Report.php">
       <class name="PHPLedger\Domain\Report" namespace="global">
-        <metrics complexity="2" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="0" elements="6" coveredelements="0"/>
+        <metrics complexity="2" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="6" coveredstatements="0" elements="8" coveredelements="0"/>
       </class>
+      <line num="24" type="method" name="getReport" visibility="public" complexity="0" crap="0" count="0"/>
       <line num="25" type="method" name="updateSubtotal" visibility="protected" complexity="2" crap="6" count="0"/>
       <line num="27" type="stmt" count="0"/>
       <line num="28" type="stmt" count="0"/>
       <line num="29" type="stmt" count="0"/>
       <line num="30" type="stmt" count="0"/>
       <line num="31" type="stmt" count="0"/>
-      <metrics loc="35" ncloc="26" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="0" elements="6" coveredelements="0"/>
+      <metrics loc="35" ncloc="26" classes="1" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="6" coveredstatements="0" elements="8" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Domain\ReportMonth.php">
       <class name="PHPLedger\Domain\ReportMonth" namespace="global">
@@ -1521,25 +1528,127 @@
       <line num="34" type="stmt" count="0"/>
       <metrics loc="37" ncloc="37" classes="1" methods="4" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="0" elements="14" coveredelements="0"/>
     </file>
-    <file name="C:\pessoal\work\contas\src\Routing\Router.php">
-      <class name="PHPLedger\Routing\Router" namespace="global">
-        <metrics complexity="5" methods="3" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="11" coveredstatements="1" elements="14" coveredelements="2"/>
+    <file name="C:\pessoal\work\contas\src\Reports\Builders\CategorySummaryReportBuilder.php">
+      <class name="PHPLedger\Reports\Builders\CategorySummaryReportBuilder" namespace="global">
+        <metrics complexity="23" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="86" coveredstatements="0" elements="89" coveredelements="0"/>
       </class>
-      <line num="48" type="method" name="handleRequest" visibility="public" complexity="3" crap="12" count="0"/>
+      <line num="9" type="method" name="build" visibility="public" complexity="20" crap="420" count="0"/>
+      <line num="11" type="stmt" count="0"/>
+      <line num="12" type="stmt" count="0"/>
+      <line num="15" type="stmt" count="0"/>
+      <line num="16" type="stmt" count="0"/>
+      <line num="17" type="stmt" count="0"/>
+      <line num="18" type="stmt" count="0"/>
+      <line num="19" type="stmt" count="0"/>
+      <line num="20" type="stmt" count="0"/>
+      <line num="21" type="stmt" count="0"/>
+      <line num="23" type="stmt" count="0"/>
+      <line num="24" type="stmt" count="0"/>
+      <line num="25" type="stmt" count="0"/>
+      <line num="26" type="stmt" count="0"/>
+      <line num="27" type="stmt" count="0"/>
+      <line num="28" type="stmt" count="0"/>
+      <line num="29" type="stmt" count="0"/>
+      <line num="31" type="stmt" count="0"/>
+      <line num="32" type="stmt" count="0"/>
+      <line num="33" type="stmt" count="0"/>
+      <line num="34" type="stmt" count="0"/>
+      <line num="35" type="stmt" count="0"/>
+      <line num="36" type="stmt" count="0"/>
+      <line num="37" type="stmt" count="0"/>
+      <line num="38" type="stmt" count="0"/>
+      <line num="39" type="stmt" count="0"/>
+      <line num="40" type="stmt" count="0"/>
+      <line num="41" type="stmt" count="0"/>
+      <line num="42" type="stmt" count="0"/>
+      <line num="43" type="stmt" count="0"/>
+      <line num="44" type="stmt" count="0"/>
+      <line num="45" type="stmt" count="0"/>
+      <line num="46" type="stmt" count="0"/>
+      <line num="47" type="stmt" count="0"/>
+      <line num="48" type="stmt" count="0"/>
+      <line num="49" type="stmt" count="0"/>
       <line num="50" type="stmt" count="0"/>
-      <line num="51" type="stmt" count="0"/>
-      <line num="52" type="stmt" count="0"/>
       <line num="53" type="stmt" count="0"/>
       <line num="54" type="stmt" count="0"/>
       <line num="55" type="stmt" count="0"/>
       <line num="57" type="stmt" count="0"/>
+      <line num="58" type="stmt" count="0"/>
       <line num="59" type="stmt" count="0"/>
       <line num="60" type="stmt" count="0"/>
-      <line num="63" type="method" name="publicActions" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="61" type="stmt" count="0"/>
+      <line num="62" type="stmt" count="0"/>
+      <line num="63" type="stmt" count="0"/>
+      <line num="64" type="stmt" count="0"/>
       <line num="65" type="stmt" count="0"/>
-      <line num="68" type="method" name="getAllowedActions" visibility="public" complexity="1" crap="1" count="6"/>
-      <line num="70" type="stmt" count="6"/>
-      <metrics loc="73" ncloc="72" classes="1" methods="3" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="11" coveredstatements="1" elements="14" coveredelements="2"/>
+      <line num="67" type="stmt" count="0"/>
+      <line num="68" type="stmt" count="0"/>
+      <line num="69" type="stmt" count="0"/>
+      <line num="71" type="stmt" count="0"/>
+      <line num="72" type="stmt" count="0"/>
+      <line num="76" type="stmt" count="0"/>
+      <line num="77" type="stmt" count="0"/>
+      <line num="80" type="stmt" count="0"/>
+      <line num="81" type="stmt" count="0"/>
+      <line num="83" type="stmt" count="0"/>
+      <line num="85" type="stmt" count="0"/>
+      <line num="86" type="stmt" count="0"/>
+      <line num="87" type="stmt" count="0"/>
+      <line num="90" type="stmt" count="0"/>
+      <line num="91" type="stmt" count="0"/>
+      <line num="92" type="stmt" count="0"/>
+      <line num="94" type="stmt" count="0"/>
+      <line num="96" type="stmt" count="0"/>
+      <line num="97" type="stmt" count="0"/>
+      <line num="98" type="stmt" count="0"/>
+      <line num="101" type="stmt" count="0"/>
+      <line num="102" type="stmt" count="0"/>
+      <line num="104" type="stmt" count="0"/>
+      <line num="105" type="stmt" count="0"/>
+      <line num="106" type="stmt" count="0"/>
+      <line num="108" type="stmt" count="0"/>
+      <line num="111" type="method" name="makeLink" visibility="private" complexity="1" crap="2" count="0"/>
+      <line num="113" type="stmt" count="0"/>
+      <line num="114" type="stmt" count="0"/>
+      <line num="115" type="stmt" count="0"/>
+      <line num="116" type="stmt" count="0"/>
+      <line num="117" type="stmt" count="0"/>
+      <line num="118" type="stmt" count="0"/>
+      <line num="121" type="method" name="makeColumnLink" visibility="private" complexity="2" crap="6" count="0"/>
+      <line num="123" type="stmt" count="0"/>
+      <line num="124" type="stmt" count="0"/>
+      <line num="125" type="stmt" count="0"/>
+      <line num="127" type="stmt" count="0"/>
+      <line num="128" type="stmt" count="0"/>
+      <line num="130" type="stmt" count="0"/>
+      <metrics loc="133" ncloc="133" classes="1" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="86" coveredstatements="0" elements="89" coveredelements="0"/>
+    </file>
+    <file name="C:\pessoal\work\contas\src\Reports\CategorySummaryReport.php">
+      <class name="PHPLedger\Reports\CategorySummaryReport" namespace="global">
+        <metrics complexity="0" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="1" coveredstatements="0" elements="2" coveredelements="0"/>
+      </class>
+      <line num="10" type="method" name="fetch" visibility="public" complexity="0" crap="0" count="0"/>
+      <metrics loc="12" ncloc="12" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="1" coveredstatements="0" elements="2" coveredelements="0"/>
+    </file>
+    <file name="C:\pessoal\work\contas\src\Routing\Router.php">
+      <class name="PHPLedger\Routing\Router" namespace="global">
+        <metrics complexity="5" methods="3" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="11" coveredstatements="1" elements="14" coveredelements="2"/>
+      </class>
+      <line num="46" type="method" name="handleRequest" visibility="public" complexity="3" crap="12" count="0"/>
+      <line num="48" type="stmt" count="0"/>
+      <line num="49" type="stmt" count="0"/>
+      <line num="50" type="stmt" count="0"/>
+      <line num="51" type="stmt" count="0"/>
+      <line num="52" type="stmt" count="0"/>
+      <line num="53" type="stmt" count="0"/>
+      <line num="55" type="stmt" count="0"/>
+      <line num="57" type="stmt" count="0"/>
+      <line num="58" type="stmt" count="0"/>
+      <line num="61" type="method" name="publicActions" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="63" type="stmt" count="0"/>
+      <line num="66" type="method" name="getAllowedActions" visibility="public" complexity="1" crap="1" count="6"/>
+      <line num="68" type="stmt" count="6"/>
+      <metrics loc="71" ncloc="70" classes="1" methods="3" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="11" coveredstatements="1" elements="14" coveredelements="2"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Storage\Abstract\AbstractDataObject.php">
       <class name="PHPLedger\Storage\Abstract\AbstractDataObject" namespace="global">
@@ -1556,36 +1665,47 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Storage\Abstract\AbstractObjectFactory.php">
       <class name="PHPLedger\Storage\Abstract\AbstractObjectFactory" namespace="global">
-        <metrics complexity="14" methods="12" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="15" coveredstatements="1" elements="27" coveredelements="1"/>
+        <metrics complexity="12" methods="10" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="13" coveredstatements="1" elements="23" coveredelements="1"/>
       </class>
-      <line num="22" type="method" name="init" visibility="public" complexity="3" crap="6.80" count="49"/>
-      <line num="24" type="stmt" count="49"/>
-      <line num="25" type="stmt" count="0"/>
+      <line num="20" type="method" name="init" visibility="public" complexity="3" crap="6.80" count="49"/>
+      <line num="22" type="stmt" count="49"/>
+      <line num="23" type="stmt" count="0"/>
+      <line num="24" type="stmt" count="0"/>
       <line num="26" type="stmt" count="0"/>
+      <line num="30" type="method" name="dataStorage" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="32" type="stmt" count="0"/>
+      <line num="34" type="method" name="account" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="36" type="stmt" count="0"/>
+      <line num="38" type="method" name="accountType" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="40" type="stmt" count="0"/>
+      <line num="42" type="method" name="currency" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="44" type="stmt" count="0"/>
+      <line num="46" type="method" name="defaults" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="48" type="stmt" count="0"/>
+      <line num="50" type="method" name="entryCategory" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="52" type="stmt" count="0"/>
+      <line num="54" type="method" name="ledger" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="56" type="stmt" count="0"/>
+      <line num="58" type="method" name="ledgerEntry" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="60" type="stmt" count="0"/>
+      <line num="62" type="method" name="user" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="64" type="stmt" count="0"/>
+      <metrics loc="67" ncloc="67" classes="1" methods="10" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="13" coveredstatements="1" elements="23" coveredelements="1"/>
+    </file>
+    <file name="C:\pessoal\work\contas\src\Storage\Abstract\AbstractReportFactory.php">
+      <class name="PHPLedger\Storage\Abstract\AbstractReportFactory" namespace="global">
+        <metrics complexity="4" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="7" coveredstatements="0" elements="9" coveredelements="0"/>
+      </class>
+      <line num="12" type="method" name="init" visibility="public" complexity="3" crap="12" count="0"/>
+      <line num="14" type="stmt" count="0"/>
+      <line num="15" type="stmt" count="0"/>
+      <line num="18" type="stmt" count="0"/>
+      <line num="19" type="stmt" count="0"/>
+      <line num="20" type="stmt" count="0"/>
+      <line num="23" type="stmt" count="0"/>
+      <line num="26" type="method" name="categorySummary" visibility="public" complexity="1" crap="2" count="0"/>
       <line num="28" type="stmt" count="0"/>
-      <line num="32" type="method" name="dataStorage" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="34" type="stmt" count="0"/>
-      <line num="36" type="method" name="account" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="38" type="stmt" count="0"/>
-      <line num="40" type="method" name="accountType" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="42" type="stmt" count="0"/>
-      <line num="44" type="method" name="currency" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="46" type="stmt" count="0"/>
-      <line num="48" type="method" name="defaults" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="50" type="stmt" count="0"/>
-      <line num="52" type="method" name="entryCategory" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="54" type="stmt" count="0"/>
-      <line num="56" type="method" name="ledger" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="58" type="stmt" count="0"/>
-      <line num="60" type="method" name="ledgerEntry" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="62" type="stmt" count="0"/>
-      <line num="64" type="method" name="reportMonth" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="66" type="stmt" count="0"/>
-      <line num="68" type="method" name="reportYear" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="70" type="stmt" count="0"/>
-      <line num="72" type="method" name="user" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="74" type="stmt" count="0"/>
-      <metrics loc="77" ncloc="77" classes="1" methods="12" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="15" coveredstatements="1" elements="27" coveredelements="1"/>
+      <metrics loc="31" ncloc="31" classes="1" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="7" coveredstatements="0" elements="9" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Storage\MySql\MySqlAccount.php">
       <class name="PHPLedger\Storage\MySql\MySqlAccount" namespace="global">
@@ -2513,7 +2633,7 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Storage\MySql\MySqlObjectFactory.php">
       <class name="PHPLedger\Storage\MySql\MySqlObjectFactory" namespace="global">
-        <metrics complexity="11" methods="11" coveredmethods="11" conditionals="0" coveredconditionals="0" statements="11" coveredstatements="11" elements="22" coveredelements="22"/>
+        <metrics complexity="9" methods="9" coveredmethods="9" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="9" elements="18" coveredelements="18"/>
       </class>
       <line num="18" type="method" name="dataStorage" visibility="public" complexity="1" crap="1" count="3"/>
       <line num="20" type="stmt" count="3"/>
@@ -2531,137 +2651,17 @@
       <line num="44" type="stmt" count="3"/>
       <line num="46" type="method" name="ledgerEntry" visibility="public" complexity="1" crap="1" count="3"/>
       <line num="48" type="stmt" count="3"/>
-      <line num="50" type="method" name="reportMonth" visibility="public" complexity="1" crap="1" count="3"/>
+      <line num="50" type="method" name="user" visibility="public" complexity="1" crap="1" count="3"/>
       <line num="52" type="stmt" count="3"/>
-      <line num="54" type="method" name="reportYear" visibility="public" complexity="1" crap="1" count="3"/>
-      <line num="56" type="stmt" count="3"/>
-      <line num="58" type="method" name="user" visibility="public" complexity="1" crap="1" count="3"/>
-      <line num="60" type="stmt" count="3"/>
-      <metrics loc="63" ncloc="56" classes="1" methods="11" coveredmethods="11" conditionals="0" coveredconditionals="0" statements="11" coveredstatements="11" elements="22" coveredelements="22"/>
+      <metrics loc="55" ncloc="48" classes="1" methods="9" coveredmethods="9" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="9" elements="18" coveredelements="18"/>
     </file>
-    <file name="C:\pessoal\work\contas\src\Storage\MySql\MySqlReport.php">
-      <class name="PHPLedger\Storage\MySql\MySqlReport" namespace="global">
-        <metrics complexity="10" methods="4" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="29" coveredstatements="1" elements="33" coveredelements="2"/>
+    <file name="C:\pessoal\work\contas\src\Storage\MySql\MySqlReportFactory.php">
+      <class name="PHPLedger\Storage\MySql\MySqlReportFactory" namespace="global">
+        <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="1" coveredstatements="0" elements="2" coveredelements="0"/>
       </class>
-      <line num="19" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="5"/>
-      <line num="21" type="stmt" count="5"/>
-      <line num="23" type="method" name="getData" visibility="protected" complexity="3" crap="12" count="0"/>
-      <line num="25" type="stmt" count="0"/>
-      <line num="26" type="stmt" count="0"/>
-      <line num="27" type="stmt" count="0"/>
-      <line num="28" type="stmt" count="0"/>
-      <line num="30" type="stmt" count="0"/>
-      <line num="31" type="stmt" count="0"/>
-      <line num="32" type="stmt" count="0"/>
-      <line num="33" type="stmt" count="0"/>
-      <line num="34" type="stmt" count="0"/>
-      <line num="36" type="stmt" count="0"/>
-      <line num="37" type="stmt" count="0"/>
-      <line num="40" type="method" name="getReport" visibility="public" complexity="2" crap="6" count="0"/>
-      <line num="42" type="stmt" count="0"/>
-      <line num="43" type="stmt" count="0"/>
-      <line num="44" type="stmt" count="0"/>
-      <line num="45" type="stmt" count="0"/>
-      <line num="47" type="stmt" count="0"/>
-      <line num="49" type="method" name="processCategory" visibility="protected" complexity="4" crap="20" count="0"/>
-      <line num="51" type="stmt" count="0"/>
-      <line num="52" type="stmt" count="0"/>
-      <line num="53" type="stmt" count="0"/>
-      <line num="54" type="stmt" count="0"/>
-      <line num="55" type="stmt" count="0"/>
-      <line num="58" type="stmt" count="0"/>
-      <line num="59" type="stmt" count="0"/>
-      <line num="60" type="stmt" count="0"/>
-      <line num="61" type="stmt" count="0"/>
-      <line num="62" type="stmt" count="0"/>
-      <line num="63" type="stmt" count="0"/>
-      <line num="64" type="stmt" count="0"/>
-      <metrics loc="70" ncloc="63" classes="1" methods="4" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="29" coveredstatements="1" elements="33" coveredelements="2"/>
-    </file>
-    <file name="C:\pessoal\work\contas\src\Storage\MySql\MySqlReportMonth.php">
-      <class name="PHPLedger\Storage\MySql\MySqlReportMonth" namespace="global">
-        <metrics complexity="9" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="30" coveredstatements="9" elements="33" coveredelements="11"/>
-      </class>
-      <line num="22" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="3"/>
-      <line num="24" type="stmt" count="3"/>
-      <line num="25" type="stmt" count="3"/>
-      <line num="26" type="stmt" count="3"/>
-      <line num="28" type="method" name="initColumnHeaders" visibility="private" complexity="2" crap="2" count="3"/>
-      <line num="30" type="stmt" count="3"/>
-      <line num="31" type="stmt" count="3"/>
-      <line num="32" type="stmt" count="3"/>
-      <line num="33" type="stmt" count="3"/>
-      <line num="34" type="stmt" count="3"/>
-      <line num="35" type="stmt" count="3"/>
-      <line num="39" type="method" name="getReport" visibility="public" complexity="6" crap="42" count="0"/>
-      <line num="41" type="stmt" count="0"/>
-      <line num="42" type="stmt" count="0"/>
-      <line num="43" type="stmt" count="0"/>
-      <line num="48" type="stmt" count="0"/>
-      <line num="49" type="stmt" count="0"/>
-      <line num="50" type="stmt" count="0"/>
-      <line num="51" type="stmt" count="0"/>
-      <line num="52" type="stmt" count="0"/>
-      <line num="53" type="stmt" count="0"/>
-      <line num="54" type="stmt" count="0"/>
-      <line num="55" type="stmt" count="0"/>
-      <line num="56" type="stmt" count="0"/>
-      <line num="57" type="stmt" count="0"/>
-      <line num="60" type="stmt" count="0"/>
-      <line num="61" type="stmt" count="0"/>
-      <line num="62" type="stmt" count="0"/>
-      <line num="63" type="stmt" count="0"/>
-      <line num="64" type="stmt" count="0"/>
-      <line num="65" type="stmt" count="0"/>
-      <line num="66" type="stmt" count="0"/>
-      <line num="69" type="stmt" count="0"/>
-      <metrics loc="72" ncloc="65" classes="1" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="30" coveredstatements="9" elements="33" coveredelements="11"/>
-    </file>
-    <file name="C:\pessoal\work\contas\src\Storage\MySql\MySqlReportYear.php">
-      <class name="PHPLedger\Storage\MySql\MySqlReportYear" namespace="global">
-        <metrics complexity="13" methods="4" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="36" coveredstatements="3" elements="40" coveredelements="4"/>
-      </class>
-      <line num="27" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="3"/>
-      <line num="29" type="stmt" count="3"/>
-      <line num="30" type="stmt" count="3"/>
-      <line num="31" type="stmt" count="3"/>
-      <line num="33" type="method" name="getReport" visibility="public" complexity="10" crap="110" count="0"/>
-      <line num="35" type="stmt" count="0"/>
-      <line num="36" type="stmt" count="0"/>
-      <line num="37" type="stmt" count="0"/>
-      <line num="38" type="stmt" count="0"/>
-      <line num="39" type="stmt" count="0"/>
-      <line num="40" type="stmt" count="0"/>
-      <line num="42" type="stmt" count="0"/>
-      <line num="43" type="stmt" count="0"/>
-      <line num="44" type="stmt" count="0"/>
-      <line num="45" type="stmt" count="0"/>
-      <line num="47" type="stmt" count="0"/>
-      <line num="52" type="stmt" count="0"/>
-      <line num="53" type="stmt" count="0"/>
-      <line num="54" type="stmt" count="0"/>
-      <line num="55" type="stmt" count="0"/>
-      <line num="56" type="stmt" count="0"/>
-      <line num="57" type="stmt" count="0"/>
-      <line num="58" type="stmt" count="0"/>
-      <line num="59" type="stmt" count="0"/>
-      <line num="60" type="stmt" count="0"/>
-      <line num="61" type="stmt" count="0"/>
-      <line num="64" type="stmt" count="0"/>
-      <line num="65" type="stmt" count="0"/>
-      <line num="66" type="stmt" count="0"/>
-      <line num="67" type="stmt" count="0"/>
-      <line num="68" type="stmt" count="0"/>
-      <line num="69" type="stmt" count="0"/>
-      <line num="70" type="stmt" count="0"/>
-      <line num="71" type="stmt" count="0"/>
-      <line num="73" type="stmt" count="0"/>
-      <line num="77" type="stmt" count="0"/>
-      <line num="79" type="method" name="getFirstYear" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="81" type="stmt" count="0"/>
-      <line num="83" type="method" name="getLastYear" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="85" type="stmt" count="0"/>
-      <metrics loc="88" ncloc="81" classes="1" methods="4" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="36" coveredstatements="3" elements="40" coveredelements="4"/>
+      <line num="11" type="method" name="categorySummary" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="13" type="stmt" count="0"/>
+      <metrics loc="16" ncloc="16" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="1" coveredstatements="0" elements="2" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Storage\MySql\MySqlSchemaManager.php">
       <metrics loc="2" ncloc="2" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
@@ -2675,27 +2675,27 @@
       <line num="36" type="stmt" count="0"/>
       <line num="37" type="stmt" count="0"/>
       <line num="38" type="stmt" count="0"/>
-      <line num="40" type="method" name="instance" visibility="public" complexity="1" crap="1" count="64"/>
-      <line num="42" type="stmt" count="64"/>
-      <line num="44" type="method" name="getConnection" visibility="public" complexity="1" crap="1" count="61"/>
-      <line num="46" type="stmt" count="61"/>
-      <line num="47" type="stmt" count="61"/>
-      <line num="49" type="method" name="connect" visibility="private" complexity="7" crap="13.12" count="61"/>
-      <line num="51" type="stmt" count="61"/>
-      <line num="52" type="stmt" count="61"/>
-      <line num="53" type="stmt" count="61"/>
-      <line num="54" type="stmt" count="61"/>
-      <line num="55" type="stmt" count="61"/>
-      <line num="56" type="stmt" count="61"/>
-      <line num="57" type="stmt" count="61"/>
-      <line num="58" type="stmt" count="61"/>
-      <line num="61" type="stmt" count="61"/>
-      <line num="62" type="stmt" count="61"/>
-      <line num="63" type="stmt" count="61"/>
+      <line num="40" type="method" name="instance" visibility="public" complexity="1" crap="1" count="59"/>
+      <line num="42" type="stmt" count="59"/>
+      <line num="44" type="method" name="getConnection" visibility="public" complexity="1" crap="1" count="56"/>
+      <line num="46" type="stmt" count="56"/>
+      <line num="47" type="stmt" count="56"/>
+      <line num="49" type="method" name="connect" visibility="private" complexity="7" crap="13.12" count="56"/>
+      <line num="51" type="stmt" count="56"/>
+      <line num="52" type="stmt" count="56"/>
+      <line num="53" type="stmt" count="56"/>
+      <line num="54" type="stmt" count="56"/>
+      <line num="55" type="stmt" count="56"/>
+      <line num="56" type="stmt" count="56"/>
+      <line num="57" type="stmt" count="56"/>
+      <line num="58" type="stmt" count="56"/>
+      <line num="61" type="stmt" count="56"/>
+      <line num="62" type="stmt" count="56"/>
+      <line num="63" type="stmt" count="56"/>
       <line num="65" type="stmt" count="0"/>
       <line num="66" type="stmt" count="0"/>
       <line num="69" type="stmt" count="0"/>
-      <line num="71" type="stmt" count="61"/>
+      <line num="71" type="stmt" count="56"/>
       <line num="74" type="stmt" count="0"/>
       <line num="75" type="stmt" count="0"/>
       <line num="76" type="stmt" count="0"/>
@@ -2706,7 +2706,7 @@
       <line num="82" type="stmt" count="0"/>
       <line num="83" type="stmt" count="0"/>
       <line num="84" type="stmt" count="0"/>
-      <line num="86" type="stmt" count="61"/>
+      <line num="86" type="stmt" count="56"/>
       <line num="89" type="method" name="addMessage" visibility="public" complexity="1" crap="2" count="0"/>
       <line num="91" type="stmt" count="0"/>
       <line num="92" type="stmt" count="0"/>
@@ -3356,22 +3356,20 @@
       <line num="246" type="stmt" count="0"/>
       <metrics loc="249" ncloc="242" classes="1" methods="8" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="138" coveredstatements="2" elements="146" coveredelements="3"/>
     </file>
-    <file name="C:\pessoal\work\contas\src\Storage\MySql\ReportAggregate.php">
-      <class name="PHPLedger\Storage\MySql\ReportAggregate" namespace="global">
-        <metrics complexity="12" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="39" coveredstatements="0" elements="42" coveredelements="0"/>
+    <file name="C:\pessoal\work\contas\src\Storage\MySql\Reports\MySqlCategorySummaryReport.php">
+      <class name="PHPLedger\Storage\MySql\Reports\MySqlCategorySummaryReport" namespace="global">
+        <metrics complexity="5" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="0" elements="18" coveredelements="0"/>
       </class>
-      <line num="23" type="method" name="__construct" visibility="public" complexity="2" crap="6" count="0"/>
-      <line num="25" type="stmt" count="0"/>
-      <line num="26" type="stmt" count="0"/>
-      <line num="27" type="stmt" count="0"/>
-      <line num="31" type="method" name="getReport" visibility="public" complexity="9" crap="90" count="0"/>
-      <line num="33" type="stmt" count="0"/>
-      <line num="37" type="stmt" count="0"/>
-      <line num="38" type="stmt" count="0"/>
+      <line num="13" type="method" name="fetch" visibility="public" complexity="5" crap="30" count="0"/>
+      <line num="15" type="stmt" count="0"/>
+      <line num="16" type="stmt" count="0"/>
+      <line num="17" type="stmt" count="0"/>
+      <line num="20" type="stmt" count="0"/>
+      <line num="36" type="stmt" count="0"/>
       <line num="39" type="stmt" count="0"/>
       <line num="40" type="stmt" count="0"/>
       <line num="41" type="stmt" count="0"/>
-      <line num="42" type="stmt" count="0"/>
+      <line num="43" type="stmt" count="0"/>
       <line num="44" type="stmt" count="0"/>
       <line num="45" type="stmt" count="0"/>
       <line num="46" type="stmt" count="0"/>
@@ -3380,29 +3378,7 @@
       <line num="49" type="stmt" count="0"/>
       <line num="50" type="stmt" count="0"/>
       <line num="51" type="stmt" count="0"/>
-      <line num="52" type="stmt" count="0"/>
-      <line num="54" type="stmt" count="0"/>
-      <line num="56" type="stmt" count="0"/>
-      <line num="57" type="stmt" count="0"/>
-      <line num="58" type="stmt" count="0"/>
-      <line num="59" type="stmt" count="0"/>
-      <line num="60" type="stmt" count="0"/>
-      <line num="61" type="stmt" count="0"/>
-      <line num="62" type="stmt" count="0"/>
-      <line num="63" type="stmt" count="0"/>
-      <line num="66" type="stmt" count="0"/>
-      <line num="67" type="stmt" count="0"/>
-      <line num="68" type="stmt" count="0"/>
-      <line num="69" type="stmt" count="0"/>
-      <line num="70" type="stmt" count="0"/>
-      <line num="71" type="stmt" count="0"/>
-      <line num="72" type="stmt" count="0"/>
-      <line num="73" type="stmt" count="0"/>
-      <line num="75" type="stmt" count="0"/>
-      <line num="79" type="stmt" count="0"/>
-      <line num="85" type="method" name="getYear" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="87" type="stmt" count="0"/>
-      <metrics loc="90" ncloc="80" classes="1" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="39" coveredstatements="0" elements="42" coveredelements="0"/>
+      <metrics loc="55" ncloc="55" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="0" elements="18" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Storage\MySql\Traits\MySqlDeleteTrait.php">
       <class name="PHPLedger\Storage\MySql\Traits\MySqlDeleteTrait" namespace="global">
@@ -3462,24 +3438,32 @@
       <line num="12" type="stmt" count="0"/>
       <metrics loc="15" ncloc="15" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="1" coveredstatements="0" elements="2" coveredelements="0"/>
     </file>
+    <file name="C:\pessoal\work\contas\src\Storage\ReportFactory.php">
+      <class name="PHPLedger\Storage\ReportFactory" namespace="global">
+        <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="1" coveredstatements="0" elements="2" coveredelements="0"/>
+      </class>
+      <line num="9" type="method" name="__construct" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="11" type="stmt" count="0"/>
+      <metrics loc="14" ncloc="14" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="1" coveredstatements="0" elements="2" coveredelements="0"/>
+    </file>
     <file name="C:\pessoal\work\contas\src\Util\CSRF.php">
       <class name="PHPLedger\Util\CSRF" namespace="global">
         <metrics complexity="10" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="22" coveredstatements="22" elements="27" coveredelements="27"/>
       </class>
-      <line num="8" type="method" name="generateToken" visibility="public" complexity="1" crap="1" count="9"/>
-      <line num="10" type="stmt" count="9"/>
-      <line num="11" type="stmt" count="9"/>
-      <line num="12" type="stmt" count="9"/>
-      <line num="13" type="stmt" count="9"/>
-      <line num="14" type="stmt" count="9"/>
-      <line num="15" type="stmt" count="9"/>
-      <line num="17" type="method" name="getToken" visibility="public" complexity="3" crap="3" count="8"/>
-      <line num="19" type="stmt" count="8"/>
-      <line num="20" type="stmt" count="2"/>
-      <line num="22" type="stmt" count="6"/>
+      <line num="8" type="method" name="generateToken" visibility="public" complexity="1" crap="1" count="10"/>
+      <line num="10" type="stmt" count="10"/>
+      <line num="11" type="stmt" count="10"/>
+      <line num="12" type="stmt" count="10"/>
+      <line num="13" type="stmt" count="10"/>
+      <line num="14" type="stmt" count="10"/>
+      <line num="15" type="stmt" count="10"/>
+      <line num="17" type="method" name="getToken" visibility="public" complexity="3" crap="3" count="11"/>
+      <line num="19" type="stmt" count="11"/>
+      <line num="20" type="stmt" count="3"/>
+      <line num="22" type="stmt" count="8"/>
       <line num="23" type="stmt" count="1"/>
       <line num="24" type="stmt" count="1"/>
-      <line num="26" type="stmt" count="5"/>
+      <line num="26" type="stmt" count="7"/>
       <line num="28" type="method" name="validateToken" visibility="public" complexity="4" crap="4" count="3"/>
       <line num="30" type="stmt" count="3"/>
       <line num="31" type="stmt" count="3"/>
@@ -3490,9 +3474,9 @@
       <line num="38" type="stmt" count="2"/>
       <line num="40" type="method" name="removeToken" visibility="public" complexity="1" crap="1" count="3"/>
       <line num="42" type="stmt" count="3"/>
-      <line num="44" type="method" name="inputField" visibility="public" complexity="1" crap="1" count="2"/>
-      <line num="46" type="stmt" count="2"/>
-      <line num="47" type="stmt" count="2"/>
+      <line num="44" type="method" name="inputField" visibility="public" complexity="1" crap="1" count="5"/>
+      <line num="46" type="stmt" count="5"/>
+      <line num="47" type="stmt" count="5"/>
       <metrics loc="50" ncloc="49" classes="1" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="22" coveredstatements="22" elements="27" coveredelements="27"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Util\Config.php">
@@ -3556,8 +3540,8 @@
       <line num="84" type="stmt" count="0"/>
       <line num="90" type="method" name="getCurrent" visibility="public" complexity="1" crap="2" count="0"/>
       <line num="92" type="stmt" count="0"/>
-      <line num="99" type="method" name="resolvePath" visibility="private" complexity="1" crap="1" count="97"/>
-      <line num="101" type="stmt" count="97"/>
+      <line num="99" type="method" name="resolvePath" visibility="private" complexity="1" crap="1" count="93"/>
+      <line num="101" type="stmt" count="93"/>
       <line num="108" type="method" name="set" visibility="public" complexity="7" crap="7" count="24"/>
       <line num="110" type="stmt" count="24"/>
       <line num="111" type="stmt" count="24"/>
@@ -3571,14 +3555,14 @@
       <line num="121" type="stmt" count="2"/>
       <line num="124" type="stmt" count="24"/>
       <line num="125" type="stmt" count="3"/>
-      <line num="134" type="method" name="get" visibility="public" complexity="4" crap="4" count="78"/>
-      <line num="136" type="stmt" count="78"/>
-      <line num="137" type="stmt" count="78"/>
-      <line num="138" type="stmt" count="78"/>
-      <line num="139" type="stmt" count="78"/>
+      <line num="134" type="method" name="get" visibility="public" complexity="4" crap="4" count="74"/>
+      <line num="136" type="stmt" count="74"/>
+      <line num="137" type="stmt" count="74"/>
+      <line num="138" type="stmt" count="74"/>
+      <line num="139" type="stmt" count="74"/>
       <line num="140" type="stmt" count="8"/>
-      <line num="142" type="stmt" count="75"/>
-      <line num="144" type="stmt" count="74"/>
+      <line num="142" type="stmt" count="70"/>
+      <line num="144" type="stmt" count="69"/>
       <line num="150" type="method" name="save" visibility="public" complexity="11" crap="15.96" count="4"/>
       <line num="152" type="stmt" count="4"/>
       <line num="153" type="stmt" count="1"/>
@@ -3787,7 +3771,7 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Util\Html.php">
       <class name="PHPLedger\Util\Html" namespace="global">
-        <metrics complexity="26" methods="14" coveredmethods="12" conditionals="0" coveredconditionals="0" statements="87" coveredstatements="85" elements="101" coveredelements="97"/>
+        <metrics complexity="26" methods="14" coveredmethods="13" conditionals="0" coveredconditionals="0" statements="87" coveredstatements="86" elements="101" coveredelements="99"/>
       </class>
       <line num="21" type="method" name="yearOptions" visibility="public" complexity="1" crap="1" count="1"/>
       <line num="23" type="stmt" count="1"/>
@@ -3884,13 +3868,13 @@
       <line num="171" type="stmt" count="1"/>
       <line num="174" type="stmt" count="2"/>
       <line num="175" type="stmt" count="1"/>
-      <line num="179" type="method" name="buildSafeLink" visibility="private" complexity="2" crap="2.03" count="6"/>
+      <line num="179" type="method" name="buildSafeLink" visibility="private" complexity="2" crap="2" count="6"/>
       <line num="181" type="stmt" count="6"/>
       <line num="182" type="stmt" count="6"/>
-      <line num="183" type="stmt" count="0"/>
+      <line num="183" type="stmt" count="2"/>
       <line num="186" type="stmt" count="6"/>
       <line num="187" type="stmt" count="6"/>
-      <metrics loc="190" ncloc="179" classes="1" methods="14" coveredmethods="12" conditionals="0" coveredconditionals="0" statements="87" coveredstatements="85" elements="101" coveredelements="97"/>
+      <metrics loc="190" ncloc="179" classes="1" methods="14" coveredmethods="13" conditionals="0" coveredconditionals="0" statements="87" coveredstatements="86" elements="101" coveredelements="99"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Util\L10n.php">
       <class name="PHPLedger\Util\L10n" namespace="global">
@@ -4110,7 +4094,7 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Util\UiBuilder.php">
       <class name="PHPLedger\Util\UiBuilder" namespace="global">
-        <metrics complexity="3" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="14" elements="16" coveredelements="16"/>
+        <metrics complexity="6" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="18" coveredstatements="14" elements="21" coveredelements="16"/>
       </class>
       <line num="9" type="method" name="menu" visibility="public" complexity="2" crap="2" count="7"/>
       <line num="12" type="stmt" count="7"/>
@@ -4128,7 +4112,12 @@
       <line num="29" type="stmt" count="7"/>
       <line num="31" type="stmt" count="7"/>
       <line num="32" type="stmt" count="7"/>
-      <metrics loc="39" ncloc="39" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="14" elements="16" coveredelements="16"/>
+      <line num="39" type="method" name="notification" visibility="public" complexity="3" crap="12" count="0"/>
+      <line num="41" type="stmt" count="0"/>
+      <line num="43" type="stmt" count="0"/>
+      <line num="44" type="stmt" count="0"/>
+      <line num="45" type="stmt" count="0"/>
+      <metrics loc="58" ncloc="58" classes="1" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="18" coveredstatements="14" elements="21" coveredelements="16"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Version.php">
       <class name="PHPLedger\Version" namespace="global">
@@ -4152,112 +4141,6 @@
       <line num="45" type="method" name="equals" visibility="public" complexity="1" crap="1" count="1"/>
       <line num="47" type="stmt" count="1"/>
       <metrics loc="50" ncloc="50" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="9" elements="17" coveredelements="17"/>
-    </file>
-    <file name="C:\pessoal\work\contas\src\Views\AccountTypeFormView.php">
-      <class name="PHPLedger\Views\AccountTypeFormView" namespace="global">
-        <metrics complexity="3" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="25" coveredstatements="0" elements="26" coveredelements="0"/>
-      </class>
-      <line num="13" type="method" name="render" visibility="public" complexity="3" crap="12" count="0"/>
-      <line num="15" type="stmt" count="0"/>
-      <line num="16" type="stmt" count="0"/>
-      <line num="18" type="stmt" count="0"/>
-      <line num="19" type="stmt" count="0"/>
-      <line num="22" type="stmt" count="0"/>
-      <line num="23" type="stmt" count="0"/>
-      <line num="24" type="stmt" count="0"/>
-      <line num="26" type="stmt" count="0"/>
-      <line num="27" type="stmt" count="0"/>
-      <line num="28" type="stmt" count="0"/>
-      <line num="29" type="stmt" count="0"/>
-      <line num="30" type="stmt" count="0"/>
-      <line num="31" type="stmt" count="0"/>
-      <line num="32" type="stmt" count="0"/>
-      <line num="34" type="stmt" count="0"/>
-      <line num="36" type="stmt" count="0"/>
-      <line num="37" type="stmt" count="0"/>
-      <line num="39" type="stmt" count="0"/>
-      <line num="43" type="stmt" count="0"/>
-      <line num="47" type="stmt" count="0"/>
-      <line num="57" type="stmt" count="0"/>
-      <line num="58" type="stmt" count="0"/>
-      <line num="59" type="stmt" count="0"/>
-      <line num="61" type="stmt" count="0"/>
-      <line num="62" type="stmt" count="0"/>
-      <metrics loc="65" ncloc="65" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="25" coveredstatements="0" elements="26" coveredelements="0"/>
-    </file>
-    <file name="C:\pessoal\work\contas\src\Views\AccountTypeListView.php">
-      <class name="PHPLedger\Views\AccountTypeListView" namespace="global">
-        <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="30" coveredstatements="0" elements="31" coveredelements="0"/>
-      </class>
-      <line num="13" type="method" name="render" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="15" type="stmt" count="0"/>
-      <line num="16" type="stmt" count="0"/>
-      <line num="17" type="stmt" count="0"/>
-      <line num="18" type="stmt" count="0"/>
-      <line num="20" type="stmt" count="0"/>
-      <line num="21" type="stmt" count="0"/>
-      <line num="24" type="stmt" count="0"/>
-      <line num="25" type="stmt" count="0"/>
-      <line num="26" type="stmt" count="0"/>
-      <line num="28" type="stmt" count="0"/>
-      <line num="29" type="stmt" count="0"/>
-      <line num="30" type="stmt" count="0"/>
-      <line num="31" type="stmt" count="0"/>
-      <line num="32" type="stmt" count="0"/>
-      <line num="33" type="stmt" count="0"/>
-      <line num="34" type="stmt" count="0"/>
-      <line num="35" type="stmt" count="0"/>
-      <line num="39" type="stmt" count="0"/>
-      <line num="40" type="stmt" count="0"/>
-      <line num="42" type="stmt" count="0"/>
-      <line num="43" type="stmt" count="0"/>
-      <line num="44" type="stmt" count="0"/>
-      <line num="45" type="stmt" count="0"/>
-      <line num="46" type="stmt" count="0"/>
-      <line num="47" type="stmt" count="0"/>
-      <line num="48" type="stmt" count="0"/>
-      <line num="49" type="stmt" count="0"/>
-      <line num="50" type="stmt" count="0"/>
-      <line num="52" type="stmt" count="0"/>
-      <line num="53" type="stmt" count="0"/>
-      <metrics loc="56" ncloc="56" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="30" coveredstatements="0" elements="31" coveredelements="0"/>
-    </file>
-    <file name="C:\pessoal\work\contas\src\Views\AccountTypeView.php">
-      <class name="PHPLedger\Views\AccountTypeView" namespace="global">
-        <metrics complexity="12" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="28" coveredstatements="0" elements="31" coveredelements="0"/>
-      </class>
-      <line num="19" type="method" name="printObject" visibility="public" complexity="4" crap="20" count="0"/>
-      <line num="21" type="stmt" count="0"/>
-      <line num="22" type="stmt" count="0"/>
-      <line num="23" type="stmt" count="0"/>
-      <line num="25" type="stmt" count="0"/>
-      <line num="26" type="stmt" count="0"/>
-      <line num="27" type="stmt" count="0"/>
-      <line num="29" type="stmt" count="0"/>
-      <line num="30" type="stmt" count="0"/>
-      <line num="31" type="stmt" count="0"/>
-      <line num="32" type="stmt" count="0"/>
-      <line num="34" type="method" name="printObjectList" visibility="public" complexity="3" crap="12" count="0"/>
-      <line num="36" type="stmt" count="0"/>
-      <line num="37" type="stmt" count="0"/>
-      <line num="38" type="stmt" count="0"/>
-      <line num="39" type="stmt" count="0"/>
-      <line num="40" type="stmt" count="0"/>
-      <line num="41" type="stmt" count="0"/>
-      <line num="42" type="stmt" count="0"/>
-      <line num="45" type="stmt" count="0"/>
-      <line num="46" type="stmt" count="0"/>
-      <line num="47" type="stmt" count="0"/>
-      <line num="49" type="method" name="getSelectFromList" visibility="public" complexity="5" crap="30" count="0"/>
-      <line num="51" type="stmt" count="0"/>
-      <line num="55" type="stmt" count="0"/>
-      <line num="56" type="stmt" count="0"/>
-      <line num="57" type="stmt" count="0"/>
-      <line num="59" type="stmt" count="0"/>
-      <line num="60" type="stmt" count="0"/>
-      <line num="61" type="stmt" count="0"/>
-      <line num="64" type="stmt" count="0"/>
-      <metrics loc="67" ncloc="55" classes="1" methods="3" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="28" coveredstatements="0" elements="31" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Views\ApplicationErrorView.php">
       <class name="PHPLedger\Views\ApplicationErrorView" namespace="global">
@@ -4285,138 +4168,6 @@
       <line num="37" type="stmt" count="0"/>
       <metrics loc="40" ncloc="40" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="19" coveredstatements="0" elements="20" coveredelements="0"/>
     </file>
-    <file name="C:\pessoal\work\contas\src\Views\ConfigView.php">
-      <class name="PHPLedger\Views\ConfigView" namespace="global">
-        <metrics complexity="7" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="125" coveredstatements="0" elements="126" coveredelements="0"/>
-      </class>
-      <line num="13" type="method" name="render" visibility="public" complexity="7" crap="56" count="0"/>
-      <line num="15" type="stmt" count="0"/>
-      <line num="16" type="stmt" count="0"/>
-      <line num="17" type="stmt" count="0"/>
-      <line num="18" type="stmt" count="0"/>
-      <line num="19" type="stmt" count="0"/>
-      <line num="20" type="stmt" count="0"/>
-      <line num="21" type="stmt" count="0"/>
-      <line num="22" type="stmt" count="0"/>
-      <line num="23" type="stmt" count="0"/>
-      <line num="25" type="stmt" count="0"/>
-      <line num="26" type="stmt" count="0"/>
-      <line num="29" type="stmt" count="0"/>
-      <line num="30" type="stmt" count="0"/>
-      <line num="31" type="stmt" count="0"/>
-      <line num="33" type="stmt" count="0"/>
-      <line num="34" type="stmt" count="0"/>
-      <line num="35" type="stmt" count="0"/>
-      <line num="36" type="stmt" count="0"/>
-      <line num="37" type="stmt" count="0"/>
-      <line num="49" type="stmt" count="0"/>
-      <line num="50" type="stmt" count="0"/>
-      <line num="51" type="stmt" count="0"/>
-      <line num="52" type="stmt" count="0"/>
-      <line num="53" type="stmt" count="0"/>
-      <line num="54" type="stmt" count="0"/>
-      <line num="55" type="stmt" count="0"/>
-      <line num="56" type="stmt" count="0"/>
-      <line num="57" type="stmt" count="0"/>
-      <line num="58" type="stmt" count="0"/>
-      <line num="59" type="stmt" count="0"/>
-      <line num="60" type="stmt" count="0"/>
-      <line num="61" type="stmt" count="0"/>
-      <line num="62" type="stmt" count="0"/>
-      <line num="64" type="stmt" count="0"/>
-      <line num="65" type="stmt" count="0"/>
-      <line num="68" type="stmt" count="0"/>
-      <line num="69" type="stmt" count="0"/>
-      <line num="71" type="stmt" count="0"/>
-      <line num="72" type="stmt" count="0"/>
-      <line num="75" type="stmt" count="0"/>
-      <line num="76" type="stmt" count="0"/>
-      <line num="79" type="stmt" count="0"/>
-      <line num="80" type="stmt" count="0"/>
-      <line num="83" type="stmt" count="0"/>
-      <line num="84" type="stmt" count="0"/>
-      <line num="87" type="stmt" count="0"/>
-      <line num="88" type="stmt" count="0"/>
-      <line num="91" type="stmt" count="0"/>
-      <line num="94" type="stmt" count="0"/>
-      <line num="95" type="stmt" count="0"/>
-      <line num="96" type="stmt" count="0"/>
-      <line num="97" type="stmt" count="0"/>
-      <line num="98" type="stmt" count="0"/>
-      <line num="99" type="stmt" count="0"/>
-      <line num="100" type="stmt" count="0"/>
-      <line num="101" type="stmt" count="0"/>
-      <line num="102" type="stmt" count="0"/>
-      <line num="104" type="stmt" count="0"/>
-      <line num="105" type="stmt" count="0"/>
-      <line num="106" type="stmt" count="0"/>
-      <line num="107" type="stmt" count="0"/>
-      <line num="108" type="stmt" count="0"/>
-      <line num="109" type="stmt" count="0"/>
-      <line num="110" type="stmt" count="0"/>
-      <line num="111" type="stmt" count="0"/>
-      <line num="112" type="stmt" count="0"/>
-      <line num="113" type="stmt" count="0"/>
-      <line num="114" type="stmt" count="0"/>
-      <line num="115" type="stmt" count="0"/>
-      <line num="116" type="stmt" count="0"/>
-      <line num="118" type="stmt" count="0"/>
-      <line num="119" type="stmt" count="0"/>
-      <line num="120" type="stmt" count="0"/>
-      <line num="122" type="stmt" count="0"/>
-      <line num="123" type="stmt" count="0"/>
-      <line num="124" type="stmt" count="0"/>
-      <line num="125" type="stmt" count="0"/>
-      <line num="126" type="stmt" count="0"/>
-      <line num="127" type="stmt" count="0"/>
-      <line num="128" type="stmt" count="0"/>
-      <line num="129" type="stmt" count="0"/>
-      <line num="130" type="stmt" count="0"/>
-      <line num="131" type="stmt" count="0"/>
-      <line num="132" type="stmt" count="0"/>
-      <line num="134" type="stmt" count="0"/>
-      <line num="135" type="stmt" count="0"/>
-      <line num="136" type="stmt" count="0"/>
-      <line num="137" type="stmt" count="0"/>
-      <line num="138" type="stmt" count="0"/>
-      <line num="139" type="stmt" count="0"/>
-      <line num="140" type="stmt" count="0"/>
-      <line num="141" type="stmt" count="0"/>
-      <line num="142" type="stmt" count="0"/>
-      <line num="144" type="stmt" count="0"/>
-      <line num="145" type="stmt" count="0"/>
-      <line num="146" type="stmt" count="0"/>
-      <line num="147" type="stmt" count="0"/>
-      <line num="148" type="stmt" count="0"/>
-      <line num="150" type="stmt" count="0"/>
-      <line num="151" type="stmt" count="0"/>
-      <line num="152" type="stmt" count="0"/>
-      <line num="153" type="stmt" count="0"/>
-      <line num="154" type="stmt" count="0"/>
-      <line num="156" type="stmt" count="0"/>
-      <line num="157" type="stmt" count="0"/>
-      <line num="158" type="stmt" count="0"/>
-      <line num="159" type="stmt" count="0"/>
-      <line num="160" type="stmt" count="0"/>
-      <line num="161" type="stmt" count="0"/>
-      <line num="162" type="stmt" count="0"/>
-      <line num="163" type="stmt" count="0"/>
-      <line num="164" type="stmt" count="0"/>
-      <line num="165" type="stmt" count="0"/>
-      <line num="166" type="stmt" count="0"/>
-      <line num="168" type="stmt" count="0"/>
-      <line num="169" type="stmt" count="0"/>
-      <line num="170" type="stmt" count="0"/>
-      <line num="171" type="stmt" count="0"/>
-      <line num="172" type="stmt" count="0"/>
-      <line num="173" type="stmt" count="0"/>
-      <line num="174" type="stmt" count="0"/>
-      <line num="175" type="stmt" count="0"/>
-      <line num="176" type="stmt" count="0"/>
-      <line num="178" type="stmt" count="0"/>
-      <line num="180" type="stmt" count="0"/>
-      <metrics loc="183" ncloc="183" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="125" coveredstatements="0" elements="126" coveredelements="0"/>
-    </file>
     <file name="C:\pessoal\work\contas\src\Views\ForgotPasswordView.php">
       <class name="PHPLedger\Views\ForgotPasswordView" namespace="global">
         <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="0" elements="11" coveredelements="0"/>
@@ -4433,588 +4184,6 @@
       <line num="38" type="stmt" count="0"/>
       <line num="41" type="stmt" count="0"/>
       <metrics loc="55" ncloc="48" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="0" elements="11" coveredelements="0"/>
-    </file>
-    <file name="C:\pessoal\work\contas\src\Views\LedgerEntriesView.php">
-      <class name="PHPLedger\Views\LedgerEntriesView" namespace="global">
-        <metrics complexity="30" methods="5" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="206" coveredstatements="0" elements="211" coveredelements="0"/>
-      </class>
-      <line num="24" type="method" name="render" visibility="public" complexity="6" crap="42" count="0"/>
-      <line num="26" type="stmt" count="0"/>
-      <line num="27" type="stmt" count="0"/>
-      <line num="28" type="stmt" count="0"/>
-      <line num="29" type="stmt" count="0"/>
-      <line num="30" type="stmt" count="0"/>
-      <line num="31" type="stmt" count="0"/>
-      <line num="32" type="stmt" count="0"/>
-      <line num="33" type="stmt" count="0"/>
-      <line num="34" type="stmt" count="0"/>
-      <line num="36" type="stmt" count="0"/>
-      <line num="37" type="stmt" count="0"/>
-      <line num="40" type="stmt" count="0"/>
-      <line num="41" type="stmt" count="0"/>
-      <line num="42" type="stmt" count="0"/>
-      <line num="43" type="stmt" count="0"/>
-      <line num="45" type="stmt" count="0"/>
-      <line num="46" type="stmt" count="0"/>
-      <line num="47" type="stmt" count="0"/>
-      <line num="48" type="stmt" count="0"/>
-      <line num="49" type="stmt" count="0"/>
-      <line num="60" type="stmt" count="0"/>
-      <line num="61" type="stmt" count="0"/>
-      <line num="62" type="stmt" count="0"/>
-      <line num="63" type="stmt" count="0"/>
-      <line num="64" type="stmt" count="0"/>
-      <line num="65" type="stmt" count="0"/>
-      <line num="66" type="stmt" count="0"/>
-      <line num="67" type="stmt" count="0"/>
-      <line num="68" type="stmt" count="0"/>
-      <line num="69" type="stmt" count="0"/>
-      <line num="73" type="stmt" count="0"/>
-      <line num="74" type="stmt" count="0"/>
-      <line num="75" type="stmt" count="0"/>
-      <line num="76" type="stmt" count="0"/>
-      <line num="78" type="stmt" count="0"/>
-      <line num="79" type="stmt" count="0"/>
-      <line num="80" type="stmt" count="0"/>
-      <line num="81" type="stmt" count="0"/>
-      <line num="82" type="stmt" count="0"/>
-      <line num="83" type="stmt" count="0"/>
-      <line num="84" type="stmt" count="0"/>
-      <line num="85" type="stmt" count="0"/>
-      <line num="86" type="stmt" count="0"/>
-      <line num="88" type="stmt" count="0"/>
-      <line num="89" type="stmt" count="0"/>
-      <line num="91" type="method" name="printFilter" visibility="private" complexity="3" crap="12" count="0"/>
-      <line num="93" type="stmt" count="0"/>
-      <line num="94" type="stmt" count="0"/>
-      <line num="95" type="stmt" count="0"/>
-      <line num="96" type="stmt" count="0"/>
-      <line num="97" type="stmt" count="0"/>
-      <line num="99" type="stmt" count="0"/>
-      <line num="101" type="stmt" count="0"/>
-      <line num="102" type="stmt" count="0"/>
-      <line num="103" type="stmt" count="0"/>
-      <line num="105" type="stmt" count="0"/>
-      <line num="108" type="stmt" count="0"/>
-      <line num="110" type="stmt" count="0"/>
-      <line num="112" type="stmt" count="0"/>
-      <line num="114" type="stmt" count="0"/>
-      <line num="118" type="stmt" count="0"/>
-      <line num="121" type="stmt" count="0"/>
-      <line num="123" type="stmt" count="0"/>
-      <line num="125" type="stmt" count="0"/>
-      <line num="127" type="stmt" count="0"/>
-      <line num="131" type="stmt" count="0"/>
-      <line num="135" type="stmt" count="0"/>
-      <line num="136" type="stmt" count="0"/>
-      <line num="137" type="stmt" count="0"/>
-      <line num="140" type="stmt" count="0"/>
-      <line num="142" type="stmt" count="0"/>
-      <line num="143" type="stmt" count="0"/>
-      <line num="144" type="stmt" count="0"/>
-      <line num="148" type="stmt" count="0"/>
-      <line num="149" type="stmt" count="0"/>
-      <line num="156" type="method" name="printBody" visibility="private" complexity="8" crap="72" count="0"/>
-      <line num="158" type="stmt" count="0"/>
-      <line num="159" type="stmt" count="0"/>
-      <line num="160" type="stmt" count="0"/>
-      <line num="161" type="stmt" count="0"/>
-      <line num="162" type="stmt" count="0"/>
-      <line num="163" type="stmt" count="0"/>
-      <line num="164" type="stmt" count="0"/>
-      <line num="166" type="stmt" count="0"/>
-      <line num="167" type="stmt" count="0"/>
-      <line num="168" type="stmt" count="0"/>
-      <line num="170" type="stmt" count="0"/>
-      <line num="171" type="stmt" count="0"/>
-      <line num="172" type="stmt" count="0"/>
-      <line num="173" type="stmt" count="0"/>
-      <line num="174" type="stmt" count="0"/>
-      <line num="179" type="stmt" count="0"/>
-      <line num="180" type="stmt" count="0"/>
-      <line num="181" type="stmt" count="0"/>
-      <line num="182" type="stmt" count="0"/>
-      <line num="183" type="stmt" count="0"/>
-      <line num="184" type="stmt" count="0"/>
-      <line num="185" type="stmt" count="0"/>
-      <line num="186" type="stmt" count="0"/>
-      <line num="187" type="stmt" count="0"/>
-      <line num="192" type="stmt" count="0"/>
-      <line num="193" type="stmt" count="0"/>
-      <line num="194" type="stmt" count="0"/>
-      <line num="195" type="stmt" count="0"/>
-      <line num="196" type="stmt" count="0"/>
-      <line num="197" type="stmt" count="0"/>
-      <line num="198" type="stmt" count="0"/>
-      <line num="199" type="stmt" count="0"/>
-      <line num="200" type="stmt" count="0"/>
-      <line num="201" type="stmt" count="0"/>
-      <line num="203" type="stmt" count="0"/>
-      <line num="206" type="stmt" count="0"/>
-      <line num="207" type="stmt" count="0"/>
-      <line num="210" type="stmt" count="0"/>
-      <line num="211" type="stmt" count="0"/>
-      <line num="212" type="stmt" count="0"/>
-      <line num="213" type="stmt" count="0"/>
-      <line num="214" type="stmt" count="0"/>
-      <line num="216" type="method" name="printRow" visibility="private" complexity="3" crap="12" count="0"/>
-      <line num="218" type="stmt" count="0"/>
-      <line num="219" type="stmt" count="0"/>
-      <line num="220" type="stmt" count="0"/>
-      <line num="221" type="stmt" count="0"/>
-      <line num="222" type="stmt" count="0"/>
-      <line num="223" type="stmt" count="0"/>
-      <line num="224" type="stmt" count="0"/>
-      <line num="225" type="stmt" count="0"/>
-      <line num="226" type="stmt" count="0"/>
-      <line num="227" type="stmt" count="0"/>
-      <line num="228" type="stmt" count="0"/>
-      <line num="229" type="stmt" count="0"/>
-      <line num="230" type="stmt" count="0"/>
-      <line num="231" type="stmt" count="0"/>
-      <line num="232" type="stmt" count="0"/>
-      <line num="233" type="stmt" count="0"/>
-      <line num="234" type="stmt" count="0"/>
-      <line num="235" type="stmt" count="0"/>
-      <line num="236" type="stmt" count="0"/>
-      <line num="237" type="stmt" count="0"/>
-      <line num="238" type="stmt" count="0"/>
-      <line num="239" type="stmt" count="0"/>
-      <line num="240" type="stmt" count="0"/>
-      <line num="241" type="stmt" count="0"/>
-      <line num="242" type="stmt" count="0"/>
-      <line num="243" type="stmt" count="0"/>
-      <line num="244" type="stmt" count="0"/>
-      <line num="245" type="stmt" count="0"/>
-      <line num="246" type="stmt" count="0"/>
-      <line num="247" type="stmt" count="0"/>
-      <line num="248" type="stmt" count="0"/>
-      <line num="249" type="stmt" count="0"/>
-      <line num="250" type="stmt" count="0"/>
-      <line num="251" type="stmt" count="0"/>
-      <line num="252" type="stmt" count="0"/>
-      <line num="253" type="stmt" count="0"/>
-      <line num="254" type="stmt" count="0"/>
-      <line num="255" type="stmt" count="0"/>
-      <line num="256" type="stmt" count="0"/>
-      <line num="257" type="stmt" count="0"/>
-      <line num="258" type="stmt" count="0"/>
-      <line num="259" type="stmt" count="0"/>
-      <line num="260" type="stmt" count="0"/>
-      <line num="261" type="stmt" count="0"/>
-      <line num="263" type="method" name="printEditor" visibility="private" complexity="10" crap="110" count="0"/>
-      <line num="265" type="stmt" count="0"/>
-      <line num="266" type="stmt" count="0"/>
-      <line num="267" type="stmt" count="0"/>
-      <line num="268" type="stmt" count="0"/>
-      <line num="269" type="stmt" count="0"/>
-      <line num="270" type="stmt" count="0"/>
-      <line num="271" type="stmt" count="0"/>
-      <line num="272" type="stmt" count="0"/>
-      <line num="273" type="stmt" count="0"/>
-      <line num="274" type="stmt" count="0"/>
-      <line num="276" type="stmt" count="0"/>
-      <line num="277" type="stmt" count="0"/>
-      <line num="280" type="stmt" count="0"/>
-      <line num="281" type="stmt" count="0"/>
-      <line num="282" type="stmt" count="0"/>
-      <line num="284" type="stmt" count="0"/>
-      <line num="286" type="stmt" count="0"/>
-      <line num="287" type="stmt" count="0"/>
-      <line num="289" type="stmt" count="0"/>
-      <line num="290" type="stmt" count="0"/>
-      <line num="292" type="stmt" count="0"/>
-      <line num="293" type="stmt" count="0"/>
-      <line num="294" type="stmt" count="0"/>
-      <line num="296" type="stmt" count="0"/>
-      <line num="297" type="stmt" count="0"/>
-      <line num="298" type="stmt" count="0"/>
-      <line num="299" type="stmt" count="0"/>
-      <line num="301" type="stmt" count="0"/>
-      <line num="302" type="stmt" count="0"/>
-      <line num="304" type="stmt" count="0"/>
-      <line num="306" type="stmt" count="0"/>
-      <line num="307" type="stmt" count="0"/>
-      <line num="308" type="stmt" count="0"/>
-      <line num="309" type="stmt" count="0"/>
-      <line num="310" type="stmt" count="0"/>
-      <line num="311" type="stmt" count="0"/>
-      <line num="314" type="stmt" count="0"/>
-      <line num="315" type="stmt" count="0"/>
-      <line num="316" type="stmt" count="0"/>
-      <line num="317" type="stmt" count="0"/>
-      <line num="318" type="stmt" count="0"/>
-      <line num="319" type="stmt" count="0"/>
-      <line num="320" type="stmt" count="0"/>
-      <line num="323" type="stmt" count="0"/>
-      <line num="325" type="stmt" count="0"/>
-      <line num="326" type="stmt" count="0"/>
-      <metrics loc="332" ncloc="325" classes="1" methods="5" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="206" coveredstatements="0" elements="211" coveredelements="0"/>
-    </file>
-    <file name="C:\pessoal\work\contas\src\Views\ObjectViewer.php">
-      <class name="PHPLedger\Views\ObjectViewer" namespace="global">
-        <metrics complexity="3" methods="5" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="6" coveredstatements="0" elements="11" coveredelements="0"/>
-      </class>
-      <line num="22" type="method" name="__construct" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="24" type="stmt" count="0"/>
-      <line num="25" type="stmt" count="0"/>
-      <line num="27" type="method" name="__toString" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="29" type="stmt" count="0"/>
-      <line num="31" type="method" name="setObject" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="33" type="stmt" count="0"/>
-      <line num="35" type="method" name="printObject" visibility="public" complexity="0" crap="0" count="0"/>
-      <line num="36" type="method" name="printObjectList" visibility="public" complexity="0" crap="0" count="0"/>
-      <metrics loc="38" ncloc="30" classes="1" methods="5" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="6" coveredstatements="0" elements="11" coveredelements="0"/>
-    </file>
-    <file name="C:\pessoal\work\contas\src\Views\ReportHtmlView.php">
-      <class name="PHPLedger\Views\ReportHtmlView" namespace="global">
-        <metrics complexity="47" methods="17" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="135" coveredstatements="0" elements="152" coveredelements="0"/>
-      </class>
-      <line num="23" type="method" name="__construct" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="25" type="stmt" count="0"/>
-      <line num="27" type="method" name="printAsTable" visibility="public" complexity="6" crap="42" count="0"/>
-      <line num="29" type="stmt" count="0"/>
-      <line num="30" type="stmt" count="0"/>
-      <line num="32" type="stmt" count="0"/>
-      <line num="33" type="stmt" count="0"/>
-      <line num="34" type="stmt" count="0"/>
-      <line num="36" type="stmt" count="0"/>
-      <line num="37" type="stmt" count="0"/>
-      <line num="38" type="stmt" count="0"/>
-      <line num="39" type="stmt" count="0"/>
-      <line num="40" type="stmt" count="0"/>
-      <line num="41" type="stmt" count="0"/>
-      <line num="42" type="stmt" count="0"/>
-      <line num="43" type="stmt" count="0"/>
-      <line num="44" type="stmt" count="0"/>
-      <line num="45" type="stmt" count="0"/>
-      <line num="49" type="stmt" count="0"/>
-      <line num="50" type="stmt" count="0"/>
-      <line num="51" type="stmt" count="0"/>
-      <line num="52" type="stmt" count="0"/>
-      <line num="53" type="stmt" count="0"/>
-      <line num="54" type="stmt" count="0"/>
-      <line num="55" type="stmt" count="0"/>
-      <line num="56" type="stmt" count="0"/>
-      <line num="58" type="method" name="printRow" visibility="private" complexity="2" crap="6" count="0"/>
-      <line num="60" type="stmt" count="0"/>
-      <line num="61" type="stmt" count="0"/>
-      <line num="63" type="stmt" count="0"/>
-      <line num="65" type="stmt" count="0"/>
-      <line num="66" type="stmt" count="0"/>
-      <line num="67" type="stmt" count="0"/>
-      <line num="68" type="stmt" count="0"/>
-      <line num="71" type="stmt" count="0"/>
-      <line num="73" type="stmt" count="0"/>
-      <line num="75" type="stmt" count="0"/>
-      <line num="78" type="method" name="buildRowStart" visibility="private" complexity="3" crap="12" count="0"/>
-      <line num="80" type="stmt" count="0"/>
-      <line num="81" type="stmt" count="0"/>
-      <line num="82" type="stmt" count="0"/>
-      <line num="83" type="stmt" count="0"/>
-      <line num="84" type="stmt" count="0"/>
-      <line num="87" type="stmt" count="0"/>
-      <line num="88" type="stmt" count="0"/>
-      <line num="89" type="stmt" count="0"/>
-      <line num="91" type="stmt" count="0"/>
-      <line num="94" type="stmt" count="0"/>
-      <line num="95" type="stmt" count="0"/>
-      <line num="96" type="stmt" count="0"/>
-      <line num="98" type="stmt" count="0"/>
-      <line num="101" type="method" name="buildToggleIcons" visibility="private" complexity="1" crap="2" count="0"/>
-      <line num="103" type="stmt" count="0"/>
-      <line num="104" type="stmt" count="0"/>
-      <line num="107" type="method" name="buildRecordLink" visibility="private" complexity="3" crap="12" count="0"/>
-      <line num="109" type="stmt" count="0"/>
-      <line num="110" type="stmt" count="0"/>
-      <line num="111" type="stmt" count="0"/>
-      <line num="112" type="stmt" count="0"/>
-      <line num="113" type="stmt" count="0"/>
-      <line num="114" type="stmt" count="0"/>
-      <line num="115" type="stmt" count="0"/>
-      <line num="117" type="stmt" count="0"/>
-      <line num="118" type="stmt" count="0"/>
-      <line num="121" type="method" name="getRecordValue" visibility="private" complexity="3" crap="12" count="0"/>
-      <line num="123" type="stmt" count="0"/>
-      <line num="124" type="stmt" count="0"/>
-      <line num="125" type="stmt" count="0"/>
-      <line num="128" type="method" name="buildColumnCell" visibility="private" complexity="2" crap="6" count="0"/>
-      <line num="130" type="stmt" count="0"/>
-      <line num="131" type="stmt" count="0"/>
-      <line num="132" type="stmt" count="0"/>
-      <line num="133" type="stmt" count="0"/>
-      <line num="134" type="stmt" count="0"/>
-      <line num="135" type="stmt" count="0"/>
-      <line num="137" type="stmt" count="0"/>
-      <line num="138" type="stmt" count="0"/>
-      <line num="139" type="stmt" count="0"/>
-      <line num="142" type="method" name="wrapValueLink" visibility="private" complexity="3" crap="12" count="0"/>
-      <line num="144" type="stmt" count="0"/>
-      <line num="145" type="stmt" count="0"/>
-      <line num="146" type="stmt" count="0"/>
-      <line num="147" type="stmt" count="0"/>
-      <line num="148" type="stmt" count="0"/>
-      <line num="150" type="stmt" count="0"/>
-      <line num="151" type="stmt" count="0"/>
-      <line num="152" type="stmt" count="0"/>
-      <line num="153" type="stmt" count="0"/>
-      <line num="154" type="stmt" count="0"/>
-      <line num="155" type="stmt" count="0"/>
-      <line num="156" type="stmt" count="0"/>
-      <line num="157" type="stmt" count="0"/>
-      <line num="159" type="stmt" count="0"/>
-      <line num="162" type="stmt" count="0"/>
-      <line num="163" type="stmt" count="0"/>
-      <line num="166" type="method" name="updateTotals" visibility="private" complexity="2" crap="6" count="0"/>
-      <line num="168" type="stmt" count="0"/>
-      <line num="169" type="stmt" count="0"/>
-      <line num="171" type="stmt" count="0"/>
-      <line num="174" type="stmt" count="0"/>
-      <line num="177" type="method" name="buildRowTotals" visibility="private" complexity="2" crap="6" count="0"/>
-      <line num="179" type="stmt" count="0"/>
-      <line num="180" type="stmt" count="0"/>
-      <line num="183" type="method" name="hasChildren" visibility="private" complexity="2" crap="6" count="0"/>
-      <line num="185" type="stmt" count="0"/>
-      <line num="187" type="method" name="addPeriodAmount" visibility="private" complexity="4" crap="20" count="0"/>
-      <line num="189" type="stmt" count="0"/>
-      <line num="190" type="stmt" count="0"/>
-      <line num="191" type="stmt" count="0"/>
-      <line num="193" type="stmt" count="0"/>
-      <line num="196" type="stmt" count="0"/>
-      <line num="197" type="stmt" count="0"/>
-      <line num="199" type="stmt" count="0"/>
-      <line num="203" type="method" name="getArrayAverage" visibility="private" complexity="2" crap="6" count="0"/>
-      <line num="205" type="stmt" count="0"/>
-      <line num="206" type="stmt" count="0"/>
-      <line num="207" type="stmt" count="0"/>
-      <line num="208" type="stmt" count="0"/>
-      <line num="210" type="stmt" count="0"/>
-      <line num="212" type="method" name="htmlArrayAverageAndSum" visibility="private" complexity="3" crap="12" count="0"/>
-      <line num="214" type="stmt" count="0"/>
-      <line num="215" type="stmt" count="0"/>
-      <line num="216" type="stmt" count="0"/>
-      <line num="217" type="stmt" count="0"/>
-      <line num="219" type="stmt" count="0"/>
-      <line num="220" type="stmt" count="0"/>
-      <line num="221" type="stmt" count="0"/>
-      <line num="222" type="stmt" count="0"/>
-      <line num="223" type="stmt" count="0"/>
-      <line num="225" type="stmt" count="0"/>
-      <line num="226" type="stmt" count="0"/>
-      <line num="227" type="stmt" count="0"/>
-      <line num="229" type="stmt" count="0"/>
-      <line num="231" type="method" name="htmlMonthlyArray" visibility="private" complexity="4" crap="20" count="0"/>
-      <line num="233" type="stmt" count="0"/>
-      <line num="234" type="stmt" count="0"/>
-      <line num="235" type="stmt" count="0"/>
-      <line num="236" type="stmt" count="0"/>
-      <line num="238" type="stmt" count="0"/>
-      <line num="239" type="stmt" count="0"/>
-      <line num="241" type="stmt" count="0"/>
-      <line num="243" type="method" name="htmlArrayWithTitle" visibility="private" complexity="4" crap="20" count="0"/>
-      <line num="245" type="stmt" count="0"/>
-      <line num="246" type="stmt" count="0"/>
-      <line num="248" type="stmt" count="0"/>
-      <line num="249" type="stmt" count="0"/>
-      <line num="251" type="stmt" count="0"/>
-      <line num="252" type="stmt" count="0"/>
-      <line num="253" type="stmt" count="0"/>
-      <line num="254" type="stmt" count="0"/>
-      <line num="255" type="stmt" count="0"/>
-      <line num="256" type="stmt" count="0"/>
-      <metrics loc="259" ncloc="251" classes="1" methods="17" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="135" coveredstatements="0" elements="152" coveredelements="0"/>
-    </file>
-    <file name="C:\pessoal\work\contas\src\Views\ReportMonthHtmlView.php">
-      <class name="PHPLedger\Views\ReportMonthHtmlView" namespace="global">
-        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
-      </class>
-      <metrics loc="15" ncloc="7" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
-    </file>
-    <file name="C:\pessoal\work\contas\src\Views\ReportMonthView.php">
-      <class name="PHPLedger\Views\ReportMonthView" namespace="global">
-        <metrics complexity="19" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="117" coveredstatements="0" elements="118" coveredelements="0"/>
-      </class>
-      <line num="21" type="method" name="render" visibility="public" complexity="19" crap="380" count="0"/>
-      <line num="23" type="stmt" count="0"/>
-      <line num="24" type="stmt" count="0"/>
-      <line num="25" type="stmt" count="0"/>
-      <line num="26" type="stmt" count="0"/>
-      <line num="27" type="stmt" count="0"/>
-      <line num="28" type="stmt" count="0"/>
-      <line num="29" type="stmt" count="0"/>
-      <line num="32" type="stmt" count="0"/>
-      <line num="33" type="stmt" count="0"/>
-      <line num="34" type="stmt" count="0"/>
-      <line num="35" type="stmt" count="0"/>
-      <line num="37" type="stmt" count="0"/>
-      <line num="38" type="stmt" count="0"/>
-      <line num="41" type="stmt" count="0"/>
-      <line num="42" type="stmt" count="0"/>
-      <line num="43" type="stmt" count="0"/>
-      <line num="44" type="stmt" count="0"/>
-      <line num="45" type="stmt" count="0"/>
-      <line num="46" type="stmt" count="0"/>
-      <line num="47" type="stmt" count="0"/>
-      <line num="48" type="stmt" count="0"/>
-      <line num="49" type="stmt" count="0"/>
-      <line num="50" type="stmt" count="0"/>
-      <line num="51" type="stmt" count="0"/>
-      <line num="52" type="stmt" count="0"/>
-      <line num="53" type="stmt" count="0"/>
-      <line num="54" type="stmt" count="0"/>
-      <line num="55" type="stmt" count="0"/>
-      <line num="57" type="stmt" count="0"/>
-      <line num="58" type="stmt" count="0"/>
-      <line num="59" type="stmt" count="0"/>
-      <line num="60" type="stmt" count="0"/>
-      <line num="61" type="stmt" count="0"/>
-      <line num="62" type="stmt" count="0"/>
-      <line num="63" type="stmt" count="0"/>
-      <line num="64" type="stmt" count="0"/>
-      <line num="65" type="stmt" count="0"/>
-      <line num="66" type="stmt" count="0"/>
-      <line num="67" type="stmt" count="0"/>
-      <line num="68" type="stmt" count="0"/>
-      <line num="69" type="stmt" count="0"/>
-      <line num="70" type="stmt" count="0"/>
-      <line num="71" type="stmt" count="0"/>
-      <line num="73" type="stmt" count="0"/>
-      <line num="74" type="stmt" count="0"/>
-      <line num="75" type="stmt" count="0"/>
-      <line num="76" type="stmt" count="0"/>
-      <line num="77" type="stmt" count="0"/>
-      <line num="78" type="stmt" count="0"/>
-      <line num="79" type="stmt" count="0"/>
-      <line num="80" type="stmt" count="0"/>
-      <line num="81" type="stmt" count="0"/>
-      <line num="82" type="stmt" count="0"/>
-      <line num="94" type="stmt" count="0"/>
-      <line num="96" type="stmt" count="0"/>
-      <line num="97" type="stmt" count="0"/>
-      <line num="98" type="stmt" count="0"/>
-      <line num="99" type="stmt" count="0"/>
-      <line num="100" type="stmt" count="0"/>
-      <line num="101" type="stmt" count="0"/>
-      <line num="102" type="stmt" count="0"/>
-      <line num="103" type="stmt" count="0"/>
-      <line num="104" type="stmt" count="0"/>
-      <line num="105" type="stmt" count="0"/>
-      <line num="106" type="stmt" count="0"/>
-      <line num="107" type="stmt" count="0"/>
-      <line num="109" type="stmt" count="0"/>
-      <line num="112" type="stmt" count="0"/>
-      <line num="113" type="stmt" count="0"/>
-      <line num="114" type="stmt" count="0"/>
-      <line num="115" type="stmt" count="0"/>
-      <line num="116" type="stmt" count="0"/>
-      <line num="118" type="stmt" count="0"/>
-      <line num="125" type="stmt" count="0"/>
-      <line num="126" type="stmt" count="0"/>
-      <line num="127" type="stmt" count="0"/>
-      <line num="128" type="stmt" count="0"/>
-      <line num="129" type="stmt" count="0"/>
-      <line num="130" type="stmt" count="0"/>
-      <line num="131" type="stmt" count="0"/>
-      <line num="132" type="stmt" count="0"/>
-      <line num="133" type="stmt" count="0"/>
-      <line num="134" type="stmt" count="0"/>
-      <line num="135" type="stmt" count="0"/>
-      <line num="136" type="stmt" count="0"/>
-      <line num="137" type="stmt" count="0"/>
-      <line num="138" type="stmt" count="0"/>
-      <line num="139" type="stmt" count="0"/>
-      <line num="141" type="stmt" count="0"/>
-      <line num="142" type="stmt" count="0"/>
-      <line num="143" type="stmt" count="0"/>
-      <line num="144" type="stmt" count="0"/>
-      <line num="145" type="stmt" count="0"/>
-      <line num="147" type="stmt" count="0"/>
-      <line num="148" type="stmt" count="0"/>
-      <line num="149" type="stmt" count="0"/>
-      <line num="150" type="stmt" count="0"/>
-      <line num="154" type="stmt" count="0"/>
-      <line num="156" type="stmt" count="0"/>
-      <line num="157" type="stmt" count="0"/>
-      <line num="158" type="stmt" count="0"/>
-      <line num="159" type="stmt" count="0"/>
-      <line num="160" type="stmt" count="0"/>
-      <line num="162" type="stmt" count="0"/>
-      <line num="163" type="stmt" count="0"/>
-      <line num="165" type="stmt" count="0"/>
-      <line num="166" type="stmt" count="0"/>
-      <line num="192" type="stmt" count="0"/>
-      <line num="193" type="stmt" count="0"/>
-      <line num="194" type="stmt" count="0"/>
-      <line num="195" type="stmt" count="0"/>
-      <line num="196" type="stmt" count="0"/>
-      <line num="197" type="stmt" count="0"/>
-      <line num="198" type="stmt" count="0"/>
-      <line num="199" type="stmt" count="0"/>
-      <line num="201" type="stmt" count="0"/>
-      <line num="202" type="stmt" count="0"/>
-      <metrics loc="205" ncloc="198" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="117" coveredstatements="0" elements="118" coveredelements="0"/>
-    </file>
-    <file name="C:\pessoal\work\contas\src\Views\ReportYearHtmlView.php">
-      <class name="PHPLedger\Views\ReportYearHtmlView" namespace="global">
-        <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
-      </class>
-      <metrics loc="15" ncloc="7" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
-    </file>
-    <file name="C:\pessoal\work\contas\src\Views\ReportYearView.php">
-      <class name="PHPLedger\Views\ReportYearView" namespace="global">
-        <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="49" coveredstatements="0" elements="50" coveredelements="0"/>
-      </class>
-      <line num="21" type="method" name="render" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="23" type="stmt" count="0"/>
-      <line num="25" type="stmt" count="0"/>
-      <line num="26" type="stmt" count="0"/>
-      <line num="29" type="stmt" count="0"/>
-      <line num="30" type="stmt" count="0"/>
-      <line num="31" type="stmt" count="0"/>
-      <line num="32" type="stmt" count="0"/>
-      <line num="33" type="stmt" count="0"/>
-      <line num="34" type="stmt" count="0"/>
-      <line num="35" type="stmt" count="0"/>
-      <line num="36" type="stmt" count="0"/>
-      <line num="37" type="stmt" count="0"/>
-      <line num="38" type="stmt" count="0"/>
-      <line num="39" type="stmt" count="0"/>
-      <line num="40" type="stmt" count="0"/>
-      <line num="41" type="stmt" count="0"/>
-      <line num="42" type="stmt" count="0"/>
-      <line num="43" type="stmt" count="0"/>
-      <line num="44" type="stmt" count="0"/>
-      <line num="45" type="stmt" count="0"/>
-      <line num="46" type="stmt" count="0"/>
-      <line num="48" type="stmt" count="0"/>
-      <line num="49" type="stmt" count="0"/>
-      <line num="50" type="stmt" count="0"/>
-      <line num="51" type="stmt" count="0"/>
-      <line num="52" type="stmt" count="0"/>
-      <line num="53" type="stmt" count="0"/>
-      <line num="54" type="stmt" count="0"/>
-      <line num="55" type="stmt" count="0"/>
-      <line num="56" type="stmt" count="0"/>
-      <line num="57" type="stmt" count="0"/>
-      <line num="58" type="stmt" count="0"/>
-      <line num="65" type="stmt" count="0"/>
-      <line num="66" type="stmt" count="0"/>
-      <line num="67" type="stmt" count="0"/>
-      <line num="68" type="stmt" count="0"/>
-      <line num="69" type="stmt" count="0"/>
-      <line num="70" type="stmt" count="0"/>
-      <line num="71" type="stmt" count="0"/>
-      <line num="72" type="stmt" count="0"/>
-      <line num="73" type="stmt" count="0"/>
-      <line num="74" type="stmt" count="0"/>
-      <line num="75" type="stmt" count="0"/>
-      <line num="76" type="stmt" count="0"/>
-      <line num="77" type="stmt" count="0"/>
-      <line num="78" type="stmt" count="0"/>
-      <line num="79" type="stmt" count="0"/>
-      <line num="81" type="stmt" count="0"/>
-      <line num="82" type="stmt" count="0"/>
-      <metrics loc="85" ncloc="78" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="49" coveredstatements="0" elements="50" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Views\ResetPasswordView.php">
       <class name="PHPLedger\Views\ResetPasswordView" namespace="global">
@@ -5204,17 +4373,98 @@
       <line num="64" type="stmt" count="2"/>
       <line num="65" type="stmt" count="2"/>
       <line num="66" type="stmt" count="2"/>
+      <line num="67" type="stmt" count="2"/>
       <line num="68" type="stmt" count="2"/>
       <line num="69" type="stmt" count="2"/>
+      <line num="70" type="stmt" count="2"/>
       <line num="71" type="stmt" count="2"/>
       <line num="72" type="stmt" count="2"/>
       <line num="73" type="stmt" count="2"/>
       <line num="74" type="stmt" count="2"/>
-      <line num="75" type="stmt" count="2"/>
       <line num="76" type="stmt" count="2"/>
-      <line num="78" type="stmt" count="2"/>
-      <line num="79" type="stmt" count="2"/>
-      <metrics loc="82" ncloc="82" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="50" coveredstatements="50" elements="51" coveredelements="51"/>
+      <line num="77" type="stmt" count="2"/>
+      <metrics loc="80" ncloc="80" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="50" coveredstatements="50" elements="51" coveredelements="51"/>
+    </file>
+    <file name="C:\pessoal\work\contas\src\Views\Templates\AccountTypeFormViewTemplate.php">
+      <class name="PHPLedger\Views\Templates\AccountTypeFormViewTemplate" namespace="global">
+        <metrics complexity="2" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="30" coveredstatements="0" elements="31" coveredelements="0"/>
+      </class>
+      <line num="10" type="method" name="render" visibility="public" complexity="2" crap="6" count="0"/>
+      <line num="12" type="stmt" count="0"/>
+      <line num="13" type="stmt" count="0"/>
+      <line num="15" type="stmt" count="0"/>
+      <line num="16" type="stmt" count="0"/>
+      <line num="19" type="stmt" count="0"/>
+      <line num="20" type="stmt" count="0"/>
+      <line num="21" type="stmt" count="0"/>
+      <line num="23" type="stmt" count="0"/>
+      <line num="24" type="stmt" count="0"/>
+      <line num="25" type="stmt" count="0"/>
+      <line num="26" type="stmt" count="0"/>
+      <line num="27" type="stmt" count="0"/>
+      <line num="30" type="stmt" count="0"/>
+      <line num="31" type="stmt" count="0"/>
+      <line num="33" type="stmt" count="0"/>
+      <line num="34" type="stmt" count="0"/>
+      <line num="35" type="stmt" count="0"/>
+      <line num="36" type="stmt" count="0"/>
+      <line num="37" type="stmt" count="0"/>
+      <line num="40" type="stmt" count="0"/>
+      <line num="41" type="stmt" count="0"/>
+      <line num="44" type="stmt" count="0"/>
+      <line num="45" type="stmt" count="0"/>
+      <line num="49" type="stmt" count="0"/>
+      <line num="50" type="stmt" count="0"/>
+      <line num="55" type="stmt" count="0"/>
+      <line num="56" type="stmt" count="0"/>
+      <line num="57" type="stmt" count="0"/>
+      <line num="59" type="stmt" count="0"/>
+      <line num="60" type="stmt" count="0"/>
+      <metrics loc="63" ncloc="63" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="30" coveredstatements="0" elements="31" coveredelements="0"/>
+    </file>
+    <file name="C:\pessoal\work\contas\src\Views\Templates\AccountTypeListViewTemplate.php">
+      <class name="PHPLedger\Views\Templates\AccountTypeListViewTemplate" namespace="global">
+        <metrics complexity="3" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="37" coveredstatements="0" elements="38" coveredelements="0"/>
+      </class>
+      <line num="10" type="method" name="render" visibility="public" complexity="3" crap="12" count="0"/>
+      <line num="12" type="stmt" count="0"/>
+      <line num="14" type="stmt" count="0"/>
+      <line num="15" type="stmt" count="0"/>
+      <line num="18" type="stmt" count="0"/>
+      <line num="19" type="stmt" count="0"/>
+      <line num="20" type="stmt" count="0"/>
+      <line num="22" type="stmt" count="0"/>
+      <line num="23" type="stmt" count="0"/>
+      <line num="24" type="stmt" count="0"/>
+      <line num="25" type="stmt" count="0"/>
+      <line num="26" type="stmt" count="0"/>
+      <line num="27" type="stmt" count="0"/>
+      <line num="28" type="stmt" count="0"/>
+      <line num="29" type="stmt" count="0"/>
+      <line num="35" type="stmt" count="0"/>
+      <line num="36" type="stmt" count="0"/>
+      <line num="37" type="stmt" count="0"/>
+      <line num="38" type="stmt" count="0"/>
+      <line num="42" type="stmt" count="0"/>
+      <line num="43" type="stmt" count="0"/>
+      <line num="44" type="stmt" count="0"/>
+      <line num="45" type="stmt" count="0"/>
+      <line num="46" type="stmt" count="0"/>
+      <line num="47" type="stmt" count="0"/>
+      <line num="50" type="stmt" count="0"/>
+      <line num="51" type="stmt" count="0"/>
+      <line num="53" type="stmt" count="0"/>
+      <line num="54" type="stmt" count="0"/>
+      <line num="55" type="stmt" count="0"/>
+      <line num="56" type="stmt" count="0"/>
+      <line num="57" type="stmt" count="0"/>
+      <line num="58" type="stmt" count="0"/>
+      <line num="59" type="stmt" count="0"/>
+      <line num="60" type="stmt" count="0"/>
+      <line num="61" type="stmt" count="0"/>
+      <line num="63" type="stmt" count="0"/>
+      <line num="64" type="stmt" count="0"/>
+      <metrics loc="67" ncloc="67" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="37" coveredstatements="0" elements="38" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Views\Templates\BalancesViewTemplate.php">
       <class name="PHPLedger\Views\Templates\BalancesViewTemplate" namespace="global">
@@ -5267,6 +4517,67 @@
       <line num="81" type="stmt" count="4"/>
       <metrics loc="84" ncloc="77" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="44" coveredstatements="44" elements="45" coveredelements="45"/>
     </file>
+    <file name="C:\pessoal\work\contas\src\Views\Templates\ConfigViewTemplate.php">
+      <class name="PHPLedger\Views\Templates\ConfigViewTemplate" namespace="global">
+        <metrics complexity="10" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="54" coveredstatements="0" elements="55" coveredelements="0"/>
+      </class>
+      <line num="11" type="method" name="render" visibility="public" complexity="10" crap="110" count="0"/>
+      <line num="13" type="stmt" count="0"/>
+      <line num="15" type="stmt" count="0"/>
+      <line num="16" type="stmt" count="0"/>
+      <line num="19" type="stmt" count="0"/>
+      <line num="20" type="stmt" count="0"/>
+      <line num="21" type="stmt" count="0"/>
+      <line num="23" type="stmt" count="0"/>
+      <line num="24" type="stmt" count="0"/>
+      <line num="25" type="stmt" count="0"/>
+      <line num="26" type="stmt" count="0"/>
+      <line num="27" type="stmt" count="0"/>
+      <line num="39" type="stmt" count="0"/>
+      <line num="40" type="stmt" count="0"/>
+      <line num="41" type="stmt" count="0"/>
+      <line num="42" type="stmt" count="0"/>
+      <line num="43" type="stmt" count="0"/>
+      <line num="44" type="stmt" count="0"/>
+      <line num="45" type="stmt" count="0"/>
+      <line num="46" type="stmt" count="0"/>
+      <line num="47" type="stmt" count="0"/>
+      <line num="48" type="stmt" count="0"/>
+      <line num="50" type="stmt" count="0"/>
+      <line num="51" type="stmt" count="0"/>
+      <line num="53" type="stmt" count="0"/>
+      <line num="54" type="stmt" count="0"/>
+      <line num="56" type="stmt" count="0"/>
+      <line num="57" type="stmt" count="0"/>
+      <line num="59" type="stmt" count="0"/>
+      <line num="60" type="stmt" count="0"/>
+      <line num="62" type="stmt" count="0"/>
+      <line num="64" type="stmt" count="0"/>
+      <line num="65" type="stmt" count="0"/>
+      <line num="68" type="stmt" count="0"/>
+      <line num="69" type="stmt" count="0"/>
+      <line num="70" type="stmt" count="0"/>
+      <line num="71" type="stmt" count="0"/>
+      <line num="72" type="stmt" count="0"/>
+      <line num="73" type="stmt" count="0"/>
+      <line num="76" type="stmt" count="0"/>
+      <line num="77" type="stmt" count="0"/>
+      <line num="80" type="stmt" count="0"/>
+      <line num="81" type="stmt" count="0"/>
+      <line num="82" type="stmt" count="0"/>
+      <line num="83" type="stmt" count="0"/>
+      <line num="85" type="stmt" count="0"/>
+      <line num="86" type="stmt" count="0"/>
+      <line num="87" type="stmt" count="0"/>
+      <line num="88" type="stmt" count="0"/>
+      <line num="89" type="stmt" count="0"/>
+      <line num="90" type="stmt" count="0"/>
+      <line num="91" type="stmt" count="0"/>
+      <line num="92" type="stmt" count="0"/>
+      <line num="94" type="stmt" count="0"/>
+      <line num="95" type="stmt" count="0"/>
+      <metrics loc="98" ncloc="98" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="54" coveredstatements="0" elements="55" coveredelements="0"/>
+    </file>
     <file name="C:\pessoal\work\contas\src\Views\Templates\EntryCategoryFormViewTemplate.php">
       <class name="PHPLedger\Views\Templates\EntryCategoryFormViewTemplate" namespace="global">
         <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="27" coveredstatements="0" elements="28" coveredelements="0"/>
@@ -5303,9 +4614,9 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Views\Templates\EntryCategoryListViewTemplate.php">
       <class name="PHPLedger\Views\Templates\EntryCategoryListViewTemplate" namespace="global">
-        <metrics complexity="8" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="53" coveredstatements="0" elements="54" coveredelements="0"/>
+        <metrics complexity="6" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="50" coveredstatements="0" elements="51" coveredelements="0"/>
       </class>
-      <line num="9" type="method" name="render" visibility="public" complexity="8" crap="72" count="0"/>
+      <line num="9" type="method" name="render" visibility="public" complexity="6" crap="42" count="0"/>
       <line num="11" type="stmt" count="0"/>
       <line num="13" type="stmt" count="0"/>
       <line num="14" type="stmt" count="0"/>
@@ -5317,29 +4628,30 @@
       <line num="23" type="stmt" count="0"/>
       <line num="24" type="stmt" count="0"/>
       <line num="25" type="stmt" count="0"/>
+      <line num="26" type="stmt" count="0"/>
       <line num="27" type="stmt" count="0"/>
       <line num="28" type="stmt" count="0"/>
       <line num="29" type="stmt" count="0"/>
-      <line num="30" type="stmt" count="0"/>
-      <line num="31" type="stmt" count="0"/>
-      <line num="32" type="stmt" count="0"/>
-      <line num="33" type="stmt" count="0"/>
+      <line num="36" type="stmt" count="0"/>
+      <line num="37" type="stmt" count="0"/>
+      <line num="38" type="stmt" count="0"/>
+      <line num="39" type="stmt" count="0"/>
       <line num="40" type="stmt" count="0"/>
-      <line num="41" type="stmt" count="0"/>
-      <line num="42" type="stmt" count="0"/>
-      <line num="43" type="stmt" count="0"/>
-      <line num="44" type="stmt" count="0"/>
+      <line num="45" type="stmt" count="0"/>
+      <line num="46" type="stmt" count="0"/>
+      <line num="47" type="stmt" count="0"/>
       <line num="49" type="stmt" count="0"/>
       <line num="50" type="stmt" count="0"/>
       <line num="51" type="stmt" count="0"/>
+      <line num="52" type="stmt" count="0"/>
       <line num="53" type="stmt" count="0"/>
       <line num="54" type="stmt" count="0"/>
       <line num="55" type="stmt" count="0"/>
       <line num="56" type="stmt" count="0"/>
-      <line num="57" type="stmt" count="0"/>
       <line num="58" type="stmt" count="0"/>
       <line num="59" type="stmt" count="0"/>
       <line num="60" type="stmt" count="0"/>
+      <line num="61" type="stmt" count="0"/>
       <line num="62" type="stmt" count="0"/>
       <line num="63" type="stmt" count="0"/>
       <line num="64" type="stmt" count="0"/>
@@ -5353,13 +4665,9 @@
       <line num="72" type="stmt" count="0"/>
       <line num="73" type="stmt" count="0"/>
       <line num="74" type="stmt" count="0"/>
-      <line num="75" type="stmt" count="0"/>
       <line num="76" type="stmt" count="0"/>
       <line num="77" type="stmt" count="0"/>
-      <line num="78" type="stmt" count="0"/>
-      <line num="80" type="stmt" count="0"/>
-      <line num="81" type="stmt" count="0"/>
-      <metrics loc="84" ncloc="84" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="53" coveredstatements="0" elements="54" coveredelements="0"/>
+      <metrics loc="80" ncloc="80" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="50" coveredstatements="0" elements="51" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Views\Templates\LedgerEntriesFilterViewTemplate.php">
       <class name="PHPLedger\Views\Templates\LedgerEntriesFilterViewTemplate" namespace="global">
@@ -5398,9 +4706,9 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Views\Templates\LedgerEntriesFormViewTemplate.php">
       <class name="PHPLedger\Views\Templates\LedgerEntriesFormViewTemplate" namespace="global">
-        <metrics complexity="7" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="46" coveredstatements="0" elements="47" coveredelements="0"/>
+        <metrics complexity="5" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="42" coveredstatements="0" elements="43" coveredelements="0"/>
       </class>
-      <line num="18" type="method" name="render" visibility="public" complexity="7" crap="56" count="0"/>
+      <line num="18" type="method" name="render" visibility="public" complexity="5" crap="30" count="0"/>
       <line num="20" type="stmt" count="0"/>
       <line num="22" type="stmt" count="0"/>
       <line num="24" type="stmt" count="0"/>
@@ -5435,32 +4743,30 @@
       <line num="67" type="stmt" count="0"/>
       <line num="69" type="stmt" count="0"/>
       <line num="70" type="stmt" count="0"/>
-      <line num="71" type="stmt" count="0"/>
       <line num="72" type="stmt" count="0"/>
       <line num="73" type="stmt" count="0"/>
-      <line num="74" type="stmt" count="0"/>
-      <line num="77" type="stmt" count="0"/>
+      <line num="75" type="stmt" count="0"/>
+      <line num="76" type="stmt" count="0"/>
       <line num="78" type="stmt" count="0"/>
-      <line num="80" type="stmt" count="0"/>
       <line num="81" type="stmt" count="0"/>
       <line num="83" type="stmt" count="0"/>
-      <line num="86" type="stmt" count="0"/>
-      <line num="88" type="stmt" count="0"/>
-      <line num="89" type="stmt" count="0"/>
-      <metrics loc="95" ncloc="88" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="46" coveredstatements="0" elements="47" coveredelements="0"/>
+      <line num="84" type="stmt" count="0"/>
+      <metrics loc="90" ncloc="83" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="42" coveredstatements="0" elements="43" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Views\Templates\LedgerEntriesMainViewTemplate.php">
       <class name="PHPLedger\Views\Templates\LedgerEntriesMainViewTemplate" namespace="global">
         <metrics complexity="3" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="31" coveredstatements="0" elements="32" coveredelements="0"/>
       </class>
-      <line num="17" type="method" name="render" visibility="public" complexity="3" crap="12" count="0"/>
+      <line num="15" type="method" name="render" visibility="public" complexity="3" crap="12" count="0"/>
+      <line num="17" type="stmt" count="0"/>
       <line num="19" type="stmt" count="0"/>
+      <line num="20" type="stmt" count="0"/>
       <line num="21" type="stmt" count="0"/>
       <line num="22" type="stmt" count="0"/>
       <line num="23" type="stmt" count="0"/>
       <line num="24" type="stmt" count="0"/>
-      <line num="25" type="stmt" count="0"/>
-      <line num="26" type="stmt" count="0"/>
+      <line num="28" type="stmt" count="0"/>
+      <line num="29" type="stmt" count="0"/>
       <line num="30" type="stmt" count="0"/>
       <line num="31" type="stmt" count="0"/>
       <line num="32" type="stmt" count="0"/>
@@ -5472,8 +4778,8 @@
       <line num="38" type="stmt" count="0"/>
       <line num="39" type="stmt" count="0"/>
       <line num="40" type="stmt" count="0"/>
-      <line num="41" type="stmt" count="0"/>
       <line num="42" type="stmt" count="0"/>
+      <line num="43" type="stmt" count="0"/>
       <line num="44" type="stmt" count="0"/>
       <line num="45" type="stmt" count="0"/>
       <line num="46" type="stmt" count="0"/>
@@ -5481,17 +4787,15 @@
       <line num="48" type="stmt" count="0"/>
       <line num="49" type="stmt" count="0"/>
       <line num="50" type="stmt" count="0"/>
-      <line num="51" type="stmt" count="0"/>
       <line num="52" type="stmt" count="0"/>
-      <line num="54" type="stmt" count="0"/>
-      <line num="55" type="stmt" count="0"/>
-      <metrics loc="58" ncloc="51" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="31" coveredstatements="0" elements="32" coveredelements="0"/>
+      <line num="53" type="stmt" count="0"/>
+      <metrics loc="56" ncloc="49" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="31" coveredstatements="0" elements="32" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Views\Templates\LedgerEntriesPreloaderTemplate.php">
       <class name="PHPLedger\Views\Templates\LedgerEntriesPreloaderTemplate" namespace="global">
-        <metrics complexity="3" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="0" elements="18" coveredelements="0"/>
+        <metrics complexity="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="0" elements="15" coveredelements="0"/>
       </class>
-      <line num="9" type="method" name="render" visibility="public" complexity="3" crap="12" count="0"/>
+      <line num="9" type="method" name="render" visibility="public" complexity="1" crap="2" count="0"/>
       <line num="11" type="stmt" count="0"/>
       <line num="13" type="stmt" count="0"/>
       <line num="14" type="stmt" count="0"/>
@@ -5504,12 +4808,9 @@
       <line num="24" type="stmt" count="0"/>
       <line num="25" type="stmt" count="0"/>
       <line num="26" type="stmt" count="0"/>
-      <line num="37" type="stmt" count="0"/>
-      <line num="38" type="stmt" count="0"/>
-      <line num="39" type="stmt" count="0"/>
-      <line num="40" type="stmt" count="0"/>
-      <line num="41" type="stmt" count="0"/>
-      <metrics loc="44" ncloc="44" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="0" elements="18" coveredelements="0"/>
+      <line num="27" type="stmt" count="0"/>
+      <line num="28" type="stmt" count="0"/>
+      <metrics loc="31" ncloc="31" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="0" elements="15" coveredelements="0"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Views\Templates\LedgerEntriesRowViewTemplate.php">
       <class name="PHPLedger\Views\Templates\LedgerEntriesRowViewTemplate" namespace="global">
@@ -5617,23 +4918,165 @@
       <line num="49" type="stmt" count="0"/>
       <metrics loc="59" ncloc="54" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="23" coveredstatements="0" elements="24" coveredelements="0"/>
     </file>
-    <file name="C:\pessoal\work\contas\src\Views\UpdateStorageView.php">
-      <class name="PHPLedger\Views\UpdateStorageView" namespace="global">
-        <metrics complexity="4" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="37" coveredstatements="0" elements="38" coveredelements="0"/>
+    <file name="C:\pessoal\work\contas\src\Views\Templates\ReportViewTemplate.php">
+      <class name="PHPLedger\Views\Templates\ReportViewTemplate" namespace="global">
+        <metrics complexity="12" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="134" coveredstatements="0" elements="135" coveredelements="0"/>
       </class>
-      <line num="20" type="method" name="render" visibility="public" complexity="4" crap="20" count="0"/>
+      <line num="10" type="method" name="render" visibility="public" complexity="12" crap="156" count="0"/>
+      <line num="12" type="stmt" count="0"/>
+      <line num="14" type="stmt" count="0"/>
+      <line num="15" type="stmt" count="0"/>
+      <line num="18" type="stmt" count="0"/>
+      <line num="19" type="stmt" count="0"/>
+      <line num="20" type="stmt" count="0"/>
+      <line num="21" type="stmt" count="0"/>
       <line num="22" type="stmt" count="0"/>
+      <line num="23" type="stmt" count="0"/>
       <line num="24" type="stmt" count="0"/>
-      <line num="25" type="stmt" count="0"/>
+      <line num="26" type="stmt" count="0"/>
+      <line num="27" type="stmt" count="0"/>
       <line num="28" type="stmt" count="0"/>
       <line num="29" type="stmt" count="0"/>
-      <line num="30" type="stmt" count="0"/>
+      <line num="31" type="stmt" count="0"/>
       <line num="32" type="stmt" count="0"/>
       <line num="33" type="stmt" count="0"/>
       <line num="34" type="stmt" count="0"/>
       <line num="35" type="stmt" count="0"/>
       <line num="36" type="stmt" count="0"/>
       <line num="37" type="stmt" count="0"/>
+      <line num="38" type="stmt" count="0"/>
+      <line num="39" type="stmt" count="0"/>
+      <line num="40" type="stmt" count="0"/>
+      <line num="42" type="stmt" count="0"/>
+      <line num="43" type="stmt" count="0"/>
+      <line num="44" type="stmt" count="0"/>
+      <line num="45" type="stmt" count="0"/>
+      <line num="46" type="stmt" count="0"/>
+      <line num="47" type="stmt" count="0"/>
+      <line num="48" type="stmt" count="0"/>
+      <line num="49" type="stmt" count="0"/>
+      <line num="50" type="stmt" count="0"/>
+      <line num="51" type="stmt" count="0"/>
+      <line num="52" type="stmt" count="0"/>
+      <line num="54" type="stmt" count="0"/>
+      <line num="55" type="stmt" count="0"/>
+      <line num="57" type="stmt" count="0"/>
+      <line num="58" type="stmt" count="0"/>
+      <line num="59" type="stmt" count="0"/>
+      <line num="60" type="stmt" count="0"/>
+      <line num="61" type="stmt" count="0"/>
+      <line num="63" type="stmt" count="0"/>
+      <line num="64" type="stmt" count="0"/>
+      <line num="66" type="stmt" count="0"/>
+      <line num="67" type="stmt" count="0"/>
+      <line num="68" type="stmt" count="0"/>
+      <line num="69" type="stmt" count="0"/>
+      <line num="70" type="stmt" count="0"/>
+      <line num="71" type="stmt" count="0"/>
+      <line num="72" type="stmt" count="0"/>
+      <line num="73" type="stmt" count="0"/>
+      <line num="74" type="stmt" count="0"/>
+      <line num="75" type="stmt" count="0"/>
+      <line num="77" type="stmt" count="0"/>
+      <line num="78" type="stmt" count="0"/>
+      <line num="79" type="stmt" count="0"/>
+      <line num="81" type="stmt" count="0"/>
+      <line num="82" type="stmt" count="0"/>
+      <line num="83" type="stmt" count="0"/>
+      <line num="84" type="stmt" count="0"/>
+      <line num="85" type="stmt" count="0"/>
+      <line num="86" type="stmt" count="0"/>
+      <line num="87" type="stmt" count="0"/>
+      <line num="88" type="stmt" count="0"/>
+      <line num="89" type="stmt" count="0"/>
+      <line num="90" type="stmt" count="0"/>
+      <line num="92" type="stmt" count="0"/>
+      <line num="94" type="stmt" count="0"/>
+      <line num="95" type="stmt" count="0"/>
+      <line num="97" type="stmt" count="0"/>
+      <line num="110" type="stmt" count="0"/>
+      <line num="111" type="stmt" count="0"/>
+      <line num="112" type="stmt" count="0"/>
+      <line num="114" type="stmt" count="0"/>
+      <line num="115" type="stmt" count="0"/>
+      <line num="120" type="stmt" count="0"/>
+      <line num="121" type="stmt" count="0"/>
+      <line num="122" type="stmt" count="0"/>
+      <line num="123" type="stmt" count="0"/>
+      <line num="124" type="stmt" count="0"/>
+      <line num="125" type="stmt" count="0"/>
+      <line num="126" type="stmt" count="0"/>
+      <line num="127" type="stmt" count="0"/>
+      <line num="128" type="stmt" count="0"/>
+      <line num="129" type="stmt" count="0"/>
+      <line num="130" type="stmt" count="0"/>
+      <line num="132" type="stmt" count="0"/>
+      <line num="134" type="stmt" count="0"/>
+      <line num="135" type="stmt" count="0"/>
+      <line num="136" type="stmt" count="0"/>
+      <line num="137" type="stmt" count="0"/>
+      <line num="138" type="stmt" count="0"/>
+      <line num="139" type="stmt" count="0"/>
+      <line num="140" type="stmt" count="0"/>
+      <line num="141" type="stmt" count="0"/>
+      <line num="142" type="stmt" count="0"/>
+      <line num="143" type="stmt" count="0"/>
+      <line num="144" type="stmt" count="0"/>
+      <line num="145" type="stmt" count="0"/>
+      <line num="149" type="stmt" count="0"/>
+      <line num="150" type="stmt" count="0"/>
+      <line num="152" type="stmt" count="0"/>
+      <line num="153" type="stmt" count="0"/>
+      <line num="155" type="stmt" count="0"/>
+      <line num="157" type="stmt" count="0"/>
+      <line num="158" type="stmt" count="0"/>
+      <line num="159" type="stmt" count="0"/>
+      <line num="160" type="stmt" count="0"/>
+      <line num="161" type="stmt" count="0"/>
+      <line num="163" type="stmt" count="0"/>
+      <line num="165" type="stmt" count="0"/>
+      <line num="166" type="stmt" count="0"/>
+      <line num="167" type="stmt" count="0"/>
+      <line num="168" type="stmt" count="0"/>
+      <line num="171" type="stmt" count="0"/>
+      <line num="172" type="stmt" count="0"/>
+      <line num="174" type="stmt" count="0"/>
+      <line num="175" type="stmt" count="0"/>
+      <line num="176" type="stmt" count="0"/>
+      <line num="177" type="stmt" count="0"/>
+      <line num="178" type="stmt" count="0"/>
+      <line num="179" type="stmt" count="0"/>
+      <line num="181" type="stmt" count="0"/>
+      <line num="182" type="stmt" count="0"/>
+      <line num="185" type="stmt" count="0"/>
+      <line num="186" type="stmt" count="0"/>
+      <line num="187" type="stmt" count="0"/>
+      <line num="188" type="stmt" count="0"/>
+      <line num="189" type="stmt" count="0"/>
+      <line num="190" type="stmt" count="0"/>
+      <line num="191" type="stmt" count="0"/>
+      <line num="193" type="stmt" count="0"/>
+      <line num="194" type="stmt" count="0"/>
+      <metrics loc="197" ncloc="197" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="134" coveredstatements="0" elements="135" coveredelements="0"/>
+    </file>
+    <file name="C:\pessoal\work\contas\src\Views\Templates\UpdateStorageViewTemplate.php">
+      <class name="PHPLedger\Views\Templates\UpdateStorageViewTemplate" namespace="global">
+        <metrics complexity="5" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="42" coveredstatements="0" elements="43" coveredelements="0"/>
+      </class>
+      <line num="17" type="method" name="render" visibility="public" complexity="5" crap="30" count="0"/>
+      <line num="19" type="stmt" count="0"/>
+      <line num="21" type="stmt" count="0"/>
+      <line num="22" type="stmt" count="0"/>
+      <line num="25" type="stmt" count="0"/>
+      <line num="26" type="stmt" count="0"/>
+      <line num="27" type="stmt" count="0"/>
+      <line num="29" type="stmt" count="0"/>
+      <line num="30" type="stmt" count="0"/>
+      <line num="31" type="stmt" count="0"/>
+      <line num="32" type="stmt" count="0"/>
+      <line num="33" type="stmt" count="0"/>
+      <line num="34" type="stmt" count="0"/>
+      <line num="36" type="stmt" count="0"/>
       <line num="38" type="stmt" count="0"/>
       <line num="39" type="stmt" count="0"/>
       <line num="40" type="stmt" count="0"/>
@@ -5644,39 +5087,27 @@
       <line num="45" type="stmt" count="0"/>
       <line num="46" type="stmt" count="0"/>
       <line num="47" type="stmt" count="0"/>
-      <line num="48" type="stmt" count="0"/>
+      <line num="50" type="stmt" count="0"/>
       <line num="51" type="stmt" count="0"/>
-      <line num="52" type="stmt" count="0"/>
+      <line num="53" type="stmt" count="0"/>
       <line num="54" type="stmt" count="0"/>
-      <line num="55" type="stmt" count="0"/>
       <line num="56" type="stmt" count="0"/>
       <line num="57" type="stmt" count="0"/>
       <line num="59" type="stmt" count="0"/>
       <line num="60" type="stmt" count="0"/>
-      <line num="62" type="stmt" count="0"/>
+      <line num="61" type="stmt" count="0"/>
       <line num="63" type="stmt" count="0"/>
-      <line num="64" type="stmt" count="0"/>
-      <line num="65" type="stmt" count="0"/>
+      <line num="66" type="stmt" count="0"/>
       <line num="67" type="stmt" count="0"/>
-      <line num="68" type="stmt" count="0"/>
-      <metrics loc="72" ncloc="65" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="37" coveredstatements="0" elements="38" coveredelements="0"/>
+      <line num="69" type="stmt" count="0"/>
+      <line num="72" type="stmt" count="0"/>
+      <line num="73" type="stmt" count="0"/>
+      <line num="74" type="stmt" count="0"/>
+      <line num="75" type="stmt" count="0"/>
+      <line num="77" type="stmt" count="0"/>
+      <line num="78" type="stmt" count="0"/>
+      <metrics loc="82" ncloc="75" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="42" coveredstatements="0" elements="43" coveredelements="0"/>
     </file>
-    <file name="C:\pessoal\work\contas\src\Views\ViewFactory.php">
-      <class name="PHPLedger\Views\ViewFactory" namespace="global">
-        <metrics complexity="5" methods="4" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="6" coveredstatements="0" elements="10" coveredelements="0"/>
-      </class>
-      <line num="25" type="method" name="instance" visibility="public" complexity="2" crap="6" count="0"/>
-      <line num="27" type="stmt" count="0"/>
-      <line num="28" type="stmt" count="0"/>
-      <line num="30" type="stmt" count="0"/>
-      <line num="32" type="method" name="accountTypeView" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="34" type="stmt" count="0"/>
-      <line num="36" type="method" name="reportMonthHtmlView" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="38" type="stmt" count="0"/>
-      <line num="40" type="method" name="reportYearHtmlView" visibility="public" complexity="1" crap="2" count="0"/>
-      <line num="42" type="stmt" count="0"/>
-      <metrics loc="45" ncloc="37" classes="1" methods="4" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="6" coveredstatements="0" elements="10" coveredelements="0"/>
-    </file>
-    <metrics files="115" loc="9741" ncloc="9028" classes="92" methods="403" coveredmethods="131" conditionals="0" coveredconditionals="0" statements="4633" coveredstatements="1203" elements="5036" coveredelements="1334"/>
+    <metrics files="109" loc="8665" ncloc="8084" classes="87" methods="361" coveredmethods="126" conditionals="0" coveredconditionals="0" statements="4145" coveredstatements="1190" elements="4506" coveredelements="1316"/>
   </project>
 </coverage>
