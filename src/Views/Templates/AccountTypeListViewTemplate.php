@@ -2,7 +2,6 @@
 
 namespace PHPLedger\Views\Templates;
 
-use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Html;
 
 final class AccountTypeListViewTemplate extends AbstractViewTemplate

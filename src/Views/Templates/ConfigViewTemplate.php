@@ -4,7 +4,6 @@ namespace PHPLedger\Views\Templates;
 
 use PHPLedger\Views\Templates\AbstractViewTemplate;
 use PHPLedger\Util\Html;
-use PHPLedger\Util\CSRF;
 
 final class ConfigViewTemplate extends AbstractViewTemplate
 {
@@ -35,20 +34,18 @@ final class ConfigViewTemplate extends AbstractViewTemplate
                     }, 2500);
                 </script>
             <?php endif; ?>
-
             <div class="maingrid">
                 <?php $ui->menu($label, $menu); ?>
                 <div class="header" style="height:0;"></div>
                 <main>
                     <div class="main config" id="main">
                         <?php if ($hasPermission): ?>
-                            <?php (new ConfigViewFormTemplate)->render(compact('label', 'config')); ?>
+                            <?php (new ConfigViewFormTemplate)->render(compact('label', 'config', 'csrf')); ?>
                         <?php endif; ?>
                     </div>
                 </main>
                 <?php $ui->footer($label, $footer); ?>
             </div>
-
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     const storageSelect = document.querySelector('select[name="storage_type"]');

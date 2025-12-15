@@ -56,6 +56,7 @@ final class ConfigController extends AbstractViewController
             'messages' => $messages,
             'pagetitle' => $this->app->l10n()->l("Configuration"),
             'lang' => $this->app->l10n()->html(),
+            'csrf' => CSRF::inputField(),
         ]));
     }
 
