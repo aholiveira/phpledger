@@ -22,8 +22,8 @@ final class ReportViewFormTemplate extends AbstractViewTemplate
             </p>
             <p><span style="grid-column: 2 / 2;">
                     <button type="submit" value="subaction" value="calculate"><?= $label['calculate'] ?></button>
-                    <button type="submit" name="subaction" value="download"><?= $label['download'] ?? 'Download CSV' ?></button>
-                    <button type="submit" name="subaction" value="download_raw"><?= $label['download_raw'] ?? 'Raw' ?></button>
+                    <button type="submit" name="subaction" value="download"><?= $label['download_report_csv'] ?></button>
+                    <button type="submit" name="subaction" value="download_raw"><?= $label['download_raw_csv'] ?></button>
                 </span>
             </p>
         </form>
