@@ -22,7 +22,7 @@ use PHPLedger\Controllers\ResetPasswordController;
 use PHPLedger\Controllers\UpdateStorageController;
 use PHPLedger\Http\HttpRequest;
 
-final class Router
+class Router
 {
     private array $actionMap = [
         'account_type'      => AccountTypeFormController::class,

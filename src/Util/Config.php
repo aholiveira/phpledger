@@ -10,12 +10,12 @@ class ConfigInvalidException extends Exception {}
 class ConfigInvalidOrMissingException extends Exception {}
 class ConfigUnsupportedException extends Exception {}
 
-final class Config
+final class Config implements ConfigurationServiceInterface
 {
     protected static array $configData = [];
     protected static string $validationMessage = "";
     private static string $file = '';
-
+    private static ?ConfigurationServiceInterface $instance;
     /**
      * Initializes the configuration by loading it from the specified file.
      * @param string $configfile The path to the configuration file.
@@ -29,10 +29,10 @@ final class Config
             if ($test) {
                 self::$file = $configfile;
             }
-            $data = self::loadConfig($configfile);
+            $data = self::load($configfile);
             $originalData = $data ?? [];
             $data = self::checkVersion($data, $test);
-            if (!$test && !self::validate($data)) {
+            if (!$test && !self::instance()->validate($data)) {
                 throw new ConfigException("Could not validate config data");
             }
             $configChanged = ($data !== $originalData);
@@ -51,6 +51,15 @@ final class Config
         }
         return $status;
     }
+    public static function instance(): ConfigurationServiceInterface
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = new self();
+            ConfigPath::ensureMigrated();
+            self::init(ConfigPath::get());
+        }
+        return self::$instance;
+    }
     private static function checkVersion(array $data, bool $test): array
     {
         $hasVersion = is_numeric($data['version'] ?? null);
@@ -60,7 +69,7 @@ final class Config
         }
         return $data;
     }
-    private static function loadConfig(string $configfile): array
+    public static function load(string $configfile, bool $test = false): array
     {
         $data = null;
         if (!file_exists($configfile)) {
@@ -79,7 +88,7 @@ final class Config
         }
         return $data;
     }
-    public static function getValidationMessage(): string
+    public function getValidationMessage(): string
     {
         return self::$validationMessage;
     }
@@ -87,7 +96,7 @@ final class Config
      * Gets the current configuration data.
      * @return array The current configuration data.
      */
-    public static function getCurrent(): array
+    public function getCurrent(): array
     {
         return self::$configData;
     }
@@ -105,7 +114,7 @@ final class Config
      * @param string $key The configuration key.
      * @param mixed $value The configuration value.
      */
-    public static function set(string $key, $value, $save = true): void
+    public function set(string $key, $value, $save = true): void
     {
         $parts = self::resolvePath($key);
         $ref = &self::$configData;
@@ -131,7 +140,7 @@ final class Config
      * @param mixed $default The default value to return if the key does not exist.
      * @return mixed The configuration value, or the default value if the key does not exist.
      */
-    public static function get(string $key, mixed $default = null): mixed
+    public function get(string $key, mixed $default = null): mixed
     {
         $parts = self::resolvePath($key);
         $ref = self::$configData;
@@ -147,7 +156,7 @@ final class Config
      * Saves the current configuration data to the configuration file.
      * @throws Exception if there is an error saving the configuration file.
      */
-    public static function save(): void
+    public function save(): void
     {
         if (empty(self::$file)) {
             Logger::instance()->error("Configuration file not set");
@@ -160,7 +169,7 @@ final class Config
         $dir = dirname(self::$file);
         if (!file_exists(self::$file) && (!is_dir($dir) || !is_writable($dir))) {
             Logger::instance()->error("Configuration directory is not writable: " . $dir);
-            throw new ConfigException("Configuration directory is not writable");
+            throw new ConfigException("Configuration directory is not writable: ");
         }
         if (file_exists(self::$file) && !is_writable(self::$file)) {
             Logger::instance()->error("Configuration file is not writable: " . self::$file);
@@ -180,6 +189,9 @@ final class Config
             throw new ConfigException("Unable to save configuration file");
         }
         Logger::instance()->debug("Replacing configuration file: " . self::$file);
+        if (file_exists(self::$file)) {
+            unlink(self::$file);
+        }
         if (!rename($tempFile, self::$file)) {
             @unlink($tempFile);
             Logger::instance()->error("Unable to replace configuration file: " . self::$file);
@@ -191,7 +203,7 @@ final class Config
      * @param array $cfg The configuration data to validate.
      * @return bool True if the configuration data is valid, false otherwise.
      */
-    public static function validate(array $cfg, $test = false): bool
+    public function validate(array $cfg, bool $test = false): bool
     {
         try {
             if (!$test && (!isset($cfg['version']) || !is_numeric($cfg['version']))) {

@@ -16,15 +16,15 @@ class Email
 {
     public static function sendEmail($from, $to, $subject, $body, $test = false): bool
     {
-        !empty(Config::get("smtp.host")) ? ini_set("smtp", Config::get("smtp.host")) : "";
-        !empty(Config::get("smtp.port")) ? ini_set("smtp_port", Config::get("smtp.port")) : "";
-        !empty(Config::get("smtp.from")) ? ini_set("sendmail_from", Config::get("smtp.from")) : "";
+        !empty(Config::instance()->get("smtp.host")) ? ini_set("smtp", Config::instance()->get("smtp.host")) : "";
+        !empty(Config::instance()->get("smtp.port")) ? ini_set("smtp_port", Config::instance()->get("smtp.port")) : "";
+        !empty(Config::instance()->get("smtp.from")) ? ini_set("sendmail_from", Config::instance()->get("smtp.from")) : "";
         !empty($from) ? ini_set("sendmail_from", $from) : "";
         if (empty($from) || empty($to) || empty($subject) || empty($body)) {
             return false;
         }
         $from = ini_get("sendmail_from");
-        $title = Config::get("title");
+        $title = Config::instance()->get("title");
         $headers["From"] = "\"{$title}\" <{$from}>";
         $headers["User-Agent"] = "PHP";
         $headers["Return-Path"] = $from;

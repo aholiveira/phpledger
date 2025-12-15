@@ -24,7 +24,7 @@ class ResetPasswordView
 
         <body>
             <div id="login">
-                <h1><?= Config::get("title"); ?></h1>
+                <h1><?= Config::instance()->get("title"); ?></h1>
 
                 <?php if ($success === false): ?>
                     <p style="color:red;"><?= $message ?></p>

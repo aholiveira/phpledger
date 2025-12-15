@@ -35,7 +35,7 @@ class ForgotPasswordView
             <?php
             ?>
             <div id="login">
-                <h1><?= Config::get("title"); ?></h1>
+                <h1><?= Config::instance()->get("title"); ?></h1>
                 <p>Reposi&ccedil;&atilde;o de palavra-passe</p>
                 <div class="main form config">
                     <p class='error'><?= $message; ?></p>

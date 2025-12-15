@@ -34,8 +34,8 @@ class MySqlStorage implements DataStorageInterface
     {
         $this->message = "";
         $this->setTableCreateSQL();
-        $this->defaultAdminUsername = Config::get("admin.username", "admin");
-        $this->defaultAdminPassword = Config::get("admin.password", "admin");
+        $this->defaultAdminUsername = Config::instance()->get("admin.username", "admin");
+        $this->defaultAdminPassword = Config::instance()->get("admin.password", "admin");
     }
     public static function instance(): self
     {
@@ -48,12 +48,12 @@ class MySqlStorage implements DataStorageInterface
     }
     private function connect(): void
     {
-        $host = Config::get("storage.settings.host", "localhost");
-        $user = Config::get("storage.settings.user", "root");
-        $pass = Config::get("storage.settings.password", "");
-        $dbase = Config::get("storage.settings.database", "contas_test");
-        $port = Config::get("storage.settings.port", 3306);
-        $ssl = Config::get("storage.settings.ssl", false);
+        $host = Config::instance()->get("storage.settings.host", "localhost");
+        $user = Config::instance()->get("storage.settings.user", "root");
+        $pass = Config::instance()->get("storage.settings.password", "");
+        $dbase = Config::instance()->get("storage.settings.database", "contas_test");
+        $port = Config::instance()->get("storage.settings.port", 3306);
+        $ssl = Config::instance()->get("storage.settings.ssl", false);
         if ($port !== null) {
             $host .= ':' . $port;
         }
@@ -100,7 +100,7 @@ class MySqlStorage implements DataStorageInterface
     public function check(bool $test = false): bool
     {
         $retval = true;
-        $db_name =  Config::get("storage.settings.database");
+        $db_name =  Config::instance()->get("storage.settings.database");
         $tables = array_keys($this->tableCreateSQL);
         $this->connect();
         if ($this->getDbCollation($db_name) != $this->dbCollation) {
@@ -186,7 +186,7 @@ class MySqlStorage implements DataStorageInterface
     {
         $retval = true;
         $tables = array_keys($this->tableCreateSQL);
-        $db_name =  Config::get("storage.settings.database");
+        $db_name =  Config::instance()->get("storage.settings.database");
         if (
             $this->getDbCollation($db_name) != $this->dbCollation &&
             $this->setDbCollation($db_name, $this->dbCollation)
@@ -337,7 +337,7 @@ class MySqlStorage implements DataStorageInterface
                     $ledgerEntry->currencyId = 'EUR';
                     $ledgerEntry->euroAmount = $ledgerEntry->currencyAmount * $ledgerEntry->direction;
                     $ledgerEntry->exchangeRate = 1;
-                    $ledgerEntry->username =  Config::get("storage.settings.user", "root");
+                    $ledgerEntry->username =  Config::instance()->get("storage.settings.user", "root");
                     $ledgerEntry->update();
                 }
                 $curr_month = date_diff(new \DateTime(date("Y-m-d", mktime(0, 0, 0, $month, 1, $year))), new \DateTime(date("Y-m-d", mktime(0, 0, 0, 1, 1, $start_year))));

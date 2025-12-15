@@ -1,6 +1,5 @@
 <?php
 
-use PHPLedger\Util\L10n;
 use PHPLedger\Util\SessionManager;
 
 beforeEach(function () {
@@ -20,7 +19,6 @@ it('refreshExpiration updates TTL', function () {
         ->toBeGreaterThan(time() + $ttl - 3)
         ->toBeLessThan(time() + $ttl + 3);
 });
-
 
 it('starts a session with the correct name', function () {
     $session = new SessionManager();
@@ -49,4 +47,22 @@ it('logout clears session data', function () {
     $session->set('foo', 'bar');
     $session->logout();
     expect($_SESSION)->toBeEmpty();
+});
+
+it('returns authentication status correctly', function () {
+    $session = new SessionManager();
+    $session->start();
+
+    // not authenticated: no user
+    expect($session->isAuthenticated())->toBeFalse();
+
+    // authenticated: user set and not expired
+    $session->set('user', 'admin');
+    $session->set('expires', time() + 300);
+    expect($session->isAuthenticated())->toBeTrue();
+
+    // not authenticated: expired session
+    $session->set('expires', time() - 10);
+    expect($session->isExpired())->toBeTrue();
+    expect($session->isAuthenticated())->toBeFalse();
 });
