@@ -120,7 +120,11 @@ final class ReportViewTemplate extends AbstractViewTemplate
                                 <?php foreach ($reportData['groups'] as $g): ?>
                                     <!-- Top-level row -->
                                     <tr id="group-head-<?= $g['id'] ?>" data-expanded="0">
-                                        <td style="width: min-content; cursor:pointer" onclick="toggleGroup('<?= $g['id'] ?>')"><span class="toggle-btn">+</span></td>
+                                        <?php if (!empty($g['rows'])): ?>
+                                            <td style="width: min-content; cursor:pointer"><span class="toggle-btn" onclick="toggleGroup('<?= $g['id'] ?>')">+</span></td>
+                                        <?php else: ?>
+                                            <td></td>
+                                        <?php endif ?>
                                         <td><a href="index.php?<?= $g['link'] ?>" aria-label="<?= htmlspecialchars($g['label']) ?>"><?= htmlspecialchars($g['label']) ?></a></td>
                                         <?php foreach ($reportData['columns'] as $c): ?>
                                             <td class="group-col-<?= $g['id'] ?> saldos"
