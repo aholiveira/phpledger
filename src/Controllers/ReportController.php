@@ -30,17 +30,22 @@ final class ReportController extends AbstractViewController
         if (strtolower($this->request->input('subaction', '')) === 'download_raw') {
             $this->rawDataDownload($raw['category']);
         }
-        $this->uiData['label'] = array_merge($this->uiData['label'], [
-            'income' => $l10n->l('income'),
-            'expense' => $l10n->l('expense'),
-            'savings' => $l10n->l('savings'),
-            'category' => $l10n->l('category'),
-            'average' => $l10n->l('average'),
-            'totals' => $l10n->l('total'),
-            'total' => $l10n->l('total'),
-            'calculate' => $l10n->l('calculate'),
-            'period' => $l10n->l('period'),
-        ]);
+        $this->uiData['label'] = array_merge($this->uiData['label'], $this->buildL10nLabels(
+            $l10n,
+            [
+                'income',
+                'expense',
+                'savings',
+                'category',
+                'average',
+                'totals',
+                'total',
+                'calculate',
+                'period',
+                'download_report_csv',
+                'download_raw_csv',
+            ]
+        ));
         (new ReportViewTemplate())->render(array_merge($this->uiData, [
             'pagetitle'    => $period === 'month' ? $l10n->l('report_month') : $l10n->l('report_year'),
             'columnLabels' => $period === 'month' ? $monthNames : $columns,
