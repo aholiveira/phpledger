@@ -148,6 +148,7 @@ final class CategorySummaryReportBuilder
             }
 
             $g['rows'] = array_values($g['rows']);
+            usort($g['rows'], fn($a, $b) => strcasecmp($a['label'], $b['label']));
 
             foreach ($this->columns as $c) {
                 $g['collapsedValues'][$c] = $g['direct'][$c] + $g['childrenTotal'][$c];
@@ -157,7 +158,13 @@ final class CategorySummaryReportBuilder
             $g['directAverage'] = count($this->columns) ? $g['directTotal'] / count($this->columns) : 0.0;
             $g['collapsedAverage'] = count($this->columns) ? $g['collapsedTotal'] / count($this->columns) : 0.0;
         }
+
+        unset($g);
+
+        $this->groups = array_values($this->groups);
+        usort($this->groups, fn($a, $b) => strcasecmp($a['label'], $b['label']));
     }
+
 
     private function finalizeFooter(): void
     {
