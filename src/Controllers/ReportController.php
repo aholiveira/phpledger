@@ -28,7 +28,7 @@ final class ReportController extends AbstractViewController
             $this->reportDownload($reportData);
         }
         if (strtolower($this->request->input('subaction', '')) === 'download_raw') {
-            $this->rawDataDownload($raw);
+            $this->rawDataDownload($raw['category']);
         }
         $this->uiData['label'] = array_merge($this->uiData['label'], [
             'income' => $l10n->l('income'),
@@ -110,8 +110,12 @@ final class ReportController extends AbstractViewController
 
         $startYear = (int)$this->request->input('startYear', $currentYear - 1);
         $endYear   = (int)$this->request->input('endYear', $currentYear);
-        if ($endYear < $startYear) [$startYear, $endYear] = [$endYear, $startYear];
-        if (($endYear - $startYear + 1) > self::MAX_YEAR_RANGE) $endYear = $startYear + self::MAX_YEAR_RANGE - 1;
+        if ($endYear < $startYear) {
+            [$startYear, $endYear] = [$endYear, $startYear];
+        }
+        if (($endYear - $startYear + 1) > self::MAX_YEAR_RANGE) {
+            $endYear = $startYear + self::MAX_YEAR_RANGE - 1;
+        }
 
         return [
             new DateTimeImmutable("$startYear-01-01"),

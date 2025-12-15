@@ -82,25 +82,7 @@ final class ReportViewTemplate extends AbstractViewTemplate
             <div class="maingrid">
                 <?php $ui->menu($label, $menu); ?>
                 <div id="header" class="header main config">
-                    <form name="filtro" method="GET">
-                        <input type="hidden" name="action" value="report">
-                        <input type="hidden" name="period" value="<?= $period ?>">
-                        <input type="hidden" name="lang" value="<?= $lang ?>">
-                        <?php foreach ($filterFields as $f): ?>
-                            <p><label for="<?= $f['id'] ?>"><?= $f['label'] ?></label><input type="<?= $f['type'] ?>" id="<?= $f['id'] ?>" name="<?= $f['id'] ?>" maxlength="4" size="6" value="<?= $f['value'] ?>"></p>
-                        <?php endforeach ?>
-                        <p><label for="period"><?= $label['period'] ?></label>
-                            <select name="period" id="period">
-                                <?php $this->renderSelectOptions($periodOptions) ?>
-                            </select>
-                        </p>
-                        <p><span style="grid-column: 2 / 2;">
-                                <button type="submit" value="subaction" value="calculate"><?= $label['calculate'] ?></button>
-                                <button type="submit" name="subaction" value="download"><?= $label['download'] ?? 'Download CSV' ?></button>
-                                <button type="submit" name="subaction" value="download_raw"><?= $label['download_raw'] ?? 'Raw' ?></button>
-                            </span>
-                        </p>
-                    </form>
+                    <?php (new ReportViewFormTemplate)->render(compact('periodOptions', 'filterFields', 'period', 'lang', 'label')); ?>
                 </div>
                 <div class="main" id="main">
                     <div class="viewSelector" id="viewSelector">
@@ -109,90 +91,7 @@ final class ReportViewTemplate extends AbstractViewTemplate
                     </div>
                     <div class="graph" id="graph" style="display: none; width: 99%"></div>
                     <div class="table report_month" id="table" style="display: inherit; width: 99%">
-                        <table class="report report_month" id="report">
-                            <thead>
-                                <tr>
-                                    <th colspan="2"><?= $label['category'] ?></th>
-                                    <?php foreach ($columnLabels as $c): ?>
-                                        <th><?= htmlspecialchars($c) ?></th>
-                                    <?php endforeach ?>
-                                    <th><?= $label['average'] ?></th>
-                                    <th><?= $label['total'] ?></th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <?php foreach ($reportData['groups'] as $g): ?>
-                                    <!-- Top-level row -->
-                                    <tr id="group-head-<?= $g['id'] ?>" data-expanded="0">
-                                        <?php if (!empty($g['rows'])): ?>
-                                            <td style="width: min-content; cursor:pointer"><span class="toggle-btn" onclick="toggleGroup('<?= $g['id'] ?>')">+</span></td>
-                                        <?php else: ?>
-                                            <td></td>
-                                        <?php endif ?>
-                                        <td><a href="index.php?<?= $g['link'] ?>" aria-label="<?= htmlspecialchars($g['label']) ?>"><?= htmlspecialchars($g['label']) ?></a></td>
-                                        <?php foreach ($reportData['columns'] as $c): ?>
-                                            <td class="group-col-<?= $g['id'] ?> saldos"
-                                                data-direct="<?= NumberUtil::normalize($g['direct'][$c]) ?>"
-                                                data-collapsed="<?= NumberUtil::normalize($g['collapsedValues'][$c]) ?>">
-                                                <?php if (!empty($g['columnLinks'][$c] ?? '')): ?>
-                                                    <a href="index.php?<?= $g['columnLinks'][$c] ?>"><span><?= NumberUtil::normalize($g['collapsedValues'][$c]) ?></span></a>
-                                                <?php else: ?>
-                                                    <span><?= NumberUtil::normalize($g['collapsedValues'][$c]) ?></span>
-                                                <?php endif ?>
-                                            </td>
-                                        <?php endforeach ?>
-                                        <td id="group-avg-<?= $g['id'] ?>" class="totals"
-                                            data-direct="<?= NumberUtil::normalize($g['directAverage']) ?>"
-                                            data-collapsed="<?= NumberUtil::normalize($g['collapsedAverage']) ?>">
-                                            <?= NumberUtil::normalize($g['collapsedAverage']) ?>
-                                        </td>
-                                        <td id="group-total-<?= $g['id'] ?>" class="totals"
-                                            data-direct="<?= NumberUtil::normalize($g['directTotal']) ?>"
-                                            data-collapsed="<?= NumberUtil::normalize($g['collapsedTotal']) ?>">
-                                            <?= NumberUtil::normalize($g['collapsedTotal']) ?>
-                                        </td>
-                                    </tr>
-
-                                    <!-- Child rows -->
-                                    <?php foreach ($g['rows'] as $r): ?>
-                                        <tr class="group-child-<?= $g['id'] ?>" style="display:none">
-                                            <td colspan="2">
-                                                <?php if (!empty($r['link'])): ?>
-                                                    <a href="index.php?<?= $r['link'] ?>"><span><?= str_repeat('&nbsp;', 4) . str_repeat('&#8594; ', 1) . htmlspecialchars($r['label']) ?></span></a>
-                                                <?php else: ?>
-                                                    <span><?= str_repeat('&nbsp;', 4) . str_repeat('&#8594; ', 1) . htmlspecialchars($r['label']) ?></span>
-                                                <?php endif ?>
-                                            </td>
-                                            <?php foreach ($reportData['columns'] as $c): ?>
-                                                <td class="saldos">
-                                                    <?php if (!empty($r['columnLinks'][$c] ?? '')): ?>
-                                                        <a href="index.php?<?= $r['columnLinks'][$c] ?>"><span><?= NumberUtil::normalize($r['values'][$c]) ?></span></a>
-                                                    <?php else: ?>
-                                                        <span><?= NumberUtil::normalize($r['values'][$c]) ?></span>
-                                                    <?php endif ?>
-                                                </td>
-                                            <?php endforeach ?>
-                                            <td class="totals"><?= NumberUtil::normalize($r['average']) ?></td>
-                                            <td class="totals"><?= NumberUtil::normalize($r['total']) ?></td>
-                                        </tr>
-                                    <?php endforeach ?>
-                                <?php endforeach ?>
-                            </tbody>
-
-                            <tfoot>
-                                <?php foreach ($reportData['footer'] as $key => $row): ?>
-                                    <tr class="<?= $key ?>">
-                                        <td colspan="2" class="<?= $key ?>" style="text-align: left;"><?= $label[$key] ?></td>
-                                        <?php foreach ($row['values'] as $cell): ?>
-                                            <td class="saldos <?= $key ?>"><?= NumberUtil::normalize($cell) ?></td>
-                                        <?php endforeach ?>
-                                        <td class="totals"><?= NumberUtil::normalize($row['average']) ?></td>
-                                        <td class="totals"><?= NumberUtil::normalize($row['total']) ?></td>
-                                    </tr>
-                                <?php endforeach ?>
-                            </tfoot>
-                        </table>
+                        <?php (new ReportViewTableTemplate)->render(compact('label', 'reportData', 'columnLabels',)); ?>
                     </div>
                 </div>
                 <?php $ui->footer($label, $footer); ?>

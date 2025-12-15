@@ -72,17 +72,13 @@ final class AccountTypeFormController extends AbstractViewController
             http_response_code(400);
             throw new PHPLedgerException("Falhou a validação do token. Repita a operação.");
         }
-        if (strtolower($filtered['update'] ?? '') === "save") {
-            if (!$this->handleSave($object, $filtered)) {
-                throw new PHPLedgerException("Ocorreu um erro ao gravar");
-            }
+        if (strtolower($filtered['update'] ?? '') === "save"  && !$this->handleSave($object, $filtered)) {
+            throw new PHPLedgerException("Ocorreu um erro ao gravar");
         }
         if (strtolower($filtered['update'] ?? '') === "delete") {
             $object->id = $filtered['id'] ?? 0;
-            if ($object->id > 0) {
-                if (!$object->delete()) {
-                    throw new PHPLedgerException("Ocorreu um erro ao eliminar");
-                }
+            if ($object->id > 0 && !$object->delete()) {
+                throw new PHPLedgerException("Ocorreu um erro ao eliminar");
             }
         }
     }

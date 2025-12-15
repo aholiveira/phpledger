@@ -9,19 +9,19 @@ beforeEach(function () {
 });
 
 it('builds empty report when no rows', function () {
-    $result = $this->builder->build([], [2024], 'year', $this->from, $this->to);
+    $result = $this->builder->build(['category' => [], 'savings' => []], [2024], 'year', $this->from, $this->to);
 
     expect($result['groups'])->toBeEmpty()
         ->and($result['footer']['totals']['total'])->toBe(0.0);
 });
 
 it('accumulates direct category values', function () {
-    $rows = [[
+    $rows['savings'] = [];
+    $rows['category'] = [[
         'categoryId' => 1,
         'parentId' => 0,
         'groupColumn' => 2024,
         'amountSum' => 100,
-        'savings' => 0,
         'categoryDescription' => 'Income',
         'parentDescription' => '',
     ]];
@@ -34,12 +34,12 @@ it('accumulates direct category values', function () {
 });
 
 it('accumulates child category values', function () {
-    $rows = [[
+    $rows['savings'] = [];
+    $rows['category'] = [[
         'categoryId' => 2,
         'parentId' => 1,
         'groupColumn' => 2024,
         'amountSum' => -50,
-        'savings' => 0,
         'categoryDescription' => 'Food',
         'parentDescription' => 'Expenses',
     ]];
@@ -52,13 +52,13 @@ it('accumulates child category values', function () {
 });
 
 it('calculates collapsed totals', function () {
-    $rows = [
+    $rows['savings'] = [];
+    $rows['category'] = [
         [
             'categoryId' => 1,
             'parentId' => 0,
             'groupColumn' => 2024,
             'amountSum' => 100,
-            'savings' => 0,
             'categoryDescription' => 'Income',
             'parentDescription' => '',
         ],
@@ -67,7 +67,6 @@ it('calculates collapsed totals', function () {
             'parentId' => 1,
             'groupColumn' => 2024,
             'amountSum' => -30,
-            'savings' => 0,
             'categoryDescription' => 'Tax',
             'parentDescription' => 'Income',
         ],
@@ -78,35 +77,27 @@ it('calculates collapsed totals', function () {
     expect($r['groups'][0]['collapsedTotal'])->toBe(70.0);
 });
 
-it('tracks savings separately', function () {
-    $rows = [[
-        'categoryId' => 3,
-        'parentId' => 0,
-        'groupColumn' => 2024,
-        'amountSum' => 200,
-        'savings' => 1,
-        'categoryDescription' => 'Savings',
-        'parentDescription' => '',
-    ]];
-
-    $r = $this->builder->build($rows, [2024], 'year', $this->from, $this->to);
-
-    expect($r['footer']['savings']['values'][2024])->toBe(200.0);
-});
-
 it('normalizes month columns automatically', function () {
-    $rows = [[
+    $rows = ['category' => [[
         'categoryId' => 1,
         'parentId' => 0,
         'groupColumn' => 1,
         'amountSum' => 10,
-        'savings' => 0,
         'categoryDescription' => 'Income',
         'parentDescription' => '',
-    ]];
+    ]], 'savings' => []];
 
     $r = $this->builder->build($rows, [], 'month', $this->from, $this->to);
 
     expect($r['columns'])->toBe(range(1, 12))
         ->and($r['groups'][0]['direct'][1])->toBe(10.0);
+});
+
+it('updates savings columns', function () {
+    $rows = ['category' => [], 'savings' => [['groupColumn' => 11, 'amountSum' => 200.0]]];
+
+    $r = $this->builder->build($rows, [], 'month', $this->from, $this->to);
+
+    expect($r['columns'])->toBe(range(1, 12))
+        ->and($r['footer']['savings']['values'][11])->toBe(200.0);
 });

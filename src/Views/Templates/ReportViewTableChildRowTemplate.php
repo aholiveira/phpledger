@@ -1,0 +1,38 @@
+<?php
+
+namespace PHPLedger\Views\Templates;
+
+use PHPLedger\Util\NumberUtil;
+
+final class ReportViewTableChildRowTemplate extends AbstractViewTemplate
+{
+    public function render(array $data): void
+    {
+        extract($data, EXTR_SKIP);
+?>
+        <!-- Child rows -->
+        <?php foreach ($g['rows'] as $r): ?>
+            <tr class="group-child-<?= $g['id'] ?>" style="display:none">
+                <td colspan="2">
+                    <?php if (!empty($r['link'])): ?>
+                        <a href="index.php?<?= $r['link'] ?>"><span><?= str_repeat('&nbsp;', 4) . str_repeat('&#8594; ', 1) . htmlspecialchars($r['label']) ?></span></a>
+                    <?php else: ?>
+                        <span><?= str_repeat('&nbsp;', 4) . str_repeat('&#8594; ', 1) . htmlspecialchars($r['label']) ?></span>
+                    <?php endif ?>
+                </td>
+                <?php foreach ($reportData['columns'] as $c): ?>
+                    <td class="saldos">
+                        <?php if (!empty($r['columnLinks'][$c] ?? '')): ?>
+                            <a href="index.php?<?= $r['columnLinks'][$c] ?>"><span><?= NumberUtil::normalize($r['values'][$c]) ?></span></a>
+                        <?php else: ?>
+                            <span><?= NumberUtil::normalize($r['values'][$c]) ?></span>
+                        <?php endif ?>
+                    </td>
+                <?php endforeach ?>
+                <td class="totals"><?= NumberUtil::normalize($r['average']) ?></td>
+                <td class="totals"><?= NumberUtil::normalize($r['total']) ?></td>
+            </tr>
+        <?php endforeach ?>
+<?php
+    }
+}

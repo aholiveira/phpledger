@@ -17,24 +17,46 @@ final class MySqlCategorySummaryReport extends CategorySummaryReport
             throw new PHPLedgerException('Invalid period parameter');
         }
 
-        $sql = "SELECT
+        $sqlCategory = "SELECT
                     movimentos.categoryId,
                     tipo_mov.parentId,
                     COALESCE(parents.`description`, '') AS parentDescription,
                     tipo_mov.`description` AS categoryDescription,
-                    tipo_contas.savings,
                     CASE WHEN ? = 'month' THEN MONTH(movimentos.entryDate) ELSE YEAR(movimentos.entryDate) END AS groupColumn,
-                    SUM(movimentos.euroAmount) AS amountSum
+                    ROUND(SUM(movimentos.euroAmount), 2) AS amountSum
                 FROM movimentos
                 LEFT JOIN tipo_mov ON tipo_mov.id = movimentos.categoryId
                 LEFT JOIN tipo_mov AS parents ON tipo_mov.parentId = parents.id AND parents.parentId = 0
-                LEFT JOIN contas ON contas.id = movimentos.accountId
-                LEFT JOIN tipo_contas ON tipo_contas.id = contas.typeId
                 WHERE movimentos.entryDate BETWEEN ? AND ?
                 GROUP BY tipo_mov.parentId, parents.description, tipo_mov.description, movimentos.categoryId,
                          CASE WHEN ? = 'month' THEN MONTH(movimentos.entryDate) ELSE YEAR(movimentos.entryDate) END
-                ORDER BY categoryDescription";
-
+                ";
+        $sqlSavings = "SELECT
+	                CASE WHEN ? = 'month'
+                        THEN MONTH(movimentos.entryDate)
+                        ELSE YEAR(movimentos.entryDate)
+                        END AS `groupColumn`,
+	                SUM(movimentos.euroAmount) AS amountSum
+                    FROM
+	                    movimentos
+	                    LEFT JOIN contas ON contas.id = movimentos.accountId
+	                    LEFT JOIN tipo_contas ON tipo_contas.id = contas.typeId
+                    WHERE
+	                    movimentos.entryDate BETWEEN ? AND ?
+	                    AND tipo_contas.savings = 1
+                        GROUP BY CASE WHEN ? = 'month' THEN MONTH(movimentos.entryDate) ELSE YEAR(movimentos.entryDate) END
+                        ";
+        try {
+            return [
+                'category' => $this->getRows($sqlCategory, $from, $to, $group),
+                'savings' => $this->getRows($sqlSavings, $from, $to, $group)
+            ];
+        } catch (\Exception $ex) {
+            throw new PHPLedgerException($ex->getMessage());
+        }
+    }
+    private function getRows(string $sql, DateTimeImmutable $from, DateTimeImmutable $to, string $group): array
+    {
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if (!$stmt) {
@@ -45,8 +67,7 @@ final class MySqlCategorySummaryReport extends CategorySummaryReport
             $stmt->bind_param('ssss', $group, $fromStr, $toStr, $group);
             $stmt->execute();
             $result = $stmt->get_result();
-            $rows = $result->fetch_all(MYSQLI_ASSOC);
-            return $rows;
+            return $result->fetch_all(MYSQLI_ASSOC);
         } catch (\Exception $ex) {
             throw new PHPLedgerException($ex->getMessage());
         }

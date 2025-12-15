@@ -22,8 +22,12 @@ final class CategorySummaryReportBuilder
         $this->groups  = [];
         $this->footer  = $this->initFooter($this->columns);
 
-        foreach ($rows as $row) {
+        foreach ($rows['category'] as $row) {
             $this->accumulateRow($row);
+        }
+
+        foreach ($rows['savings'] as $col) {
+            $this->footer['savings']['values'][$col['groupColumn']] = $col['amountSum'];
         }
 
         $this->finalizeGroups();
@@ -58,7 +62,6 @@ final class CategorySummaryReportBuilder
         $groupId  = $parentId === 0 ? $catId : $parentId;
         $column   = (int)$r['groupColumn'];
         $value    = (float)$r['amountSum'];
-        $savings  = (int)$r['savings'];
 
         $label = $parentId === 0 ? $r['categoryDescription'] : $r['parentDescription'];
         $this->initGroup($groupId, $label);
@@ -77,7 +80,7 @@ final class CategorySummaryReportBuilder
 
         $this->groups[$groupId]['columnLinks'][$column] ??= $this->makeColumnLink($groupId, $column);
 
-        $this->accumulateFooter($column, $value, $savings);
+        $this->accumulateFooter($column, $value);
     }
 
     private function initGroup(int $groupId, string $label): void
@@ -118,7 +121,7 @@ final class CategorySummaryReportBuilder
         ];
     }
 
-    private function accumulateFooter(int $column, float $value, int $savings): void
+    private function accumulateFooter(int $column, float $value): void
     {
         if ($value > 0) {
             $this->footer['income']['values'][$column] += $value;
@@ -126,9 +129,6 @@ final class CategorySummaryReportBuilder
             $this->footer['expense']['values'][$column] += $value;
         }
         $this->footer['totals']['values'][$column] += $value;
-        if ($savings === 1) {
-            $this->footer['savings']['values'][$column] += $value;
-        }
     }
 
     private function finalizeGroups(): void
@@ -168,7 +168,7 @@ final class CategorySummaryReportBuilder
 
     private function finalizeFooter(): void
     {
-        foreach ($this->footer as $k => &$row) {
+        foreach ($this->footer as &$row) {
             $row['total'] = array_sum($row['values']);
             $row['average'] = count($this->columns) ? $row['total'] / count($this->columns) : 0.0;
         }

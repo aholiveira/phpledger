@@ -26,7 +26,7 @@ final class AccountTypeListViewTemplate extends AbstractViewTemplate
                 </div>
                 <?php $ui->menu($label, $menu); ?>
                 <div class="header">
-                    <p style="margin:0"><a href="index.php?action=account_type&lang=<?= $lang ?>"><?= $label["add"] ?></a></p>
+                    <p style="margin:0"><a href="index.php?action=account_type&lang=<?= $lang ?>" aria-label="<?= $label["add"] ?>"><?= $label["add"] ?></a></p>
                 </div>
                 <div class="main" id="main">
                     <table class="lista account_type">

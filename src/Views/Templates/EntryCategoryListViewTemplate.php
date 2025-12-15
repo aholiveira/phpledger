@@ -26,7 +26,7 @@ final class EntryCategoryListViewTemplate extends AbstractViewTemplate
                 </div>
                 <?php $ui->menu($label, $menu); ?>
                 <div class="header">
-                    <p style="margin:0"><a href="index.php?action=entry_type"><?= $label['add'] ?></a></p>
+                    <p style="margin:0"><a href="index.php?action=entry_type" aria-label="<?= $label['add'] ?>"><?= $label['add'] ?></a></p>
                 </div>
                 <div id="main" class="main">
                     <div class="entry_category_list">
