@@ -3,8 +3,6 @@
 namespace PHPLedger\Views\Templates;
 
 use PHPLedger\Views\Templates\AbstractViewTemplate;
-use PHPLedger\Util\Html;
-use PHPLedger\Util\CSRF;
 
 final class ConfigViewFormTemplate extends AbstractViewTemplate
 {
@@ -12,9 +10,8 @@ final class ConfigViewFormTemplate extends AbstractViewTemplate
     {
         extract($data, EXTR_SKIP);
 ?>
-
         <form method="POST">
-            <?= CSRF::inputField() ?>
+            <?= $csrf ?>
             <p><label for="title"><?= $label['application_name'] ?></label>
                 <input id="title" name="title" value="<?= htmlspecialchars($config['title']) ?>">
             </p>
