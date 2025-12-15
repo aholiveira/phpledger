@@ -32,18 +32,18 @@ final class MySqlCategorySummaryReport extends CategorySummaryReport
                          CASE WHEN ? = 'month' THEN MONTH(movimentos.entryDate) ELSE YEAR(movimentos.entryDate) END
                 ";
         $sqlSavings = "SELECT
-	                CASE WHEN ? = 'month'
+                    CASE WHEN ? = 'month'
                         THEN MONTH(movimentos.entryDate)
                         ELSE YEAR(movimentos.entryDate)
                         END AS `groupColumn`,
-	                SUM(movimentos.euroAmount) AS amountSum
+                    SUM(movimentos.euroAmount) AS amountSum
                     FROM
-	                    movimentos
-	                    LEFT JOIN contas ON contas.id = movimentos.accountId
-	                    LEFT JOIN tipo_contas ON tipo_contas.id = contas.typeId
+                        movimentos
+                        LEFT JOIN contas ON contas.id = movimentos.accountId
+                        LEFT JOIN tipo_contas ON tipo_contas.id = contas.typeId
                     WHERE
-	                    movimentos.entryDate BETWEEN ? AND ?
-	                    AND tipo_contas.savings = 1
+                        movimentos.entryDate BETWEEN ? AND ?
+                        AND tipo_contas.savings = 1
                         GROUP BY CASE WHEN ? = 'month' THEN MONTH(movimentos.entryDate) ELSE YEAR(movimentos.entryDate) END
                         ";
         try {
