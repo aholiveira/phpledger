@@ -648,7 +648,7 @@ tr.expense {
 
 .main.config form button,
 .main.config form select {
-    width: min-content;
+    width: max-content;
 }
 
 .settings {
