@@ -9,35 +9,61 @@ use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Redirector;
-use PHPLedger\Views\ConfigView;
+use PHPLedger\Views\Templates\ConfigViewTemplate;
 
 final class ConfigController extends AbstractViewController
 {
     protected function handle(): void
     {
-        $view = new ConfigView();
-        $success = false;
-        $data = ["title" => ""];
-        $hasPermission = false;
+        $view = new ConfigViewTemplate();
         $messages = [];
+        $success = false;
+        $config = ["title" => ""];
+        $hasPermission = false;
+
         try {
             $this->checkUserPermission();
             $hasPermission = true;
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                [$data, $success, $messages] = $this->processPost();
+
+            if ($this->request->method() === 'POST') {
+                [$config, $success, $messages] = $this->processPost();
             } else {
-                $data = Config::getCurrent();
+                $config = Config::getCurrent();
             }
         } catch (Exception $e) {
             $messages = [$e->getMessage()];
         }
-        $view->render($this->app, $data, $hasPermission, $success, $this->request->input('action'), $messages);
+        $this->uiData['label'] = array_merge(
+            $this->uiData['label'],
+            $this->buildL10nLabels(
+                $this->app->l10n(),
+                [
+                    "application_name",
+                    "smtp_host",
+                    "smtp_port",
+                    "from",
+                    "url",
+                    "storage_type",
+                    "mysql_settings",
+                    "save",
+                ]
+            )
+        );
+        $view->render(array_merge($this->uiData, [
+            'config' => $config,
+            'hasPermission' => $hasPermission,
+            'success' => $success,
+            'messages' => $messages,
+            'pagetitle' => $this->app->l10n()->l("Configuration"),
+            'lang' => $this->app->l10n()->html(),
+        ]));
     }
 
     private function checkUserPermission(): void
     {
         $username = $this->app->session()->get('user', '');
-        $user = !empty($username) ? ObjectFactory::user()::getByUsername($username) : null;
+        $user = $username ? ObjectFactory::user()::getByUsername($username) : null;
+
         if (!($user instanceof User)) {
             Redirector::to("index.php?action=login");
             throw new PHPLedgerException('You must be logged in to view this page.');
@@ -46,56 +72,51 @@ final class ConfigController extends AbstractViewController
             throw new PHPLedgerException("You do not have permission to view this page.");
         }
     }
+
     private function processPost(): array
     {
         $data = Config::getCurrent();
-        $success = false;
         $messages = [];
+        $success = false;
 
-        if (!CSRF::validateToken($_POST['_csrf_token'] ?? '')) {
-            $messages = ['Invalid CSRF token.'];
+        if (!CSRF::validateToken($this->request->input('_csrf_token', ''))) {
+            $messages[] = 'Invalid CSRF token.';
             return [$data, false, $messages];
         }
 
         $new = [
             'version' => $data['version'] ?? 2,
-            'title' => trim($_POST['title'] ?? ''),
+            'title' => trim($this->request->input('title', '')),
             'storage' => [
-                'type' => $_POST['storage_type'] ?? '',
+                'type' => $this->request->input('storage_type', ''),
                 'settings' => [
-                    'host' => trim($_POST['storage_host'] ?? ''),
-                    'database' => trim($_POST['storage_database'] ?? ''),
-                    'port' => (int)trim($_POST['storage_port'] ?? ''),
-                    'user' => trim($_POST['storage_user'] ?? ''),
-                    'password' => trim($_POST['storage_password'] ?? '')
+                    'host' => trim($this->request->input('storage_host', '')),
+                    'database' => trim($this->request->input('storage_database', '')),
+                    'port' => (int)$this->request->input('storage_port', 3306),
+                    'user' => trim($this->request->input('storage_user', '')),
+                    'password' => trim($this->request->input('storage_password', '')),
                 ]
             ],
             'smtp' => [
-                'host' => trim($_POST['smtp_host'] ?? ''),
-                'port' => (int)trim($_POST['smtp_port'] ?? ''),
-                'from' => trim($_POST['smtp_from'] ?? '')
+                'host' => trim($this->request->input('smtp_host', '')),
+                'port' => (int)$this->request->input('smtp_port', 25),
+                'from' => trim($this->request->input('smtp_from', '')),
             ],
-            'admin' => [
-                'username' => $data['admin']['username'] ?? 'admin',
-                'password' => $data['admin']['password'] ?? 'admin'
-            ],
-            'url' => trim($_POST['url'] ?? '')
+            'admin' => $data['admin'] ?? ['username' => 'admin', 'password' => 'admin'],
+            'url' => trim($this->request->input('url', '')),
         ];
 
         if (!Config::validate($new)) {
-            $messages = ['Some configuration values are invalid.', Config::getValidationMessage()];
-            return [$new, false, $messages];
+            return [$new, false, ['Some configuration values are invalid.', Config::getValidationMessage()]];
         }
 
+        foreach ($new['storage']['settings'] as $k => $v) {
+            Config::set("storage.settings.$k", $v);
+        }
         Config::set('title', $new['title']);
         Config::set('storage.type', $new['storage']['type']);
-        Config::set('storage.settings.host', $new['storage']['settings']['host']);
-        Config::set('storage.settings.database', $new['storage']['settings']['database']);
-        Config::set('storage.settings.user', $new['storage']['settings']['user']);
-        Config::set('storage.settings.password', $new['storage']['settings']['password']);
-        Config::set('storage.settings.port', (int)$new['storage']['settings']['port']);
         Config::set('smtp.host', $new['smtp']['host']);
-        Config::set('smtp.port', (int)$new['smtp']['port']);
+        Config::set('smtp.port', $new['smtp']['port']);
         Config::set('smtp.from', $new['smtp']['from']);
         Config::set('url', $new['url']);
 
@@ -106,6 +127,7 @@ final class ConfigController extends AbstractViewController
         } catch (Exception $e) {
             $messages = ['Unable to save configuration: ' . $e->getMessage()];
         }
+
         return [$new, $success, $messages];
     }
 }
