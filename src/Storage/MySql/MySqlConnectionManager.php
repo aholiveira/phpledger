@@ -22,12 +22,12 @@ class MySqlConnectionManager
 
     private function connect(): void
     {
-        $host = Config::get("storage.settings.host", "localhost");
-        $user = Config::get("storage.settings.user", "root");
-        $pass = Config::get("storage.settings.password", "");
-        $dbase = Config::get("storage.settings.database", "contas_test");
-        $port = Config::get("storage.settings.port", 3306);
-        $ssl = Config::get("storage.settings.ssl", false);
+        $host = Config::instance()->get("storage.settings.host", "localhost");
+        $user = Config::instance()->get("storage.settings.user", "root");
+        $pass = Config::instance()->get("storage.settings.password", "");
+        $dbase = Config::instance()->get("storage.settings.database", "contas_test");
+        $port = Config::instance()->get("storage.settings.port", 3306);
+        $ssl = Config::instance()->get("storage.settings.ssl", false);
 
         if ($port !== null) {
             $host .= ':' . $port;

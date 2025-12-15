@@ -28,7 +28,7 @@ final class ConfigController extends AbstractViewController
             if ($this->request->method() === 'POST') {
                 [$config, $success, $messages] = $this->processPost();
             } else {
-                $config = Config::getCurrent();
+                $config = $this->app->config()->getCurrent();
             }
         } catch (Exception $e) {
             $messages = [$e->getMessage()];
@@ -75,7 +75,8 @@ final class ConfigController extends AbstractViewController
 
     private function processPost(): array
     {
-        $data = Config::getCurrent();
+        $config = $this->app->config();
+        $data = $config->getCurrent();
         $messages = [];
         $success = false;
 
@@ -106,22 +107,22 @@ final class ConfigController extends AbstractViewController
             'url' => trim($this->request->input('url', '')),
         ];
 
-        if (!Config::validate($new)) {
-            return [$new, false, ['Some configuration values are invalid.', Config::getValidationMessage()]];
+        if (!$config->validate($new)) {
+            return [$new, false, ['Some configuration values are invalid.', $config->getValidationMessage()]];
         }
 
         foreach ($new['storage']['settings'] as $k => $v) {
-            Config::set("storage.settings.$k", $v);
+            $config->set("storage.settings.$k", $v);
         }
-        Config::set('title', $new['title']);
-        Config::set('storage.type', $new['storage']['type']);
-        Config::set('smtp.host', $new['smtp']['host']);
-        Config::set('smtp.port', $new['smtp']['port']);
-        Config::set('smtp.from', $new['smtp']['from']);
-        Config::set('url', $new['url']);
+        $config->set('title', $new['title']);
+        $config->set('storage.type', $new['storage']['type']);
+        $config->set('smtp.host', $new['smtp']['host']);
+        $config->set('smtp.port', $new['smtp']['port']);
+        $config->set('smtp.from', $new['smtp']['from']);
+        $config->set('url', $new['url']);
 
         try {
-            Config::save();
+            $config->save();
             $success = true;
             $messages = ['Configuration saved successfully.'];
         } catch (Exception $e) {

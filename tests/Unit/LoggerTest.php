@@ -40,6 +40,24 @@ it('writes an info log entry', function () {
     expect($content)->toContain('Test info');
 });
 
+it('writes an warning log entry', function () {
+    $logger = new Logger($this->logFile);
+    $logger->warning('Test info', 'PFX');
+    $content = file_get_contents($this->logFile);
+    expect($content)->toContain('[WARNING]');
+    expect($content)->toContain('[PFX]');
+    expect($content)->toContain('Test info');
+});
+
+it('writes a notice log entry', function () {
+    $logger = new Logger($this->logFile);
+    $logger->notice('Test info', 'PFX');
+    $content = file_get_contents($this->logFile);
+    expect($content)->toContain('[NOTICE]');
+    expect($content)->toContain('[PFX]');
+    expect($content)->toContain('Test info');
+});
+
 it('writes a debug log entry', function () {
     $logger = new Logger($this->logFile, LogLevel::DEBUG);
     $logger->debug('Test debug', 'PFX');
@@ -115,4 +133,28 @@ it('setLogLevel updates the current log level', function () {
     $logger->debug('Debug after level change');
     $content = file_get_contents($this->logFile);
     expect($content)->toContain('Debug after level change');
+});
+
+it('formats log entry correctly and creates directory if missing', function () {
+    $file = Path::combine(__DIR__, 'tmp', 'dirtest', 'entry.log');
+    $dir = dirname($file);
+
+    // ensure directory does not exist
+    if (is_dir($dir)) {
+        array_map('unlink', glob($dir . DIRECTORY_SEPARATOR . '*'));
+        rmdir($dir);
+    }
+
+    $logger = new Logger($file, LogLevel::DEBUG);
+    $logger->info('Entry test', 'PREFIX');
+
+    // check directory was created
+    expect(is_dir($dir))->toBeTrue();
+
+    // check log file exists
+    expect(is_file($file))->toBeTrue();
+
+    // check log entry format
+    $content = file_get_contents($file);
+    expect($content)->toMatch('/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\] \[INFO\] \[PREFIX\] Entry test/');
 });

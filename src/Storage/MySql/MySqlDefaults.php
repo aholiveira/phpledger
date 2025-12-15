@@ -40,7 +40,7 @@ class MySqlDefaults extends Defaults
         $this->lastVisitedUri = $data["lastVisitedUri"] ?? "";
         $this->lastVisitedAt = $data["lastVisitedAt"] ?? time();
         $this->showReportGraph = $data["showReportGraph"] ?? 0;
-        $this->username = $data["username"] ?? Config::get("admin_username");
+        $this->username = $data["username"] ?? Config::instance()->get("admin_username");
     }
     public static function getDefinition(): array
     {

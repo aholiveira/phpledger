@@ -28,7 +28,7 @@ final class Application implements ApplicationObjectInterface
     private Logger $logger;
     private Redirector $redirector;
     private L10n $l10n;
-    private ConfigurationServiceInterface $config;
+    private static ConfigurationServiceInterface $config;
     private string $logfile;
     private bool $needsUpdate;
     public function __construct(string $logfile = "")
@@ -46,17 +46,17 @@ final class Application implements ApplicationObjectInterface
     }
     public function dataFactory(): DataObjectFactoryInterface
     {
-        $backend = Config::get("storage.type") ??  "mysql";
+        $backend = $this->config()->get("storage.type") ??  "mysql";
         return $this->dataFactory ??= new ObjectFactory($backend);
     }
     public function reportFactory(): ReportFactory
     {
-        $backend = Config::get("storage.type") ??  "mysql";
+        $backend = $this->config()->get("storage.type") ??  "mysql";
         return $this->reportFactory ??= new ReportFactory($backend);
     }
     public function config(): ConfigurationServiceInterface
     {
-        return self::$config;
+        return self::$config ?? new Config(ConfigPath::get());
     }
     public function session(): SessionServiceInterface
     {
@@ -113,7 +113,7 @@ final class Application implements ApplicationObjectInterface
             $_SESSION['timezone'] = $_COOKIE['timezone'];
         }
 
-        $tz = $_SESSION['timezone'] ?? Config::get("timezone");
+        $tz = $_SESSION['timezone'] ?? self::$config->get("timezone");
         Logger::instance()->debug("Applying timezone: " . ($tz ?? 'UTC'));
         date_default_timezone_set(
             in_array($tz, timezone_identifiers_list(), true) ? $tz : 'UTC'

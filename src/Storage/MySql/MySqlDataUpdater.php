@@ -35,7 +35,7 @@ class MySqlDataUpdater
     public function check(bool $test = false): bool
     {
         $retval = true;
-        $dbName = Config::get("storage.settings.database");
+        $dbName = Config::instance()->get("storage.settings.database");
         $tables = array_keys($this->getTableDefinitions());
 
         if ($this->getDbCollation($dbName) !== "utf8mb4_general_ci") {
@@ -62,7 +62,7 @@ class MySqlDataUpdater
     public function update(bool $test = false): bool
     {
         $retval = true;
-        $dbName = Config::get("storage.settings.database");
+        $dbName = Config::instance()->get("storage.settings.database");
         $tables = array_keys($this->getTableDefinitions());
 
         if ($this->getDbCollation($dbName) !== "utf8mb4_general_ci") {
@@ -111,7 +111,7 @@ class MySqlDataUpdater
                     $ledgerEntry->currencyId = 'EUR';
                     $ledgerEntry->euroAmount = $ledgerEntry->currencyAmount * $ledgerEntry->direction;
                     $ledgerEntry->exchangeRate = 1;
-                    $ledgerEntry->username = Config::get("storage.settings.user", "root");
+                    $ledgerEntry->username = Config::instance()->get("storage.settings.user", "root");
                     $ledgerEntry->update();
                 }
             }

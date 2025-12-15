@@ -7,7 +7,6 @@ use PHPLedger\Contracts\SessionServiceInterface;
 class SessionManager implements SessionServiceInterface
 {
     private array $data;
-    private bool $expired;
     public function __construct()
     {
         $this->start();
@@ -32,11 +31,11 @@ class SessionManager implements SessionServiceInterface
     }
     public function isAuthenticated(): bool
     {
-        return isset($this->data['user']) && !$this->expired;
+        return isset($this->data['user']) && !$this->isExpired();
     }
     public function isExpired(): bool
     {
-        return $this->expired = isset($this->data['expires']) && $this->data['expires'] < time();
+        return isset($this->data['expires']) && $this->data['expires'] < time();
     }
     public function logout(): void
     {
