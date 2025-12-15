@@ -13,7 +13,14 @@ final class ReportViewTableTopLevelTemplate extends AbstractViewTemplate
         <!-- Top-level row -->
         <tr id="group-head-<?= $g['id'] ?>" data-expanded="0">
             <?php if (!empty($g['rows'])): ?>
-                <td style="width: min-content; cursor:pointer"><span class="toggle-btn" onclick="toggleGroup('<?= $g['id'] ?>')">+</span></td>
+                <td style="width: min-content; cursor:pointer"> <button type="button"
+                        class="toggle-btn"
+                        onclick="toggleGroup('<?= $g['id'] ?>')"
+                        aria-expanded="false"
+                        aria-controls="group-<?= $g['id'] ?>">
+                        +
+                    </button>
+                </td>
             <?php else: ?>
                 <td></td>
             <?php endif ?>
