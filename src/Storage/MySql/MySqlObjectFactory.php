@@ -47,14 +47,6 @@ class MySqlObjectFactory implements DataObjectFactoryInterface
     {
         return new MySqlLedgerEntry();
     }
-    public static function reportMonth(): MySqlReportMonth
-    {
-        return new MySqlReportMonth();
-    }
-    public static function reportYear(): MySqlReportYear
-    {
-        return new MySqlReportYear();
-    }
     public static function user(): MySqlUser
     {
         return new MySqlUser();

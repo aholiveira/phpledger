@@ -10,6 +10,7 @@ use PHPLedger\Contracts\LoggerServiceInterface;
 use PHPLedger\Contracts\LogLevel;
 use PHPLedger\Contracts\SessionServiceInterface;
 use PHPLedger\Storage\ObjectFactory;
+use PHPLedger\Storage\ReportFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\ConfigPath;
 use PHPLedger\Util\L10n;
@@ -22,6 +23,7 @@ final class Application implements ApplicationObjectInterface
 {
     private static string $errorMessage = "";
     private DataObjectFactoryInterface $dataFactory;
+    private ReportFactory $reportFactory;
     private SessionManager $session;
     private Logger $logger;
     private Redirector $redirector;
@@ -46,6 +48,11 @@ final class Application implements ApplicationObjectInterface
     {
         $backend = Config::get("storage.type") ??  "mysql";
         return $this->dataFactory ??= new ObjectFactory($backend);
+    }
+    public function reportFactory(): ReportFactory
+    {
+        $backend = Config::get("storage.type") ??  "mysql";
+        return $this->reportFactory ??= new ReportFactory($backend);
     }
     public function config(): ConfigurationServiceInterface
     {

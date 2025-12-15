@@ -67,7 +67,7 @@ class MysqlAccountType extends AccountType
         return $retval;
     }
 
-    public static function getById(int $id): ?AccountType
+    public static function getById(int $id): ?self
     {
         $sql = self::getSelect() . " WHERE id=?";
         try {

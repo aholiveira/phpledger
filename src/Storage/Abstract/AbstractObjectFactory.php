@@ -11,8 +11,6 @@ use PHPLedger\Domain\Defaults;
 use PHPLedger\Domain\EntryCategory;
 use PHPLedger\Domain\Ledger;
 use PHPLedger\Domain\LedgerEntry;
-use PHPLedger\Domain\ReportMonth;
-use PHPLedger\Domain\ReportYear;
 use PHPLedger\Domain\User;
 use UnexpectedValueException;
 
@@ -60,14 +58,6 @@ abstract class AbstractObjectFactory implements DataObjectFactoryInterface
     public static function ledgerEntry(): LedgerEntry
     {
         return static::$backendFactory::ledgerentry();
-    }
-    public static function reportMonth(): ReportMonth
-    {
-        return static::$backendFactory::ReportMonth();
-    }
-    public static function reportYear(): ReportYear
-    {
-        return static::$backendFactory::ReportYear();
     }
     public static function user(): User
     {

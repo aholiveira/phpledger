@@ -115,7 +115,7 @@ abstract class User extends AbstractDataObject implements UserObjectInterface
         return $this->role === $role;
     }
 
-    abstract public static function getByUsername(string $username): ?User;
+    abstract public static function getByUsername(string $username): ?self;
 
-    abstract public static function getByToken(string $token): ?user;
+    abstract public static function getByToken(string $token): ?self;
 }

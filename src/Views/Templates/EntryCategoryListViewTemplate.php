@@ -44,7 +44,7 @@ final class EntryCategoryListViewTemplate extends AbstractViewTemplate
                                 <?php
                                 foreach ($rows as $row):
                                     $indent = $row['parentId'] > 0 ? 1 : 0;
-                                    $displayDescription = str_repeat('&nbsp;', 4 * $indent) . str_repeat('&#8594 ', $indent) . $row['description'];
+                                    $displayDescription = str_repeat('&nbsp;', 4 * $indent) . str_repeat('&#8594; ', $indent) . $row['description'];
                                 ?>
                                     <tr>
                                         <td class="id" data-label="<?= $label['id'] ?>"><?= $row['id'] ?></td>

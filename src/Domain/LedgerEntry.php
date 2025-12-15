@@ -2,10 +2,10 @@
 
 namespace PHPLedger\Domain;
 
-use PHPLedger\Contracts\DataObjectInterface;
+use PHPLedger\Contracts\Domain\LedgerEntryObjectInterface;
 use PHPLedger\Storage\Abstract\AbstractDataObject;
 
-abstract class LedgerEntry extends AbstractDataObject implements DataObjectInterface
+abstract class LedgerEntry extends AbstractDataObject implements LedgerEntryObjectInterface
 {
     public string $entryDate;
     public int $categoryId;
@@ -25,5 +25,5 @@ abstract class LedgerEntry extends AbstractDataObject implements DataObjectInter
     public int $ledgerId;
     abstract public function getBalanceBeforeDate($date, $accountId = null): ?float;
     abstract public static function getList(array $fieldFilter = []): array;
-    abstract public static function getById($id): ?ledgerentry;
+    abstract public static function getById($id): ?self;
 }

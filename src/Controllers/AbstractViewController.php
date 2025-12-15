@@ -32,8 +32,7 @@ abstract class AbstractViewController implements ViewControllerInterface
             'accounts',
             'account_types',
             'entry_types',
-            'report_month',
-            'report_year',
+            'report',
             'configuration',
             'config',
             'logout',
@@ -74,8 +73,7 @@ abstract class AbstractViewController implements ViewControllerInterface
             'accounts',
             'account_types',
             'entry_types',
-            'report_month',
-            'report_year'
+            'report',
         ];
         if ($isAdmin) {
             $menuActions[] = 'config';

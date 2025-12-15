@@ -74,7 +74,7 @@ class MySqlCurrency extends Currency
         return $retval;
     }
 
-    private static function getByField($field, $value): ?Currency
+    private static function getByField($field, $value): ?self
     {
         $sql = self::getSelect() . " WHERE $field=? ORDER BY `description`";
         $retval = null;
@@ -93,12 +93,12 @@ class MySqlCurrency extends Currency
         }
         return $retval;
     }
-    public static function getById($id): ?currency
+    public static function getById($id): ?self
     {
         return self::getByField("id", $id);
     }
 
-    public static function getByCode($code): ?currency
+    public static function getByCode($code): ?self
     {
         return self::getByField("code", $code);
     }

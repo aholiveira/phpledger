@@ -18,6 +18,6 @@ interface UserObjectInterface extends DataObjectInterface
     public function isTokenValid(string $token): bool;
     public function resetPassword(): bool;
     public function hasRole(int $role): bool;
-    public static function getByUsername(string $username): ?UserObjectInterface;
-    public static function getByToken(string $token): ?UserObjectInterface;
+    public static function getByUsername(string $username): ?self;
+    public static function getByToken(string $token): ?self;
 }

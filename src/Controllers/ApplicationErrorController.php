@@ -10,6 +10,6 @@ final class ApplicationErrorController extends AbstractViewController
     protected function handle(): void
     {
         $view = new ApplicationErrorView;
-        $view->render(Application::getErrorMessage());
+        $view->render($this->app, Application::getErrorMessage());
     }
 }

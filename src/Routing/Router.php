@@ -17,8 +17,7 @@ use PHPLedger\Controllers\EntryCategoryListController;
 use PHPLedger\Controllers\ForgotPasswordController;
 use PHPLedger\Controllers\LedgerEntriesController;
 use PHPLedger\Controllers\LoginController;
-use PHPLedger\Controllers\ReportMonthController;
-use PHPLedger\Controllers\ReportYearController;
+use PHPLedger\Controllers\ReportController;
 use PHPLedger\Controllers\ResetPasswordController;
 use PHPLedger\Controllers\UpdateStorageController;
 use PHPLedger\Http\HttpRequest;
@@ -39,8 +38,7 @@ final class Router
         'ledger_entries'    => LedgerEntriesController::class,
         'login'             => LoginController::class,
         'logout'            => LoginController::class,
-        'report_month'      => ReportMonthController::class,
-        'report_year'       => ReportYearController::class,
+        'report'            => ReportController::class,
         'resetpassword'     => ResetPasswordController::class,
         'update'            => UpdateStorageController::class,
     ];
