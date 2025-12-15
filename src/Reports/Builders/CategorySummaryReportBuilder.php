@@ -198,14 +198,14 @@ final class CategorySummaryReportBuilder
 
     private function average(float $total): float
     {
-        return count($this->columns) ? $total / count($this->columns) : 0.0;
+        return round(count($this->columns) ? $total / count($this->columns) : 0.0, 3);
     }
 
     private function finalizeFooter(): void
     {
         foreach ($this->footer as &$row) {
             $row['total'] = array_sum($row['values']);
-            $row['average'] = count($this->columns) ? $row['total'] / count($this->columns) : 0.0;
+            $row['average'] = $this->average($row['total']);
         }
     }
 
