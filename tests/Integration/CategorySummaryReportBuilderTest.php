@@ -1,0 +1,112 @@
+<?php
+
+use PHPLedger\Reports\Builders\CategorySummaryReportBuilder;
+
+beforeEach(function () {
+    $this->builder = new CategorySummaryReportBuilder();
+    $this->from = new DateTimeImmutable('2024-01-01');
+    $this->to   = new DateTimeImmutable('2024-12-31');
+});
+
+it('builds empty report when no rows', function () {
+    $result = $this->builder->build([], [2024], 'year', $this->from, $this->to);
+
+    expect($result['groups'])->toBeEmpty()
+        ->and($result['footer']['totals']['total'])->toBe(0.0);
+});
+
+it('accumulates direct category values', function () {
+    $rows = [[
+        'categoryId' => 1,
+        'parentId' => 0,
+        'groupColumn' => 2024,
+        'amountSum' => 100,
+        'savings' => 0,
+        'categoryDescription' => 'Income',
+        'parentDescription' => '',
+    ]];
+
+    $r = $this->builder->build($rows, [2024], 'year', $this->from, $this->to);
+
+    expect($r['groups'])->toHaveCount(1)
+        ->and($r['groups'][0]['direct'][2024])->toBe(100.0)
+        ->and($r['footer']['income']['values'][2024])->toBe(100.0);
+});
+
+it('accumulates child category values', function () {
+    $rows = [[
+        'categoryId' => 2,
+        'parentId' => 1,
+        'groupColumn' => 2024,
+        'amountSum' => -50,
+        'savings' => 0,
+        'categoryDescription' => 'Food',
+        'parentDescription' => 'Expenses',
+    ]];
+
+    $r = $this->builder->build($rows, [2024], 'year', $this->from, $this->to);
+
+    expect($r['groups'][0]['rows'])->toHaveCount(1)
+        ->and($r['groups'][0]['rows'][0]['total'])->toBe(-50.0)
+        ->and($r['footer']['expense']['values'][2024])->toBe(-50.0);
+});
+
+it('calculates collapsed totals', function () {
+    $rows = [
+        [
+            'categoryId' => 1,
+            'parentId' => 0,
+            'groupColumn' => 2024,
+            'amountSum' => 100,
+            'savings' => 0,
+            'categoryDescription' => 'Income',
+            'parentDescription' => '',
+        ],
+        [
+            'categoryId' => 2,
+            'parentId' => 1,
+            'groupColumn' => 2024,
+            'amountSum' => -30,
+            'savings' => 0,
+            'categoryDescription' => 'Tax',
+            'parentDescription' => 'Income',
+        ],
+    ];
+
+    $r = $this->builder->build($rows, [2024], 'year', $this->from, $this->to);
+
+    expect($r['groups'][0]['collapsedTotal'])->toBe(70.0);
+});
+
+it('tracks savings separately', function () {
+    $rows = [[
+        'categoryId' => 3,
+        'parentId' => 0,
+        'groupColumn' => 2024,
+        'amountSum' => 200,
+        'savings' => 1,
+        'categoryDescription' => 'Savings',
+        'parentDescription' => '',
+    ]];
+
+    $r = $this->builder->build($rows, [2024], 'year', $this->from, $this->to);
+
+    expect($r['footer']['savings']['values'][2024])->toBe(200.0);
+});
+
+it('normalizes month columns automatically', function () {
+    $rows = [[
+        'categoryId' => 1,
+        'parentId' => 0,
+        'groupColumn' => 1,
+        'amountSum' => 10,
+        'savings' => 0,
+        'categoryDescription' => 'Income',
+        'parentDescription' => '',
+    ]];
+
+    $r = $this->builder->build($rows, [], 'month', $this->from, $this->to);
+
+    expect($r['columns'])->toBe(range(1, 12))
+        ->and($r['groups'][0]['direct'][1])->toBe(10.0);
+});
