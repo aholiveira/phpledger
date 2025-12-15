@@ -431,20 +431,17 @@ tr.expense {
 
 /* Group expand/collapse button */
 .toggle-btn {
-    width: 1.4em;
-    height: 1.4em;
+    width: 1em;
+    height: 1em;
     padding: 0;
     line-height: 1;
     text-align: center;
-    font-weight: bold;
-    font-size: 1em;
-
+    font-weight: normal;
+    font-size: 0.9em;
     background: var(--bg-secondary);
     color: var(--accent);
-
     border: 1px solid var(--accent);
     border-radius: 50%;
-
     cursor: pointer;
 }
 
