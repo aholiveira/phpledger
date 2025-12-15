@@ -33,7 +33,7 @@ final class MySqlCategorySummaryReport extends CategorySummaryReport
                 WHERE movimentos.entryDate BETWEEN ? AND ?
                 GROUP BY tipo_mov.parentId, parents.description, tipo_mov.description, movimentos.categoryId,
                          CASE WHEN ? = 'month' THEN MONTH(movimentos.entryDate) ELSE YEAR(movimentos.entryDate) END
-                ORDER BY groupColumn, tipo_mov.parentId, movimentos.categoryId";
+                ORDER BY categoryDescription";
 
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
