@@ -15,9 +15,9 @@ final class ReportViewTableChildRowTemplate extends AbstractViewTemplate
             <tr class="group-child-<?= $g['id'] ?>" style="display:none">
                 <td colspan="2">
                     <?php if (!empty($r['link'])): ?>
-                        <a href="index.php?<?= $r['link'] ?>"><span><?= str_repeat('&nbsp;', 4) . str_repeat('&#8594; ', 1) . htmlspecialchars($r['label']) ?></span></a>
+                        <a href="index.php?<?= $r['link'] ?>"><span><?= '&#8594; ' . htmlspecialchars($r['label']) ?></span></a>
                     <?php else: ?>
-                        <span><?= str_repeat('&nbsp;', 4) . str_repeat('&#8594; ', 1) . htmlspecialchars($r['label']) ?></span>
+                        <span><?= '&#8594; ' . htmlspecialchars($r['label']) ?></span>
                     <?php endif ?>
                 </td>
                 <?php foreach ($reportData['columns'] as $c): ?>
