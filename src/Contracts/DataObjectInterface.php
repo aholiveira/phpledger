@@ -13,11 +13,11 @@ interface DataObjectInterface
 {
     public function validate(): bool;
     public function errorMessage(): string;
-    public function create(): DataObjectInterface;
-    public function read(int $id): ?DataObjectInterface;
+    public function create(): self;
+    public function read(int $id): ?self;
     public function update(): bool;
     public function delete(): bool;
     public static function getNextId(): int;
     public static function getList(array $fieldFilter = []): array;
-    public static function getById(int $id): ?DataObjectInterface;
+    public static function getById(int $id): ?self;
 }

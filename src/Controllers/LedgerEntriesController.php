@@ -207,16 +207,16 @@ final class LedgerEntriesController extends AbstractViewController
                 [
                     'text' => $this->app->l10n()->l('deposit'),
                     'value' => 1,
-                    'selected' => $editId > 0 ? ($editEntry->direction === 1) : false,
+                    'selected' => $editId > 0 ? ($editEntry->direction === 1) : ($this->defaults->direction === 1),
                 ],
                 [
-                    'text' => $this->app->l10n()->l('withdrawal'),
+                    'text' => $this->app->l10n()->l('withdraw'),
                     'value' => -1,
-                    'selected' => $editId > 0 ? ($editEntry->direction === -1) : true,
+                    'selected' => $editId > 0 ? ($editEntry->direction === -1) : ($this->defaults->direction === -1),
                 ],
             ],
             'amount' => $editId > 0 ? $editEntry->currencyAmount : 0,
-            'remarks' => htmlspecialchars($editId > 0 ? $editEntry->remarks : ''),
+            'remarks' => $editId > 0 ? $editEntry->remarks : '',
             'balance' => NumberUtil::normalize($balance),
         ];
     }

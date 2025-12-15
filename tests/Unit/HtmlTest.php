@@ -7,6 +7,7 @@ use PHPLedger\Contracts\SessionServiceInterface;
 use PHPLedger\Contracts\ConfigurationServiceInterface;
 use PHPLedger\Contracts\DataObjectFactoryInterface;
 use PHPLedger\Contracts\LoggerServiceInterface;
+use PHPLedger\Storage\ReportFactory;
 use PHPLedger\Util\Config;
 use PHPLedger\Util\Html;
 use PHPLedger\Version;
@@ -74,6 +75,7 @@ class DummyApp implements ApplicationObjectInterface
 
     public function config(): ConfigurationServiceInterface { return $this->config; }
     public function dataFactory(): DataObjectFactoryInterface { return new class{}; }
+    public function reportFactory(): ReportFactory { return new class{}; }
     public function l10n(): L10nServiceInterface { return $this->l10n; }
     public function logger(): LoggerServiceInterface { return new class{}; }
     public function session(): SessionServiceInterface { return $this->session; }

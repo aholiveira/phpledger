@@ -76,8 +76,8 @@ final class AccountController extends AbstractViewController
                 'iban' => $this->account->iban ?? '',
                 'swift' => $this->account->swift ?? '',
                 'openDate' => $this->account->openDate ?? date("Y-m-d"),
-                'closeDate' => $this->account->closeDate ?? '',
-                'activa' => ($this->account->activa ?? 0) === 1,
+                'closeDate' => $this->account->closeDate ?? date("Y-m-d", 0),
+                'activa' => ($this->account->activa ?? 1) === 1,
             ]
         ]));
     }

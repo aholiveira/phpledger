@@ -6,6 +6,7 @@ use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Contracts\L10nServiceInterface;
 use PHPLedger\Contracts\RequestInterface;
 use PHPLedger\Contracts\ViewControllerInterface;
+use PHPLedger\Util\CSRF;
 use PHPLedger\Util\UiBuilder;
 use PHPLedger\Version;
 
@@ -31,8 +32,7 @@ abstract class AbstractViewController implements ViewControllerInterface
             'accounts',
             'account_types',
             'entry_types',
-            'report_month',
-            'report_year',
+            'report',
             'configuration',
             'config',
             'logout',
@@ -44,7 +44,8 @@ abstract class AbstractViewController implements ViewControllerInterface
             'actions',
             'active',
             'open',
-            'close'
+            'close',
+            'id'
         ];
         return $this->buildL10nLabels($l10n, $base);
     }
@@ -64,6 +65,7 @@ abstract class AbstractViewController implements ViewControllerInterface
         $session = $app->session();
         $expires = date("Y-m-d H:i:s", $session->get('expires', time()));
         $isAdmin = $session->get('isAdmin', false);
+        $action = $this->request->input('action');
         $label = $this->uiData['label'];
         $menuActions = [
             'ledger_entries',
@@ -71,8 +73,7 @@ abstract class AbstractViewController implements ViewControllerInterface
             'accounts',
             'account_types',
             'entry_types',
-            'report_month',
-            'report_year'
+            'report',
         ];
         if ($isAdmin) {
             $menuActions[] = 'config';
@@ -96,7 +97,8 @@ abstract class AbstractViewController implements ViewControllerInterface
             'footer' => $footer,
             'ui' => new UiBuilder(),
             'isAdmin' => $isAdmin,
-            'lang' => $lang
+            'lang' => $lang,
+            'csrf' => CSRF::inputField(),
         ];
     }
     protected function buildLanguageSelectorHtml(string $current, array $requestParams = []): string

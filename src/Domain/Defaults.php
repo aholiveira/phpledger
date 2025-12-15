@@ -51,10 +51,10 @@ abstract class Defaults extends AbstractDataObject implements DefaultsObjectInte
      * Get Defaults by username
      * @param string $username
      */
-    abstract public static function getByUsername(string $username): ?Defaults;
+    abstract public static function getByUsername(string $username): ?self;
     /**
      * Initialize Defaults
-     * @return Defaults
+     * @return self
      */
-    abstract public static function init(): Defaults;
+    abstract public static function init(): self;
 }

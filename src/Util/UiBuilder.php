@@ -27,12 +27,31 @@ final class UiBuilder implements UiBuilderInterface
         <footer>
             <div class="footer">
                 <span class="RCS"><a href="<?= $footer['repo'] ?? '' ?>" aria-label="<?= htmlspecialchars($footer['versionText'] ?? '') ?>"><?= htmlspecialchars($footer['versionText'] ?? '') ?></a></span>
-                <span class="RCS" style="display:flex;align-items:center">
+                <span class="RCS" style="display: flex; align-items: center">
                     <?= htmlspecialchars($footer['sessionExpires'] ?? '') ?>
-                    <span style="margin-left:auto;display:flex;"><?= $footer['languageSelectorHtml'] ?? '' ?></span>
+                    <span style="margin-left: auto; display: flex;"><?= $footer['languageSelectorHtml'] ?? '' ?></span>
                 </span>
             </div>
         </footer>
-<?php
+        <?php
+    }
+
+    public function notification(string $notification, bool $success): void
+    {
+        if (!empty($notification)) {
+        ?>
+            <div id="notification" class="notification <?= $success ? "success" : "fail" ?>">
+                <?= $notification ?>
+            </div>
+            <script>
+                const el = document.getElementById('notification');
+                setTimeout(() => {
+                    el.classList.add('hide');
+                    el.addEventListener('transitionend', () => el.remove(), {
+                        once: true
+                    });
+                }, 2500);
+            </script>
+<?php }
     }
 }

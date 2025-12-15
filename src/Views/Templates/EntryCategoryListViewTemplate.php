@@ -19,11 +19,7 @@ final class EntryCategoryListViewTemplate extends AbstractViewTemplate
         </head>
 
         <body>
-            <?php if (!empty($message)): ?>
-                <div id="notification" class="notification <?= $success ? 'success' : 'fail' ?>">
-                    <?= $message ?>
-                </div>
-            <?php endif ?>
+            <?php $ui->notification($message, $success); ?>
             <div id="maingrid" class="maingrid">
                 <div id="preloader">
                     <div class="spinner"></div>
@@ -48,7 +44,7 @@ final class EntryCategoryListViewTemplate extends AbstractViewTemplate
                                 <?php
                                 foreach ($rows as $row):
                                     $indent = $row['parentId'] > 0 ? 1 : 0;
-                                    $displayDescription = str_repeat('&nbsp;', 4 * $indent) . str_repeat('&#8594 ', $indent) . $row['description'];
+                                    $displayDescription = str_repeat('&nbsp;', 4 * $indent) . str_repeat('&#8594; ', $indent) . $row['description'];
                                 ?>
                                     <tr>
                                         <td class="id" data-label="<?= $label['id'] ?>"><?= $row['id'] ?></td>

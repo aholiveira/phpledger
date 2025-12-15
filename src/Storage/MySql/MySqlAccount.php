@@ -29,7 +29,7 @@ class MySqlAccount extends Account
     }
     protected static string $tableName = "contas";
 
-    private static function fetchOne(string $sql, array $params = []): Account
+    private static function fetchOne(string $sql, array $params = []): self
     {
         $all = static::fetchAll($sql, $params);
         return array_shift($all) ?: new MySqlAccount();
@@ -42,7 +42,7 @@ class MySqlAccount extends Account
         return static::fetchAll($sql);
     }
 
-    public static function getById($id): Account
+    public static function getById($id): self
     {
         $sql = self::getSelect() . " WHERE id=?";
         return static::fetchOne($sql, [$id]);

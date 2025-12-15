@@ -119,7 +119,7 @@ class MySqlLedgerEntry extends LedgerEntry
         return $retval;
     }
 
-    public static function getById($id): ?ledgerentry
+    public static function getById($id): ?self
     {
         $sql = self::getSelect() . " WHERE id=?";
         $retval = null;

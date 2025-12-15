@@ -138,7 +138,7 @@ class MySqlDefaults extends Defaults
         }
         return $retval;
     }
-    public static function getByUsername(string $username): ?Defaults
+    public static function getByUsername(string $username): ?self
     {
         if (empty($username)) {
             return null;
@@ -179,7 +179,7 @@ class MySqlDefaults extends Defaults
      * Set values to the initial values
      * Use if there are no persisted defaults in the database
      */
-    public static function init(): Defaults
+    public static function init(): self
     {
         return new MySqlDefaults();
     }

@@ -9,8 +9,6 @@ use PHPLedger\Storage\MySql\MySqlDefaults;
 use PHPLedger\Storage\MySql\MySqlEntryCategory;
 use PHPLedger\Storage\MySql\MySqlLedger;
 use PHPLedger\Storage\MySql\MySqlLedgerEntry;
-use PHPLedger\Storage\MySql\MySqlReportMonth;
-use PHPLedger\Storage\MySql\MySqlReportYear;
 use PHPLedger\Storage\MySql\MySqlUser;
 use PHPLedger\Contracts\DataStorageInterface;
 
@@ -123,32 +121,6 @@ describe('MySqlObjectFactory::ledgerEntry', function () {
     });
 });
 
-describe('MySqlObjectFactory::reportMonth', function () {
-    it('returns a new MySqlReportMonth instance', function () {
-        $report = MySqlObjectFactory::reportMonth();
-        expect($report)->toBeInstanceOf(MySqlReportMonth::class);
-    });
-
-    it('returns a new instance each time', function () {
-        $report1 = MySqlObjectFactory::reportMonth();
-        $report2 = MySqlObjectFactory::reportMonth();
-        expect($report1)->not->toBe($report2);
-    });
-});
-
-describe('MySqlObjectFactory::reportYear', function () {
-    it('returns a new MySqlReportYear instance', function () {
-        $report = MySqlObjectFactory::reportYear();
-        expect($report)->toBeInstanceOf(MySqlReportYear::class);
-    });
-
-    it('returns a new instance each time', function () {
-        $report1 = MySqlObjectFactory::reportYear();
-        $report2 = MySqlObjectFactory::reportYear();
-        expect($report1)->not->toBe($report2);
-    });
-});
-
 describe('MySqlObjectFactory::user', function () {
     it('returns a new MySqlUser instance', function () {
         $user = MySqlObjectFactory::user();
@@ -183,8 +155,6 @@ describe('MySqlObjectFactory factory pattern', function () {
         expect(method_exists(MySqlObjectFactory::class, 'entryCategory'))->toBeTrue();
         expect(method_exists(MySqlObjectFactory::class, 'ledger'))->toBeTrue();
         expect(method_exists(MySqlObjectFactory::class, 'ledgerEntry'))->toBeTrue();
-        expect(method_exists(MySqlObjectFactory::class, 'reportMonth'))->toBeTrue();
-        expect(method_exists(MySqlObjectFactory::class, 'reportYear'))->toBeTrue();
         expect(method_exists(MySqlObjectFactory::class, 'user'))->toBeTrue();
         expect(method_exists(MySqlObjectFactory::class, 'dataStorage'))->toBeTrue();
     });
@@ -197,8 +167,6 @@ describe('MySqlObjectFactory factory pattern', function () {
         expect(MySqlObjectFactory::entryCategory())->toBeInstanceOf(MySqlEntryCategory::class);
         expect(MySqlObjectFactory::ledger())->toBeInstanceOf(MySqlLedger::class);
         expect(MySqlObjectFactory::ledgerEntry())->toBeInstanceOf(MySqlLedgerEntry::class);
-        expect(MySqlObjectFactory::reportMonth())->toBeInstanceOf(MySqlReportMonth::class);
-        expect(MySqlObjectFactory::reportYear())->toBeInstanceOf(MySqlReportYear::class);
         expect(MySqlObjectFactory::user())->toBeInstanceOf(MySqlUser::class);
     });
 });

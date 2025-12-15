@@ -43,6 +43,7 @@ beforeEach(function () {
     $this->session->shouldReceive('get')->with('isAdmin', false)->andReturn(true);
 
     $this->request->shouldReceive('all')->andReturn(['action' => 'accounts', 'foo' => 'bar']);
+    $this->request->shouldReceive('input')->with('action')->andReturn('accounts');
 });
 
 it('initializes uiData correctly', function () {

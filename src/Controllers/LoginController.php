@@ -119,7 +119,6 @@ final class LoginController extends AbstractViewController
         $view->render(array_merge($this->uiData, [
             'postUser' => $this->postUser ?? '',
             'errorMessage' => $errorMessage ?? '',
-            'csrf' => CSRF::inputField(),
             'pagetitle' => Config::get('title'),
         ]));
     }

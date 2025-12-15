@@ -10,6 +10,7 @@
 namespace PHPLedger\Contracts;
 
 use PHPLedger\Contracts\Domain\DefaultsObjectInterface;
+use PHPLedger\Contracts\Domain\LedgerEntryObjectInterface;
 use PHPLedger\Contracts\Domain\UserObjectInterface;
 
 interface DataObjectFactoryInterface
@@ -21,8 +22,6 @@ interface DataObjectFactoryInterface
     public static function accountType(): DataObjectInterface;
     public static function currency(): DataObjectInterface;
     public static function ledger(): DataObjectInterface;
-    public static function ledgerEntry(): DataObjectInterface;
+    public static function ledgerEntry(): LedgerEntryObjectInterface;
     public static function entryCategory(): DataObjectInterface;
-    public static function reportMonth(): ReportInterface;
-    public static function reportYear(): ReportInterface;
 }

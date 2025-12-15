@@ -19,6 +19,10 @@
     text-rendering: optimizeLegibility;
 }
 
+.savings {
+    background-color: #E8F5E9 !important;
+}
+
 .notification {
     position: fixed;
     top: 1.5em;
@@ -91,6 +95,7 @@ div {
     margin-left: 0.2rem;
 }
 
+tr,
 th,
 td {
     padding: 0.2em 0.3em;
@@ -407,7 +412,7 @@ div.report_year {
 }
 
 tr.income {
-    background-color: #e6f9eb !important;
+    background-color: #E3F2FD !important;
     color: #2e6d4d;
 }
 
@@ -423,6 +428,15 @@ tr.expense {
 .active {
     text-align: center;
 }
+
+.report tr.row-even {
+    background-color: var(--bg-secondary);
+}
+
+.report tr.row-odd {
+    background-color: var(--highlight);
+}
+
 @media only screen and (max-width: 1024px) {
     div {
         margin-left: 0;

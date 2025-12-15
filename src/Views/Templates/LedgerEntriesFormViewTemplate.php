@@ -66,12 +66,7 @@ final class LedgerEntriesFormViewTemplate extends AbstractViewTemplate
                 </td>
                 <td data-label="<?= $label['dc'] ?>" class="direction">
                     <select name="direction">
-                        <option value="1" <?= (int)$formData['direction'] === 1 ? " selected " : "" ?>>
-                            <?= $label['deposit'] ?>
-                        </option>
-                        <option value="-1" <?= (int)$formData['direction'] === -1 ? " selected " : "" ?>>
-                            <?= $label['withdraw'] ?>
-                        </option>
+                        <?php $this->renderSelectOptions($formData['direction']) ?>
                     </select>
                 </td>
                 <td data-label="<?= $label['amount'] ?>" class="amount">
