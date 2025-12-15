@@ -15,10 +15,6 @@
     --border-radius: 6px;
 }
 
-body {
-    text-rendering: optimizeLegibility;
-}
-
 .savings {
     background-color: #E8F5E9 !important;
 }
@@ -53,6 +49,7 @@ body {
 }
 
 body {
+    text-rendering: optimizeLegibility;
     height: 95vh;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
