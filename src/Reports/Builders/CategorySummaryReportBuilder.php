@@ -134,29 +134,16 @@ final class CategorySummaryReportBuilder
     private function finalizeGroups(): void
     {
         foreach ($this->groups as $gid => &$g) {
-            foreach ($g['rows'] as $cid => &$row) {
-                if (array_sum($row['values']) == 0.0) {
-                    unset($g['rows'][$cid]);
-                    continue;
-                }
-                $row['average'] = count($this->columns) ? $row['total'] / count($this->columns) : 0.0;
-            }
+            $this->finalizeGroupRows($g);
 
-            if (empty($g['rows']) && array_sum($g['direct']) == 0.0) {
+            if ($this->shouldRemoveGroup($g)) {
                 unset($this->groups[$gid]);
                 continue;
             }
 
-            $g['rows'] = array_values($g['rows']);
-            usort($g['rows'], fn($a, $b) => strcasecmp($a['label'], $b['label']));
-
-            foreach ($this->columns as $c) {
-                $g['collapsedValues'][$c] = $g['direct'][$c] + $g['childrenTotal'][$c];
-                $g['collapsedTotal'] += $g['collapsedValues'][$c];
-            }
-
-            $g['directAverage'] = count($this->columns) ? $g['directTotal'] / count($this->columns) : 0.0;
-            $g['collapsedAverage'] = count($this->columns) ? $g['collapsedTotal'] / count($this->columns) : 0.0;
+            $this->sortGroupRows($g);
+            $this->computeGroupCollapsedValues($g);
+            $this->computeGroupAverages($g);
         }
 
         unset($g);
@@ -165,6 +152,54 @@ final class CategorySummaryReportBuilder
         usort($this->groups, fn($a, $b) => strcasecmp($a['label'], $b['label']));
     }
 
+    private function finalizeGroupRows(array &$g): void
+    {
+        foreach ($g['rows'] as $cid => &$row) {
+            if ($this->isZeroRow($row)) {
+                unset($g['rows'][$cid]);
+                continue;
+            }
+
+            $row['average'] = $this->average($row['total']);
+        }
+
+        unset($row);
+    }
+
+    private function isZeroRow(array $row): bool
+    {
+        return array_sum($row['values']) == 0.0;
+    }
+
+    private function shouldRemoveGroup(array $g): bool
+    {
+        return empty($g['rows']) && array_sum($g['direct']) == 0.0;
+    }
+
+    private function sortGroupRows(array &$g): void
+    {
+        $g['rows'] = array_values($g['rows']);
+        usort($g['rows'], fn($a, $b) => strcasecmp($a['label'], $b['label']));
+    }
+
+    private function computeGroupCollapsedValues(array &$g): void
+    {
+        foreach ($this->columns as $c) {
+            $g['collapsedValues'][$c] = $g['direct'][$c] + $g['childrenTotal'][$c];
+            $g['collapsedTotal'] += $g['collapsedValues'][$c];
+        }
+    }
+
+    private function computeGroupAverages(array &$g): void
+    {
+        $g['directAverage'] = $this->average($g['directTotal']);
+        $g['collapsedAverage'] = $this->average($g['collapsedTotal']);
+    }
+
+    private function average(float $total): float
+    {
+        return count($this->columns) ? $total / count($this->columns) : 0.0;
+    }
 
     private function finalizeFooter(): void
     {
