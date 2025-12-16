@@ -43,12 +43,7 @@ final class LedgerEntriesTableViewTemplate extends AbstractViewTemplate
                             </td>
                         </tr>
                         <?php
-                        $rowTemplate = new LedgerEntriesRowViewTemplate();
-                        $formTemplate = new LedgerEntriesFormViewTemplate();
-                        $rowTemplateData = [
-                            'lang' => $lang,
-                            'label' => $label
-                        ];
+                        $rowTemplateData = compact('lang', 'label', 'csrf');
                         foreach ($ledgerEntryRows as $row):
                             $rowTemplateData = array_merge(
                                 $rowTemplateData,
@@ -60,16 +55,16 @@ final class LedgerEntriesTableViewTemplate extends AbstractViewTemplate
                             );
                             if ($row['text']['id'] !== $editId) {
                                 $rowTemplateData['row'] = $row;
-                                $rowTemplate->render($rowTemplateData);
+                                $rowViewTemplate->render($rowTemplateData);
                             } else {
                                 $rowTemplateData['formData'] = $formData;
-                                $formTemplate->render($rowTemplateData);
+                                $formViewTemplate->render($rowTemplateData);
                             }
                         endforeach;
                         if ((int)($editId ?? 0) === 0) {
                             $rowTemplateData['formData'] = $formData;
                             $rowTemplateData['filters'] = $filters;
-                            $formTemplate->render($rowTemplateData);
+                            $formViewTemplate->render($rowTemplateData);
                         }
                         ?>
                     </tbody>

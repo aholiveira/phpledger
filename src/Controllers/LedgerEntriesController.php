@@ -19,13 +19,15 @@ use PHPLedger\Contracts\RequestInterface;
 use PHPLedger\Domain\Defaults;
 use PHPLedger\Domain\EntryCategory;
 use PHPLedger\Domain\LedgerEntry;
-use PHPLedger\Util\CSRF;
 use PHPLedger\Util\DateParser;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\NumberUtil;
-use PHPLedger\Util\Redirector;
+use PHPLedger\Views\Templates\LedgerEntriesFilterViewTemplate;
+use PHPLedger\Views\Templates\LedgerEntriesFormViewTemplate;
 use PHPLedger\Views\Templates\LedgerEntriesMainViewTemplate;
 use PHPLedger\Views\Templates\LedgerEntriesPreloaderTemplate;
+use PHPLedger\Views\Templates\LedgerEntriesRowViewTemplate;
+use PHPLedger\Views\Templates\LedgerEntriesTableViewTemplate;
 
 final class LedgerEntriesController extends AbstractViewController
 {
@@ -115,6 +117,11 @@ final class LedgerEntriesController extends AbstractViewController
                 'ledgerEntryRows' => $ledgerEntryRows ?? [],
                 'formData' => $this->prepareFormData($ledgerEntryObject, $filters, (float)$formBalance) ?? [],
                 'filterFormData' => $filterFormData,
+                'csrf' => $this->app->csrf()->inputField(),
+                'filterViewTemplate' => new LedgerEntriesFilterViewTemplate,
+                'tableViewTemplate' => new LedgerEntriesTableViewTemplate,
+                'rowViewTemplate' => new LedgerEntriesRowViewTemplate,
+                'formViewTemplate' => new LedgerEntriesFormViewTemplate,
             ]
         );
         $view = new LedgerEntriesMainViewTemplate;
@@ -289,9 +296,8 @@ final class LedgerEntriesController extends AbstractViewController
         $success = false;
         $errorMessage = "";
         if ($request->method() === 'POST') {
-            if (!CSRF::validateToken($request->input('_csrf_token'))) {
+            if (!$this->app->csrf()->validateToken($request->input('_csrf_token'))) {
                 http_response_code(400);
-                Redirector::to('index.php?action=ledger_entries');
                 $errorMessage = "CSRF Validation";
                 $success = false;
                 return [$savedEntryId, $success, $errorMessage];

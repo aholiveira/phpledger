@@ -1,7 +1,7 @@
 <?php
 
 use PHPLedger\Contracts\LogLevel;
-use PHPLedger\Util\Logger;
+use PHPLedger\Services\Logger;
 use PHPLedger\Util\Path;
 
 beforeEach(function () {

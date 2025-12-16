@@ -1,6 +1,6 @@
 <?php
 
-namespace PHPLedger\Util;
+namespace PHPLedger\Services;
 
 use PHPLedger\Contracts\SessionServiceInterface;
 

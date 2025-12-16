@@ -4,24 +4,27 @@ namespace PHPLedger;
 
 use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Contracts\ConfigurationServiceInterface;
+use PHPLedger\Contracts\CsrfServiceInterface;
 use PHPLedger\Contracts\DataObjectFactoryInterface;
 use PHPLedger\Contracts\HeaderSenderInterface;
 use PHPLedger\Contracts\L10nServiceInterface;
 use PHPLedger\Contracts\LoggerServiceInterface;
 use PHPLedger\Contracts\LogLevel;
+use PHPLedger\Contracts\RedirectorServiceInterface;
 use PHPLedger\Contracts\SessionServiceInterface;
 use PHPLedger\Contracts\TimezoneServiceInterface;
+use PHPLedger\Services\Config;
+use PHPLedger\Services\CSRF;
 use PHPLedger\Services\HeaderSender;
+use PHPLedger\Services\L10n;
+use PHPLedger\Services\Logger;
+use PHPLedger\Services\Redirector;
+use PHPLedger\Services\SessionManager;
 use PHPLedger\Services\TimezoneService;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Storage\ReportFactory;
-use PHPLedger\Util\Config;
 use PHPLedger\Util\ConfigPath;
-use PHPLedger\Util\L10n;
-use PHPLedger\Util\Logger;
 use PHPLedger\Util\Path;
-use PHPLedger\Util\Redirector;
-use PHPLedger\Util\SessionManager;
 
 /**
  * @SuppressWarnings("php:S1448")
@@ -29,17 +32,37 @@ use PHPLedger\Util\SessionManager;
 final class Application implements ApplicationObjectInterface
 {
     private string $errorMessage = "";
+    private string $logfile;
+    private bool $needsUpdate;
+    private ConfigurationServiceInterface $config;
     private DataObjectFactoryInterface $dataFactory;
     private ReportFactory $reportFactory;
     private SessionServiceInterface $session;
     private LoggerServiceInterface $logger;
-    private Redirector $redirector;
+    private RedirectorServiceInterface $redirector;
     private L10nServiceInterface $l10n;
-    private ConfigurationServiceInterface $config;
     private HeaderSenderInterface $headerSender;
     private TimezoneServiceInterface $timezoneService;
-    private string $logfile;
-    private bool $needsUpdate;
+    private CsrfServiceInterface $csrf;
+
+    public static function create(): self
+    {
+        $app = new Application(empty($logfile) ?  Path::combine(ROOT_DIR, "logs", "ledger.log") : $logfile);
+        $config = new Config();
+        Config::init(ConfigPath::get());
+        $backend = $config->get('storage.type', 'mysql');
+        $app->setConfig($config);
+        $app->setDataFactory(new ObjectFactory($backend));
+        $app->setReportFactory(new ReportFactory($backend));
+        $app->setSessionManager(new SessionManager());
+        $app->setLogger(new Logger(empty($logfile) ? Path::combine(ROOT_DIR, "logs", "ledger.log") : $logfile));
+        $app->setRedirector(new Redirector());
+        $app->setL10n(new L10n());
+        $app->setHeaderSender(new HeaderSender());
+        $app->setTimezoneService(new TimezoneService());
+        $app->setCsrf(new CSRF());
+        return $app;
+    }
     public function __construct(string $logfile = "")
     {
         $this->logfile = empty($logfile) ? Path::combine(ROOT_DIR, "logs", "ledger.log") : $logfile;
@@ -60,7 +83,7 @@ final class Application implements ApplicationObjectInterface
     {
         $this->logger = $logger;
     }
-    public function setRedirector(Redirector $redirector): void
+    public function setRedirector(RedirectorServiceInterface $redirector): void
     {
         $this->redirector = $redirector;
     }
@@ -76,11 +99,19 @@ final class Application implements ApplicationObjectInterface
     {
         $this->timezoneService = $timezoneService;
     }
+    public function setCsrf(CsrfServiceInterface $csrf): void
+    {
+        $this->csrf = $csrf;
+    }
+    public function csrf(): CsrfServiceInterface
+    {
+        return $this->csrf;
+    }
     public function init(): void
     {
         $this->sendHeaders();
         $this->bootstrap();
-        $this->needsUpdate = !($this->dataFactory()::dataStorage()->check());
+        $this->needsUpdate = !($this->dataFactory()->dataStorage()->check());
         $this->applyTimezone();
     }
     public function needsUpdate(): bool
@@ -89,12 +120,12 @@ final class Application implements ApplicationObjectInterface
     }
     public function dataFactory(): DataObjectFactoryInterface
     {
-        $backend = $this->config()->get("storage.type") ??  "mysql";
+        $backend = $this->config()->get("storage.type") ?? "mysql";
         return $this->dataFactory ??= new ObjectFactory($backend);
     }
     public function reportFactory(): ReportFactory
     {
-        $backend = $this->config()->get("storage.type") ??  "mysql";
+        $backend = $this->config()->get("storage.type") ?? "mysql";
         return $this->reportFactory ??= new ReportFactory($backend);
     }
     public function config(): ConfigurationServiceInterface
@@ -109,7 +140,7 @@ final class Application implements ApplicationObjectInterface
     {
         return $this->l10n ??= new L10n();
     }
-    public function redirector(): Redirector
+    public function redirector(): RedirectorServiceInterface
     {
         return $this->redirector ??= new Redirector();
     }

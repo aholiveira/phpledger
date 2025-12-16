@@ -16,25 +16,28 @@ class DummyViewController extends AbstractViewController
     {
         return $this->uiData;
     }
-    public function publicBuildLanguageSelectorHtml(string $current)
+    public function publicBuildLanguageSelectorHtml(string $current): string
     {
         return $this->buildLanguageSelectorHtml($current);
     }
-    public function getBaseLabels(L10nServiceInterface $l10n)
+    public function getBaseLabels(L10nServiceInterface $l10n): array
     {
         return $this->buildL10nLabels($l10n, ['yes', 'no', 'add']);
     }
 };
 
-
 beforeEach(function () {
     $this->request = Mockery::mock(RequestInterface::class);
     $this->l10n = Mockery::mock(L10nServiceInterface::class);
     $this->session = Mockery::mock(SessionServiceInterface::class);
+    $this->csrf = Mockery::mock(\PHPLedger\Contracts\CsrfServiceInterface::class);
     $this->app = Mockery::mock(ApplicationObjectInterface::class);
 
     $this->app->shouldReceive('l10n')->andReturn($this->l10n);
     $this->app->shouldReceive('session')->andReturn($this->session);
+    $this->app->shouldReceive('csrf')->andReturn($this->csrf);
+
+    $this->csrf->shouldReceive('inputField')->andReturn('<input type="hidden" name="_csrf_token" value="token">');
 
     $this->l10n->shouldReceive('lang')->andReturn('pt-pt');
     $this->l10n->shouldReceive('l')->andReturnUsing(fn($key, $param = null) => $param ? "$key:$param" : $key);
@@ -46,9 +49,9 @@ beforeEach(function () {
     $this->request->shouldReceive('input')->with('action')->andReturn('accounts');
 });
 
+
 it('initializes uiData correctly', function () {
     $controller = new DummyViewController();
-
     $controller->handleRequest($this->app, $this->request);
     $ui = $controller->getUiData();
 
@@ -63,12 +66,12 @@ it('initializes uiData correctly', function () {
         ->and($ui)->toHaveKey('isAdmin')
         ->and($ui['isAdmin'])->toBeTrue()
         ->and($ui)->toHaveKey('lang')
-        ->and($ui['lang'])->toBe('pt-pt');
+        ->and($ui['lang'])->toBe('pt-pt')
+        ->and($ui)->toHaveKey('csrf');
 });
 
 it('builds base labels correctly', function () {
     $controller = new DummyViewController();
-
     $labels = $controller->getBaseLabels($this->l10n);
 
     expect($labels)->toBe([
@@ -78,15 +81,12 @@ it('builds base labels correctly', function () {
     ]);
 });
 
-it('builds language selector html with other parameters', function () {
-    $controller = new class extends AbstractViewController {
-        protected function handle(): void {}
-        public array $uiData = [];
-    };
+it('builds language selector html with request parameters', function () {
+    $controller = new DummyViewController();
 
     $controller->handleRequest($this->app, $this->request);
+    $html = $controller->getUiData()['footer']['languageSelectorHtml'];
 
-    $html = $controller->uiData['footer']['languageSelectorHtml'];
     expect($html)->toContain('foo=bar')
         ->and($html)->toContain('lang=en-us')
         ->and($html)->toContain('<a href=');
@@ -95,8 +95,9 @@ it('builds language selector html with other parameters', function () {
 it('toggles language correctly', function () {
     $controller = new DummyViewController();
     $this->l10n->shouldReceive('lang')->andReturn('en-us');
+
     $controller->handleRequest($this->app, $this->request);
-    $html = $controller->publicbuildLanguageSelectorHtml('en-us');
+    $html = $controller->publicBuildLanguageSelectorHtml('en-us');
 
     expect($html)->toContain('lang=pt-pt')
         ->and($html)->toContain('<a href=');

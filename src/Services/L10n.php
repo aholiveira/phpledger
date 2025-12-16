@@ -1,8 +1,10 @@
 <?php
 
-namespace PHPLedger\Util;
+namespace PHPLedger\Services;
 
 use PHPLedger\Contracts\L10nServiceInterface;
+use PHPLedger\Services\Logger;
+use PHPLedger\Util\Path;
 
 class L10n implements L10nServiceInterface
 {

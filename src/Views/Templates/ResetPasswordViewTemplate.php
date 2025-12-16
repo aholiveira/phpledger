@@ -1,21 +1,19 @@
 <?php
 
-namespace PHPLedger\Views;
+namespace PHPLedger\Views\Templates;
 
-use PHPLedger\Contracts\ApplicationObjectInterface;
-use PHPLedger\Util\Config;
 use PHPLedger\Util\Html;
+use PHPLedger\Views\Templates\AbstractViewTemplate;
 
-class ResetPasswordView
+class ResetPasswordViewTemplate extends AbstractViewTemplate
 {
-    private ApplicationObjectInterface $app;
-    public function render(ApplicationObjectInterface $app, ?string $tokenId, bool $success, string $message): void
+    public function render(array $data): void
     {
-        $this->app = $app;
+        extract($data, EXTR_SKIP);
         $pagetitle = "Recuperação de password";
 ?>
         <!DOCTYPE html>
-        <html lang="<?= $this->app->l10n()->html(); ?>">
+        <html lang="<?= $lang ?>">
 
         <head>
             <title><?= Html::title($pagetitle) ?></title>
@@ -24,27 +22,18 @@ class ResetPasswordView
 
         <body>
             <div id="login">
-                <h1><?= Config::instance()->get("title"); ?></h1>
-
+                <h1><?= $apptitle ?></h1>
+                <p style="color:<?= $success ? "green" : "red" ?>;"><?= $message ?></p>
                 <?php if ($success === false): ?>
-                    <p style="color:red;"><?= $message ?></p>
-                <?php endif; ?>
-
-                <?php if ($success): ?>
-                    <p style="color:green;"><?= $message ?></p>
-                <?php endif; ?>
-
-                <?php if ($success === false): ?>
-                    <form id="resetForm" method="POST" action="reset_password.php">
+                    <form id="resetForm" method="POST">
                         <input type="hidden" name="tokenId" value="<?= htmlspecialchars($tokenId ?? '') ?>">
+                        <input type="hidden" name="action" value="<?= $action ?>">
                         <div class="formgrid">
                             <p>Redefinição de palavra-passe</p>
                             <label for="password">Nova palavra-passe:</label>
                             <input id="password" type="password" name="password" autocomplete="new-password" required>
-
                             <label for="verifyPassword">Confirmar palavra-passe:</label>
                             <input id="verifyPassword" type="password" name="verifyPassword" autocomplete="new-password" required>
-
                             <input id="submitButton" type="submit" value="Repor" class="submit" disabled>
                             <p id="errorMsg" style="color:red;"></p>
                         </div>

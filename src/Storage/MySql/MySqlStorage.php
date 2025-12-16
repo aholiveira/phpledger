@@ -15,8 +15,8 @@ use mysqli_sql_exception;
 use mysqli;
 use PHPLedger\Contracts\DataStorageInterface;
 use PHPLedger\Domain\EntryCategory;
-use PHPLedger\Util\Config;
-use PHPLedger\Util\Logger;
+use PHPLedger\Services\Config;
+use PHPLedger\Services\Logger;
 use RuntimeException;
 use Throwable;
 

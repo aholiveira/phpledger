@@ -4,7 +4,6 @@ namespace PHPLedger\Controllers;
 
 use PHPLedger\Domain\AccountType;
 use PHPLedger\Exceptions\PHPLedgerException;
-use PHPLedger\Util\CSRF;
 use PHPLedger\Views\Templates\AccountTypeFormViewTemplate;
 use Throwable;
 
@@ -68,7 +67,7 @@ final class AccountTypeFormController extends AbstractViewController
     }
     private function handlePost(AccountType $object, $filtered): void
     {
-        if (!CSRF::validateToken($_POST['_csrf_token'] ?? null)) {
+        if (!$this->app->csrf()->validateToken($_POST['_csrf_token'] ?? null)) {
             http_response_code(400);
             throw new PHPLedgerException("Falhou a validação do token. Repita a operação.");
         }

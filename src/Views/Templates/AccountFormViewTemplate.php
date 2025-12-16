@@ -35,7 +35,7 @@ final class AccountFormViewTemplate extends AbstractViewTemplate
                 <main>
                     <div class="main config single_item account_type_form" id="main">
                         <form method="POST" action="index.php?action=account&id=<?= ($text['id']) ?>">
-                            <?= CSRF::inputField() ?>
+                            <?= $csrf ?>
                             <input type="hidden" name="action" value="account">
                             <input type="hidden" name="lang" value="<?= $lang ?>">
                             <input type="hidden" name="id" value="<?= $text['id'] ?>">

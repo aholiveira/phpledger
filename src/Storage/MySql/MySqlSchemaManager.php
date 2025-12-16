@@ -2,7 +2,7 @@
 
 namespace PHPLedger\Storage\MySql;
 
-use PHPLedger\Util\Logger;
+use PHPLedger\Services\Logger;
 
 class MySqlSchemaManager
 {

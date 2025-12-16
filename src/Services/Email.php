@@ -8,13 +8,13 @@
  *
  */
 
-namespace PHPLedger\Util;
+namespace PHPLedger\Services;
 
-use PHPLedger\Util\Config;
+use PHPLedger\Services\Config;
 
 class Email
 {
-    public static function sendEmail($from, $to, $subject, $body, $test = false): bool
+    public function send($from, $to, $subject, $body): bool
     {
         !empty(Config::instance()->get("smtp.host")) ? ini_set("smtp", Config::instance()->get("smtp.host")) : "";
         !empty(Config::instance()->get("smtp.port")) ? ini_set("smtp_port", Config::instance()->get("smtp.port")) : "";
@@ -31,9 +31,6 @@ class Email
         $headers["Content-Type"] = "text/plain; charset=us-ascii";
         $headers["X-Application"] = $title;
 
-        if ($test) {
-            return true;
-        }
         return @mail($to, $subject, str_replace("\n.\n", "\n..\n", $body), $headers, "-f {$from}");
     }
 }

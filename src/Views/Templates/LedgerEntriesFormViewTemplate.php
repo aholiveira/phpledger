@@ -10,7 +10,6 @@
 
 namespace PHPLedger\Views\Templates;
 
-use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Html;
 
 final class LedgerEntriesFormViewTemplate extends AbstractViewTemplate
@@ -27,7 +26,7 @@ final class LedgerEntriesFormViewTemplate extends AbstractViewTemplate
             ?>
             <tr>
                 <td data-label="<?= $label['actions'] ?>">
-                    <?= CSRF::inputField() ?>
+                    <?= $csrf ?>
                     <input type="hidden" name="lang" value="<?= $lang ?>" />
                     <input type="hidden" name="action" value="ledger_entries" />
                     <input type="hidden" name="filters" value='<?= !empty($filters) ? htmlspecialchars(json_encode($filters), ENT_QUOTES) : ""; ?>'>

@@ -2,10 +2,8 @@
 
 namespace PHPLedger\Storage\MySql;
 
-use Exception;
+use PHPLedger\Services\Logger;
 use Throwable;
-use mysqli;
-use PHPLedger\Util\Logger;
 
 class MySqlQueryExecutor
 {

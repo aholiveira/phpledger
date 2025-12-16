@@ -2,7 +2,6 @@
 
 namespace PHPLedger\Controllers;
 
-use PHPLedger\Application;
 use PHPLedger\Views\ApplicationErrorView;
 
 final class ApplicationErrorController extends AbstractViewController

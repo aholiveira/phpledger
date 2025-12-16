@@ -2,14 +2,13 @@
 
 namespace PHPLedger\Controllers;
 
-use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Views\Templates\EntryCategoryFormViewTemplate;
 
 final class EntryCategoryFormController extends AbstractViewController
 {
     protected function handle(): void
     {
-        $object = ObjectFactory::EntryCategory();
+        $object = $this->app->dataFactory()::EntryCategory();
         $input = $this->request->all();
         $id = isset($input['id']) && is_numeric($input['id']) ? (int)$input['id'] : 0;
         if ($id > 0) {
@@ -31,9 +30,6 @@ final class EntryCategoryFormController extends AbstractViewController
         ));
         $template->render(array_merge($this->uiData, [
             'title'        => 'Entry Category',
-            'app'          => $this->app,
-            'action'       => $this->request->input('action', 'entry_type'),
-            'isAdmin'      => $this->app->session()->get('isAdmin', false),
             'text'         => [
                 'id'          => isset($object->id) ? $object->id : "",
                 'description' => $object->description ?? '',

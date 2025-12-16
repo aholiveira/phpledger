@@ -3,15 +3,15 @@
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Domain\User;
-use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Views\ResetPasswordView;
+use PHPLedger\Views\Templates\ResetPasswordViewTemplate;
 
 final class ResetPasswordController extends AbstractViewController
 {
     private bool $success = false;
     private string $message = "";
     private ?string $tokenId = null;
-    private string $refreshHeader = "Refresh: 8; URL=index.php";
+    private string $refreshHeader = "index.php";
     private ?User $user = null;
     public function handle(): void
     {
@@ -22,12 +22,12 @@ final class ResetPasswordController extends AbstractViewController
 
         /* Validate token */
         if ($this->tokenId === null || empty($this->tokenId)) {
-            header($this->refreshHeader);
+            $this->app->redirector()->to($this->refreshHeader, 8);
             $this->message = "Token em falta. Será redirecionado para a página inicial.";
         } else {
-            $this->user = ObjectFactory::user()::getByToken($this->tokenId);
+            $this->user = $this->app->dataFactory()::user()::getByToken($this->tokenId);
             if (!$this->user instanceof User || !$this->user->isTokenValid($this->tokenId)) {
-                header($this->refreshHeader);
+                $this->app->redirector()->to($this->refreshHeader, 8);
                 $this->message = "Token inválido ou expirado. Será redirecionado para a página inicial.";
             }
         }
@@ -36,8 +36,16 @@ final class ResetPasswordController extends AbstractViewController
         if ($this->request->method() === "POST") {
             $this->handlePost();
         }
-        $view = new ResetPasswordView;
-        $view->render($this->app, $this->tokenId, $this->success, $this->message);
+        $view = new ResetPasswordViewTemplate;
+        $view->render(array_merge(
+            $this->uiData,
+            [
+                'message' => $this->message,
+                'success' => $this->success,
+                'tokenId' => $this->tokenId,
+                'apptitle' => $this->app->config()->get('title', ''),
+            ]
+        ));
     }
     private function getTokenId(): void
     {
@@ -68,14 +76,14 @@ final class ResetPasswordController extends AbstractViewController
                 $this->user->setProperty('token', '');
                 $this->user->setProperty('tokenExpiry', null);
                 if ($this->user->update()) {
-                    header($this->refreshHeader);
+                    $this->app->redirector()->to($this->refreshHeader, 8);
                     $this->success = true;
                     $this->message = "Palavra-passe alterada com sucesso. Será redirecionado para a página inicial.";
                 } else {
                     $this->message = "Erro ao atualizar a palavra-passe.";
                 }
             } else {
-                header($this->refreshHeader);
+                $this->app->redirector()->to($this->refreshHeader, 8);
                 $this->message = "Token inválido ou expirado.";
             }
         }

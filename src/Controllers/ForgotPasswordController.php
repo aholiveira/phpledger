@@ -11,8 +11,7 @@
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Domain\User;
-use PHPLedger\Storage\ObjectFactory;
-use PHPLedger\Views\ForgotPasswordView;
+use PHPLedger\Views\Templates\ForgotPasswordViewTemplate;
 
 final class ForgotPasswordController extends AbstractViewController
 {
@@ -25,20 +24,32 @@ final class ForgotPasswordController extends AbstractViewController
         if ($this->request->method() == "POST") {
             $filtered = filter_var_array($this->request->all(), $filterArray, true);
             if (empty($filtered["username"]) || empty($filtered["email"])) {
-                $message = "Indique o username e o email registados na aplica&ccedil;&atilde;o";
+                $message = $this->app->l10n()->l('missing_username_or_email');
             }
-            $user = ObjectFactory::user()::getByUsername($filtered["username"]);
+            $user = $this->app->dataFactory()::user()::getByUsername($filtered["username"]);
             if (!($user instanceof User)) {
-                $message = "Os dados indicados est&atilde;o errados.";
+                $message = $this->app->l10n()->l('invalid_credentials_for_reset');
             }
             if ($user !== null && strtolower($user->getProperty('email')) === $filtered["email"]) {
-                $message = $user->resetPassword() ?
-                    "<p>Ir&aacute; receber um email com um link para efectuar a reposicao da palavra-passe.<br></p>"
-                    :
-                    "Falhou a criacao do token de reposicao ou o envio do email. Verifique as configuracoes ou os dados fornecidos e tente novamente.";
+                $message = $this->app->l10n()->l($user->resetPassword() ? 'link_sent' : 'reset_failed');
             }
         }
-        $view = new ForgotPasswordView;
-        $view->render(isset($message) ? $message : "");
+        $view = new ForgotPasswordViewTemplate;
+        $this->uiData['label'] = array_merge(
+            $this->uiData['label'],
+            $this->buildL10nLabels($this->app->l10n(), [
+                'username',
+                'email',
+                'password_recovery',
+                'send_reset_link'
+            ])
+        );
+        $view->render(array_merge(
+            $this->uiData,
+            [
+                'message' => $message ?? "",
+                'apptitle' => $this->app->config()->get("title"),
+            ]
+        ));
     }
 }

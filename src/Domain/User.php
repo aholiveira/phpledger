@@ -5,10 +5,10 @@ namespace PHPLedger\Domain;
 use DateInterval;
 use DateTime;
 use PHPLedger\Contracts\Domain\UserObjectInterface;
+use PHPLedger\Services\Config;
+use PHPLedger\Services\Logger;
 use PHPLedger\Storage\Abstract\AbstractDataObject;
-use PHPLedger\Util\Config;
-use PHPLedger\Util\Email;
-use PHPLedger\Util\Logger;
+use PHPLedger\Services\Email;
 
 abstract class User extends AbstractDataObject implements UserObjectInterface
 {
@@ -94,8 +94,8 @@ abstract class User extends AbstractDataObject implements UserObjectInterface
         $this->setProperty('tokenExpiry', (new DateTime())->add(new DateInterval("PT24H"))->format($this->dateFormat));
         if ($this->update()) {
             $retval = true;
-            $title = Config::get("title");
-            $url = Config::get("url");
+            $title = Config::instance()->get("title");
+            $url = Config::instance()->get("url");
             $message = "Esta' a receber este email porque solicitou a reposicao da sua palavra-passe na aplicacao '$title'.\r\n";
             $message .= "Para continuar o processo deve clique no link abaixo para definir uma nova senha.\r\n";
             $message .= "{$url}reset_password.php?token_id={$this->getProperty('token')}.\r\n";
@@ -104,7 +104,8 @@ abstract class User extends AbstractDataObject implements UserObjectInterface
             $message .= "\r\n";
             $message .= "Cumprimentos,\r\n";
             $message .= "$title\r\n";
-            $retval = Email::sendEmail(Config::get("from"), $this->getProperty('email'), "Reposicao de palavra-passe", $message);
+            $email = new Email();
+            $retval = $email->send(Config::instance()->get("from"), $this->getProperty('email'), "Reposicao de palavra-passe", $message);
         }
         return $retval;
     }

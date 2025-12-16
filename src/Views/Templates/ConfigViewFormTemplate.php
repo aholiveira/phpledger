@@ -12,6 +12,7 @@ final class ConfigViewFormTemplate extends AbstractViewTemplate
 ?>
         <form method="POST">
             <?= $csrf ?>
+            <input type="hidden" name="action" value="config">
             <p><label for="title"><?= $label['application_name'] ?></label>
                 <input id="title" name="title" value="<?= htmlspecialchars($config['title']) ?>">
             </p>
@@ -42,7 +43,7 @@ final class ConfigViewFormTemplate extends AbstractViewTemplate
                     </p>
                 <?php endforeach; ?>
             </div>
-            <button type="submit"><?= $label['save'] ?></button>
+            <button type="submit" name="itemaction" value="save"><?= $label['save'] ?></button>
         </form>
 <?php
     }

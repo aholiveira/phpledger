@@ -3,9 +3,6 @@
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Domain\Account;
-use PHPLedger\Util\CSRF;
-use PHPLedger\Util\Logger;
-use PHPLedger\Util\Redirector;
 use PHPLedger\Views\Templates\AccountFormViewTemplate;
 
 final class AccountController extends AbstractViewController
@@ -28,7 +25,7 @@ final class AccountController extends AbstractViewController
     {
         if (!(($this->account ?? null) instanceof Account)) {
             $id = (int)$this->request->input('id', 0);
-            $this->account = ($id ? $this->app->dataFactory()::account()::getById($id) : null) ?? $this->app->dataFactory()::account();
+            $this->account = ($id ? $this->app->dataFactory()->account()::getById($id) : null) ?? $this->app->dataFactory()->account();
         }
         $view = new AccountFormViewTemplate();
         $accountTypes = [];
@@ -38,7 +35,7 @@ final class AccountController extends AbstractViewController
             'text' => "",
             'selected' => (($this->account->typeId ?? 0) === 0)
         ];
-        foreach ($this->app->dataFactory()::accounttype()::getList() as $r) {
+        foreach ($this->app->dataFactory()->accounttype()::getList() as $r) {
             $accountTypes[] = [
                 'value' => $r->id,
                 'parentId' => null,
@@ -90,8 +87,8 @@ final class AccountController extends AbstractViewController
     private function processPost(): void
     {
         $redirectUrl = 'index.php?action=accounts';
-        if (!CSRF::validateToken($this->request->input('_csrf_token', ''))) {
-            Redirector::to($redirectUrl);
+        if (!$this->app->csrf()->validateToken($this->request->input('_csrf_token', ''))) {
+            $this->app->redirector()->to($redirectUrl);
             return;
         }
 
@@ -100,16 +97,16 @@ final class AccountController extends AbstractViewController
             $id = (int)$this->request->input('id', 0);
             if ($id && ($a = $this->app->dataFactory()::account()::getById($id)) !== null) {
                 $a->delete();
-                Logger::instance()->notice("Account deleted: {$id}");
+                $this->app->logger()->notice("Account deleted: {$id}");
             }
-            Redirector::to($redirectUrl);
+            $this->app->redirector()->to($redirectUrl);
             return;
         }
         // Save path
         $id = (int)$this->request->input('id', 0);
         $a = ($id ? $this->app->dataFactory()::account()::getById($id) : null) ?? $this->app->dataFactory()::account();
         if ($a->id === null) {
-            $a->id = $a->getNextId();
+            $a->id = $a->getNextId($this->app->dataFactory());
         }
         // Basic assignment and server-side required validation
         $a->name = trim((string) ($this->request->input('name', '')));
@@ -127,10 +124,10 @@ final class AccountController extends AbstractViewController
             $this->errors[] = 'name';
         }
         if ($a->update()) {
-            Logger::instance()->info("Account saved: " . ($a->id ?? '(new)'));
-            Redirector::to($redirectUrl);
+            $this->app->logger()->info("Account saved: " . ($a->id ?? '(new)'));
+            $this->app->redirector()->to($redirectUrl);
         } else {
-            Logger::instance()->info("Error saving account: " . ($a->id ?? '(new)'));
+            $this->app->logger()->info("Error saving account: " . ($a->id ?? '(new)'));
             $this->errors[] = 'other';
         }
 

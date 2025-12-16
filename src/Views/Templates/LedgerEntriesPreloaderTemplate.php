@@ -11,7 +11,7 @@ final class LedgerEntriesPreloaderTemplate extends AbstractViewTemplate
         extract($data, EXTR_SKIP);
 ?>
         <!DOCTYPE html>
-        <html lang="<?= $lang ?> ?>">
+        <html lang="<?= $lang ?>">
 
         <head>
             <title><?= Html::title($pagetitle) ?></title>

@@ -25,35 +25,33 @@ require_once ROOT_DIR . '/vendor/autoload.php';
 use PHPLedger\Application;
 use PHPLedger\Http\HttpRequest;
 use PHPLedger\Routing\Router;
-use PHPLedger\Util\Redirector;
-use PHPLedger\Util\SessionManager;
 
-$app = new Application();
+$app = Application::create();
 $app->init();
 $router = new Router($app);
 $request = new HttpRequest();
-$session = new SessionManager();
+$session = $app->session();
 try {
     $frontend = "index.php?action=";
     $action = strtolower($request->input('action', 'login'));
     if ($action !== 'login' && $session->isExpired()) {
         $session->logout();
-        Redirector::to("{$frontend}login&expired=1");
+        $app->redirector()->to("{$frontend}login&expired=1");
     }
     if (!in_array($action, $router->publicActions(), true) && !$session->isAuthenticated()) {
-        Redirector::to("{$frontend}login&needsauth=1");
+        $app->redirector()->to("{$frontend}login&needsauth=1");
     }
     if ($action === 'login' && $session->isAuthenticated()) {
-        Redirector::to("{$frontend}ledger_entries");
+        $app->redirector()->to("{$frontend}ledger_entries");
     }
     if ($app->needsUpdate() && $action !== 'update') {
-        Redirector::to("{$frontend}update");
+        $app->redirector()->to("{$frontend}update");
     }
     if ($session->isAuthenticated()) {
         $session->refreshExpiration();
     }
     $router->handleRequest($app, $action, $request);
 } catch (Exception $e) {
-    $this->app->setErrorMessage($e->getMessage());
+    $app->setErrorMessage($e->getMessage());
     $router->handleRequest($app, 'application_error');
 }

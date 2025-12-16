@@ -15,7 +15,7 @@ use mysqli_result;
 use mysqli_sql_exception;
 use mysqli_stmt;
 use PHPLedger\Domain\EntryCategory;
-use PHPLedger\Util\Logger;
+use PHPLedger\Services\Logger;
 
 class MySqlEntryCategory extends EntryCategory
 {

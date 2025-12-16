@@ -18,23 +18,26 @@ final class LedgerEntriesMainViewTemplate extends AbstractViewTemplate
 ?>
         <?php $ui->menu($label, $menu); ?>
         <div class="header main config" id="header">
-            <?php (new LedgerEntriesFilterViewTemplate)->render(compact('lang', 'filterFormData', 'label', 'filters')); ?>
+            <?php $filterViewTemplate->render(compact('lang', 'filterFormData', 'label', 'filters')); ?>
             <script>
                 document.getElementById("filter_entryType").value = "<?= !empty($filters["entryType"]) ? $filters["entryType"] : ""; ?>";
                 document.getElementById("filter_accountId").value = "<?= !empty($filters["accountId"]) ? $filters["accountId"] : ""; ?>";
             </script>
         </div>
         <div class="main" id="main">
-            <?php (new LedgerEntriesTableViewTemplate)->render([
-                'lang' => $lang,
-                'isEditing' => $isEditing,
-                'editId' => $editId,
-                'label' => $label,
-                'formData' => $formData,
-                'startBalance' => $startBalance,
-                'ledgerEntryRows' => $ledgerEntryRows,
-                'filters' => $filters
-            ]); ?>
+            <?php $tableViewTemplate->render(compact(
+                'lang',
+                'isEditing',
+                'editId',
+                'label',
+                'formData',
+                'startBalance',
+                'ledgerEntryRows',
+                'filters',
+                'csrf',
+                'rowViewTemplate',
+                'formViewTemplate'
+            )); ?>
         </div>
         <div class="main-footer">
             <p><?= $transactionsInPeriod ?></p>
