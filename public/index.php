@@ -29,6 +29,7 @@ use PHPLedger\Util\Redirector;
 use PHPLedger\Util\SessionManager;
 
 $app = new Application();
+$app->init();
 $router = new Router($app);
 $request = new HttpRequest();
 $session = new SessionManager();
@@ -53,6 +54,6 @@ try {
     }
     $router->handleRequest($app, $action, $request);
 } catch (Exception $e) {
-    Application::setErrorMessage($e->getMessage());
+    $this->app->setErrorMessage($e->getMessage());
     $router->handleRequest($app, 'application_error');
 }

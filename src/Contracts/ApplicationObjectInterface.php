@@ -12,4 +12,7 @@ interface ApplicationObjectInterface
     public function l10n(): L10nServiceInterface;
     public function logger(): LoggerServiceInterface;
     public function session(): SessionServiceInterface;
+    public function setErrorMessage(string $message): void;
+    public function clearErrorMessage(): void;
+    public function getErrorMessage(): string;
 }

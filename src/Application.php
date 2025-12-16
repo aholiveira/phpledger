@@ -5,10 +5,14 @@ namespace PHPLedger;
 use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Contracts\ConfigurationServiceInterface;
 use PHPLedger\Contracts\DataObjectFactoryInterface;
+use PHPLedger\Contracts\HeaderSenderInterface;
 use PHPLedger\Contracts\L10nServiceInterface;
 use PHPLedger\Contracts\LoggerServiceInterface;
 use PHPLedger\Contracts\LogLevel;
 use PHPLedger\Contracts\SessionServiceInterface;
+use PHPLedger\Contracts\TimezoneServiceInterface;
+use PHPLedger\Services\HeaderSender;
+use PHPLedger\Services\TimezoneService;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Storage\ReportFactory;
 use PHPLedger\Util\Config;
@@ -19,26 +23,65 @@ use PHPLedger\Util\Path;
 use PHPLedger\Util\Redirector;
 use PHPLedger\Util\SessionManager;
 
+/**
+ * @SuppressWarnings("php:S1448")
+ */
 final class Application implements ApplicationObjectInterface
 {
-    private static string $errorMessage = "";
+    private string $errorMessage = "";
     private DataObjectFactoryInterface $dataFactory;
     private ReportFactory $reportFactory;
-    private SessionManager $session;
-    private Logger $logger;
+    private SessionServiceInterface $session;
+    private LoggerServiceInterface $logger;
     private Redirector $redirector;
-    private L10n $l10n;
-    private static ConfigurationServiceInterface $config;
+    private L10nServiceInterface $l10n;
+    private ConfigurationServiceInterface $config;
+    private HeaderSenderInterface $headerSender;
+    private TimezoneServiceInterface $timezoneService;
     private string $logfile;
     private bool $needsUpdate;
     public function __construct(string $logfile = "")
     {
         $this->logfile = empty($logfile) ? Path::combine(ROOT_DIR, "logs", "ledger.log") : $logfile;
-        self::sendHeaders();
-        self::bootstrap();
+    }
+    public function setDataFactory(DataObjectFactoryInterface $dataFactory): void
+    {
+        $this->dataFactory = $dataFactory;
+    }
+    public function setReportFactory(ReportFactory $reportFactory): void
+    {
+        $this->reportFactory = $reportFactory;
+    }
+    public function setSessionManager(SessionServiceInterface $session): void
+    {
+        $this->session = $session;
+    }
+    public function setLogger(LoggerServiceInterface $logger): void
+    {
+        $this->logger = $logger;
+    }
+    public function setRedirector(Redirector $redirector): void
+    {
+        $this->redirector = $redirector;
+    }
+    public function setL10n(L10nServiceInterface $l10n): void
+    {
+        $this->l10n = $l10n;
+    }
+    public function setConfig(ConfigurationServiceInterface $config): void
+    {
+        $this->config = $config;
+    }
+    public function setTimezoneService(TimezoneServiceInterface $timezoneService): void
+    {
+        $this->timezoneService = $timezoneService;
+    }
+    public function init(): void
+    {
+        $this->sendHeaders();
+        $this->bootstrap();
         $this->needsUpdate = !($this->dataFactory()::dataStorage()->check());
-        self::applyTimezone();
-        self::updateUserLastVisited();
+        $this->applyTimezone();
     }
     public function needsUpdate(): bool
     {
@@ -56,7 +99,7 @@ final class Application implements ApplicationObjectInterface
     }
     public function config(): ConfigurationServiceInterface
     {
-        return self::$config ?? new Config(ConfigPath::get());
+        return $this->config ?? new Config(ConfigPath::get());
     }
     public function session(): SessionServiceInterface
     {
@@ -74,66 +117,47 @@ final class Application implements ApplicationObjectInterface
     {
         return $this->logger ??= new Logger($this->logfile, LogLevel::INFO);
     }
-    public static function setErrorMessage(string $message): void
+    public function setHeaderSender(HeaderSenderInterface $headerSender): void
     {
-        self::$errorMessage = $message;
+        $this->headerSender = $headerSender;
     }
-    public static function clearErrorMessage(): void
+    public function setErrorMessage(string $message): void
     {
-        self::$errorMessage = "";
+        $this->errorMessage = $message;
     }
-    public static function getErrorMessage(): string
+    public function clearErrorMessage(): void
     {
-        return self::$errorMessage;
+        $this->errorMessage = "";
     }
-    private static function sendHeaders(): void
+    public function getErrorMessage(): string
     {
-        if (!headers_sent()) {
-            header('Cache-Control: no-cache');
-            header('X-XSS-Protection: 1; mode=block');
-            header('X-Frame-Options: DENY');
-            header('X-Content-Type-Options: nosniff');
-            header('Strict-Transport-Security: max-age=7776000');
-            header('Referrer-Policy: strict-origin-when-cross-origin');
+        return $this->errorMessage;
+    }
+    private function sendHeaders(): void
+    {
+        if (!isset($this->headerSender)) {
+            $this->headerSender = new HeaderSender();
+        }
+        if (!$this->headerSender->sent()) {
+            $this->headerSender->send('Cache-Control: no-cache');
+            $this->headerSender->send('X-XSS-Protection: 1; mode=block');
+            $this->headerSender->send('X-Frame-Options: DENY');
+            $this->headerSender->send('X-Content-Type-Options: nosniff');
+            $this->headerSender->send('Strict-Transport-Security: max-age=7776000');
+            $this->headerSender->send('Referrer-Policy: strict-origin-when-cross-origin');
         }
     }
     private function bootstrap(): void
     {
         $this->session()->start();
-        ConfigPath::ensureMigrated();
         Config::init(ConfigPath::get());
     }
-    private static function applyTimezone(): void
+    private function applyTimezone(): void
     {
-        if (
-            empty($_SESSION['timezone']) &&
-            !empty($_COOKIE['timezone']) &&
-            in_array($_COOKIE['timezone'], timezone_identifiers_list(), true)
-        ) {
-            $_SESSION['timezone'] = $_COOKIE['timezone'];
+        if (!isset($this->timezoneService)) {
+            $this->timezoneService = new TimezoneService();
         }
-
-        $tz = $_SESSION['timezone'] ?? self::$config->get("timezone");
-        Logger::instance()->debug("Applying timezone: " . ($tz ?? 'UTC'));
-        date_default_timezone_set(
-            in_array($tz, timezone_identifiers_list(), true) ? $tz : 'UTC'
-        );
-    }
-    private static function updateUserLastVisited(): void
-    {
-        Logger::instance()->debug("Updating user's last visited page");
-        if (!empty($_SESSION['user'])) {
-            // Exclude certain pages from being recorded as "lastVisited" to avoid redirect loops
-            $page = strtolower(basename($_SERVER['SCRIPT_NAME'] ?? ''));
-            $excluded = ['index.php'];
-            if (in_array($page, $excluded, true)) {
-                return;
-            }
-            $factory = ObjectFactory::defaults();
-            $defaults = $factory::getByUsername($_SESSION['user']) ?? $factory::init();
-            $defaults->lastVisitedUri = $_SERVER['REQUEST_URI'] ?? '/';
-            $defaults->lastVisitedAt = time();
-            $defaults->update();
-        }
+        $tz = $this->timezoneService->apply($this->config()->get("timezone", ''));
+        $this->logger()->debug("Applied timezone: $tz");
     }
 }
