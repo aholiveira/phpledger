@@ -1,4 +1,6 @@
 name: Release
+permissions:
+  contents: read
 on:
   push:
     tags:
@@ -27,6 +29,8 @@ jobs:
 
   release:
     name: Create release
+    permissions:
+      contents: read
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
