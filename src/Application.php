@@ -16,15 +16,15 @@ use PHPLedger\Contracts\TimezoneServiceInterface;
 use PHPLedger\Services\Config;
 use PHPLedger\Services\CSRF;
 use PHPLedger\Services\HeaderSender;
+use PHPLedger\Services\L10n;
+use PHPLedger\Services\Logger;
 use PHPLedger\Services\Redirector;
+use PHPLedger\Services\SessionManager;
 use PHPLedger\Services\TimezoneService;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Storage\ReportFactory;
 use PHPLedger\Util\ConfigPath;
-use PHPLedger\Util\L10n;
-use PHPLedger\Util\Logger;
 use PHPLedger\Util\Path;
-use PHPLedger\Util\SessionManager;
 
 /**
  * @SuppressWarnings("php:S1448")
@@ -49,6 +49,7 @@ final class Application implements ApplicationObjectInterface
     {
         $app = new Application(empty($logfile) ?  Path::combine(ROOT_DIR, "logs", "ledger.log") : $logfile);
         $config = new Config();
+        Config::init(ConfigPath::get());
         $backend = $config->get('storage.type', 'mysql');
         $app->setConfig($config);
         $app->setDataFactory(new ObjectFactory($backend));

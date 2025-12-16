@@ -13,9 +13,9 @@ namespace PHPLedger\Storage\MySql;
 use Exception;
 use mysqli_sql_exception;
 use PHPLedger\Domain\Ledger;
+use PHPLedger\Services\Logger;
 use PHPLedger\Storage\MySql\Traits\MySqlFetchAllTrait;
 use PHPLedger\Storage\MySql\Traits\MySqlSelectTrait;
-use PHPLedger\Util\Logger;
 
 class MySqlLedger extends Ledger
 {

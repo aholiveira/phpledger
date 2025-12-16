@@ -2,10 +2,10 @@
 
 namespace PHPLedger\Storage\MySql;
 
-use mysqli;
 use mysqli_sql_exception;
+use mysqli;
 use PHPLedger\Services\Config;
-use PHPLedger\Util\Logger;
+use PHPLedger\Services\Logger;
 use RuntimeException;
 
 class MySqlConnectionManager

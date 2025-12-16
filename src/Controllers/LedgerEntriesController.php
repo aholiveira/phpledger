@@ -22,8 +22,12 @@ use PHPLedger\Domain\LedgerEntry;
 use PHPLedger\Util\DateParser;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\NumberUtil;
+use PHPLedger\Views\Templates\LedgerEntriesFilterViewTemplate;
+use PHPLedger\Views\Templates\LedgerEntriesFormViewTemplate;
 use PHPLedger\Views\Templates\LedgerEntriesMainViewTemplate;
 use PHPLedger\Views\Templates\LedgerEntriesPreloaderTemplate;
+use PHPLedger\Views\Templates\LedgerEntriesRowViewTemplate;
+use PHPLedger\Views\Templates\LedgerEntriesTableViewTemplate;
 
 final class LedgerEntriesController extends AbstractViewController
 {
@@ -113,7 +117,11 @@ final class LedgerEntriesController extends AbstractViewController
                 'ledgerEntryRows' => $ledgerEntryRows ?? [],
                 'formData' => $this->prepareFormData($ledgerEntryObject, $filters, (float)$formBalance) ?? [],
                 'filterFormData' => $filterFormData,
-                'csrf' => $this->app->csrf()->inputField()
+                'csrf' => $this->app->csrf()->inputField(),
+                'filterViewTemplate' => new LedgerEntriesFilterViewTemplate,
+                'tableViewTemplate' => new LedgerEntriesTableViewTemplate,
+                'rowViewTemplate' => new LedgerEntriesRowViewTemplate,
+                'formViewTemplate' => new LedgerEntriesFormViewTemplate,
             ]
         );
         $view = new LedgerEntriesMainViewTemplate;

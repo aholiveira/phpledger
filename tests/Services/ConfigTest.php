@@ -4,16 +4,9 @@ namespace PHPLedgerTests\Unit\Services;
 
 use PHPLedger\Services\Config;
 use PHPLedger\Services\ConfigException;
-use ReflectionClass;
 
 afterEach(function () {
-    $ref = new ReflectionClass(Config::class);
-
-    foreach (['configData' => [], 'file' => '', 'instance' => null] as $prop => $value) {
-        $p = $ref->getProperty($prop);
-        $p->setAccessible(true);
-        $p->setValue(null, $value);
-    }
+    Config::reset();
 });
 
 function validConfig(array $override = []): array
@@ -99,7 +92,7 @@ it('returns default when key is missing', function () {
     unlink($file);
 });
 
-it('validates correct config', function () {
+it('validates correct config in test mode', function () {
     $cfg = Config::instance();
     expect($cfg->validate(validConfig(), true))->toBeTrue();
 });
@@ -157,7 +150,7 @@ it('throws when saving without file', function () {
     $cfg = Config::instance();
     $cfg->set('title', 'x', false);
     $cfg->save();
-})->throws(ConfigException::class);
+})->throws("Config not initialized");
 
 it('throws when config is invalid on save', function () {
     $file = tmpConfigFile();
@@ -166,7 +159,7 @@ it('throws when config is invalid on save', function () {
 
     $cfg->set('title', '', false);
     $cfg->save();
-})->throws(ConfigException::class);
+})->throws("Configuration data is not valid");
 
 it('fails validation with invalid MySQL port', function () {
     $cfg = Config::instance();
@@ -190,7 +183,14 @@ it('fails validation with invalid SMTP port', function () {
 });
 
 it('fails init when validation fails', function () {
-    $file = tmpConfigFile(['title' => '', 'version' => 1, 'storage' => ['type' => 'mysql','settings'=>['host'=>'localhost','user'=>'u','database'=>'d']],'smtp'=>['host'=>'a','from'=>'b@c.com'],'admin'=>['username'=>'x','password'=>'y']]);
+    $file = tmpConfigFile([
+        'version' => 1,
+        'title' => '',
+        'storage' => ['type' => 'mysql', 'settings' => ['host' => 'localhost', 'user' => 'u', 'database' => 'd']],
+        'smtp' => ['host' => 'a', 'from' => 'b@c.com'],
+        'admin' => ['username' => 'x', 'password' => 'y'],
+    ]);
+
     expect(Config::init($file))->toBeFalse();
     unlink($file);
 });

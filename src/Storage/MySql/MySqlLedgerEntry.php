@@ -13,7 +13,7 @@ namespace PHPLedger\Storage\MySql;
 use Exception;
 use mysqli_sql_exception;
 use PHPLedger\Domain\LedgerEntry;
-use PHPLedger\Util\Logger;
+use PHPLedger\Services\Logger;
 
 class MySqlLedgerEntry extends LedgerEntry
 {

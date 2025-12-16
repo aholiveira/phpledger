@@ -1,7 +1,6 @@
 <?php
 
-use PHPLedger\Util\L10n;
-use PHPLedger\Util\Path;
+use PHPLedger\Services\L10n;
 
 beforeEach(function () {
     if (!\defined('ROOT_DIR')) {

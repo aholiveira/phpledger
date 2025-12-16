@@ -3,9 +3,9 @@
 namespace PHPLedger\Services;
 
 use Exception;
+use PHPLedger\Contracts\ConfigFilesystemInterface;
 use PHPLedger\Contracts\ConfigurationServiceInterface;
-use PHPLedger\Util\ConfigPath;
-use PHPLedger\Util\Logger;
+use PHPLedger\Services\Logger;
 
 class ConfigException extends Exception {}
 class ConfigInvalidException extends Exception {}
@@ -18,6 +18,28 @@ final class Config implements ConfigurationServiceInterface
     protected static string $validationMessage = "";
     private static string $file = '';
     private static ?ConfigurationServiceInterface $instance;
+    private static ?ConfigFilesystemInterface $fs;
+
+    public static function reset(): void
+    {
+        self::$configData = [];
+        self::$validationMessage = '';
+        self::$file = '';
+        self::$instance = null;
+        self::$fs = null;
+    }
+    private static function fs(): ConfigFilesystemInterface
+    {
+        if (!isset(self::$fs)) {
+            self::$fs = new NativeFilesystem();
+        }
+        return self::$fs;
+    }
+
+    public static function setFilesystem(ConfigFilesystemInterface $fs): void
+    {
+        self::$fs = $fs;
+    }
     /**
      * Initializes the configuration by loading it from the specified file.
      * @param string $configfile The path to the configuration file.
@@ -34,7 +56,7 @@ final class Config implements ConfigurationServiceInterface
             $data = self::load($configfile);
             $originalData = $data ?? [];
             $data = self::checkVersion($data, $test);
-            if (!$test && !self::instance()->validate($data)) {
+            if (!$test && !self::instance()->validate($data, $test)) {
                 throw new ConfigException("Could not validate config data");
             }
             $configChanged = ($data !== $originalData);
@@ -57,7 +79,6 @@ final class Config implements ConfigurationServiceInterface
     {
         if (!isset(self::$instance)) {
             self::$instance = new self();
-            self::init(ConfigPath::get());
         }
         return self::$instance;
     }
@@ -72,11 +93,11 @@ final class Config implements ConfigurationServiceInterface
     public static function load(string $configfile, bool $test = false): array
     {
         $data = null;
-        if (!file_exists($configfile)) {
+        if (!self::fs()->exists($configfile)) {
             self::$file = $configfile;
             throw new ConfigException("Config file does not exists");
         }
-        $raw = file_get_contents($configfile);
+        $raw = self::fs()->read($configfile);
         if ($raw === false) {
             throw new ConfigException("Invalid config data");
         }
@@ -116,6 +137,9 @@ final class Config implements ConfigurationServiceInterface
      */
     public function set(string $key, $value, $save = true): void
     {
+        if (empty(self::$file)) {
+            throw new ConfigException("Config not initialized");
+        }
         $parts = self::resolvePath($key);
         $ref = &self::$configData;
         $original = self::$configData; // store original for comparison
@@ -158,6 +182,7 @@ final class Config implements ConfigurationServiceInterface
      */
     public function save(): void
     {
+        $fs = self::fs();
         if (empty(self::$file)) {
             Logger::instance()->error("Configuration file not set");
             throw new ConfigException("Configuration file not set");
@@ -167,11 +192,15 @@ final class Config implements ConfigurationServiceInterface
             throw new ConfigException("Configuration data is not valid");
         }
         $dir = dirname(self::$file);
-        if (!file_exists(self::$file) && (!is_dir($dir) || !is_writable($dir))) {
-            Logger::instance()->error("Configuration directory is not writable: " . $dir);
-            throw new ConfigException("Configuration directory is not writable: ");
+        if (!$fs->exists(self::$file)) {
+            if (!$fs->isDir($dir)) {
+                $fs->mkdir($dir);
+            }
+            if (!$fs->isWritable($dir)) {
+                throw new ConfigException("Configuration directory is not writable");
+            }
         }
-        if (file_exists(self::$file) && !is_writable(self::$file)) {
+        if ($fs->exists(self::$file) && !$fs->isWritable(self::$file)) {
             Logger::instance()->error("Configuration file is not writable: " . self::$file);
             throw new ConfigException("Configuration file is not writable");
         }
@@ -180,20 +209,20 @@ final class Config implements ConfigurationServiceInterface
             Logger::instance()->error("Unable to encode configuration data to JSON: " . json_last_error_msg());
             throw new ConfigException("Unable to encode configuration data to JSON");
         }
-        $tempFile = tempnam($dir, 'cfg_');
+        $tempFile = self::fs()->tempFile($dir);
         Logger::instance()->debug("Saving configuration to temporary file: $tempFile");
         Logger::instance()->dump($json);
-        if (file_put_contents($tempFile, $json, LOCK_EX) === false) {
-            @unlink($tempFile);
+        if ($fs->write($tempFile, $json) === false) {
+            $fs->delete($tempFile);
             Logger::instance()->error("Unable to write configuration file: " . $tempFile);
             throw new ConfigException("Unable to save configuration file");
         }
         Logger::instance()->debug("Replacing configuration file: " . self::$file);
-        if (file_exists(self::$file)) {
-            unlink(self::$file);
+        if ($fs->exists(self::$file)) {
+            $fs->delete(self::$file);
         }
-        if (!rename($tempFile, self::$file)) {
-            @unlink($tempFile);
+        if (!$fs->replace($tempFile, self::$file)) {
+            $fs->delete($tempFile);
             Logger::instance()->error("Unable to replace configuration file: " . self::$file);
             throw new ConfigException("Unable to replace configuration file");
         }
@@ -242,7 +271,7 @@ final class Config implements ConfigurationServiceInterface
      * @param array $storage The storage configuration to validate.
      * @return bool True if the storage configuration is valid, false otherwise.
      */
-    private static function validateStorage(array $storage, $test = false): bool
+    private static function validateStorage(array $storage, bool $test = false): bool
     {
         if (!isset($storage['type'])) {
             throw new ConfigInvalidOrMissingException("'storage.type'");
@@ -273,7 +302,7 @@ final class Config implements ConfigurationServiceInterface
                 throw new ConfigInvalidOrMissingException("'storage.settings.$k'");
             }
         }
-        if (isset($settings['port']) && !is_numeric($settings['port']) || (int)$settings['port'] === 0) {
+        if (isset($settings['port']) && (!is_numeric($settings['port']) || (int)$settings['port'] === 0)) {
             throw new ConfigInvalidException("'storage.settings.port'");
         }
         return true;
@@ -291,7 +320,7 @@ final class Config implements ConfigurationServiceInterface
         if (!isset($settings['host']) || !is_string($settings['host']) || trim($settings['host']) === '') {
             throw new ConfigInvalidOrMissingException("'smtp.host'");
         }
-        if (isset($settings['port']) && !is_numeric($settings['port']) || (int)$settings['port'] === 0) {
+        if (isset($settings['port']) && (!is_numeric($settings['port']) || (int)$settings['port'] === 0)) {
             throw new ConfigInvalidException("'smtp.port'");
         }
         if (
