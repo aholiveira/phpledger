@@ -6,9 +6,6 @@ use Exception;
 use PHPLedger\Domain\User;
 use PHPLedger\Exceptions\PHPLedgerException;
 use PHPLedger\Storage\ObjectFactory;
-use PHPLedger\Util\Config;
-use PHPLedger\Util\CSRF;
-use PHPLedger\Util\Redirector;
 use PHPLedger\Views\Templates\ConfigViewTemplate;
 
 final class ConfigController extends AbstractViewController
@@ -56,17 +53,16 @@ final class ConfigController extends AbstractViewController
             'messages' => $messages,
             'pagetitle' => $this->app->l10n()->l("Configuration"),
             'lang' => $this->app->l10n()->html(),
-            'csrf' => CSRF::inputField(),
         ]));
     }
 
     private function checkUserPermission(): void
     {
         $username = $this->app->session()->get('user', '');
-        $user = $username ? ObjectFactory::user()::getByUsername($username) : null;
+        $user = $username ? $this->app->dataFactory()::user()::getByUsername($username) : null;
 
         if (!($user instanceof User)) {
-            Redirector::to("index.php?action=login");
+            $this->app->redirector()->to("index.php?action=login");
             throw new PHPLedgerException('You must be logged in to view this page.');
         }
         if (!$user->hasRole(User::USER_ROLE_ADM)) {
@@ -81,7 +77,7 @@ final class ConfigController extends AbstractViewController
         $messages = [];
         $success = false;
 
-        if (!CSRF::validateToken($this->request->input('_csrf_token', ''))) {
+        if (!$this->app->csrf()->validateToken($this->request->input('_csrf_token', ''))) {
             $messages[] = 'Invalid CSRF token.';
             return [$data, false, $messages];
         }

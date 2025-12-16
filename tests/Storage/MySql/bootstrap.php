@@ -12,7 +12,7 @@ if (!\defined('ROOT_DIR')) {
 
 use PHPLedger\Contracts\LogLevel;
 use PHPLedger\Storage\ObjectFactory;
-use PHPLedger\Util\Config;
+use PHPLedger\Services\Config;
 use PHPLedger\Util\Logger;
 
 function  checkAndUpdateDatabaseSchema()

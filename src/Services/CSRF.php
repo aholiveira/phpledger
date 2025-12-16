@@ -1,49 +1,53 @@
 <?php
-namespace PHPLedger\Util;
-class CSRF
+
+namespace PHPLedger\Services;
+
+use PHPLedger\Contracts\CsrfServiceInterface;
+
+class CSRF implements CsrfServiceInterface
 {
     private const string TOKEN_KEY = '_csrf_token';
     private const int TOKEN_EXPIRY_SECONDS = 3600;
 
-    public static function generateToken(): string
+    public function generateToken(): string
     {
         $token = bin2hex(random_bytes(32));
         $_SESSION[self::TOKEN_KEY] = [
             'value' => $token,
-            'time' => time() + (int) self::TOKEN_EXPIRY_SECONDS,
+            'time' => time() + self::TOKEN_EXPIRY_SECONDS,
         ];
         return $token;
     }
-    public static function getToken(): ?string
+    public function getToken(): ?string
     {
         if (!isset($_SESSION[self::TOKEN_KEY])) {
             return null;
         }
         if ($_SESSION[self::TOKEN_KEY]['time'] < time()) {
-            self::removeToken();
+            $this->removeToken();
             return null;
         }
         return $_SESSION[self::TOKEN_KEY]['value'];
     }
-    public static function validateToken(?string $token): bool
+    public function validateToken(?string $token): bool
     {
-        $storedToken = self::getToken();
-        if (!$storedToken || !$token) {
+        $stored = $this->getToken();
+        if (!$stored || !$token) {
             return false;
         }
-        $valid = hash_equals($storedToken, $token);
+        $valid = hash_equals($stored, $token);
         if ($valid) {
-            self::removeToken(); // single-use token
+            $this->removeToken();
         }
         return $valid;
     }
-    public static function removeToken(): void
+    public function removeToken(): void
     {
         unset($_SESSION[self::TOKEN_KEY]);
     }
-    public static function inputField(): string
+    public function inputField(): string
     {
-        $token = self::getToken() ?? self::generateToken();
+        $token = $this->getToken() ?? $this->generateToken();
         return '<input type="hidden" name="' . self::TOKEN_KEY . '" value="' . htmlspecialchars($token, ENT_QUOTES) . '">';
     }
 }

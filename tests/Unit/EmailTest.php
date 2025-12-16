@@ -2,7 +2,7 @@
 
 namespace PHPLedger\Util;
 
-use PHPLedger\Util\Config;
+use PHPLedger\Services\Config;
 use PHPLedger\Util\Email;
 
 function mail($to, $subject, $message, $headers, $params) {

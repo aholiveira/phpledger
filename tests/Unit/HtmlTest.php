@@ -1,7 +1,7 @@
 <?php
 
 use PHPLedger\Util\Html;
-use PHPLedger\Util\Config;
+use PHPLedger\Services\Config;
 
 beforeEach(function () {
     Config::instance()->set('title', 'TestApp', false);

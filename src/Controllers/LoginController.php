@@ -3,10 +3,6 @@
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Domain\User;
-use PHPLedger\Util\Config;
-use PHPLedger\Util\CSRF;
-use PHPLedger\Util\Logger;
-use PHPLedger\Util\Redirector;
 use PHPLedger\Views\Templates\LoginViewTemplate;
 
 final class LoginController extends AbstractViewController
@@ -29,7 +25,7 @@ final class LoginController extends AbstractViewController
     {
         $user = $this->app->session()->get('user', '');
         if (!empty($user)) {
-            $defaults = $this->app->dataFactory()::defaults()::getByUsername($user);
+            $defaults = $this->app->dataFactory()->defaults()::getByUsername($user);$defaults = $this->app->dataFactory()::defaults()::getByUsername($user);
             if ($defaults !== null) {
                 $defaults->lastVisitedUri = '';
                 $defaults->lastVisitedAt = time();
@@ -37,7 +33,7 @@ final class LoginController extends AbstractViewController
             }
         }
         $this->app->session()->logout();
-        Redirector::to('index.php');
+        $this->app->redirector()->to('index.php');
     }
 
     private function login(): void
@@ -48,9 +44,9 @@ final class LoginController extends AbstractViewController
             '_csrf_token' => FILTER_UNSAFE_RAW
         ], true);
 
-        if (!CSRF::validateToken($filtered['_csrf_token'] ?? null)) {
+        if (!$this->app->csrf()->validateToken($filtered['_csrf_token'] ?? null)) {
             http_response_code(400);
-            Redirector::to('index.php');
+            $this->app->redirector()->to('index.php');
             exit('Invalid CSRF token');
         }
 
@@ -58,7 +54,7 @@ final class LoginController extends AbstractViewController
         $postPass = $filtered['password'] ?? '';
 
         if (!empty($this->postUser)) {
-            $user = $this->app->dataFactory()::user()::getByUsername($this->postUser);
+            $user = $this->app->dataFactory()->user()::getByUsername($this->postUser);
             $this->userAuth = $user->verifyPassword($postPass);
 
             if ($this->userAuth) {
@@ -78,7 +74,7 @@ final class LoginController extends AbstractViewController
         $defaults = $defaults::getByUsername($this->postUser) ?? $defaults::init();
         $defaults->entryDate = date('Y-m-d');
         $defaults->language = $this->app->l10n()->lang();
-        Logger::instance()->info("User [{$this->postUser}] logged in");
+        $this->app->logger()->info("User [{$this->postUser}] logged in");
 
         if ($defaults->lastVisitedAt < time() - 3600 * 24) {
             $defaults->lastVisitedUri = '';
@@ -90,8 +86,8 @@ final class LoginController extends AbstractViewController
             date('Y-m-01')
         );
 
-        Logger::instance()->debug("Redirecting to [{$target}]");
-        Redirector::to($target);
+        $this->app->logger()->debug("Redirecting to [{$target}]");
+        $this->app->redirector()->to($target);
     }
 
     private function renderView(): void

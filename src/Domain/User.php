@@ -6,7 +6,7 @@ use DateInterval;
 use DateTime;
 use PHPLedger\Contracts\Domain\UserObjectInterface;
 use PHPLedger\Storage\Abstract\AbstractDataObject;
-use PHPLedger\Util\Config;
+use PHPLedger\Services\Config;
 use PHPLedger\Util\Email;
 use PHPLedger\Util\Logger;
 

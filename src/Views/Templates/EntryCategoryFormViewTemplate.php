@@ -2,7 +2,6 @@
 
 namespace PHPLedger\Views\Templates;
 
-use PHPLedger\Util\CSRF;
 use PHPLedger\Util\Html;
 
 final class EntryCategoryFormViewTemplate extends AbstractViewTemplate
@@ -26,7 +25,7 @@ final class EntryCategoryFormViewTemplate extends AbstractViewTemplate
                 <div id="main" class="main config">
                     <form method="POST" action="index.php?action=entry_types" lang="<?= $lang ?>">
                         <input type="hidden" name="action" value="entry_types">
-                        <?= CSRF::inputField() ?>
+                        <?= $csrf ?>
                         <p><label for="id"><?= $label['id'] ?></label><input type="text" readonly size="4" name="id" value="<?= $text['id'] ?>"></p>
                         <p><label for="parentId"><?= $label['category'] ?></label>
                             <select name="parentId">

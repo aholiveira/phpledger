@@ -45,10 +45,7 @@ final class LedgerEntriesTableViewTemplate extends AbstractViewTemplate
                         <?php
                         $rowTemplate = new LedgerEntriesRowViewTemplate();
                         $formTemplate = new LedgerEntriesFormViewTemplate();
-                        $rowTemplateData = [
-                            'lang' => $lang,
-                            'label' => $label
-                        ];
+                        $rowTemplateData = compact('lang', 'label', 'csrf');
                         foreach ($ledgerEntryRows as $row):
                             $rowTemplateData = array_merge(
                                 $rowTemplateData,

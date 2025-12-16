@@ -13,6 +13,7 @@ it('renders account form HTML', function () {
         'lang' => 'en',
         'pagetitle' => 'Test Page',
         'ui' => $ui,
+        'csrf' => '',
         'label' => [
             'name' => 'Name',
             'number' => 'Number',
@@ -78,6 +79,7 @@ it('renders account form HTML with back action to balances', function () {
         'lang' => 'en',
         'pagetitle' => 'Test Page',
         'ui' => $ui,
+        'csrf' => '',
         'label' => [
             'name' => 'Name',
             'number' => 'Number',
@@ -121,6 +123,7 @@ it('renders account form HTML with back action to balances', function () {
     $html = ob_get_clean();
 
     expect($html)->toContain('<a href="index.php?action=balances');
+    expect($html)->toContain('Back to balances');
     expect($html)->toContain('Name');
     expect($html)->toContain('Number');
     expect($html)->toContain('IBAN');
@@ -130,7 +133,6 @@ it('renders account form HTML with back action to balances', function () {
     expect($html)->toContain('Active');
     expect($html)->toContain('Save');
     expect($html)->toContain('Delete');
-    expect($html)->toContain('Back to balances');
 });
 
 it('renders name errors', function () {
@@ -143,6 +145,7 @@ it('renders name errors', function () {
         'lang' => 'en',
         'pagetitle' => 'Test Page',
         'ui' => $ui,
+        'csrf' => '',
         'label' => [
             'name' => 'Name',
             'number' => 'Number',

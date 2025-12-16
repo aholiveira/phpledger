@@ -25,16 +25,17 @@ final class LedgerEntriesMainViewTemplate extends AbstractViewTemplate
             </script>
         </div>
         <div class="main" id="main">
-            <?php (new LedgerEntriesTableViewTemplate)->render([
-                'lang' => $lang,
-                'isEditing' => $isEditing,
-                'editId' => $editId,
-                'label' => $label,
-                'formData' => $formData,
-                'startBalance' => $startBalance,
-                'ledgerEntryRows' => $ledgerEntryRows,
-                'filters' => $filters
-            ]); ?>
+            <?php (new LedgerEntriesTableViewTemplate)->render(compact(
+                'lang',
+                'isEditing',
+                'editId',
+                'label',
+                'formData',
+                'startBalance',
+                'ledgerEntryRows',
+                'filters',
+                'csrf'
+            )); ?>
         </div>
         <div class="main-footer">
             <p><?= $transactionsInPeriod ?></p>

@@ -1,9 +1,11 @@
 <?php
 
-namespace PHPLedger\Util;
+namespace PHPLedger\Services;
 
 use Exception;
 use PHPLedger\Contracts\ConfigurationServiceInterface;
+use PHPLedger\Util\ConfigPath;
+use PHPLedger\Util\Logger;
 
 class ConfigException extends Exception {}
 class ConfigInvalidException extends Exception {}
@@ -63,8 +65,7 @@ final class Config implements ConfigurationServiceInterface
     {
         $hasVersion = is_numeric($data['version'] ?? null);
         if (!$test && !$hasVersion) {
-            Logger::instance()->debug("No version detected. Going to migrate config");
-            $data = ConfigMigrator::migrate($data);
+            Logger::instance()->debug("No version detected.");
         }
         return $data;
     }

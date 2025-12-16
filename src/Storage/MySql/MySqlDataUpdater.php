@@ -3,7 +3,7 @@
 namespace PHPLedger\Storage\MySql;
 
 use PHPLedger\Domain\EntryCategory;
-use PHPLedger\Util\Config;
+use PHPLedger\Services\Config;
 
 class MySqlDataUpdater
 {

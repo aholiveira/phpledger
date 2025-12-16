@@ -30,7 +30,7 @@ jobs:
   release:
     name: Create release
     permissions:
-      contents: read
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

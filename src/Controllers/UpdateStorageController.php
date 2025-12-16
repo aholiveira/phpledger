@@ -10,29 +10,24 @@
 
 namespace PHPLedger\Controllers;
 
-use PHPLedger\Util\Config;
-use PHPLedger\Util\ConfigPath;
-use PHPLedger\Util\CSRF;
-use PHPLedger\Util\Redirector;
 use PHPLedger\Views\Templates\UpdateStorageViewTemplate;
 
 final class UpdateStorageController extends AbstractViewController
 {
     protected function handle(): void
     {
-        Config::init(ConfigPath::get());
-        $dataStorage = $this->app->dataFactory()::dataStorage();
+        $dataStorage = $this->app->dataFactory()->dataStorage();
         $updateResult = null;
         if ($this->request->method() === "POST") {
-            if (!CSRF::validateToken($this->request->input('_csrf_token', null))) {
+            if (!$this->app->csrf()->validateToken($this->request->input('_csrf_token', null))) {
                 http_response_code(400);
-                Redirector::to('index.php?action=update');
+                $this->app->redirector()->to('index.php?action=update');
             }
             $action = $this->request->input('action', null);
             if ($action === 'update') {
                 $updateResult = $dataStorage->update();
                 if ($updateResult && !headers_sent()) {
-                    Redirector::to("index.php", 8);
+                    $this->app->redirector()->to("index.php", 8);
                     $showSection = "update_sucess";
                 }
             }

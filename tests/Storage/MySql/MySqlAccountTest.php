@@ -3,7 +3,7 @@
 use PHPLedger\Storage\MySql\MySqlAccount;
 use PHPLedger\Storage\MySql\MySqlStorage;
 use PHPLedger\Storage\ObjectFactory;
-use PHPLedger\Util\Config;
+use PHPLedger\Services\Config;
 
 beforeAll(function () {
     if (!\defined('ROOT_DIR')) {

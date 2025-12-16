@@ -6,7 +6,6 @@ use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Contracts\L10nServiceInterface;
 use PHPLedger\Contracts\RequestInterface;
 use PHPLedger\Contracts\ViewControllerInterface;
-use PHPLedger\Util\CSRF;
 use PHPLedger\Util\UiBuilder;
 use PHPLedger\Version;
 
@@ -65,8 +64,6 @@ abstract class AbstractViewController implements ViewControllerInterface
         $session = $app->session();
         $expires = date("Y-m-d H:i:s", $session->get('expires', time()));
         $isAdmin = $session->get('isAdmin', false);
-        $action = $this->request->input('action');
-        $label = $this->uiData['label'];
         $menuActions = [
             'ledger_entries',
             'balances',
@@ -79,9 +76,9 @@ abstract class AbstractViewController implements ViewControllerInterface
             $menuActions[] = 'config';
         }
         $menuActions[] = 'logout';
-        foreach ($menuActions as $action) {
-            $menuLinks[$action] = 'index.php?' . http_build_query([
-                'action' => $action,
+        foreach ($menuActions as $a) {
+            $menuLinks[$a] = 'index.php?' . http_build_query([
+                'action' => $a,
                 'lang'   => $lang
             ]);
         }
@@ -92,13 +89,14 @@ abstract class AbstractViewController implements ViewControllerInterface
             'languageSelectorHtml' => $this->buildLanguageSelectorHtml($lang),
         ];
         $this->uiData = [
-            'label' => $label,
+            'label' => $this->uiData['label'],
             'menu' => $menuLinks,
             'footer' => $footer,
             'ui' => new UiBuilder(),
             'isAdmin' => $isAdmin,
             'lang' => $lang,
-            'csrf' => CSRF::inputField(),
+            'csrf' => $this->app->csrf()->inputField(),
+            'action' => $this->request->input('action'),
         ];
     }
     protected function buildLanguageSelectorHtml(string $current, array $requestParams = []): string
