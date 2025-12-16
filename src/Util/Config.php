@@ -55,7 +55,6 @@ final class Config implements ConfigurationServiceInterface
     {
         if (!isset(self::$instance)) {
             self::$instance = new self();
-            ConfigPath::ensureMigrated();
             self::init(ConfigPath::get());
         }
         return self::$instance;

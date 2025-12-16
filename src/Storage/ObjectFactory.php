@@ -2,10 +2,9 @@
 
 namespace PHPLedger\Storage;
 
-use PHPLedger\Contracts\DataObjectFactoryInterface;
 use PHPLedger\Storage\Abstract\AbstractObjectFactory;
 
-class ObjectFactory extends AbstractObjectFactory implements DataObjectFactoryInterface
+class ObjectFactory extends AbstractObjectFactory
 {
     public function __construct(string $backend)
     {
