@@ -55,7 +55,7 @@ final class Application implements ApplicationObjectInterface
         $app->setDataFactory(new ObjectFactory($backend));
         $app->setReportFactory(new ReportFactory($backend));
         $app->setSessionManager(new SessionManager());
-        $app->setLogger(new Logger(empty($logfile) ? Path::combine(ROOT_DIR, "logs", "ledger.log") : $logfile));
+        $app->setLogger(new Logger(Path::combine(ROOT_DIR, "logs", "ledger.log")));
         $app->setRedirector(new Redirector());
         $app->setL10n(new L10n());
         $app->setHeaderSender(new HeaderSender());
