@@ -44,7 +44,8 @@ abstract class AbstractViewController implements ViewControllerInterface
             'active',
             'open',
             'close',
-            'id'
+            'id',
+            'my_profile'
         ];
         return $this->buildL10nLabels($l10n, $base);
     }
@@ -75,6 +76,7 @@ abstract class AbstractViewController implements ViewControllerInterface
         if ($isAdmin) {
             $menuActions[] = 'config';
         }
+        $menuActions[] = 'my_profile';
         $menuActions[] = 'logout';
         foreach ($menuActions as $a) {
             $menuLinks[$a] = 'index.php?' . http_build_query([

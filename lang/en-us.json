@@ -136,5 +136,12 @@
     "withdraw": "Wdr",
     "withdrawals": "Withdrawals",
     "year": "Year",
-    "yes": "Yes"
+    "yes": "Yes",
+    "my_profile": "My profile",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "full_name": "Full name",
+    "display_name": "Display name",
+    "verify_password": "Verify password",
+    "password_mismatch": "Passwords do not match"
 }

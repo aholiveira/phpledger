@@ -20,6 +20,7 @@ use PHPLedger\Controllers\LoginController;
 use PHPLedger\Controllers\ReportController;
 use PHPLedger\Controllers\ResetPasswordController;
 use PHPLedger\Controllers\UpdateStorageController;
+use PHPLedger\Controllers\UserProfileController;
 use PHPLedger\Http\HttpRequest;
 
 class Router
@@ -41,6 +42,7 @@ class Router
         'report'            => ReportController::class,
         'resetpassword'     => ResetPasswordController::class,
         'update'            => UpdateStorageController::class,
+        'my_profile'        => UserProfileController::class,
     ];
 
     public function handleRequest(ApplicationObjectInterface $app, string $action, ?RequestInterface $request = null): void

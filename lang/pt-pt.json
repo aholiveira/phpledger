@@ -137,5 +137,12 @@
     "withdraw": "Lev",
     "withdrawals": "Levantam.",
     "year": "Ano",
-    "yes": "Sim"
+    "yes": "Sim",
+    "my_profile": "O meu perfil",
+    "first_name": "Nome próprio",
+    "last_name": "Apelido",
+    "full_name": "Nome completo",
+    "display_name": "Nome a apresentar",
+    "verify_password": "Confirmar palavra-passe",
+    "password_mismatch": "As palavras-passe não coincidem"
 }
