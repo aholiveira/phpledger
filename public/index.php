@@ -22,12 +22,12 @@ if (!defined('ROOT_DIR')) {
 
 require_once ROOT_DIR . '/vendor/autoload.php';
 
-use PHPLedger\Application;
+use PHPLedger\ApplicationFactory;
 use PHPLedger\Http\HttpRequest;
 use PHPLedger\Routing\Router;
 
 
-$app = Application::create();
+$app = ApplicationFactory::create();
 $app->init();
 $router = new Router($app);
 $request = new HttpRequest();

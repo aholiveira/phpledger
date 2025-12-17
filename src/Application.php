@@ -9,31 +9,15 @@ use PHPLedger\Contracts\DataObjectFactoryInterface;
 use PHPLedger\Contracts\HeaderSenderInterface;
 use PHPLedger\Contracts\L10nServiceInterface;
 use PHPLedger\Contracts\LoggerServiceInterface;
-use PHPLedger\Contracts\LogLevel;
 use PHPLedger\Contracts\RedirectorServiceInterface;
 use PHPLedger\Contracts\SessionServiceInterface;
 use PHPLedger\Contracts\TimezoneServiceInterface;
-use PHPLedger\Services\Config;
-use PHPLedger\Services\CSRF;
 use PHPLedger\Services\FileResponseSender;
-use PHPLedger\Services\HeaderSender;
-use PHPLedger\Services\L10n;
-use PHPLedger\Services\Logger;
-use PHPLedger\Services\Redirector;
-use PHPLedger\Services\SessionManager;
-use PHPLedger\Services\TimezoneService;
-use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Storage\ReportFactory;
-use PHPLedger\Util\ConfigPath;
-use PHPLedger\Util\Path;
 
-/**
- * @SuppressWarnings("php:S1448")
- */
 final class Application implements ApplicationObjectInterface
 {
     private string $errorMessage = "";
-    private string $logfile;
     private bool $needsUpdate;
     private ConfigurationServiceInterface $config;
     private DataObjectFactoryInterface $dataFactory;
@@ -47,66 +31,59 @@ final class Application implements ApplicationObjectInterface
     private CsrfServiceInterface $csrf;
     private FileResponseSender $fileResponseSender;
 
-    public static function create(): self
-    {
-        $app = new Application(Path::combine(ROOT_DIR, "logs", "ledger.log"));
-        $config = new Config();
-        Config::setInstance($config);
-        Config::init(ConfigPath::get());
-        $logger = new Logger(Path::combine(ROOT_DIR, "logs", "ledger.log"));
-        Logger::setInstance($logger);
-        $backend = $config->get('storage.type', 'mysql');
-        $app->setConfig($config);
-        $app->setDataFactory(new ObjectFactory($backend));
-        $app->setReportFactory(new ReportFactory($backend));
-        $app->setSessionManager(new SessionManager());
-        $app->setLogger($logger);
-        $app->setRedirector(new Redirector());
-        $app->setL10n(new L10n());
-        $app->setHeaderSender(new HeaderSender());
-        $app->setTimezoneService(new TimezoneService());
-        $app->setCsrf(new CSRF());
-        return $app;
-    }
-    public function __construct(string $logfile = "")
-    {
-        $this->logfile = empty($logfile) ? Path::combine(ROOT_DIR, "logs", "ledger.log") : $logfile;
-    }
-    public function setDataFactory(DataObjectFactoryInterface $dataFactory): void
-    {
-        $this->dataFactory = $dataFactory;
-    }
-    public function setReportFactory(ReportFactory $reportFactory): void
-    {
-        $this->reportFactory = $reportFactory;
-    }
-    public function setSessionManager(SessionServiceInterface $session): void
-    {
-        $this->session = $session;
-    }
-    public function setLogger(LoggerServiceInterface $logger): void
-    {
-        $this->logger = $logger;
-    }
-    public function setRedirector(RedirectorServiceInterface $redirector): void
-    {
-        $this->redirector = $redirector;
-    }
-    public function setL10n(L10nServiceInterface $l10n): void
-    {
-        $this->l10n = $l10n;
-    }
-    public function setConfig(ConfigurationServiceInterface $config): void
-    {
+    public function __construct(
+        ConfigurationServiceInterface $config,
+        DataObjectFactoryInterface $dataFactory,
+        ReportFactory $reportFactory,
+        SessionServiceInterface $session,
+        LoggerServiceInterface $logger,
+        RedirectorServiceInterface $redirector,
+        L10nServiceInterface $l10n,
+        HeaderSenderInterface $headerSender,
+        TimezoneServiceInterface $timezoneService,
+        CsrfServiceInterface $csrf,
+        FileResponseSender $fileResponseSender
+    ) {
         $this->config = $config;
-    }
-    public function setTimezoneService(TimezoneServiceInterface $timezoneService): void
-    {
+        $this->dataFactory = $dataFactory;
+        $this->reportFactory = $reportFactory;
+        $this->session = $session;
+        $this->logger = $logger;
+        $this->redirector = $redirector;
+        $this->l10n = $l10n;
+        $this->headerSender = $headerSender;
         $this->timezoneService = $timezoneService;
-    }
-    public function setCsrf(CsrfServiceInterface $csrf): void
-    {
         $this->csrf = $csrf;
+        $this->fileResponseSender = $fileResponseSender;
+        $this->needsUpdate = false;
+    }
+    public function dataFactory(): DataObjectFactoryInterface
+    {
+        return $this->dataFactory;
+    }
+    public function reportFactory(): ReportFactory
+    {
+        return $this->reportFactory;
+    }
+    public function session(): SessionServiceInterface
+    {
+        return $this->session;
+    }
+    public function logger(): LoggerServiceInterface
+    {
+        return $this->logger;
+    }
+    public function redirector(): RedirectorServiceInterface
+    {
+        return $this->redirector;
+    }
+    public function l10n(): L10nServiceInterface
+    {
+        return $this->l10n;
+    }
+    public function config(): ConfigurationServiceInterface
+    {
+        return $this->config;
     }
     public function csrf(): CsrfServiceInterface
     {
@@ -118,7 +95,7 @@ final class Application implements ApplicationObjectInterface
     }
     public function fileResponseSender(): FileResponseSender
     {
-        return $this->fileResponseSender ??= new FileResponseSender($this->headerSender());
+        return $this->fileResponseSender;
     }
     public function init(): void
     {
@@ -130,40 +107,6 @@ final class Application implements ApplicationObjectInterface
     public function needsUpdate(): bool
     {
         return $this->needsUpdate;
-    }
-    public function dataFactory(): DataObjectFactoryInterface
-    {
-        $backend = $this->config()->get("storage.type") ?? "mysql";
-        return $this->dataFactory ??= new ObjectFactory($backend);
-    }
-    public function reportFactory(): ReportFactory
-    {
-        $backend = $this->config()->get("storage.type") ?? "mysql";
-        return $this->reportFactory ??= new ReportFactory($backend);
-    }
-    public function config(): ConfigurationServiceInterface
-    {
-        return $this->config ?? new Config(ConfigPath::get());
-    }
-    public function session(): SessionServiceInterface
-    {
-        return $this->session ??= new SessionManager();
-    }
-    public function l10n(): L10nServiceInterface
-    {
-        return $this->l10n ??= new L10n();
-    }
-    public function redirector(): RedirectorServiceInterface
-    {
-        return $this->redirector ??= new Redirector();
-    }
-    public function logger(): LoggerServiceInterface
-    {
-        return $this->logger ??= new Logger($this->logfile, LogLevel::INFO);
-    }
-    public function setHeaderSender(HeaderSenderInterface $headerSender): void
-    {
-        $this->headerSender = $headerSender;
     }
     public function setErrorMessage(string $message): void
     {
@@ -179,9 +122,6 @@ final class Application implements ApplicationObjectInterface
     }
     private function sendHeaders(): void
     {
-        if (!isset($this->headerSender)) {
-            $this->headerSender = new HeaderSender();
-        }
         if (!$this->headerSender->sent()) {
             $this->headerSender->send('Cache-Control: no-cache');
             $this->headerSender->send('X-XSS-Protection: 1; mode=block');
@@ -194,13 +134,9 @@ final class Application implements ApplicationObjectInterface
     private function bootstrap(): void
     {
         $this->session()->start();
-        Config::init(ConfigPath::get());
     }
     private function applyTimezone(): void
     {
-        if (!isset($this->timezoneService)) {
-            $this->timezoneService = new TimezoneService();
-        }
         $tz = $this->timezoneService->apply($this->config()->get("timezone", ''));
         $this->logger()->debug("Applied timezone: $tz");
     }
