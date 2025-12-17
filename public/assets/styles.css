@@ -493,31 +493,20 @@ td>.toggle-btn {
 
 @media (max-width: 768px) {
 
-    table.lista,
-    table.lista thead,
-    table.lista tbody,
-    table.lista th,
-    table.lista td {
-        display: block;
-    }
-
     table.lista thead tr {
         position: absolute;
-        /*top: -9999px;
-        left: -9999px;*/
     }
 
     table.lista tr {
-        margin: 0 0 1rem 0;
+        margin: 0 0 0.6rem 0;
         border: 1px solid #ddd;
-        padding: 0.5rem;
+        padding: 0.1rem;
         display: grid;
     }
 
     table.lista td {
         border: none;
         position: relative;
-        /*padding-left: 60%;*/
         white-space: pre-wrap;
         word-break: break-word;
         height: min-content;
@@ -535,10 +524,6 @@ td>.toggle-btn {
         width: 100%;
     }
 
-    .maingrid {
-        display: block;
-    }
-
     .header.main.config,
     .main {
         width: 100%;
@@ -547,9 +532,7 @@ td>.toggle-btn {
 
     table.lista tfoot td {
         padding: 0.2rem 0.2rem;
-        /* reduce vertical padding */
         line-height: 0.8;
-        /* tighter line spacing */
         vertical-align: middle;
     }
 
@@ -557,11 +540,8 @@ td>.toggle-btn {
     table.lista tfoot td select,
     table.lista tfoot td button {
         padding: 0.2rem 0.3rem;
-        /* smaller input/select/button padding */
         height: auto;
-        /* allow height to shrink to content */
         font-size: 0.9rem;
-        /* slightly smaller font if needed */
         line-height: 1.2;
     }
 }
@@ -575,6 +555,10 @@ td>.toggle-btn {
 @media only screen and (max-width: 1024px) {
     div {
         margin-left: 0;
+    }
+
+    .maingrid {
+        display: block;
     }
 
     .menu {
@@ -621,19 +605,17 @@ td>.toggle-btn {
         height: fit-content;
     }
 
-
-    .footer,
     #main table thead,
     .balance-label {
         display: none;
     }
 
-    #main table {
-        width: 95vw;
+    .report thead {
+        display: table-header-group !important;
     }
 
-    .lista * {
-        display: block;
+    #main table {
+        width: 95vw;
     }
 
     .lista tr {
@@ -776,7 +758,6 @@ td>.toggle-btn {
 
 .main.config form p {
     display: contents;
-    /* keep labels and inputs aligned in the grid */
 }
 
 .main.config form label {
