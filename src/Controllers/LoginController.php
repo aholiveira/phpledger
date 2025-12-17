@@ -25,7 +25,7 @@ final class LoginController extends AbstractViewController
     {
         $user = $this->app->session()->get('user', '');
         if (!empty($user)) {
-            $defaults = $this->app->dataFactory()->defaults()::getByUsername($user);$defaults = $this->app->dataFactory()::defaults()::getByUsername($user);
+            $defaults = $this->app->dataFactory()::defaults()::getByUsername($user);
             if ($defaults !== null) {
                 $defaults->lastVisitedUri = '';
                 $defaults->lastVisitedAt = time();
