@@ -19,6 +19,8 @@ abstract class User extends AbstractDataObject implements UserObjectInterface
     protected string $password;
     protected string $email = '';
     protected string $fullName = '';
+    protected string $firstName = '';
+    protected string $lastName = '';
     protected string $token = '';
     protected ?string $tokenExpiry;
     protected int $active;

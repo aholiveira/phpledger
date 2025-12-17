@@ -7,6 +7,7 @@
  * @copyright (c) 2017-2022, Antonio Henrique Oliveira
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
  */
+
 namespace PHPLedger\Storage\MySql;
 
 use Exception;
@@ -37,6 +38,8 @@ class MySqlUser extends User
             "id" => "int(3) $notNull DEFAULT 0",
             "username" => "char(100) $notNull",
             "password" => "$char255 $notNull",
+            "firstName" => "$char255 $notNull $defaultEmpty",
+            "lastName" => "$char255 $notNull $defaultEmpty",
             "fullName" => "$char255 $notNull $defaultEmpty",
             "email" => "$char255 $notNull $defaultEmpty",
             "role" => "int(3) $notNull DEFAULT 0",
@@ -49,72 +52,69 @@ class MySqlUser extends User
     }
     public function update(): bool
     {
-        $retval = false;
-        $sql = "SELECT id FROM {$this->tableName()} WHERE id=?";
+        $sql = "INSERT INTO {$this->tableName()}
+        (id, username, password, firstName, lastName, fullName, email, role, token, tokenExpiry, active)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ON DUPLICATE KEY UPDATE
+            username=VALUES(username),
+            password=VALUES(password),
+            firstName=VALUES(firstName),
+            lastName=VALUES(lastName),
+            fullName=VALUES(fullName),
+            email=VALUES(email),
+            role=VALUES(role),
+            token=VALUES(token),
+            tokenExpiry=VALUES(tokenExpiry),
+            active=VALUES(active)";
+
         try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if (!$stmt) {
-                return $retval;
-            }
             if (!isset($this->id)) {
-                return $retval;
+                return false;
             }
-            $stmt->bind_param("i", $this->id);
-            $stmt->execute();
-            $stmt->bind_result($return_id);
-            $sql = (null !== $stmt->fetch() && $return_id == $this->id) ?
-                "UPDATE {$this->tableName()} SET
-                    `username`=?,
-                    `password`=?,
-                    `fullName`=?,
-                    `email`=?,
-                    `role`=?,
-                    `token`=?,
-                    `tokenExpiry`=?,
-                    `active`=?
-                    WHERE `id`=?"
-                :
-                "INSERT INTO {$this->tableName()} (username, password, fullName, email, role, token, tokenExpiry, active, id)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmt->close();
+
+            if (empty($this->tokenExpiry)) {
+                $this->tokenExpiry = null;
+            }
+
             $stmt = MySqlStorage::getConnection()->prepare($sql);
             if ($stmt === false) {
                 throw new mysqli_sql_exception();
             }
-            if (empty($this->tokenExpiry)) {
-                $this->tokenExpiry = null;
-            }
+
             $stmt->bind_param(
-                "sssssisii",
+                "issssssisii",
+                $this->id,
                 $this->userName,
                 $this->password,
+                $this->firstName,
+                $this->lastName,
                 $this->fullName,
                 $this->email,
                 $this->role,
                 $this->token,
                 $this->tokenExpiry,
-                $this->active,
-                $this->id
+                $this->active
             );
-            $retval = $stmt->execute();
-            if ($retval === false) {
-                throw new mysqli_sql_exception();
-            }
-            MySqlStorage::getConnection()->commit();
+            $ok = $stmt->execute();
+            $stmt->close();
+            return $ok;
         } catch (Exception $ex) {
             $this->handleException($ex, $sql);
             if (isset($stmt)) {
                 $stmt->close();
             }
+            return false;
         }
-        return $retval;
     }
+
     public static function getList(array $fieldFilter = []): array
     {
         $where = self::getWhereFromArray($fieldFilter);
         $sql = "SELECT id,
             userName,
             `password`,
+            `firstName`,
+            `lastName`,
             `fullName`,
             email,
             `role`,
@@ -146,6 +146,8 @@ class MySqlUser extends User
         $sql = "SELECT id,
             username AS `userName`,
             `password`,
+            `firstName`,
+            `lastName`,
             `fullName`,
             email,
             `role` AS `role`,
@@ -175,6 +177,8 @@ class MySqlUser extends User
         $sql = "SELECT id,
         `userName`,
         `password`,
+        `firstName`,
+        `lastName`,
         `fullName`,
         `email`,
         `role`,
@@ -204,6 +208,8 @@ class MySqlUser extends User
         $sql = "SELECT id,
         `userName`,
         `password`,
+        `firstName`,
+        `lastName`,
         `fullName`,
         `email`,
         `role`,
