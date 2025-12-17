@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1765929906">
-  <project timestamp="1765929906">
+<coverage generated="1765930051">
+  <project timestamp="1765930051">
     <file name="C:\pessoal\work\contas\src\Application.php">
       <class name="PHPLedger\Application" namespace="global">
         <metrics complexity="33" methods="28" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="59" coveredstatements="0" elements="87" coveredelements="0"/>
