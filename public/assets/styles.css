@@ -493,6 +493,10 @@ td>.toggle-btn {
 
 @media (max-width: 768px) {
 
+    body {
+        font-size: xx-small;
+    }
+
     table.lista thead tr {
         position: absolute;
     }
@@ -541,14 +545,12 @@ td>.toggle-btn {
     table.lista tfoot td button {
         padding: 0.2rem 0.3rem;
         height: auto;
-        font-size: 0.9rem;
-        line-height: 1.2;
     }
 }
 
-@media (max-width: 480px) {
+@media only screen and (max-width: 1280px) {
     body {
-        font-size: 14px;
+        font-size: small;
     }
 }
 
@@ -595,13 +597,6 @@ td>.toggle-btn {
         white-space: nowrap;
     }
 
-    .menu li,
-    .header,
-    .main,
-    .main-footer {
-        font-size: small;
-    }
-
     #main table thead,
     .balance-label {
         display: none;
@@ -644,7 +639,6 @@ td>.toggle-btn {
     }
 
     #main .contas td {
-        font-size: 0.8em;
         text-align: right;
     }
 
