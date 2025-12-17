@@ -47,7 +47,7 @@ final class Application implements ApplicationObjectInterface
 
     public static function create(): self
     {
-        $app = new Application(empty($logfile) ?  Path::combine(ROOT_DIR, "logs", "ledger.log") : $logfile);
+        $app = new Application(Path::combine(ROOT_DIR, "logs", "ledger.log"));
         $config = new Config();
         Config::init(ConfigPath::get());
         $backend = $config->get('storage.type', 'mysql');
