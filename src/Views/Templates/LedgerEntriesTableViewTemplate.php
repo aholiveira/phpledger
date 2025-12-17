@@ -39,12 +39,7 @@ final class LedgerEntriesTableViewTemplate extends AbstractViewTemplate
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td class="balance-label" colspan="9"><?= $label['previous_balance'] ?></td>
-                            <td data-label="<?= $label['previous_balance'] ?>" class="balance">
-                                <?= NumberUtil::normalize($startBalance); ?>
-                            </td>
-                        </tr>
+                        <tr><td class="balance-label" colspan="9"><?= $label['previous_balance'] ?></td><td data-label="<?= $label['previous_balance'] ?>" class="balance"><?= NumberUtil::normalize($startBalance); ?></td></tr>
                         <?php
                         $rowTemplateData = compact('lang', 'label', 'csrf');
                         foreach ($ledgerEntryRows as $row):

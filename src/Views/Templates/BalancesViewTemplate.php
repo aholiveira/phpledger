@@ -55,11 +55,7 @@ final class BalancesViewTemplate extends AbstractViewTemplate
                                         <?php foreach (["deposits", "withdrawals", "balance", "percent"] as $r): ?>
                                             <td class="<?= $r ?>" data-label="<?= $label[$r] ?>"><?= $row['text'][$r] ?></td>
                                         <?php endforeach; ?>
-                                        <td class="entries-list" data-label="<?= $label['entries'] ?>">
-                                            <?php if (!empty($row['href']['entries'])): ?>
-                                                <a title="<?= $label['account_entries'] ?>" href="<?= $row['href']['entries'] ?>"><?= $label['list'] ?></a>
-                                            <?php endif; ?>
-                                        </td>
+                                        <td class="entries-list" data-label="<?= $label['entries'] ?>"><?php if (!empty($row['href']['entries'])): ?><a title="<?= $label['account_entries'] ?>" href="<?= $row['href']['entries'] ?>"><?= $label['list'] ?></a><?php endif; ?></td>
                                     </tr>
                                 <?php
                                 }
