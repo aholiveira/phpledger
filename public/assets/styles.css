@@ -145,7 +145,7 @@ button {
 
 input[name=remarks],
 select {
-    width: 100%;
+    width: max-content;
 }
 
 input[type=number] {
@@ -441,9 +441,11 @@ tr.expense {
 .active {
     text-align: center;
 }
+
 table {
     width: fit-content;
 }
+
 .report tr.row-even {
     background-color: var(--bg-secondary);
 }
@@ -489,9 +491,124 @@ td>.toggle-btn {
     justify-content: center;
 }
 
+@media (max-width: 768px) {
+
+    table.lista,
+    table.lista thead,
+    table.lista tbody,
+    table.lista th,
+    table.lista td {
+        display: block;
+    }
+
+    table.lista thead tr {
+        position: absolute;
+        /*top: -9999px;
+        left: -9999px;*/
+    }
+
+    table.lista tr {
+        margin: 0 0 1rem 0;
+        border: 1px solid #ddd;
+        padding: 0.5rem;
+        display: grid;
+    }
+
+    table.lista td {
+        border: none;
+        position: relative;
+        /*padding-left: 60%;*/
+        white-space: pre-wrap;
+        word-break: break-word;
+        height: min-content;
+    }
+
+    table.lista td:before {
+        left: 0;
+        padding-left: 0.5rem;
+        font-weight: bold;
+        white-space: nowrap;
+        content: attr(data-label);
+    }
+
+    form#datefilter span {
+        width: 100%;
+    }
+
+    .maingrid {
+        display: block;
+    }
+
+    .header.main.config,
+    .main {
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    table.lista tfoot td {
+        padding: 0.2rem 0.2rem;
+        /* reduce vertical padding */
+        line-height: 0.8;
+        /* tighter line spacing */
+        vertical-align: middle;
+    }
+
+    table.lista tfoot td input,
+    table.lista tfoot td select,
+    table.lista tfoot td button {
+        padding: 0.2rem 0.3rem;
+        /* smaller input/select/button padding */
+        height: auto;
+        /* allow height to shrink to content */
+        font-size: 0.9rem;
+        /* slightly smaller font if needed */
+        line-height: 1.2;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        font-size: 14px;
+    }
+}
+
 @media only screen and (max-width: 1024px) {
     div {
         margin-left: 0;
+    }
+
+    .menu {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        position: sticky;
+        top: 0;
+        width: 100%;
+        z-index: 10;
+        background-color: var(--bg-secondary);
+        padding: 0.5em 1em;
+        box-shadow: var(--shadow);
+    }
+
+    .menu ul {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin: 0;
+        padding: 0 0.4em;
+        list-style: none;
+    }
+
+    .menu li {
+        margin: 0.5em 0.5em;
+        white-space: nowrap;
+    }
+
+    .menu li,
+    .header,
+    .main,
+    .main-footer {
+        font-size: small;
     }
 
     .maingrid {
@@ -501,21 +618,9 @@ td>.toggle-btn {
             'main'
             'main-footer'
             'footer';
-        height: max-content;
+        height: fit-content;
     }
 
-    .menu {
-        width: 100vw;
-        position: sticky;
-        align-self: start;
-    }
-
-    .menu li,
-    .header,
-    .main,
-    .main-footer {
-        font-size: small;
-    }
 
     .footer,
     #main table thead,
@@ -545,6 +650,7 @@ td>.toggle-btn {
         font-weight: bold;
         float: left;
         white-space: nowrap;
+        margin-right: 1em;
     }
 
     .data td,
