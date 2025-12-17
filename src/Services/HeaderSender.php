@@ -17,7 +17,7 @@ class HeaderSender implements HeaderSenderInterface
         $this->headerCallable = $headerCallable ?? 'header';
     }
 
-    public function send(string $header, bool $replace = true, int $code = 303): void
+    public function send(string $header, bool $replace = true, int $code = 0): void
     {
         if (!($this->headersSentCallable)()) {
             ($this->headerCallable)($header, $replace, $code);

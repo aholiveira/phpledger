@@ -40,6 +40,10 @@ final class Config implements ConfigurationServiceInterface
     {
         self::$fs = $fs;
     }
+    public static function setInstance(self $instance): void
+    {
+        static::$instance = $instance;
+    }
     /**
      * Initializes the configuration by loading it from the specified file.
      * @param string $configfile The path to the configuration file.

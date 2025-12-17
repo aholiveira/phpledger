@@ -15,6 +15,7 @@ use PHPLedger\Contracts\SessionServiceInterface;
 use PHPLedger\Contracts\TimezoneServiceInterface;
 use PHPLedger\Services\Config;
 use PHPLedger\Services\CSRF;
+use PHPLedger\Services\FileResponseSender;
 use PHPLedger\Services\HeaderSender;
 use PHPLedger\Services\L10n;
 use PHPLedger\Services\Logger;
@@ -44,18 +45,22 @@ final class Application implements ApplicationObjectInterface
     private HeaderSenderInterface $headerSender;
     private TimezoneServiceInterface $timezoneService;
     private CsrfServiceInterface $csrf;
+    private FileResponseSender $fileResponseSender;
 
     public static function create(): self
     {
         $app = new Application(Path::combine(ROOT_DIR, "logs", "ledger.log"));
         $config = new Config();
+        Config::setInstance($config);
         Config::init(ConfigPath::get());
+        $logger = new Logger(Path::combine(ROOT_DIR, "logs", "ledger.log"));
+        Logger::setInstance($logger);
         $backend = $config->get('storage.type', 'mysql');
         $app->setConfig($config);
         $app->setDataFactory(new ObjectFactory($backend));
         $app->setReportFactory(new ReportFactory($backend));
         $app->setSessionManager(new SessionManager());
-        $app->setLogger(new Logger(Path::combine(ROOT_DIR, "logs", "ledger.log")));
+        $app->setLogger($logger);
         $app->setRedirector(new Redirector());
         $app->setL10n(new L10n());
         $app->setHeaderSender(new HeaderSender());
@@ -106,6 +111,14 @@ final class Application implements ApplicationObjectInterface
     public function csrf(): CsrfServiceInterface
     {
         return $this->csrf;
+    }
+    public function headerSender(): HeaderSenderInterface
+    {
+        return $this->headerSender;
+    }
+    public function fileResponseSender(): FileResponseSender
+    {
+        return $this->fileResponseSender ??= new FileResponseSender($this->headerSender());
     }
     public function init(): void
     {

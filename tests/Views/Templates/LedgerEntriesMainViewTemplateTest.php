@@ -40,6 +40,7 @@ beforeEach(function () {
             'balance' => 'balance',
             'previous_balance' => 'previous_balance',
             'save' => 'save',
+            'download_data' => 'download_data'
         ],
         'menu' => [],
         'filterFormData' => [
@@ -70,7 +71,8 @@ beforeEach(function () {
         'transactionsInPeriod' => 'Transactions: 0',
         'footer' => [],
         'filterViewTemplate' => $this->filterViewTemplate,
-        'tableViewTemplate' => $this->tableViewTemplate
+        'tableViewTemplate' => $this->tableViewTemplate,
+        'downloadUrl' => ''
     ];
 });
 

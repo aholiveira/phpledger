@@ -3,7 +3,6 @@
 namespace PHPLedger\Views\Templates;
 
 use PHPLedger\Util\Html;
-use PHPLedger\Util\NumberUtil;
 
 final class ReportViewTemplate extends AbstractViewTemplate
 {
@@ -82,16 +81,27 @@ final class ReportViewTemplate extends AbstractViewTemplate
             <div class="maingrid">
                 <?php $ui->menu($label, $menu); ?>
                 <div id="header" class="header main config">
-                    <?php (new ReportViewFormTemplate)->render(compact('periodOptions', 'filterFields', 'period', 'lang', 'label')); ?>
+                    <?php $reportViewFormTemplate->render(compact(
+                        'periodOptions',
+                        'filterFields',
+                        'period',
+                        'lang',
+                        'label',
+                    )); ?>
                 </div>
                 <div class="main" id="main">
-                    <div class="viewSelector" id="viewSelector">
-                        <button type="button" onclick="toggle('graph');" alt="toggle graph">Show graph</button>
-                        <button type="button" onclick="toggle('table');" alt="toggle table">Show table</button>
-                    </div>
-                    <div class="graph" id="graph" style="display: none; width: 99%"></div>
-                    <div class="table report_month" id="table" style="display: inherit; width: 99%">
-                        <?php (new ReportViewTableTemplate)->render(compact('label', 'reportData', 'columnLabels',)); ?>
+                    <div class="table report_month" id="table">
+                        <div class="csv-download">
+                            <a href="<?= htmlspecialchars($downloadUrl) ?>"><small><?= $label['download_data'] ?><img src="assets/file-csv-solid-full.svg" alt="CSV"></small></a>
+                            <a href="<?= htmlspecialchars($downloadRawUrl) ?>"><small><?= $label['download_raw_data'] ?><img src="assets/file-csv-solid-full.svg" alt="CSV"></small></a>
+                        </div>
+                        <?php $reportViewTableTemplate->render(compact(
+                            'label',
+                            'reportData',
+                            'columnLabels',
+                            'reportViewTableTopLevelTemplate',
+                            'reportViewTableChildRowTemplate',
+                        )); ?>
                     </div>
                 </div>
                 <?php $ui->footer($label, $footer); ?>

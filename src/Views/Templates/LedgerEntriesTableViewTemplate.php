@@ -20,6 +20,9 @@ final class LedgerEntriesTableViewTemplate extends AbstractViewTemplate
 ?>
         <div class="table-wrapper">
             <form name="mov" method="POST" lang="<?= $lang ?>">
+                <div class="csv-download">
+                    <a href="<?= htmlspecialchars($downloadUrl ?? '') ?>"><small><?= $label['download_data'] ?><img src="assets/file-csv-solid-full.svg" alt="CSV" ></small></a>
+                </div>
                 <table class="lista ledger_entry_list">
                     <thead>
                         <tr>

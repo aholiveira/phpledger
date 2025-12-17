@@ -1,20 +1,18 @@
 <?php
 
-namespace PHPLedger\Views;
+namespace PHPLedger\Views\Templates;
 
-use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Util\Html;
+use PHPLedger\Views\Templates\AbstractViewTemplate;
 
-class ApplicationErrorView
+final class ApplicationErrorViewTemplate extends AbstractViewTemplate
 {
-    private ApplicationObjectInterface $app;
-    public function render(ApplicationObjectInterface $app, string $message): void
+    public function render(array $data): void
     {
-        $this->app = $app;
-        $pagetitle = $this->app->l10n()->l("Application error");
+        extract($data, EXTR_SKIP);
 ?>
         <!DOCTYPE html>
-        <html lang="<?= $this->app->l10n()->html() ?>">
+        <html lang="<?= $lang ?>">
 
         <head>
             <title><?= Html::title($pagetitle) ?></title>
@@ -25,7 +23,7 @@ class ApplicationErrorView
             <div class="maingrid">
                 <main>
                     <div class="main" id="main">
-                        <p>Application error: <?= htmlspecialchars($message); ?>
+                        <p>Application error: <?= htmlspecialchars($message) ?></p>
                         <p>Check your config.json file</p>
                     </div>
                 </main>
@@ -33,7 +31,6 @@ class ApplicationErrorView
         </body>
 
         </html>
-
 <?php
     }
 }

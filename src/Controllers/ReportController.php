@@ -4,6 +4,11 @@ namespace PHPLedger\Controllers;
 
 use DateTimeImmutable;
 use PHPLedger\Reports\Builders\CategorySummaryReportBuilder;
+use PHPLedger\Util\CsvBuilder;
+use PHPLedger\Views\Templates\ReportViewFormTemplate;
+use PHPLedger\Views\Templates\ReportViewTableChildRowTemplate;
+use PHPLedger\Views\Templates\ReportViewTableTemplate;
+use PHPLedger\Views\Templates\ReportViewTableTopLevelTemplate;
 use PHPLedger\Views\Templates\ReportViewTemplate;
 
 final class ReportController extends AbstractViewController
@@ -24,11 +29,14 @@ final class ReportController extends AbstractViewController
         $raw = $this->app->reportFactory()::categorySummary()->fetch($from, $to, $period);
         $builder = new CategorySummaryReportBuilder();
         $reportData = $builder->build($raw, $columns, $period, $from, $to);
-        if (strtolower($this->request->input('subaction', '')) === 'download') {
+        $export = strtolower($this->request->input('export', ''));
+        if ($export === 'csv') {
             $this->reportDownload($reportData);
+            return;
         }
-        if (strtolower($this->request->input('subaction', '')) === 'download_raw') {
+        if ($export === 'csv_raw') {
             $this->rawDataDownload($raw['category']);
+            return;
         }
         $this->uiData['label'] = array_merge($this->uiData['label'], $this->buildL10nLabels(
             $l10n,
@@ -44,6 +52,8 @@ final class ReportController extends AbstractViewController
                 'period',
                 'download_report_csv',
                 'download_raw_csv',
+                'download_data',
+                'download_raw_data',
             ]
         ));
         (new ReportViewTemplate())->render(array_merge($this->uiData, [
@@ -57,43 +67,31 @@ final class ReportController extends AbstractViewController
             ],
             'period'       => $period,
             'action'       => $this->request->input('action', ''),
+            'downloadUrl' => "index.php?" . http_build_query(array_merge($this->request->all(), ['export' => 'csv'])),
+            'downloadRawUrl' => "index.php?" . http_build_query(array_merge($this->request->all(), ['export' => 'csv_raw'])),
+            'reportViewFormTemplate' => new ReportViewFormTemplate(),
+            'reportViewTableTemplate' => new ReportViewTableTemplate(),
+            'reportViewTableTopLevelTemplate' => new ReportViewTableTopLevelTemplate(),
+            'reportViewTableChildRowTemplate' => new ReportViewTableChildRowTemplate(),
         ]));
     }
 
-    public function reportDownload(array $data): void
+    private function reportDownload(array $data): void
     {
-        header('Content-Type: text/csv');
-        header('Content-Disposition: attachment; filename="report.csv"');
-        $out = fopen('php://output', 'w');
-
-        // Column headers
-        fputcsv($out, array_merge(['Category'], $data['columns'], ['Average', 'Total']), ',', '"', '\\');
-
+        $headers = array_merge(['Category'], $data['columns'], ['Average', 'Total']);
+        $rows = [];
         foreach ($data['groups'] as $g) {
-            fputcsv($out, array_merge([$g['label']], array_values($g['collapsedValues']), [$g['collapsedAverage'], $g['collapsedTotal']]), ',', '"', '\\');
+            $rows[] = array_merge([$g['label']], array_values($g['collapsedValues']), [$g['collapsedAverage'], $g['collapsedTotal']]);
             foreach ($g['rows'] as $r) {
-                fputcsv($out, array_merge(['→ ' . $r['label']], array_values($r['values']), [$r['average'], $r['total']]), ',', '"', '\\');
+                $rows[] = array_merge(['→ ' . $r['label']], array_values($r['values']), [$r['average'], $r['total']]);
             }
         }
-        fclose($out);
-        exit;
+        $this->app->fileResponseSender()->csv(CsvBuilder::build($headers, $rows, ','), 'report.csv');
     }
 
-    public function rawDataDownload(array $rawData): void
+    private function rawDataDownload(array $rawData): void
     {
-        header('Content-Type: text/csv');
-        header('Content-Disposition: attachment; filename="raw_report.csv"');
-        $out = fopen('php://output', 'w');
-
-        if (!empty($rawData)) {
-            fputcsv($out, array_keys($rawData[0]), ',', '"', '\\'); // header
-            foreach ($rawData as $row) {
-                fputcsv($out, $row, ',', '"', '\\');
-            }
-        }
-
-        fclose($out);
-        exit;
+        $this->app->fileResponseSender()->csv(CsvBuilder::build(array_keys($rawData[0]), $rawData), "raw_report.csv");
     }
 
     private function resolvePeriod(string $period): array

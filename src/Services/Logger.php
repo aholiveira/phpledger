@@ -11,13 +11,17 @@ class Logger implements LoggerServiceInterface
     private LogLevel $logLevel;
     private static ?self $instance = null;
 
+    public static function setInstance(self $instance): void
+    {
+        static::$instance = $instance;
+    }
     /**
      * Get the singleton instance of the Logger.
      * @return self
      */
     public static function instance(): self
     {
-        return self::$instance ??= new self(ROOT_DIR . "/logs/ledger.log");
+        return self::$instance ??= new self("");
     }
     /**
      * Initialize the Logger singleton with a specific log file and level.
@@ -117,6 +121,9 @@ class Logger implements LoggerServiceInterface
     private function writeLog(LogLevel $level, string $message, string $prefix = ""): void
     {
         if ($level->value > $this->logLevel->value) {
+            return;
+        }
+        if (empty($this->logFile)) {
             return;
         }
         $prefix = trim($prefix);

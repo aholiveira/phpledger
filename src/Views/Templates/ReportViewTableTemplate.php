@@ -23,8 +23,8 @@ final class ReportViewTableTemplate extends AbstractViewTemplate
             </thead>
             <tbody>
                 <?php foreach ($reportData['groups'] as $g): ?>
-                    <?php (new ReportViewTableTopLevelTemplate)->render(compact('g', 'reportData')); ?>
-                    <?php (new ReportViewTableChildRowTemplate)->render(compact('g', 'reportData')); ?>
+                    <?php $reportViewTableTopLevelTemplate->render(compact('g', 'reportData')); ?>
+                    <?php $reportViewTableChildRowTemplate->render(compact('g', 'reportData')); ?>
                 <?php endforeach ?>
             </tbody>
             <tfoot>
