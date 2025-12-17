@@ -559,6 +559,13 @@ td>.toggle-btn {
 
     .maingrid {
         display: block;
+        grid-template-areas:
+            'menu'
+            'header'
+            'main'
+            'main-footer'
+            'footer';
+        height: fit-content;
     }
 
     .menu {
@@ -593,16 +600,6 @@ td>.toggle-btn {
     .main,
     .main-footer {
         font-size: small;
-    }
-
-    .maingrid {
-        grid-template-areas:
-            'menu'
-            'header'
-            'main'
-            'main-footer'
-            'footer';
-        height: fit-content;
     }
 
     #main table thead,
