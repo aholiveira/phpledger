@@ -26,11 +26,28 @@ use PHPLedger\Application;
 use PHPLedger\Http\HttpRequest;
 use PHPLedger\Routing\Router;
 
+
 $app = Application::create();
 $app->init();
 $router = new Router($app);
 $request = new HttpRequest();
 $session = $app->session();
+
+
+// Global error handling
+set_exception_handler(function (\Throwable $t) use ($app, $router) {
+    $app->setErrorMessage($t->getMessage());
+    $router->handleRequest($app, 'application_error');
+});
+
+register_shutdown_function(function () use ($app, $router) {
+    $error = error_get_last();
+    if ($error !== null && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR])) {
+        $app->setErrorMessage("Fatal error: {$error['message']} in {$error['file']} on line {$error['line']}");
+        $router->handleRequest($app, 'application_error');
+    }
+});
+
 try {
     $frontend = "index.php?action=";
     $action = strtolower($request->input('action', 'login'));
@@ -51,8 +68,7 @@ try {
         $session->refreshExpiration();
     }
     $router->handleRequest($app, $action, $request);
-    exit;
-} catch (Exception $e) {
+} catch (Throwable $e) {
     $app->setErrorMessage($e->getMessage());
     $router->handleRequest($app, 'application_error');
 }
