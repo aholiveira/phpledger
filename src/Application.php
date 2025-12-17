@@ -15,6 +15,10 @@ use PHPLedger\Contracts\TimezoneServiceInterface;
 use PHPLedger\Services\FileResponseSender;
 use PHPLedger\Storage\ReportFactory;
 
+/**
+ * Suppress message too many parameters. This is intended.
+ * @SuppressWarnings("php:S107")
+ */
 final class Application implements ApplicationObjectInterface
 {
     private string $errorMessage = "";
@@ -31,10 +35,6 @@ final class Application implements ApplicationObjectInterface
     private CsrfServiceInterface $csrf;
     private FileResponseSender $fileResponseSender;
 
-    /**
-     * Suppress message too many parameters. This is intended.
-     * @SuppressWarnings("php:S107")
-     */
     public function __construct(
         ConfigurationServiceInterface $config,
         DataObjectFactoryInterface $dataFactory,

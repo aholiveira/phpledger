@@ -6,6 +6,7 @@ use PHPLedger\Contracts\ApplicationObjectInterface;
 use PHPLedger\Contracts\L10nServiceInterface;
 use PHPLedger\Contracts\RequestInterface;
 use PHPLedger\Contracts\ViewControllerInterface;
+use PHPLedger\Domain\User;
 use PHPLedger\Util\UiBuilder;
 use PHPLedger\Version;
 
@@ -45,7 +46,7 @@ abstract class AbstractViewController implements ViewControllerInterface
             'open',
             'close',
             'id',
-            'my_profile'
+            'my_profile',
         ];
         return $this->buildL10nLabels($l10n, $base);
     }
@@ -65,6 +66,10 @@ abstract class AbstractViewController implements ViewControllerInterface
         $session = $app->session();
         $expires = date("Y-m-d H:i:s", $session->get('expires', time()));
         $isAdmin = $session->get('isAdmin', false);
+        $user = $this->app->dataFactory()->user()::getByUsername($this->app->session()->get('user', ''));
+        if ($user instanceof User) {
+            $this->uiData['label']['hello'] = $l10n->l('hello', $user->getProperty('firstName', ''));
+        }
         $menuActions = [
             'ledger_entries',
             'balances',

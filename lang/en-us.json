@@ -143,5 +143,6 @@
     "full_name": "Full name",
     "display_name": "Display name",
     "verify_password": "Verify password",
-    "password_mismatch": "Passwords do not match"
+    "password_mismatch": "Passwords do not match",
+    "hello":  "Hello %s,"
 }
