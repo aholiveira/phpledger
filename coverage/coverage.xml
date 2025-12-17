@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1765930051">
-  <project timestamp="1765930051">
+<coverage generated="1765930236">
+  <project timestamp="1765930236">
     <file name="C:\pessoal\work\contas\src\Application.php">
       <class name="PHPLedger\Application" namespace="global">
-        <metrics complexity="33" methods="28" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="59" coveredstatements="0" elements="87" coveredelements="0"/>
+        <metrics complexity="32" methods="28" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="59" coveredstatements="0" elements="87" coveredelements="0"/>
       </class>
-      <line num="48" type="method" name="create" visibility="public" complexity="2" crap="6" count="0"/>
+      <line num="48" type="method" name="create" visibility="public" complexity="1" crap="2" count="0"/>
       <line num="50" type="stmt" count="0"/>
       <line num="51" type="stmt" count="0"/>
       <line num="52" type="stmt" count="0"/>
