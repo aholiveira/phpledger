@@ -7,7 +7,6 @@ use PHPLedger\Storage\ReportFactory;
 
 interface ApplicationObjectInterface
 {
-    public static function create(): self;
     public function config(): ConfigurationServiceInterface;
     public function dataFactory(): DataObjectFactoryInterface;
     public function reportFactory(): ReportFactory;
