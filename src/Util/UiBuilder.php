@@ -6,10 +6,13 @@ use PHPLedger\Contracts\UiBuilderInterface;
 
 final class UiBuilder implements UiBuilderInterface
 {
-    public function menu(array $text, array $menuLinks): void
+    public function menu(array $text, array $menuLinks, ?string $greeting = null): void
     {
 ?>
         <aside class="menu">
+        <?php if (($displayGreeting = $greeting ?? ($text['hello'] ?? '')) !== ''): ?>
+            <div class="menu-greeting"><?= htmlspecialchars($displayGreeting) ?></div>
+        <?php endif ?>
             <nav>
                 <ul>
                     <?php foreach ($menuLinks as $action => $link): ?>
