@@ -491,63 +491,6 @@ td>.toggle-btn {
     justify-content: center;
 }
 
-@media (max-width: 768px) {
-
-    body {
-        font-size: xx-small;
-    }
-
-    table.lista thead tr {
-        position: absolute;
-    }
-
-    table.lista tr {
-        margin: 0 0 0.6rem 0;
-        border: 1px solid #ddd;
-        padding: 0.1rem;
-        display: grid;
-    }
-
-    table.lista td {
-        border: none;
-        position: relative;
-        white-space: pre-wrap;
-        word-break: break-word;
-        height: min-content;
-    }
-
-    table.lista td:before {
-        left: 0;
-        padding-left: 0.5rem;
-        font-weight: bold;
-        white-space: nowrap;
-        content: attr(data-label);
-    }
-
-    form#datefilter span {
-        width: 100%;
-    }
-
-    .header.main.config,
-    .main {
-        width: 100%;
-        margin-top: 1rem;
-    }
-
-    table.lista tfoot td {
-        padding: 0.2rem 0.2rem;
-        line-height: 0.8;
-        vertical-align: middle;
-    }
-
-    table.lista tfoot td input,
-    table.lista tfoot td select,
-    table.lista tfoot td button {
-        padding: 0.2rem 0.3rem;
-        height: auto;
-    }
-}
-
 @media only screen and (max-width: 1280px) {
     body {
         font-size: small;
@@ -644,6 +587,63 @@ td>.toggle-btn {
 
     #main .lista tr td.checkbox {
         text-align: right;
+    }
+}
+
+@media (max-width: 768px) {
+
+    body {
+        font-size: xx-small;
+    }
+
+    table.lista thead tr {
+        position: absolute;
+    }
+
+    table.lista tr {
+        margin: 0 0 0.6rem 0;
+        border: 1px solid #ddd;
+        padding: 0.1rem;
+        display: grid;
+    }
+
+    table.lista td {
+        border: none;
+        position: relative;
+        white-space: pre-wrap;
+        word-break: break-word;
+        height: min-content;
+    }
+
+    table.lista td:before {
+        left: 0;
+        padding-left: 0.5rem;
+        font-weight: bold;
+        white-space: nowrap;
+        content: attr(data-label);
+    }
+
+    form#datefilter span {
+        width: 100%;
+    }
+
+    .header.main.config,
+    .main {
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    table.lista tfoot td {
+        padding: 0.2rem 0.2rem;
+        line-height: 0.8;
+        vertical-align: middle;
+    }
+
+    table.lista tfoot td input,
+    table.lista tfoot td select,
+    table.lista tfoot td button {
+        padding: 0.2rem 0.3rem;
+        height: auto;
     }
 }
 
