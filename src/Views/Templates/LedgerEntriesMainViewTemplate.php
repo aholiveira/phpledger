@@ -36,7 +36,8 @@ final class LedgerEntriesMainViewTemplate extends AbstractViewTemplate
                 'filters',
                 'csrf',
                 'rowViewTemplate',
-                'formViewTemplate'
+                'formViewTemplate',
+                'downloadUrl'
             )); ?>
         </div>
         <div class="main-footer">

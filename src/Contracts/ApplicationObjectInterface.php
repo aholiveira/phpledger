@@ -2,6 +2,7 @@
 
 namespace PHPLedger\Contracts;
 
+use PHPLedger\Services\FileResponseSender;
 use PHPLedger\Storage\ReportFactory;
 
 interface ApplicationObjectInterface
@@ -15,6 +16,8 @@ interface ApplicationObjectInterface
     public function session(): SessionServiceInterface;
     public function redirector(): RedirectorServiceInterface;
     public function csrf(): CsrfServiceInterface;
+    public function headerSender(): HeaderSenderInterface;
+    public function fileResponseSender(): FileResponseSender;
     public function setErrorMessage(string $message): void;
     public function clearErrorMessage(): void;
     public function getErrorMessage(): string;

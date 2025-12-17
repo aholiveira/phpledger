@@ -31,70 +31,41 @@ function removeDirectoryRecursively(string $dir): void
     rmdir($dir);
 }
 
-it('writes an info log entry', function () {
-    $logger = new Logger($this->logFile);
-    $logger->info('Test info', 'PFX');
-    $content = file_get_contents($this->logFile);
-    expect($content)->toContain('[INFO]');
-    expect($content)->toContain('[PFX]');
-    expect($content)->toContain('Test info');
-});
-
-it('writes an warning log entry', function () {
-    $logger = new Logger($this->logFile);
-    $logger->warning('Test info', 'PFX');
-    $content = file_get_contents($this->logFile);
-    expect($content)->toContain('[WARNING]');
-    expect($content)->toContain('[PFX]');
-    expect($content)->toContain('Test info');
-});
-
-it('writes a notice log entry', function () {
-    $logger = new Logger($this->logFile);
-    $logger->notice('Test info', 'PFX');
-    $content = file_get_contents($this->logFile);
-    expect($content)->toContain('[NOTICE]');
-    expect($content)->toContain('[PFX]');
-    expect($content)->toContain('Test info');
-});
-
-it('writes a debug log entry', function () {
+it('writes log entries for all levels', function () {
     $logger = new Logger($this->logFile, LogLevel::DEBUG);
-    $logger->debug('Test debug', 'PFX');
+    $logger->debug('Debug message', 'DBG');
+    $logger->info('Info message', 'INF');
+    $logger->notice('Notice message', 'NTC');
+    $logger->warning('Warning message', 'WRN');
+    $logger->error('Error message', 'ERR');
+
     $content = file_get_contents($this->logFile);
     expect($content)->toContain('[DEBUG]');
-    expect($content)->toContain('[PFX]');
-    expect($content)->toContain('Test debug');
+    expect($content)->toContain('[DBG]');
+    expect($content)->toContain('Debug message');
+    expect($content)->toContain('[INFO]');
+    expect($content)->toContain('[INF]');
+    expect($content)->toContain('Info message');
+    expect($content)->toContain('[NOTICE]');
+    expect($content)->toContain('[NTC]');
+    expect($content)->toContain('Notice message');
+    expect($content)->toContain('[WARNING]');
+    expect($content)->toContain('[WRN]');
+    expect($content)->toContain('Warning message');
+    expect($content)->toContain('[ERROR]');
+    expect($content)->toContain('[ERR]');
+    expect($content)->toContain('Error message');
 });
 
-it('creates log directory automatically', function () {
-    $file = Path::combine(__DIR__, 'tmp', 'auto', 'logs', 'auto.log');
-    $dir = dirname($file);
-    if (is_dir($dir)) {
-        array_map('unlink', glob($dir . DIRECTORY_SEPARATOR . '*'));
-        rmdir($dir);
-    }
-    $logger = new Logger($file);
-    $logger->info('Auto dir');
-    expect(is_file($file))->toBeTrue();
-});
-
-it('writes prefix as dash when empty', function () {
+it('writes dump output correctly', function () {
     $logger = new Logger($this->logFile);
-    $logger->info('Message', '');
-    $content = file_get_contents($this->logFile);
-    expect($content)->toContain('[-] Message');
-});
-
-it('writes dump output', function () {
-    $logger = new Logger($this->logFile);
-    $logger->dump(['a' => 1]);
+    $logger->dump(['key' => 'value']);
     $content = file_get_contents($this->logFile);
     expect($content)->toContain('Array');
-    expect($content)->toContain('[a] => 1');
+    expect($content)->toContain('[key] => value');
 });
 
-it('writes stack dump', function () {
+it('writes stack trace correctly', function () {
     $logger = new Logger($this->logFile);
     $logger->dumpStack();
     $content = file_get_contents($this->logFile);
@@ -102,59 +73,59 @@ it('writes stack dump', function () {
     expect($content)->toContain('function');
 });
 
-it('honours log level and skips lower severity', function () {
+it('skips logging below the current log level', function () {
     $logger = new Logger($this->logFile, LogLevel::ERROR);
-    $logger->error('This line should be logged');
-    $logger->debug('This line should not be logged');
+    $logger->error('Logged error');
+    $logger->info('Skipped info');
     $content = file_get_contents($this->logFile);
-    expect($content)->not->toContain('This line should not be logged');
-    expect($content)->toContain('This line should be logged');
+    expect($content)->toContain('Logged error');
+    expect($content)->not->toContain('Skipped info');
 });
 
-it('singleton instance returns Logger object', function () {
-    $logger1 = Logger::instance();
-    $logger2 = Logger::instance();
-    expect($logger1)->toBeInstanceOf(Logger::class);
-    expect($logger1)->toBe($logger2); // same instance
-});
-
-it('init sets a new singleton instance', function () {
-    $file = Path::combine($this->logDir, 'init.log');
+it('singleton instance behaves correctly', function () {
+    $file = Path::combine($this->logDir, 'singleton.log');
     Logger::init($file, LogLevel::INFO);
-    $logger = Logger::instance();
-    $logger->info('Init test');
+    $instance1 = Logger::instance();
+    $instance2 = Logger::instance();
+    expect($instance1)->toBeInstanceOf(Logger::class);
+    expect($instance1)->toBe($instance2);
+
+    $instance1->info('Singleton test');
     $content = file_get_contents($file);
-    expect($content)->toContain('Init test');
+    expect($content)->toContain('Singleton test');
 });
 
-it('setLogLevel updates the current log level', function () {
+it('setLogLevel changes effective level', function () {
     $logger = new Logger($this->logFile, LogLevel::ERROR);
     $logger->setLogLevel(LogLevel::DEBUG);
-    $logger->debug('Debug after level change');
+    $logger->debug('Debug message');
     $content = file_get_contents($this->logFile);
-    expect($content)->toContain('Debug after level change');
+    expect($content)->toContain('Debug message');
 });
 
-it('formats log entry correctly and creates directory if missing', function () {
-    $file = Path::combine(__DIR__, 'tmp', 'dirtest', 'entry.log');
+it('creates directory if missing when writing log', function () {
+    $file = Path::combine(__DIR__, 'tmp', 'autodir', 'log.log');
     $dir = dirname($file);
-
-    // ensure directory does not exist
     if (is_dir($dir)) {
         array_map('unlink', glob($dir . DIRECTORY_SEPARATOR . '*'));
         rmdir($dir);
     }
-
-    $logger = new Logger($file, LogLevel::DEBUG);
-    $logger->info('Entry test', 'PREFIX');
-
-    // check directory was created
+    $logger = new Logger($file);
+    $logger->info('Directory creation test');
     expect(is_dir($dir))->toBeTrue();
-
-    // check log file exists
     expect(is_file($file))->toBeTrue();
+});
 
-    // check log entry format
-    $content = file_get_contents($file);
-    expect($content)->toMatch('/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\] \[INFO\] \[PREFIX\] Entry test/');
+it('formats log entry correctly with timestamp, level, and prefix', function () {
+    $logger = new Logger($this->logFile);
+    $logger->info('Format test', 'PREFIX');
+    $content = file_get_contents($this->logFile);
+    expect($content)->toMatch('/\[\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}\] \[INFO\] \[PREFIX\] Format test/');
+});
+
+it('uses dash as prefix when empty', function () {
+    $logger = new Logger($this->logFile);
+    $logger->info('No prefix', '');
+    $content = file_get_contents($this->logFile);
+    expect($content)->toContain('[-] No prefix');
 });

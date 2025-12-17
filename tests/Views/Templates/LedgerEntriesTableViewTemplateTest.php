@@ -24,7 +24,8 @@ beforeEach(function () {
             'amount' => 'Amount',
             'remarks' => 'Remarks',
             'balance' => 'Balance',
-            'previous_balance' => 'Previous Balance'
+            'previous_balance' => 'Previous Balance',
+            'download_data' => 'download_data',
         ],
         'csrf' => '<input type="hidden" name="csrf_token" value="123">',
         'ledgerEntryRows' => [

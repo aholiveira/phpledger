@@ -19,6 +19,7 @@ use PHPLedger\Contracts\RequestInterface;
 use PHPLedger\Domain\Defaults;
 use PHPLedger\Domain\EntryCategory;
 use PHPLedger\Domain\LedgerEntry;
+use PHPLedger\Util\CsvBuilder;
 use PHPLedger\Util\DateParser;
 use PHPLedger\Util\Html;
 use PHPLedger\Util\NumberUtil;
@@ -52,6 +53,14 @@ final class LedgerEntriesController extends AbstractViewController
         $filteredInput = $this->processInput($this->request->all());
         $filters = $this->getFilters($filteredInput);
         [$savedEntryId, $success, $errorMessage] = $this->processRequest($this->request, $filteredInput);
+        $query = $this->request->all();
+        $query['export'] = 'csv';
+        $downloadUrl = 'index.php?' . http_build_query($query);
+        $export = strtolower((string)$this->request->input('export', ''));
+        if ($export === 'csv') {
+            $this->ledgerEntriesDownload($filters);
+            return;
+        }
         ob_start();
         $preloaderView = new LedgerEntriesPreloaderTemplate();
         $templateData = array_merge($this->uiData, [
@@ -82,7 +91,8 @@ final class LedgerEntriesController extends AbstractViewController
             'actions',
             'save',
             'deposit',
-            'withdraw'
+            'withdraw',
+            'download_data',
         ]));
         $filterFormData = $this->prepareFilterFormData($filters);
         $ledgerFilters = $this->getLedgerFilters($filters);
@@ -107,6 +117,7 @@ final class LedgerEntriesController extends AbstractViewController
         $templateData = array_merge(
             $templateData,
             [
+                'downloadUrl' => $downloadUrl,
                 'isEditing' => $this->isEditing,
                 'editId' => $filters['editId'],
                 'filteredInput' => $filters,
@@ -127,6 +138,40 @@ final class LedgerEntriesController extends AbstractViewController
         $view = new LedgerEntriesMainViewTemplate;
         $view->render($templateData);
     }
+
+    private function ledgerEntriesDownload(array $filters): void
+    {
+        $ledgerEntry = $this->dataFactory->ledgerentry();
+        $ledgerFilters = $this->getLedgerFilters($filters);
+        $dataRows = $ledgerEntry->getList($ledgerFilters);
+        $headers = [
+            $this->app->l10n()->l('id'),
+            $this->app->l10n()->l('date'),
+            $this->app->l10n()->l('category'),
+            $this->app->l10n()->l('account'),
+            $this->app->l10n()->l('currency'),
+            $this->app->l10n()->l('direction'),
+            $this->app->l10n()->l('amount'),
+            $this->app->l10n()->l('remarks')
+        ];
+        $rows = [];
+        $withdrawal = $this->app->l10n()->l('withdraw');
+        $deposit = $this->app->l10n()->l('deposit');
+        foreach ($dataRows as $r) {
+            $rows[] = [
+                $r->id,
+                $r->entryDate,
+                $r->category->description,
+                $r->account->name,
+                $r->currency->description,
+                $r->direction === 1 ? $deposit : $withdrawal,
+                $r->currencyAmount,
+                $r->remarks
+            ];
+        }
+        $this->app->fileResponseSender()->csv(CsvBuilder::build($headers, $rows), 'ledger_entries.csv');
+    }
+
     private function prepareFilterFormData(array $filters): array
     {
         $filterFormData = [];

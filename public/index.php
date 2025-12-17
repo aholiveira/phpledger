@@ -51,6 +51,7 @@ try {
         $session->refreshExpiration();
     }
     $router->handleRequest($app, $action, $request);
+    exit;
 } catch (Exception $e) {
     $app->setErrorMessage($e->getMessage());
     $router->handleRequest($app, 'application_error');
