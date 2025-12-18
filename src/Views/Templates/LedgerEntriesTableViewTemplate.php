@@ -19,10 +19,10 @@ final class LedgerEntriesTableViewTemplate extends AbstractViewTemplate
         extract($data, EXTR_SKIP);
 ?>
         <div class="table-wrapper">
+            <div class="csv-download">
+                <a href="<?= htmlspecialchars($downloadUrl ?? '') ?>"><small><?= $label['download_data'] ?><img src="assets/file-csv-solid-full.svg" alt="CSV"></small></a>
+            </div>
             <form name="mov" method="POST" lang="<?= $lang ?>">
-                <div class="csv-download">
-                    <a href="<?= htmlspecialchars($downloadUrl ?? '') ?>"><small><?= $label['download_data'] ?><img src="assets/file-csv-solid-full.svg" alt="CSV" ></small></a>
-                </div>
                 <table class="lista ledger_entry_list">
                     <thead>
                         <tr>
