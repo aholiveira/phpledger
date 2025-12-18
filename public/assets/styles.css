@@ -200,7 +200,7 @@ input[type=submit]:hover {
         'menu footer';
     grid-template-columns: max-content 1fr;
     grid-template-rows: min-content 1fr auto auto;
-    gap: 0.5em;
+    gap: 0 0.5em;
     height: 100%;
     padding-top: 1em;
 }
@@ -280,6 +280,7 @@ div#login td {
     border-radius: var(--border-radius);
     box-shadow: var(--shadow);
     padding: 1em;
+    margin-bottom: 0.5em;
 }
 
 .menu {
@@ -344,6 +345,8 @@ div#login td {
     justify-content: flex-end;
     margin-bottom: 10px;
     margin-left: 0.2em;
+    position: sticky;
+    top: 0;
 }
 
 .csv-download a {
@@ -384,9 +387,12 @@ div.report_year {
     z-index: 2;
 }
 
+#main table thead {
+    top: 0;
+}
+
 #main table tfoot {
-    bottom: 0;
-    z-index: 1;
+    bottom: -0.1em;
 }
 
 .id,

@@ -116,7 +116,7 @@ final class CategorySummaryReportBuilder
             'values' => array_fill_keys($this->columns, 0.0),
             'total' => 0.0,
             'average' => 0.0,
-            'link' => $this->makeLink($groupId, $this->from, $this->to),
+            'link' => $this->makeLink($catId, $this->from, $this->to),
             'columnLinks' => [],
         ];
     }

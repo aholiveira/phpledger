@@ -31,9 +31,9 @@ final class EntryCategoryFormController extends AbstractViewController
         $template->render(array_merge($this->uiData, [
             'title'        => 'Entry Category',
             'text'         => [
-                'id'          => isset($object->id) ? $object->id : "",
+                'id'          => isset($object->id) ? $object->id : '',
                 'description' => $object->description ?? '',
-                'active'      => isset($object->active) && $object->active ? 'checked' : ''
+                'active'      => ($object->id ?? 0) === 0 || ($object->active ?? 1) ? 'checked' : ''
             ],
             'parentRows'   => $parentRows,
         ]));
