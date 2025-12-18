@@ -145,6 +145,6 @@
     "display_name": "Nome a apresentar",
     "verify_password": "Confirmar palavra-passe",
     "password_mismatch": "As palavras-passe não coincidem",
-    "hello": "Olá %s,"
+    "hello": "Olá, %s"
 
 }
