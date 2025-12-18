@@ -3,8 +3,8 @@
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Contracts\Domain\UserObjectInterface;
+use PHPLedger\Exceptions\PHPLedgerException;
 use PHPLedger\Views\Templates\UserProfileViewTemplate;
-use RuntimeException;
 
 final class UserProfileController extends AbstractViewController
 {
@@ -53,7 +53,7 @@ final class UserProfileController extends AbstractViewController
     private function handlePost(?UserObjectInterface $user): void
     {
         if ($user === null) {
-            throw new RuntimeException("Invalid user");
+            throw new PHPLedgerException("Invalid user");
         }
         $data = $this->request->all();
         $user->setProperty('firstName', $data['firstname'] ?? '');
@@ -64,12 +64,12 @@ final class UserProfileController extends AbstractViewController
         $verify = $data['verifyPassword'] ?? '';
         if ($password !== '' || $verify !== '') {
             if ($password !== $verify) {
-                throw new RuntimeException($this->app->l10n()->l('password_mismatch'));
+                throw new PHPLedgerException($this->app->l10n()->l('password_mismatch'));
             }
             $user->setPassword($password);
         }
         if (!$user->update()) {
-            throw new RuntimeException("Unknown error while updating data");
-        };
+            throw new PHPLedgerException("Unknown error while updating data");
+        }
     }
 }
