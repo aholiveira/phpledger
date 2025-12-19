@@ -25,29 +25,16 @@ final class LoginViewTemplate extends AbstractViewTemplate
         </head>
 
         <body onload="document.getElementById('username').focus();">
-            <div id="login">
+            <div id="login" class="login-form">
                 <h1><?= htmlspecialchars($pagetitle) ?></h1>
-                <form method="POST" action="?lang=<?= $lang ?>" name="login" autocomplete="off">
-                    <input name="lang" value="<?= $lang ?>" type="hidden" />
-                    <?= $csrf ?>
-                    <div id="content">
-                        <p><input required size="25" maxlength="50" type="text" name="username" id="username"
-                                placeholder="<?= $label['username'] ?>" autocomplete="username"
-                                value="<?= htmlspecialchars($postUser) ?>"></p>
-                        <p><input required size="25" maxlength="255" type="password" name="password"
-                                placeholder="<?= $label['password'] ?>" autocomplete="current-password"></p>
-                        <?php if ($errorMessage !== ''): ?>
-                            <p class="invalid-login"><?= $errorMessage ?></p>
-                        <?php endif; ?>
-                        <p id="formButton"><input type="submit" value="<?= $label['login'] ?>"></p>
-                        <p id="versionTagContent" class="version-tag">
-                            <a href="https://github.com/aholiveira/phpledger"
-                                aria-label="<?= $footer['versionText'] ?>">
-                                <?= $footer['versionText'] ?>
-                            </a>
-                        </p>
-                        <p id="languageSelector" class="version-tag"><small><?= $footer['languageSelectorHtml'] ?></small></p>
-                    </div>
+                <form method="POST" name="login" autocomplete="off">
+                    <input name="lang" value="<?= $lang ?>" type="hidden" /><?= $csrf ?>
+                    <input required="" maxlength="255" type="text" name="username" id="username" placeholder="<?= $label['username'] ?>" autocomplete="username" value="<?= htmlspecialchars($postUser) ?>">
+                    <input required="" maxlength="255" type="password" name="password" id="password" placeholder="<?= $label['password'] ?>" autocomplete="current-password">
+                    <?php if ($errorMessage !== ''): ?><p class="invalid-login"><?= $errorMessage ?></p><?php endif; ?>
+                    <button type="submit" value="login" name="login"><?= $label['login'] ?></button>
+                    <a class="version-tag" href="https://github.com/aholiveira/phpledger" aria-label="<?= $footer['versionText'] ?>"><?= $footer['versionText'] ?></a>
+                    <small class="version-tag"><?= $footer['languageSelectorHtml'] ?></small>
                 </form>
             </div>
         </body>

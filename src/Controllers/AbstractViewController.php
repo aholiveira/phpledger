@@ -113,8 +113,23 @@ abstract class AbstractViewController implements ViewControllerInterface
         $other = $current === 'pt-pt' ? 'en-us' : 'pt-pt';
         $params['lang'] = $other;
         $url = 'index.php?' . http_build_query($params);
-        $first = $other === 'pt-pt' ? '<span>EN</span>' : '<a href="' . $url . '">EN</a>';
-        $second = $other === 'pt-pt' ? '<a href="' . $url . '">PT</a>' : '<span>PT</span>';
-        return "$first | $second";
+        $l10n = $this->app->l10n();
+        $labels = [
+            'pt_selected' => $l10n->l('pt_selected'),
+            'en_selected' => $l10n->l('en_selected'),
+            'pt_select'   => $l10n->l('pt_select'),
+            'en_select'   => $l10n->l('en_select'),
+        ];
+
+        $languages = [
+            'EN' => $other === 'pt-pt'
+                ? '<span aria-label="' . $labels['en_selected'] . '">EN</span>'
+                : '<a aria-label="' . $labels['en_select'] . '" href="' . $url . '">EN</a>',
+            'PT' => $other === 'pt-pt'
+                ? '<a aria-label="' . $labels['pt_select'] . '" href="' . $url . '">PT</a>'
+                : '<span aria-label="' . $labels['pt_selected'] . '">PT</span>',
+        ];
+
+        return $languages['EN'] . ' | ' . $languages['PT'];
     }
 }
