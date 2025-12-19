@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1766107590">
-  <project timestamp="1766107590">
+<coverage generated="1766107833">
+  <project timestamp="1766107833">
     <file name="C:\pessoal\work\contas\src\Application.php">
       <class name="PHPLedger\Application" namespace="global">
         <metrics complexity="20" methods="19" coveredmethods="11" conditionals="0" coveredconditionals="0" statements="40" coveredstatements="22" elements="59" coveredelements="33"/>
@@ -5002,14 +5002,14 @@
       <line num="27" type="stmt" count="2"/>
       <line num="28" type="stmt" count="2"/>
       <line num="29" type="stmt" count="2"/>
-      <line num="31" type="stmt" count="2"/>
       <line num="32" type="stmt" count="2"/>
       <line num="33" type="stmt" count="2"/>
       <line num="34" type="stmt" count="2"/>
       <line num="35" type="stmt" count="2"/>
       <line num="36" type="stmt" count="2"/>
       <line num="37" type="stmt" count="2"/>
-      <metrics loc="46" ncloc="41" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="16" coveredstatements="16" elements="17" coveredelements="17"/>
+      <line num="38" type="stmt" count="2"/>
+      <metrics loc="47" ncloc="42" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="16" coveredstatements="16" elements="17" coveredelements="17"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Views\Templates\ReportViewFormTemplate.php">
       <class name="PHPLedger\Views\Templates\ReportViewFormTemplate" namespace="global">
@@ -5350,6 +5350,6 @@
       <line num="76" type="stmt" count="4"/>
       <metrics loc="79" ncloc="79" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="55" coveredstatements="55" elements="56" coveredelements="56"/>
     </file>
-    <metrics files="122" loc="9128" ncloc="8569" classes="94" methods="390" coveredmethods="209" conditionals="0" coveredconditionals="0" statements="4282" coveredstatements="2081" elements="4672" coveredelements="2290"/>
+    <metrics files="122" loc="9129" ncloc="8570" classes="94" methods="390" coveredmethods="209" conditionals="0" coveredconditionals="0" statements="4282" coveredstatements="2081" elements="4672" coveredelements="2290"/>
   </project>
 </coverage>

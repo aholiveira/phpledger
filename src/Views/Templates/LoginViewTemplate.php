@@ -27,6 +27,7 @@ final class LoginViewTemplate extends AbstractViewTemplate
         <body onload="document.getElementById('username').focus();">
             <div id="login" class="login-form">
                 <h1><?= htmlspecialchars($pagetitle) ?></h1>
+                <img src="assets/logo.png" width="64">
                 <form method="POST" name="login" autocomplete="off">
                     <input name="lang" value="<?= $lang ?>" type="hidden" /><?= $csrf ?>
                     <input required="" maxlength="255" type="text" name="username" id="username" placeholder="<?= $label['username'] ?>" autocomplete="username" value="<?= htmlspecialchars($postUser) ?>">
