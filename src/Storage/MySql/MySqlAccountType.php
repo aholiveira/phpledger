@@ -50,41 +50,27 @@ class MysqlAccountType extends AccountType
         $where = static::getWhereFromArray($fieldFilter);
         $sql = self::getSelect() . " {$where}";
         $retval = [];
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->execute();
-            $result = $stmt->get_result();
-            while ($newobject = $result->fetch_object(__CLASS__)) {
-                $retval[$newobject->id] = $newobject;
-            }
-            $stmt->close();
-        } catch (Exception $ex) {
-            static::handleException($ex, $sql);
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($newobject = $result->fetch_object(__CLASS__)) {
+            $retval[$newobject->id] = $newobject;
         }
+        $stmt->close();
         return $retval;
     }
 
     public static function getById(int $id): ?self
     {
         $sql = self::getSelect() . " WHERE id=?";
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->bind_param("i", $id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__);
-            $stmt->close();
-            if (null === $retval) {
-                $retval = new self();
-            }
-        } catch (Exception $ex) {
-            static::handleException($ex, $sql);
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $retval = $result->fetch_object(__CLASS__);
+        $stmt->close();
+        if (null === $retval) {
+            $retval = new self();
         }
         return $retval;
     }
@@ -93,31 +79,21 @@ class MysqlAccountType extends AccountType
     public function update(): bool
     {
         $retval = false;
-        try {
-            $sql = "INSERT INTO {$this->tableName()}
+        $sql = "INSERT INTO {$this->tableName()}
                 (`description`, `savings`, `id`)
                 VALUES (?, ?, ?)
                 ON DUPLICATE KEY UPDATE
                     `description` = VALUES(`description`),
                     `savings` = VALUES(`savings`)";
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->bind_param(
-                "sii",
-                $this->description,
-                $this->savings,
-                $this->id
-            );
-            $retval = $stmt->execute();
-            $stmt->close();
-            if (!$retval) {
-                throw new mysqli_sql_exception();
-            }
-        } catch (Exception $ex) {
-            $this->handleException($ex, $sql);
-        }
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        $stmt->bind_param(
+            "sii",
+            $this->description,
+            $this->savings,
+            $this->id
+        );
+        $retval = $stmt->execute();
+        $stmt->close();
         return $retval;
     }
 }

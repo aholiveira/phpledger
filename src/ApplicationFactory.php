@@ -25,7 +25,6 @@ class ApplicationFactory
         Config::setInstance($config);
         Config::init(ConfigPath::get());
         $logger = new Logger($logfile);
-        Logger::setInstance($logger);
         $backend = $config->get('storage.type', 'mysql');
         $headerSender = new HeaderSender();
         return new Application(

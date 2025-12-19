@@ -15,6 +15,7 @@ it('renders account form HTML', function () {
         'ui' => $ui,
         'csrf' => '',
         'label' => [
+            'id' => 'ID',
             'name' => 'Name',
             'number' => 'Number',
             'type' => 'Type',
@@ -81,6 +82,7 @@ it('renders account form HTML with back action to balances', function () {
         'ui' => $ui,
         'csrf' => '',
         'label' => [
+            'id' => 'ID',
             'name' => 'Name',
             'number' => 'Number',
             'type' => 'Type',
@@ -147,6 +149,7 @@ it('renders name errors', function () {
         'ui' => $ui,
         'csrf' => '',
         'label' => [
+            'id' => 'ID',
             'name' => 'Name',
             'number' => 'Number',
             'type' => 'Type',

@@ -13,7 +13,6 @@ namespace PHPLedger\Storage\MySql;
 use Exception;
 use mysqli_sql_exception;
 use PHPLedger\Domain\Ledger;
-use PHPLedger\Services\Logger;
 use PHPLedger\Storage\MySql\Traits\MySqlFetchAllTrait;
 use PHPLedger\Storage\MySql\Traits\MySqlSelectTrait;
 
@@ -50,14 +49,12 @@ class MySqlLedger extends Ledger
     {
         $where = static::getWhereFromArray($fieldFilter);
         $sql = self::getSelect() . " {$where} ORDER BY id";
-        Logger::instance()->dump($sql, __FUNCTION__ . " " . __CLASS__);
         return static::fetchAll($sql);
     }
 
     public static function getById($id): ?self
     {
         $sql = self::getSelect() . " WHERE id=?";
-        Logger::instance()->dump($sql, __FUNCTION__ . " " . __CLASS__);
         return static::fetchOne($sql, [$id]);
     }
 
@@ -71,9 +68,6 @@ class MySqlLedger extends Ledger
                     nome=VALUES(nome),
                     id=VALUES(id)";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
             if (strlen($this->name) > 30) {
                 $this->name = substr($this->name, 0, 30);
             }
@@ -83,8 +77,6 @@ class MySqlLedger extends Ledger
                 $this->id
             );
             $retval = $stmt->execute();
-        } catch (Exception $ex) {
-            $this->handleException($ex, $sql);
         } finally {
             if (isset($stmt) && $stmt instanceof \mysqli_stmt) {
                 $stmt->close();

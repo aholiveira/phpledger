@@ -72,16 +72,10 @@ class MySqlStorage implements DataStorageInterface
                 }
             }
             $this->dbConnection = new mysqli($host, $user, $pass, $dbase);
-            Logger::instance()->debug("MySQL connection established");
-            Logger::instance()->debug("MySQL host: {$host}");
-            Logger::instance()->debug("MySQL database: {$dbase}");
             if ($ssl) {
-                Logger::instance()->info("Establishing MySQL SSL connection");
                 mysqli_ssl_set($this->dbConnection, null, null, null, null, null);
             }
             $this->dbConnection->set_charset('utf8mb4');
-        } catch (mysqli_sql_exception $e) {
-            throw new RuntimeException("Database connection failed: " . $e->getMessage(), 0, $e);
         } finally {
             mysqli_report(MYSQLI_REPORT_OFF);
         }
@@ -488,7 +482,6 @@ class MySqlStorage implements DataStorageInterface
             $stmt->close();
         } catch (Exception $ex) {
             $this->addMessage($ex->getMessage());
-            $this->handleException($ex);
         }
         return $retval;
     }
@@ -500,34 +493,19 @@ class MySqlStorage implements DataStorageInterface
     private function executeQuery(string $sql)
     {
         $retval = false;
-        try {
-            $stmt = self::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $retval = $stmt->execute();
-            $stmt->close();
-        } catch (Exception $ex) {
-            $this->addMessage($ex->getMessage());
-            $this->handleException($ex);
-        }
+        $stmt = self::getConnection()->prepare($sql);
+        $retval = $stmt->execute();
+        $stmt->close();
         return $retval;
     }
     private function getSQLTableCreate($table)
     {
         $retval = false;
-        try {
-            $stmt = self::getConnection()->prepare("SHOW CREATE TABLE `{$table}`");
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->execute();
-            $stmt->bind_result($table, $retval);
-            $stmt->fetch();
-            $stmt->close();
-        } catch (Exception $ex) {
-            $this->handleException($ex);
-        }
+        $stmt = self::getConnection()->prepare("SHOW CREATE TABLE `{$table}`");
+        $stmt->execute();
+        $stmt->bind_result($table, $retval);
+        $stmt->fetch();
+        $stmt->close();
         return $retval;
     }
     private function tableExists(string $table_name): bool
@@ -535,13 +513,8 @@ class MySqlStorage implements DataStorageInterface
         $retval = false;
         $this->connect();
         $sql = "SELECT count(*) as colCount FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='{$table_name}'";
-        try {
-            $count = $this->fetchSingleValue($sql);
-            $retval = ($count == 1);
-        } catch (Exception $ex) {
-            $this->addMessage($ex->getMessage());
-            $this->handleException($ex);
-        }
+        $count = $this->fetchSingleValue($sql);
+        $retval = ($count == 1);
         return $retval;
     }
     private function addColumnToTable(string $column_name, string $table_name, string $typedef): bool
@@ -559,7 +532,6 @@ class MySqlStorage implements DataStorageInterface
             return (bool) $retval;
         } catch (Exception $ex) {
             $this->addMessage("Failed to add column [{$column_name}] to [{$table_name}]: " . $ex->getMessage());
-            $this->handleException($ex);
             return false;
         }
     }
@@ -573,57 +545,40 @@ class MySqlStorage implements DataStorageInterface
         } catch (Exception $ex) {
             $this->addMessage($ex);
             $this->addMessage($sql);
-            $this->handleException($ex);
         }
         return $retval;
     }
     private function renameColumnOnTable(string $old_column_name, string $new_column_name, string $table_name): bool
     {
         $retval = false;
-        try {
-            if ($this->tableHasColumn($table_name, $new_column_name)) {
-                return false;
-            }
-            if (!$this->tableHasColumn($table_name, $old_column_name)) {
-                return false;
-            }
-            $sql = "ALTER TABLE `{$table_name}` RENAME COLUMN `{$old_column_name}` TO `{$new_column_name}`";
-            $retval = $this->executeQuery($sql);
-            $this->addMessage("Renamed column [{$old_column_name}] to [{$new_column_name}] on [{$table_name}]");
-        } catch (Exception $ex) {
-            $this->addMessage($ex);
-            $this->addMessage($sql);
-            $this->handleException($ex);
+        if ($this->tableHasColumn($table_name, $new_column_name)) {
+            return false;
         }
+        if (!$this->tableHasColumn($table_name, $old_column_name)) {
+            return false;
+        }
+        $sql = "ALTER TABLE `{$table_name}` RENAME COLUMN `{$old_column_name}` TO `{$new_column_name}`";
+        $retval = $this->executeQuery($sql);
+        $this->addMessage("Renamed column [{$old_column_name}] to [{$new_column_name}] on [{$table_name}]");
         return $retval;
     }
     private function tableHasForeignKey(string $table_name, string $key_name): bool
     {
         $retval = false;
         $sql = "SELECT count(*) as colCount FROM information_schema.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='{$table_name}' AND CONSTRAINT_NAME='{$key_name}'";
-        try {
-            $count = $this->fetchSingleValue($sql);
-            $retval = ($count == 1);
-        } catch (Exception $ex) {
-            $this->addMessage($ex);
-            $this->handleException($ex);
-        }
+        $count = $this->fetchSingleValue($sql);
+        $retval = ($count == 1);
         return $retval;
     }
     private function addForeignKeyToTable(string $key_name, string $fk_def, string $table_name): bool
     {
         $retval = false;
         $sql = "ALTER TABLE `{$table_name}` ADD FOREIGN KEY `{$key_name}` (`{$key_name}`) REFERENCES {$fk_def}";
-        try {
-            if ($this->tableHasForeignKey($table_name, $key_name)) {
-                return true;
-            }
-            $retval = $this->executeQuery($sql);
-            $this->addMessage("Added foreign key [{$key_name}] to table [{$table_name}]");
-        } catch (Exception $ex) {
-            $this->addMessage($ex);
-            $this->handleException($ex);
+        if ($this->tableHasForeignKey($table_name, $key_name)) {
+            return true;
         }
+        $retval = $this->executeQuery($sql);
+        $this->addMessage("Added foreign key [{$key_name}] to table [{$table_name}]");
         return $retval;
     }
     private function tableHasColumn(string $table_name, string $column_name): bool
@@ -631,58 +586,33 @@ class MySqlStorage implements DataStorageInterface
         $sql = "SELECT count(*) as colCount
         FROM information_schema.columns
         WHERE table_name = '{$table_name}' AND column_name = '{$column_name}' and table_schema = DATABASE()";
-        try {
-            $count = (int) $this->fetchSingleValue($sql);
-            return $count === 1;
-        } catch (Exception $ex) {
-            $this->addMessage($ex);
-            $this->handleException($ex);
-            return false;
-        }
+        $count = (int) $this->fetchSingleValue($sql);
+        return $count === 1;
     }
     private function getDbCollation(string $db_name): ?string
     {
         $this->connect();
         $sql = "SELECT DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME='{$db_name}'";
-        try {
-            $retval = $this->fetchSingleValue($sql);
-            return $retval ?: null;
-        } catch (Exception $ex) {
-            $this->addMessage("Failed to get collation for database [{$db_name}]: " . $ex->getMessage());
-            $this->handleException($ex);
-            return "";
-        }
+        $retval = $this->fetchSingleValue($sql);
+        return $retval ?: null;
     }
     private function setDbCollation(string $db_name, string $dbCollation): ?string
     {
         $retval = "";
         $this->connect();
         $sql = "ALTER DATABASE `{$db_name}` COLLATE='{$dbCollation}'";
-        try {
-            $retval = $this->executeQuery($sql);
-            if ($retval) {
-                $this->addMessage("Changed collation on database [{$db_name}] to [{$dbCollation}]");
-            }
-            return (bool) $retval;
-        } catch (Exception $ex) {
-            $this->addMessage("Failed to change collation on database [{$db_name}]: " . $ex->getMessage());
-            $this->addMessage($ex);
-            $this->handleException($ex);
-            return "";
+        $retval = $this->executeQuery($sql);
+        if ($retval) {
+            $this->addMessage("Changed collation on database [{$db_name}] to [{$dbCollation}]");
         }
+        return (bool) $retval;
     }
     private function getTableCollation(string $table_name): ?string
     {
         $retval = "";
         $this->connect();
         $sql = "SELECT table_collation FROM information_schema.TABLES WHERE table_name = '{$table_name}' AND table_schema = DATABASE()";
-        try {
-            $retval = @$this->fetchSingleValue($sql);
-        } catch (Exception $ex) {
-            $this->addMessage($ex);
-            $this->handleException($ex);
-            $retval = "";
-        }
+        $retval = @$this->fetchSingleValue($sql);
         return $retval;
     }
     private function setTableCollation(string $table_name, string $dbCollation): ?string
@@ -690,42 +620,23 @@ class MySqlStorage implements DataStorageInterface
         $retval = "";
         $this->connect();
         $sql = "ALTER TABLE `{$table_name}` COLLATE='{$dbCollation}'";
-        try {
-            $retval = @$this->executeQuery($sql);
-            $this->addMessage("Changed collation on table [{$table_name}]");
-        } catch (Exception $ex) {
-            $this->addMessage($ex);
-            $this->handleException($ex);
-            $retval = "";
-        }
+        $retval = @$this->executeQuery($sql);
+        $this->addMessage("Changed collation on table [{$table_name}]");
         return $retval;
     }
     private function getTableEngine(string $table_name): ?string
     {
-        $retval = "";
         $this->connect();
         $sql = "SELECT ENGINE FROM information_schema.TABLES WHERE table_name = '{$table_name}' AND table_schema = DATABASE()";
-        try {
-            $retval = @$this->fetchSingleValue($sql);
-        } catch (Exception $ex) {
-            $this->addMessage($ex);
-            $this->handleException($ex);
-            $retval = "";
-        }
-        return $retval;
+        return @$this->fetchSingleValue($sql);
     }
     private function setTableEngine(string $table_name, string $engine): bool
     {
         $retval = false;
         $this->connect();
         $sql = "ALTER TABLE `{$table_name}` ENGINE={$engine}";
-        try {
-            $retval = $this->executeQuery($sql);
-            $this->addMessage("Changed engine on table [{$table_name}]");
-        } catch (Exception $ex) {
-            $this->addMessage($ex);
-            $this->handleException($ex);
-        }
+        $retval = $this->executeQuery($sql);
+        $this->addMessage("Changed engine on table [{$table_name}]");
         return $retval;
     }
     private function createTable(string $table_name)
@@ -744,7 +655,6 @@ class MySqlStorage implements DataStorageInterface
         }
         $columns[] = sprintf("PRIMARY KEY (`%s`)", $createSQL['primary_key']);
 
-
         if (!empty($createSQL['keys'])) {
             foreach ($createSQL['keys'] as $key_name => $key_def) {
                 $columns[] = "KEY `{$key_name}` ({$key_def})";
@@ -757,18 +667,12 @@ class MySqlStorage implements DataStorageInterface
         }
         $sql = "CREATE TABLE `{$table_name}` (" . implode(",", $columns) . ")
          ENGINE={$this->dbEngine} DEFAULT COLLATE='{$this->dbCollation}'";
-        try {
-            $retval = $this->executeQuery($sql);
-            if ($retval) {
-                $this->addMessage("Created table [{$table_name}]");
-                $this->addMessage("Created table [{$sql}]");
-            }
-            return (bool) $retval;
-        } catch (Exception $ex) {
-            $this->addMessage("Failed to create table [{$table_name}]: " . $ex->getMessage());
-            $this->handleException($ex);
-            return false;
+        $retval = $this->executeQuery($sql);
+        if ($retval) {
+            $this->addMessage("Created table [{$table_name}]");
+            $this->addMessage("Created table [{$sql}]");
         }
+        return (bool) $retval;
     }
     private function setTableCreateSQL()
     {
@@ -785,10 +689,5 @@ class MySqlStorage implements DataStorageInterface
         foreach ($tables as $name => $data) {
             $this->tableCreateSQL[$name] = $data ?? [];
         }
-    }
-    private function handleException(Throwable $e): void
-    {
-        Logger::instance()->error("Unhandled exception: " . $e->getMessage());
-        Logger::instance()->dump($e, "Stack trace:");
     }
 }

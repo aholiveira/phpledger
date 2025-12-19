@@ -9,29 +9,6 @@ class Logger implements LoggerServiceInterface
 {
     private string $logFile;
     private LogLevel $logLevel;
-    private static ?self $instance = null;
-
-    public static function setInstance(self $instance): void
-    {
-        static::$instance = $instance;
-    }
-    /**
-     * Get the singleton instance of the Logger.
-     * @return self
-     */
-    public static function instance(): self
-    {
-        return self::$instance ??= new self("");
-    }
-    /**
-     * Initialize the Logger singleton with a specific log file and level.
-     * @param string $file
-     * @param LogLevel $logLevel
-     */
-    public static function init(string $file, LogLevel $logLevel = LogLevel::DEBUG): void
-    {
-        self::$instance = new self($file, $logLevel);
-    }
     /**
      * Constructor for Logger.
      * @param string $file

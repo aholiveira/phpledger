@@ -3,6 +3,7 @@
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Domain\User;
+use PHPLedger\Exceptions\InvalidCsrfTokenException;
 use PHPLedger\Views\Templates\LoginViewTemplate;
 
 final class LoginController extends AbstractViewController
@@ -47,7 +48,7 @@ final class LoginController extends AbstractViewController
         if (!$this->app->csrf()->validateToken($filtered['_csrf_token'] ?? null)) {
             http_response_code(400);
             $this->app->redirector()->to('index.php');
-            exit('Invalid CSRF token');
+            throw new InvalidCsrfTokenException('Invalid CSRF token');
         }
 
         $this->postUser = trim($filtered['username'] ?? '');
@@ -56,14 +57,21 @@ final class LoginController extends AbstractViewController
         if (!empty($this->postUser)) {
             $user = $this->app->dataFactory()->user()::getByUsername($this->postUser);
             $this->userAuth = $user->verifyPassword($postPass);
-
             if ($this->userAuth) {
                 $this->afterSuccessfulLogin();
-                $this->app->session()->set('isAdmin', $user->hasRole(User::USER_ROLE_ADM));
+                $this->setSessionUserInfo($user);
             }
         }
     }
-
+    private function setSessionUserInfo(User $user): void
+    {
+        $session = $this->app->session();
+        $session->set('isAdmin', $user->hasRole(User::USER_ROLE_ADM));
+        $session->set('username', $user->getProperty('username'));
+        $session->set('firstName', $user->getProperty('firstName'));
+        $session->set('lastName', $user->getProperty('lastName'));
+        $session->set('fullName', $user->getProperty('fullName'));
+    }
     private function afterSuccessfulLogin(): void
     {
         session_regenerate_id(true);

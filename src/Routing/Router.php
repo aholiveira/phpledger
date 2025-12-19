@@ -57,7 +57,6 @@ class Router
             return;
         }
         header('Location: index.php?action=login');
-        exit;
     }
 
     public function publicActions(): array

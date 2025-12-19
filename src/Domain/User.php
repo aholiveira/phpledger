@@ -113,8 +113,6 @@ abstract class User extends AbstractDataObject implements UserObjectInterface
     }
     public function hasRole(int $role): bool
     {
-        Logger::instance()->debug("Checking if user role {$this->role} >= required role $role");
-        Logger::instance()->dump($this);
         return $this->role === $role;
     }
 

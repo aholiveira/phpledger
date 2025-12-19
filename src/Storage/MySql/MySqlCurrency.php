@@ -57,20 +57,13 @@ class MySqlCurrency extends Currency
         $where = static::getWhereFromArray($fieldFilter);
         $sql = self::getSelect() . " {$where} ORDER BY description";
         $retval = [];
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->execute();
-            $result = $stmt->get_result();
-            while ($newobject = $result->fetch_object(__CLASS__)) {
-                $retval[$newobject->id] = $newobject;
-            }
-            $stmt->close();
-        } catch (Exception $ex) {
-            static::handleException($ex, $sql);
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($newobject = $result->fetch_object(__CLASS__)) {
+            $retval[$newobject->id] = $newobject;
         }
+        $stmt->close();
         return $retval;
     }
 
@@ -78,19 +71,12 @@ class MySqlCurrency extends Currency
     {
         $sql = self::getSelect() . " WHERE $field=? ORDER BY `description`";
         $retval = null;
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->bind_param("s", $value);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__);
-            $stmt->close();
-        } catch (Exception $ex) {
-            static::handleException($ex, $sql);
-        }
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        $stmt->bind_param("s", $value);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $retval = $result->fetch_object(__CLASS__);
+        $stmt->close();
         return $retval;
     }
     public static function getById($id): ?self
@@ -106,8 +92,7 @@ class MySqlCurrency extends Currency
     public function update(): bool
     {
         $retval = false;
-        try {
-            $sql = "INSERT INTO {$this->tableName()}
+        $sql = "INSERT INTO {$this->tableName()}
                     (`description`, `exchangeRate`, `code`, `username`, `createdAt`, `updatedAt`, `id`)
                 VALUES (?, ?, ?, ?, NULL, NULL, ?)
                 ON DUPLICATE KEY UPDATE
@@ -117,26 +102,17 @@ class MySqlCurrency extends Currency
                     `username`=VALUES(`username`),
                     `createdAt`=NULL,
                     `updatedAt`=NULL";
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->bind_param(
-                "sdssi",
-                $this->description,
-                $this->exchangeRate,
-                $this->code,
-                $this->username,
-                $this->id
-            );
-            $retval = $stmt->execute();
-            $stmt->close();
-            if (!$retval) {
-                throw new mysqli_sql_exception();
-            }
-        } catch (Exception $ex) {
-            $this->handleException($ex, $sql);
-        }
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        $stmt->bind_param(
+            "sdssi",
+            $this->description,
+            $this->exchangeRate,
+            $this->code,
+            $this->username,
+            $this->id
+        );
+        $retval = $stmt->execute();
+        $stmt->close();
         return $retval;
     }
     public function delete(): bool

@@ -101,21 +101,14 @@ class MySqlLedgerEntry extends LedgerEntry
         $where = self::getWhereFromArray($fieldFilter);
         $sql = self::getSelect() . " {$where} ORDER BY entryDate, id";
         $retval = [];
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->execute();
-            $result = $stmt->get_result();
-            while ($newobject = $result->fetch_object(__CLASS__)) {
-                $newobject->getValuesForForeignFields();
-                $retval[$newobject->id] = $newobject;
-            }
-            $stmt->close();
-        } catch (Exception $ex) {
-            static::handleException($ex, $sql);
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($newobject = $result->fetch_object(__CLASS__)) {
+            $newobject->getValuesForForeignFields();
+            $retval[$newobject->id] = $newobject;
         }
+        $stmt->close();
         return $retval;
     }
 
@@ -123,21 +116,14 @@ class MySqlLedgerEntry extends LedgerEntry
     {
         $sql = self::getSelect() . " WHERE id=?";
         $retval = null;
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->bind_param("i", $id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__);
-            $stmt->close();
-            if ($retval instanceof MySqlLedgerEntry) {
-                $retval->getValuesForForeignFields();
-            }
-        } catch (Exception $ex) {
-            static::handleException($ex, $sql);
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $retval = $result->fetch_object(__CLASS__);
+        $stmt->close();
+        if ($retval instanceof MySqlLedgerEntry) {
+            $retval->getValuesForForeignFields();
         }
         return $retval;
     }
@@ -147,23 +133,16 @@ class MySqlLedgerEntry extends LedgerEntry
         $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(euroAmount),euroAmount,0),5)),2) AS balance
                 FROM {$this->tableName()}
                 WHERE entryDate<?" . (null !== $accountId ? " AND accountId=?" : "");
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            if (null === $accountId) {
-                $stmt->bind_param("s", $date);
-            } else {
-                $stmt->bind_param("si", $date, $accountId);
-            }
-            $stmt->execute();
-            $stmt->bind_result($retval);
-            $stmt->fetch();
-            $stmt->close();
-        } catch (Exception $ex) {
-            $this->handleException($ex, $sql);
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        if (null === $accountId) {
+            $stmt->bind_param("s", $date);
+        } else {
+            $stmt->bind_param("si", $date, $accountId);
         }
+        $stmt->execute();
+        $stmt->bind_result($retval);
+        $stmt->fetch();
+        $stmt->close();
         return $retval;
     }
     /**
@@ -182,18 +161,11 @@ class MySqlLedgerEntry extends LedgerEntry
         $sql = "SELECT ROUND(SUM(ROUND(IF(NOT ISNULL(euroAmount),euroAmount,0),5)),2) AS balance
                 FROM {$tableName}
                 WHERE {$where}";
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->execute();
-            $stmt->bind_result($retval);
-            $stmt->fetch();
-            $stmt->close();
-        } catch (Exception $ex) {
-            Logger::instance()->dump($ex, "");
-        }
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        $stmt->execute();
+        $stmt->bind_result($retval);
+        $stmt->fetch();
+        $stmt->close();
         return $retval;
     }
     protected function getValuesForForeignFields()
@@ -214,8 +186,7 @@ class MySqlLedgerEntry extends LedgerEntry
         if (!$this->validate()) {
             return $retval;
         }
-        try {
-            $sql = "INSERT INTO {$this->tableName()}
+        $sql = "INSERT INTO {$this->tableName()}
             (id, entryDate, categoryId, accountId, currencyId, direction, currencyAmount, euroAmount, remarks, username, createdAt, updatedAt)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL)
             ON DUPLICATE KEY UPDATE
@@ -229,28 +200,22 @@ class MySqlLedgerEntry extends LedgerEntry
                 remarks=VALUES(remarks),
                 username=VALUES(username),
                 updatedAt=NULL";
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->bind_param(
-                "isiisiddss",
-                $this->id,
-                $this->entryDate,
-                $this->categoryId,
-                $this->accountId,
-                $this->currencyId,
-                $this->direction,
-                $this->currencyAmount,
-                $this->euroAmount,
-                $this->remarks,
-                $this->username
-            );
-            $retval = $stmt->execute();
-            $stmt->close();
-        } catch (Exception $ex) {
-            $this->handleException($ex, $sql);
-        }
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        $stmt->bind_param(
+            "isiisiddss",
+            $this->id,
+            $this->entryDate,
+            $this->categoryId,
+            $this->accountId,
+            $this->currencyId,
+            $this->direction,
+            $this->currencyAmount,
+            $this->euroAmount,
+            $this->remarks,
+            $this->username
+        );
+        $retval = $stmt->execute();
+        $stmt->close();
         return $retval;
     }
     public function delete(): bool

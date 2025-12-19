@@ -10,17 +10,14 @@ if (!\defined('ROOT_DIR')) {
     define('ROOT_DIR', __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
 }
 
-use PHPLedger\Contracts\LogLevel;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Services\Config;
-use PHPLedger\Services\Logger;
 use PHPLedger\Util\Path;
 
 function  checkAndUpdateDatabaseSchema()
 {
     // Initialize config and logger
     Config::init(Path::combine(ROOT_DIR, 'config', 'config.json'));
-    Logger::init(Path::combine(ROOT_DIR, 'logs', 'test-sql.log'), LogLevel::DEBUG);
     ObjectFactory::init("mysql");
     // Ensure database schema is up-to-date before running any tests
     $storage = ObjectFactory::dataStorage();

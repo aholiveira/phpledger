@@ -38,7 +38,10 @@ final class AccountFormViewTemplate extends AbstractViewTemplate
                             <?= $csrf ?>
                             <input type="hidden" name="action" value="account">
                             <input type="hidden" name="lang" value="<?= $lang ?>">
-                            <input type="hidden" name="id" value="<?= $text['id'] ?>">
+                            <p>
+                                <label for="id"><?= $label['id'] ?></label>
+                                <input id="id" name="id" value="<?= htmlspecialchars($text['id']) ?>" readonly>
+                            </p>
                             <p>
                                 <label for="name"><?= $label['name'] ?></label>
                                 <input id="name" name="name" value="<?= htmlspecialchars($text['name']) ?>" required="">

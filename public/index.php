@@ -23,6 +23,7 @@ if (!defined('ROOT_DIR')) {
 require_once ROOT_DIR . '/vendor/autoload.php';
 
 use PHPLedger\ApplicationFactory;
+use PHPLedger\Exceptions\InvalidCsrfTokenException;
 use PHPLedger\Http\HttpRequest;
 use PHPLedger\Routing\Router;
 
@@ -68,6 +69,8 @@ try {
         $session->refreshExpiration();
     }
     $router->handleRequest($app, $action, $request);
+} catch (InvalidCsrfTokenException $e) {
+    $app->redirector()->to("{$frontend}login");
 } catch (Throwable $e) {
     $app->setErrorMessage($e->getMessage());
     $router->handleRequest($app, 'application_error');

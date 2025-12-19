@@ -64,9 +64,6 @@ class MySqlTestObjectTestable extends MySqlTestObject {
         parent::setErrorMessage($msg);
     }
 
-    public static function handleExceptionPublic(Exception $ex, $sql = "") {
-        parent::handleException($ex, $sql);
-    }
 }
 
 it('constructs with null id if not set', function () {

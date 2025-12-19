@@ -100,7 +100,6 @@ class L10n implements L10nServiceInterface
             $this->cache[$lang] = [];
             return [];
         }
-        Logger::instance()->debug("Loading lang from $file", __CLASS__);
         $json = file_get_contents($file);
         $langData = json_decode($json, true, 512, JSON_THROW_ON_ERROR);
         $arr = \is_array($langData) ? $langData : [];

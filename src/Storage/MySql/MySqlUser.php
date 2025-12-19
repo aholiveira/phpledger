@@ -71,16 +71,10 @@ class MySqlUser extends User
             if (!isset($this->id)) {
                 return false;
             }
-
             if (empty($this->tokenExpiry)) {
                 $this->tokenExpiry = null;
             }
-
             $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-
             $stmt->bind_param(
                 "issssssisii",
                 $this->id,
@@ -98,8 +92,7 @@ class MySqlUser extends User
             $ok = $stmt->execute();
             $stmt->close();
             return $ok;
-        } catch (Exception $ex) {
-            $this->handleException($ex, $sql);
+        } finally {
             if (isset($stmt)) {
                 $stmt->close();
             }
@@ -125,20 +118,13 @@ class MySqlUser extends User
             {$where}
             ORDER BY username";
         $retval = [];
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->execute();
-            $result = $stmt->get_result();
-            while ($newobject = $result->fetch_object(__CLASS__)) {
-                $retval[$newobject->id] = $newobject;
-            }
-            $stmt->close();
-        } catch (Exception $ex) {
-            static::handleException($ex, $sql);
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($newobject = $result->fetch_object(__CLASS__)) {
+            $retval[$newobject->id] = $newobject;
         }
+        $stmt->close();
         return $retval;
     }
     public static function getByUsername(string $username): ?User
@@ -156,20 +142,12 @@ class MySqlUser extends User
             active
             FROM " . static::tableName() . "
             WHERE username=?";
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->bind_param("s", $username);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__);
-            $stmt->close();
-        } catch (Exception $ex) {
-            static::handleException($ex, $sql);
-            $retval = null;
-        }
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $retval = $result->fetch_object(__CLASS__);
+        $stmt->close();
         return $retval instanceof self ? $retval : null;
     }
     public static function getById(int $id): ?user
@@ -188,19 +166,12 @@ class MySqlUser extends User
         FROM " . static::tableName() . "
         WHERE id=?";
         $retval = null;
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->bind_param("i", $id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__);
-            $stmt->close();
-        } catch (Exception $ex) {
-            static::handleException($ex, $sql);
-        }
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $retval = $result->fetch_object(__CLASS__);
+        $stmt->close();
         return $retval instanceof self ? $retval : null;
     }
     public static function getByToken(string $token): ?user
@@ -219,19 +190,12 @@ class MySqlUser extends User
         FROM " . static::tableName() . "
         WHERE token=?";
         $retval = null;
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->bind_param("s", $token);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $retval = $result->fetch_object(__CLASS__);
-            $stmt->close();
-        } catch (Exception $ex) {
-            static::handleException($ex, $sql);
-        }
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        $stmt->bind_param("s", $token);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $retval = $result->fetch_object(__CLASS__);
+        $stmt->close();
         return $retval instanceof self ? $retval : null;
     }
     public function delete(): bool
@@ -243,8 +207,7 @@ class MySqlUser extends User
             $stmt->bind_param("i", $this->id);
             $retval = $stmt->execute();
             $stmt->close();
-        } catch (Exception $ex) {
-            $this->handleException($ex, $sql);
+        } finally {
             if (isset($stmt)) {
                 $stmt->close();
             }
