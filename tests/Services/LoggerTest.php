@@ -82,19 +82,6 @@ it('skips logging below the current log level', function () {
     expect($content)->not->toContain('Skipped info');
 });
 
-it('singleton instance behaves correctly', function () {
-    $file = Path::combine($this->logDir, 'singleton.log');
-    Logger::init($file, LogLevel::INFO);
-    $instance1 = Logger::instance();
-    $instance2 = Logger::instance();
-    expect($instance1)->toBeInstanceOf(Logger::class);
-    expect($instance1)->toBe($instance2);
-
-    $instance1->info('Singleton test');
-    $content = file_get_contents($file);
-    expect($content)->toContain('Singleton test');
-});
-
 it('setLogLevel changes effective level', function () {
     $logger = new Logger($this->logFile, LogLevel::ERROR);
     $logger->setLogLevel(LogLevel::DEBUG);

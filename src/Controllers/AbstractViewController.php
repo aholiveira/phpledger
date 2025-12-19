@@ -64,7 +64,7 @@ abstract class AbstractViewController implements ViewControllerInterface
         $l10n = $app->l10n();
         $lang = $l10n->lang();
         $session = $app->session();
-        $expires = date("Y-m-d H:i:s", $session->get('expires', time()));
+        $expires = date("Y-m-d H:i:s", $session->get('expires', 0));
         $isAdmin = $session->get('isAdmin', false);
         $user = $this->app->dataFactory()->user()::getByUsername($this->app->session()->get('user', ''));
         if ($user instanceof User) {
