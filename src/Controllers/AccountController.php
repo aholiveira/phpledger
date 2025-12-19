@@ -106,7 +106,7 @@ final class AccountController extends AbstractViewController
         $id = (int)$this->request->input('id', 0);
         $a = ($id ? $this->app->dataFactory()::account()::getById($id) : null) ?? $this->app->dataFactory()::account();
         if ($a->id === null) {
-            $a->id = $a->getNextId($this->app->dataFactory());
+            $a->id = $a->getNextId();
         }
         // Basic assignment and server-side required validation
         $a->name = trim((string) ($this->request->input('name', '')));
