@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1766106581">
-  <project timestamp="1766106581">
+<coverage generated="1766107590">
+  <project timestamp="1766107590">
     <file name="C:\pessoal\work\contas\src\Application.php">
       <class name="PHPLedger\Application" namespace="global">
         <metrics complexity="20" methods="19" coveredmethods="11" conditionals="0" coveredconditionals="0" statements="40" coveredstatements="22" elements="59" coveredelements="33"/>
@@ -4182,7 +4182,7 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Util\Html.php">
       <class name="PHPLedger\Util\Html" namespace="global">
-        <metrics complexity="11" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="22" coveredstatements="22" elements="30" coveredelements="30"/>
+        <metrics complexity="11" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="23" coveredstatements="23" elements="31" coveredelements="31"/>
       </class>
       <line num="17" type="method" name="yearOptions" visibility="public" complexity="1" crap="1" count="4"/>
       <line num="19" type="stmt" count="4"/>
@@ -4210,11 +4210,12 @@
       <line num="56" type="stmt" count="47"/>
       <line num="57" type="stmt" count="47"/>
       <line num="58" type="stmt" count="47"/>
-      <line num="60" type="method" name="title" visibility="public" complexity="2" crap="2" count="48"/>
-      <line num="62" type="stmt" count="48"/>
+      <line num="59" type="stmt" count="47"/>
+      <line num="61" type="method" name="title" visibility="public" complexity="2" crap="2" count="48"/>
       <line num="63" type="stmt" count="48"/>
       <line num="64" type="stmt" count="48"/>
-      <metrics loc="67" ncloc="60" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="22" coveredstatements="22" elements="30" coveredelements="30"/>
+      <line num="65" type="stmt" count="48"/>
+      <metrics loc="68" ncloc="61" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="23" coveredstatements="23" elements="31" coveredelements="31"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Util\NumberUtil.php">
       <class name="PHPLedger\Util\NumberUtil" namespace="global">
@@ -5349,6 +5350,6 @@
       <line num="76" type="stmt" count="4"/>
       <metrics loc="79" ncloc="79" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="55" coveredstatements="55" elements="56" coveredelements="56"/>
     </file>
-    <metrics files="122" loc="9127" ncloc="8568" classes="94" methods="390" coveredmethods="209" conditionals="0" coveredconditionals="0" statements="4281" coveredstatements="2080" elements="4671" coveredelements="2289"/>
+    <metrics files="122" loc="9128" ncloc="8569" classes="94" methods="390" coveredmethods="209" conditionals="0" coveredconditionals="0" statements="4282" coveredstatements="2081" elements="4672" coveredelements="2290"/>
   </project>
 </coverage>
