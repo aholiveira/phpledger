@@ -60,7 +60,7 @@ it('renders the account list correctly', function () {
     $this->view->render($this->data);
     $html = ob_get_clean();
 
-    expect($html)->toContain('<table class="lista contas account">');
+    expect($html)->toContain('<table class="lista entry_category">');
     expect($html)->toContain('<th>ID</th>');
     expect($html)->toContain('<td data-label="ID">1</td>');
     expect($html)->toContain('<td class="active" data-label="Active">✓</td>');
