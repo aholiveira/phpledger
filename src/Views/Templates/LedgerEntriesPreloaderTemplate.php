@@ -21,10 +21,10 @@ final class LedgerEntriesPreloaderTemplate extends AbstractViewTemplate
 
         <body>
             <?php $ui->notification($label['notification'], $success) ?>
+            <div id="preloader">
+                <div class="spinner"></div>
+            </div>
             <div class="maingrid">
-                <div id="preloader">
-                    <div class="spinner"></div>
-                </div>
         <?php
     }
 }

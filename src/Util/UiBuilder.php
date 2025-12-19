@@ -10,9 +10,9 @@ final class UiBuilder implements UiBuilderInterface
     {
 ?>
         <aside class="menu">
-        <?php if (($displayGreeting = $greeting ?? ($text['hello'] ?? '')) !== ''): ?>
-            <div class="menu-greeting"><?= htmlspecialchars($displayGreeting) ?></div>
-        <?php endif ?>
+            <?php if (($displayGreeting = $greeting ?? ($text['hello'] ?? '')) !== ''): ?>
+                <div class="menu-greeting"><?= htmlspecialchars($displayGreeting) ?></div>
+            <?php endif ?>
             <nav>
                 <ul>
                     <?php foreach ($menuLinks as $action => $link): ?>
@@ -27,14 +27,12 @@ final class UiBuilder implements UiBuilderInterface
     public function footer(array $text, array $footer): void
     {
     ?>
-        <footer>
-            <div class="footer">
-                <span class="RCS"><a href="<?= $footer['repo'] ?? '' ?>" aria-label="<?= htmlspecialchars($footer['versionText'] ?? '') ?>"><?= htmlspecialchars($footer['versionText'] ?? '') ?></a></span>
-                <span class="RCS" style="display: flex; align-items: center">
-                    <?= htmlspecialchars($footer['sessionExpires'] ?? '') ?>
-                    <span style="margin-left: auto; display: flex;"><?= $footer['languageSelectorHtml'] ?? '' ?></span>
-                </span>
-            </div>
+        <footer class="footer">
+            <span class="RCS"><a href="<?= $footer['repo'] ?? '' ?>" aria-label="<?= htmlspecialchars($footer['versionText'] ?? '') ?>"><?= htmlspecialchars($footer['versionText'] ?? '') ?></a></span>
+            <span class="RCS" style="display: flex; align-items: center">
+                <?= htmlspecialchars($footer['sessionExpires'] ?? '') ?>
+                <span style="margin-left: auto; display: flex;"><?= $footer['languageSelectorHtml'] ?? '' ?></span>
+            </span>
         </footer>
         <?php
     }

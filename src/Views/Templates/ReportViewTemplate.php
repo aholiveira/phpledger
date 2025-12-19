@@ -90,18 +90,20 @@ final class ReportViewTemplate extends AbstractViewTemplate
                     )); ?>
                 </div>
                 <div class="main" id="main">
-                    <div class="table report_month" id="table">
+                    <div class="main-container">
                         <div class="csv-download">
                             <a href="<?= htmlspecialchars($downloadUrl) ?>"><small><?= $label['download_data'] ?><img src="assets/file-csv-solid-full.svg" alt="CSV"></small></a>
                             <a href="<?= htmlspecialchars($downloadRawUrl) ?>"><small><?= $label['download_raw_data'] ?><img src="assets/file-csv-solid-full.svg" alt="CSV"></small></a>
                         </div>
-                        <?php $reportViewTableTemplate->render(compact(
-                            'label',
-                            'reportData',
-                            'columnLabels',
-                            'reportViewTableTopLevelTemplate',
-                            'reportViewTableChildRowTemplate',
-                        )); ?>
+                        <div class="table-wrapper">
+                            <?php $reportViewTableTemplate->render(compact(
+                                'label',
+                                'reportData',
+                                'columnLabels',
+                                'reportViewTableTopLevelTemplate',
+                                'reportViewTableChildRowTemplate',
+                            )); ?>
+                        </div>
                     </div>
                 </div>
                 <?php $ui->footer($label, $footer); ?>

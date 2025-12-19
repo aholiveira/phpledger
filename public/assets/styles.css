@@ -11,12 +11,94 @@
     --error: #d9534f;
     --success: #5cb85c;
     --warning: #f0ad4e;
+    --income: #e3f2fd;
+    --expense: #ffe6e6;
+    --savings: #e8f5e9;
     --shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     --border-radius: 6px;
 }
 
+body {
+    text-rendering: optimizeLegibility;
+    height: calc(100dvh - 1rem);
+    max-height: calc(100dvh - 1rem);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.maingrid {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    grid-template-rows: auto 1fr auto auto;
+    grid-template-areas:
+        'menu header'
+        'menu main'
+        'menu main-footer'
+        'menu footer';
+    gap: 0.5em;
+    height: 100%;
+    padding: 0.5em;
+}
+
+.menu,
+.header,
+.main,
+.main-footer,
+.footer {
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    padding: 1em;
+}
+
+.menu {
+    grid-area: menu;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    z-index: 3;
+}
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu li {
+    margin: 0.3em 0;
+}
+
+.header {
+    max-height: fit-content;
+}
+
+.main {
+    overflow-y: auto;
+}
+
+.main-footer,
+.footer {
+    align-self: end;
+}
+
+.main-footer {
+    display: grid;
+    grid-area: main-footer;
+    height: fit-content;
+}
+
+.footer {
+    display: grid;
+    grid-area: footer;
+    height: min-content;
+}
+
 .savings {
-    background-color: #E8F5E9 !important;
+    background-color: var(--savings) !important;
 }
 
 .menu-greeting {
@@ -44,28 +126,22 @@
     z-index: 9999;
 }
 
+.notification.success,
+.notification.fail {
+    color: white;
+}
+
 .notification.success {
     background: var(--success);
-    color: white;
 }
 
 .notification.fail {
     background: var(--error);
-    color: white;
 }
 
 .notification.hide {
     opacity: 0;
     pointer-events: none;
-}
-
-body {
-    text-rendering: optimizeLegibility;
-    height: 95vh;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: 0;
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
 }
 
 .lang-selector {
@@ -127,15 +203,6 @@ p {
     margin: 0;
 }
 
-.invalid-login,
-.error {
-    color: var(--error);
-}
-
-.invalid-login {
-    text-align: center;
-}
-
 hr {
     width: 100%;
     border: none;
@@ -191,20 +258,6 @@ input[type=submit]:hover {
     font-size: 0.75em;
 }
 
-.maingrid {
-    display: grid;
-    grid-template-areas:
-        'menu header'
-        'menu main'
-        'menu main-footer'
-        'menu footer';
-    grid-template-columns: max-content 1fr;
-    grid-template-rows: min-content 1fr auto auto;
-    gap: 0 0.5em;
-    height: 100%;
-    padding-top: 1em;
-}
-
 .formgrid {
     display: grid;
     width: 100%;
@@ -242,102 +295,39 @@ input[type=submit] {
     grid-area: main;
 }
 
-div#login {
-    width: 100%;
-    text-align: center;
-    align-items: center;
-    padding: 1em;
-}
-
-div#login p {
-    margin: 1em;
-}
-
-div#login div {
-    margin: auto;
-    margin-top: 0.2em;
-    padding-top: 0.5em;
-    padding-bottom: 1em;
+div.login-form {
+    margin: 1em auto;
+    padding: 1em 2em;
     align-self: center;
     background-color: #fff;
     border-radius: 6px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     width: fit-content;
+    text-align: center;
 }
 
-div#login td {
-    border: none;
-    background-color: white;
-    padding: 0.6em;
-}
-
-.menu,
-.header,
-.main,
-.main-footer,
-.footer {
-    background-color: var(--bg-secondary);
-    border-radius: var(--border-radius);
-    box-shadow: var(--shadow);
-    padding: 1em;
-    margin-bottom: 0.5em;
-}
-
-.menu {
-    grid-area: menu;
+.login-form form {
+    width: 100%;
+    text-align: center;
+    align-items: center;
     display: flex;
     flex-direction: column;
-    position: sticky;
-    top: 0;
-    z-index: 3;
+    gap: .8em;
 }
 
-.menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.invalid-login,
+.error {
+    color: var(--error);
 }
 
-.menu li {
-    margin: 0.3em 0;
-}
-
-.header {
-    max-height: fit-content;
-}
-
-.main {
-    overflow-y: auto;
-}
-
-.main-footer,
-.footer {
-    align-self: end;
-}
-
-.main-footer {
-    display: grid;
-    grid-area: main-footer;
-    height: fit-content;
-}
-
-.footer {
-    display: grid;
-    grid-area: footer;
-    height: min-content;
+.invalid-login {
+    text-align: center;
 }
 
 #main {
     grid-area: main;
     overflow: auto;
     max-height: 90vh;
-}
-
-.table-wrapper {
-    max-height: calc(95vh - 24.5em);
-    overflow: auto;
-    width: fit-content;
-    padding-right: 0.7em;
 }
 
 .csv-download {
@@ -360,6 +350,13 @@ div.csv-download img {
     vertical-align: bottom;
 }
 
+.table-wrapper {
+    max-height: calc(95vh - 24.5em);
+    overflow: auto;
+    width: fit-content;
+    padding-right: 0.7em;
+}
+
 div.saldos,
 div.accounts,
 div.contas,
@@ -373,6 +370,10 @@ div.report_year {
     max-height: calc(95vh - 14em);
     width: fit-content;
     padding-right: 0.5em;
+}
+
+table {
+    width: fit-content;
 }
 
 #main table {
@@ -398,10 +399,8 @@ div.report_year {
 .id,
 .balance,
 .total,
-#main td.amount,
-#main td.balance,
-#main td.total,
-#main td.balance-label {
+.amount,
+.balance-label {
     text-align: right;
 }
 
@@ -442,12 +441,12 @@ div.report_year {
 }
 
 tr.income {
-    background-color: #E3F2FD !important;
+    background-color: var(--income) !important;
     color: #2e6d4d;
 }
 
 tr.expense {
-    background-color: #ffe6e6 !important;
+    background-color: var(--expense) !important;
     color: #990000;
 }
 
@@ -457,10 +456,6 @@ tr.expense {
 
 .active {
     text-align: center;
-}
-
-table {
-    width: fit-content;
 }
 
 .report tr.row-even {
@@ -506,6 +501,130 @@ td>.toggle-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+/* Preloader */
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: white;
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--accent);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+.spinner::after {
+    content: "Loading...";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 10px;
+    color: #333;
+    white-space: nowrap;
+}
+
+/* Config page layout */
+.main.config form {
+    display: grid;
+    grid-template-columns: max-content;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    max-width: max-content;
+    margin: 0;
+    gap: 0.3em;
+}
+
+.main.config form p {
+    display: contents;
+}
+
+.main.config form label {
+    text-align: right;
+    padding-right: 0.5em;
+    white-space: nowrap;
+    grid-column: 1 / 1;
+}
+
+.main.config form input,
+.main.config form select {
+    box-sizing: border-box;
+    grid-column: 2 / 2;
+    text-align: left;
+    justify-self: start;
+}
+
+.main.config form h3 {
+    grid-column: 1 / -1;
+    margin-top: 1em;
+    margin-bottom: 0.2em;
+    color: var(--text-secondary);
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 4px;
+    font-size: 1.05em;
+}
+
+.main.config form button,
+.main.config form select {
+    width: max-content;
+}
+
+.settings {
+    display: grid;
+    grid-template-columns: max-content 20em;
+    grid-column: 2;
+    width: max-content;
+}
+
+.settings h3 {
+    grid-column: 1 / 2;
+}
+
+.settings div label {
+    grid-column: 2 / 2;
+    text-align: left;
+}
+
+.settings div form input,
+.settings div form select {
+    width: 20em;
+    grid-column: 3 / 3;
+}
+
+#mysql-settings {
+    display: grid;
+    grid-column: 2;
+    grid-template-columns: fit-content(10em) max-content(50em);
+    gap: 0.3em;
+}
+
+#mysql-settings p {
+    display: contents;
+}
+
+#mysql-settings label {
+    text-align: right;
+    padding-right: 0.5em;
+    align-self: center;
+    grid-column: 1;
+}
+
+#mysql-settings input {
+    grid-column: 2;
+
 }
 
 @media only screen and (max-width: 1280px) {
@@ -607,7 +726,7 @@ td>.toggle-btn {
     }
 }
 
-@media (max-width: 768px) {
+@media only screen and (max-width: 768px) {
 
     body {
         font-size: xx-small;
@@ -664,43 +783,19 @@ td>.toggle-btn {
     }
 }
 
-/* Preloader */
-#preloader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: white;
-    z-index: 9999;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+/* Responsive layout */
+@media only screen and (max-width: 700px) {
+    .main.config form {
+        grid-template-columns: 1fr;
+    }
 
-.spinner {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid var(--accent);
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-}
+    .main.config form label {
+        text-align: left;
+        padding: 0 0 0.2em 0;
+    }
 
-.spinner::after {
-    content: "Loading...";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 10px;
-    color: #333;
-    white-space: nowrap;
-}
-
-@keyframes spin {
-    to {
-        transform: rotate(360deg);
+    .main.config form h3 {
+        margin-top: 1.5em;
     }
 }
 
@@ -753,108 +848,8 @@ td>.toggle-btn {
 
 }
 
-/* Config page layout */
-.main.config form {
-    display: grid;
-    grid-template-columns: max-content;
-    background: var(--bg-secondary);
-    border-radius: var(--border-radius);
-    max-width: max-content;
-    margin: 0;
-    gap: 0.3em;
-}
-
-.main.config form p {
-    display: contents;
-}
-
-.main.config form label {
-    text-align: right;
-    padding-right: 0.5em;
-    white-space: nowrap;
-    grid-column: 1 / 1;
-}
-
-.main.config form input,
-.main.config form select {
-    box-sizing: border-box;
-    grid-column: 2 / 2;
-    text-align: left;
-    justify-self: start;
-}
-
-.main.config form h3 {
-    grid-column: 1 / -1;
-    margin-top: 1em;
-    margin-bottom: 0.2em;
-    color: var(--text-secondary);
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 4px;
-    font-size: 1.05em;
-}
-
-.main.config form button,
-.main.config form select {
-    width: max-content;
-}
-
-.settings {
-    display: grid;
-    grid-template-columns: max-content 20em;
-    grid-column: 2;
-    width: max-content;
-}
-
-.settings h3 {
-    grid-column: 1 / 2;
-}
-
-.settings div label {
-    grid-column: 2 / 2;
-    text-align: left;
-}
-
-.settings div form input,
-.settings div form select {
-    width: 20em;
-    grid-column: 3 / 3;
-}
-
-#mysql-settings {
-    display: grid;
-    grid-column: 2;
-    grid-template-columns: fit-content(10em) max-content(50em);
-    gap: 0.3em;
-}
-
-#mysql-settings p {
-    display: contents;
-}
-
-#mysql-settings label {
-    text-align: right;
-    padding-right: 0.5em;
-    align-self: center;
-    grid-column: 1 / 1;
-}
-
-#mysql-settings input {
-    grid-column: 2 / 2;
-
-}
-
-/* Responsive layout */
-@media only screen and (max-width: 700px) {
-    .main.config form {
-        grid-template-columns: 1fr;
-    }
-
-    .main.config form label {
-        text-align: left;
-        padding: 0 0 0.2em 0;
-    }
-
-    .main.config form h3 {
-        margin-top: 1.5em;
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
     }
 }
