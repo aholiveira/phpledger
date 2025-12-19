@@ -47,16 +47,13 @@ final class Html
     }
     public static function header(): void
     {
-    ?>
-        <script>
-            document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone + "; path=/";
-        </script>
-
+?>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script defer src="assets/set-timezone.js"></script>
         <link rel="stylesheet" href="assets/styles.css">
         <link rel="icon" type="image/x-icon" href="favicon.ico">
-    <?php
+<?php
     }
     public static function title(string $pagetitle = "")
     {

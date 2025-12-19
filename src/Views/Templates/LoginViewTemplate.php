@@ -17,27 +17,33 @@ final class LoginViewTemplate extends AbstractViewTemplate
         extract($data, EXTR_SKIP);
 ?>
         <!DOCTYPE html>
-        <html lang="<?= $lang ?>">
+        <html lang="<?= $htmlLang ?>">
 
         <head>
-            <title><?= Html::title() ?></title>
             <?php Html::header(); ?>
+            <title><?= Html::title() ?></title>
         </head>
 
-        <body onload="document.getElementById('username').focus();">
-            <div id="login" class="login-form">
-                <h1><?= htmlspecialchars($pagetitle) ?></h1>
-                <img src="assets/logo.png" width="64">
-                <form method="POST" name="login" autocomplete="off">
-                    <input name="lang" value="<?= $lang ?>" type="hidden" /><?= $csrf ?>
+        <body class="login-page">
+            <main class="login-box">
+                <h1 id="login-title"><?= htmlspecialchars($pagetitle) ?></h1>
+                <img class="login-logo" width="64" height="64" src="assets/logo64x64.png" srcset="assets/logo128x128.png 2x" alt="<?= $pagetitle ?> logo" loading="eager">
+                <form class="login-form" aria-labelledby="login-title" method="POST" name="login" autocomplete="on" novalidate>
+                    <input type="hidden" name="lang" value="<?= $lang ?>">
+                    <?= $csrf ?>
                     <input required="" maxlength="255" type="text" name="username" id="username" placeholder="<?= $label['username'] ?>" autocomplete="username" value="<?= htmlspecialchars($postUser) ?>">
                     <input required="" maxlength="255" type="password" name="password" id="password" placeholder="<?= $label['password'] ?>" autocomplete="current-password">
-                    <?php if ($errorMessage !== ''): ?><p class="invalid-login"><?= $errorMessage ?></p><?php endif; ?>
+                    <?php if ($errorMessage !== ''): ?><p class="login-message" role="alert" aria-live="polite"><?= $errorMessage ?></p><?php endif; ?>
                     <button type="submit" value="login" name="login"><?= $label['login'] ?></button>
-                    <a class="version-tag" href="https://github.com/aholiveira/phpledger" aria-label="<?= $footer['versionText'] ?>"><?= $footer['versionText'] ?></a>
-                    <small class="version-tag"><?= $footer['languageSelectorHtml'] ?></small>
+                    <footer class="login-footer">
+                        <a class="version-tag" href="https://github.com/aholiveira/phpledger" aria-label="<?= $footer['versionText'] ?>"><?= $footer['versionText'] ?></a>
+                        <small class="version-tag"><?= $footer['languageSelectorHtml'] ?></small>
+                    </footer>
                 </form>
-            </div>
+            </main>
+            <script>
+                document.getElementById('username').focus();
+            </script>
         </body>
 
         </html>

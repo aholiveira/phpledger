@@ -102,6 +102,7 @@ abstract class AbstractViewController implements ViewControllerInterface
             'ui' => new UiBuilder(),
             'isAdmin' => $isAdmin,
             'lang' => $lang,
+            'htmlLang' => $l10n->html(),
             'csrf' => $this->app->csrf()->inputField(),
             'action' => $this->request->input('action'),
         ];
