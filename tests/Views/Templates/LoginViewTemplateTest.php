@@ -6,6 +6,7 @@ beforeEach(function () {
     $this->template = new LoginViewTemplate();
     $this->data = [
         'lang' => 'en',
+        'htmlLang' => 'en-US',
         'pagetitle' => 'Login Page',
         'csrf' => '<input type="hidden" name="csrf_token" value="123">',
         'postUser' => 'testuser',
@@ -27,8 +28,8 @@ it('renders login form with correct fields', function () {
     $this->template->render($this->data);
     $output = ob_get_clean();
 
-    expect($output)->toContain('<form method="POST" name="login" autocomplete="off">');
-    expect($output)->toContain('<input name="lang" value="en" type="hidden" />');
+    expect($output)->toContain('<form class="login-form" aria-labelledby="login-title" method="POST" name="login" autocomplete="on" novalidate>');
+    expect($output)->toContain('<input type="hidden" name="lang" value="en">');
     expect($output)->toContain('<input required="" maxlength="255" type="text" name="username" id="username"');
     expect($output)->toContain('value="testuser"');
     expect($output)->toContain('<input required="" maxlength="255" type="password" name="password"');
@@ -44,5 +45,5 @@ it('renders error message if provided', function () {
     $this->template->render($this->data);
     $output = ob_get_clean();
 
-    expect($output)->toContain('<p class="invalid-login">Invalid login</p>');
+    expect($output)->toContain('<p class="login-message" role="alert" aria-live="polite">Invalid login</p>');
 });
