@@ -324,18 +324,10 @@ div#login div {
     width: fit-content;
 }
 
-
 #main {
     grid-area: main;
     overflow: auto;
     max-height: 90vh;
-}
-
-.table-wrapper {
-    max-height: calc(95vh - 24.5em);
-    overflow: auto;
-    width: fit-content;
-    padding-right: 0.7em;
 }
 
 .csv-download {
@@ -358,6 +350,13 @@ div.csv-download img {
     vertical-align: bottom;
 }
 
+.table-wrapper {
+    max-height: calc(95vh - 24.5em);
+    overflow: auto;
+    width: fit-content;
+    padding-right: 0.7em;
+}
+
 div.saldos,
 div.accounts,
 div.contas,
@@ -371,6 +370,10 @@ div.report_year {
     max-height: calc(95vh - 14em);
     width: fit-content;
     padding-right: 0.5em;
+}
+
+table {
+    width: fit-content;
 }
 
 #main table {
@@ -396,10 +399,8 @@ div.report_year {
 .id,
 .balance,
 .total,
-#main td.amount,
-#main td.balance,
-#main td.total,
-#main td.balance-label {
+.amount,
+.balance-label {
     text-align: right;
 }
 
@@ -440,12 +441,12 @@ div.report_year {
 }
 
 tr.income {
-    background-color: #E3F2FD !important;
+    background-color: var(--income) !important;
     color: #2e6d4d;
 }
 
 tr.expense {
-    background-color: #ffe6e6 !important;
+    background-color: var(--expense) !important;
     color: #990000;
 }
 
@@ -455,10 +456,6 @@ tr.expense {
 
 .active {
     text-align: center;
-}
-
-table {
-    width: fit-content;
 }
 
 .report tr.row-even {
