@@ -41,7 +41,7 @@ final class AccountFormViewTemplate extends AbstractViewTemplate
                             <input type="hidden" name="id" value="<?= $text['id'] ?>">
                             <p>
                                 <label for="name"><?= $label['name'] ?></label>
-                                <input id="name" name="name" value="<?= htmlspecialchars($text['name']) ?>">
+                                <input id="name" name="name" value="<?= htmlspecialchars($text['name']) ?>" required="">
                             </p>
                             <?php if (in_array('name', $errors, true)): ?>
                                 <p style="color:red"><?= $label['name_required'] ?></p>
@@ -52,7 +52,7 @@ final class AccountFormViewTemplate extends AbstractViewTemplate
                             </p>
                             <p>
                                 <label for="typeId"><?= $label['type'] ?></label>
-                                <select id="typeId" name="typeId">
+                                <select id="typeId" name="typeId" required="">
                                     <?php $this->renderSelectOptions($accountTypes); ?>
                                 </select>
                             </p>
