@@ -607,7 +607,7 @@ td>.toggle-btn {
 #mysql-settings {
     display: grid;
     grid-column: 2;
-    grid-template-columns: fit-content(10em) max-content(50em);
+    grid-template-columns: fit-content(10em) 1fr;
     gap: 0.3em;
 }
 
