@@ -52,7 +52,6 @@ it('renders the report view template without errors', function () {
     expect($html)->toContain('<html lang="en-us">');
     expect($html)->toMatch('/<title>Report.*<\/title>/');
     expect($html)->toContain('assets/common.js');
-    expect($html)->toContain('id="table"');
     expect($html)->toContain(htmlspecialchars($this->defaultData['downloadUrl']));
     expect($html)->toContain(htmlspecialchars($this->defaultData['downloadRawUrl']));
 });

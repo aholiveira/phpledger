@@ -27,13 +27,13 @@ it('renders login form with correct fields', function () {
     $this->template->render($this->data);
     $output = ob_get_clean();
 
-    expect($output)->toContain('<form method="POST" action="?lang=en" name="login" autocomplete="off">');
+    expect($output)->toContain('<form method="POST" name="login" autocomplete="off">');
     expect($output)->toContain('<input name="lang" value="en" type="hidden" />');
-    expect($output)->toContain('<input required size="25" maxlength="50" type="text" name="username" id="username"');
+    expect($output)->toContain('<input required="" maxlength="255" type="text" name="username" id="username"');
     expect($output)->toContain('value="testuser"');
-    expect($output)->toContain('<input required size="25" maxlength="255" type="password" name="password"');
-    expect($output)->toContain('<input type="submit" value="Login">');
-    expect($output)->toContain('<a href="https://github.com/aholiveira/phpledger"');
+    expect($output)->toContain('<input required="" maxlength="255" type="password" name="password"');
+    expect($output)->toContain('<button type="submit" value="login" name="login">Login</button>');
+    expect($output)->toContain('<a class="version-tag" href="https://github.com/aholiveira/phpledger"');
     expect($output)->toContain($this->data['footer']['versionText']);
     expect($output)->toContain($this->data['footer']['languageSelectorHtml']);
 });

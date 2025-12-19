@@ -52,7 +52,7 @@ it('renders the footer correctly', function () {
     $this->ui->footer($text, $footerData);
     $html = ob_get_clean();
 
-    expect($html)->toContain('<footer>');
+    expect($html)->toContain('<footer class="footer">');
     expect($html)->toContain('<a href="https://github.com/aholiveira/phpledger"');
     expect($html)->toContain('v1.0.0');
     expect($html)->toContain('Session expires: 2025-12-31 23:59:59');
@@ -66,7 +66,7 @@ it('renders the footer with missing optional fields', function () {
     $this->ui->footer([], $footerData);
     $html = ob_get_clean();
 
-    expect($html)->toContain('<footer>');
+    expect($html)->toContain('<footer class="footer">');
     expect($html)->toContain('<a href="" aria-label=""></a>');
 });
 
