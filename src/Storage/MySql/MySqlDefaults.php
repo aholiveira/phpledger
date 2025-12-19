@@ -11,7 +11,6 @@
 namespace PHPLedger\Storage\MySql;
 
 use Exception;
-use mysqli_sql_exception;
 use PHPLedger\Domain\Defaults;
 use PHPLedger\Storage\MySql\Traits\MySqlSelectTrait;
 use PHPLedger\Services\Config;
@@ -78,22 +77,12 @@ class MySqlDefaults extends Defaults
         $retval = [];
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            if ($stmt->execute() === false) {
-                throw new mysqli_sql_exception();
-            }
+            $stmt->execute();
             $result = $stmt->get_result();
-            if ($result === false) {
-                throw new mysqli_sql_exception();
-            }
             while ($data = $result->fetch_assoc()) {
                 $newobject = new self($data);
                 $retval[$newobject->id] = $newobject;
             }
-        } catch (Exception $ex) {
-            static::handleException($ex, $sql);
         } finally {
             if (isset($stmt) && $stmt instanceof \mysqli_stmt) {
                 $stmt->close();
@@ -110,24 +99,14 @@ class MySqlDefaults extends Defaults
         $retval = null;
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
             $stmt->bind_param("i", $id);
-            if ($stmt->execute() === false) {
-                throw new mysqli_sql_exception();
-            }
+            $stmt->execute();
             $result = $stmt->get_result();
-            if ($result === false) {
-                throw new mysqli_sql_exception();
-            }
             $row = $result ? $result->fetch_assoc() : null;
             if (!$row) {
                 return null;
             }
             $retval = new self($row);
-        } catch (Exception $ex) {
-            static::handleException($ex, $sql);
         } finally {
             if (isset($stmt) && $stmt instanceof \mysqli_stmt) {
                 $stmt->close();
@@ -147,24 +126,14 @@ class MySqlDefaults extends Defaults
         $retval = null;
         try {
             $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
             $stmt->bind_param("s", $username);
-            if ($stmt->execute() === false) {
-                throw new mysqli_sql_exception();
-            }
+            $stmt->execute();
             $result = $stmt->get_result();
-            if ($result === false) {
-                throw new mysqli_sql_exception();
-            }
             $row = $result->fetch_assoc();
             if (!$row) {
                 return null;
             }
             $retval = new self($row);
-        } catch (Exception $ex) {
-            static::handleException($ex, $sql);
         } finally {
             if (isset($stmt) && $stmt instanceof \mysqli_stmt) {
                 $stmt->close();
@@ -202,9 +171,6 @@ class MySqlDefaults extends Defaults
                     showReportGraph=VALUES(showReportGraph),
                     username=VALUES(username)";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
             $typeString = self::buildTypesString([
                 $this->categoryId,
                 $this->accountId,
@@ -233,17 +199,6 @@ class MySqlDefaults extends Defaults
                 $this->id
             );
             $retval = $stmt->execute();
-            if (false === $retval) {
-                throw new mysqli_sql_exception();
-            }
-            if (isset($result) && $result instanceof \mysqli_result) {
-                $result->close();
-            }
-            if ($retval === false) {
-                throw new mysqli_sql_exception();
-            }
-        } catch (Exception $ex) {
-            static::handleException($ex, $sql);
         } finally {
             if (isset($stmt) && $stmt instanceof \mysqli_stmt) {
                 $stmt->close();

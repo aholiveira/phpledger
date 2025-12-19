@@ -110,31 +110,26 @@ class MySqlAccount extends Account
                 WHERE {$where}
                 GROUP BY accountId";
         $retval = [];
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->bind_param(str_repeat('s', sizeof($param_array)), ...$param_array);
-            $stmt->execute();
-            $stmt->bind_result($income, $expense, $balance);
-            $stmt->fetch();
-            $retval = [
-                'income' => null === $income ? 0.0 : $income,
-                'expense' => null === $expense ? 0.0 : $expense,
-                'balance' => null === $balance ? 0.0 : $balance
-            ];
-            $stmt->close();
-        } catch (Exception $ex) {
-            $this->handleException($ex, $sql);
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        if ($stmt === false) {
+            throw new mysqli_sql_exception();
         }
+        $stmt->bind_param(str_repeat('s', sizeof($param_array)), ...$param_array);
+        $stmt->execute();
+        $stmt->bind_result($income, $expense, $balance);
+        $stmt->fetch();
+        $retval = [
+            'income' => null === $income ? 0.0 : $income,
+            'expense' => null === $expense ? 0.0 : $expense,
+            'balance' => null === $balance ? 0.0 : $balance
+        ];
+        $stmt->close();
         return $retval;
     }
     public function update(): bool
     {
         $retval = false;
-        try {
-            $sql = "INSERT INTO {$this->tableName()}
+        $sql = "INSERT INTO {$this->tableName()}
                         (`number`, `name`, `grupo`, `typeId`, `iban`, `swift`, `openDate`, `closeDate`, `activa`, `id`)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         ON DUPLICATE KEY UPDATE
@@ -147,31 +142,22 @@ class MySqlAccount extends Account
                             `openDate`=VALUES(`openDate`),
                             `closeDate`=VALUES(`closeDate`),
                             `activa`=VALUES(`activa`)";
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->bind_param(
-                "ssiissssii",
-                $this->number,
-                $this->name,
-                $this->grupo,
-                $this->typeId,
-                $this->iban,
-                $this->swift,
-                $this->openDate,
-                $this->closeDate,
-                $this->activa,
-                $this->id
-            );
-            $retval = $stmt->execute();
-            $stmt->close();
-            if (!$retval) {
-                throw new mysqli_sql_exception();
-            }
-        } catch (Exception $ex) {
-            $this->handleException($ex, $sql);
-        }
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        $stmt->bind_param(
+            "ssiissssii",
+            $this->number,
+            $this->name,
+            $this->grupo,
+            $this->typeId,
+            $this->iban,
+            $this->swift,
+            $this->openDate,
+            $this->closeDate,
+            $this->activa,
+            $this->id
+        );
+        $retval = $stmt->execute();
+        $stmt->close();
         return $retval;
     }
 }

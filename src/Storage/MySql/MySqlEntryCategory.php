@@ -67,30 +67,22 @@ class MySqlEntryCategory extends EntryCategory
         $retval = [];
         $children_map = [];
 
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_object(__CLASS__)) {
+            if ($row->parentId === 0 || $row->parentId === null) {
+                $retval[$row->id] = $row;
+            } else {
+                $children_map[$row->parentId][$row->id] = $row;
             }
-            $stmt->execute();
-            $result = $stmt->get_result();
-
-            while ($row = $result->fetch_object(__CLASS__)) {
-                if ($row->parentId === 0 || $row->parentId === null) {
-                    $retval[$row->id] = $row;
-                } else {
-                    $children_map[$row->parentId][$row->id] = $row;
-                }
+        }
+        $stmt->close();
+        foreach ($children_map as $parentId => $child_objects) {
+            if (isset($retval[$parentId])) {
+                $retval[$parentId]->children = $child_objects;
+                $retval[$parentId]->setChildDescriptions();
             }
-            $stmt->close();
-            foreach ($children_map as $parentId => $child_objects) {
-                if (isset($retval[$parentId])) {
-                    $retval[$parentId]->children = $child_objects;
-                    $retval[$parentId]->setChildDescriptions();
-                }
-            }
-        } catch (Exception $ex) {
-            static::handleException($ex, $sql);
         }
         return $retval;
     }
@@ -107,19 +99,12 @@ class MySqlEntryCategory extends EntryCategory
             FROM movimentos
             WHERE categoryId=?
             GROUP BY categoryId";
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->bind_param("i", $this->id);
-            $stmt->execute();
-            $stmt->bind_result($retval);
-            $stmt->fetch();
-            $stmt->close();
-        } catch (Exception $ex) {
-            $this->handleException($ex, $sql);
-        }
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        $stmt->bind_param("i", $this->id);
+        $stmt->execute();
+        $stmt->bind_result($retval);
+        $stmt->fetch();
+        $stmt->close();
         return $retval;
     }
     public static function getById(int $id): self
@@ -130,27 +115,20 @@ class MySqlEntryCategory extends EntryCategory
             WHERE c.id=? OR c.parentId=?";
         $children = [];
         $retval = new self();
-        try {
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        $stmt->bind_param("ii", $id, $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_object(__CLASS__)) {
+            if ($row->id === $id) {
+                $retval = $row;
+            } else {
+                $children[$row->id] = $row;
             }
-            $stmt->bind_param("ii", $id, $id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            while ($row = $result->fetch_object(__CLASS__)) {
-                if ($row->id === $id) {
-                    $retval = $row;
-                } else {
-                    $children[$row->id] = $row;
-                }
-            }
-            $stmt->close();
-            $retval->children = $children;
-            $retval->setChildDescriptions();
-        } catch (Exception $ex) {
-            static::handleException($ex, $sql);
         }
+        $stmt->close();
+        $retval->children = $children;
+        $retval->setChildDescriptions();
         return $retval;
     }
     public function validate(): bool
@@ -178,17 +156,11 @@ class MySqlEntryCategory extends EntryCategory
                     `description`=VALUES(`description`),
                     active=VALUES(active)";
             $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
             if ($this->id === null) {
                 $this->id = $this->getNextId();
             }
             $stmt->bind_param("ssss", $this->parentId, $this->description, $this->active, $this->id);
             $retval = $stmt->execute();
-            Logger::instance()->debug("Stored id [{$this->id}]", __CLASS__ . " " . __FUNCTION__ . "");
-        } catch (Exception $ex) {
-            $this->handleException($ex, $sql);
         } finally {
             if (isset($stmt) && $stmt instanceof mysqli_stmt) {
                 $stmt->close();
@@ -202,18 +174,14 @@ class MySqlEntryCategory extends EntryCategory
     public function delete(): bool
     {
         $retval = false;
-        try {
-            $sql = "DELETE FROM {$this->tableName()} WHERE id=?";
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($stmt === false) {
-                throw new mysqli_sql_exception();
-            }
-            $stmt->bind_param("i", $this->id);
-            $retval = $stmt->execute();
-            $stmt->close();
-        } catch (Exception $ex) {
-            $this->handleException($ex, $sql);
+        $sql = "DELETE FROM {$this->tableName()} WHERE id=?";
+        $stmt = MySqlStorage::getConnection()->prepare($sql);
+        if ($stmt === false) {
+            throw new mysqli_sql_exception();
         }
+        $stmt->bind_param("i", $this->id);
+        $retval = $stmt->execute();
+        $stmt->close();
         return $retval;
     }
 }

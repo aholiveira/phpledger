@@ -66,7 +66,6 @@ final class Config implements ConfigurationServiceInterface
             $configChanged = ($data !== $originalData);
             self::$configData = $data;
             if (!$test && $configChanged) {
-                Logger::instance()->debug("Config has changed");
                 self::save();
             }
             $status = true;
@@ -74,7 +73,6 @@ final class Config implements ConfigurationServiceInterface
             self::$validationMessage = $e->getMessage();
             $status = false;
         } catch (Exception $e) {
-            Logger::instance()->error("Config init failed: " . $e->getMessage());
             $status = false;
         }
         return $status;
@@ -89,9 +87,6 @@ final class Config implements ConfigurationServiceInterface
     private static function checkVersion(array $data, bool $test): array
     {
         $hasVersion = is_numeric($data['version'] ?? null);
-        if (!$test && !$hasVersion) {
-            Logger::instance()->debug("No version detected.");
-        }
         return $data;
     }
     public static function load(string $configfile, bool $test = false): array
@@ -108,7 +103,6 @@ final class Config implements ConfigurationServiceInterface
         $data = json_decode($raw, true, 512, JSON_THROW_ON_ERROR);
         self::$file = $configfile;
         if ($data === null || !is_array($data)) {
-            Logger::instance()->debug("Error on JSON");
             throw new ConfigException("Error on JSON");
         }
         return $data;
@@ -188,11 +182,9 @@ final class Config implements ConfigurationServiceInterface
     {
         $fs = self::fs();
         if (empty(self::$file)) {
-            Logger::instance()->error("Configuration file not set");
             throw new ConfigException("Configuration file not set");
         }
         if (!self::validate(self::$configData)) {
-            Logger::instance()->error("Configuration data is not valid: " . self::$validationMessage);
             throw new ConfigException("Configuration data is not valid");
         }
         $dir = dirname(self::$file);
@@ -205,29 +197,22 @@ final class Config implements ConfigurationServiceInterface
             }
         }
         if ($fs->exists(self::$file) && !$fs->isWritable(self::$file)) {
-            Logger::instance()->error("Configuration file is not writable: " . self::$file);
             throw new ConfigException("Configuration file is not writable");
         }
         $json = json_encode(self::$configData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
         if ($json === false) {
-            Logger::instance()->error("Unable to encode configuration data to JSON: " . json_last_error_msg());
             throw new ConfigException("Unable to encode configuration data to JSON");
         }
         $tempFile = self::fs()->tempFile($dir);
-        Logger::instance()->debug("Saving configuration to temporary file: $tempFile");
-        Logger::instance()->dump($json);
         if ($fs->write($tempFile, $json) === false) {
             $fs->delete($tempFile);
-            Logger::instance()->error("Unable to write configuration file: " . $tempFile);
             throw new ConfigException("Unable to save configuration file");
         }
-        Logger::instance()->debug("Replacing configuration file: " . self::$file);
         if ($fs->exists(self::$file)) {
             $fs->delete(self::$file);
         }
         if (!$fs->replace($tempFile, self::$file)) {
             $fs->delete($tempFile);
-            Logger::instance()->error("Unable to replace configuration file: " . self::$file);
             throw new ConfigException("Unable to replace configuration file");
         }
     }

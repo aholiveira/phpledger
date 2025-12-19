@@ -175,15 +175,6 @@ trait MySqlObject
     {
         return static::$tableName;
     }
-    protected static function handleException(Exception $ex, $sql = "")
-    {
-        Logger::instance()->dump(MySqlStorage::getConnection(), "DBLINK");
-        Logger::instance()->dump($sql, "SQL");
-        Logger::instance()->dump($ex, "EXCEPTION");
-        Logger::instance()->dump($ex->getMessage(), "EXMSG");
-        Logger::instance()->dump($ex->getTraceAsString(), "TRACE");
-        static::setErrorMessage($ex->getTraceAsString());
-    }
     public function clear(): void
     {
         $vars = get_object_vars($this);
