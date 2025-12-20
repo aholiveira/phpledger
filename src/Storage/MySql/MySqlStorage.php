@@ -512,7 +512,7 @@ class MySqlStorage implements DataStorageInterface
         $this->connect();
         $sql = "SELECT count(*) as colCount FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='{$table_name}'";
         $count = $this->fetchSingleValue($sql);
-        return ($count == 1);
+        return $count === 1;
     }
     private function addColumnToTable(string $column_name, string $table_name, string $typedef): bool
     {
@@ -562,7 +562,7 @@ class MySqlStorage implements DataStorageInterface
     {
         $sql = "SELECT count(*) as colCount FROM information_schema.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='{$table_name}' AND CONSTRAINT_NAME='{$key_name}'";
         $count = $this->fetchSingleValue($sql);
-        return ($count == 1);
+        return $count === 1;
     }
     private function addForeignKeyToTable(string $key_name, string $fk_def, string $table_name): bool
     {
