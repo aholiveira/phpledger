@@ -381,17 +381,19 @@ class MySqlStorage implements DataStorageInterface
             return false;
         }
         $retval = true;
-        if ($this->getTableEngine($table_name) != $this->dbEngine) {
-            if (!$this->setTableEngine($table_name, $this->dbEngine)) {
-                $this->addMessage("Could not change engine on table [{$table_name}]");
-                $retval = false;
-            }
+        if (
+            $this->getTableEngine($table_name) != $this->dbEngine &&
+            !$this->setTableEngine($table_name, $this->dbEngine)
+        ) {
+            $this->addMessage("Could not change engine on table [{$table_name}]");
+            $retval = false;
         }
-        if ($this->getTableCollation($table_name) !== $this->dbCollation) {
-            if (!$this->setTableCollation($table_name, $this->dbCollation)) {
-                $this->addMessage("Could not change engine on table [{$table_name}]");
-                $retval = false;
-            }
+        if (
+            $this->getTableCollation($table_name) !== $this->dbCollation &&
+            !$this->setTableCollation($table_name, $this->dbCollation)
+        ) {
+            $this->addMessage("Could not change engine on table [{$table_name}]");
+            $retval = false;
         }
         if (!empty($this->tableCreateSQL[$table_name]['new'] ?? [])) {
             foreach ($this->tableCreateSQL[$table_name]['new'] as $old_column_name => $new_column_name) {
@@ -429,11 +431,12 @@ class MySqlStorage implements DataStorageInterface
     {
         $retval = true;
         if ($this->tableExists("tipo_mov")) {
-            if (!$this->tableHasForeignKey("tipo_mov", "parentId")) {
-                if (!$this->addForeignKeyToTable("parentId", "tipo_mov(id) ON DELETE CASCADE ON UPDATE CASCADE", "tipo_mov")) {
-                    $this->addMessage("Could not add foreign key parentId to table tipo_mov");
-                    $retval = false;
-                }
+            if (
+                !$this->tableHasForeignKey("tipo_mov", "parentId") &&
+                !$this->addForeignKeyToTable("parentId", "tipo_mov(id) ON DELETE CASCADE ON UPDATE CASCADE", "tipo_mov")
+            ) {
+                $this->addMessage("Could not add foreign key parentId to table tipo_mov");
+                $retval = false;
             }
             /**
              * Create new category "Uncategorized"

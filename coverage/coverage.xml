@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1766189247">
-  <project timestamp="1766189247">
+<coverage generated="1766190011">
+  <project timestamp="1766190011">
     <file name="C:\pessoal\work\contas\src\Application.php">
       <class name="PHPLedger\Application" namespace="global">
         <metrics complexity="20" methods="19" coveredmethods="11" conditionals="0" coveredconditionals="0" statements="40" coveredstatements="22" elements="59" coveredelements="33"/>
@@ -3219,7 +3219,7 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Storage\MySql\MySqlStorage.php">
       <class name="PHPLedger\Storage\MySql\MySqlStorage" namespace="global">
-        <metrics complexity="148" methods="30" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="434" coveredstatements="32" elements="464" coveredelements="36"/>
+        <metrics complexity="148" methods="30" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="421" coveredstatements="32" elements="451" coveredelements="36"/>
       </class>
       <line num="30" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="1"/>
       <line num="32" type="stmt" count="1"/>
@@ -3545,147 +3545,134 @@
       <line num="493" type="stmt" count="0"/>
       <line num="494" type="stmt" count="0"/>
       <line num="495" type="stmt" count="0"/>
-      <line num="496" type="stmt" count="0"/>
-      <line num="498" type="method" name="getSQLTableCreate" visibility="private" complexity="1" crap="2" count="0"/>
+      <line num="497" type="method" name="getSQLTableCreate" visibility="private" complexity="1" crap="2" count="0"/>
+      <line num="499" type="stmt" count="0"/>
       <line num="500" type="stmt" count="0"/>
       <line num="501" type="stmt" count="0"/>
       <line num="502" type="stmt" count="0"/>
       <line num="503" type="stmt" count="0"/>
       <line num="504" type="stmt" count="0"/>
       <line num="505" type="stmt" count="0"/>
-      <line num="506" type="stmt" count="0"/>
-      <line num="508" type="method" name="tableExists" visibility="private" complexity="1" crap="2" count="0"/>
+      <line num="507" type="method" name="tableExists" visibility="private" complexity="1" crap="2" count="0"/>
+      <line num="509" type="stmt" count="0"/>
       <line num="510" type="stmt" count="0"/>
       <line num="511" type="stmt" count="0"/>
       <line num="512" type="stmt" count="0"/>
-      <line num="513" type="stmt" count="0"/>
-      <line num="514" type="stmt" count="0"/>
-      <line num="515" type="stmt" count="0"/>
-      <line num="517" type="method" name="addColumnToTable" visibility="private" complexity="4" crap="20" count="0"/>
+      <line num="514" type="method" name="addColumnToTable" visibility="private" complexity="4" crap="20" count="0"/>
+      <line num="516" type="stmt" count="0"/>
+      <line num="517" type="stmt" count="0"/>
       <line num="519" type="stmt" count="0"/>
-      <line num="520" type="stmt" count="0"/>
+      <line num="521" type="stmt" count="0"/>
       <line num="522" type="stmt" count="0"/>
+      <line num="523" type="stmt" count="0"/>
       <line num="524" type="stmt" count="0"/>
-      <line num="525" type="stmt" count="0"/>
       <line num="526" type="stmt" count="0"/>
       <line num="527" type="stmt" count="0"/>
+      <line num="528" type="stmt" count="0"/>
       <line num="529" type="stmt" count="0"/>
-      <line num="530" type="stmt" count="0"/>
-      <line num="531" type="stmt" count="0"/>
-      <line num="532" type="stmt" count="0"/>
-      <line num="535" type="method" name="changeColumnOnTable" visibility="private" complexity="2" crap="6" count="0"/>
+      <line num="532" type="method" name="changeColumnOnTable" visibility="private" complexity="2" crap="6" count="0"/>
+      <line num="534" type="stmt" count="0"/>
+      <line num="536" type="stmt" count="0"/>
       <line num="537" type="stmt" count="0"/>
+      <line num="538" type="stmt" count="0"/>
       <line num="539" type="stmt" count="0"/>
       <line num="540" type="stmt" count="0"/>
       <line num="541" type="stmt" count="0"/>
-      <line num="542" type="stmt" count="0"/>
       <line num="543" type="stmt" count="0"/>
-      <line num="544" type="stmt" count="0"/>
-      <line num="546" type="stmt" count="0"/>
-      <line num="548" type="method" name="renameColumnOnTable" visibility="private" complexity="3" crap="12" count="0"/>
+      <line num="545" type="method" name="renameColumnOnTable" visibility="private" complexity="3" crap="12" count="0"/>
+      <line num="547" type="stmt" count="0"/>
+      <line num="548" type="stmt" count="0"/>
       <line num="550" type="stmt" count="0"/>
       <line num="551" type="stmt" count="0"/>
-      <line num="552" type="stmt" count="0"/>
+      <line num="553" type="stmt" count="0"/>
       <line num="554" type="stmt" count="0"/>
       <line num="555" type="stmt" count="0"/>
-      <line num="557" type="stmt" count="0"/>
-      <line num="558" type="stmt" count="0"/>
-      <line num="559" type="stmt" count="0"/>
+      <line num="556" type="stmt" count="0"/>
+      <line num="558" type="method" name="tableHasForeignKey" visibility="private" complexity="1" crap="2" count="0"/>
       <line num="560" type="stmt" count="0"/>
-      <line num="562" type="method" name="tableHasForeignKey" visibility="private" complexity="1" crap="2" count="0"/>
-      <line num="564" type="stmt" count="0"/>
-      <line num="565" type="stmt" count="0"/>
+      <line num="561" type="stmt" count="0"/>
+      <line num="562" type="stmt" count="0"/>
+      <line num="564" type="method" name="addForeignKeyToTable" visibility="private" complexity="2" crap="6" count="0"/>
       <line num="566" type="stmt" count="0"/>
       <line num="567" type="stmt" count="0"/>
       <line num="568" type="stmt" count="0"/>
-      <line num="570" type="method" name="addForeignKeyToTable" visibility="private" complexity="2" crap="6" count="0"/>
+      <line num="570" type="stmt" count="0"/>
+      <line num="571" type="stmt" count="0"/>
       <line num="572" type="stmt" count="0"/>
-      <line num="573" type="stmt" count="0"/>
-      <line num="574" type="stmt" count="0"/>
-      <line num="575" type="stmt" count="0"/>
-      <line num="577" type="stmt" count="0"/>
+      <line num="574" type="method" name="tableHasColumn" visibility="private" complexity="1" crap="2" count="0"/>
+      <line num="576" type="stmt" count="0"/>
       <line num="578" type="stmt" count="0"/>
       <line num="579" type="stmt" count="0"/>
-      <line num="581" type="method" name="tableHasColumn" visibility="private" complexity="1" crap="2" count="0"/>
-      <line num="583" type="stmt" count="0"/>
+      <line num="580" type="stmt" count="0"/>
+      <line num="582" type="method" name="getDbCollation" visibility="private" complexity="2" crap="6" count="0"/>
+      <line num="584" type="stmt" count="0"/>
       <line num="585" type="stmt" count="0"/>
       <line num="586" type="stmt" count="0"/>
-      <line num="587" type="stmt" count="0"/>
-      <line num="589" type="method" name="getDbCollation" visibility="private" complexity="2" crap="6" count="0"/>
+      <line num="588" type="method" name="setDbCollation" visibility="private" complexity="2" crap="6" count="0"/>
+      <line num="590" type="stmt" count="0"/>
       <line num="591" type="stmt" count="0"/>
       <line num="592" type="stmt" count="0"/>
       <line num="593" type="stmt" count="0"/>
       <line num="594" type="stmt" count="0"/>
-      <line num="596" type="method" name="setDbCollation" visibility="private" complexity="2" crap="6" count="0"/>
-      <line num="598" type="stmt" count="0"/>
-      <line num="599" type="stmt" count="0"/>
+      <line num="596" type="stmt" count="0"/>
+      <line num="598" type="method" name="getTableCollation" visibility="private" complexity="1" crap="2" count="0"/>
       <line num="600" type="stmt" count="0"/>
       <line num="601" type="stmt" count="0"/>
       <line num="602" type="stmt" count="0"/>
-      <line num="603" type="stmt" count="0"/>
-      <line num="605" type="stmt" count="0"/>
-      <line num="607" type="method" name="getTableCollation" visibility="private" complexity="1" crap="2" count="0"/>
+      <line num="604" type="method" name="setTableCollation" visibility="private" complexity="1" crap="2" count="0"/>
+      <line num="606" type="stmt" count="0"/>
+      <line num="607" type="stmt" count="0"/>
+      <line num="608" type="stmt" count="0"/>
       <line num="609" type="stmt" count="0"/>
       <line num="610" type="stmt" count="0"/>
-      <line num="611" type="stmt" count="0"/>
-      <line num="612" type="stmt" count="0"/>
-      <line num="613" type="stmt" count="0"/>
-      <line num="615" type="method" name="setTableCollation" visibility="private" complexity="1" crap="2" count="0"/>
-      <line num="617" type="stmt" count="0"/>
-      <line num="618" type="stmt" count="0"/>
-      <line num="619" type="stmt" count="0"/>
+      <line num="612" type="method" name="getTableEngine" visibility="private" complexity="1" crap="2" count="0"/>
+      <line num="614" type="stmt" count="0"/>
+      <line num="615" type="stmt" count="0"/>
+      <line num="616" type="stmt" count="0"/>
+      <line num="618" type="method" name="setTableEngine" visibility="private" complexity="1" crap="2" count="0"/>
       <line num="620" type="stmt" count="0"/>
       <line num="621" type="stmt" count="0"/>
       <line num="622" type="stmt" count="0"/>
-      <line num="624" type="method" name="getTableEngine" visibility="private" complexity="1" crap="2" count="0"/>
-      <line num="626" type="stmt" count="0"/>
-      <line num="627" type="stmt" count="0"/>
+      <line num="623" type="stmt" count="0"/>
+      <line num="624" type="stmt" count="0"/>
+      <line num="626" type="method" name="createTable" visibility="private" complexity="9" crap="90" count="0"/>
       <line num="628" type="stmt" count="0"/>
-      <line num="630" type="method" name="setTableEngine" visibility="private" complexity="1" crap="2" count="0"/>
+      <line num="629" type="stmt" count="0"/>
+      <line num="631" type="stmt" count="0"/>
       <line num="632" type="stmt" count="0"/>
       <line num="633" type="stmt" count="0"/>
-      <line num="634" type="stmt" count="0"/>
       <line num="635" type="stmt" count="0"/>
       <line num="636" type="stmt" count="0"/>
       <line num="637" type="stmt" count="0"/>
-      <line num="639" type="method" name="createTable" visibility="private" complexity="9" crap="90" count="0"/>
-      <line num="641" type="stmt" count="0"/>
+      <line num="638" type="stmt" count="0"/>
+      <line num="640" type="stmt" count="0"/>
       <line num="642" type="stmt" count="0"/>
+      <line num="643" type="stmt" count="0"/>
       <line num="644" type="stmt" count="0"/>
-      <line num="645" type="stmt" count="0"/>
-      <line num="646" type="stmt" count="0"/>
+      <line num="647" type="stmt" count="0"/>
       <line num="648" type="stmt" count="0"/>
       <line num="649" type="stmt" count="0"/>
-      <line num="650" type="stmt" count="0"/>
-      <line num="651" type="stmt" count="0"/>
+      <line num="652" type="stmt" count="0"/>
       <line num="653" type="stmt" count="0"/>
+      <line num="654" type="stmt" count="0"/>
       <line num="655" type="stmt" count="0"/>
       <line num="656" type="stmt" count="0"/>
       <line num="657" type="stmt" count="0"/>
-      <line num="660" type="stmt" count="0"/>
-      <line num="661" type="stmt" count="0"/>
-      <line num="662" type="stmt" count="0"/>
-      <line num="665" type="stmt" count="0"/>
-      <line num="666" type="stmt" count="0"/>
-      <line num="667" type="stmt" count="0"/>
-      <line num="668" type="stmt" count="0"/>
-      <line num="669" type="stmt" count="0"/>
-      <line num="670" type="stmt" count="0"/>
-      <line num="672" type="stmt" count="0"/>
-      <line num="674" type="method" name="setTableCreateSQL" visibility="private" complexity="2" crap="2" count="1"/>
-      <line num="676" type="stmt" count="1"/>
-      <line num="677" type="stmt" count="1"/>
-      <line num="678" type="stmt" count="1"/>
-      <line num="679" type="stmt" count="1"/>
-      <line num="680" type="stmt" count="1"/>
-      <line num="681" type="stmt" count="1"/>
-      <line num="682" type="stmt" count="1"/>
-      <line num="683" type="stmt" count="1"/>
-      <line num="684" type="stmt" count="1"/>
-      <line num="685" type="stmt" count="1"/>
-      <line num="686" type="stmt" count="1"/>
-      <line num="687" type="stmt" count="1"/>
-      <metrics loc="691" ncloc="671" classes="1" methods="30" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="434" coveredstatements="32" elements="464" coveredelements="36"/>
+      <line num="659" type="stmt" count="0"/>
+      <line num="661" type="method" name="setTableCreateSQL" visibility="private" complexity="2" crap="2" count="1"/>
+      <line num="663" type="stmt" count="1"/>
+      <line num="664" type="stmt" count="1"/>
+      <line num="665" type="stmt" count="1"/>
+      <line num="666" type="stmt" count="1"/>
+      <line num="667" type="stmt" count="1"/>
+      <line num="668" type="stmt" count="1"/>
+      <line num="669" type="stmt" count="1"/>
+      <line num="670" type="stmt" count="1"/>
+      <line num="671" type="stmt" count="1"/>
+      <line num="672" type="stmt" count="1"/>
+      <line num="673" type="stmt" count="1"/>
+      <line num="674" type="stmt" count="1"/>
+      <metrics loc="678" ncloc="658" classes="1" methods="30" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="421" coveredstatements="32" elements="451" coveredelements="36"/>
     </file>
     <file name="C:\pessoal\work\contas\src\Storage\MySql\MySqlUser.php">
       <class name="PHPLedger\Storage\MySql\MySqlUser" namespace="global">
@@ -5115,6 +5102,6 @@
       <line num="76" type="stmt" count="4"/>
       <metrics loc="79" ncloc="79" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="55" coveredstatements="55" elements="56" coveredelements="56"/>
     </file>
-    <metrics files="123" loc="8736" ncloc="8186" classes="94" methods="385" coveredmethods="219" conditionals="0" coveredconditionals="0" statements="4046" coveredstatements="2031" elements="4431" coveredelements="2250"/>
+    <metrics files="123" loc="8723" ncloc="8173" classes="94" methods="385" coveredmethods="219" conditionals="0" coveredconditionals="0" statements="4033" coveredstatements="2031" elements="4418" coveredelements="2250"/>
   </project>
 </coverage>
