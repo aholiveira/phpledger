@@ -12,8 +12,6 @@
 namespace PHPLedger\Storage\MySql;
 
 use DateTimeInterface;
-use Exception;
-use mysqli_sql_exception;
 use PHPLedger\Domain\Account;
 use PHPLedger\Storage\MySql\Traits\MySqlDeleteTrait;
 use PHPLedger\Storage\MySql\Traits\MySqlFetchAllTrait;
@@ -92,7 +90,6 @@ class MySqlAccount extends Account
     public function getBalance(?DateTimeInterface $startDate = null, ?DateTimeInterface $endDate = null): array
     {
         $where = "accountId=? ";
-        $retval = ['income' => 0, 'expense' => 0, 'balance' => 0];
         $param_array = [$this->id];
         if (null !== $startDate) {
             $where .= " AND `entryDate`>=? ";
@@ -111,9 +108,6 @@ class MySqlAccount extends Account
                 GROUP BY accountId";
         $retval = [];
         $stmt = MySqlStorage::getConnection()->prepare($sql);
-        if ($stmt === false) {
-            throw new mysqli_sql_exception();
-        }
         $stmt->bind_param(str_repeat('s', sizeof($param_array)), ...$param_array);
         $stmt->execute();
         $stmt->bind_result($income, $expense, $balance);

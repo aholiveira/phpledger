@@ -10,8 +10,6 @@
 
 namespace PHPLedger\Storage\MySql;
 
-use Exception;
-use mysqli_sql_exception;
 use PHPLedger\Domain\Currency;
 use PHPLedger\Storage\MySql\MySqlObject;
 use PHPLedger\Storage\MySql\Traits\MySqlSelectTrait;

@@ -10,8 +10,6 @@
 
 namespace PHPLedger\Storage\MySql;
 
-use Exception;
-use mysqli_sql_exception;
 use PHPLedger\Domain\Ledger;
 use PHPLedger\Storage\MySql\Traits\MySqlFetchAllTrait;
 use PHPLedger\Storage\MySql\Traits\MySqlSelectTrait;

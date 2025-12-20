@@ -10,8 +10,6 @@
 
 namespace PHPLedger\Storage\MySql;
 
-use Exception;
-use mysqli_sql_exception;
 use PHPLedger\Domain\User;
 
 class MySqlUser extends User
