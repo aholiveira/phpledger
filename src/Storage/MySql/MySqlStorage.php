@@ -489,7 +489,6 @@ class MySqlStorage implements DataStorageInterface
      */
     private function executeQuery(string $sql)
     {
-        $retval = false;
         $stmt = self::getConnection()->prepare($sql);
         $retval = $stmt->execute();
         $stmt->close();
@@ -507,12 +506,10 @@ class MySqlStorage implements DataStorageInterface
     }
     private function tableExists(string $table_name): bool
     {
-        $retval = false;
         $this->connect();
         $sql = "SELECT count(*) as colCount FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='{$table_name}'";
         $count = $this->fetchSingleValue($sql);
-        $retval = ($count == 1);
-        return $retval;
+        return ($count == 1);
     }
     private function addColumnToTable(string $column_name, string $table_name, string $typedef): bool
     {
@@ -547,7 +544,6 @@ class MySqlStorage implements DataStorageInterface
     }
     private function renameColumnOnTable(string $old_column_name, string $new_column_name, string $table_name): bool
     {
-        $retval = false;
         if ($this->tableHasColumn($table_name, $new_column_name)) {
             return false;
         }
@@ -561,15 +557,12 @@ class MySqlStorage implements DataStorageInterface
     }
     private function tableHasForeignKey(string $table_name, string $key_name): bool
     {
-        $retval = false;
         $sql = "SELECT count(*) as colCount FROM information_schema.TABLE_CONSTRAINTS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='{$table_name}' AND CONSTRAINT_NAME='{$key_name}'";
         $count = $this->fetchSingleValue($sql);
-        $retval = ($count == 1);
-        return $retval;
+        return ($count == 1);
     }
     private function addForeignKeyToTable(string $key_name, string $fk_def, string $table_name): bool
     {
-        $retval = false;
         $sql = "ALTER TABLE `{$table_name}` ADD FOREIGN KEY `{$key_name}` (`{$key_name}`) REFERENCES {$fk_def}";
         if ($this->tableHasForeignKey($table_name, $key_name)) {
             return true;
@@ -590,12 +583,10 @@ class MySqlStorage implements DataStorageInterface
     {
         $this->connect();
         $sql = "SELECT DEFAULT_COLLATION_NAME FROM information_schema.SCHEMATA WHERE SCHEMA_NAME='{$db_name}'";
-        $retval = $this->fetchSingleValue($sql);
-        return $retval ?: null;
+        return $this->fetchSingleValue($sql) ?: null;
     }
     private function setDbCollation(string $db_name, string $dbCollation): ?string
     {
-        $retval = "";
         $this->connect();
         $sql = "ALTER DATABASE `{$db_name}` COLLATE='{$dbCollation}'";
         $retval = $this->executeQuery($sql);
@@ -606,15 +597,12 @@ class MySqlStorage implements DataStorageInterface
     }
     private function getTableCollation(string $table_name): ?string
     {
-        $retval = "";
         $this->connect();
         $sql = "SELECT table_collation FROM information_schema.TABLES WHERE table_name = '{$table_name}' AND table_schema = DATABASE()";
-        $retval = @$this->fetchSingleValue($sql);
-        return $retval;
+        return @$this->fetchSingleValue($sql);
     }
     private function setTableCollation(string $table_name, string $dbCollation): ?string
     {
-        $retval = "";
         $this->connect();
         $sql = "ALTER TABLE `{$table_name}` COLLATE='{$dbCollation}'";
         $retval = @$this->executeQuery($sql);
@@ -629,7 +617,6 @@ class MySqlStorage implements DataStorageInterface
     }
     private function setTableEngine(string $table_name, string $engine): bool
     {
-        $retval = false;
         $this->connect();
         $sql = "ALTER TABLE `{$table_name}` ENGINE={$engine}";
         $retval = $this->executeQuery($sql);
