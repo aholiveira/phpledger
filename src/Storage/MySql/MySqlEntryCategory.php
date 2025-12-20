@@ -10,12 +10,9 @@
 
 namespace PHPLedger\Storage\MySql;
 
-use Exception;
 use mysqli_result;
-use mysqli_sql_exception;
 use mysqli_stmt;
 use PHPLedger\Domain\EntryCategory;
-use PHPLedger\Services\Logger;
 
 class MySqlEntryCategory extends EntryCategory
 {
@@ -176,9 +173,6 @@ class MySqlEntryCategory extends EntryCategory
         $retval = false;
         $sql = "DELETE FROM {$this->tableName()} WHERE id=?";
         $stmt = MySqlStorage::getConnection()->prepare($sql);
-        if ($stmt === false) {
-            throw new mysqli_sql_exception();
-        }
         $stmt->bind_param("i", $this->id);
         $retval = $stmt->execute();
         $stmt->close();

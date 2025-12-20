@@ -11,9 +11,7 @@
 namespace PHPLedger\Storage\MySql;
 
 use DomainException;
-use Exception;
 use PHPLedger\Contracts\DataObjectInterface;
-use PHPLedger\Services\Logger;
 
 trait MySqlObject
 {

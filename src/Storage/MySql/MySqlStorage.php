@@ -11,13 +11,10 @@
 namespace PHPLedger\Storage\MySql;
 
 use Exception;
-use mysqli_sql_exception;
 use mysqli;
 use PHPLedger\Contracts\DataStorageInterface;
 use PHPLedger\Domain\EntryCategory;
 use PHPLedger\Services\Config;
-use PHPLedger\Services\Logger;
-use RuntimeException;
 use Throwable;
 
 class MySqlStorage implements DataStorageInterface
@@ -63,7 +60,7 @@ class MySqlStorage implements DataStorageInterface
                 if ($this->dbConnection->connect_errno) {
                     try {
                         $this->dbConnection->close();
-                    } catch (Exception $e) {
+                    } catch (Throwable $e) {
                         // Ignore errors on closing a broken connection
                     }
                     $this->dbConnection = null;

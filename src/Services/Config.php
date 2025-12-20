@@ -5,7 +5,6 @@ namespace PHPLedger\Services;
 use Exception;
 use PHPLedger\Contracts\ConfigFilesystemInterface;
 use PHPLedger\Contracts\ConfigurationServiceInterface;
-use PHPLedger\Services\Logger;
 
 class ConfigException extends Exception {}
 class ConfigInvalidException extends Exception {}
@@ -59,7 +58,6 @@ final class Config implements ConfigurationServiceInterface
             }
             $data = self::load($configfile);
             $originalData = $data ?? [];
-            $data = self::checkVersion($data, $test);
             if (!$test && !self::instance()->validate($data, $test)) {
                 throw new ConfigException("Could not validate config data");
             }
@@ -83,11 +81,6 @@ final class Config implements ConfigurationServiceInterface
             self::$instance = new self();
         }
         return self::$instance;
-    }
-    private static function checkVersion(array $data, bool $test): array
-    {
-        $hasVersion = is_numeric($data['version'] ?? null);
-        return $data;
     }
     public static function load(string $configfile, bool $test = false): array
     {
