@@ -1,62 +1,79 @@
-# About
-This software is intended to be used to register expenses in a ledger so you can you track your personal finances.  
-It is written using PHP and is intended to be run on a LAMP (Linux, Apache, MySQL, PHP) stack.  
-Also see [History](#history).
+# PHPLedger
 
-# Prerequisites
-- Apache or other PHP capable web-server
-- PHP 7.0 or higher
+PHPLedger is a personal finance ledger application that allows you to register and track expenses.
+It is written in PHP and designed to run on a LAMP (Linux, Apache, MySQL, PHP) stack.
+See [History](#history) for the project background.
+
+## Status
+
+**Project status:** Personal project, actively maintained for experimentation and learning.
+Not recommended for production use without thorough review and testing.
+
+## Disclaimer
+
+This software is provided "as is" without any warranties. Use at your own risk.
+Security and data integrity are the responsibility of the user.
+
+## Prerequisites
+
+- Apache or another PHP-capable web server
+- PHP 8.2 or higher
 - MySQL or MariaDB server
 
-# Installion
+## Installation
 
-1. Create a directory in the webserver root to hold the application files
-2. Unzip the contents of phpledger.zip to the directory created above
-3. Copy or rename config.sample.json to config.json
-4. Edit config.json to suit your needs
-5. Create the database using caixa.sql file with mysql -u root -p < caixa.sql
-6. Create users in mysql to access the application. The user password should be encrypted with md5 (CREATE USER 'jeffrey'@'localhost' IDENTIFIED BY PASSWORD(md5('*90E462C37378CED12064BB3388827D2BA3A9B689')))
+1. Create a directory under the web server root for the application.
+2. Extract the zip file into that directory, or clone the git repository.
+3. Copy `config/config.sample.json` to `config/config.json`.
+4. Edit `config.json` to match your environment.
+5. Create the database:
+   ```bash
+   mysql -u root -p < caixa.sql
+   ```
 
-This is still cumbersome and a bit complicated.  
-See [Goals](#goals).
+> This process is still somewhat manual. See [Goals](#goals) for ongoing improvements.
 
-# Goals 
-Although the software is already in usable state, these are the minimum goals that should be met for each version.
+## Goals
 
-## Version 1.0
-- All code is using Object Oriented Programming, and all "legacy" code is removed
-- User management is moved out of MySQL and into the application
-- Web interface is usable "enough" on mobile devices
-- Interface is using pt-PT language
-- Installation and upgrade of database is done in-app
+These are the minimum objectives for each major version:
 
-## Version 2.0
-- Web interface can either use en-US or pt-PT locales
-- Localizable strings are moved to resource files
-- Databases supported: MySQL, MS SQL, Postgresql
+### Version 1.0
 
-# Design principles
-These are the principles that guide the application's development
-- Code should be as secure as possible
-- Keep external dependencies at the minimum
-- Commits on 'main' branch should always be fully working
-- Commits on 'develop' branch can be broken, but it should be avoided if possible.
-- Some kind of code testing should be in-place, preferably automated before commits on both branches
-- Backwards compatibility is kept when possible. Schema changes should be handled by the application.
+* All code is fully object-oriented; legacy code removed
+* User management handled in the application, not the database engine
+* Web interface is usable on mobile devices
+* Interface uses Portuguese (pt-PT)
+* Database installation and upgrades handled in-app
 
-# License
-This software is distributed under GPLv3. See [LICENSE](LICENSE.md) for more details.
+### Version 2.0
 
-# Contact
-Antonio Oliveira - [aholiveira@gmail.com](mailto:aholiveira@gmail.com)
-Project link - [https://github.com/aholiveira/phpledger](https://github.com/aholiveira/phpledger)
+* Web interface supports English (en-US) and Portuguese (pt-PT)
+* Localizable strings moved to resource files
+* Additional database support: MySQL, MS SQL, PostgreSQL
 
-# History
-This project started a few years ago, circa 2000, when I wanted to implement an application to manage my own finances.
-I knew some programming so I decided to code it in PHP and host it on my own machine.  
-Code was "rushed", not very well structured and not following many rules.  
-After using the application for some years and learning more about programming, and with my wife's input, more features
-and a code rewrite were in dire need, so this project was revived in 2020.  
-I know there are probably much better alternatives out there, but this is also a chance for me to grow, experiment and learn.  
-If you know PHP, HTML or CSS feel free to contact me if you want to help this project grow. Also, please do contact me if you want to use
-it and need some help.  
+## Development Principles
+
+* Write secure code wherever possible
+* Minimise external dependencies
+* `main` branch must always be stable and fully working
+* `develop` branch may be unstable, but breakages should be minimised
+* Automated testing should be implemented and run before commits
+* Backward compatibility should be preserved; schema changes handled by the application
+
+## License
+
+Distributed under the GPLv3. See [LICENSE](LICENSE.md) for details.
+
+## Contact
+
+Antonio Oliveira – [aholiveira@gmail.com](mailto:aholiveira@gmail.com)
+Project repository: [https://github.com/aholiveira/phpledger](https://github.com/aholiveira/phpledger)
+
+We welcome end-users, developers, and enthusiasts to try PHPLedger, share feedback, and contribute improvements.
+
+## History
+
+This project started around 2000 as a personal finance management tool.
+Early versions were coded quickly with minimal structure. After several years of use and learning, the project was revived in 2020 with a complete rewrite, with  valuable input and support from my wife, who helped shape features and usability.
+
+The goal is to provide a usable ledger, experiment with PHP, HTML, and CSS, and improve development skills. Contributions and collaboration are welcome.
