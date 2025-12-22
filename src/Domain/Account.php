@@ -16,7 +16,7 @@ abstract class Account extends AbstractDataObject implements DataObjectInterface
     public int $typeId;
     public string $openDate;
     public string $closeDate;
-    public int $activa;
+    public int $active;
     public function getBalanceOnDate(DateTimeInterface $date): array
     {
         return $this->getBalance(null, $date);

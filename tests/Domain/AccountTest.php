@@ -43,7 +43,7 @@ it('allows setting and getting basic properties', function () {
     $acc->typeId = 1;
     $acc->openDate = '2025-01-01';
     $acc->closeDate = '2025-12-31';
-    $acc->activa = 1;
+    $acc->active = 1;
 
     expect($acc->name)->toBe('Test');
     expect($acc->number)->toBe('123');
@@ -53,7 +53,7 @@ it('allows setting and getting basic properties', function () {
     expect($acc->typeId)->toBe(1);
     expect($acc->openDate)->toBe('2025-01-01');
     expect($acc->closeDate)->toBe('2025-12-31');
-    expect($acc->activa)->toBe(1);
+    expect($acc->active)->toBe(1);
 });
 
 it('returns balance for a given date via getBalanceOnDate', function () {

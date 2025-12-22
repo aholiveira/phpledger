@@ -30,7 +30,7 @@ final class AccountsController extends AbstractViewController
                 'swift' => $r->swift ?? '',
                 'openDate' => $r->openDate ?? '',
                 'closeDate' => $r->closeDate ?? '',
-                'activa' => !empty($r->activa)
+                'active' => !empty($r->active)
             ];
         }
         $l10n = $this->app->l10n();
