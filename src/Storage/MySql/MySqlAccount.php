@@ -73,7 +73,8 @@ class MySqlAccount extends Account
             'conta_nome' => 'name',
             'tipo_id' => 'typeId',
             'conta_nib' => 'iban',
-            'conta_id' => 'id'
+            'conta_id' => 'id',
+            'activa' => 'active'
         ];
         return $retval;
     }
