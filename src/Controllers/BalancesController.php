@@ -19,7 +19,7 @@ final class BalancesController extends AbstractViewController
     protected function handle(): void
     {
         $object = $this->app->dataFactory()->account();
-        $objectList = $object->getList(['activa' => ['operator' => '=', 'value' => '1']]);
+        $objectList = $object->getList(['active' => ['operator' => '=', 'value' => '1']]);
         $type_names = ['income', 'expense', 'balance'];
         $totals = array_fill_keys($type_names, 0);
         $balances = [];

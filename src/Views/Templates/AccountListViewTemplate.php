@@ -57,7 +57,7 @@ final class AccountListViewTemplate extends AbstractViewTemplate
                                         <td data-label="<?= $label['swift'] ?>"><?= htmlspecialchars($row['swift']) ?></td>
                                         <td data-label="<?= $label['open'] ?>"><?= htmlspecialchars($row['openDate']) ?></td>
                                         <td data-label="<?= $label['close'] ?>"><?= htmlspecialchars($row['closeDate']) ?></td>
-                                        <td class="active" data-label="<?= $label['active'] ?>"><?= $row['activa'] ? '✓' : '–' ?></td>
+                                        <td class="active" data-label="<?= $label['active'] ?>"><?= $row['active'] ? '✓' : '–' ?></td>
                                         <td data-label="<?= $label['actions'] ?>"><a href="index.php?action=account&id=<?= (int)$row['id'] ?>&lang=<?= htmlspecialchars($lang) ?>" aria-label="<?= $label['edit'] ?>"><?= $label['edit'] ?></a></td>
                                     </tr>
                                 <?php endforeach; ?>

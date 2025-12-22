@@ -32,7 +32,7 @@ function createAccount(int $id = 1, string $name = 'Acc', string $num = '001'): 
     $a->swift = '';
     $a->openDate = date("Y-m-d");
     $a->closeDate = date("Y-m-d");
-    $a->activa = 1;
+    $a->active = 1;
     return $a;
 }
 
@@ -50,7 +50,7 @@ it('gets next id correctly', function () {
     expect(MySqlAccount::getNextId())->toBe(1);
 
     $this->db->query(
-        "INSERT INTO contas (id, number, name, grupo, typeId, iban, swift, openDate, closeDate, activa)
+        "INSERT INTO contas (id, number, name, grupo, typeId, iban, swift, openDate, closeDate, active)
          VALUES (1,'n','x',1,1,'','', NOW(), NOW(), 1)"
     );
 

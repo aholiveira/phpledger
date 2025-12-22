@@ -36,7 +36,7 @@ class MySqlAccount extends Account
     public static function getList(array $fieldFilter = []): array
     {
         $where = static::getWhereFromArray($fieldFilter);
-        $sql =  self::getSelect() . " {$where} ORDER BY activa DESC, name";
+        $sql =  self::getSelect() . " {$where} ORDER BY active DESC, name";
         return static::fetchAll($sql);
     }
 
@@ -59,7 +59,7 @@ class MySqlAccount extends Account
             "swift" => "char(24) NOT NULL DEFAULT ''",
             "openDate" => "date DEFAULT NULL",
             "closeDate" => "date DEFAULT NULL",
-            "activa" => "int(1) NOT NULL DEFAULT 0"
+            "active" => "int(1) NOT NULL DEFAULT 0"
         ];
         $retval['primary_key'] = "id";
         $retval['new'] = [
@@ -67,7 +67,6 @@ class MySqlAccount extends Account
             'type_id' => 'typeId',
             'open_date' => 'openDate',
             'close_date' => 'closeDate',
-            'active' => 'activa',
             'conta_abertura' => 'openDate',
             'conta_fecho' => 'closeDate',
             'conta_num' => 'number',
@@ -124,7 +123,7 @@ class MySqlAccount extends Account
     {
         $retval = false;
         $sql = "INSERT INTO {$this->tableName()}
-                        (`number`, `name`, `grupo`, `typeId`, `iban`, `swift`, `openDate`, `closeDate`, `activa`, `id`)
+                        (`number`, `name`, `grupo`, `typeId`, `iban`, `swift`, `openDate`, `closeDate`, `active`, `id`)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         ON DUPLICATE KEY UPDATE
                             `number`=VALUES(`number`),
@@ -135,7 +134,7 @@ class MySqlAccount extends Account
                             `swift`=VALUES(`swift`),
                             `openDate`=VALUES(`openDate`),
                             `closeDate`=VALUES(`closeDate`),
-                            `activa`=VALUES(`activa`)";
+                            `active`=VALUES(`active`)";
         $stmt = MySqlStorage::getConnection()->prepare($sql);
         $stmt->bind_param(
             "ssiissssii",
@@ -147,7 +146,7 @@ class MySqlAccount extends Account
             $this->swift,
             $this->openDate,
             $this->closeDate,
-            $this->activa,
+            $this->active,
             $this->id
         );
         $retval = $stmt->execute();

@@ -26,7 +26,7 @@ CREATE TABLE `contas` (
   `iban` char(24) default NULL,
   `openDate` date default NULL,
   `closeDate` date default NULL,
-  `activa` int(1) NOT NULL default '0',
+  `active` int(1) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4_general_ci;
 

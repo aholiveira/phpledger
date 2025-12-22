@@ -76,8 +76,8 @@ final class AccountFormViewTemplate extends AbstractViewTemplate
                                 <input id="closeDate" type="date" name="closeDate" value="<?= $text['closeDate'] ?>">
                             </p>
                             <p>
-                                <label for="activa"><?= $label['active'] ?></label>
-                                <input id="activa" type="checkbox" name="activa" <?= $text['activa'] ? 'checked' : '' ?>>
+                                <label for="active"><?= $label['active'] ?></label>
+                                <input id="active" type="checkbox" name="active" <?= $text['active'] ? 'checked' : '' ?>>
                             </p>
                             <p>
                                 <button style="grid-column: 2 / 2;" type="submit" name="itemaction" value="save"><?= $label['save'] ?></button>

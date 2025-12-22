@@ -191,7 +191,7 @@ final class LedgerEntriesController extends AbstractViewController
     }
     private function populateCaches(): void
     {
-        $this->accountListCache = $this->dataFactory->account()->getList(['activa' => ['operator' => '=', 'value' => '1']]);
+        $this->accountListCache = $this->dataFactory->account()->getList(['active' => ['operator' => '=', 'value' => '1']]);
         $this->currencyListCache = $this->dataFactory->currency()->getList();
         $this->entryCategoryListCache = $this->dataFactory->entryCategory()->getList([
             'active' => ['operator' => '=', 'value' => '1'],

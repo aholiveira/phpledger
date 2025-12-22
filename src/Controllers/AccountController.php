@@ -74,7 +74,7 @@ final class AccountController extends AbstractViewController
                 'swift' => $this->account->swift ?? '',
                 'openDate' => $this->account->openDate ?? date("Y-m-d"),
                 'closeDate' => $this->account->closeDate ?? date("Y-m-d", 0),
-                'activa' => ($this->account->activa ?? 1) === 1,
+                'active' => ($this->account->active ?? 1) === 1,
             ]
         ]));
     }
@@ -116,7 +116,7 @@ final class AccountController extends AbstractViewController
         $a->swift = trim((string) ($this->request->input('swift', '')));
         $a->openDate = trim((string) ($this->request->input('openDate', date('Y-m-d'))));
         $a->closeDate = trim((string) ($this->request->input('closeDate', '')));
-        $a->activa = $this->request->input('activa', 0) === 0 ? 0 : 1;
+        $a->active = $this->request->input('active', 0) === 0 ? 0 : 1;
         $a->grupo = (int) ($this->request->input('grupo', 0));
 
         // simple required validation for name (keep minimal as requested)

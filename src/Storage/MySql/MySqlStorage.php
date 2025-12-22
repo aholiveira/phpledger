@@ -279,7 +279,7 @@ class MySqlStorage implements DataStorageInterface
                 $account->swift = '';
                 $account->openDate = date("Y-m-d");
                 $account->closeDate = date("Y-m-d", mktime(0, 0, 0, 1, 1, 1990));
-                $account->activa = 1;
+                $account->active = 1;
                 $account->id = 1;
                 if (!$account->update()) {
                     $this->addMessage("Could not save account");
@@ -307,7 +307,7 @@ class MySqlStorage implements DataStorageInterface
         $end_year = date("Y");
         $max_month_entries = 100;
         $account = MySqlObjectFactory::account();
-        $account_list = $account->getList(['activa' => ['operator' => '=', 'value' => '1']]);
+        $account_list = $account->getList(['active' => ['operator' => '=', 'value' => '1']]);
         $category_list = $category->getList(['active' => ['operator' => '=', 'value' => '1']]);
         if (array_key_exists(0, $category_list)) {
             unset($category_list[0]);

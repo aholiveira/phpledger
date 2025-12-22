@@ -17,7 +17,7 @@ beforeEach(function () {
                 'swift' => 'BCPTPTPL',
                 'openDate' => '2025-01-01',
                 'closeDate' => '',
-                'activa' => true,
+                'active' => true,
             ],
             [
                 'id' => 2,
@@ -28,7 +28,7 @@ beforeEach(function () {
                 'swift' => 'BCPTPTPL',
                 'openDate' => '2025-01-01',
                 'closeDate' => '2025-12-31',
-                'activa' => false,
+                'active' => false,
             ],
         ],
         'label' => [
