@@ -21,7 +21,7 @@ final class LoginViewTemplate extends AbstractViewTemplate
 
         <head>
             <?php Html::header(); ?>
-            <title><?= Html::title() ?></title>
+            <title><?= Html::title('', $appTitle) ?></title>
         </head>
 
         <body class="login-page">

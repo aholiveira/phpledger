@@ -16,7 +16,7 @@ class ResetPasswordViewTemplate extends AbstractViewTemplate
         <html lang="<?= $lang ?>">
 
         <head>
-            <title><?= Html::title($pagetitle) ?></title>
+            <title><?= Html::title($pagetitle, $appTitle) ?></title>
             <?php Html::header(); ?>
         </head>
 
