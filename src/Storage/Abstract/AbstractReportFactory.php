@@ -14,13 +14,16 @@ abstract class AbstractReportFactory
         if (static::$backendFactory !== null) {
             return;
         }
-
-        if ($backend === 'mysql') {
-            static::$backendFactory = new \PHPLedger\Storage\MySql\MySqlReportFactory();
-            return;
+        switch ($backend) {
+            case 'mysql':
+                static::$backendFactory = new \PHPLedger\Storage\MySql\MySqlReportFactory();
+                break;
+            case '':
+                break;
+            default:
+                throw new UnexpectedValueException('Report storage not implemented');
+                break;
         }
-
-        throw new UnexpectedValueException('Report storage not implemented');
     }
 
     public static function categorySummary(): CategorySummaryInterface
