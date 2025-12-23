@@ -22,6 +22,11 @@ beforeEach(function () {
     ");
 });
 
+afterEach(function () {
+    $this->db = MySqlStorage::getConnection();
+    $this->db->query("DROP TABLE IF EXISTS test_table");
+});
+
 // Concrete class using the trait
 class MySqlTestObject {
     use MySqlObject;
