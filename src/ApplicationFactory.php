@@ -21,12 +21,15 @@ class ApplicationFactory
     public static function create(): Application
     {
         $logfile = Path::combine(ROOT_DIR, "logs", "ledger.log");
-        $config = new Config();
-        Config::setInstance($config);
-        Config::init(ConfigPath::get());
         $logger = new Logger($logfile);
-        $backend = $config->get('storage.type', 'mysql');
+        $config = new Config();
         $headerSender = new HeaderSender();
+        Config::setInstance($config);
+        if (Config::init(ConfigPath::get())) {
+            $backend = $config->get('storage.type', 'mysql');
+        } else {
+            $backend = "";
+        }
         return new Application(
             $config,
             new ObjectFactory($backend),
