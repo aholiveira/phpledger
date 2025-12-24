@@ -11,6 +11,7 @@ final class ApplicationErrorController extends AbstractViewController
         $view = new ApplicationErrorViewTemplate();
         $view->render([
             'pagetitle' => $this->app->l10n()->l("Application error"),
+            'appTitle'  => $this->app->config()->get('title', 'Prosperidade financeira'),
             'lang'      => $this->app->l10n()->html(),
             'message'   => $this->app->getErrorMessage(),
         ]);
