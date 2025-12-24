@@ -60,13 +60,13 @@ it('returns translation for a given id with replacements', function () {
     expect($result)->toBe(htmlspecialchars('Hello World', ENT_NOQUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8', false));
 });
 
-it('returns empty string for missing translation', function () {
+it('returns translation tag for missing translation', function () {
     $l10n = new L10n();
     $ref = new \ReflectionClass($l10n);
     $prop = $ref->getProperty('l10n');
     $prop->setAccessible(true);
     $prop->setValue($l10n, []);
-    expect($l10n->l('missing'))->toBe('');
+    expect($l10n->l('missing'))->toBe('missing');
 });
 
 it('prints translation with pl()', function () {

@@ -33,6 +33,7 @@ beforeEach(function () {
         'ui' => new UiBuilder(),
         'lang' => 'pt-pt',
         'pagetitle' => 'Balances',
+        'appTitle' => 'AppTitle',
         'rows' => [
             [
                 'text' => [

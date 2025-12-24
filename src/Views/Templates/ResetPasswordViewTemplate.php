@@ -22,7 +22,7 @@ class ResetPasswordViewTemplate extends AbstractViewTemplate
 
         <body>
             <div id="login">
-                <h1><?= $apptitle ?></h1>
+                <h1><?= $appTitle ?></h1>
                 <p style="color:<?= $success ? "green" : "red" ?>;"><?= $message ?></p>
                 <?php if ($success === false): ?>
                     <form id="resetForm" method="POST">

@@ -12,6 +12,7 @@ it('renders account form HTML', function () {
     $data = [
         'lang' => 'en',
         'pagetitle' => 'Test Page',
+        'appTitle' => 'AppTitle',
         'ui' => $ui,
         'csrf' => '',
         'label' => [
@@ -79,6 +80,7 @@ it('renders account form HTML with back action to balances', function () {
     $data = [
         'lang' => 'en',
         'pagetitle' => 'Test Page',
+        'appTitle' => 'AppTitle',
         'ui' => $ui,
         'csrf' => '',
         'label' => [
@@ -146,6 +148,7 @@ it('renders name errors', function () {
     $data = [
         'lang' => 'en',
         'pagetitle' => 'Test Page',
+        'appTitle' => 'AppTitle',
         'ui' => $ui,
         'csrf' => '',
         'label' => [

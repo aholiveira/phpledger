@@ -1,11 +1,13 @@
 <?php
 
-use PHPLedger\Views\Templates\ConfigViewFormTemplate;
+use PHPLedger\Views\Templates\SetupViewFormTemplate;
 
 it('renders the config form correctly', function () {
     $csrfToken = '<input type="hidden" name="csrf" value="token">';
     $data = [
         'csrf' => $csrfToken,
+        'saveLabel' => 'Save',
+        'showCreateButton' => true,
         'label' => [
             'application_name' => 'App Name',
             'smtp_host' => 'SMTP Host',
@@ -43,7 +45,7 @@ it('renders the config form correctly', function () {
     ];
 
     ob_start();
-    $template = new ConfigViewFormTemplate();
+    $template = new SetupViewFormTemplate();
     $template->render($data);
     $html = ob_get_clean();
 

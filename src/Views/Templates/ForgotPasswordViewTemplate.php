@@ -32,7 +32,7 @@ final class ForgotPasswordViewTemplate extends AbstractViewTemplate
             <?php
             ?>
             <div id="login">
-                <h1><?= htmlentities($apptitle ?? "") ?></h1>
+                <h1><?= htmlentities($appTitle ?? "") ?></h1>
                 <p><?= htmlentities($label['password_recovery']) ?></p>
                 <div class="main form config">
                     <p class='error'><?= $message; ?></p>

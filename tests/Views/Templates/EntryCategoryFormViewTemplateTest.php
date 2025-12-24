@@ -17,6 +17,7 @@ beforeEach(function () {
 
     $this->data = [
         'title' => 'Entry Category',
+        'appTitle' => 'AppTitle',
         'lang' => 'en-us',
         'label' => [
             'id' => 'ID',
@@ -81,5 +82,5 @@ it('renders buttons with correct labels and confirmation', function () {
 
 it('renders title correctly', function () {
     $output = captureRender(fn() => $this->template->render($this->data));
-    expect($output)->toContain('<title>' . Html::title('Entry Category') . '</title>');
+    expect($output)->toContain('<title>' . Html::title('Entry Category', 'AppTitle') . '</title>');
 });
