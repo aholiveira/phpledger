@@ -74,6 +74,10 @@ final class Config implements ConfigurationServiceInterface
         self::$loaded = $status;
         return $status;
     }
+    public function getConfigFilePath(): string
+    {
+        return self::$file;
+    }
     public static function loaded(): bool
     {
         return self::$loaded;
