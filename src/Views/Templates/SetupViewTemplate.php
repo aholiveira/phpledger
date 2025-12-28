@@ -56,7 +56,7 @@ final class SetupViewTemplate extends AbstractViewTemplate
                             </div>
                             <div id="setup-complete" class="main config" style="display: <?= $state === SetupState::COMPLETE ? 'block' : 'none' ?>;">
                                 <p><?= htmlspecialchars($label['setup_complete']) ?></p>
-                                <a href=" index.php?action=login"><?= htmlspecialchars($label['login_page']) ?></a>
+                                <a href="index.php" aria-label="<?= htmlspecialchars($label['login_page']) ?>"><?= htmlspecialchars($label['login_page']) ?></a>
                             </div>
                         </div>
                     </form>
