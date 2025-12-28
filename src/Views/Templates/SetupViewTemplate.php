@@ -37,26 +37,26 @@ final class SetupViewTemplate extends AbstractViewTemplate
                                 <?php $setupViewFormTemplate->render(compact('label', 'config', 'state')); ?>
                             </div>
                             <div id="create-step" class="main warning" style="display: <?= $state === SetupState::STORAGE_MISSING ? 'block' : 'none' ?>;">
-                                <p><?= htmlspecialchars('Storage does not exist') ?></p>
+                                <p><?= htmlspecialchars($label['storage_does_not_exist']) ?></p>
                                 <button type=" submit" name="itemaction" value="create_storage">
                                     <?= htmlspecialchars($label['create_storage'] ?? 'Create storage') ?>
                                 </button>
                             </div>
                             <div id="migration-step" class="main warning" style="display: <?= $state === SetupState::MIGRATIONS_PENDING ? 'block' : 'none' ?>;">
-                                <p><?= htmlspecialchars('Pending database migrations detected.') ?></p>
+                                <p><?= htmlspecialchars($label['pending_db_migrations_detected']) ?></p>
                                 <button type=" submit" name="itemaction" value="run_migrations">
                                     <?= htmlspecialchars($label['apply_migrations'] ?? 'Apply migrations') ?>
                                 </button>
                             </div>
                             <div id="admin-create" class="main warning" style="display:<?= $state === SetupState::ADMIN_MISSING ? 'block' : 'none' ?>;">
-                                <p><?= htmlspecialchars('No admin user detected. Click the following button to create it.') ?></p>
+                                <p><?= htmlspecialchars($label['no_admin_user_detected']) ?></p>
                                 <button type="submit" name="itemaction" value="create_admin">
                                     <?= htmlspecialchars($label['create_admin_user'] ?? 'Create admin user') ?>
                                 </button>
                             </div>
                             <div id="setup-complete" class="main config" style="display: <?= $state === SetupState::COMPLETE ? 'block' : 'none' ?>;">
-                                <p><?= htmlspecialchars('Setup complete') ?></p>
-                                <a href=" index.php?action=login">Login page</a>
+                                <p><?= htmlspecialchars($label['setup_complete']) ?></p>
+                                <a href=" index.php?action=login"><?= htmlspecialchars($label['login_page']) ?></a>
                             </div>
                         </div>
                     </form>
