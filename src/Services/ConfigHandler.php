@@ -34,9 +34,4 @@ final class ConfigHandler
         $this->config->set('url', $new['url'], false);
         $this->config->save();
     }
-
-    public function getConfigFilePath(): string
-    {
-        return $this->config->getConfigFilePath();
-    }
 }
