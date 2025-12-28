@@ -10,31 +10,34 @@ if (!\defined('ROOT_DIR')) {
     define('ROOT_DIR', __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR);
 }
 
+use PHPLedger\ApplicationFactory;
 use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Services\Config;
+use PHPLedger\Storage\StorageManager;
 use PHPLedger\Util\Path;
 
 function  checkAndUpdateDatabaseSchema()
 {
     // Initialize config and logger
     Config::init(Path::combine(ROOT_DIR, 'config', 'config.json'));
-    ObjectFactory::init("mysql");
-    // Ensure database schema is up-to-date before running any tests
-    $storage = ObjectFactory::dataStorage();
 
     // Display check message to user
-    fwrite(STDERR, PHP_EOL . "Checking database schema..." . PHP_EOL);
+    fwrite(STDOUT, PHP_EOL . "Checking storage migrations..." . PHP_EOL);
+    $app = ApplicationFactory::create();
+    $config = $app->config()->getCurrent();
+    $engine = (new StorageManager($app))->getEngine($config['storage']['type']);
+    $pending = $engine->pendingMigrations($config['storage']['settings']);
 
-    if (!$storage->check(true)) {
-        // Database needs updating
-        fwrite(STDERR, "[WARN] Database schema out of date. Running update..." . PHP_EOL);
-        $updated = $storage->update(true);
-        if (!$updated) {
-            throw new \RuntimeException("[X] Failed to update database schema: " . $storage->message());
-        }
-        fwrite(STDERR, "[OK] Database schema updated successfully." . PHP_EOL);
+    if (!empty($pending)) {
+        fwrite(
+            STDOUT,
+            "[WARN] Pending migrations detected (" . implode(', ', $pending) . "). Running migrations..." . PHP_EOL
+        );
+
+        $engine->runMigrations($config['storage']['settings']);
+
+        fwrite(STDOUT, "[OK] Storage migrated to latest version." . PHP_EOL);
     } else {
-        // Database is already up-to-date
-        fwrite(STDERR, "[OK] Database schema is up-to-date." . PHP_EOL);
+        fwrite(STDOUT, "[OK] Storage already up-to-date." . PHP_EOL);
     }
 }

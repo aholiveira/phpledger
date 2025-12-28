@@ -1,11 +1,11 @@
 <?php
 
+use PHPLedger\Util\SetupState;
 use PHPLedger\Views\Templates\SetupViewFormTemplate;
 
 it('renders the config form correctly', function () {
-    $csrfToken = '<input type="hidden" name="csrf" value="token">';
     $data = [
-        'csrf' => $csrfToken,
+        'state' => SetupState::CONFIG_REQUIRED,
         'saveLabel' => 'Save',
         'showCreateButton' => true,
         'label' => [
@@ -49,7 +49,6 @@ it('renders the config form correctly', function () {
     $template->render($data);
     $html = ob_get_clean();
 
-    expect($html)->toContain($csrfToken);
     expect($html)->toContain('<input id="title" name="title" value="MyApp">');
     expect($html)->toContain('<input id="smtp_host" name="smtp_host" value="smtp.example.com">');
     expect($html)->toContain('<input id="smtp_port" type="number" min="1" max="65535" name="smtp_port" value="587" required>');
