@@ -103,7 +103,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     form.addEventListener('submit', (e) => {
         const btn = e.submitter;
-        if (!btn || !window.fetch) return;
+        if (!btn || !globalThis.fetch) return;
         e.preventDefault();
         handleAjax(btn.value);
     });
