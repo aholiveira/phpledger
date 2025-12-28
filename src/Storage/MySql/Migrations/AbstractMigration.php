@@ -6,7 +6,6 @@ namespace PHPLedger\Storage\MySql\Migrations;
 
 use mysqli;
 use PHPLedger\Exceptions\PHPLedgerException;
-use PHPLedger\Storage\MySql\MySqlStorage;
 
 abstract class AbstractMigration
 {
