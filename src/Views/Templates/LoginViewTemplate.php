@@ -27,7 +27,7 @@ final class LoginViewTemplate extends AbstractViewTemplate
         <body class="login-page">
             <main class="login-box">
                 <h1 id="login-title"><?= htmlspecialchars($pagetitle) ?></h1>
-                <img class="login-logo" width="64" height="64" src="assets/logo-2-64x64.png" srcset="assets/logo-2-128x128.png 2x" alt="<?= $pagetitle ?> logo" loading="eager">
+                <img class="login-logo" width="64" height="64" src="assets/media/logo-2-64x64.png" srcset="assets/media/logo-2-128x128.png 2x" alt="<?= $pagetitle ?> logo" loading="eager">
                 <form class="login-form" aria-labelledby="login-title" method="POST" name="login" autocomplete="on" novalidate>
                     <input type="hidden" name="lang" value="<?= $lang ?>">
                     <?= $csrf ?>

@@ -28,7 +28,7 @@ it('renders the preloader HTML correctly', function () {
     expect($output)->toContain('<!DOCTYPE html>');
     expect($output)->toContain('<html lang="en"');
     expect($output)->toMatch('/<title>Ledger Entries - .*<\/title>/');
-    expect($output)->toContain('<script src="assets/ledger_entries.js">');
+    expect($output)->toContain('<script src="assets/js/ledger_entries.js">');
     expect($output)->toContain('<div class="notification">Loading...</div>');
     expect($output)->toContain('<div id="preloader">');
     expect($output)->toContain('<div class="spinner"></div>');

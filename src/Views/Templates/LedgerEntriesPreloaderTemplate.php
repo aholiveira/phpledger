@@ -16,7 +16,7 @@ final class LedgerEntriesPreloaderTemplate extends AbstractViewTemplate
         <head>
             <title><?= Html::title($pagetitle, $appTitle) ?></title>
             <?php Html::header(); ?>
-            <script src="assets/ledger_entries.js"> </script>
+            <script src="assets/js/ledger_entries.js"> </script>
         </head>
 
         <body>

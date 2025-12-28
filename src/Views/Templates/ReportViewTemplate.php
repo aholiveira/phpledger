@@ -16,7 +16,7 @@ final class ReportViewTemplate extends AbstractViewTemplate
         <head>
             <title><?= Html::title($pagetitle, $appTitle) ?></title>
             <?php Html::header(); ?>
-            <script src="assets/common.js"></script>
+            <script src="assets/js/common.js"></script>
             <script>
                 function toggleGroup(id) {
                     const head = document.getElementById('group-head-' + id);

@@ -39,7 +39,7 @@ it('renders header HTML with script and meta tags', function () {
     Html::header();
     $output = ob_get_clean();
 
-    expect(str_contains($output, '<script defer src="assets/set-timezone.js"></script>'))->toBeTrue();
+    expect(str_contains($output, '<script defer src="assets/js/set-timezone.js"></script>'))->toBeTrue();
     expect(str_contains($output, '<meta charset="utf-8">'))->toBeTrue();
     expect(str_contains($output, 'assets/styles.css'))->toBeTrue();
 });
