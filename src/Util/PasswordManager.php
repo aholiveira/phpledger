@@ -1,7 +1,8 @@
 <?php
 // Adapted from https://alexwebdevelop.com/php-generate-random-secure-password/
 namespace PHPLedger\Util;
-class PasswordGenerator
+
+class PasswordManager
 {
     // Alphabetic letters, lowercase
     private const string LETTERS = 'abcdefghijklmnopqrstuvwxyz';
@@ -62,5 +63,26 @@ class PasswordGenerator
             }
         }
         return $password;
+    }
+
+    public static function hashPassword(string $password): string
+    {
+        if (function_exists('sodium_crypto_pwhash_str')) {
+            return sodium_crypto_pwhash_str($password, SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE, SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE);
+        } else {
+            return password_hash($password, PASSWORD_DEFAULT);
+        }
+    }
+
+    public static function verifyPassword(string $passwordHash, string $password): bool
+    {
+        if (empty($password)) {
+            return false;
+        }
+        if (function_exists('sodium_crypto_pwhash_str_verify')) {
+            return sodium_crypto_pwhash_str_verify($passwordHash, $password);
+        } else {
+            return password_verify($password, $passwordHash);
+        }
     }
 }
