@@ -86,9 +86,6 @@ abstract class AbstractViewController implements ViewControllerInterface
             'entry_types',
             'report',
         ];
-        if ($isAdmin) {
-            $menuActions[] = 'config';
-        }
         $menuActions[] = 'my_profile';
         $menuActions[] = 'logout';
         foreach ($menuActions as $a) {

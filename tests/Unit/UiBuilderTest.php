@@ -96,3 +96,68 @@ it('does not render notification if message is empty', function () {
 
     expect($html)->toBe('');
 });
+
+it('renders menu with a greeting', function () {
+    $menuLinks = [
+        'accounts' => 'index.php?action=accounts&lang=en',
+    ];
+    $text = ['hello' => 'Welcome!'];
+
+    ob_start();
+    $this->ui->menu($text, $menuLinks);
+    $html = ob_get_clean();
+
+    expect($html)->toContain('<div class="menu-greeting">Welcome!</div>');
+});
+
+it('renders menu with explicit greeting parameter', function () {
+    $menuLinks = [
+        'ledger' => 'index.php?action=ledger&lang=en',
+    ];
+    $text = ['ledger' => 'Ledger'];
+
+    ob_start();
+    $this->ui->menu($text, $menuLinks, 'Hi User');
+    $html = ob_get_clean();
+
+    expect($html)->toContain('<div class="menu-greeting">Hi User</div>');
+    expect($html)->toContain('<a id="ledger" aria-label="Ledger" href="index.php?action=ledger&lang=en">Ledger</a>');
+});
+
+it('renders notification with special characters safely', function () {
+    ob_start();
+    $this->ui->notification('<b>Warning!</b>', false);
+    $html = ob_get_clean();
+
+    expect($html)->toContain('<div id="notification" class="notification fail">');
+    expect($html)->toContain('<b>Warning!</b>');
+    expect($html)->toContain('setTimeout');
+});
+
+it('renders footer when optional fields are empty strings', function () {
+    $footerData = [
+        'repo' => '',
+        'versionText' => '',
+        'sessionExpires' => '',
+        'languageSelectorHtml' => ''
+    ];
+
+    ob_start();
+    $this->ui->footer([], $footerData);
+    $html = ob_get_clean();
+
+    expect($html)->toContain('<footer class="footer">');
+    expect($html)->toContain('<a href="" aria-label=""></a>');
+    expect($html)->toContain('<span style="margin-left: auto; display: flex;"></span>');
+});
+
+it('renders menu with no greeting if text["hello"] is missing', function () {
+    $menuLinks = ['home' => 'index.php?action=home'];
+    $text = [];
+
+    ob_start();
+    $this->ui->menu($text, $menuLinks);
+    $html = ob_get_clean();
+
+    expect($html)->not->toContain('<div class="menu-greeting">');
+});
