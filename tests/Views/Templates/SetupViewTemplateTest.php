@@ -28,7 +28,13 @@ it('renders config view template correctly', function () {
             'storage_type' => 'Storage Type',
             'mysql_settings' => 'MySQL Settings',
             'save' => 'Save',
-            'save_anyway' => 'Save anyway'
+            'save_anyway' => 'Save anyway',
+            'storage_does_not_exist' => 'Storage does not exist',
+            'pending_db_migrations_detected' => 'pending_db_migrations_detected',
+            'no_admin_user_detected' => 'no_admin_user_detected',
+            'create_admin_user' => 'create_admin_user',
+            'setup_complete' => 'setup_complete',
+            'login_page' => 'login_page'
         ],
         'config' => [
             'title' => 'MyApp',
