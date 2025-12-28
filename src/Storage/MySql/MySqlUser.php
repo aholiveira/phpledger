@@ -25,28 +25,19 @@ class MySqlUser extends User
     }
     public static function getDefinition(): array
     {
-        $notNull = "NOT NULL";
-        $defaultEmpty = "DEFAULT ''";
-        $char255 = "char(255)";
-        $retval = [];
-        $retval['new'] = [
-            'token_expiry' => 'tokenExpiry'
+        return [
+            "id",
+            "username",
+            "password",
+            "firstName",
+            "lastName",
+            "fullName",
+            "email",
+            "role",
+            "token",
+            "tokenExpiry",
+            "active"
         ];
-        $retval['columns'] = [
-            "id" => "int(3) $notNull DEFAULT 0",
-            "username" => "char(100) $notNull",
-            "password" => "$char255 $notNull",
-            "firstName" => "$char255 $notNull $defaultEmpty",
-            "lastName" => "$char255 $notNull $defaultEmpty",
-            "fullName" => "$char255 $notNull $defaultEmpty",
-            "email" => "$char255 $notNull $defaultEmpty",
-            "role" => "int(3) $notNull DEFAULT 0",
-            "token" => "$char255 $notNull $defaultEmpty",
-            "tokenExpiry" => "datetime",
-            "active" => "int(1) $notNull DEFAULT 0"
-        ];
-        $retval['primary_key'] = "id";
-        return $retval;
     }
     public function update(): bool
     {
@@ -67,7 +58,7 @@ class MySqlUser extends User
 
         try {
             if (!isset($this->id)) {
-                return false;
+                $this->id = $this->getNextId();
             }
             if (empty($this->tokenExpiry)) {
                 $this->tokenExpiry = null;
@@ -87,9 +78,7 @@ class MySqlUser extends User
                 $this->tokenExpiry,
                 $this->active
             );
-            $ok = $stmt->execute();
-            $stmt->close();
-            return $ok;
+            return $stmt->execute();
         } finally {
             if (isset($stmt)) {
                 $stmt->close();

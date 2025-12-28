@@ -25,13 +25,10 @@ class MySqlLedger extends Ledger
     protected static string $tableName = "`grupo_contas`";
     public static function getDefinition(): array
     {
-        $retval = [];
-        $retval['columns'] = [
-            "id" => "int(4) NOT NULL DEFAULT 0",
-            "nome" => "char(30) NOT NULL DEFAULT ''"
+        return [
+            "id",
+            "nome"
         ];
-        $retval['primary_key'] = "id";
-        return $retval;
     }
     private static function getSelect(): string
     {
