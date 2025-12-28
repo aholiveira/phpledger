@@ -92,8 +92,8 @@ final class ReportViewTemplate extends AbstractViewTemplate
                 <div class="main" id="main">
                     <div class="main-container">
                         <div class="csv-download">
-                            <a href="<?= htmlspecialchars($downloadUrl) ?>"><small><?= $label['download_data'] ?><img src="assets/file-csv-solid-full.svg" alt="CSV"></small></a>
-                            <a href="<?= htmlspecialchars($downloadRawUrl) ?>"><small><?= $label['download_raw_data'] ?><img src="assets/file-csv-solid-full.svg" alt="CSV"></small></a>
+                            <a href="<?= htmlspecialchars($downloadUrl) ?>"><small><?= $label['download_data'] ?><img src="assets/media/file-csv-solid-full.svg" alt="CSV"></small></a>
+                            <a href="<?= htmlspecialchars($downloadRawUrl) ?>"><small><?= $label['download_raw_data'] ?><img src="assets/media/file-csv-solid-full.svg" alt="CSV"></small></a>
                         </div>
                         <div class="table-wrapper">
                             <?php $reportViewTableTemplate->render(compact(
