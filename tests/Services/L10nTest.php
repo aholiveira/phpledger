@@ -3,9 +3,7 @@
 use PHPLedger\Services\L10n;
 
 beforeEach(function () {
-    if (!\defined('ROOT_DIR')) {
-        define('ROOT_DIR', __DIR__);
-    }
+    if (!defined('ROOT_DIR')) define('ROOT_DIR', __DIR__);
     $_SESSION = [];
     $_REQUEST = [];
     $_SERVER = [];
@@ -24,7 +22,6 @@ it('detects user language from request', function () {
 });
 
 it('detects user language from browser header', function () {
-    $_REQUEST['lang'] = '';
     $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'en-US,en;q=0.9';
     $l10n = new L10n();
     expect($l10n->lang())->toBe('en-us');
@@ -52,29 +49,28 @@ it('returns HTML language code', function () {
 
 it('returns translation for a given id with replacements', function () {
     $l10n = new L10n();
-    $ref = new \ReflectionClass($l10n);
+    $ref = new ReflectionClass($l10n);
     $prop = $ref->getProperty('l10n');
     $prop->setAccessible(true);
     $prop->setValue($l10n, ['greet' => 'Hello %s']);
+
     $result = $l10n->l('greet', 'World');
-    expect($result)->toBe(htmlspecialchars('Hello World', ENT_NOQUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8', false));
+    expect($result)->toBe('Hello World');
 });
 
-it('returns empty string for missing translation', function () {
+it('returns fallback string for missing translation with replacements', function () {
     $l10n = new L10n();
-    $ref = new \ReflectionClass($l10n);
-    $prop = $ref->getProperty('l10n');
-    $prop->setAccessible(true);
-    $prop->setValue($l10n, []);
-    expect($l10n->l('missing'))->toBe('');
+    $result = $l10n->l('missing', 'X', 'Y');
+    expect($result)->toBe('missing [X, Y]');
 });
 
 it('prints translation with pl()', function () {
     $l10n = new L10n();
-    $ref = new \ReflectionClass($l10n);
+    $ref = new ReflectionClass($l10n);
     $prop = $ref->getProperty('l10n');
     $prop->setAccessible(true);
     $prop->setValue($l10n, ['hello' => 'Hi']);
+
     ob_start();
     $l10n->pl('hello');
     $output = ob_get_clean();
@@ -91,7 +87,7 @@ it('sanitizes allowed language codes', function () {
 
 it('safeSprintf handles mismatched placeholders gracefully', function () {
     $l10n = new L10n();
-    $ref = new \ReflectionClass($l10n);
+    $ref = new ReflectionClass($l10n);
     $method = $ref->getMethod('safeSprintf');
     $method->setAccessible(true);
 
@@ -106,7 +102,7 @@ it('safeSprintf handles mismatched placeholders gracefully', function () {
 
 it('normalizeLang converts to lowercase and replaces underscores', function () {
     $l10n = new L10n();
-    $ref = new \ReflectionClass($l10n);
+    $ref = new ReflectionClass($l10n);
     $method = $ref->getMethod('normalizeLang');
     $method->setAccessible(true);
 
@@ -116,7 +112,7 @@ it('normalizeLang converts to lowercase and replaces underscores', function () {
 
 it('loads language from cache when available', function () {
     $l10n = new L10n();
-    $ref = new \ReflectionClass($l10n);
+    $ref = new ReflectionClass($l10n);
     $propCache = $ref->getProperty('cache');
     $propCache->setAccessible(true);
     $propCache->setValue($l10n, ['pt-pt' => ['hello' => 'Hi']]);
@@ -128,9 +124,9 @@ it('loads language from cache when available', function () {
     expect($result)->toBe(['hello' => 'Hi']);
 });
 
-it('loadLang falls back to pt-pt if file missing', function () {
+it('loadLang falls back to empty if file missing', function () {
     $l10n = new L10n();
-    $ref = new \ReflectionClass($l10n);
+    $ref = new ReflectionClass($l10n);
     $method = $ref->getMethod('loadLang');
     $method->setAccessible(true);
 
@@ -138,21 +134,7 @@ it('loadLang falls back to pt-pt if file missing', function () {
     expect($result)->toBe([]);
 });
 
-it('detectUserLang returns normalized lang from request or browser', function () {
-    $_REQUEST['lang'] = 'EN-US';
-    $l10n = new L10n();
-    $ref = new \ReflectionClass($l10n);
-    $method = $ref->getMethod('detectUserLang');
-    $method->setAccessible(true);
-
-    expect($method->invoke($l10n))->toBe('en-us');
-
-    $_REQUEST = [];
-    $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'pt-BR';
-    expect($method->invoke($l10n))->toBe('pt-pt');
-});
-
-it('loads language from JSON file', function () {
+it('loads language from temporary JSON file', function () {
     $langDir = ROOT_DIR . '/lang';
     if (!is_dir($langDir)) mkdir($langDir, 0777, true);
 
@@ -162,12 +144,26 @@ it('loads language from JSON file', function () {
     $l10n = new L10n();
     $l10n->setLang('en-us');
 
-    $ref = new \ReflectionClass($l10n);
+    $ref = new ReflectionClass($l10n);
     $prop = $ref->getProperty('l10n');
     $prop->setAccessible(true);
-
     expect($prop->getValue($l10n))->toBe(['hello' => 'Hi']);
 
     // cleanup
     unlink($file);
+    rmdir($langDir);
+});
+
+it('detectUserLang returns normalized lang from request or browser', function () {
+    $_REQUEST['lang'] = 'EN-US';
+    $l10n = new L10n();
+    $ref = new ReflectionClass($l10n);
+    $method = $ref->getMethod('detectUserLang');
+    $method->setAccessible(true);
+
+    expect($method->invoke($l10n))->toBe('en-us');
+
+    $_REQUEST = [];
+    $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'pt-BR';
+    expect($method->invoke($l10n))->toBe('pt-pt');
 });

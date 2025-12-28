@@ -50,48 +50,23 @@ class MySqlLedgerEntry extends LedgerEntry
     }
     public static function getDefinition(): array
     {
-        $retval = [];
-        $retval['new'] = [
-            'mov_id' => 'id',
-            'tipo_mov' => 'categoryId',
-            'data_mov' => 'entryDate',
-            'conta_id' => 'accountId',
-            'deb_cred' => 'direction',
-            'moeda_mov' => 'currencyId',
-            'valor_mov' => 'currencyAmount',
-            'valor_euro' => 'euroAmount',
-            'cambio' => 'exchangeRate',
-            'obs' => 'remarks',
-            'last_modified' => 'updatedAt',
-            'created_at' => 'createdAt',
-            'updated_at' => 'updatedAt',
-            'exchange_rate' => 'exchangeRate',
-            'euro_amount' => 'euroAmount',
-            'currency_amount' => 'currencyAmount',
-            'category_id' => 'categoryId',
-            'account_id' => 'accountId',
-            'currency_id' => 'currencyId',
-            'entry_date' => 'entryDate'
+        return [
+            "id",
+            "entryDate",
+            "categoryId",
+            "accountId",
+            "currencyId",
+            "direction",
+            "currencyAmount",
+            "euroAmount",
+            "exchangeRate",
+            "a_pagar",
+            "com_talao",
+            "remarks",
+            "username",
+            "createdAt",
+            "updatedAt"
         ];
-        $retval['columns'] = [
-            "id" => "int(4) NOT NULL AUTO_INCREMENT",
-            "entryDate" => "date DEFAULT NULL",
-            "categoryId" => "int(3) DEFAULT NULL",
-            "accountId" => "int(3) DEFAULT NULL",
-            "currencyId" => "char(3) NOT NULL DEFAULT 'EUR'",
-            "direction" => "tinyint(1) NOT NULL DEFAULT 1",
-            "currencyAmount" => "float(10,2) DEFAULT NULL",
-            "euroAmount" => "float(10,2) DEFAULT NULL",
-            "exchangeRate" => "float(9,4) NOT NULL DEFAULT 1.0000",
-            "a_pagar" => "tinyint(1) NOT NULL DEFAULT 0",
-            "com_talao" => "tinyint(1) NOT NULL DEFAULT 0",
-            "remarks" => "char(255) DEFAULT NULL",
-            "username" => "char(255) DEFAULT ''",
-            "createdAt" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()",
-            "updatedAt" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()"
-        ];
-        $retval['primary_key'] = "id";
-        return $retval;
     }
     public static function getList(array $fieldFilter = []): array
     {

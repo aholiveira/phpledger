@@ -16,6 +16,7 @@ abstract class AbstractViewController implements ViewControllerInterface
     protected ApplicationObjectInterface $app;
     abstract protected function handle(): void;
     protected array $uiData = ['label' => []];
+
     public function handleRequest(ApplicationObjectInterface $app, RequestInterface $request): void
     {
         $this->request = $request;
@@ -24,6 +25,7 @@ abstract class AbstractViewController implements ViewControllerInterface
         $this->prepareUi();
         $this->handle();
     }
+
     private function buildBaseLabels(L10nServiceInterface $l10n): array
     {
         $base = [
@@ -50,6 +52,7 @@ abstract class AbstractViewController implements ViewControllerInterface
         ];
         return $this->buildL10nLabels($l10n, $base);
     }
+
     protected function buildL10nLabels(L10nServiceInterface $l10n, array $keys): array
     {
         $labels = [];
@@ -58,6 +61,7 @@ abstract class AbstractViewController implements ViewControllerInterface
         }
         return $labels;
     }
+
     protected function prepareUi(): void
     {
         $app = $this->app;
@@ -65,10 +69,14 @@ abstract class AbstractViewController implements ViewControllerInterface
         $lang = $l10n->lang();
         $session = $app->session();
         $expires = date("Y-m-d H:i:s", $session->get('expires', 0));
-        $isAdmin = $session->get('isAdmin', false);
-        $user = $this->app->dataFactory()->user()::getByUsername($this->app->session()->get('user', ''));
-        if ($user instanceof User) {
-            $this->uiData['label']['hello'] = $l10n->l('hello', $user->getProperty('firstName', ''));
+        if ($this->app->session()->isAuthenticated()) {
+            $isAdmin = $session->get('isAdmin', false);
+            $user = $this->app->dataFactory()->user()::getByUsername($this->app->session()->get('user', ''));
+            if ($user instanceof User) {
+                $this->uiData['label']['hello'] = $l10n->l('hello', $user->getProperty('firstName', ''));
+            }
+        } else {
+            $isAdmin = false;
         }
         $menuActions = [
             'ledger_entries',
@@ -78,9 +86,6 @@ abstract class AbstractViewController implements ViewControllerInterface
             'entry_types',
             'report',
         ];
-        if ($isAdmin) {
-            $menuActions[] = 'config';
-        }
         $menuActions[] = 'my_profile';
         $menuActions[] = 'logout';
         foreach ($menuActions as $a) {
@@ -97,6 +102,7 @@ abstract class AbstractViewController implements ViewControllerInterface
         ];
         $this->uiData = [
             'label' => $this->uiData['label'],
+            'appTitle' => $this->app->config()->get('title', ''),
             'menu' => $menuLinks,
             'footer' => $footer,
             'ui' => new UiBuilder(),
@@ -107,6 +113,7 @@ abstract class AbstractViewController implements ViewControllerInterface
             'action' => $this->request->input('action'),
         ];
     }
+
     protected function buildLanguageSelectorHtml(string $current, array $requestParams = []): string
     {
         $params = empty($requestParams) ? $this->request->all() : $requestParams;

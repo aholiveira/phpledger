@@ -30,18 +30,11 @@ class MysqlAccountType extends AccountType
 
     public static function getDefinition(): array
     {
-        $retval = [];
-        $retval['new'] = [
-            'tipo_id' => 'id',
-            'tipo_desc' => 'description'
+        return [
+            "id",
+            "description",
+            "savings"
         ];
-        $retval['columns'] = [
-            "id" => "int(2) NOT NULL DEFAULT 0",
-            "description" => "char(30) DEFAULT NULL",
-            "savings" => "int(1) NOT NULL DEFAULT 0"
-        ];
-        $retval['primary_key'] = "id";
-        return $retval;
     }
     public static function getList(array $fieldFilter = []): array
     {

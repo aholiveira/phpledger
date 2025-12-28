@@ -14,7 +14,7 @@ final class EntryCategoryListViewTemplate extends AbstractViewTemplate
         <html lang="<?= $lang ?>">
 
         <head>
-            <title><?= Html::title($title) ?></title>
+            <title><?= Html::title($title, $appTitle) ?></title>
             <?php Html::header(); ?>
         </head>
 

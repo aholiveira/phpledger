@@ -8,6 +8,7 @@ beforeEach(function () {
         'lang' => 'en',
         'htmlLang' => 'en-US',
         'pagetitle' => 'Login Page',
+        'appTitle' => 'AppTitle',
         'csrf' => '<input type="hidden" name="csrf_token" value="123">',
         'postUser' => 'testuser',
         'label' => [

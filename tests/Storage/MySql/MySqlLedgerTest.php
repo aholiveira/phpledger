@@ -29,26 +29,6 @@ afterAll(function () {
     }
 });
 
-describe('MySqlLedger::getDefinition', function () {
-    it('returns correct column definitions', function () {
-        $def = MySqlLedger::getDefinition();
-
-        expect($def)->toHaveKey('columns');
-        expect($def)->toHaveKey('primary_key');
-        expect($def['primary_key'])->toBe('id');
-    });
-
-    it('defines id and nome columns', function () {
-        $def = MySqlLedger::getDefinition();
-        $cols = $def['columns'];
-
-        expect($cols)->toHaveKey('id');
-        expect($cols)->toHaveKey('nome');
-        expect($cols['id'])->toContain('int(4)');
-        expect($cols['nome'])->toContain('char(30)');
-    });
-});
-
 describe('MySqlLedger::getList', function () {
     it('returns empty array when no ledgers exist', function () {
         $list = MySqlLedger::getList();

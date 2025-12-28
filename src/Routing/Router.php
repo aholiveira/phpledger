@@ -11,7 +11,6 @@ use PHPLedger\Controllers\AccountTypeFormController;
 use PHPLedger\Controllers\AccountTypeListController;
 use PHPLedger\Controllers\ApplicationErrorController;
 use PHPLedger\Controllers\BalancesController;
-use PHPLedger\Controllers\ConfigController;
 use PHPLedger\Controllers\EntryCategoryFormController;
 use PHPLedger\Controllers\EntryCategoryListController;
 use PHPLedger\Controllers\ForgotPasswordController;
@@ -19,6 +18,7 @@ use PHPLedger\Controllers\LedgerEntriesController;
 use PHPLedger\Controllers\LoginController;
 use PHPLedger\Controllers\ReportController;
 use PHPLedger\Controllers\ResetPasswordController;
+use PHPLedger\Controllers\SetupController;
 use PHPLedger\Controllers\UpdateStorageController;
 use PHPLedger\Controllers\UserProfileController;
 use PHPLedger\Http\HttpRequest;
@@ -32,7 +32,6 @@ class Router
         'accounts'          => AccountsController::class,
         'application_error' => ApplicationErrorController::class,
         'balances'          => BalancesController::class,
-        'config'            => ConfigController::class,
         'entry_type'        => EntryCategoryFormController::class,
         'entry_types'       => EntryCategoryListController::class,
         'forgotpassword'    => ForgotPasswordController::class,
@@ -41,8 +40,8 @@ class Router
         'logout'            => LoginController::class,
         'report'            => ReportController::class,
         'resetpassword'     => ResetPasswordController::class,
-        'update'            => UpdateStorageController::class,
         'my_profile'        => UserProfileController::class,
+        'setup'             => SetupController::class,
     ];
 
     public function handleRequest(ApplicationObjectInterface $app, string $action, ?RequestInterface $request = null): void
@@ -61,8 +60,9 @@ class Router
 
     public function publicActions(): array
     {
-        return ['login', 'update', 'resetpassword', 'forgotpassword', 'applicationerror'];
+        return ['login', 'setup', 'resetpassword', 'forgotpassword', 'applicationerror'];
     }
+
     /** Returns a whitelist of all valid actions */
     public static function getAllowedActions(): array
     {

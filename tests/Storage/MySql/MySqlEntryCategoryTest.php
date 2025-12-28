@@ -64,7 +64,7 @@ it('gets list with children (recursive)', function () {
 
     $list = MySqlEntryCategory::getList();
     expect($list)->toBeArray();
-    expect($list)->toHaveCount(1);
+    expect($list)->toHaveCount(2);
 
     $parent = reset($list);
     expect($parent->children)->toBeArray();

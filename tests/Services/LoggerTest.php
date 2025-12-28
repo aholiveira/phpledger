@@ -116,3 +116,44 @@ it('uses dash as prefix when empty', function () {
     $content = file_get_contents($this->logFile);
     expect($content)->toContain('[-] No prefix');
 });
+
+it('does not write log if logFile is empty', function () {
+    $logger = new Logger('', LogLevel::DEBUG);
+    $logger->debug('Should not log');
+    expect(file_exists(''))->toBeFalse();
+});
+
+it('dumpStack actually writes multiple stack frames', function () {
+    $logger = new Logger($this->logFile);
+    $logger->dumpStack();
+    $content = file_get_contents($this->logFile);
+    expect(substr_count($content, 'file'))->toBeGreaterThan(0);
+    expect(substr_count($content, 'function'))->toBeGreaterThan(0);
+});
+
+it('dump logs objects correctly', function () {
+    $logger = new Logger($this->logFile);
+    $obj = new stdClass();
+    $obj->prop = 'value';
+    $logger->dump($obj, 'OBJ');
+    $content = file_get_contents($this->logFile);
+    expect($content)->toContain('stdClass');
+    expect($content)->toContain('[OBJ]');
+    expect($content)->toContain('prop');
+    expect($content)->toContain('value');
+});
+
+it('writeLog respects log level filtering', function () {
+    $logger = new Logger($this->logFile, LogLevel::WARNING);
+    $logger->debug('debug ignored');
+    $logger->info('info ignored');
+    $logger->notice('notice ignored');
+    $logger->warning('warn logged');
+    $logger->error('error logged');
+    $content = file_get_contents($this->logFile);
+    expect($content)->not->toContain('debug ignored');
+    expect($content)->not->toContain('info ignored');
+    expect($content)->not->toContain('notice ignored');
+    expect($content)->toContain('warn logged');
+    expect($content)->toContain('error logged');
+});

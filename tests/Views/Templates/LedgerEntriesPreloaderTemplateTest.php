@@ -9,6 +9,7 @@ beforeEach(function () {
     $this->data = [
         'lang' => 'en',
         'pagetitle' => 'Ledger Entries',
+        'appTitle' => 'AppTitle',
         'label' => ['notification' => 'Loading...'],
         'success' => true,
         'ui' => new class {

@@ -13,6 +13,7 @@ it('renders account type form HTML', function () {
     $data = [
         'lang' => 'en',
         'ui' => $ui,
+        'appTitle' => 'AppTitle',
         'label' => [
             'back_to_list' => 'Back to list',
             'id' => 'ID',

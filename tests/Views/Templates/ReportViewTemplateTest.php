@@ -25,6 +25,7 @@ beforeEach(function () {
     $this->defaultData = [
         'lang' => 'en-us',
         'pagetitle' => 'Report',
+        'appTitle' => 'AppTitle',
         'ui' => $ui,
         'menu' => [],
         'label' => ['download_data' => 'Download', 'download_raw_data' => 'Download raw'],

@@ -48,35 +48,18 @@ class MySqlAccount extends Account
 
     public static function getDefinition(): array
     {
-        $retval = [];
-        $retval['columns'] = [
-            "id" => "int(3) NOT NULL DEFAULT 0",
-            "number" => "char(30) NOT NULL DEFAULT ''",
-            "name" => "char(30) NOT NULL DEFAULT ''",
-            "grupo" => "int(3) NOT NULL DEFAULT 0",
-            "typeId" => "int(2) DEFAULT NULL",
-            "iban" => "char(24) DEFAULT NULL",
-            "swift" => "char(24) NOT NULL DEFAULT ''",
-            "openDate" => "date DEFAULT NULL",
-            "closeDate" => "date DEFAULT NULL",
-            "active" => "int(1) NOT NULL DEFAULT 0"
+        return [
+            "id",
+            "number",
+            "name",
+            "grupo",
+            "typeId",
+            "iban",
+            "swift",
+            "openDate",
+            "closeDate",
+            "active"
         ];
-        $retval['primary_key'] = "id";
-        $retval['new'] = [
-            'group' => 'grupo',
-            'type_id' => 'typeId',
-            'open_date' => 'openDate',
-            'close_date' => 'closeDate',
-            'conta_abertura' => 'openDate',
-            'conta_fecho' => 'closeDate',
-            'conta_num' => 'number',
-            'conta_nome' => 'name',
-            'tipo_id' => 'typeId',
-            'conta_nib' => 'iban',
-            'conta_id' => 'id',
-            'activa' => 'active'
-        ];
-        return $retval;
     }
     /**
      * @return array array with keys 'income', 'expense' and 'balance'

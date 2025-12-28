@@ -1,7 +1,9 @@
 <?php
 
 use PHPLedger\Contracts\UiBuilderInterface;
-use PHPLedger\Views\Templates\ConfigViewTemplate;
+use PHPLedger\Util\SetupState;
+use PHPLedger\Views\Templates\SetupViewFormTemplate;
+use PHPLedger\Views\Templates\SetupViewTemplate;
 
 it('renders config view template correctly', function () {
     $ui = new class implements UiBuilderInterface {
@@ -14,6 +16,7 @@ it('renders config view template correctly', function () {
     $data = [
         'lang' => 'en',
         'pagetitle' => 'Configuration',
+        'appTitle' => 'AppTitle',
         'messages' => ['Saved successfully'],
         'success' => true,
         'label' => [
@@ -25,6 +28,7 @@ it('renders config view template correctly', function () {
             'storage_type' => 'Storage Type',
             'mysql_settings' => 'MySQL Settings',
             'save' => 'Save',
+            'save_anyway' => 'Save anyway'
         ],
         'config' => [
             'title' => 'MyApp',
@@ -36,11 +40,13 @@ it('renders config view template correctly', function () {
         'menu' => [],
         'footer' => [],
         'hasPermission' => true,
-        'ui' => $ui
+        'ui' => $ui,
+        'state' => SetupState::COMPLETE,
+        'setupViewFormTemplate' => new SetupViewFormTemplate,
     ];
 
     // Replace original template instance in render
-    $template = new ConfigViewTemplate();
+    $template = new SetupViewTemplate();
 
     ob_start();
     $template->render($data);

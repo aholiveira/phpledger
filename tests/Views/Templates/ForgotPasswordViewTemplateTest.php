@@ -8,7 +8,7 @@ beforeEach(function () {
 
     $this->data = [
         'lang' => 'en',
-        'apptitle' => 'PHPLedger App',
+        'appTitle' => 'PHPLedger App',
         'label' => [
             'password_recovery' => 'Password Recovery',
             'username' => 'Username',
@@ -30,7 +30,7 @@ it('renders the correct title and language', function () {
     $output = ob_get_clean();
 
     expect($output)->toContain('<html lang="en">');
-    expect($output)->toContain('<title>' . Html::title('Password Recovery') . '</title>');
+    expect($output)->toContain('<title>' . Html::title('Password Recovery', 'PHPLedger App') . '</title>');
 });
 
 it('renders app title and password recovery label', function () {

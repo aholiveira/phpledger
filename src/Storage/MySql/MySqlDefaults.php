@@ -42,32 +42,19 @@ class MySqlDefaults extends Defaults
     }
     public static function getDefinition(): array
     {
-        $retval = [];
-        $retval['new'] = [
-            "tipo_mov" => "categoryId",
-            "conta_id" => "accountId",
-            "moeda_mov" => "currencyId",
-            "data" => "entryDate",
-            "deb_cred" => "direction",
-            "last_visited" => "lastVisitedUri",
-            "show_report_graph" => "showReportGraph",
-            "lastVisited" => "lastVisitedUri"
+        return [
+            "id",
+            "categoryId",
+            "accountId",
+            "currencyId",
+            "entryDate",
+            "direction",
+            "language",
+            "lastVisitedUri",
+            "lastVisitedAt",
+            "username",
+            "showReportGraph",
         ];
-        $retval['columns'] = [
-            "id" => "int(1) NOT NULL DEFAULT 0",
-            "categoryId" => "int(3) DEFAULT NULL",
-            "accountId" => "int(3) DEFAULT NULL",
-            "currencyId" => "char(3) DEFAULT NULL",
-            "entryDate" => "date DEFAULT NULL",
-            "direction" => "enum('1','-1') DEFAULT NULL",
-            "language" => "char(10) DEFAULT NULL",
-            "lastVisitedUri" => "char(255) DEFAULT NULL",
-            "lastVisitedAt" => "int(11) DEFAULT NULL",
-            "username" => "char(100) DEFAULT NULL",
-            "showReportGraph" => "int(1) NOT NULL DEFAULT 0",
-        ];
-        $retval['primary_key'] = "id";
-        return $retval;
     }
     public static function getList(array $fieldFilter = []): array
     {

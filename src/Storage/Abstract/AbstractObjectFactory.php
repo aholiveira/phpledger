@@ -19,12 +19,18 @@ abstract class AbstractObjectFactory implements DataObjectFactoryInterface
     protected static ?DataObjectFactoryInterface $backendFactory = null;
     public static function init(string $backend = "mysql"): void
     {
-        if (static::$backendFactory === null) {
-            if ($backend === "mysql") {
+        if (static::$backendFactory !== null) {
+            return;
+        }
+        switch ($backend) {
+            case 'mysql':
                 static::$backendFactory = new \PHPLedger\Storage\MySql\MySqlObjectFactory($backend);
-            } else {
+                break;
+            case '':
+                break;
+            default:
                 throw new UnexpectedValueException("Storage not implemented");
-            }
+                break;
         }
     }
     public static function dataStorage(): DataStorageInterface

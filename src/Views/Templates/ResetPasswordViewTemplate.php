@@ -16,13 +16,13 @@ class ResetPasswordViewTemplate extends AbstractViewTemplate
         <html lang="<?= $lang ?>">
 
         <head>
-            <title><?= Html::title($pagetitle) ?></title>
+            <title><?= Html::title($pagetitle, $appTitle) ?></title>
             <?php Html::header(); ?>
         </head>
 
         <body>
             <div id="login">
-                <h1><?= $apptitle ?></h1>
+                <h1><?= $appTitle ?></h1>
                 <p style="color:<?= $success ? "green" : "red" ?>;"><?= $message ?></p>
                 <?php if ($success === false): ?>
                     <form id="resetForm" method="POST">

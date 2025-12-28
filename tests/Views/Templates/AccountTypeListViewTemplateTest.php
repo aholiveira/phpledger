@@ -14,6 +14,7 @@ it('renders account type list HTML', function () {
         'lang' => 'en',
         'ui' => $ui,
         'pagetitle' => 'Account Types',
+        'appTitle' => 'AppTitle',
         'label' => [
             'actions' => 'Actions',
             'id' => 'ID',

@@ -10,7 +10,7 @@ trait MySqlSelectTrait
 {
     private static function getSelect(): string
     {
-        $cols = array_keys(static::getDefinition()['columns']);
+        $cols = array_values(static::getDefinition());
         $cols = array_map(function ($c) {
             return "`" . $c . "`";
         }, $cols);

@@ -6,9 +6,9 @@ use DateInterval;
 use DateTime;
 use PHPLedger\Contracts\Domain\UserObjectInterface;
 use PHPLedger\Services\Config;
-use PHPLedger\Services\Logger;
 use PHPLedger\Storage\Abstract\AbstractDataObject;
 use PHPLedger\Services\Email;
+use PHPLedger\Util\PasswordManager;
 
 abstract class User extends AbstractDataObject implements UserObjectInterface
 {
@@ -61,22 +61,11 @@ abstract class User extends AbstractDataObject implements UserObjectInterface
     }
     private function hashPassword(string $password): string
     {
-        if (function_exists('sodium_crypto_pwhash_str')) {
-            return sodium_crypto_pwhash_str($password, SODIUM_CRYPTO_PWHASH_OPSLIMIT_INTERACTIVE, SODIUM_CRYPTO_PWHASH_MEMLIMIT_INTERACTIVE);
-        } else {
-            return password_hash($password, PASSWORD_DEFAULT);
-        }
+        return PasswordManager::hashPassword($password);
     }
     public function verifyPassword(string $password): bool
     {
-        if (empty($password)) {
-            return false;
-        }
-        if (function_exists('sodium_crypto_pwhash_str_verify')) {
-            return sodium_crypto_pwhash_str_verify($this->getPassword(), $password);
-        } else {
-            return password_verify($password, $this->getPassword());
-        }
+        return PasswordManager::verifyPassword($this->getPassword(), $password);
     }
     public function createToken(): string
     {

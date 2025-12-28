@@ -9,6 +9,7 @@ beforeEach(function () {
     $this->data = [
         'lang' => 'en',
         'title' => 'Test Page',
+        'appTitle' => 'AppTitle',
         'message' => 'Test message',
         'success' => true,
         'label' => [
@@ -50,7 +51,7 @@ it('renders the correct title and language', function () {
     $output = ob_get_clean();
 
     expect($output)->toContain('<html lang="en">');
-    expect($output)->toContain('<title>' . Html::title('Test Page') . '</title>');
+    expect($output)->toContain('<title>' . Html::title('Test Page', 'AppTitle') . '</title>');
 });
 
 it('renders notification message', function () {

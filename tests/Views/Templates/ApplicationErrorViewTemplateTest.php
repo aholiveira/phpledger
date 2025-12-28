@@ -10,6 +10,7 @@ it('renders a basic error page', function () {
     $data = [
         'lang' => 'en-us',
         'pagetitle' => 'Application Error',
+        'appTitle' => 'AppTitle',
         'message' => 'Something went wrong'
     ];
 
@@ -29,6 +30,7 @@ it('escapes HTML in the error message', function () {
     $data = [
         'lang' => 'en-us',
         'pagetitle' => 'Application Error',
+        'appTitle' => 'AppTitle',
         'message' => '<script>alert("xss")</script>'
     ];
 
@@ -43,6 +45,7 @@ it('includes Html header and title', function () {
     $data = [
         'lang' => 'en-us',
         'pagetitle' => 'App Error',
+        'appTitle' => 'AppTitle',
         'message' => 'Error text'
     ];
 

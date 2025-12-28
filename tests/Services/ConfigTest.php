@@ -194,3 +194,138 @@ it('fails init when validation fails', function () {
     expect(Config::init($file))->toBeFalse();
     unlink($file);
 });
+
+it('init sets loaded false on Throwable', function () {
+    $file = tmpConfigFile();
+    // Inject a broken fs that throws generic exception
+    Config::setFilesystem(new class implements \PHPLedger\Contracts\ConfigFilesystemInterface {
+        public function exists(string $path): bool { return true; }
+        public function read(string $path): string|false { throw new \Exception("fail"); }
+        public function write(string $path, string $data): bool { return true; }
+        public function delete(string $path): void {}
+        public function isDir(string $path): bool { return true; }
+        public function mkdir(string $path): void {}
+        public function isWritable(string $path): bool { return true; }
+        public function tempFile(string $dir): string { return tempnam(sys_get_temp_dir(), 'tmp'); }
+        public function replace(string $src, string $dest): bool { return true; }
+    });
+    expect(Config::init($file, true))->toBeFalse();
+    unlink($file);
+});
+
+it('save throws when directory not writable', function () {
+    $file = tmpConfigFile();
+    Config::init($file, true);
+    Config::setFilesystem(new class implements \PHPLedger\Contracts\ConfigFilesystemInterface {
+        public function exists(string $path): bool { return false; }
+        public function read(string $path): string|false { return ''; }
+        public function write(string $path, string $data): bool { return true; }
+        public function delete(string $path): void {}
+        public function isDir(string $path): bool { return false; }
+        public function mkdir(string $path): void {}
+        public function isWritable(string $path): bool { return false; }
+        public function tempFile(string $dir): string { return tempnam(sys_get_temp_dir(), 'tmp'); }
+        public function replace(string $src, string $dest): bool { return true; }
+    });
+    $cfg = Config::instance();
+    $cfg->set('title', 'x', false);
+    expect(fn() => $cfg->save())->toThrow("Configuration directory is not writable");
+    unlink($file);
+});
+
+it('validator sets message for invalid+missing field', function () {
+    $cfg = Config::instance();
+    $invalid = validConfig(['title' => '']);
+    expect($cfg->validate($invalid, false))->toBeFalse();
+    print $cfg->getValidationMessage();
+    expect(str_contains($cfg->getValidationMessage(), 'title'))->toBeTrue();
+});
+
+it('init triggers save when config changed', function () {
+    $file = tmpConfigFile();
+    Config::init($file, true);
+    $cfg = Config::instance();
+
+    $cfg->set('newkey', 'value', false);
+
+    Config::setFilesystem(new class implements \PHPLedger\Contracts\ConfigFilesystemInterface {
+        public function exists(string $path): bool { return true; }
+        public function read(string $path): string|false { return json_encode(validConfig()); }
+        public function write(string $path, string $data): bool { return true; }
+        public function delete(string $path): void {}
+        public function isDir(string $path): bool { return true; }
+        public function mkdir(string $path): void {}
+        public function isWritable(string $path): bool { return true; }
+        public function tempFile(string $dir): string { return tempnam(sys_get_temp_dir(), 'tmp'); }
+        public function replace(string $temp, string $target): bool { return true; }
+    });
+
+    expect(Config::init($file))->toBeTrue();
+    unlink($file);
+});
+
+it('set merges arrays recursively', function () {
+    $file = tmpConfigFile();
+    Config::init($file, true);
+    $cfg = Config::instance();
+
+    $cfg->set('nested', ['a' => ['b' => 1]], false);
+    $cfg->set('nested', ['a' => ['c' => 2]], false);
+
+    expect($cfg->get('nested.a.b'))->toBe(1);
+    expect($cfg->get('nested.a.c'))->toBe(2);
+
+    unlink($file);
+});
+
+it('get returns default for deeply missing nested key', function () {
+    $file = tmpConfigFile();
+    Config::init($file, true);
+    $cfg = Config::instance();
+
+    expect($cfg->get('non.existing.path', 99))->toBe(99);
+
+    unlink($file);
+});
+
+it('save throws when write fails', function () {
+    $file = tmpConfigFile();
+    Config::init($file, true);
+    Config::setFilesystem(new class implements \PHPLedger\Contracts\ConfigFilesystemInterface {
+        public function exists(string $path): bool { return true; }
+        public function read(string $path): string|false { return json_encode(validConfig()); }
+        public function write(string $path, string $data): bool { return false; }
+        public function delete(string $path): void {}
+        public function isDir(string $path): bool { return true; }
+        public function mkdir(string $path): void {}
+        public function isWritable(string $path): bool { return true; }
+        public function tempFile(string $dir): string { return tempnam(sys_get_temp_dir(), 'tmp'); }
+        public function replace(string $temp, string $target): bool { return true; }
+    });
+    $cfg = Config::instance();
+    $cfg->set('title', 'x', false);
+    expect(fn() => $cfg->save())->toThrow("Unable to save configuration file");
+
+    unlink($file);
+});
+
+it('save throws when replace fails', function () {
+    $file = tmpConfigFile();
+    Config::init($file, true);
+    Config::setFilesystem(new class implements \PHPLedger\Contracts\ConfigFilesystemInterface {
+        public function exists(string $path): bool { return true; }
+        public function read(string $path): string|false { return json_encode(validConfig()); }
+        public function write(string $path, string $data): bool { return true; }
+        public function delete(string $path): void {}
+        public function isDir(string $path): bool { return true; }
+        public function mkdir(string $path): void {}
+        public function isWritable(string $path): bool { return true; }
+        public function tempFile(string $dir): string { return tempnam(sys_get_temp_dir(), 'tmp'); }
+        public function replace(string $temp, string $target): bool { return false; }
+    });
+    $cfg = Config::instance();
+    $cfg->set('title', 'x', false);
+    expect(fn() => $cfg->save())->toThrow("Unable to replace configuration file");
+
+    unlink($file);
+});

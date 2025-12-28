@@ -56,10 +56,10 @@ final class Html
         <link rel="shortcut icon" type="image/x-icon" href="assets/logo-2.ico">
 <?php
     }
-    public static function title(string $pagetitle = "")
+    public static function title(string $pagetitle = "", string $appTitle = "Prosperidade financeira")
     {
         $title = trim($pagetitle) !== '' ? "$pagetitle - " : '';
-        $fullTitle = $title . Config::instance()->get("title");
-        return  htmlspecialchars($fullTitle);
+        $fullTitle = $title . $appTitle;
+        return htmlspecialchars($fullTitle);
     }
 }

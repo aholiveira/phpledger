@@ -1,11 +1,6 @@
 <?php
 
 use PHPLedger\Util\Html;
-use PHPLedger\Services\Config;
-
-beforeEach(function () {
-    Config::instance()->set('title', 'TestApp', false);
-});
 
 // Option generation tests
 it('builds year options with selected year', function () {
@@ -51,11 +46,11 @@ it('renders header HTML with script and meta tags', function () {
 
 // Title
 it('returns HTML-escaped title with page prefix', function () {
-    $title = Html::title('Page');
+    $title = Html::title('Page', 'TestApp');
     expect($title)->toBe('Page - TestApp');
 });
 
 it('returns title without page prefix when empty', function () {
-    $title = Html::title('');
+    $title = Html::title('', 'TestApp');
     expect($title)->toBe('TestApp');
 });

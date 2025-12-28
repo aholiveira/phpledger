@@ -7,6 +7,7 @@ beforeEach(function () {
     $this->defaultData = [
         'lang' => 'en-us',
         'pagetitle' => 'Update Storage',
+        'appTitle' => 'AppTitle',
         'csrf' => '<input type="hidden" name="csrf" value="token">',
         'footer' => ['languageSelectorHtml' => '<div>LangSelector</div>'],
         'label' => [

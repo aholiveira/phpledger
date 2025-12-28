@@ -3,7 +3,6 @@
 namespace PHPLedger\Services;
 
 use PHPLedger\Contracts\L10nServiceInterface;
-use PHPLedger\Services\Logger;
 use PHPLedger\Util\Path;
 
 class L10n implements L10nServiceInterface
@@ -41,17 +40,21 @@ class L10n implements L10nServiceInterface
 
     public function l(string $translationId, mixed ...$replacements): string
     {
-        if (empty($this->l10n[$translationId])) {
-            return "";
+        $text = $this->l10n[$translationId] ?? null;
+
+        if ($text === null) {
+            $fallback = $translationId;
+            if (!empty($replacements)) {
+                $fallback .= ' [' . implode(', ', array_map('strval', $replacements)) . ']';
+            }
+            return htmlspecialchars($fallback, ENT_NOQUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8', false);
         }
 
-        $text = !empty($replacements)
-            ? $this->safeSprintf($this->l10n[$translationId], $replacements)
-            : $this->l10n[$translationId];
+        if (!empty($replacements)) {
+            $text = $this->safeSprintf($text, $replacements);
+        }
 
-        return $text !== null && $text !== ''
-            ? htmlspecialchars((string) $text, ENT_NOQUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8', false)
-            : "";
+        return htmlspecialchars((string)$text, ENT_NOQUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8', false);
     }
 
     public function pl(string $translationId, mixed ...$replacements): void

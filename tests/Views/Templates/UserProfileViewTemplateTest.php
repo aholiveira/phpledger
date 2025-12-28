@@ -7,6 +7,7 @@ beforeEach(function () {
     $this->data = [
         'lang' => 'en',
         'pagetitle' => 'Profile',
+        'appTitle' => 'AppTitle',
         'csrf' => '<input type="hidden" name="_csrf_token" value="token">',
         'action' => 'my_profile',
         'text' => [
@@ -31,8 +32,14 @@ beforeEach(function () {
         'footer' => [],
         'message' => '',
         'ui' => new class {
-            public function menu($label, $menu) { echo '<nav>menu</nav>'; }
-            public function footer($label, $footer) { echo '<footer>footer</footer>'; }
+            public function menu($label, $menu)
+            {
+                echo '<nav>menu</nav>';
+            }
+            public function footer($label, $footer)
+            {
+                echo '<footer>footer</footer>';
+            }
         }
     ];
 });

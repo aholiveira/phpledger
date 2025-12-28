@@ -52,6 +52,7 @@ beforeEach(function () {
         'ui' => $this->ui,
         'lang' => 'en',
         'pagetitle' => 'Accounts',
+        'appTitle' => 'AppTitle',
     ];
 });
 

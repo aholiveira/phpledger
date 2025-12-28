@@ -29,26 +29,15 @@ class MySqlCurrency extends Currency
     }
     public static function getDefinition(): array
     {
-        $retval = [];
-        $retval['new'] = [
-            'moeda_id' => 'code',
-            'moeda_desc' => 'description',
-            'taxa' => 'exchangeRate',
-            'exchange_rate' => 'exchangeRate',
-            'created_at' => 'createdAt',
-            'updated_at' => 'updatedAt'
+        return [
+            "id",
+            "code",
+            "description",
+            "exchangeRate",
+            "username",
+            "createdAt",
+            "updatedAt"
         ];
-        $retval['columns'] = [
-            "id" => "int(4) NOT NULL DEFAULT 0",
-            "code" => "char(3) NOT NULL DEFAULT ''",
-            "description" => "char(30) DEFAULT NULL",
-            "exchangeRate" => "float(8,6) DEFAULT NULL",
-            "username" => "char(255) DEFAULT ''",
-            "createdAt" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP()",
-            "updatedAt" => "TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP()"
-        ];
-        $retval['primary_key'] = "moeda_id";
-        return $retval;
     }
     public static function getList(array $fieldFilter = []): array
     {

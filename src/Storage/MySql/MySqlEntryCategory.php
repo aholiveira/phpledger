@@ -31,22 +31,12 @@ class MySqlEntryCategory extends EntryCategory
     }
     public static function getDefinition(): array
     {
-        $retval = [];
-        $retval['new'] = [
-            'tipo_id' => 'id',
-            'parent_id' => 'parentId',
-            'tipo_desc' => 'description'
+        return [
+            "id",
+            "parentId",
+            "description",
+            "active"
         ];
-        $retval['columns'] = [
-            "id" => "int(3) NOT NULL DEFAULT 0",
-            "parentId" => "int(3) DEFAULT NULL",
-            "description" => "char(50) DEFAULT NULL",
-            "active" => "int(1) NOT NULL DEFAULT 0"
-        ];
-        $retval['primary_key'] = "id";
-        $retval['keys'] = ["parentId" => "parentId"];
-        $retval['constraints'] = ["parentId" => "`tipo_mov` (`id`) ON DELETE CASCADE ON UPDATE CASCADE"];
-        return $retval;
     }
     public static function getList(array $fieldFilter = []): array
     {

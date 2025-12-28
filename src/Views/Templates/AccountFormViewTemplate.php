@@ -3,7 +3,6 @@
 namespace PHPLedger\Views\Templates;
 
 use PHPLedger\Util\Html;
-use PHPLedger\Util\CSRF;
 use PHPLedger\Views\Templates\AbstractViewTemplate;
 
 final class AccountFormViewTemplate extends AbstractViewTemplate
@@ -16,7 +15,7 @@ final class AccountFormViewTemplate extends AbstractViewTemplate
         <html lang="<?= $lang ?>">
 
         <head>
-            <title><?= Html::title($pagetitle) ?></title>
+            <title><?= Html::title($pagetitle, $appTitle) ?></title>
             <?php Html::header(); ?>
         </head>
 

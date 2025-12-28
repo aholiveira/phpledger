@@ -20,4 +20,5 @@ interface ApplicationObjectInterface
     public function setErrorMessage(string $message): void;
     public function clearErrorMessage(): void;
     public function getErrorMessage(): string;
+    public function isInstalled(): bool;
 }

@@ -9,7 +9,8 @@ beforeEach(function () {
 it('renders the page with success message', function () {
     $data = [
         'lang' => 'pt-pt',
-        'apptitle' => 'PHPLedger',
+        'appTitle' => 'PHPLedger',
+        'pagetitle' => 'Page title',
         'success' => true,
         'message' => 'Password updated successfully',
     ];
@@ -27,7 +28,7 @@ it('renders the page with success message', function () {
 it('renders the page with error message', function () {
     $data = [
         'lang' => 'pt-pt',
-        'apptitle' => 'PHPLedger',
+        'appTitle' => 'PHPLedger',
         'success' => false,
         'message' => 'Token inválido',
         'tokenId' => '12345',
@@ -53,7 +54,7 @@ it('renders the page with error message', function () {
 it('disables the submit button initially', function () {
     $data = [
         'lang' => 'pt-pt',
-        'apptitle' => 'PHPLedger',
+        'appTitle' => 'PHPLedger',
         'success' => false,
         'message' => 'Enter new password',
         'tokenId' => 'abc',
