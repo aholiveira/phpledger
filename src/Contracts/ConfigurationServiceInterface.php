@@ -13,4 +13,5 @@ interface ConfigurationServiceInterface
     public function save(): void;
     public function getCurrent(): array;
     public function getValidationMessage(): string;
+    public function getConfigFilePath(): string;
 }

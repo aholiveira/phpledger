@@ -40,7 +40,6 @@ class Router
         'logout'            => LoginController::class,
         'report'            => ReportController::class,
         'resetpassword'     => ResetPasswordController::class,
-        'update'            => UpdateStorageController::class,
         'my_profile'        => UserProfileController::class,
         'setup'             => SetupController::class,
     ];

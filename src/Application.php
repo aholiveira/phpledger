@@ -12,7 +12,9 @@ use PHPLedger\Contracts\LoggerServiceInterface;
 use PHPLedger\Contracts\RedirectorServiceInterface;
 use PHPLedger\Contracts\SessionServiceInterface;
 use PHPLedger\Contracts\TimezoneServiceInterface;
+use PHPLedger\Exceptions\ApplicationNotInstalledException;
 use PHPLedger\Services\FileResponseSender;
+use PHPLedger\Services\SetupService;
 use PHPLedger\Storage\ReportFactory;
 
 /**
@@ -22,7 +24,6 @@ use PHPLedger\Storage\ReportFactory;
 final class Application implements ApplicationObjectInterface
 {
     private string $errorMessage = "";
-    private bool $needsUpdate;
     private ConfigurationServiceInterface $config;
     private DataObjectFactoryInterface $dataFactory;
     private ReportFactory $reportFactory;
@@ -59,7 +60,6 @@ final class Application implements ApplicationObjectInterface
         $this->timezoneService = $timezoneService;
         $this->csrf = $csrf;
         $this->fileResponseSender = $fileResponseSender;
-        $this->needsUpdate = false;
     }
     public function dataFactory(): DataObjectFactoryInterface
     {
@@ -101,17 +101,27 @@ final class Application implements ApplicationObjectInterface
     {
         return $this->fileResponseSender;
     }
-    public function init(): void
+    public function init(bool $setup = false): void
     {
         $this->sendHeaders();
-        $this->bootstrap();
-        $this->needsUpdate = !($this->dataFactory()->dataStorage()->check());
+        $this->session()->start();
+
+        if (!$setup && !$this->isInstalled()) {
+            throw new ApplicationNotInstalledException('Application not installed');
+        }
         $this->applyTimezone();
     }
-    public function needsUpdate(): bool
+
+    public function isInstalled(): bool
     {
-        return $this->needsUpdate;
+        return $this->config->loaded();
     }
+
+    public function needsSetup(): bool
+    {
+        return (new SetupService($this))->needsSetup();
+    }
+
     public function setErrorMessage(string $message): void
     {
         $this->errorMessage = $message;
@@ -134,10 +144,6 @@ final class Application implements ApplicationObjectInterface
             $this->headerSender->send('Strict-Transport-Security: max-age=7776000');
             $this->headerSender->send('Referrer-Policy: strict-origin-when-cross-origin');
         }
-    }
-    private function bootstrap(): void
-    {
-        $this->session()->start();
     }
     private function applyTimezone(): void
     {
