@@ -53,6 +53,9 @@ final class LedgerEntriesController extends AbstractViewController
         $filteredInput = $this->processInput($this->request->all());
         $filters = $this->getFilters($filteredInput);
         [$savedEntryId, $success, $errorMessage] = $this->processRequest($this->request, $filteredInput);
+        if ($savedEntryId !== null && $success) {
+            $filters['editId'] = 0;
+        }
         $query = $this->request->all();
         $query['export'] = 'csv';
         $downloadUrl = 'index.php?' . http_build_query($query);
@@ -106,7 +109,7 @@ final class LedgerEntriesController extends AbstractViewController
         if (empty($ledgerEntryRows)) {
             $formBalance = $startBalance;
         } else {
-            $editId = $filters['editId'] ?? 0;
+            $editId = $filters['editId'];
             if ($editId > 0 && isset($ledgerEntryRows[$editId]['text']['balance'])) {
                 $formBalance = (float) str_replace(",", "", $ledgerEntryRows[$editId]['text']['balance']);
             } else {
@@ -393,16 +396,6 @@ final class LedgerEntriesController extends AbstractViewController
             'filter_endDateAA' => FILTER_SANITIZE_NUMBER_INT,
             'filter_endDateMM' => FILTER_SANITIZE_NUMBER_INT,
             'filter_endDateDD' => FILTER_SANITIZE_NUMBER_INT,
-            'filters' => [
-                'filter' => FILTER_CALLBACK,
-                'options' => function ($v) {
-                    if (!is_string($v)) {
-                        return null;
-                    }
-                    $decoded = json_decode($v, true);
-                    return is_array($decoded) ? $decoded : null;
-                }
-            ],
             'lang' => FILTER_SANITIZE_ENCODED,
             '_csrf_token' => FILTER_DEFAULT,
         ];

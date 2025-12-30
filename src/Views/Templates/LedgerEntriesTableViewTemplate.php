@@ -23,6 +23,11 @@ final class LedgerEntriesTableViewTemplate extends AbstractViewTemplate
                 <a href="<?= htmlspecialchars($downloadUrl ?? '') ?>"><small><?= $label['download_data'] ?><img src="assets/media/file-csv-solid-full.svg" alt="CSV"></small></a>
             </div>
             <form name="mov" method="POST" lang="<?= $lang ?>">
+                <?php foreach ($filters as $k => $v): ?>
+                    <?php if ($v !== null): ?>
+                        <input type="hidden" name="filter_<?= $k ?>" value="<?= htmlspecialchars(is_string($v) ? (string)$v : '') ?>">
+                    <?php endif; ?>
+                <?php endforeach; ?>
                 <div class="table-wrapper">
                     <table class="lista ledger_entry_list">
                         <thead>
