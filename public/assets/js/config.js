@@ -8,10 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const ajaxField = form.querySelector('#ajaxField');
     const createBtn = form.querySelector('button[name="itemaction"][value="create_db"]');
     const saveBtn = form.querySelector('button[name="itemaction"][value="save"]');
-    const sections = ['config_required', 'storage_missing', 'migrations_pending', 'admin_missing', 'complete']
-        .map(id => document.getElementById(id))
-        .filter(Boolean);
-
     let testExecuted = false;
     let testFailed = false;
 
