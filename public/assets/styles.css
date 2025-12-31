@@ -99,6 +99,32 @@ body {
     background-color: var(--savings) !important;
 }
 
+.required {
+    color: #c00;
+}
+
+.help {
+    font-size: 0.85em;
+    color: var(--text-secondary);
+    margin: 0.2em 0 0.8em 0;
+    max-width: 40em;
+}
+
+.help::before {
+    content: "ℹ ";
+    color: var(--accent);
+    font-weight: bold;
+}
+
+.main.config h2 {
+    grid-column: 1;
+    margin: 1.2em 0 0.4em 0;
+    padding-bottom: 0.3em;
+    font-size: 1.1em;
+    color: var(--text-primary);
+    border-bottom: 1px solid #ddd;
+}
+
 .menu-greeting {
     font-weight: bold;
     font-size: 0.95em;
@@ -327,6 +353,19 @@ input[type=submit] {
 
 .login-message {
     text-align: center;
+}
+
+.setup-section {
+    display: none;
+}
+
+.setup-section.active {
+    display: grid;
+}
+
+div.setup-section {
+    box-shadow: none;
+    border-radius: 0;
 }
 
 #main {

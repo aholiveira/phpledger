@@ -22,6 +22,16 @@ it('renders the config form correctly', function () {
             'user' => 'User',
             'password' => 'Password',
             'save' => 'Save',
+            'admin_username' => 'admin_username',
+            'admin_password' => 'admin_password',
+            'create_storage' => 'create_storage',
+            'test_db' => 'test_db',
+            'basic_configuration' => 'basic_configuration',
+            'basic_configuration_help' => 'basic_configuration_help',
+            'email_settings' => 'email_settings',
+            'email_settings_help' => 'email_settings_help',
+            'storage_settings' => 'storage_settings',
+            'storage_settings_help' => 'storage_settings_help',
         ],
         'config' => [
             'title' => 'MyApp',
@@ -49,12 +59,12 @@ it('renders the config form correctly', function () {
     $template->render($data);
     $html = ob_get_clean();
 
-    expect($html)->toContain('<input id="title" name="title" value="MyApp">');
-    expect($html)->toContain('<input id="smtp_host" name="smtp_host" value="smtp.example.com">');
+    expect($html)->toContain('<input id="title" name="title" value="MyApp" required>');
+    expect($html)->toContain('<input id="smtp_host" name="smtp_host" value="smtp.example.com" placeholder="smtp.example.com" required>');
     expect($html)->toContain('<input id="smtp_port" type="number" min="1" max="65535" name="smtp_port" value="587" required>');
-    expect($html)->toContain('<input id="smtp_from" name="smtp_from" value="noreply@example.com">');
-    expect($html)->toContain('<input id="url" name="url" value="http://example.com">');
-    expect($html)->toContain('<select id="storage_type" name="storage_type">');
+    expect($html)->toContain('<input id="smtp_from" name="smtp_from" value="noreply@example.com" required>');
+    expect($html)->toContain('<input id="url" name="url" value="http://example.com" required>');
+    expect($html)->toContain('<select id="storage_type" name="storage_type" required>');
     expect($html)->toContain('<option value="mysql" selected>MySQL</option>');
     expect($html)->toContain('<div class="settings mysql" id="mysql-settings" style="display: grid">');
     expect($html)->toContain('<input id="storage_host" name="storage_host"  value="localhost">');

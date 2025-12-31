@@ -1,27 +1,24 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('configForm');
-    if (!form) return;
-
+    if (!form) {
+        return;
+    }
     const storageSelect = form.querySelector('select[name="storage_type"]');
     const mysqlSettings = document.getElementById('mysql-settings');
     const ajaxField = form.querySelector('#ajaxField');
     const createBtn = form.querySelector('button[name="itemaction"][value="create_db"]');
     const saveBtn = form.querySelector('button[name="itemaction"][value="save"]');
-
-    const sections = Object.fromEntries(
-        ['config-required', 'create-step', 'migration-step', 'admin-create', 'setup-complete']
-            .map(id => [id.split('-')[0], document.getElementById(id)])
-    );
+    const sections = ['config_required', 'storage_missing', 'migrations_pending', 'admin_missing', 'complete']
+        .map(id => document.getElementById(id))
+        .filter(Boolean);
 
     let testExecuted = false;
     let testFailed = false;
-    let pendingMigrations = [];
 
-    const showSection = (key) => {
-        Object.values(sections).forEach(sec => {
-            if (sec) sec.style.display = 'none';
+    const showSection = (id) => {
+        document.querySelectorAll('.setup-section').forEach(el => {
+            el.classList.toggle('active', el.id === id);
         });
-        if (sections[key]) sections[key].style.display = 'block';
     };
 
     storageSelect?.addEventListener('change', () => {
@@ -45,12 +42,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const updateSaveState = () => {
-        if (!saveBtn) return;
-        saveBtn.disabled = (testExecuted && testFailed) || pendingMigrations.length > 0;
+        if (!saveBtn) {
+            return;
+        }
+        saveBtn.disabled = (testExecuted && testFailed);
     };
 
     const handleAjax = async (action) => {
-        if (!globalThis.fetch) return;
         ajaxField.value = 1;
         const formData = new FormData(form);
         formData.set('itemaction', action);
@@ -58,23 +56,14 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const response = await fetch(globalThis.location.href, { method: 'POST', body: formData, credentials: 'same-origin' });
             const data = await response.json();
-
             showNotification(data.message, data.success);
-
             const csrfInput = form.querySelector('input[name="_csrf_token"]');
-            if (csrfInput) csrfInput.value = data.csrf;
-
-            if (data.state) {
-                const mapping = {
-                    'config_required': 'config',
-                    'storage_missing': 'migration',
-                    'migrations_pending': 'migration',
-                    'admin_missing': 'admin',
-                    'complete': 'complete'
-                };
-                showSection(mapping[data.state] || 'config');
+            if (csrfInput) {
+                csrfInput.value = data.csrf;
             }
-
+            if (data.state) {
+                showSection(data.state);
+            }
             if (action === 'test_storage') {
                 testExecuted = true;
                 testFailed = !data.success;
@@ -83,37 +72,25 @@ document.addEventListener('DOMContentLoaded', () => {
                 testExecuted = false;
                 testFailed = false;
             }
-
-            if (data.save_label) saveBtn.innerText = data.save_label;
-            if (createBtn) createBtn.style.display = data.db_exists === false ? 'inline-block' : 'none';
-
-            pendingMigrations = Array.isArray(data.pending_migrations) ? data.pending_migrations : [];
-            if (pendingMigrations.length > 0) {
-                showNotification('Storage migrations are required before continuing.', true);
-                document.getElementById('config-required')?.remove();
-            } else {
-                document.getElementById('migration-confirm')?.remove();
+            if (createBtn) {
+                createBtn.style.display = data.db_exists === false ? 'inline-block' : 'none';
             }
-
+            const pending = Array.isArray(data.pending_migrations) ? data.pending_migrations : [];
+            if (pending.length > 0) {
+                document.getElementById('config_required')?.remove();
+            } else {
+                document.getElementById('migrations_pending')?.remove();
+            }
             updateSaveState();
         } finally {
             ajaxField.value = 0;
         }
     };
-
     form.addEventListener('submit', (e) => {
         const btn = e.submitter;
         if (!btn || !globalThis.fetch) return;
         e.preventDefault();
         handleAjax(btn.value);
     });
-
-    const initialStateMapping = {
-        'config_required': 'config',
-        'storage_missing': 'create-step',
-        'migrations_pending': 'migration',
-        'admin_missing': 'admin',
-        'complete': 'complete'
-    };
-    showSection(initialStateMapping[form.dataset.state] || 'config');
+    showSection(form.dataset.state || 'config_required');
 });

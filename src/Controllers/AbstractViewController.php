@@ -49,6 +49,7 @@ abstract class AbstractViewController implements ViewControllerInterface
             'close',
             'id',
             'my_profile',
+            'invalid_csrf',
         ];
         return $this->buildL10nLabels($l10n, $base);
     }

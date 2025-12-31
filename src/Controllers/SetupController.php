@@ -34,28 +34,44 @@ final class SetupController extends AbstractViewController
             $this->buildL10nLabels(
                 $this->app->l10n(),
                 [
+                    'admin_account_help',
+                    'admin_account',
                     'admin_password',
                     'admin_username',
                     'application_name',
+                    'apply_migrations',
+                    'basic_configuration_help',
+                    'basic_configuration',
                     'config_saved',
                     'create_admin_user',
                     'create_db',
+                    'create_storage',
                     'database',
                     'db_created',
+                    'email_settings_help',
+                    'email_settings',
                     'error_config_setting',
                     'from',
                     'host',
+                    'login_page',
                     'migrations_applied',
+                    'mysql_settings_help',
                     'mysql_settings',
+                    'no_admin_user_detected',
                     'no_migrations',
                     'password',
+                    'pending_db_migrations_detected',
                     'pending_migrations',
                     'port',
                     'save_anyway',
                     'save',
                     'setup_complete',
+                    'smtp_host_help',
                     'smtp_host',
                     'smtp_port',
+                    'storage_does_not_exist',
+                    'storage_settings_help',
+                    'storage_settings',
                     'storage_type',
                     'test_db',
                     'url',
@@ -67,6 +83,7 @@ final class SetupController extends AbstractViewController
         try {
             $config = $this->configHandler->getCurrent();
             $state  = $this->determineSetupState($config);
+            $this->app->logger()->info("Application state: " . $state->value, __CLASS__);
             if ($this->request->method() === 'POST') {
                 [$config, $success, $messages] = $this->handlePost($config);
                 $state = $this->determineSetupState($config);
@@ -85,7 +102,7 @@ final class SetupController extends AbstractViewController
                 'config' => $config,
                 'success' => $success,
                 'messages' => $messages,
-                'pagetitle' => $this->app->l10n()->l('Configuration & Setup'),
+                'pagetitle' => $this->app->l10n()->l('application_setup'),
                 'lang' => $this->app->l10n()->html(),
                 'setupViewFormTemplate' => $setupViewFormTemplate,
                 'pending_migrations' => $pendingMigrations
@@ -115,7 +132,7 @@ final class SetupController extends AbstractViewController
     {
         try {
             $this->stepCreateInitialUser($config);
-            $message = 'Admin user created';
+            $message = $this->app->l10n()->l('admin_user_created');
             $this->respond([
                 'success' => true,
                 'message' => $message,
@@ -206,10 +223,10 @@ final class SetupController extends AbstractViewController
             $pending = $engine->pendingMigrations($config['storage']['settings']);
 
             if (empty($pending)) {
-                $message = $this->uiData['label']['no_migrations'] ?? 'No migrations to apply';
+                $message = $this->uiData['label']['no_migrations'];
             } else {
                 $engine->runMigrations($config['storage']['settings']);
-                $message = $this->uiData['label']['migrations_applied'] ?? 'Migrations applied';
+                $message = $this->uiData['label']['migrations_applied'];
             }
             $this->respond([
                 'success' => true,
