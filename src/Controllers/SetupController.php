@@ -28,57 +28,6 @@ final class SetupController extends AbstractViewController
         $config = ['title' => ''];
         $messages = [];
         $success = null;
-
-        $this->uiData['label'] = array_merge(
-            $this->uiData['label'],
-            $this->buildL10nLabels(
-                $this->app->l10n(),
-                [
-                    'admin_account_help',
-                    'admin_account',
-                    'admin_password',
-                    'admin_username',
-                    'application_name',
-                    'apply_migrations',
-                    'basic_configuration_help',
-                    'basic_configuration',
-                    'config_saved',
-                    'create_admin_user',
-                    'create_db',
-                    'create_storage',
-                    'database',
-                    'db_created',
-                    'email_settings_help',
-                    'email_settings',
-                    'error_config_setting',
-                    'from',
-                    'host',
-                    'login_page',
-                    'migrations_applied',
-                    'mysql_settings_help',
-                    'mysql_settings',
-                    'no_admin_user_detected',
-                    'no_migrations',
-                    'password',
-                    'pending_db_migrations_detected',
-                    'pending_migrations',
-                    'port',
-                    'save_anyway',
-                    'save',
-                    'setup_complete',
-                    'smtp_host_help',
-                    'smtp_host',
-                    'smtp_port',
-                    'storage_does_not_exist',
-                    'storage_settings_help',
-                    'storage_settings',
-                    'storage_type',
-                    'test_db',
-                    'url',
-                    'user',
-                ]
-            )
-        );
         $pendingMigrations = [];
         try {
             $config = $this->configHandler->getCurrent();

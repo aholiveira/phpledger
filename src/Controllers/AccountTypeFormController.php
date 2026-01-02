@@ -42,18 +42,6 @@ final class AccountTypeFormController extends AbstractViewController
                 $object = $object->getById($id);
             }
         }
-        $this->uiData['label'] = array_merge(
-            $this->uiData['label'],
-            $this->buildL10nLabels($this->app->l10n(), [
-                'id',
-                'description',
-                'savings',
-                'save',
-                'delete',
-                'are_you_sure_you_want_to_delete',
-                'back_to_list'
-            ])
-        );
         $view = new AccountTypeFormViewTemplate;
         $view->render(array_merge($this->uiData, [
             'notification' => $this->message ?? '',

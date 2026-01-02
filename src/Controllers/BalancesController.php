@@ -32,20 +32,6 @@ final class BalancesController extends AbstractViewController
                 }
             }
         }
-        $this->uiData['label'] = array_merge(
-            $this->uiData['label'],
-            $this->buildL10nLabels($this->app->l10n(), [
-                'account',
-                'deposits',
-                'withdrawals',
-                'balance',
-                'percent',
-                'entries',
-                'edit_account',
-                'account_entries',
-                'list'
-            ])
-        );
         $rows = [];
         foreach ($objectList as $object) {
             if ($object instanceof Account) {

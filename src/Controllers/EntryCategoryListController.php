@@ -61,17 +61,6 @@ final class EntryCategoryListController extends AbstractViewController
                 $rows[] = $this->makeRow($child);
             }
         }
-        $this->uiData['label'] = array_merge($this->uiData['label'], $this->buildL10nLabels($this->app->l10n(), [
-            'add',
-            'id',
-            'category',
-            'description',
-            'amount',
-            'active',
-            'edit',
-            'edit_category',
-            'actions',
-        ]));
         $template = new EntryCategoryListViewTemplate();
         $template->render(array_merge($this->uiData, [
             'title'    => 'Tipos de movimentos',

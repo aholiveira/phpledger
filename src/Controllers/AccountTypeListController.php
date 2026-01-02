@@ -18,10 +18,6 @@ final class AccountTypeListController extends AbstractViewController
                 'savings' => $row->savings,
             ];
         }
-        $this->uiData['label'] = array_merge(
-            $this->uiData['label'],
-            $this->buildL10nLabels($this->app->l10n(), ['description', 'savings', 'actions'])
-        );
         $view = new AccountTypeListViewTemplate();
         $view->render(array_merge($this->uiData, [
             'rows' => $rows,

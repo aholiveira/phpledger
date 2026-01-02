@@ -18,24 +18,6 @@ final class UserProfileController extends AbstractViewController
                 $message = $e->getMessage();
             }
         }
-        $this->uiData['label'] = array_merge(
-            $this->uiData['label'],
-            $this->buildL10nLabels(
-                $this->app->l10n(),
-                [
-                    'id',
-                    'username',
-                    'first_name',
-                    'last_name',
-                    'full_name',
-                    'display_name',
-                    'password',
-                    'verify_password',
-                    'save',
-                    'email',
-                ]
-            )
-        );
         $template = new UserProfileViewTemplate();
         $template->render(array_merge($this->uiData, [
             'pagetitle' => $this->app->l10n()->l('my_profile'),

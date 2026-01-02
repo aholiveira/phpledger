@@ -35,15 +35,6 @@ final class ForgotPasswordController extends AbstractViewController
             }
         }
         $view = new ForgotPasswordViewTemplate;
-        $this->uiData['label'] = array_merge(
-            $this->uiData['label'],
-            $this->buildL10nLabels($this->app->l10n(), [
-                'username',
-                'email',
-                'password_recovery',
-                'send_reset_link'
-            ])
-        );
         $view->render(array_merge(
             $this->uiData,
             [

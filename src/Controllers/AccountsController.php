@@ -33,23 +33,6 @@ final class AccountsController extends AbstractViewController
                 'active' => !empty($r->active)
             ];
         }
-        $l10n = $this->app->l10n();
-        $this->uiData['label'] = array_merge($this->uiData['label'], $this->buildL10nLabels($l10n, [
-            'add',
-            'id',
-            'name',
-            'number',
-            'type',
-            'iban',
-            'swift',
-            'open',
-            'close',
-            'active',
-            'yes',
-            'no',
-            'actions',
-            'edit'
-        ]));
         $view = new AccountListViewTemplate();
         $view->render(array_merge($this->uiData, [
             'list' => $list,

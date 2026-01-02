@@ -16,18 +16,6 @@ final class EntryCategoryFormController extends AbstractViewController
         }
         $parentRows = $this->buildParentRows($object);
         $template = new EntryCategoryFormViewTemplate();
-        $this->uiData['label'] = array_merge($this->uiData['label'], $this->buildL10nLabels(
-            $this->app->l10n(),
-            [
-                'id',
-                'category',
-                'description',
-                'active',
-                'delete',
-                'save',
-                'are_you_sure_you_want_to_delete'
-            ]
-        ));
         $template->render(array_merge($this->uiData, [
             'title'        => 'Entry Category',
             'text'         => [

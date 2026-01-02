@@ -100,14 +100,6 @@ final class LoginController extends AbstractViewController
 
     private function renderView(): void
     {
-        $this->uiData['label'] = array_merge(
-            $this->uiData['label'],
-            $this->buildL10nLabels($this->app->l10n(), [
-                'username',
-                'password',
-                'login'
-            ])
-        );
         $this->uiData['footer']['languageSelectorHtml'] = $this->buildLanguageSelectorHtml($this->app->l10n()->lang(), ['action' => 'login']);
         $view = new LoginViewTemplate();
         if ($this->request->method() === "POST" && !$this->userAuth) {

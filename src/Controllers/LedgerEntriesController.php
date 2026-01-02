@@ -74,29 +74,6 @@ final class LedgerEntriesController extends AbstractViewController
         ob_end_flush();
         $preloaderView->render($templateData);
         $this->populateCaches();
-        $templateData['label'] = array_merge($templateData['label'], $this->buildL10nLabels($this->app->l10n(), [
-            'id',
-            'date',
-            'category',
-            'currency',
-            'account',
-            'dc',
-            'amount',
-            'remarks',
-            'balance',
-            'start',
-            'end',
-            'no_filter',
-            'filter',
-            'clear_filter',
-            'previous_balance',
-            'edit',
-            'actions',
-            'save',
-            'deposit',
-            'withdraw',
-            'download_data',
-        ]));
         $filterFormData = $this->prepareFilterFormData($filters);
         $ledgerFilters = $this->getLedgerFilters($filters);
 

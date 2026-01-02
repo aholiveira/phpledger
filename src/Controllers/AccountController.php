@@ -43,22 +43,6 @@ final class AccountController extends AbstractViewController
                 'selected' => (($this->account->typeId ?? 0) === $r->id)
             ];
         }
-        $this->uiData['label'] = array_merge($this->uiData['label'], $this->buildL10nLabels($this->app->l10n(), [
-            'back_to_balances',
-            'back_to_list',
-            'name',
-            'number',
-            'type',
-            'iban',
-            'swift',
-            'openDate',
-            'closeDate',
-            'active',
-            'save',
-            'delete',
-            'check_your_data',
-            'name_required',
-        ]));
         $view->render(array_merge($this->uiData, [
             'account' => $this->account,
             'back' => $this->request->input('back', ""),
