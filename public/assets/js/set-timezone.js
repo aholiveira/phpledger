@@ -1,1 +1,1 @@
-document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone + "; path=/";
+document.cookie = "timezone=" + Intl.DateTimeFormat().resolvedOptions().timeZone + "; path=/; Secure";
