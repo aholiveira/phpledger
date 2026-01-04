@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1767354524">
-  <project timestamp="1767354524">
+<coverage generated="1767548206">
+  <project timestamp="1767548206">
     <file name="C:\pessoal\work\contas\src\Application.php">
       <class name="PHPLedger\Application" namespace="global">
         <metrics complexity="22" methods="19" coveredmethods="11" conditionals="0" coveredconditionals="0" statements="40" coveredstatements="21" elements="59" coveredelements="32"/>
@@ -4442,9 +4442,9 @@
     </file>
     <file name="C:\pessoal\work\contas\src\Views\Templates\LedgerEntriesTableViewTemplate.php">
       <class name="PHPLedger\Views\Templates\LedgerEntriesTableViewTemplate" namespace="global">
-        <metrics complexity="7" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="50" coveredstatements="47" elements="51" coveredelements="47"/>
+        <metrics complexity="6" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="50" coveredstatements="47" elements="51" coveredelements="47"/>
       </class>
-      <line num="17" type="method" name="render" visibility="public" complexity="7" crap="7.01" count="2"/>
+      <line num="17" type="method" name="render" visibility="public" complexity="6" crap="6.01" count="2"/>
       <line num="19" type="stmt" count="2"/>
       <line num="21" type="stmt" count="2"/>
       <line num="22" type="stmt" count="2"/>
