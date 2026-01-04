@@ -50,7 +50,7 @@ class MySqlEntryCategory extends EntryCategory
             FROM " . static::$tableName . " c
             INNER JOIN category_tree ct ON c.parentId = ct.id
         )
-        SELECT * FROM category_tree ORDER BY active DESC, description";
+        SELECT * FROM category_tree {$where} ORDER BY active DESC, description";
         $retval = [];
         $children_map = [];
 
