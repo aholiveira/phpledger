@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 use PHPLedger\Views\Templates\LedgerEntriesMainViewTemplate;
 use PHPLedger\Views\Templates\LedgerEntriesFilterViewTemplate;
 use PHPLedger\Views\Templates\LedgerEntriesTableViewTemplate;
@@ -18,8 +24,14 @@ beforeEach(function () {
     // Minimal data for rendering
     $this->data = [
         'ui' => new class {
-            public function menu($label, $menu) { echo '<!-- menu called -->'; }
-            public function footer($label, $footer) { echo '<!-- footer called -->'; }
+            public function menu($label, $menu)
+            {
+                echo '<!-- menu called -->';
+            }
+            public function footer($label, $footer)
+            {
+                echo '<!-- footer called -->';
+            }
         },
         'lang' => 'en',
         'label' => [

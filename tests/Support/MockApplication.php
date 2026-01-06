@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 namespace PHPLedgerTests\Support;
 
 use PHPLedger\Contracts\ApplicationObjectInterface;
@@ -69,18 +75,60 @@ final class MockApplication implements ApplicationObjectInterface
         $this->reportFactory = new ReportFactory("mysql");
     }
 
-    public function config(): ConfigurationServiceInterface { return $this->config; }
-    public function dataFactory(): DataObjectFactoryInterface { return $this->dataFactory; }
-    public function reportFactory(): ReportFactory { return $this->reportFactory; }
-    public function l10n(): L10nServiceInterface { return $this->l10n; }
-    public function logger(): LoggerServiceInterface { return $this->logger; }
-    public function session(): SessionServiceInterface { return $this->session; }
-    public function redirector(): RedirectorServiceInterface { return $this->redirector; }
-    public function csrf(): CsrfServiceInterface { return $this->csrf; }
-    public function headerSender(): HeaderSenderInterface { return $this->headerSender; }
-    public function fileResponseSender(): FileResponseSender { return $this->fileResponseSender; }
-    public function setErrorMessage(string $message): void { $this->errorMessage = $message; }
-    public function clearErrorMessage(): void { $this->errorMessage = ''; }
-    public function getErrorMessage(): string { return $this->errorMessage; }
-    public function isInstalled(): bool { return true; }
+    public function config(): ConfigurationServiceInterface
+    {
+        return $this->config;
+    }
+    public function dataFactory(): DataObjectFactoryInterface
+    {
+        return $this->dataFactory;
+    }
+    public function reportFactory(): ReportFactory
+    {
+        return $this->reportFactory;
+    }
+    public function l10n(): L10nServiceInterface
+    {
+        return $this->l10n;
+    }
+    public function logger(): LoggerServiceInterface
+    {
+        return $this->logger;
+    }
+    public function session(): SessionServiceInterface
+    {
+        return $this->session;
+    }
+    public function redirector(): RedirectorServiceInterface
+    {
+        return $this->redirector;
+    }
+    public function csrf(): CsrfServiceInterface
+    {
+        return $this->csrf;
+    }
+    public function headerSender(): HeaderSenderInterface
+    {
+        return $this->headerSender;
+    }
+    public function fileResponseSender(): FileResponseSender
+    {
+        return $this->fileResponseSender;
+    }
+    public function setErrorMessage(string $message): void
+    {
+        $this->errorMessage = $message;
+    }
+    public function clearErrorMessage(): void
+    {
+        $this->errorMessage = '';
+    }
+    public function getErrorMessage(): string
+    {
+        return $this->errorMessage;
+    }
+    public function isInstalled(): bool
+    {
+        return true;
+    }
 }

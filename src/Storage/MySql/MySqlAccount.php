@@ -1,12 +1,9 @@
 <?php
 
 /**
- * Holds a mysql-backed `account` object
- *
- * @author Antonio Henrique Oliveira
- * @copyright (c) 2017-2022, Antonio Henrique Oliveira
- * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
- *
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
  */
 
 namespace PHPLedger\Storage\MySql;
@@ -16,8 +13,10 @@ use PHPLedger\Domain\Account;
 use PHPLedger\Storage\MySql\Traits\MySqlDeleteTrait;
 use PHPLedger\Storage\MySql\Traits\MySqlFetchAllTrait;
 use PHPLedger\Storage\MySql\Traits\MySqlSelectTrait;
-use Throwable;
 
+/**
+ * Holds a mysql-backed `Account` object
+ */
 class MySqlAccount extends Account
 {
     use MySqlSelectTrait;

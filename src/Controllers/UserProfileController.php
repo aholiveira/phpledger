@@ -1,13 +1,30 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Contracts\Domain\UserObjectInterface;
 use PHPLedger\Exceptions\PHPLedgerException;
 use PHPLedger\Views\Templates\UserProfileViewTemplate;
 
+/**
+ * Controller responsible for displaying and updating the current user's profile.
+ */
 final class UserProfileController extends AbstractViewController
 {
+    /**
+     * Handle the user profile request.
+     *
+     * Loads the current user, processes profile updates on POST requests,
+     * and renders the user profile view template.
+     *
+     * @return void
+     */
     protected function handle(): void
     {
         $user = $this->app->dataFactory()::user()->getByUsername($this->app->session()->get('user'));
@@ -32,6 +49,18 @@ final class UserProfileController extends AbstractViewController
             ],
         ]));
     }
+
+    /**
+     * Handle POST data for updating the user profile.
+     *
+     * Validates input, updates user properties, handles password changes,
+     * and persists the user object.
+     *
+     * @param UserObjectInterface|null $user
+     * @return void
+     *
+     * @throws PHPLedgerException
+     */
     private function handlePost(?UserObjectInterface $user): void
     {
         if ($user === null) {

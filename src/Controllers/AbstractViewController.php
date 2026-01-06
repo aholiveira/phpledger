@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Contracts\ApplicationObjectInterface;
@@ -12,6 +18,13 @@ use PHPLedger\Services\PermissionService;
 use PHPLedger\Util\UiBuilder;
 use PHPLedger\Version;
 
+/**
+ * Abstract base class for view controllers.
+ *
+ * Provides common functionality for handling requests, initializing user permissions,
+ * preparing UI data, and building localized labels, menus, and footers.
+ *
+ */
 abstract class AbstractViewController implements ViewControllerInterface
 {
     protected RequestInterface $request;
@@ -21,6 +34,14 @@ abstract class AbstractViewController implements ViewControllerInterface
     abstract protected function handle(): void;
     protected array $uiData = ['label' => []];
 
+    /**
+     * Handle an incoming HTTP request.
+     *
+     * Initializes UI data, user permissions, and delegates to the concrete handle method.
+     *
+     * @param ApplicationObjectInterface $app
+     * @param RequestInterface $request
+     */
     public function handleRequest(ApplicationObjectInterface $app, RequestInterface $request): void
     {
         $this->request = $request;
@@ -31,6 +52,9 @@ abstract class AbstractViewController implements ViewControllerInterface
         $this->handle();
     }
 
+    /**
+     * Initialize current user and permission service.
+     */
     protected function initUserPermissions(): void
     {
         $username = $this->app->session()->get('user', '');
@@ -42,6 +66,12 @@ abstract class AbstractViewController implements ViewControllerInterface
         }
     }
 
+    /**
+     * Build a localized label array from translation keys.
+     *
+     * @param L10nServiceInterface $l10n
+     * @return array
+     */
     private function buildLabels(L10nServiceInterface $l10n): array
     {
         $base = [
@@ -172,11 +202,21 @@ abstract class AbstractViewController implements ViewControllerInterface
         return $this->buildL10nLabels($l10n, $base);
     }
 
+    /**
+     * Map translation keys to localized labels.
+     *
+     * @param L10nServiceInterface $l10n
+     * @param array $keys
+     * @return array
+     */
     protected function buildL10nLabels(L10nServiceInterface $l10n, array $keys): array
     {
         return array_combine($keys, array_map(fn($k) => $l10n->l($k), $keys));
     }
 
+    /**
+     * Prepare the UI data array for templates.
+     */
     protected function prepareUi(): void
     {
         $app = $this->app;
@@ -208,6 +248,14 @@ abstract class AbstractViewController implements ViewControllerInterface
         ]);
     }
 
+    /**
+     * Prepare footer data for the UI.
+     *
+     * @param L10nServiceInterface $l10n
+     * @param string $lang
+     * @param string $expires
+     * @return array
+     */
     protected function prepareFooter(L10nServiceInterface $l10n, string $lang, string $expires): array
     {
         return [
@@ -218,6 +266,12 @@ abstract class AbstractViewController implements ViewControllerInterface
         ];
     }
 
+    /**
+     * Prepare menu links for the UI.
+     *
+     * @param string $lang
+     * @return array
+     */
     protected function prepareMenu(string $lang): array
     {
         $menuActions = [
@@ -240,6 +294,14 @@ abstract class AbstractViewController implements ViewControllerInterface
         return $menuLinks;
     }
 
+    /**
+     * Build HTML for the language selector component.
+     *
+     * @param L10nServiceInterface $l10n
+     * @param string $current
+     * @param array $requestParams
+     * @return string
+     */
     protected function buildLanguageSelectorHtml(L10nServiceInterface $l10n, string $current, array $requestParams = []): string
     {
         $params = empty($requestParams) ? $this->request->all() : $requestParams;

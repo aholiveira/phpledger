@@ -1,18 +1,16 @@
 <?php
 
 /**
- *
- * @author Antonio Henrique Oliveira
- * @copyright (c) 2017-2022, Antonio Henrique Oliveira
- * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
- *
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
  */
 
 namespace PHPLedger\Storage\MySql;
 
 use PHPLedger\Domain\Defaults;
-use PHPLedger\Storage\MySql\Traits\MySqlSelectTrait;
 use PHPLedger\Services\Config;
+use PHPLedger\Storage\MySql\Traits\MySqlSelectTrait;
 
 class MySqlDefaults extends Defaults
 {

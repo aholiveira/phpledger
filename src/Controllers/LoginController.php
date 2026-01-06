@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * Controller for handling user login and logout.
+ *
+ * Processes login POST requests with CSRF validation, sets session data,
+ * handles logout, and renders the login view with appropriate messages.
+ *
+ * @author Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Domain\User;
@@ -10,18 +20,27 @@ final class LoginController extends AbstractViewController
 {
     private string $postUser = '';
     private bool $userAuth = false;
+
+    /**
+     * Handle login/logout requests and render the login view.
+     */
     public function handle(): void
     {
         if ($this->request->method() === 'GET' && $this->request->input('action', '') === 'logout') {
             $this->logout();
             return;
         }
+
         if ($this->request->method() === 'POST') {
             $this->login();
         }
+
         $this->renderView();
     }
 
+    /**
+     * Log out the current user.
+     */
     private function logout(): void
     {
         $user = $this->app->session()->get('user', '');
@@ -33,10 +52,14 @@ final class LoginController extends AbstractViewController
                 $defaults->update();
             }
         }
+
         $this->app->session()->logout();
         $this->app->redirector()->to('index.php');
     }
 
+    /**
+     * Process login POST request with CSRF and password validation.
+     */
     private function login(): void
     {
         $filtered = filter_var_array($this->request->all(), [
@@ -63,6 +86,10 @@ final class LoginController extends AbstractViewController
             }
         }
     }
+
+    /**
+     * Set session variables for the authenticated user.
+     */
     private function setSessionUserInfo(User $user): void
     {
         $session = $this->app->session();
@@ -72,6 +99,10 @@ final class LoginController extends AbstractViewController
         $session->set('lastName', $user->getProperty('lastName'));
         $session->set('fullName', $user->getProperty('fullName'));
     }
+
+    /**
+     * Handle post-login actions, session updates, and redirect.
+     */
     private function afterSuccessfulLogin(): void
     {
         session_regenerate_id(true);
@@ -98,10 +129,14 @@ final class LoginController extends AbstractViewController
         $this->app->redirector()->to($target);
     }
 
+    /**
+     * Render the login view with any error messages.
+     */
     private function renderView(): void
     {
         $l10n = $this->app->l10n();
         $this->uiData['footer']['languageSelectorHtml'] = $this->buildLanguageSelectorHtml($l10n, $l10n->lang(), ['action' => 'login']);
+
         $view = new LoginViewTemplate();
         if ($this->request->method() === "POST" && !$this->userAuth) {
             $errorMessage = $l10n->l('invalid_credentials');

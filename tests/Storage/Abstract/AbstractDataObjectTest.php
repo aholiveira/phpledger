@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 namespace PHPLedgerTests\Unit\Storage\Abstract;
 
 use PHPLedger\Storage\Abstract\AbstractDataObject;
@@ -12,15 +18,42 @@ class TestDataObject extends AbstractDataObject
         $this->id = $id;
     }
 
-    public function validate(): bool { return true; }
-    public function errorMessage(): string { return "error"; }
-    public function create(): self { return $this; }
-    public function read(int $id): ?self { return new self($id); }
-    public function update(): bool { return true; }
-    public function delete(): bool { return true; }
-    public static function getNextId(): int { return 1; }
-    public static function getList(array $fieldFilter = []): array { return []; }
-    public static function getById(int $id): ?DataObjectInterface { return new self($id); }
+    public function validate(): bool
+    {
+        return true;
+    }
+    public function errorMessage(): string
+    {
+        return "error";
+    }
+    public function create(): self
+    {
+        return $this;
+    }
+    public function read(int $id): ?self
+    {
+        return new self($id);
+    }
+    public function update(): bool
+    {
+        return true;
+    }
+    public function delete(): bool
+    {
+        return true;
+    }
+    public static function getNextId(): int
+    {
+        return 1;
+    }
+    public static function getList(array $fieldFilter = []): array
+    {
+        return [];
+    }
+    public static function getById(int $id): ?DataObjectInterface
+    {
+        return new self($id);
+    }
 }
 
 it('can instantiate a concrete subclass', function () {

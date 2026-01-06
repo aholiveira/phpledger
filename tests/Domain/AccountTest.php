@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 namespace PHPLedgerTests\Domain;
 
 use DateTimeImmutable;
@@ -14,19 +20,46 @@ class DummyAccount extends Account
     }
 
     // Implement abstract methods from AbstractDataObject
-    public function validate(): bool { return true; }
-    public function errorMessage(): string { return ''; }
+    public function validate(): bool
+    {
+        return true;
+    }
+    public function errorMessage(): string
+    {
+        return '';
+    }
     public function create(): DataObjectInterface
     {
         throw new \Exception('Not implemented');
     }
-    public function read(int $id): ?DataObjectInterface { return null; }
-    public function update(): bool { return true; }
-    public function delete(): bool { return true; }
-    public static function init(): static { return new static(); }
-    public static function getById(int $id): ?static { return new static(); }
-    public static function defaults(): static { return new static(); }
-    public static function getNextId(): int { return 1; }
+    public function read(int $id): ?DataObjectInterface
+    {
+        return null;
+    }
+    public function update(): bool
+    {
+        return true;
+    }
+    public function delete(): bool
+    {
+        return true;
+    }
+    public static function init(): static
+    {
+        return new static();
+    }
+    public static function getById(int $id): ?static
+    {
+        return new static();
+    }
+    public static function defaults(): static
+    {
+        return new static();
+    }
+    public static function getNextId(): int
+    {
+        return 1;
+    }
     public static function getList(array $fieldFilter = []): array
     {
         return [];

@@ -1,15 +1,26 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Views\Templates\AccountListViewTemplate;
 
+/**
+ * Controller for listing accounts.
+ *
+ * Fetches accounts and their types, prepares data for display,
+ * and renders the account list view template.
+ *
+ */
 final class AccountsController extends AbstractViewController
 {
     /**
-     * Handle list request (GET)
-     *
-     * @return void
+     * Handle list request (GET).
      */
     protected function handle(): void
     {

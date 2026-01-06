@@ -1,11 +1,13 @@
 <?php
 
 /**
+ * Controller for displaying account balances.
  *
- * @author Antonio Henrique Oliveira
- * @copyright (c) 2017-2022, Antonio Henrique Oliveira
- * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
+ * Fetches active accounts, calculates balances, totals, and percentages,
+ * and renders the balances view template.
  *
+ * @author Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
  */
 
 namespace PHPLedger\Controllers;
@@ -16,6 +18,9 @@ use PHPLedger\Views\Templates\BalancesViewTemplate;
 
 final class BalancesController extends AbstractViewController
 {
+    /**
+     * Handle balances display.
+     */
     protected function handle(): void
     {
         $object = $this->app->dataFactory()->account();
@@ -32,6 +37,7 @@ final class BalancesController extends AbstractViewController
                 }
             }
         }
+
         $rows = [];
         foreach ($objectList as $object) {
             if ($object instanceof Account) {
@@ -41,7 +47,7 @@ final class BalancesController extends AbstractViewController
                         'deposits' => NumberUtil::normalize($balances[$object->id]['income']),
                         'withdrawals' => NumberUtil::normalize($balances[$object->id]['expense']),
                         'balance' => NumberUtil::normalize($balances[$object->id]['balance']),
-                        'percent' => NumberUtil::normalize($totals['balance'] <> 0 ? round($balances[$object->id]['balance'] / $totals['balance'] * 100, 2) : 0),
+                        'percent' => NumberUtil::normalize($totals['balance'] !== 0 ? round($balances[$object->id]['balance'] / $totals['balance'] * 100, 2) : 0),
                     ],
                     'href' => [
                         'name' => "index.php?action=account&back=balances&id={$object->id}",
@@ -50,18 +56,19 @@ final class BalancesController extends AbstractViewController
                 ];
             }
         }
+
         $rows[] = [
             'text' => [
                 'name' => $this->app->l10n()->l('networth'),
                 'deposits' => NumberUtil::normalize($totals['income']),
                 'withdrawals' => NumberUtil::normalize($totals['expense']),
                 'balance' => NumberUtil::normalize($totals['balance']),
-                'percent' =>  NumberUtil::normalize(100),
+                'percent' => NumberUtil::normalize(100),
             ],
             'href' => ['name' => '', 'entries' => '']
         ];
 
-        $view = new BalancesViewTemplate;
+        $view = new BalancesViewTemplate();
         $view->render(array_merge($this->uiData, [
             'pagetitle' => "Saldos",
             'lang' => $this->app->l10n()->html(),

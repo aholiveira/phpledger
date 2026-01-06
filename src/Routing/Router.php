@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 namespace PHPLedger\Routing;
 
 use PHPLedger\Contracts\ApplicationObjectInterface;
@@ -19,7 +25,6 @@ use PHPLedger\Controllers\LoginController;
 use PHPLedger\Controllers\ReportController;
 use PHPLedger\Controllers\ResetPasswordController;
 use PHPLedger\Controllers\SetupController;
-use PHPLedger\Controllers\UpdateStorageController;
 use PHPLedger\Controllers\UserProfileController;
 use PHPLedger\Http\HttpRequest;
 

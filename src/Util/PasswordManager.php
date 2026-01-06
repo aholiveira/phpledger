@@ -1,7 +1,14 @@
 <?php
-// Adapted from https://alexwebdevelop.com/php-generate-random-secure-password/
+
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 namespace PHPLedger\Util;
 
+// Adapted from https://alexwebdevelop.com/php-generate-random-secure-password/
 class PasswordManager
 {
     // Alphabetic letters, lowercase

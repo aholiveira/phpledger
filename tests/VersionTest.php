@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 namespace PHPLedgerTests;
 
 use PHPLedger\Version;
@@ -27,8 +33,8 @@ it('converts version to integer', function () {
 it('isAtLeast works relative to current version', function () {
     $current = Version::string();
     $parts = Version::parts();
-    $lower = "{$parts[0]}.{$parts[1]}." . max(0, $parts[2]-1);
-    $higher = "{$parts[0]}.{$parts[1]}." . ($parts[2]+1);
+    $lower = "{$parts[0]}.{$parts[1]}." . max(0, $parts[2] - 1);
+    $higher = "{$parts[0]}.{$parts[1]}." . ($parts[2] + 1);
 
     expect(Version::isAtLeast($lower))->toBeTrue();
     expect(Version::isAtLeast($current))->toBeTrue();
@@ -38,7 +44,7 @@ it('isAtLeast works relative to current version', function () {
 it('equals works relative to current version', function () {
     $current = Version::string();
     $parts = Version::parts();
-    $different = "{$parts[0]}.{$parts[1]}." . ($parts[2]+1);
+    $different = "{$parts[0]}.{$parts[1]}." . ($parts[2] + 1);
 
     expect(Version::equals($current))->toBeTrue();
     expect(Version::equals($different))->toBeFalse();

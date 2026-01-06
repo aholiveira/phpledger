@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 use PHPLedger\Storage\MySql\MySqlObject;
 use PHPLedger\Storage\MySql\MySqlStorage;
 use PHPLedger\Services\Config;
@@ -28,27 +34,37 @@ afterEach(function () {
 });
 
 // Concrete class using the trait
-class MySqlTestObject {
+class MySqlTestObject
+{
     use MySqlObject;
 
     protected static string $tableName = 'test_table';
     public ?int $id = null;
     public string $name = '';
 
-    public static function getList(array $fieldFilter = []): array { return []; }
-    public static function getDefinition(): array { return []; }
-    public function update(): bool {
+    public static function getList(array $fieldFilter = []): array
+    {
+        return [];
+    }
+    public static function getDefinition(): array
+    {
+        return [];
+    }
+    public function update(): bool
+    {
         $stmt = MySqlStorage::getConnection()->prepare("INSERT INTO test_table (id, name) VALUES (?, ?) ON DUPLICATE KEY UPDATE name=?");
         $stmt->bind_param('iss', $this->id, $this->name, $this->name);
         $stmt->execute();
         $stmt->close();
         return true;
     }
-    public function delete(): bool {
+    public function delete(): bool
+    {
         $this->id = null;
         return true;
     }
-    public static function getById(int $id): ?self {
+    public static function getById(int $id): ?self
+    {
         $obj = new self();
         $obj->id = $id;
         $obj->name = "test";
@@ -56,19 +72,22 @@ class MySqlTestObject {
     }
 }
 
-class MySqlTestObjectTestable extends MySqlTestObject {
-    public static function copyfromObjectPublic($src, $dest) {
+class MySqlTestObjectTestable extends MySqlTestObject
+{
+    public static function copyfromObjectPublic($src, $dest)
+    {
         parent::copyfromObject($src, $dest);
     }
 
-    public static function getWhereFromArrayPublic(array $filter, ?string $table = null) {
+    public static function getWhereFromArrayPublic(array $filter, ?string $table = null)
+    {
         return parent::getWhereFromArray($filter, $table);
     }
 
-    public static function setErrorMessagePublic(string $msg) {
+    public static function setErrorMessagePublic(string $msg)
+    {
         parent::setErrorMessage($msg);
     }
-
 }
 
 it('constructs with null id if not set', function () {

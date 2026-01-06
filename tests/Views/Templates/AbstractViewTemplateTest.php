@@ -1,16 +1,24 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 use PHPLedger\Views\Templates\AbstractViewTemplate;
 
 beforeEach(function () {
     $this->view = new class extends AbstractViewTemplate {
         public function render(array $data): void {}
-        public function callRenderSelectOptions(array $optionList): string {
+        public function callRenderSelectOptions(array $optionList): string
+        {
             ob_start();
             $this->renderSelectOptions($optionList);
             return ob_get_clean();
         }
-        public function callRenderOptionRow(array $row): string {
+        public function callRenderOptionRow(array $row): string
+        {
             ob_start();
             $this->renderOptionRow($row);
             return ob_get_clean();

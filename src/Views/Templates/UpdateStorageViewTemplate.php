@@ -1,11 +1,9 @@
 <?php
 
 /**
- *
- * @author Antonio Henrique Oliveira
- * @copyright (c) 2017-2022, Antonio Henrique Oliveira
- * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
- *
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
  */
 
 namespace PHPLedger\Views\Templates;
@@ -65,7 +63,7 @@ final class UpdateStorageViewTemplate extends AbstractViewTemplate
                             ?>
                                 <p role="alert"><?= $label['update_fail'] ?></p>
                                 <p><?= $label['error_msg'] ?><br><?= nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8')) ?></p>
-                            <?php
+                        <?php
                                 break;
                         }
                         ?>

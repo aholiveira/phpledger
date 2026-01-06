@@ -1,6 +1,12 @@
 <?php
 
 /**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
+/**
  * Global Pest setup for Storage/MySql tests.
  * Ensures database schema is up-to-date before running any MySQL storage tests.
  */

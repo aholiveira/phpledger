@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 use PHPLedger\Util\PasswordManager;
 
 beforeEach(function () {
@@ -12,7 +18,7 @@ beforeEach(function () {
 it('generates a password within length bounds', function () {
     $pwd = PasswordManager::generate(8, 12);
     expect(strlen($pwd))->toBeGreaterThanOrEqual(8)
-                        ->toBeLessThanOrEqual(12);
+        ->toBeLessThanOrEqual(12);
 });
 
 it('always contains lowercase uppercase digit special', function () {

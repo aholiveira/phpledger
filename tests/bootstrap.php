@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 // Load .env.test if present
 $envTest = __DIR__ . '/../.env.test';
 if (file_exists($envTest)) {
@@ -9,4 +15,3 @@ if (file_exists($envTest)) {
         }
     }
 }
-

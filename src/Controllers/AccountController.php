@@ -1,15 +1,33 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Domain\Account;
 use PHPLedger\Views\Templates\AccountFormViewTemplate;
-use Throwable;
 
+/**
+ * Controller for managing accounts.
+ *
+ * Handles displaying account forms, saving, and deleting accounts.
+ * Integrates CSRF protection, permission checks, and logging.
+ *
+ */
 final class AccountController extends AbstractViewController
 {
     protected array $errors;
     protected Account $account;
+
+    /**
+     * Main request handler.
+     *
+     * Delegates to POST processing or form rendering.
+     */
     protected function handle(): void
     {
         if ($this->request->method() === 'POST') {
@@ -17,10 +35,9 @@ final class AccountController extends AbstractViewController
         }
         $this->renderForm();
     }
+
     /**
-     * Render add/edit form.
-     *
-     * @return void
+     * Render add/edit account form.
      */
     private function renderForm(): void
     {
@@ -28,6 +45,7 @@ final class AccountController extends AbstractViewController
             $id = (int)$this->request->input('id');
             $this->account = ($id ? $this->app->dataFactory()->account()::getById($id) : null) ?? $this->app->dataFactory()->account();
         }
+
         $view = new AccountFormViewTemplate();
         $accountTypes = [];
         $accountTypes[] = [
@@ -36,6 +54,7 @@ final class AccountController extends AbstractViewController
             'text' => "",
             'selected' => (($this->account->typeId ?? 0) === 0)
         ];
+
         foreach ($this->app->dataFactory()->accounttype()::getList() as $r) {
             $accountTypes[] = [
                 'value' => $r->id,
@@ -44,6 +63,7 @@ final class AccountController extends AbstractViewController
                 'selected' => (($this->account->typeId ?? 0) === $r->id)
             ];
         }
+
         $view->render(array_merge($this->uiData, [
             'account' => $this->account,
             'back' => $this->request->input('back', ""),
@@ -65,15 +85,12 @@ final class AccountController extends AbstractViewController
     }
 
     /**
-     * Process POST (save or delete).
-     *
-     * @return void
+     * Handle POST request: save or delete account.
      */
     private function processPost(): void
     {
         $redirectUrl = 'index.php?action=accounts';
         $userName = $this->currentUser?->getProperty('userName', '');
-
         $account = null;
 
         if (!$this->isCsrfValid() || !$this->canCurrentUserWrite($userName)) {
@@ -93,11 +110,17 @@ final class AccountController extends AbstractViewController
         $this->app->redirector()->to($redirectUrl);
     }
 
+    /**
+     * Validate CSRF token.
+     */
     private function isCsrfValid(): bool
     {
         return $this->app->csrf()->validateToken($this->request->input('_csrf_token', ''));
     }
 
+    /**
+     * Check if current user can write and log forbidden attempts.
+     */
     private function canCurrentUserWrite(string $userName): bool
     {
         if (!$this->permissions?->canWrite()) {
@@ -108,6 +131,9 @@ final class AccountController extends AbstractViewController
         return true;
     }
 
+    /**
+     * Handle account deletion.
+     */
     private function handleDelete(string $userName): void
     {
         $id = (int)$this->request->input('id', 0);
@@ -117,10 +143,16 @@ final class AccountController extends AbstractViewController
         }
     }
 
+    /**
+     * Handle saving account data.
+     *
+     * @return Account Saved or updated account
+     */
     private function handleSave(string $userName): Account
     {
         $id = (int)$this->request->input('id');
         $a = ($id ? $this->app->dataFactory()::account()::getById($id) : null) ?? $this->app->dataFactory()::account();
+
         $fields = [
             'name' => '',
             'number' => '',
@@ -143,12 +175,14 @@ final class AccountController extends AbstractViewController
         if ($a->name === '') {
             $this->errors[] = 'name';
         }
+
         if ($a->update()) {
             $this->app->logger()->info("Account [" . ($a->id ?? '(new)') . "] saved by user [{$userName}]");
         } else {
             $this->app->logger()->info("Error saving account [" . ($a->id ?? '(new)') . "] by user [{$userName}]: " . $a->errorMessage());
             $this->errors[] = 'other';
         }
+
         return $a;
     }
 }

@@ -1,5 +1,14 @@
 <?php
 
+/**
+ * Controller for generating and displaying category summary reports.
+ *
+ * Supports monthly or yearly reports, CSV exports, and raw data download.
+ *
+ * @author Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 namespace PHPLedger\Controllers;
 
 use DateTimeImmutable;
@@ -15,6 +24,9 @@ final class ReportController extends AbstractViewController
 {
     private const MAX_YEAR_RANGE = 10;
 
+    /**
+     * Handle report requests and rendering.
+     */
     protected function handle(): void
     {
         $period = strtolower((string)$this->request->input('period', 'month'));
@@ -22,13 +34,17 @@ final class ReportController extends AbstractViewController
         if ($period !== 'month' && $period !== 'year') {
             $period = 'month';
         }
+
         [$from, $to, $filters, $columns] = $this->resolvePeriod($period);
+
         if ($period === 'month') {
             $monthNames = array_map(fn($n) => $l10n->l("mon_$n"), $columns);
         }
+
         $raw = $this->app->reportFactory()::categorySummary()->fetch($from, $to, $period);
         $builder = new CategorySummaryReportBuilder();
         $reportData = $builder->build($raw, $columns, $period, $from, $to);
+
         $export = strtolower($this->request->input('export', ''));
         if ($export === 'csv') {
             $this->reportDownload($reportData);
@@ -38,6 +54,7 @@ final class ReportController extends AbstractViewController
             $this->rawDataDownload($raw['category']);
             return;
         }
+
         (new ReportViewTemplate())->render(array_merge($this->uiData, [
             'pagetitle'    => $period === 'month' ? $l10n->l('report_month') : $l10n->l('report_year'),
             'columnLabels' => $period === 'month' ? $monthNames : $columns,
@@ -58,28 +75,40 @@ final class ReportController extends AbstractViewController
         ]));
     }
 
+    /**
+     * Generate CSV and send report download.
+     */
     private function reportDownload(array $data): void
     {
         $headers = array_merge(['Category'], $data['columns'], ['Average', 'Total']);
         $rows = [];
+
         foreach ($data['groups'] as $g) {
             $rows[] = array_merge([$g['label']], array_values($g['collapsedValues']), [$g['collapsedAverage'], $g['collapsedTotal']]);
             foreach ($g['rows'] as $r) {
                 $rows[] = array_merge(['→ ' . $r['label']], array_values($r['values']), [$r['average'], $r['total']]);
             }
         }
+
         $this->app->fileResponseSender()->csv(CsvBuilder::build($headers, $rows, ','), 'report.csv');
     }
 
+    /**
+     * Generate CSV and send raw report data.
+     */
     private function rawDataDownload(array $rawData): void
     {
         $this->app->fileResponseSender()->csv(CsvBuilder::build(array_keys($rawData[0]), $rawData), "raw_report.csv");
     }
 
+    /**
+     * Determine report date range, filters, and columns based on period.
+     */
     private function resolvePeriod(string $period): array
     {
         $currentYear = (int)date('Y');
         $l10n = $this->app->l10n();
+
         if ($period === 'month') {
             $year = (int)$this->request->input('year', $currentYear);
             $from = new DateTimeImmutable("$year-01-01");
@@ -95,9 +124,11 @@ final class ReportController extends AbstractViewController
 
         $startYear = (int)$this->request->input('startYear', $currentYear - 1);
         $endYear   = (int)$this->request->input('endYear', $currentYear);
+
         if ($endYear < $startYear) {
             [$startYear, $endYear] = [$endYear, $startYear];
         }
+
         if (($endYear - $startYear + 1) > self::MAX_YEAR_RANGE) {
             $endYear = $startYear + self::MAX_YEAR_RANGE - 1;
         }

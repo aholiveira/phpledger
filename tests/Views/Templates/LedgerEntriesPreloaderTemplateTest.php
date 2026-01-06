@@ -1,7 +1,12 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 use PHPLedger\Views\Templates\LedgerEntriesPreloaderTemplate;
-use PHPLedger\Util\Html;
 
 beforeEach(function () {
     $this->preloaderTemplate = new LedgerEntriesPreloaderTemplate();
@@ -13,7 +18,8 @@ beforeEach(function () {
         'label' => ['notification' => 'Loading...'],
         'success' => true,
         'ui' => new class {
-            public function notification($message, $success) {
+            public function notification($message, $success)
+            {
                 echo '<div class="notification">' . htmlspecialchars($message) . "</div>";
             }
         }

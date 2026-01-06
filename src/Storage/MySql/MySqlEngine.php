@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 namespace PHPLedger\Storage\MySql;
 
 use mysqli;
@@ -80,6 +86,7 @@ final class MySqlEngine implements StorageEngineInterface
     {
         return new mysqli($settings['host'], $settings['user'], $settings['password'], $settings['database'], $settings['port']);
     }
+
     private function getRunner(mysqli $db): MySqlMigrationRunner
     {
         return new MySqlMigrationRunner(

@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 use PHPLedger\Views\Templates\BalancesViewTemplate;
 use PHPLedger\Util\UiBuilder;
 
@@ -93,7 +99,7 @@ it('renders table headers from labels', function () {
     $this->view->render($this->data);
     $html = ob_get_clean();
 
-    foreach (['Account','Deposits','Withdrawals','Balance','Percent','Entries'] as $header) {
+    foreach (['Account', 'Deposits', 'Withdrawals', 'Balance', 'Percent', 'Entries'] as $header) {
         expect($html)->toContain("<th>$header</th>");
     }
 });

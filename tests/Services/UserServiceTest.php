@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 use PHPLedger\Contracts\DataObjectInterface;
 use PHPLedger\Contracts\Domain\UserObjectInterface;
 use PHPLedger\Domain\User;
@@ -7,19 +13,53 @@ use PHPLedger\Services\UserService;
 use PHPLedgerTests\Support\MockApplication;
 
 /* Minimal concrete User for instanceof checks */
+
 final class TestUser extends User
 {
-    public function create(): DataObjectInterface { throw new \Exception('Not implemented'); }
-    public function read(int $id): ?DataObjectInterface { throw new \Exception('Not implemented'); }
-    public function validate(): bool { return true; }
-    public function errorMessage(): string { return ''; }
-    public function update(): bool { return true; }
-    public function delete(): bool { return true; }
-    public static function getNextId(): int { return 1; }
-    public static function getList(array $fieldFilter = []): array { return []; }
-    public static function getById(int $id): ?self { return null; }
-    public static function getByUsername(string $username): ?self { return null; }
-    public static function getByToken(string $token): ?self { return null; }
+    public function create(): DataObjectInterface
+    {
+        throw new \Exception('Not implemented');
+    }
+    public function read(int $id): ?DataObjectInterface
+    {
+        throw new \Exception('Not implemented');
+    }
+    public function validate(): bool
+    {
+        return true;
+    }
+    public function errorMessage(): string
+    {
+        return '';
+    }
+    public function update(): bool
+    {
+        return true;
+    }
+    public function delete(): bool
+    {
+        return true;
+    }
+    public static function getNextId(): int
+    {
+        return 1;
+    }
+    public static function getList(array $fieldFilter = []): array
+    {
+        return [];
+    }
+    public static function getById(int $id): ?self
+    {
+        return null;
+    }
+    public static function getByUsername(string $username): ?self
+    {
+        return null;
+    }
+    public static function getByToken(string $token): ?self
+    {
+        return null;
+    }
 }
 
 /* Tests */

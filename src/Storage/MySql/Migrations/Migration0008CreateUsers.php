@@ -1,10 +1,14 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 declare(strict_types=1);
 
 namespace PHPLedger\Storage\MySql\Migrations;
-
-use PHPLedger\Storage\MySql\MySqlUser;
 
 final class Migration0008CreateUsers extends AbstractMigration
 {

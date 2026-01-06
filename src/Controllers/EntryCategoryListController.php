@@ -1,11 +1,13 @@
 <?php
 
 /**
+ * Controller for listing, updating, and deleting entry categories.
  *
- * @author Antonio Henrique Oliveira
- * @copyright (c) 2017-2022, Antonio Henrique Oliveira
- * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
+ * Handles POST requests for saving or deleting categories, validates input,
+ * and renders the entry category list view template with hierarchical rows.
  *
+ * @author Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
  */
 
 namespace PHPLedger\Controllers;
@@ -20,6 +22,9 @@ final class EntryCategoryListController extends AbstractViewController
 {
     private EntryCategory $object;
 
+    /**
+     * Handle list display and POST updates/deletes.
+     */
     protected function handle(): void
     {
         $success = false;
@@ -49,6 +54,7 @@ final class EntryCategoryListController extends AbstractViewController
         } catch (Exception $e) {
             $message = $e->getMessage();
         }
+
         $object = $this->app->dataFactory()->entryCategory();
         $objectList = $object->getList();
         $rows = [];
@@ -61,6 +67,7 @@ final class EntryCategoryListController extends AbstractViewController
                 $rows[] = $this->makeRow($child);
             }
         }
+
         $template = new EntryCategoryListViewTemplate();
         $template->render(array_merge($this->uiData, [
             'title'    => 'Tipos de movimentos',
@@ -75,6 +82,13 @@ final class EntryCategoryListController extends AbstractViewController
         ]));
     }
 
+    /**
+     * Handle saving an entry category.
+     *
+     * @param array $filtered Filtered POST data
+     * @return bool True if saved successfully
+     * @throws PHPLedgerException on validation errors
+     */
     private function handleUpdate(array $filtered): bool
     {
         $this->object->id = empty($filtered['id']) ? $this->object->getNextId() : $filtered['id'];
@@ -94,6 +108,13 @@ final class EntryCategoryListController extends AbstractViewController
             throw new PHPLedgerException("Dados inv&aacute;lidos. Por favor verifique.");
         }
     }
+
+    /**
+     * Handle deleting an entry category.
+     *
+     * @param array $filtered Filtered POST data
+     * @return bool True if deleted successfully
+     */
     private function handleDelete(array $filtered): bool
     {
         if (isset($filtered['id'])) {
@@ -102,12 +123,19 @@ final class EntryCategoryListController extends AbstractViewController
         }
         return false;
     }
+
+    /**
+     * Build a row for display in the entry category list.
+     *
+     * @param EntryCategory $c Category object
+     * @return array Row data
+     */
     private function makeRow(EntryCategory $c): array
     {
         return [
             'href'        => ($c->id ?? 0) > 0 ? "index.php?action=entry_type&id={$c->id}" : "",
             'id'          => $c->id ?? "",
-            'parentId'      => $c->parentId,
+            'parentId'    => $c->parentId,
             'description' => $c->description ?? '',
             'amount'      => NumberUtil::normalize(abs($c->getBalance())),
             'active'      => $c->active

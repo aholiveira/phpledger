@@ -1,11 +1,14 @@
 <?php
 
 /**
+ * Controller for handling ledger entries
+ *
+ * Handles all operations related to ledger entries, including displaying, filtering,
+ * exporting, and saving ledger entries. Integrates with data factories, UI templates,
+ * and localization services.
  *
  * @author Antonio Henrique Oliveira
- * @copyright (c) 2017-2022, Antonio Henrique Oliveira
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU General Public License (GPL) v3
- *
  */
 
 namespace PHPLedger\Controllers;
@@ -22,7 +25,6 @@ use PHPLedger\Domain\LedgerEntry;
 use PHPLedger\Exceptions\PHPLedgerException;
 use PHPLedger\Util\CsvBuilder;
 use PHPLedger\Util\DateParser;
-use PHPLedger\Util\Html;
 use PHPLedger\Util\NumberUtil;
 use PHPLedger\Views\Templates\LedgerEntriesFilterViewTemplate;
 use PHPLedger\Views\Templates\LedgerEntriesFormViewTemplate;
@@ -40,6 +42,14 @@ final class LedgerEntriesController extends AbstractViewController
     private array $accountListCache;
     private bool $isEditing = false;
 
+    /**
+     * Main request handler for ledger entries.
+     *
+     * Initializes data, applies filters, handles export requests, populates caches,
+     * prepares UI templates, and renders the main ledger entries view.
+     *
+     * @return void
+     */
     protected function handle(): void
     {
         $pagetitle = $this->app->l10n()->l("ledger_entries");
@@ -120,6 +130,12 @@ final class LedgerEntriesController extends AbstractViewController
         $view->render($templateData);
     }
 
+    /**
+     * Exports ledger entries as a CSV file based on the given filters.
+     *
+     * @param array $filters Associative array of filters to apply for the export.
+     * @return void
+     */
     private function ledgerEntriesDownload(array $filters): void
     {
         $ledgerEntry = $this->dataFactory->ledgerentry();
@@ -153,6 +169,12 @@ final class LedgerEntriesController extends AbstractViewController
         $this->app->fileResponseSender()->csv(CsvBuilder::build($headers, $rows), 'ledger_entries.csv');
     }
 
+    /**
+     * Prepares form data for the ledger entries filter form.
+     *
+     * @param array $filters Associative array of filters applied.
+     * @return array Structured form data including accounts, categories, start and end dates.
+     */
     private function prepareFilterFormData(array $filters): array
     {
         $filterFormData = [];
@@ -164,6 +186,14 @@ final class LedgerEntriesController extends AbstractViewController
         $filterFormData['endDate'] = $endDate->format("Y-m-d");
         return $filterFormData;
     }
+
+    /**
+     * Populates cached lists of accounts, currencies, and entry categories.
+     *
+     * This is used to reduce repeated database queries during ledger entry rendering.
+     *
+     * @return void
+     */
     private function populateCaches(): void
     {
         $this->accountListCache = $this->dataFactory->account()->getList(['active' => ['operator' => '=', 'value' => '1']]);
@@ -173,6 +203,16 @@ final class LedgerEntriesController extends AbstractViewController
             'id' => ['operator' => '>', 'value' => '0']
         ]);
     }
+
+    /**
+     * Prepares ledger entry rows for display in the table view.
+     *
+     * @param LedgerEntry $ledgerEntryObject LedgerEntry domain object for data retrieval.
+     * @param array $ledgerFilters Filters to apply when fetching ledger entries.
+     * @param array $filters Filter values used for generating links and context.
+     * @param float $startBalance Initial balance before the filtered period.
+     * @return array Structured array of ledger entries including text, href, and title data.
+     */
     private function prepareLedgerEntryRows(LedgerEntry $ledgerEntryObject, array $ledgerFilters, array $filters, float $startBalance): array
     {
         $ledgerEntryList = $ledgerEntryObject->getList($ledgerFilters);
@@ -217,6 +257,15 @@ final class LedgerEntriesController extends AbstractViewController
         }
         return $rows;
     }
+
+    /**
+     * Prepares data for the ledger entry edit/create form.
+     *
+     * @param LedgerEntry $ledgerEntryObject LedgerEntry domain object for retrieving the entry by ID.
+     * @param array $filters Current filter context including editId.
+     * @param float $balance Current balance for the entry.
+     * @return array Form data including categories, currencies, accounts, direction, amount, remarks, and balance.
+     */
     private function prepareFormData(LedgerEntry $ledgerEntryObject, array $filters, float $balance): array
     {
         $editId = is_numeric($filters['editId'] ?? '') ? (int)$filters['editId'] : 0;
@@ -247,6 +296,13 @@ final class LedgerEntriesController extends AbstractViewController
             'balance' => NumberUtil::normalize($balance),
         ];
     }
+
+    /**
+     * Prepares an array of accounts for form selection.
+     *
+     * @param int $selectedId ID of the account that should be marked as selected.
+     * @return array Array of account rows including value, text, and selected status.
+     */
     private function prepareAccountRows(int $selectedId): array
     {
         $accountRows = [];
@@ -262,6 +318,13 @@ final class LedgerEntriesController extends AbstractViewController
         }
         return $accountRows;
     }
+
+    /**
+     * Prepares an array of currencies for form selection.
+     *
+     * @param int $selectedId ID of the currency that should be marked as selected.
+     * @return array Array of currency rows including value, text, and selected status.
+     */
     private function prepareCurrencyRows(int $selectedId): array
     {
         $currencyRows = [];
@@ -277,6 +340,14 @@ final class LedgerEntriesController extends AbstractViewController
         }
         return $currencyRows;
     }
+
+    /**
+     * Constructs a single ledger entry category row for selection.
+     *
+     * @param EntryCategory $row EntryCategory object.
+     * @param int $selectedId ID of the category that should be marked as selected.
+     * @return array Array containing value, text, parentId, and selected status.
+     */
     private function makeEntryCategoryRow(EntryCategory $row, int $selectedId): array
     {
         return [
@@ -286,6 +357,13 @@ final class LedgerEntriesController extends AbstractViewController
             'selected' => $row->id === $selectedId
         ];
     }
+
+    /**
+     * Prepares an array of ledger entry categories for form selection, including children.
+     *
+     * @param int $selectedEntryCategoryId ID of the category that should be marked as selected.
+     * @return array Array of category rows including value, text, parentId, and selected status.
+     */
     private function prepareEntryCategoryRows(int $selectedEntryCategoryId): array
     {
         $entryCategoryRows = [];
@@ -297,6 +375,13 @@ final class LedgerEntriesController extends AbstractViewController
         }
         return $entryCategoryRows;
     }
+
+    /**
+     * Builds an array of filters suitable for querying ledger entries.
+     *
+     * @param array $filters Associative array containing filter values like startDate, endDate, accountId, and entryType.
+     * @return array Array of filters with operators and values for ledger entry queries.
+     */
     private function getLedgerFilters(array $filters): array
     {
         $ledgerFilters = [];
@@ -310,6 +395,14 @@ final class LedgerEntriesController extends AbstractViewController
         }
         return $ledgerFilters;
     }
+
+    /**
+     * Handles a request for ledger entry operations, including saving and editing.
+     *
+     * @param RequestInterface $request The request object containing POST or GET data.
+     * @param array $filteredInput Input data filtered and sanitized.
+     * @return array Array containing saved entry ID (or null), success status, and error message.
+     */
     private function processRequest(RequestInterface $request, array $filteredInput): array
     {
         $savedEntryId = null;
@@ -335,6 +428,13 @@ final class LedgerEntriesController extends AbstractViewController
         }
         return [$savedEntryId, $success, $errorMessage];
     }
+
+    /**
+     * Processes and sanitizes input data for ledger entry operations.
+     *
+     * @param array $inputData Raw input data from request.
+     * @return array Filtered and sanitized input data array.
+     */
     private function processInput(array $inputData): array
     {
         $dateFilter = [
@@ -364,6 +464,19 @@ final class LedgerEntriesController extends AbstractViewController
         ];
         return filter_var_array($inputData, $input_variables_filter, true);
     }
+
+    /**
+     * Save a ledger entry or update an existing one from input data.
+     *
+     * Validates required fields and the CSRF token, then persists the entry
+     * and updates user defaults accordingly.
+     *
+     * @param array $input The input data for the ledger entry.
+     * @return int The ID of the saved ledger entry.
+     * @throws PHPLedgerException If the user lacks write permissions.
+     * @throws InvalidArgumentException If required input fields are missing or invalid.
+     * @throws DomainException If saving the ledger entry fails.
+     */
     private function handleSave(array $input): int
     {
         $userName = $this->currentUser?->getProperty('userName', '');
@@ -394,6 +507,16 @@ final class LedgerEntriesController extends AbstractViewController
         $this->storeDefaults($entry);
         return $entry->id;
     }
+
+    /**
+     * Store the current ledger entry as the user's default settings.
+     *
+     * Updates category, currency, account, date, direction, language, and username
+     * in the defaults object and persists it.
+     *
+     * @param LedgerEntry $entry The ledger entry whose values will be stored as defaults.
+     * @throws DomainException If saving the defaults fails.
+     */
     private function storeDefaults(LedgerEntry $entry)
     {
         $this->defaults->categoryId = $entry->categoryId;
@@ -407,6 +530,15 @@ final class LedgerEntriesController extends AbstractViewController
             throw new DomainException($this->app->l10n()->l("defaults_save_error"));
         }
     }
+    /**
+     * Extract and normalize filter values from input data.
+     *
+     * Converts numeric filters to integers and validates start and end dates.
+     * If no filters are provided, defaults are used.
+     *
+     * @param array $input Input data array.
+     * @return array Normalized filter array including 'startDate' and 'endDate'.
+     */
     private function getFilters(array $input): array
     {
         if (isset($input['filters'])) {
@@ -421,12 +553,25 @@ final class LedgerEntriesController extends AbstractViewController
             $filters['startDate'] = $input['filter_startDate'] ?? null;
             $filters['endDate']   = $input['filter_endDate'] ?? null;
         }
+
         $start = $this->validateDateFieldFromInput('startDate', $filters);
         $end   = $this->validateDateFieldFromInput('endDate', $filters);
+
         $filters['startDate'] = $start ? $start->format('Y-m-d') : date('Y-m-01');
-        $filters['endDate'] = $end ? $end->format('Y-m-d') : date('Y-m-d');
+        $filters['endDate']   = $end ? $end->format('Y-m-d') : date('Y-m-d');
+
         return $filters;
     }
+
+    /**
+     * Validate and parse a date field from input.
+     *
+     * @param string $fieldName Name of the input field to validate.
+     * @param array $input Input array containing the date field.
+     * @param bool $throw Whether to throw an exception if the date is invalid.
+     * @return DateTimeImmutable|null The parsed date or null if invalid and $throw is false.
+     * @throws DomainException If $throw is true and date is invalid or missing.
+     */
     private function validateDateFieldFromInput(string $fieldName, array $input, bool $throw = false)
     {
         try {
@@ -434,16 +579,17 @@ final class LedgerEntriesController extends AbstractViewController
         } catch (Exception $e) {
             if ($throw) {
                 throw new DomainException($this->app->l10n()->l("invalid_date", $e->getMessage()));
-            } else {
-                return null;
             }
+            return null;
         }
+
         if (!$dt) {
             if ($throw) {
                 throw new DomainException($this->app->l10n()->l("date_required"));
             }
             $dt = null;
         }
+
         return $dt;
     }
 }

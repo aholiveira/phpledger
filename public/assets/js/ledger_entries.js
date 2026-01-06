@@ -1,3 +1,8 @@
+/*!
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
 function clear_filter() {
     const now = new Date();
     document.getElementById("filter_entryType").value = "";

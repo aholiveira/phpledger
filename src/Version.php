@@ -1,10 +1,16 @@
 <?php
 
+/**
+ * @author Antonio Oliveira
+ * @copyright Copyright (c) 2026 Antonio Oliveira
+ * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
+ */
+
 namespace PHPLedger;
 
 final class Version
 {
-    private const VERSION = '0.8.16';
+    private const VERSION = '0.8.17';
 
     public static function string(): string
     {
