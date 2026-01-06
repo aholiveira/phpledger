@@ -12,6 +12,8 @@ namespace PHPLedger\Storage\MySql;
 
 use DomainException;
 use PHPLedger\Contracts\DataObjectInterface;
+use PHPLedger\Exceptions\PHPLedgerException;
+use Throwable;
 
 trait MySqlObject
 {
@@ -181,6 +183,26 @@ trait MySqlObject
         }
         foreach (array_keys($vars) as $key) {
             unset($this->$key);
+        }
+    }
+    protected function saveWithTransaction(string $sql, string $types, array $params): bool
+    {
+        $c = MySqlStorage::getConnection();
+        try {
+            $c->begin_transaction();
+            if (!isset($this->id)) {
+                $this->id = $this->getNextId();
+            }
+            $stmt = $c->prepare($sql);
+            $stmt->bind_param("i" . $types, $this->id, ...$params);
+            $ok = $stmt->execute();
+            $stmt->close();
+            $c->commit();
+            return $ok;
+        } catch (Throwable $e) {
+            $c->rollback();
+            static::setErrorMessage($e->getMessage() ?? '');
+            throw $e;
         }
     }
 }

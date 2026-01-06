@@ -66,25 +66,21 @@ class MysqlAccountType extends AccountType
         return $retval;
     }
 
-
     public function update(): bool
     {
-        $retval = false;
         $sql = "INSERT INTO {$this->tableName()}
-                (`description`, `savings`, `id`)
+                (`id`, `description`, `savings`)
                 VALUES (?, ?, ?)
                 ON DUPLICATE KEY UPDATE
                     `description` = VALUES(`description`),
                     `savings` = VALUES(`savings`)";
-        $stmt = MySqlStorage::getConnection()->prepare($sql);
-        $stmt->bind_param(
-            "sii",
-            $this->description,
-            $this->savings,
-            $this->id
+        return $this->saveWithTransaction(
+            $sql,
+            "si",
+            [
+                $this->description,
+                $this->savings,
+            ]
         );
-        $retval = $stmt->execute();
-        $stmt->close();
-        return $retval;
     }
 }

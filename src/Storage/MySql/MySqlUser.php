@@ -11,6 +11,7 @@
 namespace PHPLedger\Storage\MySql;
 
 use PHPLedger\Domain\User;
+use Throwable;
 
 class MySqlUser extends User
 {
@@ -56,35 +57,18 @@ class MySqlUser extends User
             tokenExpiry=VALUES(tokenExpiry),
             active=VALUES(active)";
 
-        try {
-            if (!isset($this->id)) {
-                $this->id = $this->getNextId();
-            }
-            if (empty($this->tokenExpiry)) {
-                $this->tokenExpiry = null;
-            }
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            $stmt->bind_param(
-                "issssssisii",
-                $this->id,
-                $this->userName,
-                $this->password,
-                $this->firstName,
-                $this->lastName,
-                $this->fullName,
-                $this->email,
-                $this->role,
-                $this->token,
-                $this->tokenExpiry,
-                $this->active
-            );
-            return $stmt->execute();
-        } finally {
-            if (isset($stmt)) {
-                $stmt->close();
-            }
-            return false;
-        }
+        return $this->saveWithTransaction($sql, "ssssssisii", [
+            $this->userName,
+            $this->password,
+            $this->firstName,
+            $this->lastName,
+            $this->fullName,
+            $this->email,
+            $this->role,
+            $this->token,
+            $this->tokenExpiry,
+            $this->active
+        ]);
     }
 
     public static function getList(array $fieldFilter = []): array

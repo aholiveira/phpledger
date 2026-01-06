@@ -78,10 +78,9 @@ class MySqlCurrency extends Currency
 
     public function update(): bool
     {
-        $retval = false;
         $sql = "INSERT INTO {$this->tableName()}
-                    (`description`, `exchangeRate`, `code`, `username`, `createdAt`, `updatedAt`, `id`)
-                VALUES (?, ?, ?, ?, NULL, NULL, ?)
+                    (`id`, `description`, `exchangeRate`, `code`, `username`, `createdAt`, `updatedAt`)
+                VALUES (?, ?, ?, ?, ?, NULL, NULL)
                 ON DUPLICATE KEY UPDATE
                     `description`=VALUES(`description`),
                     `exchangeRate`=VALUES(`exchangeRate`),
@@ -89,18 +88,16 @@ class MySqlCurrency extends Currency
                     `username`=VALUES(`username`),
                     `createdAt`=NULL,
                     `updatedAt`=NULL";
-        $stmt = MySqlStorage::getConnection()->prepare($sql);
-        $stmt->bind_param(
-            "sdssi",
-            $this->description,
-            $this->exchangeRate,
-            $this->code,
-            $this->username,
-            $this->id
+        return $this->saveWithTransaction(
+            $sql,
+            "sdss",
+            [
+                $this->description,
+                $this->exchangeRate,
+                $this->code,
+                $this->username,
+            ]
         );
-        $retval = $stmt->execute();
-        $stmt->close();
-        return $retval;
     }
     public function delete(): bool
     {

@@ -27,6 +27,7 @@ abstract class User extends AbstractDataObject implements UserObjectInterface
     protected int $role;
     protected static int $tokenLength = 32;
     private string $dateFormat = "Y-m-d H:i:s";
+
     public function setProperty(string $name, mixed $value): void
     {
         $method = 'set' . ucfirst($name);
@@ -38,6 +39,7 @@ abstract class User extends AbstractDataObject implements UserObjectInterface
             $this->$name = $value;
         }
     }
+
     public function getProperty(string $name, mixed $default = null): mixed
     {
         $method = 'get' . ucfirst($name);
@@ -46,10 +48,12 @@ abstract class User extends AbstractDataObject implements UserObjectInterface
         }
         return property_exists($this, $name) ? $this->$name : $default;
     }
+
     public function setPassword(string $value)
     {
         $this->password = $this->hashPassword($value);
     }
+
     /**
      * This returns the password hash.
      * The unhashed password is never stored on the object
@@ -59,22 +63,27 @@ abstract class User extends AbstractDataObject implements UserObjectInterface
     {
         return $this->password;
     }
+
     private function hashPassword(string $password): string
     {
         return PasswordManager::hashPassword($password);
     }
+
     public function verifyPassword(string $password): bool
     {
         return PasswordManager::verifyPassword($this->getPassword(), $password);
     }
+
     public function createToken(): string
     {
         return bin2hex(random_bytes(user::$tokenLength));
     }
+
     public function isTokenValid(string $token): bool
     {
         return date($this->dateFormat) <= $this->tokenExpiry && $this->token == $token;
     }
+
     public function resetPassword(): bool
     {
         $retval = false;
@@ -100,12 +109,12 @@ abstract class User extends AbstractDataObject implements UserObjectInterface
         }
         return $retval;
     }
+
     public function hasRole(int $role): bool
     {
         return $this->role === $role;
     }
 
     abstract public static function getByUsername(string $username): ?self;
-
     abstract public static function getByToken(string $token): ?self;
 }

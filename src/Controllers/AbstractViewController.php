@@ -3,10 +3,12 @@
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Contracts\ApplicationObjectInterface;
+use PHPLedger\Contracts\Domain\UserObjectInterface;
 use PHPLedger\Contracts\L10nServiceInterface;
+use PHPLedger\Contracts\PermissionServiceInterface;
 use PHPLedger\Contracts\RequestInterface;
 use PHPLedger\Contracts\ViewControllerInterface;
-use PHPLedger\Domain\User;
+use PHPLedger\Services\PermissionService;
 use PHPLedger\Util\UiBuilder;
 use PHPLedger\Version;
 
@@ -14,6 +16,8 @@ abstract class AbstractViewController implements ViewControllerInterface
 {
     protected RequestInterface $request;
     protected ApplicationObjectInterface $app;
+    protected ?UserObjectInterface $currentUser = null;
+    protected ?PermissionServiceInterface $permissions = null;
     abstract protected function handle(): void;
     protected array $uiData = ['label' => []];
 
@@ -23,7 +27,19 @@ abstract class AbstractViewController implements ViewControllerInterface
         $this->app = $app;
         $this->uiData['label'] = $this->buildLabels($app->l10n());
         $this->prepareUi();
+        $this->initUserPermissions();
         $this->handle();
+    }
+
+    protected function initUserPermissions(): void
+    {
+        $username = $this->app->session()->get('user', '');
+        if ($username) {
+            $this->currentUser = $this->app->dataFactory()->user()::getByUsername($username);
+        }
+        if ($this->currentUser instanceof UserObjectInterface) {
+            $this->permissions = new PermissionService($this->currentUser);
+        }
     }
 
     private function buildLabels(L10nServiceInterface $l10n): array
@@ -158,11 +174,7 @@ abstract class AbstractViewController implements ViewControllerInterface
 
     protected function buildL10nLabels(L10nServiceInterface $l10n, array $keys): array
     {
-        $labels = [];
-        foreach ($keys as $key) {
-            $labels[$key] = $l10n->l($key);
-        }
-        return $labels;
+        return array_combine($keys, array_map(fn($k) => $l10n->l($k), $keys));
     }
 
     protected function prepareUi(): void
@@ -175,36 +187,15 @@ abstract class AbstractViewController implements ViewControllerInterface
         if ($this->app->session()->isAuthenticated()) {
             $isAdmin = $session->get('isAdmin', false);
             $user = $this->app->dataFactory()->user()->getByUsername($this->app->session()->get('user', ''));
-            if ($user instanceof User) {
+            if ($user instanceof UserObjectInterface) {
                 $this->uiData['label']['hello'] = $l10n->l('hello', $user->getProperty('firstName', ''));
             }
         } else {
             $isAdmin = false;
         }
-        $menuActions = [
-            'ledger_entries',
-            'balances',
-            'accounts',
-            'account_types',
-            'entry_types',
-            'report',
-        ];
-        $menuActions[] = 'my_profile';
-        $menuActions[] = 'logout';
-        foreach ($menuActions as $a) {
-            $menuLinks[$a] = 'index.php?' . http_build_query([
-                'action' => $a,
-                'lang'   => $lang
-            ]);
-        }
-        $footer = [
-            'repo' => 'https://github.com/aholiveira/phpledger',
-            'versionText' => $l10n->l("version", Version::string()),
-            'sessionExpires' => $l10n->l("session_expires", $expires),
-            'languageSelectorHtml' => $this->buildLanguageSelectorHtml($lang),
-        ];
-        $this->uiData = [
-            'label' => $this->uiData['label'],
+        $menuLinks = $this->prepareMenu($lang);
+        $footer = $this->prepareFooter($l10n, $lang, $expires);
+        $this->uiData = array_merge($this->uiData, [
             'appTitle' => $this->app->config()->get('title', ''),
             'menu' => $menuLinks,
             'footer' => $footer,
@@ -214,17 +205,48 @@ abstract class AbstractViewController implements ViewControllerInterface
             'htmlLang' => $l10n->html(),
             'csrf' => $this->app->csrf()->inputField(),
             'action' => $this->request->input('action'),
+        ]);
+    }
+
+    protected function prepareFooter(L10nServiceInterface $l10n, string $lang, string $expires): array
+    {
+        return [
+            'repo' => 'https://github.com/aholiveira/phpledger',
+            'versionText' => $l10n->l("version", Version::string()),
+            'sessionExpires' => $l10n->l("session_expires", $expires),
+            'languageSelectorHtml' => $this->buildLanguageSelectorHtml($l10n, $lang),
         ];
     }
 
-    protected function buildLanguageSelectorHtml(string $current, array $requestParams = []): string
+    protected function prepareMenu(string $lang): array
+    {
+        $menuActions = [
+            'ledger_entries',
+            'balances',
+            'accounts',
+            'account_types',
+            'entry_types',
+            'report',
+            'my_profile',
+            'logout'
+        ];
+        $menuLinks = [];
+        foreach ($menuActions as $a) {
+            $menuLinks[$a] = 'index.php?' . http_build_query([
+                'action' => $a,
+                'lang'   => $lang
+            ]);
+        }
+        return $menuLinks;
+    }
+
+    protected function buildLanguageSelectorHtml(L10nServiceInterface $l10n, string $current, array $requestParams = []): string
     {
         $params = empty($requestParams) ? $this->request->all() : $requestParams;
         unset($params['lang']);
         $other = $current === 'pt-pt' ? 'en-us' : 'pt-pt';
         $params['lang'] = $other;
         $url = 'index.php?' . http_build_query($params);
-        $l10n = $this->app->l10n();
         $labels = [
             'pt_selected' => $l10n->l('pt_selected'),
             'en_selected' => $l10n->l('en_selected'),

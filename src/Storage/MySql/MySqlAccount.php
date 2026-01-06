@@ -16,6 +16,7 @@ use PHPLedger\Domain\Account;
 use PHPLedger\Storage\MySql\Traits\MySqlDeleteTrait;
 use PHPLedger\Storage\MySql\Traits\MySqlFetchAllTrait;
 use PHPLedger\Storage\MySql\Traits\MySqlSelectTrait;
+use Throwable;
 
 class MySqlAccount extends Account
 {
@@ -105,9 +106,8 @@ class MySqlAccount extends Account
     }
     public function update(): bool
     {
-        $retval = false;
         $sql = "INSERT INTO {$this->tableName()}
-                        (`number`, `name`, `grupo`, `typeId`, `iban`, `swift`, `openDate`, `closeDate`, `active`, `id`)
+                        (`id`, `number`, `name`, `grupo`, `typeId`, `iban`, `swift`, `openDate`, `closeDate`, `active`)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         ON DUPLICATE KEY UPDATE
                             `number`=VALUES(`number`),
@@ -119,22 +119,20 @@ class MySqlAccount extends Account
                             `openDate`=VALUES(`openDate`),
                             `closeDate`=VALUES(`closeDate`),
                             `active`=VALUES(`active`)";
-        $stmt = MySqlStorage::getConnection()->prepare($sql);
-        $stmt->bind_param(
-            "ssiissssii",
-            $this->number,
-            $this->name,
-            $this->grupo,
-            $this->typeId,
-            $this->iban,
-            $this->swift,
-            $this->openDate,
-            $this->closeDate,
-            $this->active,
-            $this->id
+        return $this->saveWithTransaction(
+            $sql,
+            "ssiissssi",
+            [
+                $this->number,
+                $this->name,
+                $this->grupo,
+                $this->typeId,
+                $this->iban,
+                $this->swift,
+                $this->openDate,
+                $this->closeDate,
+                $this->active,
+            ]
         );
-        $retval = $stmt->execute();
-        $stmt->close();
-        return $retval;
     }
 }

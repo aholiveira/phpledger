@@ -55,32 +55,15 @@ class MySqlLedger extends Ledger
 
     public function update(): bool
     {
-        $retval = false;
-        try {
-            $sql = "INSERT INTO {$this->tableName()} (nome, id)
+        $sql = "INSERT INTO {$this->tableName()} (id, nome)
                 VALUES (?, ?)
                 ON DUPLICATE KEY UPDATE
-                    nome=VALUES(nome),
-                    id=VALUES(id)";
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if (strlen($this->name) > 30) {
-                $this->name = substr($this->name, 0, 30);
-            }
-            $stmt->bind_param(
-                "si",
-                $this->name,
-                $this->id
-            );
-            $retval = $stmt->execute();
-        } finally {
-            if (isset($stmt) && $stmt instanceof \mysqli_stmt) {
-                $stmt->close();
-            }
-            if (isset($result) && $result instanceof \mysqli_result) {
-                $result->close();
-            }
+                    id=VALUES(id),
+                    nome=VALUES(nome)";
+        if (strlen($this->name) > 30) {
+            $this->name = substr($this->name, 0, 30);
         }
-        return $retval;
+        return $this->saveWithTransaction($sql, "s", [$this->name]);
     }
     public function delete(): bool
     {

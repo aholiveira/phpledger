@@ -4,6 +4,7 @@ namespace PHPLedger\Controllers;
 
 use PHPLedger\Domain\Account;
 use PHPLedger\Views\Templates\AccountFormViewTemplate;
+use Throwable;
 
 final class AccountController extends AbstractViewController
 {
@@ -24,7 +25,7 @@ final class AccountController extends AbstractViewController
     private function renderForm(): void
     {
         if (!(($this->account ?? null) instanceof Account)) {
-            $id = (int)$this->request->input('id', 0);
+            $id = (int)$this->request->input('id');
             $this->account = ($id ? $this->app->dataFactory()->account()::getById($id) : null) ?? $this->app->dataFactory()->account();
         }
         $view = new AccountFormViewTemplate();
@@ -71,50 +72,83 @@ final class AccountController extends AbstractViewController
     private function processPost(): void
     {
         $redirectUrl = 'index.php?action=accounts';
-        if (!$this->app->csrf()->validateToken($this->request->input('_csrf_token', ''))) {
+        $userName = $this->currentUser?->getProperty('userName', '');
+
+        $account = null;
+
+        if (!$this->isCsrfValid() || !$this->canCurrentUserWrite($userName)) {
             $this->app->redirector()->to($redirectUrl);
             return;
         }
 
         $action = $this->request->input('itemaction', 'save');
-        if ($action === 'delete') {
-            $id = (int)$this->request->input('id', 0);
-            if ($id && ($a = $this->app->dataFactory()::account()::getById($id)) !== null) {
-                $a->delete();
-                $this->app->logger()->notice("Account deleted: {$id}");
-            }
-            $this->app->redirector()->to($redirectUrl);
-            return;
-        }
-        // Save path
-        $id = (int)$this->request->input('id', 0);
-        $a = ($id ? $this->app->dataFactory()::account()::getById($id) : null) ?? $this->app->dataFactory()::account();
-        if ($a->id === null) {
-            $a->id = $a->getNextId();
-        }
-        // Basic assignment and server-side required validation
-        $a->name = trim((string) ($this->request->input('name', '')));
-        $a->number = trim((string) ($this->request->input('number', '')));
-        $a->typeId = (int) ($this->request->input('typeId', 0));
-        $a->iban = trim((string) ($this->request->input('iban', '')));
-        $a->swift = trim((string) ($this->request->input('swift', '')));
-        $a->openDate = trim((string) ($this->request->input('openDate', date('Y-m-d'))));
-        $a->closeDate = trim((string) ($this->request->input('closeDate', '')));
-        $a->active = $this->request->input('active', 0) === 0 ? 0 : 1;
-        $a->grupo = (int) ($this->request->input('grupo', 0));
 
-        // simple required validation for name (keep minimal as requested)
+        if ($action === 'delete') {
+            $this->handleDelete($userName);
+        } else {
+            $account = $this->handleSave($userName);
+        }
+
+        $this->account = $account ?? $this->account;
+        $this->app->redirector()->to($redirectUrl);
+    }
+
+    private function isCsrfValid(): bool
+    {
+        return $this->app->csrf()->validateToken($this->request->input('_csrf_token', ''));
+    }
+
+    private function canCurrentUserWrite(string $userName): bool
+    {
+        if (!$this->permissions?->canWrite()) {
+            $this->errors[] = 'forbidden';
+            $this->app->logger()->warning("User [{$userName}] attempted write account without permission");
+            return false;
+        }
+        return true;
+    }
+
+    private function handleDelete(string $userName): void
+    {
+        $id = (int)$this->request->input('id', 0);
+        if ($id && ($a = $this->app->dataFactory()::account()::getById($id)) !== null) {
+            $a->delete();
+            $this->app->logger()->notice("Account [{$id}] deleted by user [{$userName}]");
+        }
+    }
+
+    private function handleSave(string $userName): Account
+    {
+        $id = (int)$this->request->input('id');
+        $a = ($id ? $this->app->dataFactory()::account()::getById($id) : null) ?? $this->app->dataFactory()::account();
+        $fields = [
+            'name' => '',
+            'number' => '',
+            'typeId' => 0,
+            'iban' => '',
+            'swift' => '',
+            'openDate' => date('Y-m-d'),
+            'closeDate' => '',
+            'active' => 0,
+            'grupo' => 0,
+        ];
+
+        foreach ($fields as $key => $default) {
+            $value = $this->request->input($key, $default);
+            $a->$key = is_int($default) ? (int)$value : trim((string)$value);
+        }
+
+        $a->active = $this->request->input('active', 0) === 0 ? 0 : 1;
+
         if ($a->name === '') {
             $this->errors[] = 'name';
         }
         if ($a->update()) {
-            $this->app->logger()->info("Account saved: " . ($a->id ?? '(new)'));
-            $this->app->redirector()->to($redirectUrl);
+            $this->app->logger()->info("Account [" . ($a->id ?? '(new)') . "] saved by user [{$userName}]");
         } else {
-            $this->app->logger()->info("Error saving account: " . ($a->id ?? '(new)'));
+            $this->app->logger()->info("Error saving account [" . ($a->id ?? '(new)') . "] by user [{$userName}]: " . $a->errorMessage());
             $this->errors[] = 'other';
         }
-
-        $this->account = $a;
+        return $a;
     }
 }

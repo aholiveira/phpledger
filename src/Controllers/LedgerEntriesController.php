@@ -19,6 +19,7 @@ use PHPLedger\Contracts\RequestInterface;
 use PHPLedger\Domain\Defaults;
 use PHPLedger\Domain\EntryCategory;
 use PHPLedger\Domain\LedgerEntry;
+use PHPLedger\Exceptions\PHPLedgerException;
 use PHPLedger\Util\CsvBuilder;
 use PHPLedger\Util\DateParser;
 use PHPLedger\Util\Html;
@@ -365,6 +366,10 @@ final class LedgerEntriesController extends AbstractViewController
     }
     private function handleSave(array $input): int
     {
+        $userName = $this->currentUser?->getProperty('userName', '');
+        if (!$this->permissions?->canWrite()) {
+            throw new PHPLedgerException('No permissions');
+        }
         $dt = $this->validateDateFieldFromInput('data_mov', $input, true);
         foreach (['currencyAmount', 'direction', 'categoryId', 'currencyId', 'accountId'] as $fld) {
             if (!isset($input[$fld]) || $input[$fld] === '' || $input[$fld] === false) {
@@ -373,7 +378,7 @@ final class LedgerEntriesController extends AbstractViewController
         }
         $entry = $this->dataFactory->ledgerentry();
         $entry->entryDate = $dt->format('Y-m-d');
-        $entry->id = isset($input['id']) && is_numeric($input['id']) && $input['id'] > 0 ? (int)$input['id'] : $entry->getNextId();
+        $entry->id = isset($input['id']) && is_numeric($input['id']) && $input['id'] > 0 ? (int)$input['id'] : null;
         $entry->currencyAmount = (float) $input['currencyAmount'];
         $entry->direction = (int) $input['direction'];
         $entry->euroAmount = $entry->direction * $entry->currencyAmount;
@@ -381,10 +386,11 @@ final class LedgerEntriesController extends AbstractViewController
         $entry->currencyId = $input['currencyId'];
         $entry->accountId = (int) $input['accountId'];
         $entry->remarks = $input['remarks'];
-        $entry->username = $this->app->session()->get('user', 'empty');
+        $entry->username = $userName;
         if (!$entry->update()) {
             throw new DomainException($this->app->l10n()->l("ledger_save_error"));
         }
+        $this->app->logger()->info("Ledger entry [{$entry->id}] save by user [{$userName}]");
         $this->storeDefaults($entry);
         return $entry->id;
     }

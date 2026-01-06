@@ -160,15 +160,6 @@ describe('MySqlLedger::update', function () {
         expect($retrieved->name)->toBe('Updated Name');
     });
 
-    it('returns false when id is not set', function () {
-        $ledger = new MySqlLedger();
-        $ledger->name = 'No ID Ledger';
-
-        $result = $ledger->update();
-
-        expect($result)->toBeFalse();
-    });
-
     it('handles special characters in name', function () {
         $ledger = new MySqlLedger();
         $ledger->id = 101;

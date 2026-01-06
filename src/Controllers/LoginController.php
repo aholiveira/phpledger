@@ -100,16 +100,17 @@ final class LoginController extends AbstractViewController
 
     private function renderView(): void
     {
-        $this->uiData['footer']['languageSelectorHtml'] = $this->buildLanguageSelectorHtml($this->app->l10n()->lang(), ['action' => 'login']);
+        $l10n = $this->app->l10n();
+        $this->uiData['footer']['languageSelectorHtml'] = $this->buildLanguageSelectorHtml($l10n, $l10n->lang(), ['action' => 'login']);
         $view = new LoginViewTemplate();
         if ($this->request->method() === "POST" && !$this->userAuth) {
-            $errorMessage = $this->app->l10n()->l('invalid_credentials');
+            $errorMessage = $l10n->l('invalid_credentials');
         }
         if ($this->request->input('needsauth', 0)) {
-            $errorMessage = $this->app->l10n()->l('not_authenticated');
+            $errorMessage = $l10n->l('not_authenticated');
         }
         if ($this->request->input('expired', 0)) {
-            $errorMessage = $this->app->l10n()->l('expired_session');
+            $errorMessage = $l10n->l('expired_session');
         }
 
         $view->render(array_merge($this->uiData, [

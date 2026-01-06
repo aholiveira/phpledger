@@ -131,32 +131,16 @@ class MySqlEntryCategory extends EntryCategory
     }
     public function update(): bool
     {
-        $retval = false;
         if (!$this->validate()) {
-            return $retval;
+            return false;
         }
-        try {
-            $sql = "INSERT INTO {$this->tableName()} (parentId, `description`, active, id)
+        $sql = "INSERT INTO {$this->tableName()} (id, parentId, `description`, active)
                 VALUES (?, ?, ?, ?)
                 ON DUPLICATE KEY UPDATE
                     parentId=VALUES(parentId),
                     `description`=VALUES(`description`),
                     active=VALUES(active)";
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            if ($this->id === null) {
-                $this->id = $this->getNextId();
-            }
-            $stmt->bind_param("ssss", $this->parentId, $this->description, $this->active, $this->id);
-            $retval = $stmt->execute();
-        } finally {
-            if (isset($stmt) && $stmt instanceof mysqli_stmt) {
-                $stmt->close();
-            }
-            if (isset($result) && $result instanceof mysqli_result) {
-                $result->close();
-            }
-        }
-        return $retval;
+        return $this->saveWithTransaction($sql, "sss", [$this->parentId, $this->description, $this->active]);
     }
     public function delete(): bool
     {

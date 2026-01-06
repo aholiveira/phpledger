@@ -147,7 +147,6 @@ final class Application implements ApplicationObjectInterface
     }
     private function applyTimezone(): void
     {
-        $tz = $this->timezoneService->apply($this->config()->get("timezone", ''));
-        $this->logger()->debug("Applied timezone: $tz");
+        $this->timezoneService->apply($this->config()->get("timezone", ''));
     }
 }

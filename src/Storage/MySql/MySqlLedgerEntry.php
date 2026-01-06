@@ -154,9 +154,8 @@ class MySqlLedgerEntry extends LedgerEntry
     }
     public function update(): bool
     {
-        $retval = false;
         if (!$this->validate()) {
-            return $retval;
+            return false;
         }
         $sql = "INSERT INTO {$this->tableName()}
             (id, entryDate, categoryId, accountId, currencyId, direction, currencyAmount, euroAmount, remarks, username, createdAt, updatedAt)
@@ -172,23 +171,21 @@ class MySqlLedgerEntry extends LedgerEntry
                 remarks=VALUES(remarks),
                 username=VALUES(username),
                 updatedAt=NULL";
-        $stmt = MySqlStorage::getConnection()->prepare($sql);
-        $stmt->bind_param(
-            "isiisiddss",
-            $this->id,
-            $this->entryDate,
-            $this->categoryId,
-            $this->accountId,
-            $this->currencyId,
-            $this->direction,
-            $this->currencyAmount,
-            $this->euroAmount,
-            $this->remarks,
-            $this->username
+        return $this->saveWithTransaction(
+            $sql,
+            "siisiddss",
+            [
+                $this->entryDate,
+                $this->categoryId,
+                $this->accountId,
+                $this->currencyId,
+                $this->direction,
+                $this->currencyAmount,
+                $this->euroAmount,
+                $this->remarks,
+                $this->username,
+            ]
         );
-        $retval = $stmt->execute();
-        $stmt->close();
-        return $retval;
     }
     public function delete(): bool
     {

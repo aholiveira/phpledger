@@ -140,10 +140,8 @@ class MySqlDefaults extends Defaults
     }
     public function update(): bool
     {
-        $retval = false;
-        try {
-            $sql = "INSERT INTO {$this->tableName()}
-                    (categoryId, accountId, currencyId, entryDate, direction, language, lastVisitedUri, lastVisitedAt, showReportGraph, username, id)
+        $sql = "INSERT INTO {$this->tableName()}
+                    (id, categoryId, accountId, currencyId, entryDate, direction, language, lastVisitedUri, lastVisitedAt, showReportGraph, username)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 ON DUPLICATE KEY UPDATE
                     categoryId=VALUES(categoryId),
@@ -156,22 +154,22 @@ class MySqlDefaults extends Defaults
                     lastVisitedAt=VALUES(lastVisitedAt),
                     showReportGraph=VALUES(showReportGraph),
                     username=VALUES(username)";
-            $stmt = MySqlStorage::getConnection()->prepare($sql);
-            $typeString = self::buildTypesString([
-                $this->categoryId,
-                $this->accountId,
-                $this->currencyId,
-                $this->entryDate,
-                $this->language,
-                "'" . $this->direction . "'",
-                $this->lastVisitedUri,
-                $this->lastVisitedAt,
-                $this->showReportGraph,
-                $this->username,
-                $this->id
-            ]);
-            $stmt->bind_param(
-                $typeString,
+        $typeString = self::buildTypesString([
+            $this->categoryId,
+            $this->accountId,
+            $this->currencyId,
+            $this->entryDate,
+            $this->language,
+            "'" . $this->direction . "'",
+            $this->lastVisitedUri,
+            $this->lastVisitedAt,
+            $this->showReportGraph,
+            $this->username
+        ]);
+        return $this->saveWithTransaction(
+            $sql,
+            $typeString,
+            [
                 $this->categoryId,
                 $this->accountId,
                 $this->currencyId,
@@ -182,18 +180,8 @@ class MySqlDefaults extends Defaults
                 $this->lastVisitedAt,
                 $this->showReportGraph,
                 $this->username,
-                $this->id
-            );
-            $retval = $stmt->execute();
-        } finally {
-            if (isset($stmt) && $stmt instanceof \mysqli_stmt) {
-                $stmt->close();
-            }
-            if (isset($result) && $result instanceof \mysqli_result) {
-                $result->close();
-            }
-        }
-        return $retval;
+            ]
+        );
     }
     private static function buildTypesString(array $fields): string
     {
