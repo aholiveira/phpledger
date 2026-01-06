@@ -160,13 +160,7 @@ final class LedgerEntriesController extends AbstractViewController
         $startDate = DateTimeImmutable::createFromFormat('Y-m-d', $filters['startDate']) ?: new DateTimeImmutable(date('Y-m-01'));
         $endDate = DateTimeImmutable::createFromFormat('Y-m-d', $filters['endDate']) ?: new DateTimeImmutable(date('Y-m-d'));
         $filterFormData['startDate'] = $startDate->format("Y-m-d");
-        $filterFormData['startDateAA'] = Html::yearOptions($startDate->format("Y"));
-        $filterFormData['startDateMM'] = Html::monthOptions($startDate->format("m"));
-        $filterFormData['startDateDD'] = Html::dayOptions($startDate->format("d"));
         $filterFormData['endDate'] = $endDate->format("Y-m-d");
-        $filterFormData['endDateAA'] = Html::yearOptions($endDate->format("Y"));
-        $filterFormData['endDateMM'] = Html::monthOptions($endDate->format("m"));
-        $filterFormData['endDateDD'] = Html::dayOptions($endDate->format("d"));
         return $filterFormData;
     }
     private function populateCaches(): void
@@ -349,9 +343,6 @@ final class LedgerEntriesController extends AbstractViewController
         $input_variables_filter = [
             'action' => FILTER_DEFAULT,
             'data_mov' => $dateFilter,
-            'data_movAA' => FILTER_SANITIZE_NUMBER_INT,
-            'data_movMM' => FILTER_SANITIZE_NUMBER_INT,
-            'data_movDD' => FILTER_SANITIZE_NUMBER_INT,
             'id' => FILTER_SANITIZE_NUMBER_INT,
             'accountId' => FILTER_SANITIZE_NUMBER_INT,
             'categoryId' => FILTER_SANITIZE_NUMBER_INT,
@@ -365,14 +356,8 @@ final class LedgerEntriesController extends AbstractViewController
             'filter_editId' => FILTER_SANITIZE_NUMBER_INT,
             'filter_entryType' => FILTER_SANITIZE_NUMBER_INT,
             'filter_accountId' => FILTER_SANITIZE_NUMBER_INT,
-            'filter_startDateAA' => FILTER_SANITIZE_NUMBER_INT,
-            'filter_startDateMM' => FILTER_SANITIZE_NUMBER_INT,
-            'filter_startDateDD' => FILTER_SANITIZE_NUMBER_INT,
             'filter_startDate' => $dateFilter,
             'filter_endDate' => $dateFilter,
-            'filter_endDateAA' => FILTER_SANITIZE_NUMBER_INT,
-            'filter_endDateMM' => FILTER_SANITIZE_NUMBER_INT,
-            'filter_endDateDD' => FILTER_SANITIZE_NUMBER_INT,
             'lang' => FILTER_SANITIZE_ENCODED,
             '_csrf_token' => FILTER_DEFAULT,
         ];

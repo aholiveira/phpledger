@@ -46,7 +46,6 @@ final class LedgerEntriesMainViewTemplate extends AbstractViewTemplate
         <?php $ui->footer($label, $footer); ?>
         </div> <!-- Main grid -->
         <script>
-            toggleDateElements("data_mov");
             setTimeout(() => {
                 document.getElementById("preloader").style.display = "none"; // Hide
             }, 0);

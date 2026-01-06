@@ -81,8 +81,8 @@ it('renders LedgerEntriesFilterViewTemplate with correct form fields', function 
     expect($output)->toContain('<form id="datefilter"');
     expect($output)->toContain('<input name="action" value="ledger_entries" type="hidden">');
     expect($output)->toContain('<input name="lang" value="en" type="hidden">');
-    expect($output)->toContain('<input class="date-fallback" type="date" id="filter_startDate" name="filter_startDate"');
-    expect($output)->toContain('<input class="date-fallback" type="date" id="filter_endDate" name="filter_endDate"');
+    expect($output)->toContain('<input type="date" id="filter_startDate" name="filter_startDate"');
+    expect($output)->toContain('<input type="date" id="filter_endDate" name="filter_endDate"');
     expect($output)->toContain('<select name="filter_accountId"');
     expect($output)->toContain('<option value="1" >Cash</option>');
     expect($output)->toContain('<option value="2" >Bank</option>');
@@ -100,7 +100,7 @@ it('renders LedgerEntriesFormViewTemplate with correct form inputs', function ()
 
     expect($output)->toContain('<button class="submit" type="submit" name="save" value="save">Save</button>');
     expect($output)->toContain('<input type="hidden" name="id" value="0">');
-    expect($output)->toContain('<input class="date-fallback" type="date" id="data_mov" name="data_mov" required value="2025-01-01">');
+    expect($output)->toContain('<input type="date" id="data_mov" name="data_mov" required value="2025-01-01">');
     expect($output)->toContain('<select name="categoryId">');
     expect($output)->toContain('<option value="10" >Sales</option>');
     expect($output)->toContain('<select name="currencyId">');
