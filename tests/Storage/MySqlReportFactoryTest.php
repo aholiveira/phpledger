@@ -12,7 +12,6 @@ use PHPLedger\Storage\ReportFactory;
 use PHPLedger\Storage\Abstract\AbstractReportFactory;
 use PHPLedger\Storage\MySql\MySqlReportFactory;
 use UnexpectedValueException;
-use PHPUnit\Framework\TestCase;
 
 beforeEach(function () {
     $ref = new \ReflectionClass(AbstractReportFactory::class);
