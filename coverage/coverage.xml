@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1767795748">
-  <project timestamp="1767795748">
+<coverage generated="1767796827">
+  <project timestamp="1767796827">
     <file name="C:\pessoal\work\contas\src\Application.php">
       <class name="PHPLedger\Application" namespace="global">
         <metrics complexity="22" methods="19" coveredmethods="11" conditionals="0" coveredconditionals="0" statements="39" coveredstatements="21" elements="58" coveredelements="32"/>
@@ -2742,6 +2742,16 @@
       <line num="38" type="stmt" count="0"/>
       <metrics loc="41" ncloc="36" classes="1" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="0" elements="5" coveredelements="0"/>
     </file>
+    <file name="C:\pessoal\work\contas\src\Storage\MySql\Migrations\Migration0009AlterExchangeRate.php">
+      <class name="PHPLedger\Storage\MySql\Migrations\Migration0009AlterExchangeRate" namespace="global">
+        <metrics complexity="2" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="0" elements="4" coveredelements="0"/>
+      </class>
+      <line num="16" type="method" name="up" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="18" type="stmt" count="0"/>
+      <line num="21" type="method" name="down" visibility="public" complexity="1" crap="2" count="0"/>
+      <line num="23" type="stmt" count="0"/>
+      <metrics loc="26" ncloc="21" classes="1" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="2" coveredstatements="0" elements="4" coveredelements="0"/>
+    </file>
     <file name="C:\pessoal\work\contas\src\Storage\MySql\MySqlAccount.php">
       <class name="PHPLedger\Storage\MySql\MySqlAccount" namespace="global">
         <metrics complexity="13" methods="7" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="61" coveredstatements="59" elements="68" coveredelements="65"/>
@@ -5113,6 +5123,6 @@
       <line num="82" type="stmt" count="4"/>
       <metrics loc="85" ncloc="80" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="55" coveredstatements="55" elements="56" coveredelements="56"/>
     </file>
-    <metrics files="149" loc="11158" ncloc="8982" classes="115" methods="456" coveredmethods="231" conditionals="0" coveredconditionals="0" statements="3844" coveredstatements="1972" elements="4300" coveredelements="2203"/>
+    <metrics files="150" loc="11184" ncloc="9003" classes="116" methods="458" coveredmethods="231" conditionals="0" coveredconditionals="0" statements="3846" coveredstatements="1972" elements="4304" coveredelements="2203"/>
   </project>
 </coverage>
