@@ -233,7 +233,7 @@ final class LedgerEntriesController extends AbstractViewController
         $deposit = $l10n->l('deposit');
         $withdrawal = $l10n->l('withdraw');
         foreach ($ledgerEntryList as $row) {
-            $balance += ($row->direction * $row->euroAmount);
+            $balance += $row->euroAmount;
             $idQuery = http_build_query(array_merge($filtersArray, ['filter_editId' => $row->id]));
             $categoryQuery = http_build_query(array_merge($filtersArray, ['filter_entryType' => $row->categoryId]));
             $accountQuery = http_build_query(array_merge($filtersArray, ['filter_accountId' => $row->accountId]));
