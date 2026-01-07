@@ -32,7 +32,7 @@ class ResetPasswordViewTemplate extends AbstractViewTemplate
                 <p style="color:<?= $success ? "green" : "red" ?>;"><?= $message ?></p>
                 <?php if ($success === false): ?>
                     <form id="resetForm" method="POST">
-                        <input type="hidden" name="tokenId" value="<?= htmlspecialchars($tokenId ?? '') ?>">
+                        <input type="hidden" name="tokenId" value="<?= $this->htmlSafe($tokenId ?? '') ?>">
                         <input type="hidden" name="action" value="<?= $action ?>">
                         <div class="formgrid">
                             <p>Redefinição de palavra-passe</p>

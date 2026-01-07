@@ -21,6 +21,8 @@ beforeEach(function () {
             'account' => 'Cash',
             'direction' => 'D',
             'amount' => '100.00',
+            'exchangeRate' => '1.00',
+            'euroAmount' => '1.00',
             'remarks' => 'Test Entry',
             'balance' => '1000.00'
         ],
@@ -44,7 +46,9 @@ beforeEach(function () {
             'dc' => 'DC',
             'amount' => 'Amount',
             'remarks' => 'Remarks',
-            'balance' => 'Balance'
+            'balance' => 'Balance',
+            'exchangeRate' => 'exchangeRate',
+            'euro' => 'euro',
         ]
     ];
 });

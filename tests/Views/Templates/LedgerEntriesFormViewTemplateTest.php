@@ -50,6 +50,8 @@ beforeEach(function () {
             'account' => 'Account',
             'dc' => 'Direction',
             'amount' => 'Amount',
+            'exchangeRate' => 'exchangeRate',
+            'euro' => 'euro',
             'remarks' => 'Remarks',
             'balance' => 'Balance',
             'save' => 'Save'
@@ -72,6 +74,8 @@ beforeEach(function () {
                 ['value' => 'C', 'text' => 'Credit', 'parentId' => 0, 'selected' => false]
             ],
             'amount' => 100,
+            'exchangeRate' => 1,
+            'euroAmount' => 100,
             'remarks' => 'Test',
             'balance' => 1000
         ],

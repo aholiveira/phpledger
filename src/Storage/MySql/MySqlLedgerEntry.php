@@ -156,8 +156,8 @@ class MySqlLedgerEntry extends LedgerEntry
             return false;
         }
         $sql = "INSERT INTO {$this->tableName()}
-            (id, entryDate, categoryId, accountId, currencyId, direction, currencyAmount, euroAmount, remarks, username, createdAt, updatedAt)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL)
+            (id, entryDate, categoryId, accountId, currencyId, direction, currencyAmount, exchangeRate, euroAmount, remarks, username, createdAt, updatedAt)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NULL, NULL)
             ON DUPLICATE KEY UPDATE
                 entryDate=VALUES(entryDate),
                 categoryId=VALUES(categoryId),
@@ -165,13 +165,14 @@ class MySqlLedgerEntry extends LedgerEntry
                 currencyId=VALUES(currencyId),
                 direction=VALUES(direction),
                 currencyAmount=VALUES(currencyAmount),
+                exchangeRate=VALUES(exchangeRate),
                 euroAmount=VALUES(euroAmount),
                 remarks=VALUES(remarks),
                 username=VALUES(username),
                 updatedAt=NULL";
         return $this->saveWithTransaction(
             $sql,
-            "siisiddss",
+            "siisidddss",
             [
                 $this->entryDate,
                 $this->categoryId,
@@ -179,6 +180,7 @@ class MySqlLedgerEntry extends LedgerEntry
                 $this->currencyId,
                 $this->direction,
                 $this->currencyAmount,
+                $this->exchangeRate,
                 $this->euroAmount,
                 $this->remarks,
                 $this->username,

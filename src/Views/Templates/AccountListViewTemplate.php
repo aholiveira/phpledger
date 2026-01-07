@@ -32,7 +32,7 @@ final class AccountListViewTemplate extends AbstractViewTemplate
                 <?php $ui->menu($label, $menu); ?>
                 <div class="header">
                     <p style="margin:0">
-                        <a href="index.php?action=account&lang=<?= htmlspecialchars($lang) ?>" aria-label="<?= $label['add'] ?>"><?= $label['add'] ?></a>
+                        <a href="index.php?action=account&lang=<?= $this->htmlSafe($lang) ?>" aria-label="<?= $label['add'] ?>"><?= $label['add'] ?></a>
                     </p>
                 </div>
                 <div class="main" id="main">
@@ -55,16 +55,16 @@ final class AccountListViewTemplate extends AbstractViewTemplate
                             <tbody>
                                 <?php foreach ($list as $row): ?>
                                     <tr>
-                                        <td data-label="<?= $label['id'] ?>"><?= htmlspecialchars($row['id']) ?></td>
-                                        <td data-label="<?= $label['name'] ?>"><?= htmlspecialchars($row['name']) ?></td>
-                                        <td data-label="<?= $label['number'] ?>"><?= htmlspecialchars($row['number']) ?></td>
-                                        <td data-label="<?= $label['type'] ?>"><?= htmlspecialchars($row['type']) ?></td>
-                                        <td data-label="<?= $label['iban'] ?>"><?= htmlspecialchars($row['iban']) ?></td>
-                                        <td data-label="<?= $label['swift'] ?>"><?= htmlspecialchars($row['swift']) ?></td>
-                                        <td data-label="<?= $label['open'] ?>"><?= htmlspecialchars($row['openDate']) ?></td>
-                                        <td data-label="<?= $label['close'] ?>"><?= htmlspecialchars($row['closeDate']) ?></td>
+                                        <td data-label="<?= $label['id'] ?>"><?= $this->htmlSafe($row['id']) ?></td>
+                                        <td data-label="<?= $label['name'] ?>"><?= $this->htmlSafe($row['name']) ?></td>
+                                        <td data-label="<?= $label['number'] ?>"><?= $this->htmlSafe($row['number']) ?></td>
+                                        <td data-label="<?= $label['type'] ?>"><?= $this->htmlSafe($row['type']) ?></td>
+                                        <td data-label="<?= $label['iban'] ?>"><?= $this->htmlSafe($row['iban']) ?></td>
+                                        <td data-label="<?= $label['swift'] ?>"><?= $this->htmlSafe($row['swift']) ?></td>
+                                        <td data-label="<?= $label['open'] ?>"><?= $this->htmlSafe($row['openDate']) ?></td>
+                                        <td data-label="<?= $label['close'] ?>"><?= $this->htmlSafe($row['closeDate']) ?></td>
                                         <td class="active" data-label="<?= $label['active'] ?>"><?= $row['active'] ? '✓' : '–' ?></td>
-                                        <td data-label="<?= $label['actions'] ?>"><a href="index.php?action=account&id=<?= (int)$row['id'] ?>&lang=<?= htmlspecialchars($lang) ?>" aria-label="<?= $label['edit'] ?>"><?= $label['edit'] ?></a></td>
+                                        <td data-label="<?= $label['actions'] ?>"><a href="index.php?action=account&id=<?= (int)$row['id'] ?>&lang=<?= $this->htmlSafe($lang) ?>" aria-label="<?= $label['edit'] ?>"><?= $label['edit'] ?></a></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>

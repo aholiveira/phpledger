@@ -48,6 +48,8 @@ beforeEach(function () {
             'currency' => 'currency',
             'dc' => 'dc',
             'amount' => 'amount',
+            'exchangeRate' => 'exchangeRate',
+            'euro' => 'euro',
             'remarks' => 'remarks',
             'balance' => 'balance',
             'previous_balance' => 'previous_balance',
@@ -72,6 +74,8 @@ beforeEach(function () {
             'accountRows' => [],
             'direction' => [],
             'amount' => 0,
+            'exchangeRate' => 1,
+            'euroAmount' => 0,
             'remarks' => '',
             'balance' => 0
         ],

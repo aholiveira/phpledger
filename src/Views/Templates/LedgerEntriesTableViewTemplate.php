@@ -18,12 +18,12 @@ final class LedgerEntriesTableViewTemplate extends AbstractViewTemplate
 ?>
         <div class="main-container">
             <div class="csv-download">
-                <a href="<?= htmlspecialchars($downloadUrl ?? '') ?>"><small><?= $label['download_data'] ?><img src="assets/media/file-csv-solid-full.svg" alt="CSV"></small></a>
+                <a href="<?= $this->htmlSafe($downloadUrl ?? '') ?>"><small><?= $label['download_data'] ?><img src="assets/media/file-csv-solid-full.svg" alt="CSV"></small></a>
             </div>
             <form name="mov" method="POST" lang="<?= $lang ?>">
                 <?php foreach ($filters as $k => $v): ?>
                     <?php if ($v !== null): ?>
-                        <input type="hidden" name="filter_<?= $k ?>" value="<?= htmlspecialchars(((string)$v) ?? '') ?>">
+                        <input type="hidden" name="filter_<?= $k ?>" value="<?= $this->htmlSafe(((string)$v) ?? '') ?>">
                     <?php endif; ?>
                 <?php endforeach; ?>
                 <div class="table-wrapper">
@@ -38,13 +38,15 @@ final class LedgerEntriesTableViewTemplate extends AbstractViewTemplate
                                 <th scope="col"><?= $label['account'] ?></th>
                                 <th scope="col"><?= $label['dc'] ?></th>
                                 <th scope="col"><?= $label['amount'] ?></th>
+                                <th scope="col"><?= $label['exchangeRate'] ?></th>
+                                <th scope="col"><?= $label['euro'] ?></th>
                                 <th scope="col"><?= $label['remarks'] ?></th>
                                 <th scope="col"><?= $label['balance'] ?></th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td class="balance-label" colspan="9"><?= $label['previous_balance'] ?></td>
+                                <td class="balance-label" colspan="11"><?= $label['previous_balance'] ?></td>
                                 <td data-label="<?= $label['previous_balance'] ?>" class="balance"><?= NumberUtil::normalize($startBalance); ?></td>
                             </tr>
                             <?php
@@ -66,13 +68,15 @@ final class LedgerEntriesTableViewTemplate extends AbstractViewTemplate
                                     $formViewTemplate->render($rowTemplateData);
                                 }
                             endforeach;
-                            if ((int)($editId ?? 0) === 0) {
-                                $rowTemplateData['formData'] = $formData;
-                                $rowTemplateData['filters'] = $filters;
-                                $formViewTemplate->render($rowTemplateData);
-                            }
                             ?>
                         </tbody>
+                        <?php
+                        if ((int)($editId ?? 0) === 0) {
+                            $rowTemplateData['formData'] = $formData;
+                            $rowTemplateData['filters'] = $filters;
+                            $formViewTemplate->render($rowTemplateData);
+                        }
+                        ?>
                     </table>
                 </div>
             </form>

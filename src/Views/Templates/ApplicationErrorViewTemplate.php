@@ -29,7 +29,7 @@ final class ApplicationErrorViewTemplate extends AbstractViewTemplate
             <div class="maingrid">
                 <main>
                     <div class="main" id="main">
-                        <p>Application error: <?= htmlspecialchars($message) ?></p>
+                        <p>Application error: <?= $this->htmlSafe($message) ?></p>
                         <p>Check your config.json file</p>
                     </div>
                 </main>

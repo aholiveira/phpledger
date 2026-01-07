@@ -52,7 +52,8 @@ final class LedgerEntriesController extends AbstractViewController
      */
     protected function handle(): void
     {
-        $pagetitle = $this->app->l10n()->l("ledger_entries");
+        $l10n = $this->app->l10n();
+        $pagetitle = $l10n->l("ledger_entries");
         $this->dataFactory = $this->app->dataFactory();
         $this->defaults = $this->dataFactory->defaults();
         $username = $this->app->session()->get('user', 'empty');
@@ -81,7 +82,7 @@ final class LedgerEntriesController extends AbstractViewController
             'pagetitle' => $pagetitle,
             'success' => $success
         ]);
-        $templateData['label']['notification'] = $success ? $this->app->l10n()->l("save_success", $savedEntryId) : $errorMessage;
+        $templateData['label']['notification'] = $success ? $l10n->l("save_success", $savedEntryId) : $errorMessage;
         ob_end_flush();
         $preloaderView->render($templateData);
         $this->populateCaches();
@@ -115,7 +116,7 @@ final class LedgerEntriesController extends AbstractViewController
                 'filters' => $filters,
                 'defaults' => $this->defaults,
                 'startBalance' => $startBalance,
-                'transactionsInPeriod' => $this->app->l10n()->l('transactions_in_period', count($ledgerEntryRows)),
+                'transactionsInPeriod' => $l10n->l('transactions_in_period', count($ledgerEntryRows)),
                 'ledgerEntryRows' => $ledgerEntryRows ?? [],
                 'formData' => $this->prepareFormData($ledgerEntryObject, $filters, (float)$formBalance) ?? [],
                 'filterFormData' => $filterFormData,
@@ -141,19 +142,22 @@ final class LedgerEntriesController extends AbstractViewController
         $ledgerEntry = $this->dataFactory->ledgerentry();
         $ledgerFilters = $this->getLedgerFilters($filters);
         $dataRows = $ledgerEntry->getList($ledgerFilters);
+        $l10n = $this->app->l10n();
         $headers = [
-            $this->app->l10n()->l('id'),
-            $this->app->l10n()->l('date'),
-            $this->app->l10n()->l('category'),
-            $this->app->l10n()->l('account'),
-            $this->app->l10n()->l('currency'),
-            $this->app->l10n()->l('direction'),
-            $this->app->l10n()->l('amount'),
-            $this->app->l10n()->l('remarks')
+            $l10n->l('id'),
+            $l10n->l('date'),
+            $l10n->l('category'),
+            $l10n->l('account'),
+            $l10n->l('currency'),
+            $l10n->l('direction'),
+            $l10n->l('amount'),
+            $l10n->l('exchangeRate'),
+            $l10n->l('euro'),
+            $l10n->l('remarks')
         ];
         $rows = [];
-        $withdrawal = $this->app->l10n()->l('withdraw');
-        $deposit = $this->app->l10n()->l('deposit');
+        $withdrawal = $l10n->l('withdraw');
+        $deposit = $l10n->l('deposit');
         foreach ($dataRows as $r) {
             $rows[] = [
                 $r->id,
@@ -162,7 +166,9 @@ final class LedgerEntriesController extends AbstractViewController
                 $r->account->name,
                 $r->currency->description,
                 $r->direction === 1 ? $deposit : $withdrawal,
+                $r->exchangeRate,
                 $r->currencyAmount,
+                $r->euroAmount,
                 $r->remarks
             ];
         }
@@ -223,10 +229,11 @@ final class LedgerEntriesController extends AbstractViewController
         );
         $balance = $startBalance;
         $rows = [];
-        $deposit = $this->app->l10n()->l('deposit');
-        $withdrawal = $this->app->l10n()->l('withdraw');
+        $l10n = $this->app->l10n();
+        $deposit = $l10n->l('deposit');
+        $withdrawal = $l10n->l('withdraw');
         foreach ($ledgerEntryList as $row) {
-            $balance += ($row->direction * $row->currencyAmount);
+            $balance += ($row->direction * $row->euroAmount);
             $idQuery = http_build_query(array_merge($filtersArray, ['filter_editId' => $row->id]));
             $categoryQuery = http_build_query(array_merge($filtersArray, ['filter_entryType' => $row->categoryId]));
             $accountQuery = http_build_query(array_merge($filtersArray, ['filter_accountId' => $row->accountId]));
@@ -240,6 +247,8 @@ final class LedgerEntriesController extends AbstractViewController
                     'account' => $row->account->name,
                     'direction' => (int)$row->direction === 1 ? $deposit : $withdrawal,
                     'amount' => NumberUtil::normalize($row->currencyAmount),
+                    'exchangeRate' => NumberUtil::normalize($row->exchangeRate, 8),
+                    'euroAmount' => NumberUtil::normalize($row->euroAmount),
                     'remarks' => $row->remarks,
                     'balance' => NumberUtil::normalize($balance)
                 ],
@@ -249,7 +258,7 @@ final class LedgerEntriesController extends AbstractViewController
                     'account' => "{$baseLink}{$accountQuery}"
                 ],
                 'title' => [
-                    'editlink' => "{$this->app->l10n()->l('click_to_edit')}&#10;{$this->app->l10n()->l('modified_by_at',$row->username,$row->updatedAt)}",
+                    'editlink' => "{$l10n->l('click_to_edit')}&#10;{$l10n->l('modified_by_at',$row->username,$row->updatedAt)}",
                     'category' => "Filtrar lista para esta categoria",
                     'account' => "Filtrar lista para esta conta",
                 ]
@@ -268,6 +277,7 @@ final class LedgerEntriesController extends AbstractViewController
      */
     private function prepareFormData(LedgerEntry $ledgerEntryObject, array $filters, float $balance): array
     {
+        $l10n = $this->app->l10n();
         $editId = is_numeric($filters['editId'] ?? '') ? (int)$filters['editId'] : 0;
         $editEntry = $ledgerEntryObject->getById($editId);
         $selectedEntryCategoryId = (int)($editId > 0 ? $editEntry->categoryId : $this->defaults->categoryId);
@@ -281,17 +291,19 @@ final class LedgerEntriesController extends AbstractViewController
             'accountRows' => $this->prepareAccountRows((int)$selectedAccountId),
             'direction' => [
                 [
-                    'text' => $this->app->l10n()->l('deposit'),
+                    'text' => $l10n->l('deposit'),
                     'value' => 1,
                     'selected' => $editId > 0 ? ($editEntry->direction === 1) : ($this->defaults->direction === 1),
                 ],
                 [
-                    'text' => $this->app->l10n()->l('withdraw'),
+                    'text' => $l10n->l('withdraw'),
                     'value' => -1,
                     'selected' => $editId > 0 ? ($editEntry->direction === -1) : ($this->defaults->direction === -1),
                 ],
             ],
-            'amount' => $editId > 0 ? $editEntry->currencyAmount : 0,
+            'amount' => $editId > 0 ? $editEntry->currencyAmount : 0.0,
+            'exchangeRate' => $editId > 0 ? $editEntry->exchangeRate : 1.00000000,
+            'euroAmount' => $editId > 0 ? $editEntry->euroAmount : 0.00000000,
             'remarks' => $editId > 0 ? $editEntry->remarks : '',
             'balance' => NumberUtil::normalize($balance),
         ];
@@ -451,6 +463,10 @@ final class LedgerEntriesController extends AbstractViewController
                 'filter' => FILTER_SANITIZE_NUMBER_FLOAT,
                 'flags' => FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_THOUSAND
             ],
+            'exchangeRate' => [
+                'filter' => FILTER_SANITIZE_NUMBER_FLOAT,
+                'flags' => FILTER_FLAG_ALLOW_FRACTION | FILTER_FLAG_ALLOW_THOUSAND
+            ],
             'currencyId' => FILTER_SANITIZE_NUMBER_INT,
             'direction' => FILTER_SANITIZE_NUMBER_INT,
             'remarks' => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
@@ -479,6 +495,7 @@ final class LedgerEntriesController extends AbstractViewController
      */
     private function handleSave(array $input): int
     {
+        $l10n = $this->app->l10n();
         $userName = $this->currentUser?->getProperty('userName', '');
         if (!$this->permissions?->canWrite()) {
             throw new PHPLedgerException('No permissions');
@@ -486,7 +503,7 @@ final class LedgerEntriesController extends AbstractViewController
         $dt = $this->validateDateFieldFromInput('data_mov', $input, true);
         foreach (['currencyAmount', 'direction', 'categoryId', 'currencyId', 'accountId'] as $fld) {
             if (!isset($input[$fld]) || $input[$fld] === '' || $input[$fld] === false) {
-                throw new InvalidArgumentException($this->app->l10n()->l("invalid_parameter", $fld));
+                throw new InvalidArgumentException($l10n->l("invalid_parameter", $fld));
             }
         }
         $entry = $this->dataFactory->ledgerentry();
@@ -494,14 +511,15 @@ final class LedgerEntriesController extends AbstractViewController
         $entry->id = isset($input['id']) && is_numeric($input['id']) && $input['id'] > 0 ? (int)$input['id'] : null;
         $entry->currencyAmount = (float) $input['currencyAmount'];
         $entry->direction = (int) $input['direction'];
-        $entry->euroAmount = $entry->direction * $entry->currencyAmount;
+        $entry->exchangeRate = (float)$input['exchangeRate'];
+        $entry->euroAmount = $entry->direction * $entry->currencyAmount * $entry->exchangeRate;
         $entry->categoryId = (int) $input['categoryId'];
         $entry->currencyId = $input['currencyId'];
         $entry->accountId = (int) $input['accountId'];
-        $entry->remarks = $input['remarks'];
+        $entry->remarks = $input['remarks'] ?? '';
         $entry->username = $userName;
         if (!$entry->update()) {
-            throw new DomainException($this->app->l10n()->l("ledger_save_error"));
+            throw new DomainException($l10n->l("ledger_save_error"));
         }
         $this->app->logger()->info("Ledger entry [{$entry->id}] save by user [{$userName}]");
         $this->storeDefaults($entry);

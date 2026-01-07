@@ -52,4 +52,9 @@ abstract class AbstractViewTemplate implements ViewTemplateInterface
         <option value="<?= $row['value'] ?>" <?= $row['selected'] === true ? "selected" : "" ?>><?= $row['text'] ?></option>
 <?php
     }
+
+    protected function htmlSafe(string $string): string
+    {
+        return htmlspecialchars($string, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+    }
 }

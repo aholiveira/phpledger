@@ -17,6 +17,8 @@ use PHPLedger\Controllers\AccountTypeFormController;
 use PHPLedger\Controllers\AccountTypeListController;
 use PHPLedger\Controllers\ApplicationErrorController;
 use PHPLedger\Controllers\BalancesController;
+use PHPLedger\Controllers\CurrencyFormController;
+use PHPLedger\Controllers\CurrencyListController;
 use PHPLedger\Controllers\EntryCategoryFormController;
 use PHPLedger\Controllers\EntryCategoryListController;
 use PHPLedger\Controllers\ForgotPasswordController;
@@ -37,6 +39,8 @@ class Router
         'accounts'          => AccountsController::class,
         'application_error' => ApplicationErrorController::class,
         'balances'          => BalancesController::class,
+        'currencies'        => CurrencyListController::class,
+        'currency'          => CurrencyFormController::class,
         'entry_type'        => EntryCategoryFormController::class,
         'entry_types'       => EntryCategoryListController::class,
         'forgotpassword'    => ForgotPasswordController::class,

@@ -36,7 +36,7 @@ final class UpdateStorageViewTemplate extends AbstractViewTemplate
                                 <p><?= $label['db_needs_update'] ?></p>
                                 <p><?= $label['cannot_use_app'] ?></p>
                                 <p><?= $label['start_update'] ?></p>
-                                <p><?= nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8')) ?></p>
+                                <p><?= nl2br($this->htmlSafe($message, ENT_QUOTES, 'UTF-8')) ?></p>
                                 <form method="POST" aria-describedby="update-messages" action="index.php?action=update&lang=<?= $lang ?>">
                                     <?= $csrf ?>
                                     <button class="submit" type="submit" name="action" value="update"
@@ -54,7 +54,7 @@ final class UpdateStorageViewTemplate extends AbstractViewTemplate
                                 break;
                             case 'update_success':
                             ?>
-                                <p><?= nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8')) ?></p>
+                                <p><?= nl2br($this->htmlSafe($message, ENT_QUOTES, 'UTF-8')) ?></p>
                                 <p><?= $label['db_updated'] ?></p>
                                 <p><?= $label['redirecting'] ?></p>
                             <?php
@@ -62,7 +62,7 @@ final class UpdateStorageViewTemplate extends AbstractViewTemplate
                             default:
                             ?>
                                 <p role="alert"><?= $label['update_fail'] ?></p>
-                                <p><?= $label['error_msg'] ?><br><?= nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8')) ?></p>
+                                <p><?= $label['error_msg'] ?><br><?= nl2br($this->htmlSafe($message, ENT_QUOTES, 'UTF-8')) ?></p>
                         <?php
                                 break;
                         }

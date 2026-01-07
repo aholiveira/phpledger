@@ -44,7 +44,7 @@ final class AccountTypeFormViewTemplate extends AbstractViewTemplate
                         </p>
                         <p>
                             <label for="description"><?= $label['description'] ?></label>
-                            <input type="text" size="30" maxlength="30" name="description" value="<?= $row['description'] ?>">
+                            <input type="text" size="30" maxlength="30" name="description" value="<?= $this->htmlSafe($row['description']) ?>">
                         </p>
                         <p>
                             <label for="savings"><?= $label['savings'] ?></label>

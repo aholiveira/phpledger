@@ -1,11 +1,6 @@
 <?php
 
 /**
- * Controller for managing account type forms.
- *
- * Handles displaying the account type form, saving, and deleting account types.
- * Includes CSRF validation, error handling, and localized success messages.
- *
  * @author Antonio Oliveira
  * @license http://www.gnu.org/licenses/gpl-3.0.html GNU GPL v3
  */
@@ -13,11 +8,20 @@
 namespace PHPLedger\Controllers;
 
 use PHPLedger\Domain\AccountType;
+use PHPLedger\Domain\Currency;
 use PHPLedger\Exceptions\PHPLedgerException;
 use PHPLedger\Views\Templates\AccountTypeFormViewTemplate;
+use PHPLedger\Views\Templates\CurrencyFormViewTemplate;
 use Throwable;
 
-final class AccountTypeFormController extends AbstractViewController
+/**
+ * Controller for managing account type forms.
+ *
+ * Handles displaying the account type form, saving, and deleting account types.
+ * Includes CSRF validation, error handling, and localized success messages.
+ *
+ */
+final class CurrencyFormController extends AbstractViewController
 {
     private ?string $message = null;
 
@@ -28,13 +32,14 @@ final class AccountTypeFormController extends AbstractViewController
     {
         $filterArray = [
             "id" => FILTER_VALIDATE_INT,
+            "code" => FILTER_DEFAULT,
             "description" => FILTER_DEFAULT,
-            "savings" => FILTER_DEFAULT,
+            "exchangeRate" => FILTER_VALIDATE_FLOAT,
             "action" => FILTER_DEFAULT,
             "update" => FILTER_DEFAULT
         ];
 
-        $object = $this->app->dataFactory()::accounttype();
+        $object = $this->app->dataFactory()::currency();
         $filtered = filter_var_array($this->request->all(), $filterArray, true);
         $l10n = $this->app->l10n();
 
@@ -55,14 +60,16 @@ final class AccountTypeFormController extends AbstractViewController
             }
         }
 
-        $view = new AccountTypeFormViewTemplate();
+        $view = new CurrencyFormViewTemplate();
         $view->render(array_merge($this->uiData, [
             'notification' => $this->message ?? '',
+            'pagetitle' => $l10n->l('currencies'),
             'success' => $success ?? false,
             'row' => [
                 'id' => $object->id ?? '',
+                'code' => $object->code ?? '',
                 'description' => $object->description ?? '',
-                'savings' => $object->savings ?? false,
+                'exchangeRate' => $object->exchangeRate ?? 0,
             ]
         ]));
     }
@@ -70,11 +77,11 @@ final class AccountTypeFormController extends AbstractViewController
     /**
      * Handle POST request for save or delete actions.
      *
-     * @param AccountType $object
+     * @param Currency $object
      * @param array $filtered
      * @throws PHPLedgerException
      */
-    private function handlePost(AccountType $object, $filtered): void
+    private function handlePost(Currency $object, $filtered): void
     {
         if (!$this->app->csrf()->validateToken($_POST['_csrf_token'] ?? null)) {
             http_response_code(400);
@@ -96,15 +103,16 @@ final class AccountTypeFormController extends AbstractViewController
     /**
      * Save account type data.
      *
-     * @param AccountType $object
+     * @param Currency $object
      * @param array $filtered
      * @return bool True if update was successful
      */
-    private function handleSave(AccountType $object, array $filtered): bool
+    private function handleSave(Currency $object, array $filtered): bool
     {
-        $object->id = (int)($filtered['id'] === false ? null : $filtered['id']);
+        $object->id = (int)(empty($filtered['id'] ?? 0) ? null : $filtered['id']);
+        $object->code = $filtered['code'] ?? '';
         $object->description = $filtered['description'] ?? '';
-        $object->savings = empty($filtered['savings']) ? 0 : 1;
+        $object->exchangeRate = $filtered['exchangeRate'] ?? 1;
         return $object->update();
     }
 }

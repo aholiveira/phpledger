@@ -187,7 +187,7 @@ trait MySqlObject
         $c = MySqlStorage::getConnection();
         try {
             $c->begin_transaction();
-            if (!isset($this->id)) {
+            if (!isset($this->id) || $this->id === 0) {
                 $this->id = $this->getNextId();
             }
             $stmt = $c->prepare($sql);

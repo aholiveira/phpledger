@@ -15,3 +15,27 @@ function clear_filter() {
 function add_filter(filter_name, filter_value) {
     document.getElementById("filter_" + filter_name).value = filter_value;
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const currencyAmount = document.querySelector('input[name="currencyAmount"]');
+    const euroAmount = document.querySelector('input[name="euroAmount"]');
+    const exchangeRate = document.querySelector('input[name="exchangeRate"]');
+
+    function recalc(source) {
+        const curr = parseFloat(currencyAmount.value) || 0;
+        const euro = parseFloat(euroAmount.value) || 0;
+        const rate = parseFloat(exchangeRate.value) || 0;
+
+        if (source === "currency") {
+            euroAmount.value = (curr * rate).toFixed(2);
+        } else if (source === "euro") {
+            exchangeRate.value = curr ? (euro / curr).toFixed(8) : rate.toFixed(8);
+        } else if (source === "rate") {
+            euroAmount.value = (curr * rate).toFixed(2);
+        }
+    }
+
+    currencyAmount.addEventListener("input", () => recalc("currency"));
+    euroAmount.addEventListener("input", () => recalc("euro"));
+    exchangeRate.addEventListener("input", () => recalc("rate"));
+});

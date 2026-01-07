@@ -10,8 +10,8 @@ namespace PHPLedger\Util;
 
 final class NumberUtil
 {
-    public static function normalize(?float $number): string
+    public static function normalize(?float $number, int $decimals = 2): string
     {
-        return null === $number ? "" : number_format($number, 2);
+        return null === $number ? "" : number_format($number, $decimals);
     }
 }

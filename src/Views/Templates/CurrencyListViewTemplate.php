@@ -10,7 +10,7 @@ namespace PHPLedger\Views\Templates;
 
 use PHPLedger\Util\Html;
 
-final class AccountTypeListViewTemplate extends AbstractViewTemplate
+final class CurrencyListViewTemplate extends AbstractViewTemplate
 {
     public function render(array $data): void
     {
@@ -31,25 +31,25 @@ final class AccountTypeListViewTemplate extends AbstractViewTemplate
                 </div>
                 <?php $ui->menu($label, $menu); ?>
                 <div class="header">
-                    <p style="margin:0"><a href="index.php?action=account_type&lang=<?= $lang ?>" aria-label="<?= $label["add"] ?>"><?= $label["add"] ?></a></p>
+                    <p style="margin:0"><a href="index.php?action=currency&lang=<?= $lang ?>" aria-label="<?= $label["add"] ?>"><?= $label["add"] ?></a></p>
                 </div>
                 <div class="main" id="main">
-                    <table class="lista account_type">
+                    <table class="lista currency">
                         <thead>
                             <tr>
-                                <th><?= $this->htmlSafe($label['actions']) ?>
-                                <th><?= $this->htmlSafe($label['id']) ?></th>
-                                <th><?= $this->htmlSafe($label['description']) ?></th>
-                                <th><?= $this->htmlSafe($label['savings']) ?></th>
+                                <th><?= $label['actions'] ?>
+                                <th><?= $label['code'] ?></th>
+                                <th><?= $label['description'] ?></th>
+                                <th><?= $label['exchangeRate'] ?></th>
                             </tr>
                         </thead>
                         <tbody>
                             <?php foreach ($rows as $row): ?>
                                 <tr id="<?= $row['id'] ?>">
-                                    <td data-label="<?= $label['actions'] ?>"><a title="<?= $label['edit'] ?>" href="index.php?action=account_type&id=<?= $row['id'] ?>" aria-label="<?= $this->htmlSafe($label['edit']) ?>"><?= $this->htmlSafe($label['edit']) ?></a></td>
-                                    <td data-label="<?= $label['id'] ?>"><?= $row['id'] ?></td>
-                                    <td data-label="<?= $label['description'] ?>"><?= $this->htmlSafe($row['description']) ?></td>
-                                    <td class="active" data-label="<?= $label['savings'] ?>"><?= $row['savings'] ? '✓' : '–' ?></td>
+                                    <td data-label="<?= $label['actions'] ?>"><a title="<?= $label['edit'] ?>" href="index.php?action=currency&id=<?= $row['id'] ?>" aria-label="<?= $label['edit'] ?>"><?= $label['edit'] ?></a></td>
+                                    <td data-label="<?= $label['code'] ?>"><?= $row['code'] ?></td>
+                                    <td data-label="<?= $label['description'] ?>"><?= $row['description'] ?></td>
+                                    <td data-label="<?= $label['exchangeRate'] ?>"><?= $row['exchangeRate'] ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>

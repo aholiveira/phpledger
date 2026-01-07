@@ -20,21 +20,21 @@ final class SetupViewFormTemplate extends AbstractViewTemplate
         <h2><?= $label['basic_configuration'] ?></h2>
         <p class="help"><?= $label['basic_configuration_help'] ?></p>
         <label for="title"><?= $label['application_name'] ?><span class="required">*</span></label>
-        <input id="title" name="title" value="<?= htmlspecialchars($config['title'] ?? '') ?>" required>
+        <input id="title" name="title" value="<?= $this->htmlSafe($config['title'] ?? '') ?>" required>
         <label for="url"><?= $label['url'] ?><span class="required">*</span></label>
-        <input id="url" name="url" value="<?= htmlspecialchars($config['url'] ?? '') ?>" required>
+        <input id="url" name="url" value="<?= $this->htmlSafe($config['url'] ?? '') ?>" required>
         <label for="admin_username"><?= $label['admin_username'] ?><span class="required">*</span></label>
-        <input id="admin_username" type="text" name="admin_username" autocomplete="username" placeholder="admin" value="<?= htmlspecialchars($config['admin']['username'] ?? '') ?>" required>
+        <input id="admin_username" type="text" name="admin_username" autocomplete="username" placeholder="admin" value="<?= $this->htmlSafe($config['admin']['username'] ?? '') ?>" required>
         <label for="admin_password"><?= $label['admin_password'] ?><span class="required">*</span></label>
-        <input id="admin_password" type="password" name="admin_password" autocomplete="new-password" placeholder="*****" value="<?= htmlspecialchars($config['admin']['password'] ?? '') ?>" required>
+        <input id="admin_password" type="password" name="admin_password" autocomplete="new-password" placeholder="*****" value="<?= $this->htmlSafe($config['admin']['password'] ?? '') ?>" required>
         <h2><?= $label['email_settings'] ?></h2>
         <p class="help"><?= $label['email_settings_help'] ?></p>
         <label for="smtp_host"><?= $label['smtp_host'] ?><span class="required">*</span></label>
-        <input id="smtp_host" name="smtp_host" value="<?= htmlspecialchars($config['smtp']['host'] ?? '') ?>" placeholder="smtp.example.com" required>
+        <input id="smtp_host" name="smtp_host" value="<?= $this->htmlSafe($config['smtp']['host'] ?? '') ?>" placeholder="smtp.example.com" required>
         <label for="smtp_port"><?= $label['smtp_port'] ?><span class="required">*</span></label>
-        <input id="smtp_port" type="number" min="1" max="65535" name="smtp_port" value="<?= htmlspecialchars($config['smtp']['port'] ?? 25) ?>" required>
+        <input id="smtp_port" type="number" min="1" max="65535" name="smtp_port" value="<?= $this->htmlSafe($config['smtp']['port'] ?? 25) ?>" required>
         <label for="smtp_from"><?= $label['from'] ?><span class="required">*</span></label>
-        <input id="smtp_from" name="smtp_from" value="<?= htmlspecialchars($config['smtp']['from'] ?? '') ?>" required>
+        <input id="smtp_from" name="smtp_from" value="<?= $this->htmlSafe($config['smtp']['from'] ?? '') ?>" required>
         <h2><?= $label['storage_settings'] ?></h2>
         <p class="help"><?= $label['storage_settings_help'] ?></p>
         <label for="storage_type"><?= $label['storage_type'] ?><span class="required">*</span></label>
@@ -45,7 +45,7 @@ final class SetupViewFormTemplate extends AbstractViewTemplate
             <h3><?= $label['mysql_settings'] ?></h3>
             <?php foreach (['host', 'port', 'database', 'user', 'password'] as $key): ?>
                 <label for="storage_<?= $key ?>"><?= $label[$key] ?></label>
-                <input id="storage_<?= $key ?>" name="storage_<?= $key ?>" <?= $key === 'port' ? 'type="number" min="1" max="65535"' : '' ?> value="<?= htmlspecialchars($config['storage']['settings'][$key] ?? ($key === 'port' ? 3306 : '')) ?>">
+                <input id="storage_<?= $key ?>" name="storage_<?= $key ?>" <?= $key === 'port' ? 'type="number" min="1" max="65535"' : '' ?> value="<?= $this->htmlSafe($config['storage']['settings'][$key] ?? ($key === 'port' ? 3306 : '')) ?>">
             <?php endforeach; ?>
             <button style="grid-column: 2;" type="submit" name="itemaction" value="test_storage"><?= $label['test_db'] ?></button>
             <button style="grid-column: 2; display: <?= $state === SetupState::STORAGE_MISSING ? 'inline-block' : 'none' ?>;" type="submit" name="itemaction" value="create_storage"><?= $label['create_storage'] ?></button>

@@ -76,7 +76,7 @@ final class EntryCategoryListController extends AbstractViewController
             'lang'     => $this->app->l10n()->html(),
             'action'   => $this->request->input('action', 'entry_types'),
             'isAdmin'  => $this->app->session()->get('isAdmin', false),
-            'message'  => htmlentities($message ?? ''),
+            'message'  => $message ?? '',
             'success'  => $success ?? false,
             'rows'     => $rows,
         ]));

@@ -32,6 +32,8 @@ beforeEach(function () {
             'balance' => 'Balance',
             'previous_balance' => 'Previous Balance',
             'download_data' => 'download_data',
+            'exchangeRate' => 'exchangeRate',
+            'euro' => 'euro',
         ],
         'csrf' => '<input type="hidden" name="csrf_token" value="123">',
         'ledgerEntryRows' => [
@@ -92,6 +94,6 @@ it('renders table wrapper and previous balance', function () {
     $output = ob_get_clean();
 
     expect($output)->toContain('<div class="table-wrapper">');
-    expect($output)->toContain('<td class="balance-label" colspan="9">Previous Balance</td>');
+    expect($output)->toContain('<td class="balance-label" colspan="11">Previous Balance</td>');
     expect($output)->toContain('<td data-label="Previous Balance" class="balance">');
 });

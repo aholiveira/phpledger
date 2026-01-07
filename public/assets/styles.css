@@ -450,6 +450,8 @@ table {
 .balance,
 .total,
 .amount,
+.exchangeRate,
+.euroAmount,
 .balance-label {
     text-align: right;
 }

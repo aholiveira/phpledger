@@ -21,7 +21,7 @@ final class ReportViewTableTemplate extends AbstractViewTemplate
                 <tr>
                     <th colspan="2"><?= $label['category'] ?></th>
                     <?php foreach ($columnLabels as $c): ?>
-                        <th><?= htmlspecialchars($c) ?></th>
+                        <th><?= $this->htmlSafe($c) ?></th>
                     <?php endforeach ?>
                     <th><?= $label['average'] ?></th>
                     <th><?= $label['total'] ?></th>

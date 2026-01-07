@@ -30,15 +30,15 @@ final class ForgotPasswordViewTemplate extends AbstractViewTemplate
             <?php
             ?>
             <div id="login">
-                <h1><?= htmlentities($appTitle ?? "") ?></h1>
-                <p><?= htmlentities($label['password_recovery']) ?></p>
+                <h1><?= $this->htmlSafe($appTitle ?? "") ?></h1>
+                <p><?= $this->htmlSafe($label['password_recovery']) ?></p>
                 <div class="main form config">
                     <p class='error'><?= $message; ?></p>
                     <form method="POST" name="forgot_password">
                         <?= $csrf ?>
                         <input type="hidden" name="action" value="<?= $action ?>">
-                        <p><label for="username"><?= htmlentities($label['username']) ?></label><input id="username" size="50" maxlength="250" type="text" name="username" value="" required></p>
-                        <p><label for="email"><?= htmlentities($label['email']) ?></label><input id="email" size="50" maxlength="250" type="text" name="email" value="" required></p>
+                        <p><label for="username"><?= $this->htmlSafe($label['username']) ?></label><input id="username" size="50" maxlength="250" type="text" name="username" value="" required></p>
+                        <p><label for="email"><?= $this->htmlSafe($label['email']) ?></label><input id="email" size="50" maxlength="250" type="text" name="email" value="" required></p>
                         <p style="text-align: center"><input type="submit" value="<?= $label['send_reset_link'] ?>"></p>
                     </form>
                     <p id="languageSelector" class="version-tag"><small><?= $footer['languageSelectorHtml'] ?></small></p>

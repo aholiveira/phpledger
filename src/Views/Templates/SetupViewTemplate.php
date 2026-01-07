@@ -42,20 +42,20 @@ final class SetupViewTemplate extends AbstractViewTemplate
                                 <?php $setupViewFormTemplate->render(compact('label', 'config', 'state')); ?>
                             </div>
                             <div id="storage_missing" class="main warning setup-section">
-                                <p><?= htmlspecialchars($label['storage_does_not_exist']) ?></p>
-                                <button type=" submit" name="itemaction" value="create_storage"><?= htmlspecialchars($label['create_storage']) ?></button>
+                                <p><?= $this->htmlSafe($label['storage_does_not_exist']) ?></p>
+                                <button type=" submit" name="itemaction" value="create_storage"><?= $this->htmlSafe($label['create_storage']) ?></button>
                             </div>
                             <div id="migrations_pending" class="main warning setup-section">
-                                <p><?= htmlspecialchars($label['pending_db_migrations_detected']) ?></p>
-                                <button type=" submit" name="itemaction" value="run_migrations"><?= htmlspecialchars($label['apply_migrations']) ?></button>
+                                <p><?= $this->htmlSafe($label['pending_db_migrations_detected']) ?></p>
+                                <button type=" submit" name="itemaction" value="run_migrations"><?= $this->htmlSafe($label['apply_migrations']) ?></button>
                             </div>
                             <div id="admin_missing" class="main warning setup-section">
-                                <p><?= htmlspecialchars($label['no_admin_user_detected']) ?></p>
-                                <button type="submit" name="itemaction" value="create_admin"><?= htmlspecialchars($label['create_admin_user']) ?></button>
+                                <p><?= $this->htmlSafe($label['no_admin_user_detected']) ?></p>
+                                <button type="submit" name="itemaction" value="create_admin"><?= $this->htmlSafe($label['create_admin_user']) ?></button>
                             </div>
                             <div id="complete" class="main config setup-section">
-                                <p><?= htmlspecialchars($label['setup_complete']) ?></p>
-                                <a href="index.php" aria-label="<?= htmlspecialchars($label['login_page']) ?>"><?= htmlspecialchars($label['login_page']) ?></a>
+                                <p><?= $this->htmlSafe($label['setup_complete']) ?></p>
+                                <a href="index.php" aria-label="<?= $this->htmlSafe($label['login_page']) ?>"><?= $this->htmlSafe($label['login_page']) ?></a>
                             </div>
                         </div>
                     </form>

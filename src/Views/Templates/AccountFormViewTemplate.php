@@ -31,9 +31,9 @@ final class AccountFormViewTemplate extends AbstractViewTemplate
                 <div class="header">
                     <p style="margin:0">
                         <?php if ($back === "balances"): ?>
-                            <a href="index.php?action=balances&lang=<?= htmlspecialchars($lang) ?>" aria-label="<?= $label['back_to_balances'] ?>"><?= $label['back_to_balances'] ?></a>
+                            <a href="index.php?action=balances&lang=<?= $this->htmlSafe($lang) ?>" aria-label="<?= $label['back_to_balances'] ?>"><?= $label['back_to_balances'] ?></a>
                         <?php else: ?>
-                            <a href="index.php?action=accounts&lang=<?= htmlspecialchars($lang) ?>" aria-label="<?= $label['back_to_list'] ?>"><?= $label['back_to_list'] ?></a>
+                            <a href="index.php?action=accounts&lang=<?= $this->htmlSafe($lang) ?>" aria-label="<?= $label['back_to_list'] ?>"><?= $label['back_to_list'] ?></a>
                         <?php endif ?>
                     </p>
                 </div>
@@ -45,18 +45,18 @@ final class AccountFormViewTemplate extends AbstractViewTemplate
                             <input type="hidden" name="lang" value="<?= $lang ?>">
                             <p>
                                 <label for="id"><?= $label['id'] ?></label>
-                                <input id="id" name="id" value="<?= htmlspecialchars($text['id']) ?>" readonly>
+                                <input id="id" name="id" value="<?= $this->htmlSafe($text['id']) ?>" readonly>
                             </p>
                             <p>
                                 <label for="name"><?= $label['name'] ?></label>
-                                <input id="name" name="name" value="<?= htmlspecialchars($text['name']) ?>" required="">
+                                <input id="name" name="name" value="<?= $this->htmlSafe($text['name']) ?>" required="">
                             </p>
                             <?php if (in_array('name', $errors, true)): ?>
                                 <p style="color:red"><?= $label['name_required'] ?></p>
                             <?php endif; ?>
                             <p>
                                 <label for="number"><?= $label['number'] ?></label>
-                                <input id="number" name="number" value="<?= htmlspecialchars($text['number']) ?>">
+                                <input id="number" name="number" value="<?= $this->htmlSafe($text['number']) ?>">
                             </p>
                             <p>
                                 <label for="typeId"><?= $label['type'] ?></label>
@@ -66,11 +66,11 @@ final class AccountFormViewTemplate extends AbstractViewTemplate
                             </p>
                             <p>
                                 <label for="iban"><?= $label['iban'] ?></label>
-                                <input id="iban" name="iban" width="100" value="<?= htmlspecialchars($text['iban']) ?>">
+                                <input id="iban" name="iban" width="100" value="<?= $this->htmlSafe($text['iban']) ?>">
                             </p>
                             <p>
                                 <label for="swift"><?= $label['swift'] ?></label>
-                                <input id="swift" name="swift" value="<?= htmlspecialchars($text['swift']) ?>">
+                                <input id="swift" name="swift" value="<?= $this->htmlSafe($text['swift']) ?>">
                             </p>
                             <p>
                                 <label for="openDate"><?= $label['openDate'] ?></label>

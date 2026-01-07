@@ -30,7 +30,7 @@ final class ReportViewTableTopLevelTemplate extends AbstractViewTemplate
             <?php else: ?>
                 <td></td>
             <?php endif ?>
-            <td><a href="index.php?<?= $g['link'] ?>" aria-label="<?= htmlspecialchars($g['label']) ?>"><?= htmlspecialchars($g['label']) ?></a></td>
+            <td><a href="index.php?<?= $g['link'] ?>" aria-label="<?= $this->htmlSafe($g['label']) ?>"><?= $this->htmlSafe($g['label']) ?></a></td>
             <?php foreach ($reportData['columns'] as $c): ?>
                 <td class="group-col-<?= $g['id'] ?> saldos"
                     data-direct="<?= NumberUtil::normalize($g['direct'][$c]) ?>"

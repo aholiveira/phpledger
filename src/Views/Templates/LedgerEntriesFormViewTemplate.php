@@ -29,6 +29,8 @@ final class LedgerEntriesFormViewTemplate extends AbstractViewTemplate
                 <td data-label="<?= $label['account'] ?>" class="account"><select name="accountId"><?php $this->renderSelectOptions($formData['accountRows']) ?></select></td>
                 <td data-label="<?= $label['dc'] ?>" class="direction"><select name="direction"><?php $this->renderSelectOptions($formData['direction']) ?></select></td>
                 <td data-label="<?= $label['amount'] ?>" class="amount"><input type="number" step="0.01" name="currencyAmount" placeholder="0.00" value="<?= $formData['amount'] ?>"></td>
+                <td data-label="<?= $label['exchangeRate'] ?>" class="exchangeRate"><input type="number" step="0.00000001" name="exchangeRate" placeholder="0.00000000" value="<?= $formData['exchangeRate'] ?>"></td>
+                <td data-label="<?= $label['euro'] ?>" class="euroAmount"><input type="number" step="0.01" name="euroAmount" placeholder="0.00" value="<?= $formData['euroAmount'] ?>"></td>
                 <td data-label="<?= $label['remarks'] ?>" class="remarks"><input type="text" name="remarks" maxlength="255" value="<?= $formData['remarks'] ?>"></td>
                 <td data-label="<?= $label['balance'] ?>" class="total" style="text-align: right"><?= $formData['balance'] ?></td>
             </tr>
