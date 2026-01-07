@@ -22,9 +22,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const exchangeRate = document.querySelector('input[name="exchangeRate"]');
 
     function recalc(source) {
-        const curr = parseFloat(currencyAmount.value) || 0;
-        const euro = parseFloat(euroAmount.value) || 0;
-        const rate = parseFloat(exchangeRate.value) || 0;
+        const curr = Number.parseFloat(currencyAmount.value) || 0;
+        const euro = Number.parseFloat(euroAmount.value) || 0;
+        const rate = Number.parseFloat(exchangeRate.value) || 0;
 
         if (source === "currency") {
             euroAmount.value = (curr * rate).toFixed(2);
