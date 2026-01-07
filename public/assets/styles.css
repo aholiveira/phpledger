@@ -257,6 +257,7 @@ select {
 
 input[type=number] {
     text-align: right;
+    max-width: 8em;
 }
 
 .submit,
@@ -454,6 +455,7 @@ table {
 .euroAmount,
 .balance-label {
     text-align: right;
+    max-width: 8em;
 }
 
 .balance,
