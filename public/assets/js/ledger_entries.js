@@ -20,18 +20,20 @@ document.addEventListener("DOMContentLoaded", () => {
     const currencyAmount = document.querySelector('input[name="currencyAmount"]');
     const euroAmount = document.querySelector('input[name="euroAmount"]');
     const exchangeRate = document.querySelector('input[name="exchangeRate"]');
+    const direction = document.querySelector('select[name="direction"]');
 
     function recalc(source) {
         const curr = Number.parseFloat(currencyAmount.value) || 0;
         const euro = Number.parseFloat(euroAmount.value) || 0;
         const rate = Number.parseFloat(exchangeRate.value) || 0;
+        const dir = Number.parseFloat(direction.value) || 0;
 
         if (source === "currency") {
-            euroAmount.value = (curr * rate).toFixed(2);
+            euroAmount.value = (dir * curr * rate).toFixed(2);
         } else if (source === "euro") {
-            exchangeRate.value = curr ? (euro / curr).toFixed(8) : rate.toFixed(8);
+            exchangeRate.value = curr ? (dir * euro / curr).toFixed(8) : rate.toFixed(8);
         } else if (source === "rate") {
-            euroAmount.value = (curr * rate).toFixed(2);
+            euroAmount.value = (dir * curr * rate).toFixed(2);
         }
     }
 
