@@ -18,7 +18,7 @@ final class LedgerEntriesRowViewTemplate extends AbstractViewTemplate
             <td lang="<?= $lang ?>" data-label="<?= $label['edit'] ?>" class="id"><a title="<?= $title['editlink'] ?>" href="<?= $href['editlink'] ?>"><?= $label['edit'] ?></a></td>
             <td lang="<?= $lang ?>" data-label="<?= $label['id'] ?>" class="id"><?= $text['id'] ?></td>
             <td lang="<?= $lang ?>" data-label="<?= $label['date'] ?>" class="data"><?= $text['date'] ?></td>
-            <td lang="<?= $lang ?>" data-label="<?= $label['category'] ?>" class="category"><a title="<?= $title['category'] ?>" href="<?= $href['category'] ?>"><?= $this->htmlSafe($text['category']) ?></a></td>
+            <td lang="<?= $lang ?>" data-label="<?= $label['category'] ?>" class="category"><a title="<?= $title['category'] ?>" href="<?= $href['category'] ?>"><?= $text['category'] ?></a></td>
             <td lang="<?= $lang ?>" data-label="<?= $label['currency'] ?>" class="currency"><?= $text['currency'] ?></td>
             <td lang="<?= $lang ?>" data-label="<?= $label['account'] ?>" class="account"><a title="<?= $title['account'] ?>" href="<?= $href['account'] ?>"><?= $this->htmlSafe($text['account']) ?></a></td>
             <td data-label="<?= $label['dc'] ?>" class="direction"><?= $text['direction'] ?></td>
