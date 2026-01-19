@@ -41,3 +41,12 @@ document.addEventListener("DOMContentLoaded", () => {
     euroAmount.addEventListener("input", () => recalc("euro"));
     exchangeRate.addEventListener("input", () => recalc("rate"));
 });
+
+function focusTarget(elementId) {
+    const el = document.getElementById(elementId);
+    if (!el) { return; }
+    setTimeout(() => {
+        el.focus();
+        el.closest("tr")?.scrollIntoView({ behavior: "auto", block: "nearest" });
+    }, 1);
+}

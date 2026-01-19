@@ -55,7 +55,7 @@ final class SetupController extends AbstractViewController
             $state  = $this->determineSetupState($config);
             $this->app->logger()->info("Application state: " . $state->value, __CLASS__);
 
-            if ($this->request->method() === 'POST') {
+            if ($this->request->isPost()) {
                 [$config, $success, $messages] = $this->handlePost($config);
                 $state = $this->determineSetupState($config);
             }

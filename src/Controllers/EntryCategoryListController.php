@@ -29,7 +29,7 @@ final class EntryCategoryListController extends AbstractViewController
     {
         $success = false;
         try {
-            if ($this->request->method() === "POST") {
+            if ($this->request->isPost()) {
                 $filterArray = [
                     "id" => FILTER_VALIDATE_INT,
                     "description" => FILTER_DEFAULT,
@@ -42,12 +42,14 @@ final class EntryCategoryListController extends AbstractViewController
                 $this->object = $this->app->dataFactory()->entryCategory();
                 if ($action === "save") {
                     $success = $this->handleUpdate($filtered);
+                    $l10n_error = $this->app->l10n()->l('error_saving');
                 }
                 if ($action === "delete") {
                     $success = $this->handleDelete($filtered);
+                    $l10n_error = $this->app->l10n()->l('error_deleting');
                 }
                 if (!$success) {
-                    throw new PHPLedgerException("Ocorreu um erro na operacao");
+                    throw new PHPLedgerException($l10n_error ?? '');
                 }
                 $message = "Registo {$action}. ID: {$this->object->id}";
             }
@@ -70,7 +72,7 @@ final class EntryCategoryListController extends AbstractViewController
 
         $template = new EntryCategoryListViewTemplate();
         $template->render(array_merge($this->uiData, [
-            'title'    => 'Tipos de movimentos',
+            'title'    => $this->app->l10n()->l('entry_types'),
             'app'      => $this->app,
             'object'   => $object,
             'lang'     => $this->app->l10n()->html(),

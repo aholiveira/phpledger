@@ -26,12 +26,12 @@ final class LoginController extends AbstractViewController
      */
     public function handle(): void
     {
-        if ($this->request->method() === 'GET' && $this->request->input('action', '') === 'logout') {
+        if ($this->request->isGet() && $this->request->input('action', '') === 'logout') {
             $this->logout();
             return;
         }
 
-        if ($this->request->method() === 'POST') {
+        if ($this->request->isPost()) {
             $this->login();
         }
 
@@ -138,7 +138,7 @@ final class LoginController extends AbstractViewController
         $this->uiData['footer']['languageSelectorHtml'] = $this->buildLanguageSelectorHtml($l10n, $l10n->lang(), ['action' => 'login']);
 
         $view = new LoginViewTemplate();
-        if ($this->request->method() === "POST" && !$this->userAuth) {
+        if ($this->request->isPost()  && !$this->userAuth) {
             $errorMessage = $l10n->l('invalid_credentials');
         }
         if ($this->request->input('needsauth', 0)) {

@@ -12,22 +12,18 @@
 
 namespace PHPLedger\Controllers;
 
+use PHPLedger\Contracts\DataObjectInterface;
 use PHPLedger\Views\Templates\EntryCategoryFormViewTemplate;
 
-final class EntryCategoryFormController extends AbstractViewController
+final class EntryCategoryFormController extends AbstractFormController
 {
-    /**
-     * Handle entry category form display.
-     */
-    protected function handle(): void
+    protected function setupObject(): DataObjectInterface
     {
-        $object = $this->app->dataFactory()::EntryCategory();
-        $input = $this->request->all();
-        $id = isset($input['id']) && is_numeric($input['id']) ? (int)$input['id'] : 0;
-        if ($id > 0) {
-            $object = $object->getById($id);
-        }
+        return $this->app->dataFactory()::EntryCategory();
+    }
 
+    protected function renderView(DataObjectInterface $object, bool $success): void
+    {
         $parentRows = $this->buildParentRows($object);
         $template = new EntryCategoryFormViewTemplate();
         $template->render(array_merge($this->uiData, [
@@ -40,7 +36,13 @@ final class EntryCategoryFormController extends AbstractViewController
             'parentRows' => $parentRows,
         ]));
     }
-
+    /**
+     * No-op - object save is handled by the list controller
+     */
+    protected function handleSave(DataObjectInterface $object, array $filtered): bool
+    {
+        return false;
+    }
     /**
      * Build parent category rows for selection.
      *

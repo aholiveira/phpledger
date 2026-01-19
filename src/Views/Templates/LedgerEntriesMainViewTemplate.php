@@ -47,6 +47,7 @@ final class LedgerEntriesMainViewTemplate extends AbstractViewTemplate
             setTimeout(() => {
                 document.getElementById("preloader").style.display = "none"; // Hide
             }, 0);
+            focusTarget("data_mov");
         </script>
         </body>
 

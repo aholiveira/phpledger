@@ -22,6 +22,20 @@ interface RequestInterface
     public function method(): string;
 
     /**
+     * Returns true if HTTP request is a POST
+     *
+     * @return array
+     */
+    public function isPost(): bool;
+
+    /**
+     * Returns true if HTTP request is a GET
+     *
+     * @return array
+     */
+    public function isGet(): bool;
+
+    /**
      * Retrieve a specific input value from the request.
      *
      * @param string $key Input key

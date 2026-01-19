@@ -27,7 +27,7 @@ final class ForgotPasswordController extends AbstractViewController
             "email" => FILTER_SANITIZE_ENCODED
         ];
 
-        if ($this->request->method() === "POST") {
+        if ($this->request->isPost()) {
             $filtered = filter_var_array($this->request->all(), $filterArray, true);
 
             if (empty($filtered["username"]) || empty($filtered["email"])) {

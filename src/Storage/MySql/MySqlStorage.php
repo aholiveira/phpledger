@@ -22,15 +22,18 @@ class MySqlStorage implements DataStorageInterface
     {
         $this->message = "";
     }
+
     public static function instance(): self
     {
         return self::$instance ??= new self();
     }
+
     public static function getConnection(): mysqli
     {
         self::instance()->connect();
         return self::instance()->dbConnection;
     }
+
     private function connect(): void
     {
         $host = Config::instance()->get("storage.settings.host", "localhost");
@@ -65,6 +68,14 @@ class MySqlStorage implements DataStorageInterface
             mysqli_report(MYSQLI_REPORT_OFF);
         }
     }
+
+    public function fetchRow(string $sql): array|null|false
+    {
+        $db = self::getConnection();
+        $query = mysqli_query($db, $sql);
+        return mysqli_fetch_assoc($query);
+    }
+
     public function addMessage(string $message): string
     {
         $this->message = ($this->message ?? "") . "{$message}\r\n";

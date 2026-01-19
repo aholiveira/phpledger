@@ -28,7 +28,7 @@ final class UserProfileController extends AbstractViewController
     protected function handle(): void
     {
         $user = $this->app->dataFactory()::user()->getByUsername($this->app->session()->get('user'));
-        if ($this->request->method() === 'POST' && $this->request->input('itemaction', '') === 'save') {
+        if ($this->request->isPost() && $this->request->input('itemaction', '') === 'save') {
             try {
                 $this->handlePost($user);
             } catch (\Throwable $e) {

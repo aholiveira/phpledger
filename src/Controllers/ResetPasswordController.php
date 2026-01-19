@@ -27,7 +27,7 @@ final class ResetPasswordController extends AbstractViewController
     {
         $this->getTokenId();
 
-        if ($this->request->method() === "GET") {
+        if ($this->request->isGet()) {
             $this->handleGet();
         }
 
@@ -42,7 +42,7 @@ final class ResetPasswordController extends AbstractViewController
             }
         }
 
-        if ($this->request->method() === "POST") {
+        if ($this->request->isPost()) {
             $this->handlePost();
         }
 

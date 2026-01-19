@@ -24,6 +24,16 @@ final class HttpRequest implements RequestInterface
         return $this->method;
     }
 
+    public function isGet(): bool
+    {
+        return $this->method() === "GET";
+    }
+
+    public function isPost(): bool
+    {
+        return $this->method() === "POST";
+    }
+
     public function input(string $key, mixed $default = null): mixed
     {
         return match ($this->method) {

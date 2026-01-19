@@ -12,49 +12,27 @@
 
 namespace PHPLedger\Controllers;
 
+use PHPLedger\Contracts\DataObjectInterface;
 use PHPLedger\Domain\AccountType;
-use PHPLedger\Exceptions\PHPLedgerException;
 use PHPLedger\Views\Templates\AccountTypeFormViewTemplate;
-use Throwable;
 
-final class AccountTypeFormController extends AbstractViewController
+final class AccountTypeFormController extends AbstractFormController
 {
-    private ?string $message = null;
+    protected array $filterArray = [
+        "id" => FILTER_VALIDATE_INT,
+        "description" => FILTER_DEFAULT,
+        "savings" => FILTER_DEFAULT,
+        "action" => FILTER_DEFAULT,
+        "update" => FILTER_DEFAULT
+    ];
 
-    /**
-     * Handle account type form request (GET form or POST save/delete).
-     */
-    protected function handle(): void
+    protected function setupObject(): DataObjectInterface
     {
-        $filterArray = [
-            "id" => FILTER_VALIDATE_INT,
-            "description" => FILTER_DEFAULT,
-            "savings" => FILTER_DEFAULT,
-            "action" => FILTER_DEFAULT,
-            "update" => FILTER_DEFAULT
-        ];
+        return $this->app->dataFactory()::accounttype();
+    }
 
-        $object = $this->app->dataFactory()::accounttype();
-        $filtered = filter_var_array($this->request->all(), $filterArray, true);
-        $l10n = $this->app->l10n();
-
-        if ($this->request->method() === "POST") {
-            try {
-                $this->handlePost($object, $filtered);
-                $this->message = $l10n->l('save_success', $object->id);
-                $success = true;
-            } catch (Throwable $e) {
-                $this->message = $e->getMessage();
-            }
-        }
-
-        if ($this->request->method() === "GET") {
-            $id = $filtered['id'] ?? 0;
-            if ($id > 0) {
-                $object = $object->getById($id);
-            }
-        }
-
+    protected function renderView(DataObjectInterface $object, bool $success): void
+    {
         $view = new AccountTypeFormViewTemplate();
         $view->render(array_merge($this->uiData, [
             'notification' => $this->message ?? '',
@@ -68,40 +46,17 @@ final class AccountTypeFormController extends AbstractViewController
     }
 
     /**
-     * Handle POST request for save or delete actions.
-     *
-     * @param AccountType $object
-     * @param array $filtered
-     * @throws PHPLedgerException
-     */
-    private function handlePost(AccountType $object, $filtered): void
-    {
-        if (!$this->app->csrf()->validateToken($_POST['_csrf_token'] ?? null)) {
-            http_response_code(400);
-            throw new PHPLedgerException("Falhou a validação do token. Repita a operação.");
-        }
-
-        if (strtolower($filtered['update'] ?? '') === "save" && !$this->handleSave($object, $filtered)) {
-            throw new PHPLedgerException("Ocorreu um erro ao gravar");
-        }
-
-        if (strtolower($filtered['update'] ?? '') === "delete") {
-            $object->id = $filtered['id'] ?? 0;
-            if ($object->id > 0 && !$object->delete()) {
-                throw new PHPLedgerException("Ocorreu um erro ao eliminar");
-            }
-        }
-    }
-
-    /**
      * Save account type data.
      *
      * @param AccountType $object
      * @param array $filtered
      * @return bool True if update was successful
      */
-    private function handleSave(AccountType $object, array $filtered): bool
+    protected function handleSave(DataObjectInterface $object, array $filtered): bool
     {
+        if (!($object instanceof AccountType)) {
+            return false;
+        }
         $object->id = (int)($filtered['id'] === false ? null : $filtered['id']);
         $object->description = $filtered['description'] ?? '';
         $object->savings = empty($filtered['savings']) ? 0 : 1;

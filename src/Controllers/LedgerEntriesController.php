@@ -420,7 +420,7 @@ final class LedgerEntriesController extends AbstractViewController
         $savedEntryId = null;
         $success = false;
         $errorMessage = "";
-        if ($request->method() === 'POST') {
+        if ($request->isPost()) {
             if (!$this->app->csrf()->validateToken($request->input('_csrf_token'))) {
                 http_response_code(400);
                 $errorMessage = "CSRF Validation";
@@ -435,7 +435,7 @@ final class LedgerEntriesController extends AbstractViewController
                 $errorMessage = $e->getMessage();
             }
         }
-        if ($request->method() === 'GET' && (int)$request->input('editId', 0) !== 0) {
+        if ($request->isGet() && (int)$request->input('editId', 0) !== 0) {
             $this->isEditing = true;
         }
         return [$savedEntryId, $success, $errorMessage];

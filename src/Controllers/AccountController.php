@@ -30,7 +30,7 @@ final class AccountController extends AbstractViewController
      */
     protected function handle(): void
     {
-        if ($this->request->method() === 'POST') {
+        if ($this->request->isPost()) {
             $this->processPost();
         }
         $this->renderForm();
@@ -125,7 +125,7 @@ final class AccountController extends AbstractViewController
     {
         if (!$this->permissions?->canWrite()) {
             $this->errors[] = 'forbidden';
-            $this->app->logger()->warning("User [{$userName}] attempted write account without permission");
+            $this->app->logger()->warning("User [{$userName}] account write attempted without permission. ");
             return false;
         }
         return true;
