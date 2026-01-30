@@ -41,7 +41,7 @@ final class ReportController extends AbstractViewController
             $monthNames = array_map(fn($n) => $l10n->l("mon_$n"), $columns);
         }
 
-        $raw = $this->app->reportFactory()::categorySummary()->fetch($from, $to, $period);
+        $raw = $this->app->reportFactory()->categorySummary()->fetch($from, $to, $period);
         $builder = new CategorySummaryReportBuilder();
         $reportData = $builder->build($raw, $columns, $period, $from, $to);
 

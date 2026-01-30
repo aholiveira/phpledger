@@ -8,12 +8,24 @@
 
 namespace PHPLedger\Storage;
 
+use PHPLedger\Contracts\Domain\Reports\CategorySummaryInterface;
 use PHPLedger\Storage\Abstract\AbstractReportFactory;
+use PHPLedger\Storage\MySql\MySqlReportFactory;
+use UnexpectedValueException;
 
 final class ReportFactory extends AbstractReportFactory
 {
-    public function __construct(string $backend)
+    protected AbstractReportFactory $backendFactory;
+    public function __construct(string $backend = 'mysql')
     {
-        parent::init($backend);
+        $this->backendFactory = match ($backend) {
+            'mysql' => new MySqlReportFactory(),
+            default => throw new UnexpectedValueException('Report storage not implemented'),
+        };
+    }
+
+    public function categorySummary(): CategorySummaryInterface
+    {
+        return $this->backendFactory->categorySummary();
     }
 }

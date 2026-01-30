@@ -165,16 +165,19 @@ final class CategorySummaryReportBuilder
                 unset($g['rows'][$cid]);
                 continue;
             }
-
             $row['average'] = $this->average($row['total']);
         }
-
         unset($row);
     }
 
     private function isZeroRow(array $row): bool
     {
-        return array_sum($row['values']) == 0.0;
+        foreach ($row['values'] as $value) {
+            if ($value != 0.0) {
+                return false;
+            }
+        }
+        return $row['total'] == 0.0;
     }
 
     private function shouldRemoveGroup(array $g): bool

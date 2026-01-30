@@ -8,13 +8,13 @@
 
 namespace PHPLedger\Storage\MySql;
 
-use PHPLedger\Reports\CategorySummaryReport;
+use PHPLedger\Contracts\Domain\Reports\CategorySummaryInterface;
 use PHPLedger\Storage\Abstract\AbstractReportFactory;
 use PHPLedger\Storage\MySql\Reports\MySqlCategorySummaryReport;
 
 final class MySqlReportFactory extends AbstractReportFactory
 {
-    public static function categorySummary(): CategorySummaryReport
+    public function categorySummary(): CategorySummaryInterface
     {
         return new MySqlCategorySummaryReport();
     }
