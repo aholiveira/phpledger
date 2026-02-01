@@ -66,6 +66,7 @@ try {
 } catch (InvalidCsrfTokenException) {
     $app->redirector()->to("{$frontend}login");
 } catch (Throwable $e) {
+    $app->logger()->debug($e->getMessage());
     $app->logger()->debug($e->getTraceAsString());
     $app->setErrorMessage($e->getMessage());
     $router->handleRequest($app, 'application_error');
