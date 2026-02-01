@@ -25,14 +25,15 @@ beforeEach(function () {
             'amount' => 'Amount',
             'active' => 'Active',
             'actions' => 'Actions',
+            'fixedCost' => 'Fixed cost',
             'edit' => 'Edit',
             'edit_category' => 'Edit Category'
         ],
         'menu' => ['home' => '/home'],
         'footer' => [],
         'rows' => [
-            ['id' => 1, 'description' => 'Category 1', 'amount' => 10, 'active' => true, 'parentId' => 0, 'href' => '/edit/1'],
-            ['id' => 2, 'description' => 'Category 2', 'amount' => 20, 'active' => false, 'parentId' => 1, 'href' => '/edit/2'],
+            ['id' => 1, 'description' => 'Category 1', 'amount' => 10, 'fixedCost' => false, 'active' => true, 'parentId' => 0, 'href' => '/edit/1'],
+            ['id' => 2, 'description' => 'Category 2', 'amount' => 20, 'fixedCost' => false, 'active' => false, 'parentId' => 1, 'href' => '/edit/2'],
         ],
         'ui' => new class {
             public function notification($msg, $success)
@@ -73,7 +74,7 @@ it('renders the table headers', function () {
     $this->template->render($this->data);
     $output = ob_get_clean();
 
-    foreach (['ID', 'Description', 'Amount', 'Active', 'Actions'] as $header) {
+    foreach (['ID', 'Description', 'Amount', 'Fixed cost', 'Active', 'Actions'] as $header) {
         expect($output)->toContain("<th>{$header}</th>");
     }
 });
@@ -101,7 +102,7 @@ it('renders footer and menu', function () {
 });
 
 it('renders disabled span when row has no valid id or href', function () {
-    $this->data['rows'][] = ['id' => 0, 'description' => 'No Edit', 'amount' => 0, 'active' => false, 'parentId' => 0];
+    $this->data['rows'][] = ['id' => 0, 'description' => 'No Edit', 'amount' => 0, 'fixedCost' => false, 'active' => false, 'parentId' => 0];
 
     ob_start();
     $this->template->render($this->data);

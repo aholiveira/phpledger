@@ -17,9 +17,18 @@ use PHPLedger\Views\Templates\EntryCategoryFormViewTemplate;
 
 final class EntryCategoryFormController extends AbstractFormController
 {
+    protected array $filterArray = [
+        "id" => FILTER_VALIDATE_INT,
+        "description" => FILTER_DEFAULT,
+        "parentId" => FILTER_VALIDATE_INT,
+        "fixedCost" => FILTER_DEFAULT,
+        "active" => FILTER_DEFAULT,
+        "update" => FILTER_DEFAULT
+    ];
+
     protected function setupObject(): DataObjectInterface
     {
-        return $this->app->dataFactory()::EntryCategory();
+        return $this->app->dataFactory()->EntryCategory();
     }
 
     protected function renderView(DataObjectInterface $object, bool $success): void
@@ -31,6 +40,7 @@ final class EntryCategoryFormController extends AbstractFormController
             'text' => [
                 'id' => isset($object->id) ? $object->id : '',
                 'description' => $object->description ?? '',
+                'fixedCost' => ($object->id ?? 0) === 0 || ($object->fixedCost ?? 1) ? 'checked' : '',
                 'active' => ($object->id ?? 0) === 0 || ($object->active ?? 1) ? 'checked' : ''
             ],
             'parentRows' => $parentRows,

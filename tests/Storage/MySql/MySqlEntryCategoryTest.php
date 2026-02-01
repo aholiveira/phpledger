@@ -26,12 +26,13 @@ beforeEach(function () {
     $this->db->query("DELETE FROM tipo_mov WHERE id > 0");
 });
 
-function createCategory(int $id = 1, ?int $parentId = null, string $desc = 'Cat', int $active = 1): MySqlEntryCategory
+function createCategory(int $id = 1, ?int $parentId = null, string $desc = 'Cat', int $fixedCost = 1, int $active = 1): MySqlEntryCategory
 {
     $c = new MySqlEntryCategory();
     $c->id = $id;
     $c->parentId = $parentId;
     $c->description = $desc;
+    $c->fixedCost = $fixedCost;
     $c->active = $active;
     return $c;
 }

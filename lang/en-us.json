@@ -84,6 +84,7 @@
     "expired_session": "The session has expired.",
     "filter": "Filter",
     "first_name": "First name",
+    "fixedCost": "Fixed cost",
     "forgot_password": "Forgot password",
     "from": "From",
     "full_name": "Full name",

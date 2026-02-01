@@ -34,6 +34,7 @@ final class EntryCategoryListController extends AbstractViewController
                     "id" => FILTER_VALIDATE_INT,
                     "description" => FILTER_DEFAULT,
                     "parentId" => FILTER_VALIDATE_INT,
+                    "fixedCost" => FILTER_DEFAULT,
                     "active" => FILTER_DEFAULT,
                     "update" => FILTER_DEFAULT
                 ];
@@ -101,6 +102,9 @@ final class EntryCategoryListController extends AbstractViewController
         if ($this->object->parentId === $this->object->id) {
             throw new PHPLedgerException("N&atilde;o pode colocar uma categoria como ascendente dela propria!");
         }
+        if (isset($filtered['fixedCost'])) {
+            $this->object->fixedCost = strtolower($filtered['fixedCost']) === "on" ? 1 : 0;
+        }
         if (isset($filtered['active'])) {
             $this->object->active = strtolower($filtered['active']) === "on" ? 1 : 0;
         }
@@ -140,6 +144,7 @@ final class EntryCategoryListController extends AbstractViewController
             'parentId'    => $c->parentId,
             'description' => $c->description ?? '',
             'amount'      => NumberUtil::normalize(abs($c->getBalance())),
+            'fixedCost'   => $c->fixedCost,
             'active'      => $c->active
         ];
     }

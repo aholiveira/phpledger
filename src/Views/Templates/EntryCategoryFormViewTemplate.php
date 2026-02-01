@@ -40,7 +40,11 @@ final class EntryCategoryFormViewTemplate extends AbstractViewTemplate
                         </p>
                         <p>
                             <label for="description"><?= $label['description'] ?></label>
-                            <input type=text size=30 maxlength=30 name="description" value="<?= $text['description'] ?>">
+                            <input type="text" size="30" maxlength="30" name="description" value="<?= $text['description'] ?>">
+                        </p>
+                        <p>
+                            <label for="fixedCost"><?= $label['fixedCost'] ?></label>
+                            <input type="checkbox" name="fixedCost" <?= $text['fixedCost'] ?>>
                         </p>
                         <p>
                             <label for="active"><?= $label['active'] ?></label>

@@ -17,7 +17,6 @@ if (!\defined('ROOT_DIR')) {
 }
 
 use PHPLedger\ApplicationFactory;
-use PHPLedger\Storage\ObjectFactory;
 use PHPLedger\Services\Config;
 use PHPLedger\Storage\StorageManager;
 use PHPLedger\Util\Path;

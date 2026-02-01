@@ -31,6 +31,7 @@ class MySqlEntryCategory extends EntryCategory
             "id",
             "parentId",
             "description",
+            "fixedCost",
             "active"
         ];
     }
@@ -38,11 +39,11 @@ class MySqlEntryCategory extends EntryCategory
     {
         $where = static::getWhereFromArray($fieldFilter);
         $sql = "WITH RECURSIVE category_tree AS (
-            SELECT id, parentId, description, active
+            SELECT id, parentId, description, fixedCost, active
             FROM " . static::$tableName . "
             {$where}
             UNION ALL
-            SELECT c.id, c.parentId, c.description, c.active
+            SELECT c.id, c.parentId, c.description, c.fixedCost, c.active
             FROM " . static::$tableName . " c
             INNER JOIN category_tree ct ON c.parentId = ct.id
         )
@@ -92,7 +93,7 @@ class MySqlEntryCategory extends EntryCategory
     }
     public static function getById(int $id): self
     {
-        $sql = "SELECT c.id, c.parentId, c.description AS `description`, c.active, p.description AS parentDescription
+        $sql = "SELECT c.id, c.parentId, c.description AS `description`, c.fixedCost, c.active, p.description AS parentDescription
             FROM " . static::tableName() . " c
             LEFT JOIN " . static::tableName() . " p ON c.parentId = p.id
             WHERE c.id=? OR c.parentId=?";
@@ -130,13 +131,14 @@ class MySqlEntryCategory extends EntryCategory
         if (!$this->validate()) {
             return false;
         }
-        $sql = "INSERT INTO {$this->tableName()} (id, parentId, `description`, active)
-                VALUES (?, ?, ?, ?)
+        $sql = "INSERT INTO {$this->tableName()} (id, parentId, `description`, fixedCost, active)
+                VALUES (?, ?, ?, ?, ?)
                 ON DUPLICATE KEY UPDATE
                     parentId=VALUES(parentId),
                     `description`=VALUES(`description`),
+                    fixedCost=VALUES(fixedCost),
                     active=VALUES(active)";
-        return $this->saveWithTransaction($sql, "sss", [$this->parentId, $this->description, $this->active]);
+        return $this->saveWithTransaction($sql, "ssii", [$this->parentId, $this->description, $this->fixedCost, $this->active]);
     }
     public function delete(): bool
     {

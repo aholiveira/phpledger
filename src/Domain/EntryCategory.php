@@ -14,6 +14,7 @@ use PHPLedger\Storage\Abstract\AbstractDataObject;
 abstract class EntryCategory extends AbstractDataObject implements DataObjectInterface
 {
     public ?string $description;
+    public int $fixedCost;
     public int $active;
     public ?int $parentId;
     public ?string $parentDescription = null;

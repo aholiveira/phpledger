@@ -42,6 +42,7 @@ final class EntryCategoryListViewTemplate extends AbstractViewTemplate
                                     <th><?= $label['id'] ?></th>
                                     <th><?= $label['description'] ?></th>
                                     <th><?= $label['amount'] ?></th>
+                                    <th><?= $label['fixedCost'] ?></th>
                                     <th><?= $label['active'] ?></th>
                                     <th><?= $label['actions'] ?></th>
                                 </tr>
@@ -56,6 +57,7 @@ final class EntryCategoryListViewTemplate extends AbstractViewTemplate
                                         <td class="id" data-label="<?= $label['id'] ?>"><?= $row['id'] ?></td>
                                         <td class="description" data-label="<?= $label['description'] ?>"><?= $displayDescription ?></td>
                                         <td class="amount" data-label="<?= $label['amount'] ?>"><?= $row['amount'] ?></td>
+                                        <td class="active fixedCost" data-label="<?= $label['fixedCost'] ?>"><?= $row['fixedCost'] ? '✓' : '–' ?></td>
                                         <td class="active" data-label="<?= $label['active'] ?>"><?= $row['active'] ? '✓' : '–' ?></td>
                                         <td class="editlink" data-label="<?= $label['edit'] ?>">
                                             <?php if (isset($row['id'], $row['href']) && $row['id'] > 0): ?>

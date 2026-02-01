@@ -29,6 +29,7 @@ beforeEach(function () {
             'id' => 'ID',
             'category' => 'Category',
             'description' => 'Description',
+            'fixedCost' => 'Fixed cost',
             'active' => 'Active',
             'save' => 'Save',
             'delete' => 'Delete',
@@ -41,6 +42,7 @@ beforeEach(function () {
         'text' => [
             'id' => '1',
             'description' => 'Test description',
+            'fixedCost' => 'checked',
             'active' => 'checked',
         ],
         'parentRows' => [

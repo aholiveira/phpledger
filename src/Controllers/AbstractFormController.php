@@ -20,6 +20,9 @@ abstract class AbstractFormController extends AbstractViewController
     {
         $object = $this->setupObject();
         $filtered = filter_var_array($this->request->all(), $this->filterArray, true);
+        if (!empty($filtered['id'])) {
+            $object = $object->getById($filtered['id']);
+        }
         $this->l10n = $this->app->l10n();
         $success = false;
         if ($this->request->isPost()) {
