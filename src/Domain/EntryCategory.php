@@ -26,5 +26,6 @@ abstract class EntryCategory extends AbstractDataObject implements DataObjectInt
         if (!isset($this->parentId) || $this->parentId === null) {
             $this->parentId = 0;
         }
+        $this->fixedCost ??= 0;
     }
 }
